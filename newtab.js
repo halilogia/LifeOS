@@ -264,17 +264,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderKanbanItem(todo, index) {
         const item = document.createElement('div');
         item.className = 'kanban-item';
+        item.setAttribute('draggable', 'true');
+        item.dataset.index = index.toString();
         item.innerHTML = `
             <div class="kanban-item-text">${todo.text}</div>
             <div class="kanban-controls">
-                <button class="move-btn move-left" title="Sola Taşı" ${todo.status === 'todo' ? 'disabled' : ''}>
+                <button class="move-btn move-left" title="${currentLang === 'tr' ? 'Sola Taşı' : 'Move Left'}" ${todo.status === 'todo' ? 'disabled' : ''}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <button class="move-btn move-right" title="Sağa Taşı" ${todo.status === 'done' ? 'disabled' : ''}>
+                <button class="move-btn move-right" title="${currentLang === 'tr' ? 'Sağa Taşı' : 'Move Right'}" ${todo.status === 'done' ? 'disabled' : ''}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
         `;
+        item.addEventListener('dragstart', (e) => {
+            if (e.dataTransfer) {
+                e.dataTransfer.setData('text/plain', index.toString());
+                item.classList.add('dragging');
+            }
+        });
+        item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+        });
         item.querySelector('.move-left')?.addEventListener('click', () => moveTask(index, -1));
         item.querySelector('.move-right')?.addEventListener('click', () => moveTask(index, 1));
         if (todo.status === 'todo')
@@ -284,6 +295,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (todo.status === 'done')
             kanbanDone.appendChild(item);
     }
+    function moveTaskWithStatus(index, newStatus) {
+        chrome.storage.local.get(['todos'], (result) => {
+            const todos = result.todos || [];
+            if (todos[index].status === newStatus)
+                return;
+            todos[index].status = newStatus;
+            todos[index].completed = newStatus === 'done';
+            if (todos[index].completed) {
+                todos[index].lastCompletedDate = new Date().toISOString();
+            }
+            chrome.storage.local.set({ todos }, loadTodos);
+        });
+    }
     function moveTask(index, direction) {
         chrome.storage.local.get(['todos'], (result) => {
             const todos = result.todos || [];
@@ -291,13 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentIdx = statuses.indexOf(todos[index].status);
             const nextIdx = currentIdx + direction;
             if (nextIdx >= 0 && nextIdx < statuses.length) {
-                todos[index].status = statuses[nextIdx];
-                // Sync completed status
-                todos[index].completed = todos[index].status === 'done';
-                if (todos[index].completed) {
-                    todos[index].lastCompletedDate = new Date().toISOString();
-                }
-                chrome.storage.local.set({ todos }, loadTodos);
+                moveTaskWithStatus(index, statuses[nextIdx]);
             }
         });
     }
@@ -433,5 +451,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === settingsPanel) {
             settingsPanel.classList.remove('active');
         }
+    });
+    // Drag and Drop Listeners for Kanban Columns
+    [kanbanTodo, kanbanInProgress, kanbanDone].forEach(col => {
+        col.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            col.closest('.kanban-column')?.classList.add('drag-over');
+        });
+        col.addEventListener('dragleave', () => {
+            col.closest('.kanban-column')?.classList.remove('drag-over');
+        });
+        col.addEventListener('drop', (e) => {
+            e.preventDefault();
+            col.closest('.kanban-column')?.classList.remove('drag-over');
+            const index = e.dataTransfer?.getData('text/plain');
+            if (index !== undefined) {
+                const status = col.dataset.status;
+                moveTaskWithStatus(parseInt(index), status);
+            }
+        });
     });
 });
