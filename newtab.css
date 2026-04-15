@@ -352,9 +352,14 @@ body {
     color: var(--text-secondary);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.kanban-column.drag-over {
+    border-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.kanban-item.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
 }
 
 /* ... Card Footer ... */
