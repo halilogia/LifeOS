@@ -19,10 +19,16 @@
         </header>
 
         <section class="todo-card">
-            <h1 class="greeting">What's your focus for today?</h1>
+            <h1 class="greeting">Bugünkü odağın nedir?</h1>
             
             <div class="input-group">
-                <input type="text" id="todo-input" placeholder="Add a new task..." autocomplete="off">
+                <input type="text" id="todo-input" placeholder="Yeni görev ekle..." autocomplete="off">
+                <select id="repeat-select" class="repeat-select">
+                    <option value="none">Tekrar Yok</option>
+                    <option value="daily">Günlük</option>
+                    <option value="weekly">Haftalık</option>
+                    <option value="monthly">Aylık</option>
+                </select>
                 <button id="add-btn" aria-label="Add Task">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
@@ -33,7 +39,7 @@
             </ul>
 
             <div id="empty-state" class="empty-state">
-                <p>All clear! Time to relax or start something new.</p>
+                <p>Her şey tamam! Biraz dinlenme zamanı.</p>
             </div>
         </section>
     </main>

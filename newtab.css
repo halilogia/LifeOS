@@ -131,6 +131,27 @@ body {
     box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
 }
 
+.repeat-select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.repeat-select:focus {
+    border-color: var(--accent-color);
+}
+
+.repeat-select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
 #add-btn {
     background: var(--accent-color);
     border: none;
@@ -228,6 +249,17 @@ body {
     flex: 1;
     font-size: 1rem;
     cursor: pointer;
+}
+
+.repeat-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-color);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .delete-btn {
