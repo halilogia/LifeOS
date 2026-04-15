@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenTodo - Focus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="newtab.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <main class="container">
+        <header class="hero">
+            <div id="clock" class="clock">00:00</div>
+            <div id="date" class="date">Wednesday, April 15</div>
+        </header>
+
+        <section class="todo-card">
+            <h1 class="greeting">What's your focus for today?</h1>
+            
+            <div class="input-group">
+                <input type="text" id="todo-input" placeholder="Add a new task..." autocomplete="off">
+                <button id="add-btn" aria-label="Add Task">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+
+            <ul id="todo-list" class="todo-list">
+                <!-- Tasks will be injected here -->
+            </ul>
+
+            <div id="empty-state" class="empty-state">
+                <p>All clear! Time to relax or start something new.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p id="quote">"The secret of getting ahead is getting started."</p>
+    </footer>
+
+    <script src="newtab.js"></script>
+</body>
+</html>
