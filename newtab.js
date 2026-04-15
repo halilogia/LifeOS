@@ -5,56 +5,189 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoInput = document.getElementById('todo-input');
     const addButton = document.getElementById('add-btn');
     const todoList = document.getElementById('todo-list');
+    const recurringList = document.getElementById('recurring-list');
+    const tasksSection = document.getElementById('tasks-section');
+    const recurringSection = document.getElementById('recurring-section');
     const emptyState = document.getElementById('empty-state');
     const quoteElement = document.getElementById('quote');
     const repeatSelect = document.getElementById('repeat-select');
     const backupButton = document.getElementById('backup-btn');
     const restoreButton = document.getElementById('restore-btn');
     const restoreInput = document.getElementById('restore-input');
-    const quotes = [
-        '"Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır."',
-        '"Başlamak, başarmanın yarısıdır."',
-        '"Yapılmış olması, mükemmel olmasından iyidir."',
-        '"Meşgul olmaya değil, üretken olmaya odaklan."',
-        '"Geleceği tahmin etmenin en iyi yolu onu yaratmaktır."',
-        '"İstediğin her şey korkunun diğer tarafındadır."',
-        '"Günleri sayma, günlere anlam kat."'
-    ];
+    const navListBtn = document.getElementById('view-list-btn');
+    const navKanbanBtn = document.getElementById('view-kanban-btn');
+    const listView = document.getElementById('list-view');
+    const kanbanView = document.getElementById('kanban-view');
+    const kanbanTodo = document.querySelector('#col-todo .kanban-list');
+    const kanbanInProgress = document.querySelector('#col-in-progress .kanban-list');
+    const kanbanDone = document.querySelector('#col-done .kanban-list');
+    const langToggleBtn = document.getElementById('lang-toggle-btn');
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsPanel = document.getElementById('settings-panel');
+    const settingsClose = document.getElementById('settings-close');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+    let currentLang = 'tr';
+    const translations = {
+        tr: {
+            view_list: 'Liste',
+            view_kanban: 'Kanban',
+            greeting: 'Bugünkü odağın nedir?',
+            todo_placeholder: 'Yeni görev ekle...',
+            repeat_none: 'Tekrar Yok',
+            repeat_daily: 'Günlük',
+            repeat_weekly: 'Haftalık',
+            repeat_monthly: 'Aylık',
+            section_tasks: 'Odağım',
+            section_recurring: 'Rutinler & Alışkanlıklar',
+            empty_state: 'Her şey tamam! Biraz dinlenme zamanı.',
+            backup: 'Yedek Al',
+            restore: 'Yedekten Yükle',
+            kanban_todo: 'Yapılacak',
+            kanban_in_progress: 'Yapılıyor',
+            kanban_done: 'Bitti',
+            settings_title: 'Ayarlar',
+            settings_data_title: 'Veri Yönetimi',
+            clear_all: 'Tüm Verileri Temizle',
+            alert_restore_success: 'Yedek başarıyla yüklendi!',
+            alert_restore_invalid: 'Geçersiz yedek dosyası formatı.',
+            alert_restore_error: 'Yedek dosyası okunurken bir hata oluştu.',
+            alert_clear_confirm: 'Tüm verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+            quote_1: '"Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır."',
+            quote_2: '"Başlamak, başarmanın yarısıdır."',
+            quote_3: '"Yapılmış olması, mükemmel olmasından iyidir."',
+            quote_4: '"Meşgul olmaya değil, üretken olmaya odaklan."',
+            quote_5: '"Geleceği tahmin etmenin en iyi yolu onu yaratmaktır."',
+            quote_6: '"İstediğin her şey korkunun diğer tarafındadır."',
+            quote_7: '"Günleri sayma, günlere anlam kat."'
+        },
+        en: {
+            view_list: 'List',
+            view_kanban: 'Kanban',
+            greeting: "What's your focus for today?",
+            todo_placeholder: 'Add a new task...',
+            repeat_none: 'No Repeat',
+            repeat_daily: 'Daily',
+            repeat_weekly: 'Weekly',
+            repeat_monthly: 'Monthly',
+            section_tasks: 'My Focus',
+            section_recurring: 'Routines & Habits',
+            empty_state: 'All done! Time for some rest.',
+            backup: 'Backup',
+            restore: 'Restore',
+            kanban_todo: 'To Do',
+            kanban_in_progress: 'Doing',
+            kanban_done: 'Done',
+            settings_title: 'Settings',
+            settings_data_title: 'Data Management',
+            clear_all: 'Clear All Data',
+            alert_restore_success: 'Backup restored successfully!',
+            alert_restore_invalid: 'Invalid backup file format.',
+            alert_restore_error: 'An error occurred while reading the backup file.',
+            alert_clear_confirm: 'Are you sure you want to clear all data? This action cannot be undone.',
+            quote_1: '"The secret of getting ahead is getting started."',
+            quote_2: '"Well begun is half done."',
+            quote_3: '"Done is better than perfect."',
+            quote_4: '"Focus on being productive instead of busy."',
+            quote_5: '"The best way to predict the future is to create it."',
+            quote_6: '"Everything you want is on the other side of fear."',
+            quote_7: '"Don’t count the days, make the days count."'
+        }
+    };
     // Initialize
+    initLanguage();
     updateTime();
     setInterval(updateTime, 1000);
     loadTodos();
-    setRandomQuote();
+    function initLanguage() {
+        chrome.storage.local.get(['lang'], (result) => {
+            currentLang = result.lang || 'tr';
+            applyTranslations();
+            setRandomQuote();
+        });
+    }
+    function toggleLanguage() {
+        currentLang = currentLang === 'tr' ? 'en' : 'tr';
+        chrome.storage.local.set({ lang: currentLang }, () => {
+            applyTranslations();
+            setRandomQuote();
+            updateTime();
+            loadTodos();
+        });
+    }
+    function applyTranslations() {
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[currentLang][key]) {
+                el.textContent = translations[currentLang][key];
+            }
+        });
+        // Update placeholder
+        todoInput.placeholder = translations[currentLang].todo_placeholder;
+        // Update toggle button text (opposite of current)
+        langToggleBtn.textContent = currentLang === 'tr' ? 'EN' : 'TR';
+    }
     function updateTime() {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         clockElement.textContent = `${hours}:${minutes}`;
+        const locale = currentLang === 'tr' ? 'tr-TR' : 'en-US';
         const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        dateElement.textContent = now.toLocaleDateString('tr-TR', options);
+        dateElement.textContent = now.toLocaleDateString(locale, options);
     }
     function setRandomQuote() {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        quoteElement.textContent = quotes[randomIndex];
+        const quoteKeys = ['quote_1', 'quote_2', 'quote_3', 'quote_4', 'quote_5', 'quote_6', 'quote_7'];
+        const randomKey = quoteKeys[Math.floor(Math.random() * quoteKeys.length)];
+        quoteElement.textContent = translations[currentLang][randomKey];
     }
     // Todo Logic
     function loadTodos() {
         chrome.storage.local.get(['todos'], (result) => {
-            const todos = result.todos || [];
+            let todos = result.todos || [];
+            // Data Migration for Status
+            let needsSave = false;
+            todos = todos.map(todo => {
+                if (!todo.status) {
+                    todo.status = todo.completed ? 'done' : 'todo';
+                    needsSave = true;
+                }
+                return todo;
+            });
             // Check for resets
             const wasModified = checkAndResetRepeatingTasks(todos);
-            if (wasModified) {
+            if (wasModified || needsSave) {
                 chrome.storage.local.set({ todos });
             }
+            // Clear all lists
             todoList.innerHTML = '';
-            if (todos.length === 0) {
+            recurringList.innerHTML = '';
+            kanbanTodo.innerHTML = '';
+            kanbanInProgress.innerHTML = '';
+            kanbanDone.innerHTML = '';
+            let oneTimeCount = 0;
+            let recurringCount = 0;
+            todos.forEach((todo, index) => {
+                // List View Rendering
+                if (todo.repeat === 'none') {
+                    renderTodo(todo, index, todoList);
+                    oneTimeCount++;
+                }
+                else {
+                    renderTodo(todo, index, recurringList);
+                    recurringCount++;
+                }
+                // Kanban View Rendering
+                renderKanbanItem(todo, index);
+            });
+            // Toggle visibility of sections in List View
+            tasksSection.style.display = oneTimeCount > 0 ? 'block' : 'none';
+            recurringSection.style.display = recurringCount > 0 ? 'block' : 'none';
+            if (oneTimeCount === 0 && recurringCount === 0) {
                 emptyState.classList.add('active');
             }
             else {
                 emptyState.classList.remove('active');
-                todos.forEach((todo, index) => {
-                    renderTodo(todo, index);
-                });
             }
         });
     }
@@ -99,18 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
         monday.setHours(0, 0, 0, 0);
         return monday;
     }
-    function renderTodo(todo, index) {
+    function renderTodo(todo, index, targetList) {
         const li = document.createElement('li');
         li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
         let repeatLabel = '';
         if (todo.repeat === 'daily') {
-            repeatLabel = 'Günlük';
+            repeatLabel = translations[currentLang].repeat_daily;
         }
         if (todo.repeat === 'weekly') {
-            repeatLabel = 'Haftalık';
+            repeatLabel = translations[currentLang].repeat_weekly;
         }
         if (todo.repeat === 'monthly') {
-            repeatLabel = 'Aylık';
+            repeatLabel = translations[currentLang].repeat_monthly;
         }
         const repeatBadge = repeatLabel ? `<span class="repeat-badge">${repeatLabel}</span>` : '';
         li.innerHTML = `
@@ -125,8 +258,48 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         li.querySelector('.checkbox').addEventListener('click', () => toggleTodo(index));
         li.querySelector('.todo-text').addEventListener('click', () => toggleTodo(index));
-        li.querySelector('.delete-btn').addEventListener('click', () => deleteTodo(index));
-        todoList.appendChild(li);
+        li.querySelector('.delete-btn').addEventListener('click', () => deleteTodo(index, li));
+        targetList.appendChild(li);
+    }
+    function renderKanbanItem(todo, index) {
+        const item = document.createElement('div');
+        item.className = 'kanban-item';
+        item.innerHTML = `
+            <div class="kanban-item-text">${todo.text}</div>
+            <div class="kanban-controls">
+                <button class="move-btn move-left" title="Sola Taşı" ${todo.status === 'todo' ? 'disabled' : ''}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="move-btn move-right" title="Sağa Taşı" ${todo.status === 'done' ? 'disabled' : ''}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+        `;
+        item.querySelector('.move-left')?.addEventListener('click', () => moveTask(index, -1));
+        item.querySelector('.move-right')?.addEventListener('click', () => moveTask(index, 1));
+        if (todo.status === 'todo')
+            kanbanTodo.appendChild(item);
+        if (todo.status === 'in-progress')
+            kanbanInProgress.appendChild(item);
+        if (todo.status === 'done')
+            kanbanDone.appendChild(item);
+    }
+    function moveTask(index, direction) {
+        chrome.storage.local.get(['todos'], (result) => {
+            const todos = result.todos || [];
+            const statuses = ['todo', 'in-progress', 'done'];
+            const currentIdx = statuses.indexOf(todos[index].status);
+            const nextIdx = currentIdx + direction;
+            if (nextIdx >= 0 && nextIdx < statuses.length) {
+                todos[index].status = statuses[nextIdx];
+                // Sync completed status
+                todos[index].completed = todos[index].status === 'done';
+                if (todos[index].completed) {
+                    todos[index].lastCompletedDate = new Date().toISOString();
+                }
+                chrome.storage.local.set({ todos }, loadTodos);
+            }
+        });
     }
     function addTodo() {
         const text = todoInput.value.trim();
@@ -137,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 todos.push({
                     text,
                     completed: false,
+                    status: 'todo',
                     repeat,
                     lastCompletedDate: null
                 });
@@ -153,15 +327,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const todos = result.todos || [];
             const isCompleting = !todos[index].completed;
             todos[index].completed = isCompleting;
+            // Sync status
+            todos[index].status = isCompleting ? 'done' : 'todo';
             if (isCompleting) {
                 todos[index].lastCompletedDate = new Date().toISOString();
             }
             chrome.storage.local.set({ todos }, loadTodos);
         });
     }
-    function deleteTodo(index) {
-        const item = todoList.children[index];
-        item.style.animation = 'slideOut 0.3s ease-out forwards';
+    function switchView(view) {
+        if (view === 'list') {
+            navListBtn.classList.add('active');
+            navKanbanBtn.classList.remove('active');
+            listView.classList.add('active');
+            kanbanView.classList.remove('active');
+        }
+        else {
+            navKanbanBtn.classList.add('active');
+            navListBtn.classList.remove('active');
+            kanbanView.classList.add('active');
+            listView.classList.remove('active');
+        }
+    }
+    function deleteTodo(index, element) {
+        element.style.animation = 'slideOut 0.3s ease-out forwards';
         setTimeout(() => {
             chrome.storage.local.get(['todos'], (result) => {
                 const todos = result.todos || [];
@@ -195,21 +384,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (Array.isArray(todos)) {
                     chrome.storage.local.set({ todos }, () => {
                         loadTodos();
-                        alert('Yedek başarıyla yüklendi!');
+                        alert(translations[currentLang].alert_restore_success);
                     });
                 }
                 else {
-                    alert('Geçersiz yedek dosyası formatı.');
+                    alert(translations[currentLang].alert_restore_invalid);
                 }
             }
             catch (err) {
                 console.error('Error parsing backup file:', err);
-                alert('Yedek dosyası okunurken bir hata oluştu.');
+                alert(translations[currentLang].alert_restore_error);
             }
             // Reset input so the same file can be selected again
             input.value = '';
         };
         reader.readAsText(file);
+    }
+    function clearAllData() {
+        const confirmMsg = translations[currentLang].alert_clear_confirm;
+        if (confirm(confirmMsg)) {
+            chrome.storage.local.clear(() => {
+                // Restore language preference after clear
+                chrome.storage.local.set({ lang: currentLang }, () => {
+                    loadTodos();
+                    settingsPanel.classList.remove('active');
+                });
+            });
+        }
     }
     // Events
     addButton.addEventListener('click', addTodo);
@@ -221,4 +422,16 @@ document.addEventListener('DOMContentLoaded', () => {
     backupButton.addEventListener('click', backupData);
     restoreButton.addEventListener('click', () => restoreInput.click());
     restoreInput.addEventListener('change', restoreData);
+    navListBtn.addEventListener('click', () => switchView('list'));
+    navKanbanBtn.addEventListener('click', () => switchView('kanban'));
+    langToggleBtn.addEventListener('click', toggleLanguage);
+    settingsBtn.addEventListener('click', () => settingsPanel.classList.add('active'));
+    settingsClose.addEventListener('click', () => settingsPanel.classList.remove('active'));
+    clearAllBtn.addEventListener('click', clearAllData);
+    // Close settings panel when clicking outside
+    settingsPanel.addEventListener('click', (e) => {
+        if (e.target === settingsPanel) {
+            settingsPanel.classList.remove('active');
+        }
+    });
 });

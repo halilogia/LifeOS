@@ -12,46 +12,113 @@
 <body>
     <div class="background-overlay"></div>
     
+    <nav class="nav-bar">
+        <div class="nav-group">
+            <button id="view-list-btn" class="nav-btn active">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                <span data-i18n="view_list">Liste</span>
+            </button>
+            <button id="view-kanban-btn" class="nav-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                <span data-i18n="view_kanban">Kanban</span>
+            </button>
+        </div>
+        <div class="nav-separator"></div>
+        <button id="settings-btn" class="nav-btn" title="Ayarlar / Settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <button id="lang-toggle-btn" class="nav-btn lang-btn" title="Dil Değiştir / Change Language">
+            TR
+        </button>
+    </nav>
+
+    <div id="settings-panel" class="settings-panel">
+        <div class="settings-content">
+            <header class="settings-header">
+                <h2 data-i18n="settings_title">Ayarlar</h2>
+                <button id="settings-close" class="close-btn">&times;</button>
+            </header>
+            
+            <div class="settings-group">
+                <h3 data-i18n="settings_data_title">Veri Yönetimi</h3>
+                <div class="settings-actions">
+                    <button id="backup-btn" class="settings-action-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span data-i18n="backup">Yedek Al</span>
+                    </button>
+                    <button id="restore-btn" class="settings-action-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <span data-i18n="restore">Yedekten Yükle</span>
+                    </button>
+                    <button id="clear-all-btn" class="settings-action-btn danger">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <span data-i18n="clear_all">Tüm Verileri Temizle</span>
+                    </button>
+                </div>
+                <input type="file" id="restore-input" accept=".json" style="display: none;">
+            </div>
+        </div>
+    </div>
+
     <main class="container">
         <header class="hero">
             <div id="clock" class="clock">00:00</div>
             <div id="date" class="date">Wednesday, April 15</div>
         </header>
 
-        <section class="todo-card">
-            <h1 class="greeting">Bugünkü odağın nedir?</h1>
-            
-            <div class="input-group">
-                <input type="text" id="todo-input" placeholder="Yeni görev ekle..." autocomplete="off">
-                <select id="repeat-select" class="repeat-select">
-                    <option value="none">Tekrar Yok</option>
-                    <option value="daily">Günlük</option>
-                    <option value="weekly">Haftalık</option>
-                    <option value="monthly">Aylık</option>
-                </select>
-                <button id="add-btn" aria-label="Add Task">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
+        <!-- List View -->
+        <section id="list-view" class="view-content active">
+            <div class="todo-card">
+                <h1 class="greeting" data-i18n="greeting">Bugünkü odağın nedir?</h1>
+                
+                <div class="input-group">
+                    <input type="text" id="todo-input" placeholder="Yeni görev ekle..." autocomplete="off">
+                    <select id="repeat-select" class="repeat-select">
+                        <option value="none" data-i18n="repeat_none">Tekrar Yok</option>
+                        <option value="daily" data-i18n="repeat_daily">Günlük</option>
+                        <option value="weekly" data-i18n="repeat_weekly">Haftalık</option>
+                        <option value="monthly" data-i18n="repeat_monthly">Aylık</option>
+                    </select>
+                    <button id="add-btn" aria-label="Add Task">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+
+                <div id="tasks-section">
+                    <h2 class="section-title" data-i18n="section_tasks">Odağım</h2>
+                    <ul id="todo-list" class="todo-list">
+                        <!-- One-time tasks -->
+                    </ul>
+                </div>
+
+                <div id="recurring-section">
+                    <h2 class="section-title" data-i18n="section_recurring">Rutinler & Alışkanlıklar</h2>
+                    <ul id="recurring-list" class="todo-list">
+                        <!-- Recurring tasks -->
+                    </ul>
+                </div>
+
+                <div id="empty-state" class="empty-state">
+                    <p data-i18n="empty_state">Her şey tamam! Biraz dinlenme zamanı.</p>
+                </div>
             </div>
+        </section>
 
-            <ul id="todo-list" class="todo-list">
-                <!-- Tasks will be injected here -->
-            </ul>
-
-            <div id="empty-state" class="empty-state">
-                <p>Her şey tamam! Biraz dinlenme zamanı.</p>
-            </div>
-
-            <div class="card-footer">
-                <button id="backup-btn" class="text-btn" title="Yedek Al">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Yedek Al
-                </button>
-                <button id="restore-btn" class="text-btn" title="Yedekten Yükle">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    Yedekten Yükle
-                </button>
-                <input type="file" id="restore-input" accept=".json" style="display: none;">
+        <!-- Kanban View -->
+        <section id="kanban-view" class="view-content">
+            <div class="kanban-board">
+                <div class="kanban-column" id="col-todo">
+                    <h3 class="kanban-title" data-i18n="kanban_todo">Yapılacak</h3>
+                    <div class="kanban-list" data-status="todo"></div>
+                </div>
+                <div class="kanban-column" id="col-in-progress">
+                    <h3 class="kanban-title" data-i18n="kanban_in_progress">Yapılıyor</h3>
+                    <div class="kanban-list" data-status="in-progress"></div>
+                </div>
+                <div class="kanban-column" id="col-done">
+                    <h3 class="kanban-title" data-i18n="kanban_done">Bitti</h3>
+                    <div class="kanban-list" data-status="done"></div>
+                </div>
             </div>
         </section>
     </main>
