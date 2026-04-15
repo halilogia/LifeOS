@@ -26,6 +26,6 @@ export default ts.config(
     },
   },
   {
-    ignores: ['node_modules/', 'newtab.js', 'dist/', 'build/'],
+    ignores: ['node_modules/', '*.js', 'dist/', 'build/'],
   }
 );
