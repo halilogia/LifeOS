@@ -26,6 +26,6 @@ export default ts.config(
     },
   },
   {
-    ignores: ['node_modules/', '*.js', 'dist/', 'build/'],
+    ignores: ['node_modules/', 'dist/', '*.js'],
   }
 );
