@@ -6,15 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoList = document.getElementById('todo-list');
     const emptyState = document.getElementById('empty-state');
     const quoteElement = document.getElementById('quote');
+    const repeatSelect = document.getElementById('repeat-select');
 
     const quotes = [
-        '"The secret of getting ahead is getting started."',
-        '"Done is better than perfect."',
-        '"The way to get started is to quit talking and begin doing."',
-        '"Focus on being productive instead of busy."',
-        '"The best way to predict the future is to create it."',
-        '"Everything you’ve ever wanted is on the other side of fear."',
-        '"Don’t count the days, make the days count."'
+        '"Başlamak, başarmanın yarısıdır."',
+        '"Yapılmış olması, mükemmel olmasından iyidir."',
+        '"Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır."',
+        '"Meşgul olmaya değil, üretken olmaya odaklan."',
+        '"Geleceği tahmin etmenin en iyi yolu onu yaratmaktır."',
+        '"İstediğin her şey korkunun diğer tarafındadır."',
+        '"Günleri sayma, günlere anlam kat."'
     ];
 
     // Initialize
@@ -23,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTodos();
     setRandomQuote();
 
-    // Time & Date
     function updateTime() {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
@@ -42,7 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Todo Logic
     function loadTodos() {
         chrome.storage.local.get(['todos'], (result) => {
-            const todos = result.todos || [];
+            let todos = result.todos || [];
+            
+            // Check for resets
+            const wasModified = checkAndResetRepeatingTasks(todos);
+            if (wasModified) {
+                chrome.storage.local.set({ todos });
+            }
+
             todoList.innerHTML = '';
             
             if (todos.length === 0) {
@@ -56,14 +63,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function checkAndResetRepeatingTasks(todos) {
+        const now = new Date();
+        const nowString = now.toDateString();
+        let modified = false;
+
+        todos.forEach(todo => {
+            if (todo.repeat && todo.repeat !== 'none' && todo.completed && todo.lastCompletedDate) {
+                const lastDate = new Date(todo.lastCompletedDate);
+                let shouldReset = false;
+
+                if (todo.repeat === 'daily') {
+                    if (nowString !== lastDate.toDateString()) {
+                        shouldReset = true;
+                    }
+                } else if (todo.repeat === 'weekly') {
+                    // Check if it's a new week (using Monday as start)
+                    const lastWeekStart = getStartOfWeek(lastDate);
+                    const currentWeekStart = getStartOfWeek(now);
+                    if (currentWeekStart.getTime() > lastWeekStart.getTime()) {
+                        shouldReset = true;
+                    }
+                } else if (todo.repeat === 'monthly') {
+                    if (now.getMonth() !== lastDate.getMonth() || now.getFullYear() !== lastDate.getFullYear()) {
+                        shouldReset = true;
+                    }
+                }
+
+                if (shouldReset) {
+                    todo.completed = false;
+                    modified = true;
+                }
+            }
+        });
+        return modified;
+    }
+
+    function getStartOfWeek(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is sunday
+        const monday = new Date(d.setDate(diff));
+        monday.setHours(0,0,0,0);
+        return monday;
+    }
+
     function renderTodo(todo, index) {
         const li = document.createElement('li');
         li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+        
+        let repeatLabel = '';
+        if (todo.repeat === 'daily') repeatLabel = 'Günlük';
+        if (todo.repeat === 'weekly') repeatLabel = 'Haftalık';
+        if (todo.repeat === 'monthly') repeatLabel = 'Aylık';
+
+        const repeatBadge = repeatLabel ? `<span class="repeat-badge">${repeatLabel}</span>` : '';
+
         li.innerHTML = `
             <div class="checkbox">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
             <span class="todo-text">${todo.text}</span>
+            ${repeatBadge}
             <button class="delete-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
@@ -78,12 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addTodo() {
         const text = todoInput.value.trim();
+        const repeat = repeatSelect.value;
         if (text) {
             chrome.storage.local.get(['todos'], (result) => {
                 const todos = result.todos || [];
-                todos.push({ text, completed: false });
+                todos.push({ 
+                    text, 
+                    completed: false, 
+                    repeat, 
+                    lastCompletedDate: null 
+                });
                 chrome.storage.local.set({ todos }, () => {
                     todoInput.value = '';
+                    repeatSelect.value = 'none';
                     loadTodos();
                 });
             });
@@ -93,7 +161,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTodo(index) {
         chrome.storage.local.get(['todos'], (result) => {
             const todos = result.todos || [];
-            todos[index].completed = !todos[index].completed;
+            const isCompleting = !todos[index].completed;
+            todos[index].completed = isCompleting;
+            
+            if (isCompleting) {
+                todos[index].lastCompletedDate = new Date().toISOString();
+            }
+            
             chrome.storage.local.set({ todos }, loadTodos);
         });
     }
