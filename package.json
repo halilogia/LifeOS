@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "description": "ZenTodo is a high-end Chrome extension that replaces your New Tab page with a minimalist, focused, and aesthetically pleasing To-Do list environment.",
-  "main": "newtab.js",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "copy-assets": "cp src/newtab.html src/newtab.css src/manifest.json dist/ && cp -r icons dist/ 2>/dev/null || true",
+    "build": "npm run clean && mkdir -p dist && tsc && npm run copy-assets",
     "watch": "tsc -w",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint src --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -16,10 +17,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/halilogia/chrome-extension-todo/issues"
-  },
-  "homepage": "https://github.com/halilogia/chrome-extension-todo#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/chrome": "^0.1.40",
