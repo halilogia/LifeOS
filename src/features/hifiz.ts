@@ -1,9 +1,9 @@
-import { HifizProgress } from "./types.js";
-import { elements } from "./dom.js";
+import { HifizProgress } from "../types/types.js";
+import { elements } from "../ui/dom.js";
 import { storage } from "./storage.js";
 
-import { INITIAL_HIFIZ_ITEMS } from "./hifizData.js";
-import { createCardHTML, updateHifizStats } from "./hifizRender.js";
+import { INITIAL_HIFIZ_ITEMS } from "../hifizData.js";
+import { createCardHTML, updateHifizStats } from "../ui/hifizRender.js";
 
 let currentCategory = "ALL";
 let searchQuery = "";

@@ -1,7 +1,7 @@
-import { Todo } from "./types.js";
-import { translations } from "./i18n.js";
-import { elements } from "./dom.js";
-import { state } from "./state.js";
+import { Todo } from "./types/types.js";
+import { translations } from "./utils/i18n.js";
+import { elements } from "./ui/dom.js";
+import { state } from "./core/state.js";
 
 export function renderTodo(
   todo: Todo,
@@ -130,7 +130,7 @@ export function switchView(
   const hero = elements.hero();
   const topHeader = elements.topHeader();
   if (hero) {
-    hero.style.display = (isList || isPomodoro) ? "block" : "none";
+    hero.style.display = isList || isPomodoro ? "block" : "none";
   }
   if (topHeader) {
     topHeader.style.display = isList ? "flex" : "none";
@@ -144,14 +144,18 @@ export function switchView(
         ? "100%"
         : isHifiz
           ? "1200px"
-          : isPomodoro ? "600px" : "1250px"; 
+          : isPomodoro
+            ? "600px"
+            : "1250px";
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
         ? "20px auto 0 auto"
         : isHifiz
           ? "40px auto 0 auto"
-          : isPomodoro ? "100px auto 0 auto" : "60px auto 0 auto";
+          : isPomodoro
+            ? "100px auto 0 auto"
+            : "60px auto 0 auto";
   }
 }
 

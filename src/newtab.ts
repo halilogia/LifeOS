@@ -1,28 +1,28 @@
-import { Todo } from "./types.js";
-import { applyI18n, translations } from "./i18n.js";
-import { updateTime, setRandomQuote } from "./utils.js";
-import { elements } from "./dom.js";
-import { state } from "./state.js";
-import { storage } from "./storage.js";
+import { Todo } from "./types/types.js";
+import { applyI18n, translations } from "./utils/i18n.js";
+import { updateTime, setRandomQuote } from "./utils/utils.js";
+import { elements } from "./ui/dom.js";
+import { state } from "./core/state.js";
+import { storage } from "./core/storage.js";
 import {
   renderTodo,
   renderKanbanItem,
   switchView,
   switchTab,
 } from "./render.js";
-import { handleBackup, handleRestore } from "./backup.js";
+import { handleBackup, handleRestore } from "./core/backup.js";
 import {
   checkAndResetRepeatingTasks,
   moveTaskWithStatus,
   getUpdatedStatuses,
-} from "./tasks.js";
-import { initHifiz } from "./hifiz.js";
-import { initNotes } from "./notes.js";
-import { initSrs } from "./srsView.js";
-import { initPomodoro } from "./pomodoro.js";
+} from "./features/tasks.js";
+import { initHifiz } from "./features/hifiz.js";
+import { initNotes } from "./features/notes.js";
+import { initSrs } from "./ui/srsView.js";
+import { initPomodoro } from "./features/pomodoro.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Initial data load
+  // Initial data load
   const settings = await storage.getSettings();
   state.currentLang = settings.lang;
   const isSidebarOpen = !!(settings.sidebarOpen !== undefined
@@ -200,12 +200,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements
     .viewKanbanBtn()
     .addEventListener("click", () => switchView("kanban"));
-  elements
-    .viewHifizBtn()
-    .addEventListener("click", () => {
-      switchView("hifiz");
-      initHifiz();
-    });
+  elements.viewHifizBtn().addEventListener("click", () => {
+    switchView("hifiz");
+    initHifiz();
+  });
   elements.viewNotesBtn().addEventListener("click", () => {
     switchView("notes");
     initNotes();

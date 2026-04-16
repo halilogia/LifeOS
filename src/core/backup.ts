@@ -1,6 +1,6 @@
 import { storage } from "./storage.js";
 import { state } from "./state.js";
-import { translations } from "./i18n.js";
+import { translations } from "../i18n.js";
 
 export async function handleBackup(): Promise<void> {
   const todos = await storage.getTodos();
@@ -14,7 +14,10 @@ export async function handleBackup(): Promise<void> {
   a.click();
 }
 
-export async function handleRestore(e: Event, reloadTodos: () => void): Promise<void> {
+export async function handleRestore(
+  e: Event,
+  reloadTodos: () => void,
+): Promise<void> {
   const input = e.target as HTMLInputElement;
   if (!input.files || input.files.length === 0) {
     return;
