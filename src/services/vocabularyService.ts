@@ -35,37 +35,28 @@ const _loadJSON = (level: LevelKey): Promise<RawWord[]> => {
   }
 
   const promise = (async () => {
-    switch (level) {
-      case "A1":
-        return (await import("../data/vocabulary/a1.json"))
-          .default as RawWord[];
-      case "A2":
-        return (await import("../data/vocabulary/a2.json"))
-          .default as RawWord[];
-      case "B1":
-        return (await import("../data/vocabulary/b1.json"))
-          .default as RawWord[];
-      case "B2":
-        return (await import("../data/vocabulary/b2.json"))
-          .default as RawWord[];
-      case "C1":
-        return (await import("../data/vocabulary/c1.json"))
-          .default as RawWord[];
-      case "gre":
-        return (await import("../data/vocabulary/gre.json"))
-          .default as RawWord[];
-      case "idiom":
-        return (await import("../data/vocabulary/idioms.json"))
-          .default as RawWord[];
-      case "phrasal":
-        return (await import("../data/vocabulary/phrasal.json"))
-          .default as RawWord[];
-      case "irregular":
-        return (await import("../data/vocabulary/irregular.json"))
-          .default as RawWord[];
-      default:
-        throw new Error(`Unknown level: ${level}`);
+    const fileNameMap: Record<LevelKey, string> = {
+      A1: "a1.json",
+      A2: "a2.json",
+      B1: "b1.json",
+      B2: "b2.json",
+      C1: "c1.json",
+      gre: "gre.json",
+      idiom: "idioms.json",
+      phrasal: "phrasal.json",
+      irregular: "irregular.json",
+    };
+
+    const fileName = fileNameMap[level];
+    if (!fileName) {
+      throw new Error(`Unknown level: ${level}`);
     }
+
+    // We use absolute path from extension root for fetch
+    const response = await fetch(
+      chrome.runtime.getURL(`data/vocabulary/${fileName}`),
+    );
+    return await response.json();
   })();
 
   _dataPromises.set(level, promise);
