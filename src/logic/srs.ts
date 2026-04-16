@@ -1,4 +1,8 @@
-import { type ReviewQuality, type WordReviewData, type WordStatus } from '../types/word';
+import {
+  type ReviewQuality,
+  type WordReviewData,
+  type WordStatus,
+} from "../types/word.js";
 
 export interface SRSOutcome extends WordReviewData {
   xpEarned: number;
@@ -14,7 +18,7 @@ export function calculateSM2(
   let xpEarned = 0;
 
   switch (quality) {
-    case 'easy':
+    case "easy":
       newEaseFactor = Math.min(2.5, current.easeFactor + 0.15);
       if (current.interval === 0) {
         newInterval = 1;
@@ -23,11 +27,11 @@ export function calculateSM2(
       } else {
         newInterval = Math.round(current.interval * newEaseFactor);
       }
-      newStatus = 'learned';
+      newStatus = "learned";
       xpEarned = 15;
       break;
 
-    case 'medium':
+    case "medium":
       if (current.interval === 0) {
         newInterval = 0.007;
       } else if (current.interval < 1) {
@@ -35,14 +39,14 @@ export function calculateSM2(
       } else {
         newInterval = Math.round(current.interval * 1.2);
       }
-      newStatus = 'learning';
+      newStatus = "learning";
       xpEarned = 10;
       break;
 
-    case 'hard':
+    case "hard":
       newInterval = 0.0007;
       newEaseFactor = Math.max(1.3, current.easeFactor - 0.2);
-      newStatus = 'learning';
+      newStatus = "learning";
       xpEarned = 0;
       break;
 
@@ -50,7 +54,9 @@ export function calculateSM2(
       newInterval = current.interval;
   }
 
-  const nextReviewDate = new Date(now.getTime() + newInterval * 24 * 60 * 60 * 1000);
+  const nextReviewDate = new Date(
+    now.getTime() + newInterval * 24 * 60 * 60 * 1000,
+  );
 
   return {
     ...current,
@@ -60,21 +66,23 @@ export function calculateSM2(
     nextReviewDate: nextReviewDate.toISOString(),
     lastReviewDate: now.toISOString(),
     reviewCount: current.reviewCount + 1,
-    correctCount: quality === 'easy' ? current.correctCount + 1 : current.correctCount,
-    incorrectCount: quality === 'hard' ? current.incorrectCount + 1 : current.incorrectCount,
+    correctCount:
+      quality === "easy" ? current.correctCount + 1 : current.correctCount,
+    incorrectCount:
+      quality === "hard" ? current.incorrectCount + 1 : current.incorrectCount,
     xpEarned,
   };
 }
 export function createInitialSRSWord(
   wordId: string,
-  wordType: 'vocabulary' | 'verb' | 'phrasal' | 'idiom',
+  wordType: "vocabulary" | "verb" | "phrasal" | "idiom",
 ): WordReviewData {
   return {
     wordId,
     wordType,
-    status: 'new',
+    status: "new",
     nextReviewDate: new Date().toISOString(),
-    lastReviewDate: '',
+    lastReviewDate: "",
     reviewCount: 0,
     easeFactor: 2.5,
     interval: 0,
@@ -84,7 +92,7 @@ export function createInitialSRSWord(
 }
 export interface SRSWordWithInfo extends WordReviewData {
   level: string;
-  listType: 'ox3k' | 'ox5k' | string;
+  listType: "ox3k" | "ox5k" | string;
   freq?: number;
 }
 
@@ -105,37 +113,41 @@ export function prepareSRSQueue(
   const now = options.now || new Date();
   const goal = options.dailyGoal || 10;
   const dueWords = allWords.filter((w) => {
-    if (!w.nextReviewDate) return true;
+    if (!w.nextReviewDate) {
+      return true;
+    }
     const nextReview = new Date(w.nextReviewDate);
     return nextReview <= now;
   });
   const filteredDue = dueWords.filter((w) => {
     const { isCustomMode, filters } = options;
-    const isIdiomOrSlang = w.level === 'idioms' || w.level === 'slang';
+    const isIdiomOrSlang = w.level === "idioms" || w.level === "slang";
 
     const isAllowedType = isCustomMode || !isIdiomOrSlang;
 
     return (
       isAllowedType &&
-      (filters.listType === 'all' || w.listType === filters.listType) &&
+      (filters.listType === "all" || w.listType === filters.listType) &&
       (filters.levels.length === 0 || filters.levels.includes(w.level))
     );
   });
   let queue = [...filteredDue];
   if (queue.length < goal) {
     if (options.universe && options.universe.length > 0) {
-      const existingIds = new Set(allWords.map((w) => String(w.wordId).toLowerCase()));
+      const existingIds = new Set(
+        allWords.map((w) => String(w.wordId).toLowerCase()),
+      );
       const filteredCandidates = options.universe.filter((w) => {
         const { isCustomMode, filters } = options;
         const normalizedId = String(w.wordId).toLowerCase();
         const isNotUsed = !existingIds.has(normalizedId);
 
-        const isIdiomOrSlang = w.level === 'idioms' || w.level === 'slang';
+        const isIdiomOrSlang = w.level === "idioms" || w.level === "slang";
         const isAllowedType = isCustomMode || !isIdiomOrSlang;
 
         const matchesFilters =
           isAllowedType &&
-          (filters.listType === 'all' || w.listType === filters.listType) &&
+          (filters.listType === "all" || w.listType === filters.listType) &&
           (filters.levels.length === 0 || filters.levels.includes(w.level));
 
         return isNotUsed && matchesFilters;
@@ -146,14 +158,16 @@ export function prepareSRSQueue(
     }
 
     if (!options.isCustomMode && queue.length < goal) {
-      const usedInSession = new Set(queue.map((q) => String(q.wordId).toLowerCase()));
+      const usedInSession = new Set(
+        queue.map((q) => String(q.wordId).toLowerCase()),
+      );
       const reservoir = [...allWords, ...(options.universe || [])];
 
       const remainingCharacters = reservoir.filter((w) => {
         const normalizedId = String(w.wordId).toLowerCase();
 
         const isNotUsed = !usedInSession.has(normalizedId);
-        const isIdiomOrSlang = w.level === 'idioms' || w.level === 'slang';
+        const isIdiomOrSlang = w.level === "idioms" || w.level === "slang";
         const isAllowedType = !isIdiomOrSlang;
 
         return isNotUsed && isAllowedType;
@@ -161,7 +175,10 @@ export function prepareSRSQueue(
 
       const uniqueRemaining = Array.from(
         new Map(
-          remainingCharacters.map((c: SRSWordWithInfo) => [String(c.wordId).toLowerCase(), c]),
+          remainingCharacters.map((c: SRSWordWithInfo) => [
+            String(c.wordId).toLowerCase(),
+            c,
+          ]),
         ).values(),
       );
 

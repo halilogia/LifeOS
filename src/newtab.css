@@ -777,10 +777,6 @@ body.sidebar-open .sidebar {
 
 .tasks-container {
     display: none;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 16px;
-    padding: 1rem;
-    border: 1px solid var(--card-border);
 }
 
 .tasks-container.active {

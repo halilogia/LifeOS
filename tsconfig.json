@@ -10,6 +10,7 @@
     "noImplicitAny": false,
     "outDir": "dist",
     "rootDir": "src",
+    "resolveJsonModule": true,
     "types": ["chrome"]
   },
   "include": ["src/**/*.ts"],
