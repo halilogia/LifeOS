@@ -22,6 +22,9 @@ import { initSrs } from "./ui/srsView.js";
 import { initPomodoro } from "./features/pomodoro.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Restore local data to sync on first run
+  await storage.migrateLocalToSync();
+
   // Initial data load
   const settings = await storage.getSettings();
   state.currentLang = settings.lang;

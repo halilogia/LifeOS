@@ -89,4 +89,22 @@ export const storage = {
       });
     });
   },
+  migrateLocalToSync: async (): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(null, async (localData) => {
+        if (localData && Object.keys(localData).length > 0) {
+          // Check if sync already has data to avoid overwriting existing cloud data unnecessarily
+          chrome.storage.sync.get(null, async (syncData) => {
+            if (!syncData || Object.keys(syncData).length <= 1) { // <= 1 because lang might be there
+              await chrome.storage.sync.set(localData);
+              console.log("Data migrated to sync storage.");
+            }
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
 };
