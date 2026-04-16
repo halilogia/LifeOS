@@ -1,0 +1,2500 @@
+[
+  {
+    "id": "iv-1",
+    "word": "abide",
+    "v2": "abode / abided",
+    "v3": "abode / abided",
+    "definitions": ["To continue", "To reside", "To live"],
+    "examples": ["He promised to abide by the rules of the house."],
+    "freq": 3.59
+  },
+  {
+    "id": "iv-3",
+    "word": "alight",
+    "v2": "alit / alighted",
+    "v3": "alit / alighted",
+    "definitions": ["To get off a bus, train, etc."],
+    "examples": ["The passengers alighted from the bus at the town square."],
+    "freq": 3
+  },
+  {
+    "id": "iv-4",
+    "word": "arise",
+    "v2": "arose",
+    "v3": "arisen",
+    "definitions": [
+      "To originate",
+      "To get up from horizontal position, out of bed",
+      "To come into existence"
+    ],
+    "examples": ["Serious problems can arise from a lack of communication."],
+    "freq": 3.93
+  },
+  {
+    "id": "iv-5",
+    "word": "awake",
+    "v2": "awoke",
+    "v3": "awoken",
+    "definitions": ["To stop sleeping and become conscious"],
+    "examples": ["The sound of birds caused him to awake early."],
+    "freq": 4.14
+  },
+  {
+    "id": "iv-10",
+    "word": "be",
+    "v2": "was / were",
+    "v3": "been",
+    "definitions": [
+      "To exist, live or occur.",
+      "To have as a quality or a state",
+      "An auxiliary verb"
+    ],
+    "examples": ["There must be some mistake here."],
+    "freq": 6.79
+  },
+  {
+    "id": "iv-11",
+    "word": "bear",
+    "v2": "bore",
+    "v3": "born / borne",
+    "definitions": ["To carry", "To tolerate", "To give birth to"],
+    "examples": ["The bridge must be able to bear the weight of heavy trucks."],
+    "freq": 4.71
+  },
+  {
+    "id": "iv-12",
+    "word": "beat",
+    "v2": "beat",
+    "v3": "beaten",
+    "definitions": ["To hit repeatedly"],
+    "examples": ["He managed to beat his opponent in the final set."],
+    "freq": 5.01
+  },
+  {
+    "id": "iv-13",
+    "word": "become",
+    "v2": "became",
+    "v3": "become",
+    "definitions": ["To come into existence"],
+    "examples": ["It has become very cold this evening."],
+    "freq": 5.4
+  },
+  {
+    "id": "iv-17",
+    "word": "begin",
+    "v2": "began",
+    "v3": "begun",
+    "definitions": ["To start something"],
+    "examples": ["When does the concert begin?"],
+    "freq": 4.84
+  },
+  {
+    "id": "iv-20",
+    "word": "behold",
+    "v2": "beheld",
+    "v3": "beheld",
+    "definitions": ["To become conscious of by seeing"],
+    "examples": ["It was a truly magnificent sight to behold."],
+    "freq": 3.76
+  },
+  {
+    "id": "iv-22",
+    "word": "bend",
+    "v2": "bent",
+    "v3": "bent",
+    "definitions": ["To curve something by distorting its shape"],
+    "examples": ["Be careful not to bend the plastic."],
+    "freq": 4.13
+  },
+  {
+    "id": "iv-25",
+    "word": "beset",
+    "v2": "beset",
+    "v3": "beset",
+    "definitions": ["To be restricted and occupied by difficulties"],
+    "examples": ["The company has been beset by financial problems for several years."],
+    "freq": 3.08
+  },
+  {
+    "id": "iv-29",
+    "word": "bet",
+    "v2": "bet",
+    "v3": "bet",
+    "definitions": ["To risk money against the result of a future event"],
+    "examples": ["I bet ten dollars that he would win."],
+    "freq": 4.79
+  },
+  {
+    "id": "iv-33",
+    "word": "bid",
+    "v2": "bade",
+    "v3": "bidden",
+    "definitions": ["To command or urge someone to do something"],
+    "examples": ["The general bade his troops' attention before the battle."],
+    "freq": 4.4
+  },
+  {
+    "id": "iv-35",
+    "word": "bind",
+    "v2": "bound",
+    "v3": "bound",
+    "definitions": ["To tie something with string, or similar, to hold it"],
+    "examples": ["The wizard used a spell to bind the demon."],
+    "freq": 3.75
+  },
+  {
+    "id": "iv-36",
+    "word": "bite",
+    "v2": "bit",
+    "v3": "bitten",
+    "definitions": ["To cut or hold with teeth"],
+    "examples": ["Stop biting your nails."],
+    "freq": 4.31
+  },
+  {
+    "id": "iv-38",
+    "word": "bleed",
+    "v2": "bled",
+    "v3": "bled",
+    "definitions": ["To lose blood through a cut in the skin"],
+    "examples": ["Your finger is bleeding."],
+    "freq": 3.72
+  },
+  {
+    "id": "iv-39",
+    "word": "blend",
+    "v2": "blended / blent",
+    "v3": "blended / blent",
+    "definitions": ["To mix together"],
+    "examples": ["Oil and water do not blend very easily."],
+    "freq": 3.95
+  },
+  {
+    "id": "iv-40",
+    "word": "bless",
+    "v2": "blessed / blest",
+    "v3": "blessed / blest",
+    "definitions": ["To wish or confer happiness", "To make holy"],
+    "examples": ["The priest blessed the congregation at the end of the service."],
+    "freq": 4.17
+  },
+  {
+    "id": "iv-41",
+    "word": "blow",
+    "v2": "blew",
+    "v3": "blown",
+    "definitions": ["To move air, wind and gases"],
+    "examples": ["The wind blew the hat off my head."],
+    "freq": 4.59
+  },
+  {
+    "id": "iv-42",
+    "word": "bottle-feed",
+    "v2": "bottle-fed",
+    "v3": "bottle-fed",
+    "definitions": ["To feed a baby with a bottle"],
+    "examples": ["She had to bottle-feed her kitten because its mother was too ill."],
+    "freq": 4.32
+  },
+  {
+    "id": "iv-44",
+    "word": "break",
+    "v2": "broke",
+    "v3": "broken",
+    "definitions": ["To cause something to separate into at least two pieces"],
+    "examples": ["She accidentally broke the vase."],
+    "freq": 5.18
+  },
+  {
+    "id": "iv-45",
+    "word": "breast-feed",
+    "v2": "breast-fed",
+    "v3": "breast-fed",
+    "definitions": ["To feed a baby with breast milk"],
+    "examples": ["The doctor encouraged the new mother to breast-feed her child."],
+    "freq": 4.18
+  },
+  {
+    "id": "iv-46",
+    "word": "breed",
+    "v2": "bred",
+    "v3": "bred",
+    "definitions": ["To produce animals or plants by controlling their reproduction"],
+    "examples": ["Pandas are very difficult to breed in captivity."],
+    "freq": 4.08
+  },
+  {
+    "id": "iv-47",
+    "word": "bring",
+    "v2": "brought",
+    "v3": "brought",
+    "definitions": ["To carry or convey something to the place where you are going"],
+    "examples": ["Don't forget to bring your umbrella."],
+    "freq": 5.27
+  },
+  {
+    "id": "iv-48",
+    "word": "broadcast",
+    "v2": "broadcast / broadcasted",
+    "v3": "broadcast / broadcasted",
+    "definitions": ["To transmit radio or TV signals"],
+    "examples": ["The news is broadcast every hour."],
+    "freq": 4.39
+  },
+  {
+    "id": "iv-50",
+    "word": "build",
+    "v2": "built",
+    "v3": "built",
+    "definitions": ["To construct"],
+    "examples": ["They are building a new skyscraper downtown."],
+    "freq": 5.04
+  },
+  {
+    "id": "iv-51",
+    "word": "burn",
+    "v2": "burnt / burned",
+    "v3": "burnt / burned",
+    "definitions": ["To consume or be consumed by fire"],
+    "examples": ["The candles were burning on the table."],
+    "freq": 4.53
+  },
+  {
+    "id": "iv-52",
+    "word": "burst",
+    "v2": "burst",
+    "v3": "burst",
+    "definitions": [
+      "To break something open, usually by internal pressure, such as a balloon with too much air in it"
+    ],
+    "examples": ["The balloon burst when it hit the ground."],
+    "freq": 4.15
+  },
+  {
+    "id": "iv-53",
+    "word": "bust",
+    "v2": "bust",
+    "v3": "bust",
+    "definitions": ["To break"],
+    "examples": ["The police arrived to bust the illegal gambling ring."],
+    "freq": 4.04
+  },
+  {
+    "id": "iv-54",
+    "word": "buy",
+    "v2": "bought",
+    "v3": "bought",
+    "definitions": ["To acquire something in exchange for money"],
+    "examples": ["Where did you buy those shoes?"],
+    "freq": 5.32
+  },
+  {
+    "id": "iv-55",
+    "word": "cast",
+    "v2": "cast",
+    "v3": "cast",
+    "definitions": ["To throw or project something"],
+    "examples": ["The sun cast a long shadow on the wall."],
+    "freq": 4.79
+  },
+  {
+    "id": "iv-56",
+    "word": "catch",
+    "v2": "caught",
+    "v3": "caught",
+    "definitions": [
+      "To receive",
+      "To stop and hold a moving object, usually with your hands",
+      "To make something unable to escape"
+    ],
+    "examples": ["Did you catch any fish today?"],
+    "freq": 4.87
+  },
+  {
+    "id": "iv-59",
+    "word": "choose",
+    "v2": "chose",
+    "v3": "chosen",
+    "definitions": ["To select"],
+    "examples": ["Please choose a color for the walls."],
+    "freq": 4.91
+  },
+  {
+    "id": "iv-60",
+    "word": "clap",
+    "v2": "clapped / clapt",
+    "v3": "clapped / clapt",
+    "definitions": [
+      "To hit your hands together to make a sound to show approval",
+      "To make a loud noise, like thunder"
+    ],
+    "examples": ["The audience clapped at the end of the show."],
+    "freq": 3.54
+  },
+  {
+    "id": "iv-61",
+    "word": "clear-cut",
+    "v2": "clear-cut",
+    "v3": "clear-cut",
+    "definitions": ["To cut down all trees in an area"],
+    "examples": ["Large areas of the forest have been clear-cut for logging."],
+    "freq": 4.94
+  },
+  {
+    "id": "iv-65",
+    "word": "cling",
+    "v2": "clung",
+    "v3": "clung",
+    "definitions": ["To hold on to or to stick to"],
+    "examples": ["The child clung to his mother's hand."],
+    "freq": 3.49
+  },
+  {
+    "id": "iv-69",
+    "word": "come",
+    "v2": "came",
+    "v3": "come",
+    "definitions": ["To move towards or to arrive at a specified place, time or situation"],
+    "examples": ["Please come here for a moment."],
+    "freq": 5.78
+  },
+  {
+    "id": "iv-70",
+    "word": "cost",
+    "v2": "cost",
+    "v3": "cost",
+    "definitions": ["The amount of money required to buy something; it costs five dollars."],
+    "examples": ["How much does this watch cost?"],
+    "freq": 5.24
+  },
+  {
+    "id": "iv-71",
+    "word": "cost-cut",
+    "v2": "cost-cut",
+    "v3": "cost-cut",
+    "definitions": ["To reduce costs or expenditure"],
+    "examples": ["The company is looking for ways to cost-cut without affecting quality."],
+    "freq": 4.94
+  },
+  {
+    "id": "iv-74",
+    "word": "crash-dive",
+    "v2": "crash-dived",
+    "v3": "crash-dived",
+    "definitions": ["To go down very quickly"],
+    "examples": ["The submarine had to crash-dive to avoid the enemy ships."],
+    "freq": 3.98
+  },
+  {
+    "id": "iv-75",
+    "word": "creep",
+    "v2": "crept",
+    "v3": "crept",
+    "definitions": ["To move along the ground lying down"],
+    "examples": ["I saw a spider creeping across the floor."],
+    "freq": 3.84
+  },
+  {
+    "id": "iv-76",
+    "word": "creep-feed",
+    "v2": "creep-fed",
+    "v3": "creep-fed",
+    "definitions": ["To feed young animals in a special area that adult animals can't get in"],
+    "examples": ["The farmer used a creep-feed to ensure the lambs got enough nutrients."],
+    "freq": 3.78
+  },
+  {
+    "id": "iv-77",
+    "word": "crib-bite",
+    "v2": "crib-bit",
+    "v3": "crib-bitten",
+    "definitions": ["To bite its manger and swallow air (of a horse)"],
+    "examples": ["The horse started to crib-bite because of boredom."],
+    "freq": 3.42
+  },
+  {
+    "id": "iv-78",
+    "word": "cross-bite",
+    "v2": "cross-bit",
+    "v3": "cross-bitten",
+    "definitions": ["To thwart or stop something happening by deception"],
+    "examples": ["He tried to cross-bite the deal by spreading false rumors."],
+    "freq": 4.23
+  },
+  {
+    "id": "iv-79",
+    "word": "cross-string",
+    "v2": "cross-strung",
+    "v3": "cross-strung",
+    "definitions": ["To place bass strings on a piano across the treble strings"],
+    "examples": ["This vintage piano is cross-strung for a richer sound."],
+    "freq": 4.3
+  },
+  {
+    "id": "iv-83",
+    "word": "crow",
+    "v2": "crowed / crew",
+    "v3": "crowed",
+    "definitions": ["To boast To utter a sound indicating pleasure"],
+    "examples": ["The rooster crowed at the break of dawn."],
+    "freq": 3.8
+  },
+  {
+    "id": "iv-84",
+    "word": "cut",
+    "v2": "cut",
+    "v3": "cut",
+    "definitions": ["To break the surface of something with a knife or similar tool"],
+    "examples": ["He cut the cake into eight pieces."],
+    "freq": 5.24
+  },
+  {
+    "id": "iv-85",
+    "word": "dare",
+    "v2": "dared / durst",
+    "v3": "dared",
+    "definitions": ["To have sufficient courage"],
+    "examples": ["He dared to dream of a better future."],
+    "freq": 4.31
+  },
+  {
+    "id": "iv-87",
+    "word": "deal",
+    "v2": "dealt",
+    "v3": "dealt",
+    "definitions": ["To distribute, especially playing cards in games"],
+    "examples": ["How do you deal with difficult customers?"],
+    "freq": 5.32
+  },
+  {
+    "id": "iv-88",
+    "word": "deep-freeze",
+    "v2": "deep-froze",
+    "v3": "deep-frozen",
+    "definitions": ["To freeze or store frozen", "To suspend progress or activity"],
+    "examples": ["We need to deep-freeze the vegetables to keep them fresh."],
+    "freq": 4.06
+  },
+  {
+    "id": "iv-89",
+    "word": "dig",
+    "v2": "dug",
+    "v3": "dug",
+    "definitions": ["To make a hole in the ground"],
+    "examples": ["The dog is digging a hole in the garden."],
+    "freq": 4.22
+  },
+  {
+    "id": "iv-93",
+    "word": "dive",
+    "v2": "dived / dove",
+    "v3": "dived",
+    "definitions": ["To jump head first into water", "To fall quickly"],
+    "examples": ["The swimmers dived into the pool."],
+    "freq": 4.12
+  },
+  {
+    "id": "iv-94",
+    "word": "do",
+    "v2": "did",
+    "v3": "done",
+    "definitions": ["To perform or carry out"],
+    "examples": ["What are you doing this weekend?"],
+    "freq": 6.35
+  },
+  {
+    "id": "iv-96",
+    "word": "dow",
+    "v2": "dought / dowed",
+    "v3": "dought / dowed",
+    "definitions": ["To have the ability to do something", "To do well"],
+    "examples": ["He dought/dowed well in his new job."],
+    "freq": 3.63
+  },
+  {
+    "id": "iv-97",
+    "word": "draw",
+    "v2": "drew",
+    "v3": "drawn",
+    "definitions": ["To make a picture using a pen or pencil"],
+    "examples": ["She loves to draw portraits."],
+    "freq": 4.81
+  },
+  {
+    "id": "iv-98",
+    "word": "dream",
+    "v2": "dreamt / dreamed",
+    "v3": "dreamt / dreamed",
+    "definitions": ["To see visual images while sleeping"],
+    "examples": ["I had a strange dream last night."],
+    "freq": 4.91
+  },
+  {
+    "id": "iv-99",
+    "word": "drink",
+    "v2": "drank",
+    "v3": "drunk",
+    "definitions": ["To consume liquids"],
+    "examples": ["Would you like something to drink?"],
+    "freq": 4.9
+  },
+  {
+    "id": "iv-100",
+    "word": "drip-feed",
+    "v2": "drip-fed",
+    "v3": "drip-fed",
+    "definitions": [
+      "To feed someone with fluids going into the vein",
+      "To release information very slowly, bit by bit"
+    ],
+    "examples": ["The government began to drip-feed information to the press."],
+    "freq": 3.55
+  },
+  {
+    "id": "iv-101",
+    "word": "drive",
+    "v2": "drove",
+    "v3": "driven",
+    "definitions": ["To operate and control a car or other vehicle"],
+    "examples": ["It takes about an hour to drive to the airport."],
+    "freq": 5.13
+  },
+  {
+    "id": "iv-102",
+    "word": "dwell",
+    "v2": "dwelt",
+    "v3": "dwelt",
+    "definitions": ["To reside or live somewhere"],
+    "examples": ["They dwelt in a small cottage in the woods."],
+    "freq": 3.57
+  },
+  {
+    "id": "iv-103",
+    "word": "eat",
+    "v2": "ate",
+    "v3": "eaten",
+    "definitions": ["To consume solid food"],
+    "examples": ["Where should we eat dinner?"],
+    "freq": 5.13
+  },
+  {
+    "id": "iv-104",
+    "word": "end-run",
+    "v2": "end-ran",
+    "v3": "end-run",
+    "definitions": ["To avoid doing something by cheating or deceit"],
+    "examples": ["They tried to end-run the rules, but they were caught."],
+    "freq": 5.27
+  },
+  {
+    "id": "iv-108",
+    "word": "fall",
+    "v2": "fell",
+    "v3": "fallen",
+    "definitions": ["To move downwards or to the ground"],
+    "examples": ["Be careful not to fall on the ice."],
+    "freq": 5.13
+  },
+  {
+    "id": "iv-109",
+    "word": "fast-cut",
+    "v2": "fast-cut",
+    "v3": "fast-cut",
+    "definitions": ["To cut quickly from one scene to another in a film"],
+    "examples": ["The movie was fast-cut to create a sense of urgency."],
+    "freq": 4.88
+  },
+  {
+    "id": "iv-110",
+    "word": "feed",
+    "v2": "fed",
+    "v3": "fed",
+    "definitions": ["To give or supply food"],
+    "examples": ["Did you feed the dog this morning?"],
+    "freq": 4.67
+  },
+  {
+    "id": "iv-111",
+    "word": "feel",
+    "v2": "felt",
+    "v3": "felt",
+    "definitions": ["To sense by touch", "To experience an emotion, or sensation"],
+    "examples": ["I feel much better today."],
+    "freq": 5.67
+  },
+  {
+    "id": "iv-112",
+    "word": "fight",
+    "v2": "fought",
+    "v3": "fought",
+    "definitions": ["To try to hurt or kill someone in combat or war"],
+    "examples": ["They are fighting for their rights."],
+    "freq": 5.23
+  },
+  {
+    "id": "iv-113",
+    "word": "find",
+    "v2": "found",
+    "v3": "found",
+    "definitions": ["To discover something either by chance or when looking for it"],
+    "examples": ["I can't find my keys anywhere."],
+    "freq": 5.76
+  },
+  {
+    "id": "iv-114",
+    "word": "fit",
+    "v2": "fit / fitted",
+    "v3": "fit / fitted",
+    "definitions": [
+      "To be the correct size, for clothes, etc. (fit/fit/fit)",
+      "To measure someone for size (fit fit/fitted/ fit/fitted)"
+    ],
+    "examples": ["These shoes fit me perfectly."],
+    "freq": 4.95
+  },
+  {
+    "id": "iv-115",
+    "word": "flash-freeze",
+    "v2": "flash-froze",
+    "v3": "flash-frozen",
+    "definitions": ["To freeze food very rapidly to preserve taste and nutrients"],
+    "examples": ["The berries were flash-frozen immediately after picking."],
+    "freq": 3.95
+  },
+  {
+    "id": "iv-116",
+    "word": "flee",
+    "v2": "fled",
+    "v3": "fled",
+    "definitions": ["To run away in order to find safety"],
+    "examples": ["The family fled the country during the war."],
+    "freq": 3.81
+  },
+  {
+    "id": "iv-117",
+    "word": "fling",
+    "v2": "flung",
+    "v3": "flung",
+    "definitions": ["To throw or move something suddenly"],
+    "examples": ["He flung the door open."],
+    "freq": 3.33
+  },
+  {
+    "id": "iv-119",
+    "word": "fly",
+    "v2": "flew",
+    "v3": "flown",
+    "definitions": ["To move through the air", "To travel by aeroplane"],
+    "examples": ["Birds fly south for the winter."],
+    "freq": 4.75
+  },
+  {
+    "id": "iv-122",
+    "word": "forbid",
+    "v2": "forbade / forbad",
+    "v3": "forbidden",
+    "definitions": ["To prohibit"],
+    "examples": ["My doctor forbids me to eat sugar."],
+    "freq": 3.66
+  },
+  {
+    "id": "iv-123",
+    "word": "force-feed",
+    "v2": "force-fed",
+    "v3": "force-fed",
+    "definitions": ["To feed someone who refuses or doesn't want to eat"],
+    "examples": ["The prisoners were force-fed during the hunger strike."],
+    "freq": 4.56
+  },
+  {
+    "id": "iv-125",
+    "word": "forecast",
+    "v2": "forecast / forecasted",
+    "v3": "forecast / forecasted",
+    "definitions": ["To predict the future"],
+    "examples": ["The weather bureau forecast/forecasted rain for the weekend."],
+    "freq": 4.09
+  },
+  {
+    "id": "iv-130",
+    "word": "foresee",
+    "v2": "foresaw",
+    "v3": "foreseen",
+    "definitions": ["To predict or see the future"],
+    "examples": ["No one could foresee the consequences of their actions."],
+    "freq": 3.18
+  },
+  {
+    "id": "iv-134",
+    "word": "forget",
+    "v2": "forgot",
+    "v3": "forgotten",
+    "definitions": ["To be unable to remember something"],
+    "examples": ["I forgot to lock the door."],
+    "freq": 5.06
+  },
+  {
+    "id": "iv-135",
+    "word": "forgive",
+    "v2": "forgave",
+    "v3": "forgiven",
+    "definitions": ["To pardon or stop being angry with someone who has offended you"],
+    "examples": ["I hope you can forgive me."],
+    "freq": 4.25
+  },
+  {
+    "id": "iv-139",
+    "word": "fraught",
+    "v2": "fraught / fraughted",
+    "v3": "fraught / fraughted",
+    "definitions": ["To stock To load a ship, etc", "To hire a ship, etc"],
+    "examples": ["The ship was fraught/fraughted with expensive spices."],
+    "freq": 3.12
+  },
+  {
+    "id": "iv-140",
+    "word": "free-fall",
+    "v2": "free-fell",
+    "v3": "free-fallen",
+    "definitions": [
+      "To drop or fall suddenly",
+      "To fall through the air without opening a parachute"
+    ],
+    "examples": ["The skydiver was in free-fall for several minutes."],
+    "freq": 5.01
+  },
+  {
+    "id": "iv-141",
+    "word": "freeze",
+    "v2": "froze",
+    "v3": "frozen",
+    "definitions": [
+      "To make liquids into solids by cold temperatures",
+      "To store food below zero degrees centigrade"
+    ],
+    "examples": ["The lake freezes in the winter."],
+    "freq": 4.11
+  },
+  {
+    "id": "iv-145",
+    "word": "get",
+    "v2": "got",
+    "v3": "got / gotten",
+    "definitions": ["To obtain, catch or receive"],
+    "examples": ["I got a letter from my friend."],
+    "freq": 6.28
+  },
+  {
+    "id": "iv-148",
+    "word": "gin",
+    "v2": "gan",
+    "v3": "gan",
+    "definitions": ["To begin something"],
+    "examples": ["He gan to laugh out loud."],
+    "freq": 3.68
+  },
+  {
+    "id": "iv-150",
+    "word": "give",
+    "v2": "gave",
+    "v3": "given",
+    "definitions": ["To offer something as a present"],
+    "examples": ["Give me your hand."],
+    "freq": 5.71
+  },
+  {
+    "id": "iv-152",
+    "word": "go",
+    "v2": "went",
+    "v3": "gone / been",
+    "definitions": ["To travel to a place"],
+    "examples": ["We go to the park every Sunday."],
+    "freq": 6.03
+  },
+  {
+    "id": "iv-153",
+    "word": "grave",
+    "v2": "graved",
+    "v3": "graven / graved",
+    "definitions": ["To dig", "To carve", "To fix in the memory"],
+    "examples": ["The date was graven on the stone monument."],
+    "freq": 4.31
+  },
+  {
+    "id": "iv-154",
+    "word": "grind",
+    "v2": "ground",
+    "v3": "ground",
+    "definitions": ["To break something into a powder"],
+    "examples": ["Shall I grind some coffee for you?"],
+    "freq": 3.94
+  },
+  {
+    "id": "iv-155",
+    "word": "grow",
+    "v2": "grew",
+    "v3": "grown",
+    "definitions": ["To increase in size"],
+    "examples": ["These plants grow very fast."],
+    "freq": 4.9
+  },
+  {
+    "id": "iv-158",
+    "word": "hamstring",
+    "v2": "hamstrung / hamstringed",
+    "v3": "hamstrung / hamstringed",
+    "definitions": ["To make things difficult for someone doing something"],
+    "examples": ["The project was hamstrung by a lack of funding."],
+    "freq": 3.16
+  },
+  {
+    "id": "iv-159",
+    "word": "hand-feed",
+    "v2": "hand-fed",
+    "v3": "hand-fed",
+    "definitions": ["To give food by hand"],
+    "examples": ["We are not allowed to hand-feed the animals at the zoo."],
+    "freq": 4.6
+  },
+  {
+    "id": "iv-160",
+    "word": "hand-ride",
+    "v2": "hand-rode",
+    "v3": "hand-ridden",
+    "definitions": ["To control an animal by hand"],
+    "examples": ["The jockey had to hand-ride the horse to the finish line."],
+    "freq": 4.74
+  },
+  {
+    "id": "iv-163",
+    "word": "hang",
+    "v2": "hung / hanged",
+    "v3": "hung / hanged",
+    "definitions": ["To suspend from a support"],
+    "examples": ["Hang your coat on the hook."],
+    "freq": 4.6
+  },
+  {
+    "id": "iv-164",
+    "word": "have",
+    "v2": "had",
+    "v3": "had",
+    "definitions": ["To possess", "To do", "An auxiliary verb"],
+    "examples": ["They have a beautiful house."],
+    "freq": 6.71
+  },
+  {
+    "id": "iv-165",
+    "word": "hear",
+    "v2": "heard",
+    "v3": "heard",
+    "definitions": ["To detect or perceive sound"],
+    "examples": ["Did you hear that noise?"],
+    "freq": 5.23
+  },
+  {
+    "id": "iv-168",
+    "word": "hide",
+    "v2": "hid",
+    "v3": "hidden",
+    "definitions": ["To conceal or put something where it cannot be seen"],
+    "examples": ["The clouds hid the sun."],
+    "freq": 4.54
+  },
+  {
+    "id": "iv-170",
+    "word": "hit",
+    "v2": "hit",
+    "v3": "hit",
+    "definitions": ["To touch somebody or something with force"],
+    "examples": ["He hit the ball over the fence."],
+    "freq": 5.37
+  },
+  {
+    "id": "iv-172",
+    "word": "hoist",
+    "v2": "hoist / hoisted",
+    "v3": "hoist / hoisted",
+    "definitions": ["To raise or lift using ropes, etc"],
+    "examples": ["They hoisted the flag to the top of the pole."],
+    "freq": 3.12
+  },
+  {
+    "id": "iv-173",
+    "word": "hold",
+    "v2": "held",
+    "v3": "held",
+    "definitions": ["To secure something in your hand", "To contain"],
+    "examples": ["Can you hold this for a second?"],
+    "freq": 5.19
+  },
+  {
+    "id": "iv-174",
+    "word": "house-sit",
+    "v2": "house-sat",
+    "v3": "house-sat",
+    "definitions": ["To stay in someone's house to look after it while they are away"],
+    "examples": ["She agreed to house-sit for her neighbors while they were on vacation."],
+    "freq": 4.84
+  },
+  {
+    "id": "iv-176",
+    "word": "hurt",
+    "v2": "hurt",
+    "v3": "hurt",
+    "definitions": ["To cause pain, injury or stress", "To experience pain, injury or stress"],
+    "examples": ["My arm hurts after the workout."],
+    "freq": 4.94
+  },
+  {
+    "id": "iv-181",
+    "word": "input",
+    "v2": "input / inputted",
+    "v3": "input / inputted",
+    "definitions": ["To enter data into a computer"],
+    "examples": ["I need to input all these numbers into the spreadsheet."],
+    "freq": 4.35
+  },
+  {
+    "id": "iv-193",
+    "word": "jerry-build",
+    "v2": "jerry-built",
+    "v3": "jerry-built",
+    "definitions": ["To build something cheaply and badly"],
+    "examples": ["The houses were jerry-built and fell apart during the storm."],
+    "freq": 4.19
+  },
+  {
+    "id": "iv-194",
+    "word": "keep",
+    "v2": "kept",
+    "v3": "kept",
+    "definitions": [
+      "To have possession",
+      "To make somebody or something stay in a particular place"
+    ],
+    "examples": ["Keep the change."],
+    "freq": 5.66
+  },
+  {
+    "id": "iv-195",
+    "word": "ken",
+    "v2": "kent / kenned",
+    "v3": "kent / kenned",
+    "definitions": ["To know"],
+    "examples": ["He kens more about this subject than anyone else."],
+    "freq": 4.21
+  },
+  {
+    "id": "iv-196",
+    "word": "kneel",
+    "v2": "knelt / kneeled",
+    "v3": "knelt / kneeled",
+    "definitions": ["To support yourself on your knees"],
+    "examples": ["She knelt down to talk to the child."],
+    "freq": 3.24
+  },
+  {
+    "id": "iv-197",
+    "word": "knit",
+    "v2": "knit / knitted",
+    "v3": "knit / knitted",
+    "definitions": ["To make clothes such as pullovers out of wool"],
+    "examples": ["My grandmother taught me how to knit."],
+    "freq": 3.66
+  },
+  {
+    "id": "iv-198",
+    "word": "know",
+    "v2": "knew",
+    "v3": "known",
+    "definitions": ["To be acquainted with", "To have correctly in your memory"],
+    "examples": ["I know the way to the station."],
+    "freq": 6.1
+  },
+  {
+    "id": "iv-200",
+    "word": "landslide",
+    "v2": "landslid / landslided",
+    "v3": "landslid / landslided",
+    "definitions": ["To win a convincing and easy victory in an election"],
+    "examples": ["The incumbent mayor landslided into a second term."],
+    "freq": 3.47
+  },
+  {
+    "id": "iv-201",
+    "word": "lay",
+    "v2": "laid",
+    "v3": "laid",
+    "definitions": ["To put something in a horizontal position"],
+    "examples": ["Lay the baby in the crib."],
+    "freq": 4.64
+  },
+  {
+    "id": "iv-202",
+    "word": "lead",
+    "v2": "led",
+    "v3": "led",
+    "definitions": ["To take someone somewhere or guide them", "To be in command"],
+    "examples": ["This path leads to the forest."],
+    "freq": 5.2
+  },
+  {
+    "id": "iv-203",
+    "word": "lean",
+    "v2": "leant / leaned",
+    "v3": "leant / leaned",
+    "definitions": ["To place something at an incline for support against something"],
+    "examples": ["Don't lean against the wall."],
+    "freq": 4.14
+  },
+  {
+    "id": "iv-204",
+    "word": "leap",
+    "v2": "leapt / leaped",
+    "v3": "leapt / leaped",
+    "definitions": ["To jump"],
+    "examples": ["The cat leaped onto the fence."],
+    "freq": 3.94
+  },
+  {
+    "id": "iv-205",
+    "word": "learn",
+    "v2": "learnt / learned",
+    "v3": "learnt / learned",
+    "definitions": ["To acquire knowledge"],
+    "examples": ["I want to learn how to play the piano."],
+    "freq": 5.17
+  },
+  {
+    "id": "iv-206",
+    "word": "leave",
+    "v2": "left",
+    "v3": "left",
+    "definitions": ["To go out of a place"],
+    "examples": ["The train leaves in ten minutes."],
+    "freq": 5.34
+  },
+  {
+    "id": "iv-207",
+    "word": "lend",
+    "v2": "lent",
+    "v3": "lent",
+    "definitions": ["To give somebody money that must be returned"],
+    "examples": ["Can you lend me your pen?"],
+    "freq": 3.92
+  },
+  {
+    "id": "iv-209",
+    "word": "let",
+    "v2": "let",
+    "v3": "let",
+    "definitions": ["To allow something to happen", "To allow someone to do something"],
+    "examples": ["Let me see the results."],
+    "freq": 5.6
+  },
+  {
+    "id": "iv-210",
+    "word": "lie",
+    "v2": "lay",
+    "v3": "lain",
+    "definitions": ["To get into or be in a horizontal position"],
+    "examples": ["I just want to lie down for a while."],
+    "freq": 4.84
+  },
+  {
+    "id": "iv-211",
+    "word": "light",
+    "v2": "lit",
+    "v3": "lit",
+    "definitions": ["To make something burn"],
+    "examples": ["He lit a match to see better."],
+    "freq": 5.33
+  },
+  {
+    "id": "iv-213",
+    "word": "lip-read",
+    "v2": "lip-read",
+    "v3": "lip-read",
+    "definitions": ["To work out what someone is saying from the movements of their mouth"],
+    "examples": ["As she was deaf, she had to learn how to lip-read."],
+    "freq": 4.11
+  },
+  {
+    "id": "iv-214",
+    "word": "lose",
+    "v2": "lost",
+    "v3": "lost",
+    "definitions": ["Not to have something because you do not know where it is"],
+    "examples": ["I lost my phone yesterday."],
+    "freq": 5.08
+  },
+  {
+    "id": "iv-215",
+    "word": "make",
+    "v2": "made",
+    "v3": "made",
+    "definitions": [
+      "To create or construct something",
+      "To cause somebody to do something",
+      "To perform an action"
+    ],
+    "examples": ["I'll make some tea."],
+    "freq": 6.08
+  },
+  {
+    "id": "iv-216",
+    "word": "mean",
+    "v2": "meant",
+    "v3": "meant",
+    "definitions": ["To signify", "To intend"],
+    "examples": ["What do you mean by that?"],
+    "freq": 5.53
+  },
+  {
+    "id": "iv-217",
+    "word": "meet",
+    "v2": "met",
+    "v3": "met",
+    "definitions": ["To make somebody's acquaintance"],
+    "examples": ["Nice to meet you."],
+    "freq": 5.27
+  },
+  {
+    "id": "iv-218",
+    "word": "melt",
+    "v2": "melted",
+    "v3": "molten / melted",
+    "definitions": ["To change from solid into a liquid as the temperature goes up"],
+    "examples": ["The ice cream will melt if you leave it in the sun."],
+    "freq": 3.96
+  },
+  {
+    "id": "iv-232",
+    "word": "mislead",
+    "v2": "misled",
+    "v3": "misled",
+    "definitions": ["To make someone behave wrongly", "To deceive"],
+    "examples": ["The confusing signs misled the drivers."],
+    "freq": 3.22
+  },
+  {
+    "id": "iv-242",
+    "word": "mistake",
+    "v2": "mistook",
+    "v3": "mistaken",
+    "definitions": ["Not to understand", "To confuse somebody with someone else"],
+    "examples": ["I mistook you for your older brother."],
+    "freq": 4.67
+  },
+  {
+    "id": "iv-246",
+    "word": "misunderstand",
+    "v2": "misunderstood",
+    "v3": "misunderstood",
+    "definitions": ["Not to understand"],
+    "examples": ["I think you misunderstood what I said."],
+    "freq": 3.15
+  },
+  {
+    "id": "iv-250",
+    "word": "mow",
+    "v2": "mowed",
+    "v3": "mown",
+    "definitions": ["To cut grass or cereals"],
+    "examples": ["It's your turn to mow the lawn."],
+    "freq": 3.1
+  },
+  {
+    "id": "iv-252",
+    "word": "nose-dive",
+    "v2": "nose-dived / nose-dove",
+    "v3": "nose-dived / nose-dove",
+    "definitions": ["To dive or plunge nose first (aircraft)"],
+    "examples": ["The plane nose-dived shortly after takeoff."],
+    "freq": 3.97
+  },
+  {
+    "id": "iv-253",
+    "word": "offset",
+    "v2": "offset",
+    "v3": "offset",
+    "definitions": ["To compensate or counterbalance"],
+    "examples": ["The gains in one area offset the losses in another."],
+    "freq": 3.99
+  },
+  {
+    "id": "iv-265",
+    "word": "output",
+    "v2": "output / outputted",
+    "v3": "output / outputted",
+    "definitions": ["To put out or produce"],
+    "examples": ["The factory outputted twice as many cars this year."],
+    "freq": 4.43
+  },
+  {
+    "id": "iv-297",
+    "word": "overcast",
+    "v2": "overcast",
+    "v3": "overcast",
+    "definitions": ["To become cloudy", "To sew with overcast stitches (long slanting stitches)"],
+    "examples": ["We couldn't see the stars because the sky was overcast."],
+    "freq": 3.05
+  },
+  {
+    "id": "iv-298",
+    "word": "overcome",
+    "v2": "overcame",
+    "v3": "overcome",
+    "definitions": [
+      "To master a problem or difficult situation",
+      "To become helpless because of excessive emotions or physical difficulties"
+    ],
+    "examples": ["She managed to overcome her fear of heights."],
+    "freq": 4.27
+  },
+  {
+    "id": "iv-303",
+    "word": "overdrive",
+    "v2": "overdrove",
+    "v3": "overdriven",
+    "definitions": ["To drive or work something too hard"],
+    "examples": ["Don't overdrive the engine, or it might break down."],
+    "freq": 3.18
+  },
+  {
+    "id": "iv-310",
+    "word": "overlay",
+    "v2": "overlaid",
+    "v3": "overlaid",
+    "definitions": ["To cover something with a layer"],
+    "examples": ["They overlaid the wooden floors with a beautiful carpet."],
+    "freq": 3.24
+  },
+  {
+    "id": "iv-329",
+    "word": "overtake",
+    "v2": "overtook",
+    "v3": "overtaken",
+    "definitions": ["To pass a vehicle that is going more slowly"],
+    "examples": ["He pulled out to overtake the truck."],
+    "freq": 3.3
+  },
+  {
+    "id": "iv-331",
+    "word": "overthrow",
+    "v2": "overthrew",
+    "v3": "overthrown",
+    "definitions": ["To remove someone forcibly from government or power"],
+    "examples": ["The rebels plotted to overthrow the government."],
+    "freq": 3.61
+  },
+  {
+    "id": "iv-336",
+    "word": "partake",
+    "v2": "partook",
+    "v3": "partaken",
+    "definitions": ["To take part in something or a part of something, usually food"],
+    "examples": ["We were invited to partake in the feast."],
+    "freq": 3.23
+  },
+  {
+    "id": "iv-337",
+    "word": "pay",
+    "v2": "paid",
+    "v3": "paid",
+    "definitions": ["To give somebody money in exchange for things or services"],
+    "examples": ["I need to pay the electricity bill."],
+    "freq": 5.4
+  },
+  {
+    "id": "iv-338",
+    "word": "pen",
+    "v2": "pent / penned",
+    "v3": "pent / penned",
+    "definitions": ["To shut up or enclose in a cage, etc"],
+    "examples": ["The sheep were penned in for the night."],
+    "freq": 4.38
+  },
+  {
+    "id": "iv-339",
+    "word": "pinch-hit",
+    "v2": "pinch-hit",
+    "v3": "pinch-hit",
+    "definitions": ["To bat instead of a player in baseball, especially when a hit is needed"],
+    "examples": ["He was asked to pinch-hit when the lead actor fell ill."],
+    "freq": 3.75
+  },
+  {
+    "id": "iv-340",
+    "word": "plead",
+    "v2": "pled / pleaded",
+    "v3": "pled / pleaded",
+    "definitions": [
+      "To tell a court that you are guilty or innocent",
+      "To ask for special treatment by authorities, etc."
+    ],
+    "examples": ["The defendant will plead not guilty."],
+    "freq": 3.63
+  },
+  {
+    "id": "iv-342",
+    "word": "practice-teach",
+    "v2": "practice-taught",
+    "v3": "practice-taught",
+    "definitions": ["To teach as part of training"],
+    "examples": ["She had to practice-teach for a semester before getting her diploma."],
+    "freq": 4.52
+  },
+  {
+    "id": "iv-353",
+    "word": "price-cut",
+    "v2": "price-cut",
+    "v3": "price-cut",
+    "definitions": ["To cut or reduce prices"],
+    "examples": ["The supermarket decided to price-cut essential items."],
+    "freq": 4.93
+  },
+  {
+    "id": "iv-355",
+    "word": "prove",
+    "v2": "proved",
+    "v3": "proven / proved",
+    "definitions": ["To demonstrate that something is true"],
+    "examples": ["Can you prove that you were at home?"],
+    "freq": 4.77
+  },
+  {
+    "id": "iv-356",
+    "word": "put",
+    "v2": "put",
+    "v3": "put",
+    "definitions": ["To place something in a specific position"],
+    "examples": ["Put your hat on."],
+    "freq": 5.66
+  },
+  {
+    "id": "iv-357",
+    "word": "quick-freeze",
+    "v2": "quick-froze",
+    "v3": "quick-frozen",
+    "definitions": ["To freeze something rapidly"],
+    "examples": ["They quick-freeze the peas immediately after harvesting."],
+    "freq": 4.06
+  },
+  {
+    "id": "iv-358",
+    "word": "quit",
+    "v2": "quit",
+    "v3": "quit",
+    "definitions": ["To stop doing something", "To resign from a job"],
+    "examples": ["He decided to quit his job last month."],
+    "freq": 4.54
+  },
+  {
+    "id": "iv-359",
+    "word": "rap",
+    "v2": "rapped / rapt",
+    "v3": "rapped / rapt",
+    "definitions": ["To be very affected by strong emotion"],
+    "examples": ["He was rapt in thought as he listened to the music."],
+    "freq": 4.12
+  },
+  {
+    "id": "iv-360",
+    "word": "re-prove",
+    "v2": "re-proved",
+    "v3": "re-proved",
+    "definitions": ["To prove again"],
+    "examples": ["The scientist had to re-prove his theory with new evidence."],
+    "freq": 4.64
+  },
+  {
+    "id": "iv-361",
+    "word": "read",
+    "v2": "read",
+    "v3": "read",
+    "definitions": ["To look at written words and understand them"],
+    "examples": ["I like to read before bed."],
+    "freq": 5.54
+  },
+  {
+    "id": "iv-367",
+    "word": "rebuild",
+    "v2": "rebuilt",
+    "v3": "rebuilt",
+    "definitions": ["To build something again"],
+    "examples": ["The city was rebuilt after the devastating earthquake."],
+    "freq": 3.9
+  },
+  {
+    "id": "iv-372",
+    "word": "redo",
+    "v2": "redid",
+    "v3": "redone",
+    "definitions": ["To do something again"],
+    "examples": ["I had to redo my homework because of the mistakes."],
+    "freq": 3.19
+  },
+  {
+    "id": "iv-381",
+    "word": "relay",
+    "v2": "relaid",
+    "v3": "relaid",
+    "definitions": ["To operate a system where things are replaced as they become used or tired"],
+    "examples": ["The fresh horses were relayed at the next station."],
+    "freq": 3.86
+  },
+  {
+    "id": "iv-384",
+    "word": "remake",
+    "v2": "remade",
+    "v3": "remade",
+    "definitions": ["To make something again, such as a new version of a film"],
+    "examples": ["They decided to remake the classic movie with a modern twist."],
+    "freq": 3.79
+  },
+  {
+    "id": "iv-386",
+    "word": "repay",
+    "v2": "repaid",
+    "v3": "repaid",
+    "definitions": ["To pay somebody money owed"],
+    "examples": ["It will take years to repay the bank loan."],
+    "freq": 3.66
+  },
+  {
+    "id": "iv-387",
+    "word": "reread",
+    "v2": "reread",
+    "v3": "reread",
+    "definitions": ["To read again"],
+    "examples": ["I highly recommend you reread the instructions carefully."],
+    "freq": 3
+  },
+  {
+    "id": "iv-391",
+    "word": "reset",
+    "v2": "reset",
+    "v3": "reset",
+    "definitions": ["To put something back to the original way it was organised"],
+    "examples": ["You will need to reset your password."],
+    "freq": 3.83
+  },
+  {
+    "id": "iv-398",
+    "word": "retake",
+    "v2": "retook",
+    "v3": "retaken",
+    "definitions": ["Take again, especially exams and tests"],
+    "examples": ["He failed the driving test, so he'll have to retake it in a month."],
+    "freq": 3.28
+  },
+  {
+    "id": "iv-402",
+    "word": "rethink",
+    "v2": "rethought",
+    "v3": "rethought",
+    "definitions": ["To think again"],
+    "examples": ["We need to rethink our marketing strategy."],
+    "freq": 3.47
+  },
+  {
+    "id": "iv-410",
+    "word": "rewind",
+    "v2": "rewound",
+    "v3": "rewound",
+    "definitions": ["To put a cassette or video back to the beginning"],
+    "examples": ["Please rewind the tape to the beginning."],
+    "freq": 3.24
+  },
+  {
+    "id": "iv-411",
+    "word": "rewrite",
+    "v2": "rewrote",
+    "v3": "rewritten",
+    "definitions": ["To write something again, usually with improvements"],
+    "examples": ["The author had to rewrite the final chapter of the book."],
+    "freq": 3.47
+  },
+  {
+    "id": "iv-412",
+    "word": "rid",
+    "v2": "rid / ridded",
+    "v3": "rid / ridded",
+    "definitions": ["To dispose of"],
+    "examples": ["We need to rid the house of mice."],
+    "freq": 4.5
+  },
+  {
+    "id": "iv-413",
+    "word": "ride",
+    "v2": "rode",
+    "v3": "ridden",
+    "definitions": ["To travel by horse, bike or motorbike"],
+    "examples": ["He rides his bike to work every day."],
+    "freq": 4.85
+  },
+  {
+    "id": "iv-414",
+    "word": "ring",
+    "v2": "rang",
+    "v3": "rung",
+    "definitions": ["To telephone", "To make sounds with a bell"],
+    "examples": ["The phone is ringing."],
+    "freq": 4.81
+  },
+  {
+    "id": "iv-415",
+    "word": "rise",
+    "v2": "rose",
+    "v3": "risen",
+    "definitions": ["To move upwards"],
+    "examples": ["The sun rises in the east."],
+    "freq": 4.81
+  },
+  {
+    "id": "iv-419",
+    "word": "run",
+    "v2": "ran",
+    "v3": "run",
+    "definitions": ["To move quickly, so that both legs leave the ground"],
+    "examples": ["The children love to run in the park."],
+    "freq": 5.49
+  },
+  {
+    "id": "iv-420",
+    "word": "sand-cast",
+    "v2": "sand-cast",
+    "v3": "sand-cast",
+    "definitions": ["To make a cast by pouring metal into a mold made of sand."],
+    "examples": ["The bronze sculpture was sand-cast by the artist."],
+    "freq": 4.28
+  },
+  {
+    "id": "iv-421",
+    "word": "saw",
+    "v2": "sawed",
+    "v3": "sawn / sawed",
+    "definitions": ["To cut wood, etc, with a tool"],
+    "examples": ["They were sawing the fallen tree into logs."],
+    "freq": 5.34
+  },
+  {
+    "id": "iv-422",
+    "word": "say",
+    "v2": "said",
+    "v3": "said",
+    "definitions": ["To speak words"],
+    "examples": ["What did she say to you?"],
+    "freq": 5.89
+  },
+  {
+    "id": "iv-423",
+    "word": "see",
+    "v2": "saw",
+    "v3": "seen",
+    "definitions": ["To notice with your eyes"],
+    "examples": ["I can see the mountains from here."],
+    "freq": 6.1
+  },
+  {
+    "id": "iv-424",
+    "word": "seek",
+    "v2": "sought",
+    "v3": "sought",
+    "definitions": ["To try to find something"],
+    "examples": ["They are seeking shelter from the rain."],
+    "freq": 4.61
+  },
+  {
+    "id": "iv-425",
+    "word": "self-feed",
+    "v2": "self-fed",
+    "v3": "self-fed",
+    "definitions": ["To feed itself without assistance"],
+    "examples": ["The infant is learning to self-feed."],
+    "freq": 4.57
+  },
+  {
+    "id": "iv-426",
+    "word": "self-sow",
+    "v2": "self-sowed",
+    "v3": "self-sown / self-sowed",
+    "definitions": ["To sow itself without assistance"],
+    "examples": ["Some plants will self-sow and spread naturally in the garden."],
+    "freq": 3.37
+  },
+  {
+    "id": "iv-427",
+    "word": "sell",
+    "v2": "sold",
+    "v3": "sold",
+    "definitions": ["To receive money in exchange for goods"],
+    "examples": ["They sell fresh bread at the bakery."],
+    "freq": 4.98
+  },
+  {
+    "id": "iv-428",
+    "word": "send",
+    "v2": "sent",
+    "v3": "sent",
+    "definitions": [
+      "To cause something to be taken to a specific destination, especially letters, message, etc."
+    ],
+    "examples": ["I'll send you an email tonight."],
+    "freq": 5.11
+  },
+  {
+    "id": "iv-429",
+    "word": "set",
+    "v2": "set",
+    "v3": "set",
+    "definitions": ["To place something somewhere", "To fix something in a particular position"],
+    "examples": ["Set the table for dinner."],
+    "freq": 5.59
+  },
+  {
+    "id": "iv-430",
+    "word": "sew",
+    "v2": "sewed",
+    "v3": "sewn / sewed",
+    "definitions": ["To join pieces of material together using thread"],
+    "examples": ["She sews all her own clothes."],
+    "freq": 3.45
+  },
+  {
+    "id": "iv-431",
+    "word": "shake",
+    "v2": "shook",
+    "v3": "shaken",
+    "definitions": ["To vibrate To make something vibrate"],
+    "examples": ["Shake the bottle before opening."],
+    "freq": 4.33
+  },
+  {
+    "id": "iv-432",
+    "word": "shave",
+    "v2": "shaved",
+    "v3": "shaven / shaved",
+    "definitions": ["To remove body hair"],
+    "examples": ["He shaves his beard every morning."],
+    "freq": 3.83
+  },
+  {
+    "id": "iv-433",
+    "word": "shear",
+    "v2": "shore / sheared",
+    "v3": "shorn / sheared",
+    "definitions": ["To cut with scissors, especially wool from sheep"],
+    "examples": ["The farmers shear the sheep in the spring."],
+    "freq": 3.4
+  },
+  {
+    "id": "iv-434",
+    "word": "shed",
+    "v2": "shed",
+    "v3": "shed",
+    "definitions": ["To fall off or let something fall off; snakes shed their skin"],
+    "examples": ["Trees shed their leaves in autumn."],
+    "freq": 4.23
+  },
+  {
+    "id": "iv-437",
+    "word": "shine",
+    "v2": "shone",
+    "v3": "shone",
+    "definitions": ["To give off or reflect bright light"],
+    "examples": ["The stars are shining brightly."],
+    "freq": 4.17
+  },
+  {
+    "id": "iv-438",
+    "word": "shit",
+    "v2": "shat / shit",
+    "v3": "shat / shit",
+    "definitions": ["To get rid of solid body waste"],
+    "examples": ["The dog shat on the new carpet."],
+    "freq": 5.48
+  },
+  {
+    "id": "iv-439",
+    "word": "shoe",
+    "v2": "shod",
+    "v3": "shod",
+    "definitions": ["To provide with shoes, especially horses"],
+    "examples": ["The blacksmith shod the horse yesterday."],
+    "freq": 4.24
+  },
+  {
+    "id": "iv-440",
+    "word": "shoot",
+    "v2": "shot",
+    "v3": "shot",
+    "definitions": ["To fire a bullet from a gun", "To kill or hurt somebody with a gun"],
+    "examples": ["He can shoot an arrow with great accuracy."],
+    "freq": 4.73
+  },
+  {
+    "id": "iv-441",
+    "word": "shortcut",
+    "v2": "shortcut",
+    "v3": "shortcut",
+    "definitions": ["To use a shorter or quicker way of going somewhere or doing something"],
+    "examples": ["We tried to shortcut the long queue by entering through the side door."],
+    "freq": 3.35
+  },
+  {
+    "id": "iv-442",
+    "word": "show",
+    "v2": "showed",
+    "v3": "shown",
+    "definitions": ["To allow somebody to see something so that they can become aware of it"],
+    "examples": ["Let me show you my new car."],
+    "freq": 5.68
+  },
+  {
+    "id": "iv-443",
+    "word": "shrink",
+    "v2": "shrank",
+    "v3": "shrunk",
+    "definitions": ["To become smaller", "To make something smaller"],
+    "examples": ["My sweater shrank in the wash."],
+    "freq": 3.73
+  },
+  {
+    "id": "iv-445",
+    "word": "shut",
+    "v2": "shut",
+    "v3": "shut",
+    "definitions": ["To close something"],
+    "examples": ["Please shut the window."],
+    "freq": 4.78
+  },
+  {
+    "id": "iv-447",
+    "word": "sight-read",
+    "v2": "sight-read",
+    "v3": "sight-read",
+    "definitions": ["To read music"],
+    "examples": ["She can sight-read even the most difficult pieces of music."],
+    "freq": 4.5
+  },
+  {
+    "id": "iv-449",
+    "word": "sing",
+    "v2": "sang",
+    "v3": "sung",
+    "definitions": ["To make music with your voice"],
+    "examples": ["She sings beautifully."],
+    "freq": 4.54
+  },
+  {
+    "id": "iv-450",
+    "word": "sink",
+    "v2": "sank",
+    "v3": "sunk",
+    "definitions": ["To move downwards in water", "To make something move downwards in water"],
+    "examples": ["The boat began to sink and we had to swim."],
+    "freq": 4.21
+  },
+  {
+    "id": "iv-451",
+    "word": "sit",
+    "v2": "sat",
+    "v3": "sat",
+    "definitions": [
+      "To support your body with your buttocks not your feet, with the back in a vertical position as on a chair"
+    ],
+    "examples": ["Please sit down on the sofa."],
+    "freq": 4.9
+  },
+  {
+    "id": "iv-453",
+    "word": "slay",
+    "v2": "slew",
+    "v3": "slain",
+    "definitions": ["To kill"],
+    "examples": ["In the legend, the hero slays the dragon."],
+    "freq": 3.35
+  },
+  {
+    "id": "iv-454",
+    "word": "sleep",
+    "v2": "slept",
+    "v3": "slept",
+    "definitions": ["To be in a relaxed state with your eyes closed"],
+    "examples": ["I usually sleep for eight hours."],
+    "freq": 5.05
+  },
+  {
+    "id": "iv-455",
+    "word": "slide",
+    "v2": "slid",
+    "v3": "slid / slidden",
+    "definitions": ["To move on a smooth surface, such as ice"],
+    "examples": ["The kids are sliding on the ice."],
+    "freq": 4.3
+  },
+  {
+    "id": "iv-456",
+    "word": "sling",
+    "v2": "slung",
+    "v3": "slung",
+    "definitions": ["To throw something somewhere"],
+    "examples": ["He slung his bag over his shoulder."],
+    "freq": 3.34
+  },
+  {
+    "id": "iv-458",
+    "word": "slit",
+    "v2": "slit",
+    "v3": "slit",
+    "definitions": ["To make a long thin cut in something"],
+    "examples": ["She slit the envelope open with a knife."],
+    "freq": 3.47
+  },
+  {
+    "id": "iv-459",
+    "word": "smell",
+    "v2": "smelt / smelled",
+    "v3": "smelt / smelled",
+    "definitions": ["To detect odours with your nose", "To emit odours"],
+    "examples": ["These flowers smell wonderful."],
+    "freq": 4.49
+  },
+  {
+    "id": "iv-462",
+    "word": "sneak",
+    "v2": "sneaked / snuck",
+    "v3": "sneaked / snuck",
+    "definitions": ["To move around guiltily or to avoid being noticed"],
+    "examples": ["We tried to sneak past the guard."],
+    "freq": 3.99
+  },
+  {
+    "id": "iv-464",
+    "word": "sow",
+    "v2": "sowed",
+    "v3": "sown",
+    "definitions": ["To plant seeds in the ground to produce plants or cereals"],
+    "examples": ["The farmer is sowing wheat this week."],
+    "freq": 3.38
+  },
+  {
+    "id": "iv-465",
+    "word": "speak",
+    "v2": "spoke",
+    "v3": "spoken",
+    "definitions": ["To say words with your mouth", "To be able to use a language"],
+    "examples": ["Do you speak any other languages?"],
+    "freq": 5.03
+  },
+  {
+    "id": "iv-466",
+    "word": "speed",
+    "v2": "sped / speeded",
+    "v3": "sped / speeded",
+    "definitions": ["To move quickly", "To drive faster than legally permitted"],
+    "examples": ["The car sped away from the police."],
+    "freq": 5
+  },
+  {
+    "id": "iv-467",
+    "word": "spell",
+    "v2": "spelt / spelled",
+    "v3": "spelt / spelled",
+    "definitions": ["To use the correct combination of letters for a word"],
+    "examples": ["How do you spell your last name?"],
+    "freq": 4.37
+  },
+  {
+    "id": "iv-469",
+    "word": "spend",
+    "v2": "spent",
+    "v3": "spent",
+    "definitions": ["To use money to buy things", "To use time or energy doing something"],
+    "examples": ["I spent the whole day reading."],
+    "freq": 4.97
+  },
+  {
+    "id": "iv-470",
+    "word": "spill",
+    "v2": "spilt / spilled",
+    "v3": "spilt / spilled",
+    "definitions": ["To allow liquids out of their containers accidentally"],
+    "examples": ["I accidentally spilled some milk."],
+    "freq": 3.84
+  },
+  {
+    "id": "iv-471",
+    "word": "spin",
+    "v2": "span / spun",
+    "v3": "spun",
+    "definitions": [
+      "To turn repeatedly in circles around a fixed point",
+      "To make something turn repeatedly in circles"
+    ],
+    "examples": ["The dancer began to spin in circles."],
+    "freq": 4.38
+  },
+  {
+    "id": "iv-472",
+    "word": "spit",
+    "v2": "spat / spit",
+    "v3": "spat / spit",
+    "definitions": ["To eject saliva, liquid or food from the mouth"],
+    "examples": ["It is rude to spit on the street."],
+    "freq": 3.85
+  },
+  {
+    "id": "iv-473",
+    "word": "split",
+    "v2": "split",
+    "v3": "split",
+    "definitions": ["To divide", "To break open"],
+    "examples": ["The log split easily with the axe."],
+    "freq": 4.65
+  },
+  {
+    "id": "iv-474",
+    "word": "spoil",
+    "v2": "spoilt / spoiled",
+    "v3": "spoilt / spoiled",
+    "definitions": ["To let something go bad", "To go bad"],
+    "examples": ["The milk will spoil if you leave it out of the fridge."],
+    "freq": 3.81
+  },
+  {
+    "id": "iv-476",
+    "word": "spread",
+    "v2": "spread",
+    "v3": "spread",
+    "definitions": ["To cover the surface of one thing with"],
+    "examples": ["Spread the cloth over the table."],
+    "freq": 4.81
+  },
+  {
+    "id": "iv-477",
+    "word": "spring",
+    "v2": "sprang",
+    "v3": "sprung",
+    "definitions": ["To jump To become active"],
+    "examples": ["He sprang out of bed when the alarm went off."],
+    "freq": 4.92
+  },
+  {
+    "id": "iv-478",
+    "word": "stall-feed",
+    "v2": "stall-fed",
+    "v3": "stall-fed",
+    "definitions": ["To feed or fatten an animal in a stall"],
+    "examples": ["The cattle were stall-fed for several months before being sold."],
+    "freq": 3.74
+  },
+  {
+    "id": "iv-479",
+    "word": "stand",
+    "v2": "stood",
+    "v3": "stood",
+    "definitions": [
+      "To be in a vertical position with the weight on the feet",
+      "To get into this position"
+    ],
+    "examples": ["I had to stand on the bus because it was full."],
+    "freq": 5.14
+  },
+  {
+    "id": "iv-480",
+    "word": "stave",
+    "v2": "stove / staved / stoved",
+    "v3": "stove / staved / stoved",
+    "definitions": ["To break a hole in something"],
+    "examples": ["The side of the boat was staved in by the rocks."],
+    "freq": 3.04
+  },
+  {
+    "id": "iv-481",
+    "word": "steal",
+    "v2": "stole",
+    "v3": "stolen",
+    "definitions": ["To take property or money that is not yours"],
+    "examples": ["The thief stole my wallet."],
+    "freq": 4.41
+  },
+  {
+    "id": "iv-482",
+    "word": "stick",
+    "v2": "stuck",
+    "v3": "stuck",
+    "definitions": ["To attach things with glue", "To insert a sharp object into something"],
+    "examples": ["Don't stick your finger in the electrical socket."],
+    "freq": 4.76
+  },
+  {
+    "id": "iv-483",
+    "word": "sting",
+    "v2": "stung",
+    "v3": "stung",
+    "definitions": [
+      "To feel pain caused by an insect or plant or in a particular part of the body"
+    ],
+    "examples": ["A bee stung me on the arm."],
+    "freq": 3.8
+  },
+  {
+    "id": "iv-484",
+    "word": "stink",
+    "v2": "stank",
+    "v3": "stunk",
+    "definitions": ["To smell very badly"],
+    "examples": ["The garbage really stinks."],
+    "freq": 3.46
+  },
+  {
+    "id": "iv-487",
+    "word": "stride",
+    "v2": "strode / strided",
+    "v3": "stridden",
+    "definitions": ["To walk confidently"],
+    "examples": ["He strode confidently into the room."],
+    "freq": 3.43
+  },
+  {
+    "id": "iv-488",
+    "word": "strike",
+    "v2": "struck",
+    "v3": "struck / stricken",
+    "definitions": ["To stop working as a protest about working conditions", "To hit"],
+    "examples": ["The clock struck twelve."],
+    "freq": 4.66
+  },
+  {
+    "id": "iv-489",
+    "word": "string",
+    "v2": "strung",
+    "v3": "strung",
+    "definitions": ["To attach something using a cord"],
+    "examples": ["She was busy stringing beads for a necklace."],
+    "freq": 4.4
+  },
+  {
+    "id": "iv-490",
+    "word": "strip",
+    "v2": "stript / stripped",
+    "v3": "stript / stripped",
+    "definitions": ["To undress", "To remove the covering of something"],
+    "examples": ["They stripped the old wallpaper off the walls."],
+    "freq": 4.36
+  },
+  {
+    "id": "iv-491",
+    "word": "strive",
+    "v2": "strove",
+    "v3": "striven",
+    "definitions": ["To try very hard to do something"],
+    "examples": ["We will strive to improve our service."],
+    "freq": 3.72
+  },
+  {
+    "id": "iv-494",
+    "word": "swear",
+    "v2": "swore",
+    "v3": "sworn",
+    "definitions": ["To use words which are regarded as offensive", "To promise"],
+    "examples": ["I swear that I am telling the truth."],
+    "freq": 4.51
+  },
+  {
+    "id": "iv-495",
+    "word": "sweat",
+    "v2": "sweat / sweated",
+    "v3": "sweat / sweated",
+    "definitions": ["To perspire"],
+    "examples": ["He was sweating profusely after the long run."],
+    "freq": 4.14
+  },
+  {
+    "id": "iv-496",
+    "word": "sweep",
+    "v2": "swept / sweeped",
+    "v3": "swept / sweeped",
+    "definitions": ["To clean floors using a brush"],
+    "examples": ["Can you sweep the kitchen floor?"],
+    "freq": 3.97
+  },
+  {
+    "id": "iv-497",
+    "word": "swell",
+    "v2": "swelled",
+    "v3": "swollen",
+    "definitions": ["To increase in size usually by filling with liquids or gases"],
+    "examples": ["His ankle started to swell after the fall."],
+    "freq": 3.64
+  },
+  {
+    "id": "iv-498",
+    "word": "swim",
+    "v2": "swam",
+    "v3": "swum",
+    "definitions": ["To travel in water by moving your arms and legs"],
+    "examples": ["I love to swim in the ocean."],
+    "freq": 4.21
+  },
+  {
+    "id": "iv-499",
+    "word": "swing",
+    "v2": "swung",
+    "v3": "swung",
+    "definitions": ["To move from side to side from a fixed point"],
+    "examples": ["The children are swinging in the playground."],
+    "freq": 4.34
+  },
+  {
+    "id": "iv-501",
+    "word": "switch-hit",
+    "v2": "switch-hit",
+    "v3": "switch-hit",
+    "definitions": ["To bat right-handed against a left-handed bowler, or vice versa, in baseball"],
+    "examples": ["The batter decided to switch-hit to gain an advantage."],
+    "freq": 4.53
+  },
+  {
+    "id": "iv-502",
+    "word": "take",
+    "v2": "took",
+    "v3": "taken",
+    "definitions": ["To perform an action", "To acquire"],
+    "examples": ["Take a deep breath and relax."],
+    "freq": 5.92
+  },
+  {
+    "id": "iv-503",
+    "word": "teach",
+    "v2": "taught",
+    "v3": "taught",
+    "definitions": ["To instruct or train somebody"],
+    "examples": ["She teaches English at the local high school."],
+    "freq": 4.67
+  },
+  {
+    "id": "iv-504",
+    "word": "tear",
+    "v2": "tore",
+    "v3": "torn",
+    "definitions": ["To make a hole or divide material, paper, etc."],
+    "examples": ["Be careful not to tear the fragile document."],
+    "freq": 4.35
+  },
+  {
+    "id": "iv-505",
+    "word": "telecast",
+    "v2": "telecast / telecasted",
+    "v3": "telecast / telecasted",
+    "definitions": ["To broadcast on TV"],
+    "examples": ["The concert was telecast live around the world."],
+    "freq": 3.07
+  },
+  {
+    "id": "iv-506",
+    "word": "tell",
+    "v2": "told",
+    "v3": "told",
+    "definitions": ["To give somebody information"],
+    "examples": ["Can you tell me a story?"],
+    "freq": 5.53
+  },
+  {
+    "id": "iv-507",
+    "word": "test-drive",
+    "v2": "test-drove",
+    "v3": "test-driven",
+    "definitions": ["To drive a car to test it before buying"],
+    "examples": ["We took the new SUV for a test-drive yesterday."],
+    "freq": 4.86
+  },
+  {
+    "id": "iv-508",
+    "word": "test-fly",
+    "v2": "test-flew",
+    "v3": "test-flown",
+    "definitions": ["To test a plane"],
+    "examples": ["The pilot test-flew the prototype aircraft this morning."],
+    "freq": 4.62
+  },
+  {
+    "id": "iv-509",
+    "word": "think",
+    "v2": "thought",
+    "v3": "thought",
+    "definitions": ["To have an opinion To use the brain"],
+    "examples": ["I think it is a great idea."],
+    "freq": 6.08
+  },
+  {
+    "id": "iv-510",
+    "word": "thrive",
+    "v2": "throve / thrived",
+    "v3": "thriven / thrived",
+    "definitions": ["To do very well because the circumstances or situation is right"],
+    "examples": ["The plants thrive in this sunny spot."],
+    "freq": 3.73
+  },
+  {
+    "id": "iv-511",
+    "word": "throw",
+    "v2": "threw",
+    "v3": "thrown",
+    "definitions": [
+      "To cause an object to leave your hand in such a way that it travels through the air"
+    ],
+    "examples": ["Throw the ball to me!"],
+    "freq": 4.83
+  },
+  {
+    "id": "iv-512",
+    "word": "thrust",
+    "v2": "thrust",
+    "v3": "thrust",
+    "definitions": ["To push with force"],
+    "examples": ["He thrust the sword into the ground."],
+    "freq": 3.86
+  },
+  {
+    "id": "iv-515",
+    "word": "tread",
+    "v2": "trod",
+    "v3": "trodden",
+    "definitions": ["To put your foot down"],
+    "examples": ["Tread carefully on the slippery floor."],
+    "freq": 3.52
+  },
+  {
+    "id": "iv-527",
+    "word": "undercut",
+    "v2": "undercut",
+    "v3": "undercut",
+    "definitions": ["To sell at a cheaper price than a competitor"],
+    "examples": ["The supermarket undercut its rivals by reducing the price of milk."],
+    "freq": 3.1
+  },
+  {
+    "id": "iv-531",
+    "word": "undergo",
+    "v2": "underwent",
+    "v3": "undergone",
+    "definitions": ["To suffer or go through an unpleasant experience, such as surgery"],
+    "examples": ["She had to undergo a minor operation on her knee."],
+    "freq": 3.81
+  },
+  {
+    "id": "iv-540",
+    "word": "understand",
+    "v2": "understood",
+    "v3": "understood",
+    "definitions": ["To know or come to know the meaning of something"],
+    "examples": ["Do you understand the instructions?"],
+    "freq": 5.37
+  },
+  {
+    "id": "iv-541",
+    "word": "undertake",
+    "v2": "undertook",
+    "v3": "undertaken",
+    "definitions": ["To accept responsibility for doing something"],
+    "examples": ["He undertook the task with great enthusiasm."],
+    "freq": 3.73
+  },
+  {
+    "id": "iv-544",
+    "word": "undo",
+    "v2": "undid",
+    "v3": "undone",
+    "definitions": [
+      "To ruin somebody's reputation",
+      "To 'open' clothes or shoes before taking them off"
+    ],
+    "examples": ["Can you help me undo this knot?"],
+    "freq": 3.57
+  },
+  {
+    "id": "iv-569",
+    "word": "unwind",
+    "v2": "unwound",
+    "v3": "unwound",
+    "definitions": ["To relax"],
+    "examples": ["After a long day at work, I like to unwind by listening to music."],
+    "freq": 3.09
+  },
+  {
+    "id": "iv-572",
+    "word": "uphold",
+    "v2": "upheld",
+    "v3": "upheld",
+    "definitions": ["To support or confirm a decision"],
+    "examples": ["The court upheld the previous ruling."],
+    "freq": 3.52
+  },
+  {
+    "id": "iv-575",
+    "word": "upset",
+    "v2": "upset",
+    "v3": "upset",
+    "definitions": ["To make somebody unhappy or disturbed"],
+    "examples": ["I'm sorry, I didn't mean to upset you."],
+    "freq": 4.61
+  },
+  {
+    "id": "iv-580",
+    "word": "wake",
+    "v2": "woke",
+    "v3": "woken",
+    "definitions": ["To stop sleeping and become conscious", "To make somebody stop sleeping"],
+    "examples": ["What time do you usually wake up?"],
+    "freq": 4.76
+  },
+  {
+    "id": "iv-582",
+    "word": "wear",
+    "v2": "wore",
+    "v3": "worn",
+    "definitions": ["To have clothes on your body"],
+    "examples": ["I'm wearing my favorite blue shirt."],
+    "freq": 4.92
+  },
+  {
+    "id": "iv-583",
+    "word": "weave",
+    "v2": "wove",
+    "v3": "woven",
+    "definitions": ["To make material"],
+    "examples": ["The basket was woven from willow branches."],
+    "freq": 3.53
+  },
+  {
+    "id": "iv-584",
+    "word": "wed",
+    "v2": "wed / wedded",
+    "v3": "wed / wedded",
+    "definitions": ["To marry"],
+    "examples": ["They were wed in a private ceremony at the weekend."],
+    "freq": 3.66
+  },
+  {
+    "id": "iv-585",
+    "word": "weep",
+    "v2": "wept",
+    "v3": "wept",
+    "definitions": ["To cry heavily"],
+    "examples": ["She wept with joy when she heard the news."],
+    "freq": 3.37
+  },
+  {
+    "id": "iv-587",
+    "word": "wet",
+    "v2": "wet / wetted",
+    "v3": "wet / wetted",
+    "definitions": ["To make something wet by applying a liquid to it"],
+    "examples": ["He wet the cloth and started cleaning the table."],
+    "freq": 4.54
+  },
+  {
+    "id": "iv-589",
+    "word": "win",
+    "v2": "won",
+    "v3": "won",
+    "definitions": ["To be the best in a competition, game, election, etc."],
+    "examples": ["Our team won the championship."],
+    "freq": 5.39
+  },
+  {
+    "id": "iv-590",
+    "word": "wind",
+    "v2": "wound",
+    "v3": "wound",
+    "definitions": ["To turn something round to make a mechanical process operate"],
+    "examples": ["Don't forget to wind the old clock."],
+    "freq": 4.84
+  },
+  {
+    "id": "iv-593",
+    "word": "wit",
+    "v2": "wist",
+    "v3": "wist",
+    "definitions": ["To know"],
+    "examples": ["God wit what will happen in the future."],
+    "freq": 3.96
+  },
+  {
+    "id": "iv-594",
+    "word": "withdraw",
+    "v2": "withdrew",
+    "v3": "withdrawn",
+    "definitions": ["To remove money from a bank", "To remove something from a place"],
+    "examples": ["He withdrew money from his savings account."],
+    "freq": 4.05
+  },
+  {
+    "id": "iv-595",
+    "word": "withhold",
+    "v2": "withheld",
+    "v3": "withheld",
+    "definitions": ["Not to let somebody have something"],
+    "examples": ["The bank decided to withhold the information from the public."],
+    "freq": 3.28
+  },
+  {
+    "id": "iv-596",
+    "word": "withstand",
+    "v2": "withstood",
+    "v3": "withstood",
+    "definitions": ["To resist successfully"],
+    "examples": ["The building was constructed to withstand powerful earthquakes."],
+    "freq": 3.65
+  },
+  {
+    "id": "iv-597",
+    "word": "wont",
+    "v2": "wont",
+    "v3": "wont / wonted",
+    "definitions": ["To be accustomed"],
+    "examples": ["He was wont to take a long walk every morning."],
+    "freq": 4.09
+  },
+  {
+    "id": "iv-598",
+    "word": "work",
+    "v2": "worked / wrought",
+    "v3": "worked / wrought",
+    "definitions": ["To make physical or mental effort to produce or achieve something"],
+    "examples": ["She wrought/worked hard to achieve her goals."],
+    "freq": 5.96
+  },
+  {
+    "id": "iv-599",
+    "word": "wrap",
+    "v2": "wrapped / wrapt",
+    "v3": "wrapped / wrapt",
+    "definitions": ["To cover", "To transport emotionally"],
+    "examples": ["He was wrapped up in his own world.", "She wrapped the gift in colorful paper."],
+    "freq": 4.2
+  },
+  {
+    "id": "iv-602",
+    "word": "write",
+    "v2": "wrote",
+    "v3": "written",
+    "definitions": ["To put words onto paper using a pen or pencil"],
+    "examples": ["Write your name at the top of the page."],
+    "freq": 5.03
+  },
+  {
+    "id": "iv-603",
+    "word": "zinc",
+    "v2": "zinced / zincked",
+    "v3": "zinced / zincked",
+    "definitions": ["To coat or cover something with a layer of zinc"],
+    "examples": ["The metal fence was zinced/zincked to prevent rusting."],
+    "freq": 3.65
+  }
+]
