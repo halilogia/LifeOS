@@ -18,9 +18,10 @@ import {
 } from "./tasks.js";
 import { initHifiz } from "./hifiz.js";
 import { initNotes } from "./notes.js";
+import { initSrs } from "./srsView.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Initial data load
+    // Initial data load
   const settings = await storage.getSettings();
   state.currentLang = settings.lang;
   const isSidebarOpen = !!(settings.sidebarOpen !== undefined
@@ -207,6 +208,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements.viewNotesBtn().addEventListener("click", () => {
     switchView("notes");
     initNotes();
+  });
+  elements.viewSrsBtn()?.addEventListener("click", () => {
+    switchView("srs");
+    initSrs();
   });
 
   elements.navFocusBtn().addEventListener("click", () => {

@@ -95,21 +95,30 @@ export function renderKanbanItem(
   }
 }
 
-export function switchView(view: "list" | "kanban" | "hifiz" | "notes"): void {
+export function switchView(
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs",
+): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
   const isHifiz = view === "hifiz";
   const isNotes = view === "notes";
+  const isSrs = view === "srs";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
   elements.viewHifizBtn().classList.toggle("active", isHifiz);
   elements.viewNotesBtn().classList.toggle("active", isNotes);
+  if (elements.viewSrsBtn()) {
+    elements.viewSrsBtn().classList.toggle("active", isSrs);
+  }
 
   elements.listView().classList.toggle("active", isList);
   elements.kanbanView().classList.toggle("active", isKanban);
   elements.hifizView().classList.toggle("active", isHifiz);
   elements.notesView().classList.toggle("active", isNotes);
+  if (elements.srsView()) {
+    elements.srsView().classList.toggle("active", isSrs);
+  }
 
   const hero = elements.hero();
   const topHeader = elements.topHeader();
@@ -122,16 +131,20 @@ export function switchView(view: "list" | "kanban" | "hifiz" | "notes"): void {
 
   const container = elements.container();
   if (container) {
-    container.style.maxWidth =
-      isList ? "1000px"
-      : isKanban ? "100%"
-      : isHifiz ? "1200px"
-      : "1250px";
-    container.style.margin =
-      isList ? "120px auto 0 auto"
-      : isKanban ? "20px auto 0 auto"
-      : isHifiz ? "40px auto 0 auto"
-      : "60px auto 0 auto";
+    container.style.maxWidth = isList
+      ? "1000px"
+      : isKanban
+        ? "100%"
+        : isHifiz
+          ? "1200px"
+          : "1250px"; /* includes notes and srs */
+    container.style.margin = isList
+      ? "120px auto 0 auto"
+      : isKanban
+        ? "20px auto 0 auto"
+        : isHifiz
+          ? "40px auto 0 auto"
+          : "60px auto 0 auto";
   }
 }
 

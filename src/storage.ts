@@ -1,4 +1,5 @@
 import { Todo, Language, HifizProgress, Note } from "./types.js";
+import { WordReviewData } from "./types/word.js";
 
 export const storage = {
   getTodos: (): Promise<Todo[]> => {
@@ -35,6 +36,18 @@ export const storage = {
   setHifizProgress: (hifizProgress: HifizProgress[]): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.local.set({ hifizProgress }, resolve);
+    });
+  },
+  getSrsProgress: (): Promise<WordReviewData[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(["srsProgress"], (result) => {
+        resolve((result.srsProgress as WordReviewData[]) || []);
+      });
+    });
+  },
+  setSrsProgress: (srsProgress: WordReviewData[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ srsProgress }, resolve);
     });
   },
   getCustomCategories: (): Promise<string[]> => {
