@@ -21,7 +21,11 @@
             <h2 class="logo">ZenTodo</h2>
         </div>
         <nav class="sidebar-nav">
-            <button id="nav-focus-btn" class="sidebar-btn active">
+            <button id="view-pomodoro-btn" class="sidebar-btn active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4"></path><path d="M12 14v-4"></path><path d="M4 13a8 8 0 0 1 8-7 8 8 0 1 1-8 7z"></path></svg>
+                <span data-i18n="view_pomodoro">Pomodoro</span>
+            </button>
+            <button id="nav-focus-btn" class="sidebar-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span data-i18n="section_tasks">Odağım</span>
             </button>
@@ -30,7 +34,7 @@
                 <span data-i18n="section_recurring">Rutinler</span>
             </button>
             <div class="sidebar-divider"></div>
-            <button id="view-list-btn" class="sidebar-btn active">
+            <button id="view-list-btn" class="sidebar-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 <span data-i18n="view_list">Liste</span>
             </button>
@@ -108,14 +112,40 @@
         </div>
     </header>
 
-    <main class="container">
+    <main id="container" class="container">
         <header class="hero">
             <div id="clock" class="clock">00:00</div>
             <div id="date" class="date">Wednesday, April 15</div>
         </header>
 
+        <!-- Pomodoro View -->
+        <section id="pomodoro-view" class="view-content active">
+            <div class="pomodoro-container todo-card">
+                <div class="pomodoro-timer">
+                    <div id="pomodoro-time">25:00</div>
+                    <div id="pomodoro-label" class="pomodoro-label">FOCUS</div>
+                </div>
+                <div class="pomodoro-controls">
+                    <button id="pomodoro-start" class="pomodoro-action-btn primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </button>
+                    <button id="pomodoro-pause" class="pomodoro-action-btn secondary hidden">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                    </button>
+                    <button id="pomodoro-reset" class="pomodoro-action-btn tertiary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                    </button>
+                </div>
+                <div class="pomodoro-modes">
+                    <button class="pomodoro-mode-btn active" data-mode="focus">Focus</button>
+                    <button class="pomodoro-mode-btn" data-mode="short">Short Break</button>
+                    <button class="pomodoro-mode-btn" data-mode="long">Long Break</button>
+                </div>
+            </div>
+        </section>
+
         <!-- List View -->
-        <section id="list-view" class="view-content active">
+        <section id="list-view" class="view-content">
             <div class="todo-card">
                 <h1 class="greeting" data-i18n="greeting">Bugünkü odağın nedir?</h1>
 
@@ -216,10 +246,9 @@
 
         <!-- SRS View -->
         <section id="srs-view" class="view-content">
-            <div class="srs-container todo-card">
-                <h2 data-i18n="srs_title" class="greeting">Aralıklı Tekrar</h2>
+            <div class="srs-container">
                 <div id="srs-content">
-                    <p style="text-align: center; color: var(--text-secondary);">Kelime tekrarları burada görünecek.</p>
+                    <p style="text-align: center; color: var(--text-secondary);">Yükleniyor...</p>
                 </div>
             </div>
         </section>

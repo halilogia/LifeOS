@@ -96,13 +96,14 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
   const isHifiz = view === "hifiz";
   const isNotes = view === "notes";
   const isSrs = view === "srs";
+  const isPomodoro = view === "pomodoro";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -110,6 +111,9 @@ export function switchView(
   elements.viewNotesBtn().classList.toggle("active", isNotes);
   if (elements.viewSrsBtn()) {
     elements.viewSrsBtn().classList.toggle("active", isSrs);
+  }
+  if (elements.viewPomodoroBtn()) {
+    elements.viewPomodoroBtn().classList.toggle("active", isPomodoro);
   }
 
   elements.listView().classList.toggle("active", isList);
@@ -119,11 +123,14 @@ export function switchView(
   if (elements.srsView()) {
     elements.srsView().classList.toggle("active", isSrs);
   }
+  if (elements.pomodoroView()) {
+    elements.pomodoroView().classList.toggle("active", isPomodoro);
+  }
 
   const hero = elements.hero();
   const topHeader = elements.topHeader();
   if (hero) {
-    hero.style.display = isList ? "block" : "none";
+    hero.style.display = (isList || isPomodoro) ? "block" : "none";
   }
   if (topHeader) {
     topHeader.style.display = isList ? "flex" : "none";
@@ -137,14 +144,14 @@ export function switchView(
         ? "100%"
         : isHifiz
           ? "1200px"
-          : "1250px"; /* includes notes and srs */
+          : isPomodoro ? "600px" : "1250px"; 
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
         ? "20px auto 0 auto"
         : isHifiz
           ? "40px auto 0 auto"
-          : "60px auto 0 auto";
+          : isPomodoro ? "100px auto 0 auto" : "60px auto 0 auto";
   }
 }
 

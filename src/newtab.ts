@@ -19,6 +19,7 @@ import {
 import { initHifiz } from "./hifiz.js";
 import { initNotes } from "./notes.js";
 import { initSrs } from "./srsView.js";
+import { initPomodoro } from "./pomodoro.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     // Initial data load
@@ -213,6 +214,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     switchView("srs");
     initSrs();
   });
+  elements.viewPomodoroBtn()?.addEventListener("click", () => {
+    switchView("pomodoro");
+    initPomodoro();
+  });
 
   elements.navFocusBtn().addEventListener("click", () => {
     switchTab("focus");
@@ -300,6 +305,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadTodos();
   initHifiz();
   initNotes();
+  initPomodoro();
+  switchView("pomodoro");
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),
     1000,
