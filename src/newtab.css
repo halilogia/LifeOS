@@ -441,7 +441,62 @@ body {
     outline: none;
 }
 
-.repeat-select:focus {
+.repeat-select:focus, .category-select:focus {
+    border-color: var(--accent-color);
+}
+
+.category-select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.category-select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filter-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--accent-color);
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: white;
     border-color: var(--accent-color);
 }
 
@@ -567,6 +622,17 @@ body {
     background: rgba(139, 92, 246, 0.1);
     color: var(--accent-color);
     border: 1px solid rgba(139, 92, 246, 0.2);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.category-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid var(--card-border);
     text-transform: uppercase;
     font-weight: 600;
 }

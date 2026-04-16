@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('empty-state') as HTMLDivElement;
     const quoteElement = document.getElementById('quote') as HTMLParagraphElement;
     const repeatSelect = document.getElementById('repeat-select') as HTMLSelectElement;
+    const categorySelect = document.getElementById('category-select') as HTMLSelectElement;
+    const categoryFilter = document.getElementById('category-filter') as HTMLDivElement;
     const backupButton = document.getElementById('backup-btn') as HTMLButtonElement;
     const restoreButton = document.getElementById('restore-btn') as HTMLButtonElement;
     const restoreInput = document.getElementById('restore-input') as HTMLInputElement;
@@ -32,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearAllBtn = document.getElementById('clear-all-btn') as HTMLButtonElement;
 
     let currentLang: Language = 'tr';
+    let currentCategoryFilter = 'all';
 
     function loadTodos(): void {
         chrome.storage.local.get(['todos'], (result) => {
@@ -57,12 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
             let recCount = 0;
 
             todos.forEach((todo, index) => {
-                if (todo.repeat === 'none') {
-                    renderTodo(todo, index, todoList);
-                    oneCount++;
-                } else {
-                    renderTodo(todo, index, recurringList);
-                    recCount++;
+                if (!todo.category) {
+                    todo.category = 'other';
+                    needsSave = true;
+                }
+
+                const isVisible = currentCategoryFilter === 'all' || todo.category === currentCategoryFilter;
+                
+                if (isVisible) {
+                    if (todo.repeat === 'none') {
+                        renderTodo(todo, index, todoList);
+                        oneCount++;
+                    } else {
+                        renderTodo(todo, index, recurringList);
+                        recCount++;
+                    }
                 }
                 renderKanbanItem(todo, index);
             });
@@ -109,14 +121,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.createElement('li');
         li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
         const key = `repeat_${todo.repeat}` as keyof typeof translations['tr'];
+        const catKey = `cat_${todo.category}` as keyof typeof translations['tr'];
         const rLabel = todo.repeat !== 'none' ? `<span class="repeat-badge">${translations[currentLang][key]}</span>` : '';
+        const cLabel = `<span class="category-badge">${translations[currentLang][catKey] || todo.category}</span>`;
 
         li.innerHTML = `
             <div class="checkbox">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
-            <span class="todo-text">${todo.text}</span>
-            ${rLabel}
+            <div class="todo-content" style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <span class="todo-text">${todo.text}</span>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    ${cLabel}
+                    ${rLabel}
+                </div>
+            </div>
             <button class="delete-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
@@ -133,8 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
         item.className = 'kanban-item';
         item.setAttribute('draggable', 'true');
         
+        const catKey = `cat_${todo.category}` as keyof typeof translations['tr'];
+        const cLabel = `<span class="category-badge" style="font-size: 0.6rem; padding: 1px 6px;">${translations[currentLang][catKey] || todo.category}</span>`;
+
         item.innerHTML = `
-            <div class="kanban-item-text">${todo.text}</div>
+            <div class="kanban-item-content" style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="kanban-item-text">${todo.text}</div>
+                <div>${cLabel}</div>
+            </div>
             <div class="kanban-controls">
                 <button class="move-btn move-left" title="${currentLang === 'tr' ? 'Sola Taşı' : 'Move Left'}" ${todo.status === 'todo' ? 'disabled' : ''}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -227,8 +252,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!text) { return; }
         chrome.storage.local.get(['todos'], (r) => {
             const t: Todo[] = (r.todos as Todo[]) || [];
-            t.push({ text, completed: false, status: 'todo', repeat: repeatSelect.value as Todo['repeat'], lastCompletedDate: null });
-            chrome.storage.local.set({ todos: t }, () => { todoInput.value = ''; repeatSelect.value = 'none'; loadTodos(); });
+            t.push({ 
+                text, 
+                completed: false, 
+                status: 'todo', 
+                repeat: repeatSelect.value as Todo['repeat'], 
+                category: categorySelect.value,
+                lastCompletedDate: null 
+            });
+            chrome.storage.local.set({ todos: t }, () => { 
+                todoInput.value = ''; 
+                repeatSelect.value = 'none'; 
+                categorySelect.value = 'other';
+                loadTodos(); 
+            });
+        });
+    });
+
+    categoryFilter.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            categoryFilter.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategoryFilter = (btn as HTMLButtonElement).dataset.category || 'all';
+            loadTodos();
         });
     });
 
