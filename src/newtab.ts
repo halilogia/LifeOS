@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const backupButton = document.getElementById('backup-btn') as HTMLButtonElement;
     const restoreButton = document.getElementById('restore-btn') as HTMLButtonElement;
     const restoreInput = document.getElementById('restore-input') as HTMLInputElement;
+    const newCatInput = document.getElementById('new-cat-input') as HTMLInputElement;
+    const addCatBtn = document.getElementById('add-cat-btn') as HTMLButtonElement;
+    const customCatList = document.getElementById('custom-cat-list') as HTMLUListElement;
 
     const navListBtn = document.getElementById('view-list-btn') as HTMLButtonElement;
     const navKanbanBtn = document.getElementById('view-kanban-btn') as HTMLButtonElement;
@@ -224,6 +227,87 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function loadCategories(): void {
+        chrome.storage.local.get(['customCategories'], (r) => {
+            const categories = (r.customCategories as string[]) || [];
+            
+            customCatList.innerHTML = '';
+            categories.forEach((cat: string, index: number) => {
+                const li = document.createElement('li');
+                li.className = 'settings-list-item';
+                li.innerHTML = `
+                    <span>${cat}</span>
+                    <button class="settings-del-btn" data-index="${index}">&times;</button>
+                `;
+                li.querySelector('.settings-del-btn')?.addEventListener('click', () => deleteCategory(index));
+                customCatList.appendChild(li);
+            });
+
+            categorySelect.innerHTML = `
+                <option value="other" data-i18n="cat_other">${translations[currentLang].cat_other}</option>
+                <option value="work" data-i18n="cat_work">${translations[currentLang].cat_work}</option>
+                <option value="personal" data-i18n="cat_personal">${translations[currentLang].cat_personal}</option>
+                <option value="study" data-i18n="cat_study">${translations[currentLang].cat_study}</option>
+            `;
+            categories.forEach((cat: string) => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                categorySelect.appendChild(opt);
+            });
+
+            categoryFilter.innerHTML = `
+                <button class="filter-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" data-category="all" data-i18n="cat_all">${translations[currentLang].cat_all}</button>
+                <button class="filter-btn ${currentCategoryFilter === 'work' ? 'active' : ''}" data-category="work" data-i18n="cat_work">${translations[currentLang].cat_work}</button>
+                <button class="filter-btn ${currentCategoryFilter === 'personal' ? 'active' : ''}" data-category="personal" data-i18n="cat_personal">${translations[currentLang].cat_personal}</button>
+                <button class="filter-btn ${currentCategoryFilter === 'study' ? 'active' : ''}" data-category="study" data-i18n="cat_study">${translations[currentLang].cat_study}</button>
+                <button class="filter-btn ${currentCategoryFilter === 'other' ? 'active' : ''}" data-category="other" data-i18n="cat_other">${translations[currentLang].cat_other}</button>
+            `;
+            categories.forEach((cat: string) => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${currentCategoryFilter === cat ? 'active' : ''}`;
+                btn.dataset.category = cat;
+                btn.textContent = cat;
+                categoryFilter.appendChild(btn);
+            });
+
+            categoryFilter.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryFilter.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategoryFilter = (btn as HTMLButtonElement).dataset.category || 'all';
+                    loadTodos();
+                });
+            });
+        });
+    }
+
+    function addCategory(): void {
+        const cat = newCatInput.value.trim();
+        if (!cat) { return; }
+        chrome.storage.local.get(['customCategories'], (r) => {
+            const cats = (r.customCategories as string[]) || [];
+            if (!cats.includes(cat)) {
+                cats.push(cat);
+                chrome.storage.local.set({ customCategories: cats }, () => {
+                    newCatInput.value = '';
+                    loadCategories();
+                });
+            }
+        });
+    }
+
+    function deleteCategory(index: number): void {
+        chrome.storage.local.get(['customCategories'], (r) => {
+            const cats = (r.customCategories as string[]) || [];
+            cats.splice(index, 1);
+            chrome.storage.local.set({ customCategories: cats }, () => {
+                loadCategories();
+                loadTodos();
+            });
+        });
+    }
+
     function switchView(view: 'list' | 'kanban'): void {
         const isList = view === 'list';
         navListBtn.classList.toggle('active', isList);
@@ -269,14 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    categoryFilter.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            categoryFilter.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentCategoryFilter = (btn as HTMLButtonElement).dataset.category || 'all';
-            loadTodos();
-        });
-    });
+    addCatBtn.addEventListener('click', addCategory);
+    newCatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { addCategory(); } });
 
     todoInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { addButton.click(); } });
     backupButton.addEventListener('click', () => { chrome.storage.local.get(['todos'], (r) => {
@@ -291,7 +369,13 @@ document.addEventListener('DOMContentLoaded', () => {
     navKanbanBtn.addEventListener('click', () => switchView('kanban'));
     langToggleBtn.addEventListener('click', () => {
         currentLang = currentLang === 'tr' ? 'en' : 'tr';
-        chrome.storage.local.set({ lang: currentLang }, () => { applyI18n(currentLang, todoInput, langToggleBtn); setRandomQuote(quoteElement, currentLang); updateTime(clockElement, dateElement, currentLang); loadTodos(); });
+        chrome.storage.local.set({ lang: currentLang }, () => { 
+            applyI18n(currentLang, todoInput, langToggleBtn); 
+            setRandomQuote(quoteElement, currentLang); 
+            updateTime(clockElement, dateElement, currentLang); 
+            loadCategories();
+            loadTodos(); 
+        });
     });
     settingsBtn.addEventListener('click', () => settingsPanel.classList.add('active'));
     settingsClose.addEventListener('click', () => settingsPanel.classList.remove('active'));
@@ -310,7 +394,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.storage.local.get(['lang'], (r) => {
         currentLang = (r.lang as Language) || 'tr';
-        applyI18n(currentLang, todoInput, langToggleBtn); setRandomQuote(quoteElement, currentLang); updateTime(clockElement, dateElement, currentLang); loadTodos();
+        applyI18n(currentLang, todoInput, langToggleBtn); 
+        setRandomQuote(quoteElement, currentLang); 
+        updateTime(clockElement, dateElement, currentLang); 
+        loadCategories();
+        loadTodos();
     });
     setInterval(() => updateTime(clockElement, dateElement, currentLang), 1000);
 });
