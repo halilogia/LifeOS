@@ -1,7 +1,7 @@
 import { storage } from "./storage.js";
-import { elements } from "./dom.js";
-import { Note } from "./types.js";
-import { state } from "./state.js";
+import { elements } from "../ui/dom.js";
+import { Note } from "../types/types.js";
+import { state } from "../core/state.js";
 
 let currentEditingId: string | null = null;
 
@@ -32,7 +32,9 @@ export async function loadNotes(): Promise<void> {
   const grid = elements.notesGrid();
   grid.innerHTML = "";
 
-  notes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  notes.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
 
   notes.forEach((note) => {
     const card = renderNoteCard(note);
@@ -43,11 +45,13 @@ export async function loadNotes(): Promise<void> {
 function renderNoteCard(note: Note): HTMLElement {
   const card = document.createElement("div");
   card.className = "note-card";
-  
-  const title = note.title || (state.currentLang === "tr" ? "Başlıksız" : "Untitled");
-  const content = note.content.length > 100 
-    ? note.content.substring(0, 100) + "..." 
-    : note.content;
+
+  const title =
+    note.title || (state.currentLang === "tr" ? "Başlıksız" : "Untitled");
+  const content =
+    note.content.length > 100
+      ? note.content.substring(0, 100) + "..."
+      : note.content;
 
   card.innerHTML = `
     <div class="note-card-header">
@@ -68,12 +72,20 @@ function renderNoteCard(note: Note): HTMLElement {
     }
   });
 
-  card.querySelector(".note-delete-btn")?.addEventListener("click", async (e) => {
-    e.stopPropagation();
-    if (confirm(state.currentLang === "tr" ? "Bu notu silmek istediğinize emin misiniz?" : "Are you sure you want to delete this note?")) {
-      await deleteNote(note.id);
-    }
-  });
+  card
+    .querySelector(".note-delete-btn")
+    ?.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      if (
+        confirm(
+          state.currentLang === "tr"
+            ? "Bu notu silmek istediğinize emin misiniz?"
+            : "Are you sure you want to delete this note?",
+        )
+      ) {
+        await deleteNote(note.id);
+      }
+    });
 
   return card;
 }

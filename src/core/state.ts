@@ -1,4 +1,4 @@
-import { Language } from "./types.js";
+import { Language } from "../types/types.js";
 
 export const state = {
   currentLang: "tr" as Language,

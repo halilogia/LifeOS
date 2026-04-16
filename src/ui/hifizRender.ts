@@ -1,10 +1,13 @@
-import { HifizItem, HifizProgress } from "./types.js";
-import { translations } from "./i18n.js";
-import { state } from "./state.js";
+import { HifizItem, HifizProgress } from "../types/types.js";
+import { translations } from "../i18n.js";
+import { state } from "../core/state.js";
 import { elements } from "./dom.js";
 import { INITIAL_HIFIZ_ITEMS } from "./hifizData.js";
 
-export function createCardHTML(item: HifizItem, itemProgress: HifizProgress): string {
+export function createCardHTML(
+  item: HifizItem,
+  itemProgress: HifizProgress,
+): string {
   const statusText =
     translations[state.currentLang][
       `hifiz_status_${itemProgress.status}` as keyof typeof translations.tr

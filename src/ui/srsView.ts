@@ -1,7 +1,12 @@
-import { storage } from "./storage.js";
-import { calculateSM2, prepareSRSQueue, SRSWordWithInfo, createInitialSRSWord } from "./logic/srs.js";
-import { getAllWords } from "./services/vocabularyService.js";
-import { Word, WordReviewData, ReviewQuality } from "./types/word.js";
+import { storage } from "../core/storage.js";
+import {
+  calculateSM2,
+  prepareSRSQueue,
+  SRSWordWithInfo,
+  createInitialSRSWord,
+} from "../logic/srs.js";
+import { getAllWords } from "../services/vocabularyService.js";
+import { Word, WordReviewData, ReviewQuality } from "../types/word.js";
 
 let wordsData: Word[] = [];
 let currentQueue: WordReviewData[] = [];
@@ -10,8 +15,10 @@ let isFlipped = false;
 
 export async function initSrs() {
   const content = document.getElementById("srs-content");
-  if (!content) return;
-  
+  if (!content) {
+    return;
+  }
+
   content.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--text-secondary); animation: pulse 1.5s infinite;">Kelime havuzu hazırlanıyor...</div>`;
 
   try {
@@ -19,32 +26,33 @@ export async function initSrs() {
     const progress = await storage.getSrsProgress();
 
     const progressMap = new Map<string, WordReviewData>();
-    progress.forEach(p => progressMap.set(p.wordId, p));
+    progress.forEach((p) => progressMap.set(p.wordId, p));
 
-    const srsUniverse: SRSWordWithInfo[] = wordsData.slice(0, 1500).map(w => {
-      const p = progressMap.get(w.id) || createInitialSRSWord(w.id, 'vocabulary');
+    const srsUniverse: SRSWordWithInfo[] = wordsData.slice(0, 1500).map((w) => {
+      const p =
+        progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
       return {
         ...p,
-        level: w.level || 'unknown',
-        listType: 'all',
-        freq: w.freq || 0
+        level: w.level || "unknown",
+        listType: "all",
+        freq: w.freq || 0,
       };
     });
 
-    const enrichedProgress: SRSWordWithInfo[] = progress.map(p => {
-      const wInfo = wordsData.find(w => w.id === p.wordId);
+    const enrichedProgress: SRSWordWithInfo[] = progress.map((p) => {
+      const wInfo = wordsData.find((w) => w.id === p.wordId);
       return {
         ...p,
-        level: wInfo?.level || 'unknown',
-        listType: 'all',
-        freq: wInfo?.freq || 0
+        level: wInfo?.level || "unknown",
+        listType: "all",
+        freq: wInfo?.freq || 0,
       };
     });
 
     currentQueue = prepareSRSQueue(enrichedProgress, {
       dailyGoal: 10,
       isCustomMode: false,
-      filters: { listType: 'all', levels: [] },
+      filters: { listType: "all", levels: [] },
       universe: srsUniverse,
     });
 
@@ -57,11 +65,13 @@ export async function initSrs() {
 }
 
 function renderFlashcard() {
-    const content = document.getElementById("srs-content");
-    if (!content) return;
+  const content = document.getElementById("srs-content");
+  if (!content) {
+    return;
+  }
 
-    if (currentQueue.length === 0 || currentWordIndex >= currentQueue.length) {
-        content.innerHTML = `
+  if (currentQueue.length === 0 || currentWordIndex >= currentQueue.length) {
+    content.innerHTML = `
             <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.03); border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);">
                 <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
                 <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--success); font-weight: 700;">Harika İş!</h3>
@@ -69,28 +79,40 @@ function renderFlashcard() {
                 <button onclick="location.reload()" style="margin-top: 2rem; background: var(--accent-color); color: white; border: none; padding: 12px 30px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: transform 0.2s;">Yeniden Başla</button>
             </div>
         `;
-        return;
-    }
+    return;
+  }
 
-    const reviewData = currentQueue[currentWordIndex];
-    const wordInfo = wordsData.find(w => w.id === reviewData.wordId);
+  const reviewData = currentQueue[currentWordIndex];
+  const wordInfo = wordsData.find((w) => w.id === reviewData.wordId);
 
-    if (!wordInfo) {
-        currentWordIndex++;
-        renderFlashcard();
-        return;
-    }
+  if (!wordInfo) {
+    currentWordIndex++;
+    renderFlashcard();
+    return;
+  }
 
-    isFlipped = false;
+  isFlipped = false;
 
-    const meaning = wordInfo.meaning || (wordInfo.categories && wordInfo.categories.length > 0 ? wordInfo.categories[0].translations.join(', ') : '') || wordInfo.definitions?.[0] || 'Tanım bulunamadı';
-    
-    // Auto-font-size for word
-    const wordFontSize = wordInfo.word.length > 15 ? '2.2rem' : wordInfo.word.length > 10 ? '2.6rem' : '3.2rem';
-    // Auto-font-size for meaning
-    const meaningFontSize = meaning.length > 50 ? '1.1rem' : meaning.length > 30 ? '1.3rem' : '1.6rem';
+  const meaning =
+    wordInfo.meaning ||
+    (wordInfo.categories && wordInfo.categories.length > 0
+      ? wordInfo.categories[0].translations.join(", ")
+      : "") ||
+    wordInfo.definitions?.[0] ||
+    "Tanım bulunamadı";
 
-    content.innerHTML = `
+  // Auto-font-size for word
+  const wordFontSize =
+    wordInfo.word.length > 15
+      ? "2.2rem"
+      : wordInfo.word.length > 10
+        ? "2.6rem"
+        : "3.2rem";
+  // Auto-font-size for meaning
+  const meaningFontSize =
+    meaning.length > 50 ? "1.1rem" : meaning.length > 30 ? "1.3rem" : "1.6rem";
+
+  content.innerHTML = `
         <div style="max-width: 600px; margin: 0 auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 0 1rem;">
                 <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">Aralıklı Tekrar</h2>
@@ -132,7 +154,7 @@ function renderFlashcard() {
                         backdrop-filter: blur(10px);
                     ">
                         <div style="position: absolute; top: 2rem; right: 2rem; font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 8px; color: var(--accent-light);">
-                            ${wordInfo.level || 'General'}
+                            ${wordInfo.level || "General"}
                         </div>
                         <h1 style="font-size: ${wordFontSize}; margin-bottom: 1rem; color: var(--text-primary); font-weight: 800; letter-spacing: -0.5px;">${wordInfo.word}</h1>
                         <p style="color: var(--text-secondary); font-size: 0.9rem; opacity: 0.6; margin-top: 2rem;">Anlamını görmek için tıklayın</p>
@@ -160,13 +182,17 @@ function renderFlashcard() {
                              <h2 style="font-size: ${meaningFontSize}; margin-bottom: 1.5rem; color: #fff; font-weight: 600; line-height: 1.4; max-width: 90%;">
                                 ${meaning}
                              </h2>
-                             ${wordInfo.examples && wordInfo.examples.length > 0 ? `
+                             ${
+                               wordInfo.examples && wordInfo.examples.length > 0
+                                 ? `
                                 <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; width: 100%;">
                                     <p style="color: rgba(255,255,255,0.7); font-style: italic; font-size: 0.95rem; line-height: 1.6; margin: 0;">
                                         "${wordInfo.examples[0]}"
                                     </p>
                                 </div>
-                             ` : ''}
+                             `
+                                 : ""
+                             }
                         </div>
                         
                         <div id="srs-actions" style="display: flex; gap: 0.8rem; margin-top: 1rem; opacity: 0; transform: translateY(10px); transition: all 0.4s ease 0.3s; pointer-events: none;">
@@ -205,62 +231,69 @@ function renderFlashcard() {
         </div>
     `;
 
-    const cardInner = document.getElementById("flashcard-inner");
-    if (cardInner) {
-        cardInner.addEventListener("click", (e) => {
-            if ((e.target as HTMLElement).closest('.srs-btn')) return;
-            
-            isFlipped = !isFlipped;
-            cardInner.style.transform = isFlipped ? "rotateY(180deg)" : "rotateY(0deg)";
-            
-            const actions = document.getElementById("srs-actions");
-            if (actions) {
-                if (isFlipped) {
-                    actions.style.opacity = "1";
-                    actions.style.transform = "translateY(0)";
-                    actions.style.pointerEvents = "auto";
-                } else {
-                    actions.style.opacity = "0";
-                    actions.style.transform = "translateY(10px)";
-                    actions.style.pointerEvents = "none";
-                }
-            }
-        });
-    }
+  const cardInner = document.getElementById("flashcard-inner");
+  if (cardInner) {
+    cardInner.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest(".srs-btn")) {
+        return;
+      }
 
-    const actionBtns = document.querySelectorAll(".srs-btn");
-    actionBtns.forEach(btn => {
-        btn.addEventListener("click", async (e) => {
-            e.stopPropagation();
-            const quality = (e.currentTarget as HTMLButtonElement).dataset.quality as ReviewQuality;
-            await handleReview(quality);
-        });
+      isFlipped = !isFlipped;
+      cardInner.style.transform = isFlipped
+        ? "rotateY(180deg)"
+        : "rotateY(0deg)";
+
+      const actions = document.getElementById("srs-actions");
+      if (actions) {
+        if (isFlipped) {
+          actions.style.opacity = "1";
+          actions.style.transform = "translateY(0)";
+          actions.style.pointerEvents = "auto";
+        } else {
+          actions.style.opacity = "0";
+          actions.style.transform = "translateY(10px)";
+          actions.style.pointerEvents = "none";
+        }
+      }
     });
+  }
+
+  const actionBtns = document.querySelectorAll(".srs-btn");
+  actionBtns.forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const quality = (e.currentTarget as HTMLButtonElement).dataset
+        .quality as ReviewQuality;
+      await handleReview(quality);
+    });
+  });
 }
 
 async function handleReview(quality: ReviewQuality) {
-    const reviewData = currentQueue[currentWordIndex];
-    if (!reviewData) return;
-    
-    const outcome = calculateSM2(reviewData, quality, new Date());
-    
-    const progress = await storage.getSrsProgress();
-    const index = progress.findIndex(p => p.wordId === outcome.wordId);
-    if (index >= 0) {
-        progress[index] = outcome;
-    } else {
-        progress.push(outcome);
-    }
-    await storage.setSrsProgress(progress);
+  const reviewData = currentQueue[currentWordIndex];
+  if (!reviewData) {
+    return;
+  }
 
-    currentWordIndex++;
-    
-    const cardInner = document.getElementById("flashcard-inner");
-    if (cardInner) {
-        cardInner.style.transform = "translateX(-80px) rotateY(180deg) scale(0.85)";
-        cardInner.style.opacity = "0";
-        setTimeout(renderFlashcard, 400);
-    } else {
-        renderFlashcard();
-    }
+  const outcome = calculateSM2(reviewData, quality, new Date());
+
+  const progress = await storage.getSrsProgress();
+  const index = progress.findIndex((p) => p.wordId === outcome.wordId);
+  if (index >= 0) {
+    progress[index] = outcome;
+  } else {
+    progress.push(outcome);
+  }
+  await storage.setSrsProgress(progress);
+
+  currentWordIndex++;
+
+  const cardInner = document.getElementById("flashcard-inner");
+  if (cardInner) {
+    cardInner.style.transform = "translateX(-80px) rotateY(180deg) scale(0.85)";
+    cardInner.style.opacity = "0";
+    setTimeout(renderFlashcard, 400);
+  } else {
+    renderFlashcard();
+  }
 }
