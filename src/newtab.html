@@ -21,6 +21,15 @@
             <h2 class="logo">ZenTodo</h2>
         </div>
         <nav class="sidebar-nav">
+            <button id="nav-focus-btn" class="sidebar-btn active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span data-i18n="section_tasks">Odağım</span>
+            </button>
+            <button id="nav-routines-btn" class="sidebar-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                <span data-i18n="section_recurring">Rutinler</span>
+            </button>
+            <div class="sidebar-divider"></div>
             <button id="view-list-btn" class="sidebar-btn active">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 <span data-i18n="view_list">Liste</span>
@@ -35,7 +44,6 @@
                 <span data-i18n="settings_title">Ayarlar</span>
             </button>
         </nav>
-        </nav>
     </aside>
 
     <div id="settings-panel" class="settings-panel">
@@ -45,19 +53,6 @@
                 <button id="settings-close" class="close-btn">&times;</button>
             </header>
             
-            <div class="settings-group">
-                <h3 data-i18n="settings_cat_title">Kategori Yönetimi</h3>
-                <div class="settings-actions">
-                    <div class="settings-input-group">
-                        <input type="text" id="new-cat-input" placeholder="Yeni kategori..." autocomplete="off">
-                        <button id="add-cat-btn" class="settings-add-btn">+</button>
-                    </div>
-                    <ul id="custom-cat-list" class="settings-list">
-                        <!-- Custom categories will be listed here -->
-                    </ul>
-                </div>
-            </div>
-
             <div class="settings-group">
                 <h3 data-i18n="settings_data_title">Veri Yönetimi</h3>
                 <div class="settings-actions">
@@ -88,12 +83,6 @@
         <div class="global-input-container">
             <div class="input-group">
                 <input type="text" id="todo-input" placeholder="Yeni görev ekle..." autocomplete="off">
-                <div class="category-input-wrapper">
-                    <input type="text" id="todo-category-input" placeholder="Kategori..." autocomplete="off">
-                    <select id="category-select" class="category-select hidden">
-                        <!-- Keep this for backward compatibility and list management -->
-                    </select>
-                </div>
                 <select id="repeat-select" class="repeat-select">
                     <option value="none" data-i18n="repeat_none">Tekrar Yok</option>
                     <option value="daily" data-i18n="repeat_daily">Günlük</option>
@@ -116,30 +105,22 @@
         <!-- List View -->
         <section id="list-view" class="view-content active">
             <div class="todo-card">
-
-
                 <h1 class="greeting" data-i18n="greeting">Bugünkü odağın nedir?</h1>
 
-                <div class="filter-bar" id="category-filter">
-                    <button class="filter-btn active" data-category="all" data-i18n="cat_all">Tümü</button>
-                    <button class="filter-btn" data-category="work" data-i18n="cat_work">İş</button>
-                    <button class="filter-btn" data-category="personal" data-i18n="cat_personal">Kişisel</button>
-                    <button class="filter-btn" data-category="study" data-i18n="cat_study">Eğitim</button>
-                    <button class="filter-btn" data-category="other" data-i18n="cat_other">Diğer</button>
-                </div>
+                <div class="sections-grid single-column">
+                    <div id="tasks-section" class="tasks-container active">
+                        <h2 class="section-title" data-i18n="section_tasks">Odağım</h2>
+                        <ul id="todo-list" class="todo-list">
+                            <!-- One-time tasks -->
+                        </ul>
+                    </div>
 
-                <div id="tasks-section">
-                    <h2 class="section-title" data-i18n="section_tasks">Odağım</h2>
-                    <ul id="todo-list" class="todo-list">
-                        <!-- One-time tasks -->
-                    </ul>
-                </div>
-
-                <div id="recurring-section">
-                    <h2 class="section-title" data-i18n="section_recurring">Rutinler & Alışkanlıklar</h2>
-                    <ul id="recurring-list" class="todo-list">
-                        <!-- Recurring tasks -->
-                    </ul>
+                    <div id="recurring-section" class="tasks-container">
+                        <h2 class="section-title" data-i18n="section_recurring">Rutinler</h2>
+                        <ul id="recurring-list" class="todo-list">
+                            <!-- Recurring tasks -->
+                        </ul>
+                    </div>
                 </div>
 
                 <div id="empty-state" class="empty-state">

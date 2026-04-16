@@ -1,20 +1,20 @@
-import { Language } from './types.js';
-import { translations } from './i18n.js';
+import { Language } from "./types.js";
+import { translations } from "./i18n.js";
 
 export function updateTime(clockElement: HTMLDivElement, dateElement: HTMLDivElement, currentLang: Language): void {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
     clockElement.textContent = `${hours}:${minutes}`;
 
-    const locale = currentLang === 'tr' ? 'tr-TR' : 'en-US';
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+    const locale = currentLang === "tr" ? "tr-TR" : "en-US";
+    const options: Intl.DateTimeFormatOptions = { weekday: "long", month: "long", day: "numeric" };
     dateElement.textContent = now.toLocaleDateString(locale, options);
 }
 
 export function setRandomQuote(quoteElement: HTMLParagraphElement, currentLang: Language): void {
-    const quoteKeys = ['quote_1', 'quote_2', 'quote_3', 'quote_4', 'quote_5', 'quote_6', 'quote_7'];
-    const randomKey = quoteKeys[Math.floor(Math.random() * quoteKeys.length)] as keyof typeof translations['tr'];
+    const quoteKeys = ["quote_1", "quote_2", "quote_3", "quote_4", "quote_5", "quote_6", "quote_7"];
+    const randomKey = quoteKeys[Math.floor(Math.random() * quoteKeys.length)] as keyof typeof translations["tr"];
     quoteElement.textContent = translations[currentLang][randomKey];
 }
 

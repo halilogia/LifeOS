@@ -1,10 +1,10 @@
 export interface Todo {
-    text: string;
-    completed: boolean;
-    status: 'todo' | 'in-progress' | 'done';
-    repeat: 'none' | 'daily' | 'weekly' | 'monthly';
-    category: string;
-    lastCompletedDate: string | null;
+  text: string;
+  completed: boolean;
+  status: "todo" | "in-progress" | "done";
+  repeat: "none" | "daily" | "weekly" | "monthly";
+  category: string;
+  lastCompletedDate: string | null;
 }
 
-export type Language = 'tr' | 'en';
+export type Language = "tr" | "en";

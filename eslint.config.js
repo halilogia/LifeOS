@@ -22,7 +22,7 @@ export default ts.config(
       'eqeqeq': ['error', 'always'],
       'curly': ['error', 'all'],
       'semi': ['error', 'always'],
-      'quotes': ['error', 'single'],
+      'quotes': 'off',
     },
   },
   {
