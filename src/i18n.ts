@@ -19,6 +19,7 @@ export const translations = {
         kanban_in_progress: 'Yapılıyor',
         kanban_done: 'Bitti',
         settings_title: 'Ayarlar',
+        change_lang: 'Dil Değiştir',
         settings_cat_title: 'Kategori Yönetimi',
         settings_data_title: 'Veri Yönetimi',
         clear_all: 'Tüm Verileri Temizle',
@@ -59,6 +60,7 @@ export const translations = {
         kanban_in_progress: 'Doing',
         kanban_done: 'Done',
         settings_title: 'Settings',
+        change_lang: 'Change Language',
         settings_cat_title: 'Category Management',
         settings_data_title: 'Data Management',
         clear_all: 'Clear All Data',
@@ -93,5 +95,4 @@ export function applyI18n(lang: Language, todoInput: HTMLInputElement, langToggl
     });
 
     todoInput.placeholder = translations[lang].todo_placeholder;
-    langToggleBtn.textContent = lang === 'tr' ? 'EN' : 'TR';
 }
