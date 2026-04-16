@@ -35,6 +35,19 @@ export const translations = {
     quote_6: '"İstediğin her şey korkunun diğer tarafındadır."',
     quote_7: '"Günleri sayma, günlere anlam kat."',
     cat_other: "Diğer",
+    view_hifiz: "Ezberlerim",
+    hifiz_title: "Kuran Ezberlerim",
+    hifiz_stat_memorized: "Ezberlendi",
+    hifiz_stat_in_progress: "Çalışılıyor",
+    hifiz_stat_total: "Hedef",
+    hifiz_cat_ayat: "Özel Ayetler",
+    hifiz_cat_surahs: "Sureler",
+    hifiz_cat_duas: "Dualar",
+    hifiz_cat_juz30: "30. Cüz (Amme)",
+    hifiz_status_not_started: "Başlanmadı",
+    hifiz_status_in_progress: "Devam Ediyor",
+    hifiz_status_memorized: "Ezberlendi",
+    hifiz_search_placeholder: "Sure veya dua ara...",
   },
   en: {
     view_list: "List",
@@ -70,6 +83,19 @@ export const translations = {
     quote_6: '"Everything you want is on the other side of fear."',
     quote_7: '"Don’t count the days, make the days count."',
     cat_other: "Other",
+    view_hifiz: "Memorizations",
+    hifiz_title: "Quran Memorization",
+    hifiz_stat_memorized: "Memorized",
+    hifiz_stat_in_progress: "In Progress",
+    hifiz_stat_total: "Goal",
+    hifiz_cat_ayat: "Special Ayats",
+    hifiz_cat_surahs: "Surahs",
+    hifiz_cat_duas: "Duas",
+    hifiz_cat_juz30: "Juz 30 (Amme)",
+    hifiz_status_not_started: "Not Started",
+    hifiz_status_in_progress: "In Progress",
+    hifiz_status_memorized: "Memorized",
+    hifiz_search_placeholder: "Search surah or dua...",
   },
 };
 
@@ -78,13 +104,25 @@ export function applyI18n(
   todoInput: HTMLInputElement,
   _langToggleBtn: HTMLButtonElement,
 ): void {
-  const elements = document.querySelectorAll("[data-i18n]");
-  elements.forEach((el) => {
+  const elementsWithText = document.querySelectorAll("[data-i18n]");
+  elementsWithText.forEach((el) => {
     const key = el.getAttribute(
       "data-i18n",
     ) as keyof (typeof translations)["tr"];
     if (translations[lang][key]) {
       el.textContent = translations[lang][key];
+    }
+  });
+
+  const elementsWithPlaceholder = document.querySelectorAll(
+    "[data-i18n-placeholder]",
+  );
+  elementsWithPlaceholder.forEach((el) => {
+    const key = el.getAttribute(
+      "data-i18n-placeholder",
+    ) as keyof (typeof translations)["tr"];
+    if (translations[lang][key]) {
+      (el as HTMLInputElement).placeholder = translations[lang][key];
     }
   });
 

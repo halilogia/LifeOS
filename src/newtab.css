@@ -976,3 +976,219 @@ body.sidebar-open .sidebar {
     from { opacity: 1; transform: translateX(0); }
     to { opacity: 0; transform: translateX(10px); }
 }
+
+/* Hifiz View Styles */
+.hifiz-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 4rem;
+}
+
+.hifiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.hifiz-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.hifiz-search-box {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.hifiz-search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+#hifiz-search {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 10px 12px 10px 40px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#hifiz-search:focus {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.hifiz-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.hifiz-stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.hifiz-stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon.memorized { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.stat-icon.progress { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.stat-icon.total { background: rgba(139, 92, 246, 0.1); color: var(--accent-color); }
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.hifiz-filters {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+}
+
+.hifiz-filters::-webkit-scrollbar { display: none; }
+
+.hifiz-filter-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.hifiz-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.hifiz-filter-btn.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.hifiz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.hifiz-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.hifiz-card:hover {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.06);
+    transform: scale(1.02);
+}
+
+.hifiz-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hifiz-cat-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    color: var(--text-secondary);
+}
+
+.hifiz-status-badge {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.hifiz-status-badge.status-not_started { background: #94a3b8; }
+.hifiz-status-badge.status-in_progress { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+.hifiz-status-badge.status-memorized { background: #10b981; box-shadow: 0 0 8px #10b981; }
+
+.hifiz-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.hifiz-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .hifiz-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .hifiz-search-box {
+        max-width: 100%;
+    }
+}
