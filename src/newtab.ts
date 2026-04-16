@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const newCatInput = document.getElementById('new-cat-input') as HTMLInputElement;
     const addCatBtn = document.getElementById('add-cat-btn') as HTMLButtonElement;
     const customCatList = document.getElementById('custom-cat-list') as HTMLUListElement;
+    const sidebarToggle = document.getElementById('sidebar-toggle') as HTMLButtonElement;
+    const sidebar = document.getElementById('sidebar') as HTMLElement;
+    const todoCategoryInput = document.getElementById('todo-category-input') as HTMLInputElement;
+    const langText = document.getElementById('lang-text') as HTMLSpanElement;
 
     const navListBtn = document.getElementById('view-list-btn') as HTMLButtonElement;
     const navKanbanBtn = document.getElementById('view-kanban-btn') as HTMLButtonElement;
@@ -333,24 +337,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addButton.addEventListener('click', () => {
         const text = todoInput.value.trim();
+        const category = todoCategoryInput.value.trim() || 'other';
         if (!text) { return; }
-        chrome.storage.local.get(['todos'], (r) => {
+        chrome.storage.local.get(['todos', 'customCategories'], (r) => {
             const t: Todo[] = (r.todos as Todo[]) || [];
+            const cats: string[] = (r.customCategories as string[]) || [];
+
+            // If it's a new category, save it
+            if (category !== 'other' && category !== 'work' && category !== 'personal' && category !== 'study' && !cats.includes(category)) {
+                cats.push(category);
+                chrome.storage.local.set({ customCategories: cats }, loadCategories);
+            }
+
             t.push({ 
                 text, 
                 completed: false, 
                 status: 'todo', 
                 repeat: repeatSelect.value as Todo['repeat'], 
-                category: categorySelect.value,
+                category: category,
                 lastCompletedDate: null 
             });
             chrome.storage.local.set({ todos: t }, () => { 
                 todoInput.value = ''; 
+                todoCategoryInput.value = '';
                 repeatSelect.value = 'none'; 
-                categorySelect.value = 'other';
                 loadTodos(); 
             });
         });
+    });
+
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('active') && 
+            !sidebar.contains(e.target as Node) && 
+            !sidebarToggle.contains(e.target as Node) &&
+            window.innerWidth < 1200) {
+            sidebar.classList.remove('active');
+        }
     });
 
     addCatBtn.addEventListener('click', addCategory);
@@ -374,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setRandomQuote(quoteElement, currentLang); 
             updateTime(clockElement, dateElement, currentLang); 
             loadCategories();
+            langText.textContent = currentLang.toUpperCase();
             loadTodos(); 
         });
     });
@@ -398,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setRandomQuote(quoteElement, currentLang); 
         updateTime(clockElement, dateElement, currentLang); 
         loadCategories();
+        langText.textContent = currentLang.toUpperCase();
         loadTodos();
     });
     setInterval(() => updateTime(clockElement, dateElement, currentLang), 1000);
