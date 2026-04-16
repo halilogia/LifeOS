@@ -31,7 +31,14 @@ export const translations = {
         quote_4: '"Meşgul olmaya değil, üretken olmaya odaklan."',
         quote_5: '"Geleceği tahmin etmenin en iyi yolu onu yaratmaktır."',
         quote_6: '"İstediğin her şey korkunun diğer tarafındadır."',
-        quote_7: '"Günleri sayma, günlere anlam kat."'
+        quote_7: '"Günleri sayma, günlere anlam kat."',
+        cat_all: 'Tümü',
+        cat_work: 'İş',
+        cat_personal: 'Kişisel',
+        cat_study: 'Eğitim',
+        cat_other: 'Diğer',
+        label_category: 'Kategori',
+        filter_title: 'Kategoriler'
     },
     en: {
         view_list: 'List',
@@ -63,7 +70,14 @@ export const translations = {
         quote_4: '"Focus on being productive instead of busy."',
         quote_5: '"The best way to predict the future is to create it."',
         quote_6: '"Everything you want is on the other side of fear."',
-        quote_7: '"Don’t count the days, make the days count."'
+        quote_7: '"Don’t count the days, make the days count."',
+        cat_all: 'All',
+        cat_work: 'Work',
+        cat_personal: 'Personal',
+        cat_study: 'Study',
+        cat_other: 'Other',
+        label_category: 'Category',
+        filter_title: 'Categories'
     }
 };
 

@@ -3,6 +3,7 @@ export interface Todo {
     completed: boolean;
     status: 'todo' | 'in-progress' | 'done';
     repeat: 'none' | 'daily' | 'weekly' | 'monthly';
+    category: string;
     lastCompletedDate: string | null;
 }
 
