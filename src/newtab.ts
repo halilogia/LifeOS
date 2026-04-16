@@ -220,11 +220,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   elements.navFocusBtn().addEventListener("click", () => {
+    switchView("list");
     switchTab("focus");
     elements.repeatSelect().value = "none";
     loadTodos();
   });
   elements.navRoutinesBtn().addEventListener("click", () => {
+    switchView("list");
     switchTab("routines");
     elements.repeatSelect().value = "daily";
     loadTodos();

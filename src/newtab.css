@@ -593,100 +593,116 @@ body.sidebar-open .sidebar {
 
 /* ... Card Footer ... */
 
-/* Pomodoro Section */
+/* Pomodoro Section Refinement */
 .pomodoro-container {
-    text-align: center;
-    padding: 3rem 2rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 0.6s ease-out;
+    background: transparent;
+    animation: fadeIn 0.8s ease-out;
 }
 
-.pomodoro-timer {
+.pomodoro-visual {
+    position: relative;
+    width: 320px;
+    height: 320px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+}
+
+.progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
+}
+
+.pomodoro-timer-inner {
+    text-align: center;
+    z-index: 2;
 }
 
 #pomodoro-time {
-    font-size: 6rem;
+    font-size: 5rem;
     font-weight: 300;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
     letter-spacing: -2px;
     line-height: 1;
+    margin-bottom: 0.5rem;
 }
 
-.pomodoro-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 4px;
+#pomodoro-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 5px;
     color: var(--accent-color);
     text-transform: uppercase;
+    opacity: 0.8;
 }
 
 .pomodoro-controls {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 3rem;
+    margin-top: 1rem;
 }
 
 .pomodoro-action-btn {
-    width: 64px;
-    height: 64px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.pomodoro-action-btn:hover {
-    transform: scale(1.1);
-}
-
-.pomodoro-action-btn:active {
-    transform: scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pomodoro-action-btn.primary {
+    width: 86px;
+    height: 86px;
     background: var(--accent-color);
     color: white;
-    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
 }
 
 .pomodoro-action-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-primary);
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
 }
 
-.pomodoro-action-btn.tertiary {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--text-secondary);
+.pomodoro-action-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+
+.pomodoro-action-btn.primary:hover {
+    box-shadow: 0 20px 45px rgba(139, 92, 246, 0.5);
+    background: var(--accent-light);
+}
+
+.pomodoro-action-btn:active {
+    transform: translateY(0) scale(0.95);
 }
 
 .pomodoro-modes {
     display: flex;
-    gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.04);
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
     padding: 6px;
-    border-radius: 16px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 1rem;
 }
 
 .pomodoro-mode-btn {
-    padding: 10px 20px;
-    border-radius: 12px;
+    padding: 10px 24px;
+    border-radius: 16px;
     border: none;
     background: transparent;
     color: var(--text-secondary);
@@ -696,15 +712,15 @@ body.sidebar-open .sidebar {
     transition: all 0.2s ease;
 }
 
-.pomodoro-mode-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+.pomodoro-mode-btn.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
 }
 
-.pomodoro-mode-btn.active {
-    background: rgba(255, 255, 255, 0.1);
+.pomodoro-mode-btn:not(.active):hover {
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .pomodoro-action-btn.hidden {
