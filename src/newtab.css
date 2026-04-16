@@ -210,6 +210,82 @@ body {
     border-color: var(--danger);
 }
 
+.settings-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+#new-cat-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#new-cat-input:focus {
+    border-color: var(--accent-color);
+}
+
+.settings-add-btn {
+    background: var(--accent-color);
+    border: none;
+    border-radius: 12px;
+    width: 42px;
+    height: 42px;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-add-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.05);
+}
+
+.settings-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.settings-list-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.settings-del-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.settings-del-btn:hover {
+    color: var(--danger);
+    opacity: 1;
+}
+
 .nav-btn {
     background: transparent;
     border: none;
