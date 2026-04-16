@@ -14,6 +14,7 @@ export interface HifizItem {
   title: string;
   category: "ayat" | "surahs" | "duas" | "juz30";
   description?: string;
+  url?: string;
 }
 
 export interface HifizProgress {

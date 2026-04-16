@@ -18,15 +18,43 @@
     font-family: 'Inter', sans-serif;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+    opacity: 0.5;
+}
+
+html {
+    height: 100%;
+    overflow: auto;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
-    min-height: 100vh;
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .background-overlay {
@@ -1118,6 +1146,7 @@ body.sidebar-open .sidebar {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
+    padding-bottom: 200px; /* Alttaki footer'ın üstüne binmemesi ve kaydırma için alan */
 }
 
 .hifiz-card {
@@ -1173,6 +1202,12 @@ body.sidebar-open .sidebar {
     color: var(--text-primary);
 }
 
+.hifiz-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
 .hifiz-card-footer {
     display: flex;
     justify-content: space-between;
@@ -1181,6 +1216,39 @@ body.sidebar-open .sidebar {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.8rem;
     color: var(--text-secondary);
+}
+
+.hifiz-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.hifiz-action-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hifiz-action-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.hifiz-status-badge {
+    transition: transform 0.2s ease;
+}
+
+.hifiz-status-badge:hover {
+    transform: scale(1.5);
 }
 
 @media (max-width: 768px) {
