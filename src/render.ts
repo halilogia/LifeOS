@@ -95,12 +95,18 @@ export function renderKanbanItem(
   }
 }
 
-export function switchView(view: "list" | "kanban"): void {
+export function switchView(view: "list" | "kanban" | "hifiz"): void {
   const isList = view === "list";
+  const isKanban = view === "kanban";
+  const isHifiz = view === "hifiz";
+
   elements.viewListBtn().classList.toggle("active", isList);
-  elements.viewKanbanBtn().classList.toggle("active", !isList);
+  elements.viewKanbanBtn().classList.toggle("active", isKanban);
+  elements.viewHifizBtn().classList.toggle("active", isHifiz);
+
   elements.listView().classList.toggle("active", isList);
-  elements.kanbanView().classList.toggle("active", !isList);
+  elements.kanbanView().classList.toggle("active", isKanban);
+  elements.hifizView().classList.toggle("active", isHifiz);
 
   const hero = elements.hero();
   const topHeader = elements.topHeader();
@@ -113,8 +119,12 @@ export function switchView(view: "list" | "kanban"): void {
 
   const container = elements.container();
   if (container) {
-    container.style.maxWidth = isList ? "1000px" : "100%";
-    container.style.margin = isList ? "120px auto 0 auto" : "20px auto 0 auto";
+    container.style.maxWidth = isList ? "1000px" : isKanban ? "100%" : "1200px";
+    container.style.margin = isList
+      ? "120px auto 0 auto"
+      : isKanban
+        ? "20px auto 0 auto"
+        : "40px auto 0 auto";
   }
 }
 

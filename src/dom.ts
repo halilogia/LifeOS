@@ -33,4 +33,12 @@ export const elements = {
   hero: () => document.querySelector(".hero") as HTMLElement,
   topHeader: () => document.querySelector(".top-header") as HTMLElement,
   container: () => document.querySelector(".container") as HTMLElement,
+  viewHifizBtn: () => document.getElementById("view-hifiz-btn") as HTMLButtonElement,
+  hifizView: () => document.getElementById("hifiz-view") as HTMLElement,
+  hifizGrid: () => document.getElementById("hifiz-grid") as HTMLDivElement,
+  hifizSearch: () => document.getElementById("hifiz-search") as HTMLInputElement,
+  hifizFilterBtns: () => document.querySelectorAll(".hifiz-filter-btn"),
+  hifizStatMemorized: () => document.getElementById("hifiz-stat-memorized-count") as HTMLSpanElement,
+  hifizStatProgress: () => document.getElementById("hifiz-stat-progress-count") as HTMLSpanElement,
+  hifizStatTotal: () => document.getElementById("hifiz-stat-total-count") as HTMLSpanElement,
 };

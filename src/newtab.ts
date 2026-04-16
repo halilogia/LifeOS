@@ -1,16 +1,22 @@
 import { Todo } from "./types.js";
-import { applyI18n } from "./i18n.js";
+import { applyI18n, translations } from "./i18n.js";
 import { updateTime, setRandomQuote } from "./utils.js";
 import { elements } from "./dom.js";
 import { state } from "./state.js";
 import { storage } from "./storage.js";
-import { renderTodo, renderKanbanItem, switchView, switchTab } from "./render.js";
+import {
+  renderTodo,
+  renderKanbanItem,
+  switchView,
+  switchTab,
+} from "./render.js";
 import { handleBackup, handleRestore } from "./backup.js";
 import {
   checkAndResetRepeatingTasks,
   moveTaskWithStatus,
   getUpdatedStatuses,
 } from "./tasks.js";
+import { initHifiz } from "./hifiz.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Initial data load
@@ -152,7 +158,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await storage.setTodos(todos);
     elements.todoInput().value = "";
-    elements.repeatSelect().value = state.activeTab === "focus" ? "none" : "daily";
+    elements.repeatSelect().value =
+      state.activeTab === "focus" ? "none" : "daily";
     loadTodos();
   });
 
@@ -180,10 +187,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   elements.backupBtn().addEventListener("click", handleBackup);
-  elements.restoreInput().addEventListener("change", (e) => handleRestore(e, loadTodos));
-  elements.restoreBtn().addEventListener("click", () => elements.restoreInput().click());
+  elements
+    .restoreInput()
+    .addEventListener("change", (e) => handleRestore(e, loadTodos));
+  elements
+    .restoreBtn()
+    .addEventListener("click", () => elements.restoreInput().click());
   elements.viewListBtn().addEventListener("click", () => switchView("list"));
-  elements.viewKanbanBtn().addEventListener("click", () => switchView("kanban"));
+  elements
+    .viewKanbanBtn()
+    .addEventListener("click", () => switchView("kanban"));
+  elements
+    .viewHifizBtn()
+    .addEventListener("click", () => {
+      switchView("hifiz");
+      initHifiz();
+    });
 
   elements.navFocusBtn().addEventListener("click", () => {
     switchTab("focus");
@@ -199,15 +218,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements.langToggleBtn().addEventListener("click", async () => {
     state.currentLang = state.currentLang === "tr" ? "en" : "tr";
     await storage.setLang(state.currentLang);
-    applyI18n(state.currentLang, elements.todoInput(), elements.langToggleBtn());
+    applyI18n(
+      state.currentLang,
+      elements.todoInput(),
+      elements.langToggleBtn(),
+    );
     setRandomQuote(elements.quote(), state.currentLang);
     updateTime(elements.clock(), elements.date(), state.currentLang);
     elements.langText().textContent = state.currentLang.toUpperCase();
     loadTodos();
   });
 
-  elements.settingsBtn().addEventListener("click", () => elements.settingsPanel().classList.add("active"));
-  elements.settingsClose().addEventListener("click", () => elements.settingsPanel().classList.remove("active"));
+  elements
+    .settingsBtn()
+    .addEventListener("click", () =>
+      elements.settingsPanel().classList.add("active"),
+    );
+  elements
+    .settingsClose()
+    .addEventListener("click", () =>
+      elements.settingsPanel().classList.remove("active"),
+    );
 
   elements.clearAllBtn().addEventListener("click", async () => {
     const settings = await storage.getSettings();
@@ -224,23 +255,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  [elements.kanbanTodo(), elements.kanbanInProgress(), elements.kanbanDone()].forEach((col) => {
+  [
+    elements.kanbanTodo(),
+    elements.kanbanInProgress(),
+    elements.kanbanDone(),
+  ].forEach((col) => {
     col.addEventListener("dragover", (e) => {
       e.preventDefault();
-      (col.closest(".kanban-column") as HTMLElement)?.classList.add("drag-over");
+      (col.closest(".kanban-column") as HTMLElement)?.classList.add(
+        "drag-over",
+      );
     });
-    col.addEventListener("dragleave", () => (col.closest(".kanban-column") as HTMLElement)?.classList.remove("drag-over"));
+    col.addEventListener("dragleave", () =>
+      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
+        "drag-over",
+      ),
+    );
     col.addEventListener("drop", (e) => {
       e.preventDefault();
-      (col.closest(".kanban-column") as HTMLElement)?.classList.remove("drag-over");
+      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
+        "drag-over",
+      );
       const idx = e.dataTransfer?.getData("text/plain");
       if (idx !== undefined) {
-        moveTaskWithStatusAndReload(parseInt(idx), col.dataset.status as Todo["status"]);
+        moveTaskWithStatusAndReload(
+          parseInt(idx),
+          col.dataset.status as Todo["status"],
+        );
       }
     });
   });
 
   // Final Initialization
   loadTodos();
-  setInterval(() => updateTime(elements.clock(), elements.date(), state.currentLang), 1000);
+  initHifiz();
+  setInterval(
+    () => updateTime(elements.clock(), elements.date(), state.currentLang),
+    1000,
+  );
 });

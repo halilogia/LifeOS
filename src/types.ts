@@ -8,3 +8,16 @@ export interface Todo {
 }
 
 export type Language = "tr" | "en";
+
+export interface HifizItem {
+  id: string;
+  title: string;
+  category: "ayat" | "surahs" | "duas" | "juz30";
+  description?: string;
+}
+
+export interface HifizProgress {
+  itemId: string;
+  status: "not_started" | "in_progress" | "memorized";
+  lastUpdated: string;
+}
