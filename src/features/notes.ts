@@ -1,4 +1,4 @@
-import { storage } from "./storage.js";
+import { storage } from "../core/storage.js";
 import { elements } from "../ui/dom.js";
 import { Note } from "../types/types.js";
 import { state } from "../core/state.js";

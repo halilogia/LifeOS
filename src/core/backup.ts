@@ -1,6 +1,6 @@
 import { storage } from "./storage.js";
 import { state } from "./state.js";
-import { translations } from "../i18n.js";
+import { translations } from "../utils/i18n.js";
 
 export async function handleBackup(): Promise<void> {
   const todos = await storage.getTodos();

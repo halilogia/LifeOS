@@ -1,8 +1,8 @@
 import { HifizItem, HifizProgress } from "../types/types.js";
-import { translations } from "../i18n.js";
+import { translations } from "../utils/i18n.js";
 import { state } from "../core/state.js";
 import { elements } from "./dom.js";
-import { INITIAL_HIFIZ_ITEMS } from "./hifizData.js";
+import { INITIAL_HIFIZ_ITEMS } from "../features/hifizData.js";
 
 export function createCardHTML(
   item: HifizItem,
