@@ -17,6 +17,7 @@ import {
   getUpdatedStatuses,
 } from "./tasks.js";
 import { initHifiz } from "./hifiz.js";
+import { initNotes } from "./notes.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Initial data load
@@ -203,6 +204,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       switchView("hifiz");
       initHifiz();
     });
+  elements.viewNotesBtn().addEventListener("click", () => {
+    switchView("notes");
+    initNotes();
+  });
 
   elements.navFocusBtn().addEventListener("click", () => {
     switchTab("focus");
@@ -289,6 +294,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Final Initialization
   loadTodos();
   initHifiz();
+  initNotes();
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),
     1000,

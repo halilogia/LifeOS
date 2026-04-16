@@ -41,4 +41,13 @@ export const elements = {
   hifizStatMemorized: () => document.getElementById("hifiz-stat-memorized-count") as HTMLSpanElement,
   hifizStatProgress: () => document.getElementById("hifiz-stat-progress-count") as HTMLSpanElement,
   hifizStatTotal: () => document.getElementById("hifiz-stat-total-count") as HTMLSpanElement,
+  viewNotesBtn: () => document.getElementById("view-notes-btn") as HTMLButtonElement,
+  notesView: () => document.getElementById("notes-view") as HTMLElement,
+  notesGrid: () => document.getElementById("notes-grid") as HTMLDivElement,
+  addNoteBtn: () => document.getElementById("add-note-btn") as HTMLButtonElement,
+  noteModal: () => document.getElementById("note-modal") as HTMLDivElement,
+  noteTitleInput: () => document.getElementById("note-title-input") as HTMLInputElement,
+  noteContentInput: () => document.getElementById("note-content-input") as HTMLTextAreaElement,
+  saveNoteBtn: () => document.getElementById("save-note-btn") as HTMLButtonElement,
+  noteModalClose: () => document.getElementById("note-modal-close") as HTMLButtonElement,
 };

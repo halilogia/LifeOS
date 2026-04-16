@@ -1,4 +1,4 @@
-import { Todo, Language, HifizProgress } from "./types.js";
+import { Todo, Language, HifizProgress, Note } from "./types.js";
 
 export const storage = {
   getTodos: (): Promise<Todo[]> => {
@@ -11,6 +11,18 @@ export const storage = {
   setTodos: (todos: Todo[]): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.local.set({ todos }, resolve);
+    });
+  },
+  getNotes: (): Promise<Note[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(["notes"], (result) => {
+        resolve((result.notes as Note[]) || []);
+      });
+    });
+  },
+  setNotes: (notes: Note[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ notes }, resolve);
     });
   },
   getHifizProgress: (): Promise<HifizProgress[]> => {
