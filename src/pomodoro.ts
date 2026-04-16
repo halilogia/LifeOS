@@ -2,7 +2,7 @@ import { elements } from "./dom.js";
 
 let timer: number | null = null;
 let timeLeft = 25 * 60;
-let isWork = true;
+let totalTime = 25 * 60;
 let currentMode: 'focus' | 'short' | 'long' = 'focus';
 
 const MODE_TIMES = {
@@ -17,15 +17,22 @@ const MODE_LABELS = {
     long: "LONG BREAK"
 };
 
+const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 150; // r=150 from HTML
+
 export function initPomodoro() {
     const startBtn = elements.pomodoroStart();
     const pauseBtn = elements.pomodoroPause();
     const resetBtn = elements.pomodoroReset();
     const modeBtns = elements.pomodoroModeBtns();
 
-    startBtn.addEventListener("click", startTimer);
-    pauseBtn.addEventListener("click", pauseTimer);
-    resetBtn.addEventListener("click", resetTimer);
+    // Remove existing to avoid double listeners if re-init
+    startBtn.replaceWith(startBtn.cloneNode(true));
+    pauseBtn.replaceWith(pauseBtn.cloneNode(true));
+    resetBtn.replaceWith(resetBtn.cloneNode(true));
+
+    elements.pomodoroStart().addEventListener("click", startTimer);
+    elements.pomodoroPause().addEventListener("click", pauseTimer);
+    elements.pomodoroReset().addEventListener("click", resetTimer);
 
     modeBtns.forEach(btn => {
         btn.addEventListener("click", (e) => {
@@ -41,13 +48,15 @@ function setMode(mode: 'focus' | 'short' | 'long') {
     pauseTimer();
     currentMode = mode;
     timeLeft = MODE_TIMES[mode];
+    totalTime = timeLeft;
     
     elements.pomodoroModeBtns().forEach(btn => {
         const b = btn as HTMLButtonElement;
         b.classList.toggle("active", b.dataset.mode === mode);
     });
     
-    elements.pomodoroLabel().textContent = MODE_LABELS[mode];
+    const label = elements.pomodoroLabel();
+    if (label) label.textContent = MODE_LABELS[mode];
     updateDisplay();
 }
 
@@ -81,6 +90,7 @@ function pauseTimer() {
 function resetTimer() {
     pauseTimer();
     timeLeft = MODE_TIMES[currentMode];
+    totalTime = timeLeft;
     updateDisplay();
 }
 
@@ -88,10 +98,16 @@ function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
     const timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    elements.pomodoroTime().textContent = timeStr;
+    const timeEl = elements.pomodoroTime();
+    if (timeEl) timeEl.textContent = timeStr;
     
-    // Also update document title if tab is focused on pomodoro? 
-    // Maybe unnecessary for a new tab but useful.
+    // Update progress ring
+    const progressEl = document.getElementById("pomodoro-progress") as any;
+    if (progressEl) {
+        const percent = timeLeft / totalTime;
+        const offset = CIRCLE_CIRCUMFERENCE * (1 - percent);
+        progressEl.style.strokeDashoffset = offset.toString();
+    }
 }
 
 function handleTimerComplete() {
@@ -103,9 +119,10 @@ function handleTimerComplete() {
 }
 
 function notify() {
-    // Basic vibration or sound if possible
+    // Better alarm sound
     try {
-        const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+        const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+        audio.volume = 0.4;
         audio.play();
     } catch (e) {
         console.warn("Could not play sound", e);
@@ -113,7 +130,7 @@ function notify() {
     
     if (Notification.permission === "granted") {
         new Notification("ZenTodo Pomodoro", {
-            body: currentMode === 'focus' ? "Focus session complete! Take a break." : "Break over! Time to focus."
+            body: currentMode === 'focus' ? "Session finished! Take a break." : "Break over! Time to focus."
         });
     } else if (Notification.permission !== "denied") {
         Notification.requestPermission();

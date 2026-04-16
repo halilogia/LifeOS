@@ -120,22 +120,31 @@
 
         <!-- Pomodoro View -->
         <section id="pomodoro-view" class="view-content active">
-            <div class="pomodoro-container todo-card">
-                <div class="pomodoro-timer">
-                    <div id="pomodoro-time">25:00</div>
-                    <div id="pomodoro-label" class="pomodoro-label">FOCUS</div>
+            <div class="pomodoro-container">
+                <div class="pomodoro-visual">
+                    <svg class="progress-ring" width="320" height="320">
+                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="150" cx="160" cy="160"/>
+                        <circle id="pomodoro-progress" class="progress-ring__circle" stroke="var(--accent-color)" stroke-width="8" stroke-linecap="round" fill="transparent" r="150" cx="160" cy="160" style="stroke-dasharray: 942.48; stroke-dashoffset: 0; transition: stroke-dashoffset 0.3s;"/>
+                    </svg>
+                    <div class="pomodoro-timer-inner">
+                        <div id="pomodoro-time">25:00</div>
+                        <div id="pomodoro-label">FOCUS</div>
+                    </div>
                 </div>
+                
                 <div class="pomodoro-controls">
-                    <button id="pomodoro-start" class="pomodoro-action-btn primary">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    </button>
-                    <button id="pomodoro-pause" class="pomodoro-action-btn secondary hidden">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-                    </button>
-                    <button id="pomodoro-reset" class="pomodoro-action-btn tertiary">
+                    <button id="pomodoro-reset" class="pomodoro-action-btn secondary" title="Reset">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
                     </button>
+                    <button id="pomodoro-start" class="pomodoro-action-btn primary play-btn">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button id="pomodoro-pause" class="pomodoro-action-btn primary pause-btn hidden">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <div style="width: 24px;"></div> <!-- placeholder to balance reset -->
                 </div>
+
                 <div class="pomodoro-modes">
                     <button class="pomodoro-mode-btn active" data-mode="focus">Focus</button>
                     <button class="pomodoro-mode-btn" data-mode="short">Short Break</button>
