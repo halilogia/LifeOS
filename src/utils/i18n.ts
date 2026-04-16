@@ -1,4 +1,4 @@
-import { Language } from "./types/types.js";
+import { Language } from "../types/types.js";
 
 export const translations = {
   tr: {

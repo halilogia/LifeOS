@@ -1,4 +1,4 @@
-import { HifizItem } from "./types.js";
+import { HifizItem } from "../types/types.js";
 
 const DIYANET_BASE = "https://kuran.diyanet.gov.tr/mushaf";
 

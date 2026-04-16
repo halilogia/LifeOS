@@ -1,5 +1,5 @@
-import { Todo, Language, HifizProgress, Note } from "./types.js";
-import { WordReviewData } from "./types/word.js";
+import { Todo, Language, HifizProgress, Note } from "../types/types.js";
+import { WordReviewData } from "../types/word.js";
 
 export const storage = {
   getTodos: (): Promise<Todo[]> => {

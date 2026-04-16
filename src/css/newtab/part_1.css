@@ -91,8 +91,8 @@ body {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
-    margin: 100px auto 0 auto;
+    gap: 1.5rem;
+    margin: 40px auto 0 auto;
     transition: padding-left 0.4s ease;
 }
 
