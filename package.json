@@ -5,7 +5,7 @@
   "description": "ZenTodo is a high-end Chrome extension that replaces your New Tab page with a minimalist, focused, and aesthetically pleasing To-Do list environment.",
   "scripts": {
     "clean": "rm -rf dist",
-    "copy-assets": "cp src/newtab.html src/newtab.css src/manifest.json dist/ && cp -r icons dist/ 2>/dev/null || true",
+    "copy-assets": "cp src/newtab.html src/newtab.css src/manifest.json dist/ && cp -r icons src/data dist/ 2>/dev/null || true",
     "build": "npm run clean && mkdir -p dist && tsc && npm run copy-assets",
     "watch": "tsc -w",
     "lint": "eslint src --ext .ts"
