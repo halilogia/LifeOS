@@ -344,10 +344,16 @@
             <div class="notes-container">
                 <div class="notes-header">
                     <h2 data-i18n="notes_title">Notlarım</h2>
-                    <button id="add-note-btn" class="add-note-action-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span data-i18n="add_note">Yeni Not</span>
-                    </button>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="add-quote-btn" class="add-note-action-btn" style="background: var(--accent-color); border-color: var(--accent-color);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            <span data-i18n="add_quote">Yeni Söz</span>
+                        </button>
+                        <button id="add-note-btn" class="add-note-action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span data-i18n="add_note">Yeni Not</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="notes-grid" class="notes-grid">
                     <!-- Notes will be rendered here -->
@@ -367,6 +373,23 @@
                 </div>
                 <div class="settings-footer">
                     <button id="save-note-btn" class="settings-add-btn" style="width: auto; padding: 0 20px;">Kaydet</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Modal -->
+        <div id="quote-modal" class="settings-panel">
+            <div class="settings-content" style="max-width: 500px;">
+                <header class="settings-header">
+                    <h3 data-i18n="add_quote">Yeni Özlü Söz</h3>
+                    <button id="quote-modal-close" class="close-btn">&times;</button>
+                </header>
+                <div class="note-editor-body" style="padding: 20px;">
+                    <textarea id="quote-content-input" class="note-content-input" style="height: 120px; font-style: italic;" placeholder="Özlü sözü buraya yazın..."></textarea>
+                    <input type="text" id="quote-author-input" class="note-title-input" style="margin-top: 10px; font-size: 0.9rem;" placeholder="Yazar (Opsiyonel)">
+                </div>
+                <div class="settings-footer">
+                    <button id="save-quote-btn" class="settings-add-btn" style="width: auto; padding: 0 20px;">Ekle</button>
                 </div>
             </div>
         </div>

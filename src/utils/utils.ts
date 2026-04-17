@@ -20,23 +20,36 @@ export function updateTime(
   dateElement.textContent = now.toLocaleDateString(locale, options);
 }
 
-export function setRandomQuote(
+import { storage } from "../core/storage.js";
+
+export async function setRandomQuote(
   quoteElement: HTMLParagraphElement,
   currentLang: Language,
-): void {
-  const quoteKeys = [
-    "quote_1",
-    "quote_2",
-    "quote_3",
-    "quote_4",
-    "quote_5",
-    "quote_6",
-    "quote_7",
-  ];
-  const randomKey = quoteKeys[
-    Math.floor(Math.random() * quoteKeys.length)
-  ] as keyof (typeof translations)["tr"];
-  quoteElement.textContent = translations[currentLang][randomKey];
+): Promise<void> {
+  const customQuotes = await storage.getCustomQuotes();
+  const defaultQuoteCount = 7;
+  
+  const poolSize = defaultQuoteCount + customQuotes.length;
+  const randomIndex = Math.floor(Math.random() * poolSize);
+
+  if (randomIndex < defaultQuoteCount) {
+    const quoteKeys = [
+      "quote_1",
+      "quote_2",
+      "quote_3",
+      "quote_4",
+      "quote_5",
+      "quote_6",
+      "quote_7",
+    ];
+    const randomKey = quoteKeys[randomIndex] as keyof (typeof translations)["tr"];
+    quoteElement.textContent = translations[currentLang][randomKey];
+  } else {
+    const custom = customQuotes[randomIndex - defaultQuoteCount];
+    quoteElement.textContent = custom.author 
+      ? `"${custom.text}" - ${custom.author}` 
+      : `"${custom.text}"`;
+  }
 }
 
 export function getStartOfWeek(date: Date): Date {

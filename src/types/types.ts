@@ -36,3 +36,9 @@ export interface KpssProgress {
   topic: string;
   status: 0 | 1 | 2; // 0: reset, 1: working, 2: finished
 }
+
+export interface CustomQuote {
+  text: string;
+  author?: string;
+}
+
