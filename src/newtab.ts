@@ -200,19 +200,52 @@ document.addEventListener("DOMContentLoaded", async () => {
   const navMap: Record<string, () => void> = {
     viewListBtn: () => switchView("list"),
     viewKanbanBtn: () => switchView("kanban"),
-    viewHifizBtn: () => { switchView("hifiz"); initHifiz(); },
-    viewNotesBtn: () => { switchView("notes"); initNotes(); },
-    viewSrsBtn: () => { switchView("srs"); initSrs(); },
-    viewPomodoroBtn: () => { switchView("pomodoro"); initPomodoro(); },
-    viewCalendarBtn: () => { switchView("calendar"); renderCalendar(); },
-    viewPrayerBtn: () => { switchView("prayer"); initPrayers(); },
-    viewKpssBtn: () => { switchView("kpss"); initKpss(); },
-    navFocusBtn: () => { switchView("list"); switchTab("focus"); elements.repeatSelect().value = "none"; loadTodos(); },
-    navRoutinesBtn: () => { switchView("list"); switchTab("routines"); elements.repeatSelect().value = "daily"; loadTodos(); },
+    viewHifizBtn: () => {
+      switchView("hifiz");
+      initHifiz();
+    },
+    viewNotesBtn: () => {
+      switchView("notes");
+      initNotes();
+    },
+    viewSrsBtn: () => {
+      switchView("srs");
+      initSrs();
+    },
+    viewPomodoroBtn: () => {
+      switchView("pomodoro");
+      initPomodoro();
+    },
+    viewCalendarBtn: () => {
+      switchView("calendar");
+      renderCalendar();
+    },
+    viewPrayerBtn: () => {
+      switchView("prayer");
+      initPrayers();
+    },
+    viewKpssBtn: () => {
+      switchView("kpss");
+      initKpss();
+    },
+    navFocusBtn: () => {
+      switchView("list");
+      switchTab("focus");
+      elements.repeatSelect().value = "none";
+      loadTodos();
+    },
+    navRoutinesBtn: () => {
+      switchView("list");
+      switchTab("routines");
+      elements.repeatSelect().value = "daily";
+      loadTodos();
+    },
   };
 
   Object.entries(navMap).forEach(([btnKey, action]) => {
-    const getEl = (elements as Record<string, () => HTMLElement | null>)[btnKey];
+    const getEl = (
+      elements as unknown as Record<string, () => HTMLElement | null>
+    )[btnKey];
     getEl?.()?.addEventListener("click", action);
   });
 
