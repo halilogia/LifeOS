@@ -20,6 +20,7 @@ import { initHifiz } from "./features/hifiz.js";
 import { initNotes } from "./features/notes.js";
 import { initSrs } from "./ui/srsView.js";
 import { initPomodoro } from "./features/pomodoro.js";
+import { initCalendar, renderCalendar } from "./features/calendar.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -105,7 +106,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     todos[index].completed = isComp;
     todos[index].status = isComp ? "done" : "todo";
     if (isComp) {
-      todos[index].lastCompletedDate = new Date().toISOString();
+      const now = new Date().toISOString();
+      todos[index].lastCompletedDate = now;
+      if (!todos[index].completedDates) {
+        todos[index].completedDates = [];
+      }
+      todos[index].completedDates.push(now);
     }
     await storage.setTodos(todos);
     loadTodos();
@@ -160,6 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       repeat: repeat,
       category: "other",
       lastCompletedDate: null,
+      completedDates: [],
     });
 
     await storage.setTodos(todos);
@@ -218,6 +225,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements.viewPomodoroBtn()?.addEventListener("click", () => {
     switchView("pomodoro");
     initPomodoro();
+  });
+  elements.viewCalendarBtn()?.addEventListener("click", () => {
+    switchView("calendar");
+    renderCalendar();
   });
 
   elements.navFocusBtn().addEventListener("click", () => {
@@ -309,6 +320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHifiz();
   initNotes();
   initPomodoro();
+  initCalendar();
   switchView("pomodoro");
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),

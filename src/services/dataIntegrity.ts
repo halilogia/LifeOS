@@ -1,20 +1,22 @@
 export function safeValidate<T>(
   data: unknown,
-  _schema: any,
+  _schema: unknown,
   fallback: T,
   contextName: string,
 ): T {
   // Simple check for existence since we removed zod for browser compatibility
   if (data !== undefined && data !== null) {
-      return data as T;
+    return data as T;
   }
-  console.error(`[Data Integrity Error] ${contextName}: Validation failed (simple check)!`);
+  console.error(
+    `[Data Integrity Error] ${contextName}: Validation failed (simple check)!`,
+  );
   return fallback;
 }
 
 export function safeValidateList<T>(
   data: unknown,
-  _itemSchema: any,
+  _itemSchema: unknown,
   contextName: string,
   _options: { strict?: boolean } = { strict: true },
 ): T[] {

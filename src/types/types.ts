@@ -5,6 +5,7 @@ export interface Todo {
   repeat: "none" | "daily" | "weekly" | "monthly";
   category: string;
   lastCompletedDate: string | null;
+  completedDates?: string[];
 }
 
 export type Language = "tr" | "en";
