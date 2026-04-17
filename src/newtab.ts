@@ -21,6 +21,7 @@ import { initNotes } from "./features/notes.js";
 import { initSrs } from "./ui/srsView.js";
 import { initPomodoro } from "./features/pomodoro.js";
 import { initCalendar, renderCalendar } from "./features/calendar.js";
+import { initPrayers } from "./ui/prayerView.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -230,6 +231,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     switchView("calendar");
     renderCalendar();
   });
+  elements.viewPrayerBtn()?.addEventListener("click", () => {
+    switchView("prayer");
+    initPrayers();
+  });
 
   elements.navFocusBtn().addEventListener("click", () => {
     switchView("list");
@@ -255,6 +260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     setRandomQuote(elements.quote(), state.currentLang);
     updateTime(elements.clock(), elements.date(), state.currentLang);
     elements.langText().textContent = state.currentLang.toUpperCase();
+    initPrayers();
     loadTodos();
   });
 
