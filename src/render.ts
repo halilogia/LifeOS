@@ -120,6 +120,10 @@ export function switchView(
     elements.viewCalendarBtn().classList.toggle("active", isCalendar);
   }
 
+  // Deactivate focus/routines tabs if not in list view
+  elements.navFocusBtn().classList.toggle("active", isList && state.activeTab === "focus");
+  elements.navRoutinesBtn().classList.toggle("active", isList && state.activeTab === "routines");
+
   elements.listView().classList.toggle("active", isList);
   elements.kanbanView().classList.toggle("active", isKanban);
   elements.hifizView().classList.toggle("active", isHifiz);
