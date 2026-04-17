@@ -24,6 +24,8 @@ import { initPomodoro } from "./features/pomodoro.js";
 import { initCalendar, renderCalendar } from "./features/calendar.js";
 import { initPrayers } from "./ui/prayerView.js";
 import { initKpss } from "./features/kpss.js";
+import { initQuotes } from "./features/quotes.js";
+import { initSidebar } from "./ui/sidebar.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Initial UI setup
   applyI18n(state.currentLang, elements.todoInput(), elements.langToggleBtn());
-  setRandomQuote(elements.quote(), state.currentLang);
+  await setRandomQuote(elements.quote(), state.currentLang);
   updateTime(elements.clock(), elements.date(), state.currentLang);
   elements.langText().textContent = state.currentLang.toUpperCase();
 
@@ -179,22 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadTodos();
   });
 
-  elements.sidebarToggle().addEventListener("click", async () => {
-    const isOpen = document.body.classList.toggle("sidebar-open");
-    await storage.setSidebarOpen(isOpen);
-  });
-
-  document.addEventListener("click", (e) => {
-    if (
-      document.body.classList.contains("sidebar-open") &&
-      !elements.sidebar().contains(e.target as Node) &&
-      !elements.sidebarToggle().contains(e.target as Node) &&
-      window.innerWidth < 1200
-    ) {
-      document.body.classList.remove("sidebar-open");
-      storage.setSidebarOpen(false);
-    }
-  });
+  initSidebar();
 
   elements.todoInput().addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
@@ -209,50 +196,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   elements
     .restoreBtn()
     .addEventListener("click", () => elements.restoreInput().click());
-  elements.viewListBtn().addEventListener("click", () => switchView("list"));
-  elements
-    .viewKanbanBtn()
-    .addEventListener("click", () => switchView("kanban"));
-  elements.viewHifizBtn().addEventListener("click", () => {
-    switchView("hifiz");
-    initHifiz();
-  });
-  elements.viewNotesBtn().addEventListener("click", () => {
-    switchView("notes");
-    initNotes();
-  });
-  elements.viewSrsBtn()?.addEventListener("click", () => {
-    switchView("srs");
-    initSrs();
-  });
-  elements.viewPomodoroBtn()?.addEventListener("click", () => {
-    switchView("pomodoro");
-    initPomodoro();
-  });
-  elements.viewCalendarBtn()?.addEventListener("click", () => {
-    switchView("calendar");
-    renderCalendar();
-  });
-  elements.viewPrayerBtn()?.addEventListener("click", () => {
-    switchView("prayer");
-    initPrayers();
-  });
-  elements.viewKpssBtn()?.addEventListener("click", () => {
-    switchView("kpss");
-    initKpss();
-  });
+  // Navigation Buttons
+  const navMap: Record<string, () => void> = {
+    viewListBtn: () => switchView("list"),
+    viewKanbanBtn: () => switchView("kanban"),
+    viewHifizBtn: () => { switchView("hifiz"); initHifiz(); },
+    viewNotesBtn: () => { switchView("notes"); initNotes(); },
+    viewSrsBtn: () => { switchView("srs"); initSrs(); },
+    viewPomodoroBtn: () => { switchView("pomodoro"); initPomodoro(); },
+    viewCalendarBtn: () => { switchView("calendar"); renderCalendar(); },
+    viewPrayerBtn: () => { switchView("prayer"); initPrayers(); },
+    viewKpssBtn: () => { switchView("kpss"); initKpss(); },
+    navFocusBtn: () => { switchView("list"); switchTab("focus"); elements.repeatSelect().value = "none"; loadTodos(); },
+    navRoutinesBtn: () => { switchView("list"); switchTab("routines"); elements.repeatSelect().value = "daily"; loadTodos(); },
+  };
 
-  elements.navFocusBtn().addEventListener("click", () => {
-    switchView("list");
-    switchTab("focus");
-    elements.repeatSelect().value = "none";
-    loadTodos();
-  });
-  elements.navRoutinesBtn().addEventListener("click", () => {
-    switchView("list");
-    switchTab("routines");
-    elements.repeatSelect().value = "daily";
-    loadTodos();
+  Object.entries(navMap).forEach(([btnKey, action]) => {
+    const getEl = (elements as Record<string, () => HTMLElement | null>)[btnKey];
+    getEl?.()?.addEventListener("click", action);
   });
 
   elements.langToggleBtn().addEventListener("click", async () => {
@@ -263,7 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       elements.todoInput(),
       elements.langToggleBtn(),
     );
-    setRandomQuote(elements.quote(), state.currentLang);
+    await setRandomQuote(elements.quote(), state.currentLang);
     updateTime(elements.clock(), elements.date(), state.currentLang);
     elements.langText().textContent = state.currentLang.toUpperCase();
     initPrayers();
@@ -305,6 +266,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initPomodoro();
   initCalendar();
   initKpss();
+  initQuotes();
   switchView("pomodoro");
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),

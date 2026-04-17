@@ -1,4 +1,4 @@
-import { Todo, Language, HifizProgress, Note, KpssProgress } from "../types/types.js";
+import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
 export const storage = {
@@ -72,6 +72,18 @@ export const storage = {
   setKpssProgress: (kpssProgress: KpssProgress[]): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set({ kpssProgress }, resolve);
+    });
+  },
+  getCustomQuotes: (): Promise<CustomQuote[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["customQuotes"], (result) => {
+        resolve((result.customQuotes as CustomQuote[]) || []);
+      });
+    });
+  },
+  setCustomQuotes: (customQuotes: CustomQuote[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ customQuotes }, resolve);
     });
   },
   getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean }> => {

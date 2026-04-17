@@ -80,4 +80,10 @@ export const elements = {
   kpssSubjectTitle: () => document.getElementById("kpss-subject-title") as HTMLSpanElement,
   kpssProgressText: () => document.getElementById("kpss-progress-text") as HTMLSpanElement,
   kpssProgressFill: () => document.getElementById("kpss-progress-fill") as HTMLDivElement,
+  addQuoteBtn: () => document.getElementById("add-quote-btn") as HTMLButtonElement,
+  quoteModal: () => document.getElementById("quote-modal") as HTMLDivElement,
+  quoteContentInput: () => document.getElementById("quote-content-input") as HTMLTextAreaElement,
+  quoteAuthorInput: () => document.getElementById("quote-author-input") as HTMLInputElement,
+  saveQuoteBtn: () => document.getElementById("save-quote-btn") as HTMLButtonElement,
+  quoteModalClose: () => document.getElementById("quote-modal-close") as HTMLButtonElement,
 };
