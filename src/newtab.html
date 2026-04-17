@@ -132,35 +132,72 @@
 
         <!-- Pomodoro View -->
         <section id="pomodoro-view" class="view-content active">
-            <div class="pomodoro-container">
-                <div class="pomodoro-visual">
-                    <svg class="progress-ring" width="320" height="320">
-                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="150" cx="160" cy="160"/>
-                        <circle id="pomodoro-progress" class="progress-ring__circle" stroke="var(--accent-color)" stroke-width="8" stroke-linecap="round" fill="transparent" r="150" cx="160" cy="160" style="stroke-dasharray: 942.48; stroke-dashoffset: 0; transition: stroke-dashoffset 0.3s;"/>
-                    </svg>
-                    <div class="pomodoro-timer-inner">
-                        <div id="pomodoro-time">25:00</div>
-                        <div id="pomodoro-label">FOCUS</div>
+            <div class="pomodoro-dashboard">
+                <!-- Main Pomodoro -->
+                <div class="pomodoro-main-card">
+                    <div class="pomodoro-visual-container">
+                        <svg class="progress-ring-main" width="240" height="240">
+                            <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="110" cx="120" cy="120"/>
+                            <circle id="pomodoro-progress" class="progress-ring__circle" stroke="var(--accent-color)" stroke-width="8" stroke-linecap="round" fill="transparent" r="110" cx="120" cy="120" style="stroke-dasharray: 691.15; stroke-dashoffset: 0; transition: stroke-dashoffset 0.3s;"/>
+                        </svg>
+                        <div class="pomodoro-timer-inner">
+                            <div id="pomodoro-time">25:00</div>
+                            <div id="pomodoro-label">FOCUS</div>
+                        </div>
+                    </div>
+                    
+                    <div class="pomodoro-controls">
+                        <button id="pomodoro-reset" class="pomodoro-action-btn secondary" title="Reset">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                        </button>
+                        <button id="pomodoro-start" class="pomodoro-action-btn primary play-btn">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                        <button id="pomodoro-pause" class="pomodoro-action-btn primary pause-btn hidden">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        </button>
+                        <div style="width: 20px;"></div>
+                    </div>
+
+                    <div class="pomodoro-modes" id="pomodoro-modes-container">
+                        <button class="pomodoro-mode-btn active" data-mode="focus">Focus</button>
+                        <button class="pomodoro-mode-btn" data-mode="short">Short</button>
+                        <button class="pomodoro-mode-btn" data-mode="long">Long</button>
                     </div>
                 </div>
-                
-                <div class="pomodoro-controls">
-                    <button id="pomodoro-reset" class="pomodoro-action-btn secondary" title="Reset">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-                    </button>
-                    <button id="pomodoro-start" class="pomodoro-action-btn primary play-btn">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                    <button id="pomodoro-pause" class="pomodoro-action-btn primary pause-btn hidden">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    <div style="width: 24px;"></div> <!-- placeholder to balance reset -->
-                </div>
 
-                <div class="pomodoro-modes">
-                    <button class="pomodoro-mode-btn active" data-mode="focus">Focus</button>
-                    <button class="pomodoro-mode-btn" data-mode="short">Short Break</button>
-                    <button class="pomodoro-mode-btn" data-mode="long">Long Break</button>
+                <!-- Side Panel: Stopwatch & Alarm -->
+                <div class="pomodoro-side-panel">
+                    <!-- Stopwatch Mini Card -->
+                    <div class="mini-tool-card" id="stopwatch-mini">
+                        <div class="mini-tool-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Kronometre</span>
+                        </div>
+                        <div class="mini-tool-content">
+                            <div id="stopwatch-time" class="mini-time">00:00</div>
+                            <div class="mini-controls">
+                                <button id="sw-start-btn" class="mini-btn primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+                                <button id="sw-pause-btn" class="mini-btn primary hidden"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+                                <button id="sw-reset-btn" class="mini-btn secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alarm Mini Card -->
+                    <div class="mini-tool-card" id="alarm-mini">
+                        <div class="mini-tool-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            <span>Alarm</span>
+                        </div>
+                        <div class="mini-tool-content">
+                            <input type="time" id="alarm-time-input" class="mini-alarm-input">
+                            <div class="mini-controls">
+                                <button id="alarm-start-btn" class="mini-btn primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+                                <button id="alarm-stop-btn" class="mini-btn primary hidden"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

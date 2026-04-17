@@ -1,150 +1,185 @@
 import { elements } from "../ui/dom.js";
 
-let timer: number | null = null;
-let timeLeft = 25 * 60;
-let totalTime = 25 * 60;
-let currentMode: "focus" | "short" | "long" = "focus";
+// Main Pomodoro State
+let pomoTimer: number | null = null;
+let pomoTimeLeft = 25 * 60;
+let pomoTotalTime = 25 * 60;
+let pomoMode: "focus" | "short" | "long" = "focus";
 
-const MODE_TIMES = {
-  focus: 25 * 60,
-  short: 5 * 60,
-  long: 15 * 60,
-};
+// Stopwatch State
+let swTimer: number | null = null;
+let swTime = 0;
 
-const MODE_LABELS = {
-  focus: "FOCUS",
-  short: "SHORT BREAK",
-  long: "LONG BREAK",
-};
+// Alarm State
+let alarmTimer: number | null = null;
+let alarmTarget: string | null = null;
 
-const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 150; // r=150 from HTML
+const MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
+const MODE_LABELS = { focus: "FOCUS", short: "SHORT", long: "LONG" };
+const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110; // updated r=110
 
 export function initPomodoro() {
-  const startBtn = elements.pomodoroStart();
-  const pauseBtn = elements.pomodoroPause();
-  const resetBtn = elements.pomodoroReset();
-  const modeBtns = elements.pomodoroModeBtns();
+    initPomoListeners();
+    initSwListeners();
+    initAlarmListeners();
+    updateDisplays();
+}
 
-  // Remove existing to avoid double listeners if re-init
-  startBtn.replaceWith(startBtn.cloneNode(true));
-  pauseBtn.replaceWith(pauseBtn.cloneNode(true));
-  resetBtn.replaceWith(resetBtn.cloneNode(true));
+function initPomoListeners() {
+    const startBtn = document.getElementById("pomodoro-start");
+    const pauseBtn = document.getElementById("pomodoro-pause");
+    const resetBtn = document.getElementById("pomodoro-reset");
+    const modeBtns = document.querySelectorAll(".pomodoro-mode-btn");
 
-  elements.pomodoroStart().addEventListener("click", startTimer);
-  elements.pomodoroPause().addEventListener("click", pauseTimer);
-  elements.pomodoroReset().addEventListener("click", resetTimer);
+    startBtn?.addEventListener("click", startPomo);
+    pauseBtn?.addEventListener("click", pausePomo);
+    resetBtn?.addEventListener("click", resetPomo);
 
-  modeBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const mode = (e.currentTarget as HTMLButtonElement).dataset
-        .mode as unknown;
-      setMode(mode as "focus" | "short" | "long");
+    modeBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            modeBtns.forEach(b => b.classList.remove("active"));
+            const target = e.currentTarget as HTMLButtonElement;
+            target.classList.add("active");
+            setPomoMode(target.dataset.mode as any);
+        });
     });
-  });
-
-  updateDisplay();
 }
 
-function setMode(mode: "focus" | "short" | "long") {
-  pauseTimer();
-  currentMode = mode;
-  timeLeft = MODE_TIMES[mode];
-  totalTime = timeLeft;
-
-  elements.pomodoroModeBtns().forEach((btn) => {
-    const b = btn as HTMLButtonElement;
-    b.classList.toggle("active", b.dataset.mode === mode);
-  });
-
-  const label = elements.pomodoroLabel();
-  if (label) {
-    label.textContent = MODE_LABELS[mode];
-  }
-  updateDisplay();
+function initSwListeners() {
+    document.getElementById("sw-start-btn")?.addEventListener("click", startSw);
+    document.getElementById("sw-pause-btn")?.addEventListener("click", pauseSw);
+    document.getElementById("sw-reset-btn")?.addEventListener("click", resetSw);
 }
 
-function startTimer() {
-  if (timer) {
-    return;
-  }
+function initAlarmListeners() {
+    document.getElementById("alarm-start-btn")?.addEventListener("click", startAlarm);
+    document.getElementById("alarm-stop-btn")?.addEventListener("click", stopAlarm);
+}
 
-  elements.pomodoroStart().classList.add("hidden");
-  elements.pomodoroPause().classList.remove("hidden");
+// --- MAIN POMODORO ---
+function setPomoMode(mode: "focus" | "short" | "long") {
+    pausePomo();
+    pomoMode = mode;
+    pomoTimeLeft = MODE_TIMES[mode];
+    pomoTotalTime = pomoTimeLeft;
+    const label = document.getElementById("pomodoro-label");
+    if (label) label.textContent = MODE_LABELS[mode];
+    updatePomoDisplay();
+}
 
-  timer = window.setInterval(() => {
-    timeLeft--;
-    if (timeLeft <= 0) {
-      clearInterval(timer!);
-      timer = null;
-      notify();
-      handleTimerComplete();
+function startPomo() {
+    if (pomoTimer) return;
+    document.getElementById("pomodoro-start")?.classList.add("hidden");
+    document.getElementById("pomodoro-pause")?.classList.remove("hidden");
+    pomoTimer = window.setInterval(() => {
+        pomoTimeLeft--;
+        if (pomoTimeLeft <= 0) {
+            pausePomo();
+            notify("Pomodoro finished!");
+            // Auto switch?
+            if (pomoMode === "focus") setPomoMode("short");
+            else setPomoMode("focus");
+        }
+        updatePomoDisplay();
+    }, 1000);
+}
+
+function pausePomo() {
+    if (pomoTimer) { clearInterval(pomoTimer); pomoTimer = null; }
+    document.getElementById("pomodoro-start")?.classList.remove("hidden");
+    document.getElementById("pomodoro-pause")?.classList.add("hidden");
+}
+
+function resetPomo() {
+    pausePomo();
+    pomoTimeLeft = MODE_TIMES[pomoMode];
+    pomoTotalTime = pomoTimeLeft;
+    updatePomoDisplay();
+}
+
+function updatePomoDisplay() {
+    const timeEl = document.getElementById("pomodoro-time");
+    if (!timeEl) return;
+    const mins = Math.floor(pomoTimeLeft / 60);
+    const secs = pomoTimeLeft % 60;
+    timeEl.textContent = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    
+    const progressEl = document.getElementById("pomodoro-progress");
+    if (progressEl) {
+        const percent = pomoTimeLeft / pomoTotalTime;
+        const offset = CIRCLE_CIRCUMFERENCE * (1 - percent);
+        (progressEl as any).style.strokeDashoffset = offset.toString();
     }
-    updateDisplay();
-  }, 1000);
 }
 
-function pauseTimer() {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-  elements.pomodoroStart().classList.remove("hidden");
-  elements.pomodoroPause().classList.add("hidden");
+// --- STOPWATCH ---
+function startSw() {
+    if (swTimer) return;
+    document.getElementById("sw-start-btn")?.classList.add("hidden");
+    document.getElementById("sw-pause-btn")?.classList.remove("hidden");
+    swTimer = window.setInterval(() => {
+        swTime++;
+        updateSwDisplay();
+    }, 1000);
 }
 
-function resetTimer() {
-  pauseTimer();
-  timeLeft = MODE_TIMES[currentMode];
-  totalTime = timeLeft;
-  updateDisplay();
+function pauseSw() {
+    if (swTimer) { clearInterval(swTimer); swTimer = null; }
+    document.getElementById("sw-start-btn")?.classList.remove("hidden");
+    document.getElementById("sw-pause-btn")?.classList.add("hidden");
 }
 
-function updateDisplay() {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const timeStr = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  const timeEl = elements.pomodoroTime();
-  if (timeEl) {
-    timeEl.textContent = timeStr;
-  }
-
-  // Update progress ring
-  const progressEl = document.getElementById("pomodoro-progress") as unknown;
-  if (progressEl) {
-    const percent = timeLeft / totalTime;
-    const offset = CIRCLE_CIRCUMFERENCE * (1 - percent);
-    (progressEl as SVGElement).style.strokeDashoffset = offset.toString();
-  }
+function resetSw() {
+    pauseSw();
+    swTime = 0;
+    updateSwDisplay();
 }
 
-function handleTimerComplete() {
-  if (currentMode === "focus") {
-    setMode("short");
-  } else {
-    setMode("focus");
-  }
+function updateSwDisplay() {
+    const timeEl = document.getElementById("stopwatch-time");
+    if (!timeEl) return;
+    const mins = Math.floor(swTime / 60);
+    const secs = swTime % 60;
+    timeEl.textContent = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
-function notify() {
-  // Better alarm sound
-  try {
-    const audio = new Audio(
-      "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
-    );
-    audio.volume = 0.4;
-    audio.play();
-  } catch (e) {
-    console.warn("Could not play sound", e);
-  }
+// --- ALARM ---
+function startAlarm() {
+    const input = document.getElementById("alarm-time-input") as HTMLInputElement;
+    if (!input || !input.value) return;
+    alarmTarget = input.value;
+    document.getElementById("alarm-start-btn")?.classList.add("hidden");
+    document.getElementById("alarm-stop-btn")?.classList.remove("hidden");
+    
+    if (alarmTimer) clearInterval(alarmTimer);
+    alarmTimer = window.setInterval(() => {
+        const now = new Date().toTimeString().slice(0, 5);
+        if (now === alarmTarget) {
+            stopAlarm();
+            notify("ALARM!");
+        }
+    }, 1000);
+}
 
-  if (Notification.permission === "granted") {
-    new Notification("Life OS", {
-      body:
-        currentMode === "focus"
-          ? "Session finished! Take a break."
-          : "Break over! Time to focus.",
-    });
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission();
-  }
+function stopAlarm() {
+    if (alarmTimer) { clearInterval(alarmTimer); alarmTimer = null; }
+    alarmTarget = null;
+    document.getElementById("alarm-start-btn")?.classList.remove("hidden");
+    document.getElementById("alarm-stop-btn")?.classList.add("hidden");
+}
+
+// --- UTILS ---
+function updateDisplays() {
+    updatePomoDisplay();
+    updateSwDisplay();
+}
+
+function notify(msg: string) {
+    try {
+        const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+        audio.volume = 0.4;
+        audio.play();
+    } catch {}
+    if (Notification.permission === "granted") new Notification("Life OS", { body: msg });
+    else Notification.requestPermission();
 }
