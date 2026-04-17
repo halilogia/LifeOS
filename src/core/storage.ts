@@ -1,4 +1,4 @@
-import { Todo, Language, HifizProgress, Note } from "../types/types.js";
+import { Todo, Language, HifizProgress, Note, KpssProgress } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
 export const storage = {
@@ -60,6 +60,18 @@ export const storage = {
   setCustomCategories: (customCategories: string[]): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set({ customCategories }, resolve);
+    });
+  },
+  getKpssProgress: (): Promise<KpssProgress[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssProgress"], (result) => {
+        resolve((result.kpssProgress as KpssProgress[]) || []);
+      });
+    });
+  },
+  setKpssProgress: (kpssProgress: KpssProgress[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssProgress }, resolve);
     });
   },
   getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean }> => {
