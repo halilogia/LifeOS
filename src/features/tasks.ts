@@ -54,7 +54,12 @@ export function moveTaskWithStatus(
   todos[index].status = newStatus;
   todos[index].completed = newStatus === "done";
   if (todos[index].completed) {
-    todos[index].lastCompletedDate = new Date().toISOString();
+    const now = new Date().toISOString();
+    todos[index].lastCompletedDate = now;
+    if (!todos[index].completedDates) {
+      todos[index].completedDates = [];
+    }
+    todos[index].completedDates.push(now);
   }
 }
 

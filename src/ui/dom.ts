@@ -60,4 +60,10 @@ export const elements = {
   noteContentInput: () => document.getElementById("note-content-input") as HTMLTextAreaElement,
   saveNoteBtn: () => document.getElementById("save-note-btn") as HTMLButtonElement,
   noteModalClose: () => document.getElementById("note-modal-close") as HTMLButtonElement,
+  viewCalendarBtn: () => document.getElementById("view-calendar-btn") as HTMLButtonElement,
+  calendarView: () => document.getElementById("calendar-view") as HTMLElement,
+  calendarGrid: () => document.getElementById("calendar-grid") as HTMLDivElement,
+  currentMonthYear: () => document.getElementById("current-month-year") as HTMLSpanElement,
+  prevMonthBtn: () => document.getElementById("prev-month-btn") as HTMLButtonElement,
+  nextMonthBtn: () => document.getElementById("next-month-btn") as HTMLButtonElement,
 };

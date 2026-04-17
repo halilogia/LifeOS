@@ -96,7 +96,7 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
@@ -104,6 +104,7 @@ export function switchView(
   const isNotes = view === "notes";
   const isSrs = view === "srs";
   const isPomodoro = view === "pomodoro";
+  const isCalendar = view === "calendar";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -115,6 +116,9 @@ export function switchView(
   if (elements.viewPomodoroBtn()) {
     elements.viewPomodoroBtn().classList.toggle("active", isPomodoro);
   }
+  if (elements.viewCalendarBtn()) {
+    elements.viewCalendarBtn().classList.toggle("active", isCalendar);
+  }
 
   elements.listView().classList.toggle("active", isList);
   elements.kanbanView().classList.toggle("active", isKanban);
@@ -125,6 +129,9 @@ export function switchView(
   }
   if (elements.pomodoroView()) {
     elements.pomodoroView().classList.toggle("active", isPomodoro);
+  }
+  if (elements.calendarView()) {
+    elements.calendarView().classList.toggle("active", isCalendar);
   }
 
   const hero = elements.hero();
@@ -146,7 +153,9 @@ export function switchView(
           ? "1200px"
           : isPomodoro
             ? "600px"
-            : "1250px";
+            : isCalendar
+              ? "1400px"
+              : "1250px";
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
@@ -155,7 +164,9 @@ export function switchView(
           ? "40px auto 0 auto"
           : isPomodoro
             ? "100px auto 0 auto"
-            : "60px auto 0 auto";
+            : isCalendar
+              ? "40px auto 0 auto"
+              : "60px auto 0 auto";
   }
 }
 
