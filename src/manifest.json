@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ZenTodo - New Tab",
+  "name": "Life OS - Personal Dashboard",
   "version": "1.0.0",
-  "description": "A minimalist, beautiful to-do list for your New Tab page.",
+  "description": "Kişisel yaşam yönetimi, KPSS takibi, Pomodoro, Namaz vakitleri ve Hıfız özellikli tamamen kişiselleştirilmiş bir New Tab arayüzü.",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },

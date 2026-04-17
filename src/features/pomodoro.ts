@@ -138,7 +138,7 @@ function notify() {
   }
 
   if (Notification.permission === "granted") {
-    new Notification("ZenTodo Pomodoro", {
+    new Notification("Life OS", {
       body:
         currentMode === "focus"
           ? "Session finished! Take a break."

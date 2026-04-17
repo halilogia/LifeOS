@@ -86,14 +86,21 @@ export const storage = {
       chrome.storage.sync.set({ customQuotes }, resolve);
     });
   },
-  getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean }> => {
+  getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean; prayerCity?: string; prayerCountry?: string }> => {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["lang", "sidebarOpen"], (result) => {
+      chrome.storage.sync.get(["lang", "sidebarOpen", "prayerCity", "prayerCountry"], (result) => {
         resolve({
           lang: (result.lang as Language) || "tr",
-          sidebarOpen: result.sidebarOpen as boolean | undefined,
+          sidebarOpen: result.sidebarOpen ?? true,
+          prayerCity: result.prayerCity || "Istanbul",
+          prayerCountry: result.prayerCountry || "Turkey",
         });
       });
+    });
+  },
+  setPrayerLocation: (city: string, country: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ prayerCity: city, prayerCountry: country }, resolve);
     });
   },
   setLang: (lang: Language): Promise<void> => {

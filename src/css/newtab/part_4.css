@@ -197,11 +197,24 @@
 .footer {
     position: fixed;
     bottom: 2rem;
-    text-align: center;
+    left: 0;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+#quote {
+    text-align: center;
     color: var(--text-secondary);
     font-style: italic;
     opacity: 0.8;
+    max-width: 800px;
+    pointer-events: auto;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 /* Animations */
