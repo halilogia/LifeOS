@@ -96,7 +96,7 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
@@ -105,6 +105,7 @@ export function switchView(
   const isSrs = view === "srs";
   const isPomodoro = view === "pomodoro";
   const isCalendar = view === "calendar";
+  const isPrayer = view === "prayer";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -118,6 +119,9 @@ export function switchView(
   }
   if (elements.viewCalendarBtn()) {
     elements.viewCalendarBtn().classList.toggle("active", isCalendar);
+  }
+  if (elements.viewPrayerBtn()) {
+    elements.viewPrayerBtn().classList.toggle("active", isPrayer);
   }
 
   // Deactivate focus/routines tabs if not in list view
@@ -136,6 +140,9 @@ export function switchView(
   }
   if (elements.calendarView()) {
     elements.calendarView().classList.toggle("active", isCalendar);
+  }
+  if (elements.prayerView()) {
+    elements.prayerView().classList.toggle("active", isPrayer);
   }
 
   const hero = elements.hero();

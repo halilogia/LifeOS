@@ -70,4 +70,7 @@ export const elements = {
   dayTasksTitle: () => document.getElementById("day-tasks-title") as HTMLHeadingElement,
   dayTasksList: () => document.getElementById("day-tasks-list") as HTMLUListElement,
   dayTasksClose: () => document.getElementById("day-tasks-close") as HTMLButtonElement,
+  viewPrayerBtn: () => document.getElementById("view-prayer-btn") as HTMLButtonElement,
+  prayerView: () => document.getElementById("prayer-view") as HTMLElement,
+  prayerContent: () => document.getElementById("prayer-content") as HTMLDivElement,
 };
