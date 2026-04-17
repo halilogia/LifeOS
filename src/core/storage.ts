@@ -1,6 +1,13 @@
 import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
+interface SettingsResult {
+  lang?: Language;
+  sidebarOpen?: boolean;
+  prayerCity?: string;
+  prayerCountry?: string;
+}
+
 export const storage = {
   getTodos: (): Promise<Todo[]> => {
     return new Promise((resolve) => {
@@ -88,7 +95,7 @@ export const storage = {
   },
   getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean; prayerCity?: string; prayerCountry?: string }> => {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["lang", "sidebarOpen", "prayerCity", "prayerCountry"], (result) => {
+      chrome.storage.sync.get(["lang", "sidebarOpen", "prayerCity", "prayerCountry"], (result: SettingsResult) => {
         resolve({
           lang: (result.lang as Language) || "tr",
           sidebarOpen: result.sidebarOpen ?? true,
