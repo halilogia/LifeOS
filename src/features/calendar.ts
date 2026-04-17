@@ -16,6 +16,16 @@ export async function initCalendar() {
     currentDisplayDate.setMonth(currentDisplayDate.getMonth() + 1);
     renderCalendar();
   });
+
+  elements.dayTasksClose().addEventListener("click", () => {
+    elements.dayTasksModal().classList.remove("active");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === elements.dayTasksModal()) {
+      elements.dayTasksModal().classList.remove("active");
+    }
+  });
 }
 
 export async function renderCalendar() {
@@ -29,32 +39,12 @@ export async function renderCalendar() {
   const month = currentDisplayDate.getMonth();
 
   const monthNamesTr = [
-    "Ocak",
-    "Şubat",
-    "Mart",
-    "Nisan",
-    "Mayıs",
-    "Haziran",
-    "Temmuz",
-    "Ağustos",
-    "Eylül",
-    "Ekim",
-    "Kasım",
-    "Aralık",
+    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
   ];
   const monthNamesEn = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
   const monthName =
@@ -62,31 +52,25 @@ export async function renderCalendar() {
   currentMonthYear.textContent = `${monthName} ${year}`;
 
   const firstDayOfMonth = new Date(year, month, 1).getDay();
-  // Adjust to start from Monday (0: Sun, 1: Mon...) -> (0: Mon, 1: Tue...)
   const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Add empty cells for previous month
   for (let i = 0; i < startOffset; i++) {
     const emptyCell = document.createElement("div");
     emptyCell.className = "calendar-day empty";
     calendarGrid.appendChild(emptyCell);
   }
 
-  // Create lookup for completed tasks by date
   const completedTasksByDate: Record<string, string[]> = {};
 
   todos.forEach((todo) => {
-    const dates =
-      todo.completedDates ||
-      (todo.lastCompletedDate ? [todo.lastCompletedDate] : []);
+    const dates = todo.completedDates || (todo.lastCompletedDate ? [todo.lastCompletedDate] : []);
     dates.forEach((dateStr) => {
       const date = new Date(dateStr);
       const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
       if (!completedTasksByDate[dateKey]) {
         completedTasksByDate[dateKey] = [];
       }
-      // Avoid duplicate texts on the same day if desired, but here we just push
       if (!completedTasksByDate[dateKey].includes(todo.text)) {
         completedTasksByDate[dateKey].push(todo.text);
       }
@@ -94,8 +78,7 @@ export async function renderCalendar() {
   });
 
   const today = new Date();
-  const isCurrentMonth =
-    today.getFullYear() === year && today.getMonth() === month;
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dayCell = document.createElement("div");
@@ -110,10 +93,12 @@ export async function renderCalendar() {
     dayCell.appendChild(dayNumber);
 
     const dateKey = `${year}-${month}-${day}`;
-    if (completedTasksByDate[dateKey]) {
+    const tasks = completedTasksByDate[dateKey] || [];
+
+    if (tasks.length > 0) {
       const taskList = document.createElement("ul");
       taskList.className = "calendar-task-list";
-      completedTasksByDate[dateKey].forEach((taskText) => {
+      tasks.forEach((taskText) => {
         const taskItem = document.createElement("li");
         taskItem.textContent = taskText;
         taskList.appendChild(taskItem);
@@ -122,6 +107,36 @@ export async function renderCalendar() {
       dayCell.classList.add("has-tasks");
     }
 
+    dayCell.addEventListener("click", () => {
+      showDayTasks(day, monthName, year, tasks);
+    });
+
     calendarGrid.appendChild(dayCell);
   }
+}
+
+function showDayTasks(day: number, monthName: string, year: number, tasks: string[]) {
+  elements.dayTasksTitle().textContent = `${day} ${monthName} ${year}`;
+  const list = elements.dayTasksList();
+  list.innerHTML = "";
+
+  if (tasks.length === 0) {
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = state.currentLang === "tr" ? "Bu güne ait tamamlanmış görev yok." : "No completed tasks for this day.";
+    emptyMsg.style.color = "var(--text-secondary)";
+    emptyMsg.style.textAlign = "center";
+    emptyMsg.style.padding = "20px";
+    list.appendChild(emptyMsg);
+  } else {
+    tasks.forEach(taskText => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>${taskText}</span>
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  elements.dayTasksModal().classList.add("active");
 }

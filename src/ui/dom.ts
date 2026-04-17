@@ -66,4 +66,8 @@ export const elements = {
   currentMonthYear: () => document.getElementById("current-month-year") as HTMLSpanElement,
   prevMonthBtn: () => document.getElementById("prev-month-btn") as HTMLButtonElement,
   nextMonthBtn: () => document.getElementById("next-month-btn") as HTMLButtonElement,
+  dayTasksModal: () => document.getElementById("day-tasks-modal") as HTMLDivElement,
+  dayTasksTitle: () => document.getElementById("day-tasks-title") as HTMLHeadingElement,
+  dayTasksList: () => document.getElementById("day-tasks-list") as HTMLUListElement,
+  dayTasksClose: () => document.getElementById("day-tasks-close") as HTMLButtonElement,
 };
