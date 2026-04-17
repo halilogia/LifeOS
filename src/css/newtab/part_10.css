@@ -1,0 +1,145 @@
+/* Pomodoro Dashboard Layout - Fixed Alignment */
+.pomodoro-dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.pomodoro-main-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    width: 360px;
+    flex-shrink: 0;
+}
+
+.pomodoro-visual-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.progress-ring-main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 240px;
+    transform: rotate(-90deg);
+}
+
+.pomodoro-timer-inner {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+#pomodoro-time {
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+#pomodoro-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--accent-color);
+    opacity: 0.8;
+}
+
+.pomodoro-controls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.pomodoro-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.mini-tool-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.mini-tool-card:hover { border-color: var(--accent-color); }
+
+.mini-tool-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.mini-tool-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mini-time {
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.mini-alarm-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 8px;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+    outline: none;
+}
+
+.mini-controls { display: flex; gap: 0.75rem; }
+
+.mini-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-color);
+    color: white;
+}
+.mini-btn.secondary { background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.1); }
+
+.hidden { display: none !important; }
