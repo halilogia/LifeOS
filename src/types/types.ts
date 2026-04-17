@@ -31,3 +31,8 @@ export interface Note {
   color?: string;
   createdAt: string;
 }
+export interface KpssProgress {
+  subject: string;
+  topic: string;
+  status: 0 | 1 | 2; // 0: reset, 1: working, 2: finished
+}

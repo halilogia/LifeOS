@@ -1,4 +1,4 @@
-import { prayerService } from "../services/prayerService.js";
+import { prayerService, PrayerTimes } from "../services/prayerService.js";
 import { state } from "../core/state.js";
 
 const PRAYER_NAMES: Record<string, Record<string, string>> = {
@@ -25,14 +25,17 @@ const PRAYER_NAMES: Record<string, Record<string, string>> = {
 export async function initPrayers() {
   const content = document.getElementById("prayer-content");
 
-  if (!content) return;
+  if (!content) {
+    return;
+  }
 
   content.innerHTML = `<div style="text-align:center; padding: 4rem; color: var(--text-secondary); animation: pulse 1.5s infinite;">Vakitler alınıyor...</div>`;
 
   try {
     const times = await prayerService.getPrayerTimes();
     const currentLang = state.currentLang || "tr";
-    const labels = PRAYER_NAMES[currentLang as keyof typeof PRAYER_NAMES] || PRAYER_NAMES.tr;
+    const labels =
+      PRAYER_NAMES[currentLang as keyof typeof PRAYER_NAMES] || PRAYER_NAMES.tr;
 
     content.innerHTML = `
       <div class="prayer-standalone-card" style="max-width: 600px; margin: 0 auto;">
@@ -67,7 +70,7 @@ function renderPrayerItem(name: string, time: string) {
   `;
 }
 
-function highlightCurrentPrayer(times: any) {
+function highlightCurrentPrayer(times: PrayerTimes) {
   const now = new Date();
   const currentTime = now.getHours() * 60 + now.getMinutes();
 

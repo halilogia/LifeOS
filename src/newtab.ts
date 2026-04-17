@@ -9,6 +9,7 @@ import {
   renderKanbanItem,
   switchView,
   switchTab,
+  setupKanbanListeners,
 } from "./render.js";
 import { handleBackup, handleRestore } from "./core/backup.js";
 import {
@@ -22,6 +23,7 @@ import { initSrs } from "./ui/srsView.js";
 import { initPomodoro } from "./features/pomodoro.js";
 import { initCalendar, renderCalendar } from "./features/calendar.js";
 import { initPrayers } from "./ui/prayerView.js";
+import { initKpss } from "./features/kpss.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -235,6 +237,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     switchView("prayer");
     initPrayers();
   });
+  elements.viewKpssBtn()?.addEventListener("click", () => {
+    switchView("kpss");
+    initKpss();
+  });
 
   elements.navFocusBtn().addEventListener("click", () => {
     switchView("list");
@@ -290,36 +296,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  [
-    elements.kanbanTodo(),
-    elements.kanbanInProgress(),
-    elements.kanbanDone(),
-  ].forEach((col) => {
-    col.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      (col.closest(".kanban-column") as HTMLElement)?.classList.add(
-        "drag-over",
-      );
-    });
-    col.addEventListener("dragleave", () =>
-      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
-        "drag-over",
-      ),
-    );
-    col.addEventListener("drop", (e) => {
-      e.preventDefault();
-      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
-        "drag-over",
-      );
-      const idx = e.dataTransfer?.getData("text/plain");
-      if (idx !== undefined) {
-        moveTaskWithStatusAndReload(
-          parseInt(idx),
-          col.dataset.status as Todo["status"],
-        );
-      }
-    });
-  });
+  setupKanbanListeners(moveTaskWithStatusAndReload);
 
   // Final Initialization
   loadTodos();
@@ -327,6 +304,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initNotes();
   initPomodoro();
   initCalendar();
+  initKpss();
   switchView("pomodoro");
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),

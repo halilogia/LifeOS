@@ -96,7 +96,7 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer" | "kpss",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
@@ -106,6 +106,7 @@ export function switchView(
   const isPomodoro = view === "pomodoro";
   const isCalendar = view === "calendar";
   const isPrayer = view === "prayer";
+  const isKpss = view === "kpss";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -122,6 +123,9 @@ export function switchView(
   }
   if (elements.viewPrayerBtn()) {
     elements.viewPrayerBtn().classList.toggle("active", isPrayer);
+  }
+  if (elements.viewKpssBtn()) {
+    elements.viewKpssBtn().classList.toggle("active", isKpss);
   }
 
   // Deactivate focus/routines tabs if not in list view
@@ -143,6 +147,9 @@ export function switchView(
   }
   if (elements.prayerView()) {
     elements.prayerView().classList.toggle("active", isPrayer);
+  }
+  if (elements.kpssView()) {
+    elements.kpssView().classList.toggle("active", isKpss);
   }
 
   const hero = elements.hero();
@@ -166,7 +173,9 @@ export function switchView(
             ? "600px"
             : isCalendar
               ? "1400px"
-              : "1250px";
+              : isKpss 
+                ? "1100px"
+                : "1250px";
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
@@ -177,7 +186,9 @@ export function switchView(
             ? "100px auto 0 auto"
             : isCalendar
               ? "40px auto 0 auto"
-              : "60px auto 0 auto";
+              : isKpss
+                ? "40px auto 0 auto"
+                : "60px auto 0 auto";
   }
 }
 
@@ -188,4 +199,36 @@ export function switchTab(tab: "focus" | "routines"): void {
   elements.navRoutinesBtn().classList.toggle("active", !isFocus);
   elements.tasksSection().classList.toggle("active", isFocus);
   elements.recurringSection().classList.toggle("active", !isFocus);
+}
+
+export function setupKanbanListeners(
+  onDrop: (index: number, status: Todo["status"]) => void,
+): void {
+  [
+    elements.kanbanTodo(),
+    elements.kanbanInProgress(),
+    elements.kanbanDone(),
+  ].forEach((col) => {
+    col.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      (col.closest(".kanban-column") as HTMLElement)?.classList.add(
+        "drag-over",
+      );
+    });
+    col.addEventListener("dragleave", () =>
+      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
+        "drag-over",
+      ),
+    );
+    col.addEventListener("drop", (e) => {
+      e.preventDefault();
+      (col.closest(".kanban-column") as HTMLElement)?.classList.remove(
+        "drag-over",
+      );
+      const idx = e.dataTransfer?.getData("text/plain");
+      if (idx !== undefined) {
+        onDrop(parseInt(idx), col.dataset.status as Todo["status"]);
+      }
+    });
+  });
 }

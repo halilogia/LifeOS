@@ -73,4 +73,11 @@ export const elements = {
   viewPrayerBtn: () => document.getElementById("view-prayer-btn") as HTMLButtonElement,
   prayerView: () => document.getElementById("prayer-view") as HTMLElement,
   prayerContent: () => document.getElementById("prayer-content") as HTMLDivElement,
+  viewKpssBtn: () => document.getElementById("view-kpss-btn") as HTMLButtonElement,
+  kpssView: () => document.getElementById("kpss-view") as HTMLElement,
+  kpssSubjectBtns: () => document.querySelectorAll(".kpss-subject-btn") as NodeListOf<HTMLButtonElement>,
+  kpssTopicList: () => document.getElementById("kpss-topic-list") as HTMLDivElement,
+  kpssSubjectTitle: () => document.getElementById("kpss-subject-title") as HTMLSpanElement,
+  kpssProgressText: () => document.getElementById("kpss-progress-text") as HTMLSpanElement,
+  kpssProgressFill: () => document.getElementById("kpss-progress-fill") as HTMLDivElement,
 };
