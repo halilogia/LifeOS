@@ -2,6 +2,17 @@ import { prayerService, PrayerTimes } from "../services/prayerService.js";
 import { state } from "../core/state.js";
 import { storage } from "../core/storage.js";
 
+const TURKEY_CITIES = [
+  "Adana", "Adiyaman", "Afyonkarahisar", "Agri", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin",
+  "Aydin", "Balikesir", "Bartin", "Batman", "Bayburt", "Bilecik", "Bingol", "Bitlis", "Bolu", "Burdur",
+  "Bursa", "Canakkale", "Cankiri", "Corum", "Denizli", "Diyarbakir", "Duzce", "Edirne", "Elazig", "Erzincan",
+  "Erzurum", "Eskisehir", "Gaziantep", "Giresun", "Gumushane", "Hakkari", "Hatay", "Igdir", "Isparta", "Istanbul",
+  "Izmir", "Kahramanmaras", "Karabuk", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kirikkale", "Kirklareli",
+  "Kirsehir", "Kocaeli", "Konya", "Kutahya", "Malatya", "Manisa", "Mardin", "Mersin", "Mugla", "Mus",
+  "Nevsehir", "Nigde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Sanliurfa", "Siirt", "Sinop",
+  "Sivas", "Sirnak", "Tekirdag", "Tokat", "Trabzon", "Tunceli", "Usak", "Van", "Yalova", "Yozgat", "Zonguldak"
+];
+
 const PRAYER_NAMES: Record<string, Record<string, string>> = {
   tr: {
     Fajr: "İmsak",
@@ -55,9 +66,10 @@ export async function initPrayers() {
           
           <div id="city-edit-form" style="display: none; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--card-border);">
             <div style="display: flex; gap: 8px;">
-               <input type="text" id="prayer-city-input" value="${city}" placeholder="City" style="flex: 2; background: var(--bg-color); border: 1px solid var(--card-border); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem;">
-               <input type="text" id="prayer-country-input" value="${country}" placeholder="Country" style="flex: 1; background: var(--bg-color); border: 1px solid var(--card-border); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem;">
-               <button id="save-prayer-city-btn" style="background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Save</button>
+               <select id="prayer-city-select" style="flex: 1; background: var(--bg-color); border: 1px solid var(--card-border); color: var(--text-primary); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem;">
+                 ${TURKEY_CITIES.map(c => `<option value="${c}" ${c === city ? 'selected' : ''}>${c}</option>`).join('')}
+               </select>
+               <button id="save-prayer-city-btn" style="background: var(--accent-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600;">Kaydet</button>
             </div>
           </div>
         </div>
@@ -86,10 +98,9 @@ export async function initPrayers() {
 
     if (saveBtn) {
       saveBtn.onclick = async () => {
-        const newCity = (document.getElementById("prayer-city-input") as HTMLInputElement).value.trim();
-        const newCountry = (document.getElementById("prayer-country-input") as HTMLInputElement).value.trim();
-        if (newCity && newCountry) {
-          await storage.setPrayerLocation(newCity, newCountry);
+        const newCity = (document.getElementById("prayer-city-select") as HTMLSelectElement).value;
+        if (newCity) {
+          await storage.setPrayerLocation(newCity, "Turkey");
           initPrayers(); // Refresh
         }
       };
