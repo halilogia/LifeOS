@@ -310,3 +310,119 @@
 .hifiz-stat-card:hover {
     transform: translateY(-5px);
 }
+
+.hifiz-sub-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1rem;
+}
+
+.hifiz-nav-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hifiz-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border-color: var(--accent-color);
+}
+
+.hifiz-nav-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.hifiz-sub-view {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.hifiz-sub-view.active {
+    display: block;
+}
+
+.yeterlikler-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.yeterlik-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.yeterlik-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.yeterlik-item.completed {
+    background: rgba(139, 92, 246, 0.05);
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.yeterlik-item.completed .yeterlik-text {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.yeterlik-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--accent-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.yeterlik-item.completed .yeterlik-checkbox {
+    background: var(--accent-color);
+}
+
+.yeterlik-checkbox svg {
+    color: white;
+    display: none;
+}
+
+.yeterlik-item.completed .yeterlik-checkbox svg {
+    display: block;
+}
+
+.yeterlik-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
