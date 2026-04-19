@@ -93,6 +93,18 @@ export const storage = {
       chrome.storage.sync.set({ customQuotes }, resolve);
     });
   },
+  getYeterlikler: (): Promise<number[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["yeterlikler"], (result) => {
+        resolve((result.yeterlikler as number[]) || []);
+      });
+    });
+  },
+  setYeterlikler: (yeterlikler: number[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ yeterlikler }, resolve);
+    });
+  },
   getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean; prayerCity?: string; prayerCountry?: string }> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["lang", "sidebarOpen", "prayerCity", "prayerCountry"], (result: SettingsResult) => {

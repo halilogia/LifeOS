@@ -247,57 +247,72 @@
             </div>
         </section>
 
-        <!-- Hifiz View -->
         <section id="hifiz-view" class="view-content">
             <div class="hifiz-container">
-                <div class="hifiz-header">
-                    <h2 data-i18n="hifiz_title">Kuran Ezberlerim</h2>
-                    <div class="hifiz-search-box">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="hifiz-search" data-i18n-placeholder="hifiz_search_placeholder" placeholder="Sure veya dua ara...">
+                <nav class="hifiz-sub-nav">
+                    <button id="hifiz-tab-memorizations" class="hifiz-nav-btn active" data-i18n="hifiz_btn_memorizations">Ezberlerim</button>
+                    <button id="hifiz-tab-yeterlikler" class="hifiz-nav-btn" data-i18n="hifiz_btn_yeterlikler">İmam-Hatip</button>
+                </nav>
+
+                <div id="hifiz-main-content" class="hifiz-sub-view active">
+                    <div class="hifiz-header">
+                        <h2 data-i18n="hifiz_title">Aday Din Görevlisi Yeterlilikleri</h2>
+                        <div class="hifiz-search-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="hifiz-search" data-i18n-placeholder="hifiz_search_placeholder" placeholder="Sure veya dua ara...">
+                        </div>
+                    </div>
+
+                    <div class="hifiz-stats">
+                        <div class="hifiz-stat-card">
+                            <div class="stat-icon memorized">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" data-i18n="hifiz_stat_memorized">Ezberlendi</span>
+                                <span id="hifiz-stat-memorized-count" class="stat-value">0</span>
+                            </div>
+                        </div>
+                        <div class="hifiz-stat-card">
+                            <div class="stat-icon progress">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" data-i18n="hifiz_stat_in_progress">Çalışılıyor</span>
+                                <span id="hifiz-stat-progress-count" class="stat-value">0</span>
+                            </div>
+                        </div>
+                        <div class="hifiz-stat-card">
+                            <div class="stat-icon total">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" data-i18n="hifiz_stat_total">Hedef</span>
+                                <span id="hifiz-stat-total-count" class="stat-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hifiz-filters">
+                        <button class="hifiz-filter-btn active" data-category="ALL">Tümü</button>
+                        <button class="hifiz-filter-btn" data-category="ayat" data-i18n="hifiz_cat_ayat">Özel Ayetler</button>
+                        <button class="hifiz-filter-btn" data-category="surahs" data-i18n="hifiz_cat_surahs">Sureler</button>
+                        <button class="hifiz-filter-btn" data-category="duas" data-i18n="hifiz_cat_duas">Dualar</button>
+                        <button class="hifiz-filter-btn" data-category="juz30" data-i18n="hifiz_cat_juz30">30. Cüz</button>
+                    </div>
+
+                    <div id="hifiz-grid" class="hifiz-grid">
+                        <!-- Items will be rendered here -->
                     </div>
                 </div>
 
-                <div class="hifiz-stats">
-                    <div class="hifiz-stat-card">
-                        <div class="stat-icon memorized">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-label" data-i18n="hifiz_stat_memorized">Ezberlendi</span>
-                            <span id="hifiz-stat-memorized-count" class="stat-value">0</span>
-                        </div>
+                <div id="yeterlikler-content" class="hifiz-sub-view">
+                    <div class="hifiz-header">
+                        <h2>A. Aday Din Görevlisi (İmam-Hatip) Yeterlikleri</h2>
                     </div>
-                    <div class="hifiz-stat-card">
-                        <div class="stat-icon progress">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-label" data-i18n="hifiz_stat_in_progress">Çalışılıyor</span>
-                            <span id="hifiz-stat-progress-count" class="stat-value">0</span>
-                        </div>
+                    <div class="yeterlikler-list" id="yeterlikler-list">
+                        <!-- Checklist will be injected here by JS -->
                     </div>
-                    <div class="hifiz-stat-card">
-                        <div class="stat-icon total">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-label" data-i18n="hifiz_stat_total">Hedef</span>
-                            <span id="hifiz-stat-total-count" class="stat-value">0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hifiz-filters">
-                    <button class="hifiz-filter-btn active" data-category="ALL">Tümü</button>
-                    <button class="hifiz-filter-btn" data-category="ayat" data-i18n="hifiz_cat_ayat">Özel Ayetler</button>
-                    <button class="hifiz-filter-btn" data-category="surahs" data-i18n="hifiz_cat_surahs">Sureler</button>
-                    <button class="hifiz-filter-btn" data-category="duas" data-i18n="hifiz_cat_duas">Dualar</button>
-                    <button class="hifiz-filter-btn" data-category="juz30" data-i18n="hifiz_cat_juz30">30. Cüz</button>
-                </div>
-
-                <div id="hifiz-grid" class="hifiz-grid">
-                    <!-- Items will be rendered here -->
                 </div>
             </div>
         </section>
