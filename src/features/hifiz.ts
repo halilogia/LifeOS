@@ -45,7 +45,30 @@ export async function initHifiz() {
     });
   }
 
+  // Yeterlik Modal Listeners
+  elements.yeterlikModalClose()?.addEventListener("click", () => closeYeterlikModal());
+  elements.yeterlikModalOk()?.addEventListener("click", () => closeYeterlikModal());
+  elements.yeterlikModal()?.addEventListener("click", (e) => {
+      if (e.target === elements.yeterlikModal()) closeYeterlikModal();
+  });
+
   renderHifizView();
+}
+
+function openYeterlikModal(title: string, description: string) {
+    const modal = elements.yeterlikModal();
+    const mTitle = elements.yeterlikModalTitle();
+    const mDesc = elements.yeterlikModalDescription();
+
+    if (modal && mTitle && mDesc) {
+        mTitle.textContent = title;
+        mDesc.textContent = description;
+        modal.classList.add("active");
+    }
+}
+
+function closeYeterlikModal() {
+    elements.yeterlikModal()?.classList.remove("active");
 }
 
 function updateSubViewUI() {
@@ -139,7 +162,7 @@ async function renderYeterlikler() {
   const completed = await storage.getYeterlikler();
   list.innerHTML = "";
 
-  YETERLIKLER_DATA.forEach((text, index) => {
+  YETERLIKLER_DATA.forEach((itemData, index) => {
     const isCompleted = completed.includes(index);
     const item = document.createElement("div");
     item.className = `yeterlik-item ${isCompleted ? "completed" : ""}`;
@@ -149,10 +172,16 @@ async function renderYeterlikler() {
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
-      <div class="yeterlik-text">${text}</div>
+      <div class="yeterlik-text">${itemData.title}</div>
+      <button class="yeterlik-info-btn" title="Detay">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      </button>
     `;
 
-    item.addEventListener("click", async () => {
+    item.addEventListener("click", async (e) => {
+      // Don't toggle if the info button was clicked
+      if ((e.target as HTMLElement).closest(".yeterlik-info-btn")) return;
+
       const currentCompleted = await storage.getYeterlikler();
       if (currentCompleted.includes(index)) {
         const next = currentCompleted.filter((i) => i !== index);
@@ -162,6 +191,11 @@ async function renderYeterlikler() {
         await storage.setYeterlikler(currentCompleted);
       }
       renderYeterlikler();
+    });
+
+    item.querySelector(".yeterlik-info-btn")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openYeterlikModal(itemData.title, itemData.description);
     });
 
     list.appendChild(item);
