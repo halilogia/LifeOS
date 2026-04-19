@@ -260,29 +260,104 @@ export const INITIAL_HIFIZ_ITEMS: HifizItem[] = [
 ];
 
 export const YETERLIKLER_DATA = [
-  "1. Kur’an-ı Kerim’i yüzüne okur.",
-  "2. Yasin, Mülk, Nebe sureleriyle Duha’dan Nâs’a kadar olan sureleri, Bakara Suresi 1-5, 255, 285-286, Haşr Suresi 20-24. ayetleri ezbere okur.",
-  "3. Fatiha ile Fil - Nas arası sûrelerin anlamlarını genel hatlarıyla bilir.",
-  "4. Temel tecvit kurallarını uygular.",
-  "5. Kur'an-ı Kerim’le ilgili ayet, sûre, meal vb. temel kavramları bilir.",
-  "6. İtikat, ibadet, ahlak ve siyer ile ilgili temel kavramları bilir.",
-  "7. İslam inanç, ibadet ve ahlakının temel esaslarını bilir.",
-  "8. İtikadî ve fıkhî mezhepleri sayar.",
-  "9. Temel İslam Bilimlerinin ana konularını bilir.",
-  "10. Kur’an ve sünnetin İslam dinindeki yeri ve önemini bilir.",
-  "11. Hz. Peygamberin hayatını genel hatlarıyla bilir.",
-  "12. Hutbe ve vaaz dualarını bilir.",
-  "13. Yapılması mutad olan duaları (cenaze, ezan, yemek vb.) bilir.",
-  "14. Müslümanların bilim, kültür ve medeniyete katkılarını bilir.",
-  "15. Ulusal ve uluslararası güncel dini gelişmeleri genel hatlarıyla bilir.",
-  "16. Yaşayan dünya dinlerini genel hatlarıyla bilir.",
-  "17. Türkiye’nin sosyo-kültürel ve dini özelliklerini bilir.",
-  "18. Görevinin gerektirdiği temsil özelliklerini bilir.",
-  "19. Sesini ve nefesini doğru ve etkili kullanma becerisine sahiptir.",
-  "20. Cami mûsikisinde uygulanan makamları tanır.",
-  "21. Cami musikisinin temel formlarından olan ezan, kamet ve salayı okur.",
-  "22. Diyanet İşleri Başkanlığının teşkilat yapısını ve görevlerini genel hatlarıyla bilir.",
-  "23. Türkçeyi doğru ve etkili biçimde kullanır.",
-  "24. Bilişim teknolojilerini kullanma becerisine sahiptir.",
-  "25. Muhatapları ile iletişim kurma becerisine sahiptir.",
+  {
+    title: "1. Kur’an-ı Kerim’i yüzüne okur.",
+    description: "Kur'an-ı Kerim'i tecvit kurallarına uygun, akıcı ve doğru bir şekilde, mahreçlerine dikkat ederek yüzünden okuma becerisini ifade eder."
+  },
+  {
+    title: "2. Yasin, Mülk, Nebe sureleriyle Duha’dan Nâs’a kadar olan sureleri, Bakara Suresi 1-5, 255, 285-286, Haşr Suresi 20-24. ayetleri ezbere okur.",
+    description: "İmam-hatiplik için temel teşkil eden bu sure ve ayetlerin, ezberden, tecvit ve mahreç kurallarına tam uyum içerisinde okunabilmesi gerekliliğidir."
+  },
+  {
+    title: "3. Fatiha ile Fil - Nas arası sûrelerin anlamlarını genel hatlarıyla bilir.",
+    description: "Namazlarda en sık okunan bu surelerin kelime ve cümle anlamlarını, genel mesajlarını ve neden indirildiklerini (nüzul sebepleri) bilmeyi kapsar."
+  },
+  {
+    title: "4. Temel tecvit kurallarını uygular.",
+    description: "Medler, idgamlar, ihfa, izhar, iklab ve ra harfinin okunuşu gibi Kur'an-ı Kerim'i güzel okuma kurallarını uygulamalı olarak bilmek."
+  },
+  {
+    title: "5. Kur'an-ı Kerim’le ilgili ayet, sûre, meal vb. temel kavramları bilir.",
+    description: "Vahiy, mushaf, cüz, ayet, sure ve meal gibi Kur'an ilimlerine giriş niteliğindeki temel terimlerin tanımlarını bilmektir."
+  },
+  {
+    title: "6. İtikat, ibadet, ahlak ve siyer ile ilgili temel kavramları bilir.",
+    description: "Din hizmetlerinin temelini oluşturan inanç, amel, etik ve Hz. Peygamber’in hayatına dair temel terminolojiye hakimiyet."
+  },
+  {
+    title: "7. İslam inanç, ibadet ve ahlakının temel esaslarını bilir.",
+    description: "İmanın ve İslam’ın şartları, temel ahlaki prensipler ve bu esasların dayandığı temel deliller hakkında bilgi sahibi olmak."
+  },
+  {
+    title: "8. İtikadî ve fıkhî mezhepleri sayar.",
+    description: "Ehl-i Sünnet ve diğer mezheplerin (Hanefi, Şafii, Maturidi, Eş'ari vb.) temel ayırıcı özelliklerini ve kurucularını bilir."
+  },
+  {
+    title: "9. Temel İslam Bilimlerinin ana konularını bilir.",
+    description: "Tefsir, Hadis, Fıkıh, Kelam, Tasavvuf ve İslam Tarihi gibi ana disiplinlerin çalıştığı temel mevzuları kavramak."
+  },
+  {
+    title: "10. Kur’an ve sünnetin İslam dinindeki yeri ve önemini bilir.",
+    description: "İslam hukukunun ve yaşantısının ana kaynakları olan Kur’an ve Sünnet’in hiyerarşisi, birbirini tamamlaması ve dindeki otoritesini bilmek."
+  },
+  {
+    title: "11. Hz. Peygamberin hayatını genel hatlarıyla bilir.",
+    description: "Hz. Muhammed'in (sav) çocukluğu, gencliği, peygamberliği ve vefatına kadar olan dönemi, kazandığı önemli başarıları ve örnek kişiliği."
+  },
+  {
+    title: "12. Hutbe ve vaaz dualarını bilir.",
+    description: "Minberde veya kürsüde okunması gereken Arapça başlangıç ve bitiş dualarını, hamdele ve salveleleri ezbere ve doğru okumak."
+  },
+  {
+    title: "13. Yapılması mutad olan duaları (cenaze, ezan, yemek vb.) bilir.",
+    description: "Toplumun her kesiminde ihtiyaç duyulan yemek, ezan, cenaze telkini ve şükür dualarını usulüne uygun yapabilme becerisi."
+  },
+  {
+    title: "14. Müslümanların bilim, kültür ve medeniyete katkılarını bilir.",
+    description: "İslam medeniyetinin altın çağında bilim, sanat ve mimari alanında yapılan keşifler ve dünya medeniyetine yön veren Müslüman bilginler."
+  },
+  {
+    title: "15. Ulusal ve uluslararası güncel dini gelişmeleri genel hatlarıyla bilir.",
+    description: "Dini hayatı etkileyen güncel tartışmalar, fetvalar ve uluslararası platformlarda dini kurumların tutumları hakkında farkındalık."
+  },
+  {
+    title: "16. Yaşayan dünya dinlerini genel hatlarıyla bilir.",
+    description: "Yahudilik, Hristiyanlık, Budizm gibi dinlerin temel inanışlarını ve bu dinlerle İslam arasındaki benzerlik/farklılıkları ana hatlarıyla bilmek."
+  },
+  {
+    title: "17. Türkiye’nin sosyo-kültürel ve dini özelliklerini bilir.",
+    description: "Ülkemizin dini yapısı, geleneksel dini anlayışlar, vakıflar, dernekler ve halkın dini beklentileri hakkında bilgi."
+  },
+  {
+    title: "18. Görevinin gerektirdiği temsil özelliklerini bilir.",
+    description: "Bir din görevlisinin toplum önündeki duruşu, giyim-kuşamı, konuşma üslubu ve sergilemesi gereken örnek karakter özellikleridir."
+  },
+  {
+    title: "19. Sesini ve nefesini doğru ve etkili kullanma becerisine sahiptir.",
+    description: "Ezan, sala ve hutbe icrasında sesini koruyarak doğru tekniklerle nefes alma ve sesini en gür ve etkili tonda kullanma kabiliyeti."
+  },
+  {
+    title: "20. Cami mûsikisinde uygulanan makamları tanır.",
+    description: "Ezan ve salada kullanılan Hicaz, Rast, Segah, Saba ve Uşşak gibi temel makamların kulak dolgunluğuna ve teknik özelliklerine sahip olmak."
+  },
+  {
+    title: "21. Cami musikisinin temel formlarından olan ezan, kamet ve salayı okur.",
+    description: "Ezanın, kametin ve selanın kendi usul, adap ve makamlarına uygun olarak icra edilebilmesi becerisini ifade eder."
+  },
+  {
+    title: "22. Diyanet İşleri Başkanlığının teşkilat yapısını ve görevlerini genel hatlarıyla bilir.",
+    description: "Başkanlığın merkez, taşra ve yurt dışı teşkilat şeması ile 633 sayılı kanun çerçevesindeki yasal görevlerini bilmek."
+  },
+  {
+    title: "23. Türkçeyi doğru ve etkili biçimde kullanır.",
+    description: "İrşat faaliyetlerinde (hutbe, vaaz) dil bilgisi kurallarına uygun, açık, anlaşılır ve etkileyici bir hitabet diline sahip olmak."
+  },
+  {
+    title: "24. Bilişim teknolojilerini kullanma becerisine sahiptir.",
+    description: "İdari işlerde bilgisayar kullanımı, e-posta, Office programları ve kurumsal veri tabanlarını (DHYS vb.) kullanabilme yetisi."
+  },
+  {
+    title: "25. Muhatapları ile iletişim kurma becerisine sahiptir.",
+    description: "Cemaat, gençler ve toplumun her kesimiyle sağlıklı empati kurabilme, çatışmaları yönetme ve doğru iletişim dili kullanma yetkinliği."
+  },
 ];

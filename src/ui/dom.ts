@@ -91,4 +91,9 @@ export const elements = {
   quoteAuthorInput: () => document.getElementById("quote-author-input") as HTMLInputElement,
   saveQuoteBtn: () => document.getElementById("save-quote-btn") as HTMLButtonElement,
   quoteModalClose: () => document.getElementById("quote-modal-close") as HTMLButtonElement,
+  yeterlikModal: () => document.getElementById("yeterlik-modal") as HTMLDivElement,
+  yeterlikModalTitle: () => document.getElementById("yeterlik-modal-title") as HTMLHeadingElement,
+  yeterlikModalDescription: () => document.getElementById("yeterlik-modal-description") as HTMLParagraphElement,
+  yeterlikModalClose: () => document.getElementById("yeterlik-modal-close") as HTMLButtonElement,
+  yeterlikModalOk: () => document.getElementById("yeterlik-modal-ok") as HTMLButtonElement,
 };
