@@ -117,11 +117,14 @@ export async function initKpss() {
   // Daily stats save button
   elements.kpssSaveStatsBtn()?.addEventListener("click", async () => {
     const questions = parseInt(elements.kpssQuestionsInput()?.value || "0");
-    const tests = parseInt(elements.kpssTestsInput()?.value || "0");
+    const subject = elements.kpssSubjectSelect()?.value || "turkce";
     
-    if (questions > 0 || tests > 0) {
-      await saveKpssDailyStats(questions, tests);
+    if (questions > 0) {
+      await saveKpssDailyStats(questions, subject);
       alert("İlerleme kaydedildi!");
+      if (elements.kpssQuestionsInput()) {
+          elements.kpssQuestionsInput()!.value = "";
+      }
       renderHistoryChart();
     }
   });
@@ -130,19 +133,19 @@ export async function initKpss() {
   await renderHistoryChart();
 }
 
-async function saveKpssDailyStats(questions: number, tests: number) {
+async function saveKpssDailyStats(questions: number, subject: string) {
   const today = new Date().toISOString().split("T")[0];
   const stats = await storage.getKpssDailyStats();
   
   const existingIdx = stats.findIndex(s => s.date === today);
   if (existingIdx !== -1) {
     stats[existingIdx].questions = questions;
-    stats[existingIdx].tests = tests;
+    stats[existingIdx].subject = subject;
   } else {
-    stats.push({ date: today, questions, tests });
+    stats.push({ date: today, questions, subject });
   }
   
-  // Keep only last 7 days for the chart
+  // Keep only last 30 days
   if (stats.length > 30) stats.shift();
   
   await storage.setKpssDailyStats(stats);

@@ -56,9 +56,15 @@ export function createCardHTML(
       <span class="status-text">${statusText}</span>
       <div class="hifiz-actions">
         ${
-          item.url
+          item.pages && item.pages.length > 0
             ? `
-          <button class="hifiz-action-btn open-url" title="Diyanet'te Aç">
+          <button class="hifiz-action-btn open-mushaf" data-id="${item.id}" title="Mushaf Sayfasını Aç">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </button>
+        `
+            : item.url
+            ? `
+          <button class="hifiz-action-btn open-url" data-url="${item.url}" title="Diyanet'te Aç">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           </button>
         `

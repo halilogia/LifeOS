@@ -9,6 +9,10 @@ let currentCategory = "surahs";
 let searchQuery = "";
 let currentSubView: "memorizations" | "yeterlikler" = "memorizations";
 
+// Mushaf Viewer State
+let activeItem: any = null;
+let currentPageIndex = 0;
+
 export async function initHifiz() {
   const hSearch = elements.hifizSearch();
   if (hSearch) {
@@ -52,6 +56,24 @@ export async function initHifiz() {
       if (e.target === elements.yeterlikModal()) closeYeterlikModal();
   });
 
+  // Mushaf Viewer Listeners
+  elements.hifizImageClose()?.addEventListener("click", () => closeMushafViewer());
+  elements.hifizPrevPage()?.addEventListener("click", () => {
+      if (currentPageIndex > 0) {
+          currentPageIndex--;
+          updateMushafPage();
+      }
+  });
+  elements.hifizNextPage()?.addEventListener("click", () => {
+      if (activeItem && currentPageIndex < (activeItem.pages?.length || 0) - 1) {
+          currentPageIndex++;
+          updateMushafPage();
+      }
+  });
+  elements.hifizImageModal()?.addEventListener("click", (e) => {
+      if (e.target === elements.hifizImageModal()) closeMushafViewer();
+  });
+
   renderHifizView();
 }
 
@@ -69,6 +91,41 @@ function openYeterlikModal(title: string, description: string) {
 
 function closeYeterlikModal() {
     elements.yeterlikModal()?.classList.remove("active");
+}
+
+/* Mushaf Viewer Functions */
+function openMushafViewer(item: any) {
+    if (!item.pages || item.pages.length === 0) return;
+    activeItem = item;
+    currentPageIndex = 0;
+    
+    const modal = elements.hifizImageModal();
+    if (modal) modal.classList.add("active");
+    
+    updateMushafPage();
+}
+
+function updateMushafPage() {
+    if (!activeItem || !activeItem.pages) return;
+    
+    const page = activeItem.pages[currentPageIndex];
+    const title = elements.hifizImageTitle();
+    const info = elements.hifizPageInfo();
+    const img = elements.hifizMushafImg();
+    const prev = elements.hifizPrevPage();
+    const next = elements.hifizNextPage();
+    
+    if (title) title.textContent = activeItem.title;
+    if (info) info.textContent = `${currentPageIndex + 1} / ${activeItem.pages.length}`;
+    if (img) img.src = `data/quran_images/sayfa_${page.toString().padStart(3, '0')}.png`;
+    
+    if (prev) prev.disabled = currentPageIndex === 0;
+    if (next) next.disabled = currentPageIndex === activeItem.pages.length - 1;
+}
+
+function closeMushafViewer() {
+    elements.hifizImageModal()?.classList.remove("active");
+    activeItem = null;
 }
 
 function updateSubViewUI() {
@@ -135,9 +192,15 @@ async function renderMemorizationsGrid() {
 
     card.querySelector(".open-url")?.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (item.url) {
-        window.open(item.url, "_blank");
+      const url = (e.currentTarget as HTMLElement).getAttribute("data-url");
+      if (url) {
+        window.open(url, "_blank");
       }
+    });
+
+    card.querySelector(".open-mushaf")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openMushafViewer(item);
     });
 
     card.querySelectorAll(".hifiz-page-box").forEach((box) => {
@@ -149,7 +212,9 @@ async function renderMemorizationsGrid() {
     });
 
     card.addEventListener("click", () => {
-      if (item.url) {
+      if (item.pages && item.pages.length > 0) {
+        openMushafViewer(item);
+      } else if (item.url) {
         window.open(item.url, "_blank");
       } else {
         cycleStatus(item.id);

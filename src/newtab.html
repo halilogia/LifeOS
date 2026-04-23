@@ -403,8 +403,15 @@
                                 <input type="number" id="kpss-questions-input" placeholder="0" min="0">
                             </div>
                             <div class="kpss-input-group">
-                                <label for="kpss-tests-input">Test Sayısı</label>
-                                <input type="number" id="kpss-tests-input" placeholder="0" min="0">
+                                <label for="kpss-subject-select">Ders</label>
+                                <select id="kpss-subject-select">
+                                    <option value="turkce">Türkçe</option>
+                                    <option value="matematik">Matematik</option>
+                                    <option value="geometri">Geometri</option>
+                                    <option value="tarih">Tarih</option>
+                                    <option value="cografya">Coğrafya</option>
+                                    <option value="vatandaslik">Vatandaşlık</option>
+                                </select>
                             </div>
                             <button id="kpss-save-stats-btn">Kaydet</button>
                         </div>
@@ -500,6 +507,25 @@
                 </div>
                 <div class="settings-footer">
                     <button id="yeterlik-modal-ok" class="settings-add-btn" style="width: auto; padding: 0 30px;">Anladım</button>
+                </div>
+            </div>
+        </div>
+        <!-- Hifiz Image Viewer Modal -->
+        <div id="hifiz-image-modal" class="settings-panel">
+            <div class="hifiz-modal-content">
+                <header class="settings-header">
+                    <h3 id="hifiz-image-title">Sure Adı</h3>
+                    <div style="display: flex; gap: 15px; align-items: center; margin-right: 10px;">
+                        <span id="hifiz-page-info" style="font-size: 0.95rem; color: var(--text-secondary); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 8px;">1 / 1</span>
+                        <button id="hifiz-image-close" class="close-btn" style="margin: 0; font-size: 1.8rem;">&times;</button>
+                    </div>
+                </header>
+                <div class="hifiz-image-body">
+                    <button id="hifiz-prev-page" class="hifiz-nav-btn">&lt;</button>
+                    <div class="hifiz-image-container">
+                        <img id="hifiz-mushaf-img" src="" alt="Mushaf Sayfası">
+                    </div>
+                    <button id="hifiz-next-page" class="hifiz-nav-btn">&gt;</button>
                 </div>
             </div>
         </div>
