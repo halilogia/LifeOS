@@ -263,6 +263,16 @@
                         </div>
                     </div>
 
+                    <div class="hifiz-overall-progress-container">
+                        <div class="hifiz-overall-info">
+                            <span data-i18n="hifiz_overall_basic_progress">Temel Seviye İlerleme</span>
+                            <span id="hifiz-overall-percent">0%</span>
+                        </div>
+                        <div class="hifiz-overall-bar">
+                            <div id="hifiz-overall-fill" class="hifiz-overall-fill"></div>
+                        </div>
+                    </div>
+
                     <div class="hifiz-stats">
                         <div class="hifiz-stat-card">
                             <div class="stat-icon memorized">
@@ -294,11 +304,8 @@
                     </div>
 
                     <div class="hifiz-filters">
-                        <button class="hifiz-filter-btn active" data-category="ALL">Tümü</button>
-                        <button class="hifiz-filter-btn" data-category="ayat" data-i18n="hifiz_cat_ayat">Özel Ayetler</button>
-                        <button class="hifiz-filter-btn" data-category="surahs" data-i18n="hifiz_cat_surahs">Sureler</button>
+                        <button class="hifiz-filter-btn active" data-category="surahs" data-i18n="hifiz_cat_surahs">Sureler</button>
                         <button class="hifiz-filter-btn" data-category="duas" data-i18n="hifiz_cat_duas">Dualar</button>
-                        <button class="hifiz-filter-btn" data-category="juz30" data-i18n="hifiz_cat_juz30">30. Cüz</button>
                     </div>
 
                     <div id="hifiz-grid" class="hifiz-grid">
@@ -310,6 +317,17 @@
                     <div class="hifiz-header">
                         <h2>A. Aday Din Görevlisi (İmam-Hatip) Yeterlikleri</h2>
                     </div>
+
+                    <div class="hifiz-overall-progress-container">
+                        <div class="hifiz-overall-info">
+                            <span data-i18n="hifiz_overall_basic_progress">Ezber İlerleme</span>
+                            <span id="yeterlikler-overall-percent">0%</span>
+                        </div>
+                        <div class="hifiz-overall-bar">
+                            <div id="yeterlikler-overall-fill" class="hifiz-overall-fill"></div>
+                        </div>
+                    </div>
+
                     <div class="yeterlikler-list" id="yeterlikler-list">
                         <!-- Checklist will be injected here by JS -->
                     </div>
@@ -375,6 +393,30 @@
                         <button class="kpss-subject-btn" data-subject="vatandaslik">Vatandaşlık</button>
                     </nav>
                 </header>
+                
+                <div class="kpss-daily-stats-section">
+                    <div class="kpss-daily-input">
+                        <h3>Günlük İlerleme</h3>
+                        <div class="kpss-stats-inputs">
+                            <div class="kpss-input-group">
+                                <label for="kpss-questions-input">Soru Sayısı</label>
+                                <input type="number" id="kpss-questions-input" placeholder="0" min="0">
+                            </div>
+                            <div class="kpss-input-group">
+                                <label for="kpss-tests-input">Test Sayısı</label>
+                                <input type="number" id="kpss-tests-input" placeholder="0" min="0">
+                            </div>
+                            <button id="kpss-save-stats-btn">Kaydet</button>
+                        </div>
+                    </div>
+                    <div class="kpss-chart-container">
+                        <canvas id="kpss-history-chart"></canvas>
+                        <div id="kpss-chart-placeholder" class="chart-placeholder">
+                            <p>Henüz veri yok</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="kpss-content">
                     <div id="kpss-topic-list" class="kpss-topic-list">
                         <!-- Topics will be rendered here -->

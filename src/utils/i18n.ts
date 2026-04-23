@@ -60,6 +60,10 @@ export const translations = {
     hifiz_status_in_progress: "Devam Ediyor",
     hifiz_status_memorized: "Ezberlendi",
     hifiz_search_placeholder: "Sure veya dua ara...",
+    hifiz_level_basic: "Temel Seviye",
+    hifiz_level_advanced: "İleri Seviye",
+    hifiz_progress_pages: "sayfa ezberlendi",
+    hifiz_overall_basic_progress: "Ezber İlerleme Çubuğu",
   },
   en: {
     view_list: "List",
@@ -120,6 +124,10 @@ export const translations = {
     hifiz_status_in_progress: "In Progress",
     hifiz_status_memorized: "Memorized",
     hifiz_search_placeholder: "Search surah or dua...",
+    hifiz_level_basic: "Basic Level",
+    hifiz_level_advanced: "Advanced Level",
+    hifiz_progress_pages: "pages memorized",
+    hifiz_overall_basic_progress: "Memorization Progress",
   },
 };
 

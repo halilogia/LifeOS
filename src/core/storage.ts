@@ -1,4 +1,4 @@
-import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote } from "../types/types.js";
+import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote, KpssDailyStats } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
 interface SettingsResult {
@@ -103,6 +103,18 @@ export const storage = {
   setYeterlikler: (yeterlikler: number[]): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set({ yeterlikler }, resolve);
+    });
+  },
+  getKpssDailyStats: (): Promise<KpssDailyStats[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssDailyStats"], (result) => {
+        resolve((result.kpssDailyStats as KpssDailyStats[]) || []);
+      });
+    });
+  },
+  setKpssDailyStats: (kpssDailyStats: KpssDailyStats[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssDailyStats }, resolve);
     });
   },
   getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean; prayerCity?: string; prayerCountry?: string }> => {
