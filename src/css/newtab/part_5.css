@@ -305,6 +305,144 @@
     font-weight: 500;
 }
 
+/* Hifiz Tabs */
+.hifiz-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 6px;
+    border-radius: 16px;
+    width: fit-content;
+    border: 1px solid var(--card-border);
+    margin-top: 10px;
+}
+
+.hifiz-tab-btn {
+    padding: 10px 28px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hifiz-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.hifiz-tab-btn.active {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Mushaf Viewer Modal - Full Screen */
+#hifiz-image-modal .hifiz-modal-content {
+    background: #ffffff; 
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    animation: none; /* Remove small slide up for full screen */
+}
+
+#hifiz-image-modal .settings-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 15px 25px;
+    color: #1e293b;
+    border-radius: 0;
+}
+
+#hifiz-image-modal #hifiz-image-title {
+    color: #1e293b;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+#hifiz-image-modal .close-btn {
+    color: #1e293b;
+    background: rgba(0,0,0,0.05);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hifiz-image-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    background: #fdfdfd; 
+    position: relative;
+    overflow: hidden;
+}
+
+.hifiz-image-container {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.hifiz-image-container img {
+    max-height: 90vh;
+    max-width: 85vw;
+    width: auto;
+    object-fit: contain;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.05);
+}
+
+.hifiz-nav-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #334155;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: all 0.2s ease;
+    z-index: 10;
+    margin: 0 30px;
+}
+
+.hifiz-nav-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.hifiz-nav-btn:disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .hifiz-nav-btn {
+        width: 48px;
+        height: 48px;
+        margin: 0 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .hifiz-header {
         flex-direction: column;

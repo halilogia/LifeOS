@@ -49,6 +49,6 @@ export interface CustomQuote {
 export interface KpssDailyStats {
   date: string;
   questions: number;
-  tests: number;
+  subject: string;
 }
 
