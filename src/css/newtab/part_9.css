@@ -293,21 +293,44 @@
     -moz-appearance: textfield;
 }
 
-#kpss-save-stats-btn {
+.kpss-action-btns {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
     margin-top: 10px;
+}
+
+#kpss-save-stats-btn,
+#kpss-reset-stats-btn {
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 12px;
     border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#kpss-save-stats-btn {
     background: var(--accent-color);
     color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
 }
 
 #kpss-save-stats-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+#kpss-reset-stats-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#kpss-reset-stats-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
 }
 
 .kpss-chart-container {
