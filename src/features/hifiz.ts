@@ -5,7 +5,7 @@ import { storage } from "../core/storage.js";
 import { INITIAL_HIFIZ_ITEMS, YETERLIKLER_DATA } from "../features/hifizData.js";
 import { createCardHTML, updateHifizStats } from "../ui/hifizRender.js";
 
-let currentCategory = "ALL";
+let currentCategory = "surahs";
 let searchQuery = "";
 let currentSubView: "memorizations" | "yeterlikler" = "memorizations";
 
@@ -23,7 +23,7 @@ export async function initHifiz() {
       btn.addEventListener("click", () => {
         filterBtns.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        currentCategory = btn.getAttribute("data-category") || "ALL";
+        currentCategory = btn.getAttribute("data-category") || "surahs";
         renderMemorizationsGrid();
       });
     });
@@ -106,8 +106,7 @@ async function renderMemorizationsGrid() {
   grid.innerHTML = "";
 
   const filtered = INITIAL_HIFIZ_ITEMS.filter((item) => {
-    const matchesCat =
-      currentCategory === "ALL" || item.category === currentCategory;
+    const matchesCat = item.category === currentCategory;
     const matchesSearch = item.title.toLowerCase().includes(searchQuery);
     return matchesCat && matchesSearch;
   });
@@ -139,6 +138,14 @@ async function renderMemorizationsGrid() {
       if (item.url) {
         window.open(item.url, "_blank");
       }
+    });
+
+    card.querySelectorAll(".hifiz-page-box").forEach((box) => {
+      box.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const pageIdx = parseInt(box.getAttribute("data-page") || "0");
+        cyclePageStatus(item.id, pageIdx);
+      });
     });
 
     card.addEventListener("click", () => {
@@ -200,11 +207,15 @@ async function renderYeterlikler() {
 
     list.appendChild(item);
   });
+
+  const progress = await storage.getHifizProgress();
+  updateHifizStats(progress);
 }
 
 async function cycleStatus(itemId: string) {
   const progress = await storage.getHifizProgress();
   const itemIndex = progress.findIndex((p) => p.itemId === itemId);
+  const itemData = INITIAL_HIFIZ_ITEMS.find(i => i.id === itemId);
 
   const statuses: HifizProgress["status"][] = [
     "not_started",
@@ -213,18 +224,72 @@ async function cycleStatus(itemId: string) {
   ];
 
   if (itemIndex === -1) {
-    progress.push({
+    const newItem: HifizProgress = {
       itemId,
       status: "in_progress",
       lastUpdated: new Date().toISOString(),
-    });
+    };
+    if (itemData?.totalPages && itemData.totalPages > 1) {
+        newItem.pageStatuses = new Array(itemData.totalPages).fill("not_started");
+    }
+    progress.push(newItem);
   } else {
     const currentStatus = progress[itemIndex].status;
     const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
-    progress[itemIndex].status = statuses[nextIndex];
+    const nextStatus = statuses[nextIndex];
+    
+    progress[itemIndex].status = nextStatus;
     progress[itemIndex].lastUpdated = new Date().toISOString();
+
+    // Sync page statuses if they exist
+    if (progress[itemIndex].pageStatuses) {
+        progress[itemIndex].pageStatuses = progress[itemIndex].pageStatuses?.map(() => nextStatus);
+    }
   }
 
   await storage.setHifizProgress(progress);
   renderMemorizationsGrid();
+}
+
+async function cyclePageStatus(itemId: string, pageIdx: number) {
+    const progress = await storage.getHifizProgress();
+    const itemData = INITIAL_HIFIZ_ITEMS.find(i => i.id === itemId);
+    if (!itemData) return;
+
+    let itemProgress = progress.find(p => p.itemId === itemId);
+    
+    if (!itemProgress) {
+        itemProgress = {
+            itemId,
+            status: "in_progress",
+            pageStatuses: new Array(itemData.totalPages || 1).fill("not_started"),
+            lastUpdated: new Date().toISOString()
+        };
+        progress.push(itemProgress);
+    }
+
+    if (!itemProgress.pageStatuses) {
+        itemProgress.pageStatuses = new Array(itemData.totalPages || 1).fill(itemProgress.status);
+    }
+
+    const statuses: HifizProgress["status"][] = ["not_started", "in_progress", "memorized"];
+    const currentStatus = itemProgress.pageStatuses[pageIdx];
+    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+    itemProgress.pageStatuses[pageIdx] = statuses[nextIndex];
+    itemProgress.lastUpdated = new Date().toISOString();
+
+    // Derived overall status
+    const allMemorized = itemProgress.pageStatuses.every(s => s === "memorized");
+    const anyProgress = itemProgress.pageStatuses.some(s => s !== "not_started");
+
+    if (allMemorized) {
+        itemProgress.status = "memorized";
+    } else if (anyProgress) {
+        itemProgress.status = "in_progress";
+    } else {
+        itemProgress.status = "not_started";
+    }
+
+    await storage.setHifizProgress(progress);
+    renderMemorizationsGrid();
 }

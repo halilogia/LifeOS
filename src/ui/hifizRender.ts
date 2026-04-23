@@ -8,6 +8,12 @@ export function createCardHTML(
   item: HifizItem,
   itemProgress: HifizProgress,
 ): string {
+  const totalPages = item.totalPages || 1;
+  const pageStatuses = itemProgress.pageStatuses || new Array(totalPages).fill("not_started");
+  
+  const memorizedPages = pageStatuses.filter(s => s === "memorized").length;
+  const progressPercent = Math.round((memorizedPages / totalPages) * 100);
+
   const statusText =
     translations[state.currentLang][
       `hifiz_status_${itemProgress.status}` as keyof typeof translations.tr
@@ -17,6 +23,25 @@ export function createCardHTML(
       `hifiz_cat_${item.category}` as keyof typeof translations.tr
     ];
 
+  let pagesHTML = "";
+  if (totalPages > 1) {
+    pagesHTML = `
+      <div class="hifiz-pages-container">
+        <div class="hifiz-progress-track">
+          <div class="hifiz-progress-fill" style="width: ${progressPercent}%"></div>
+        </div>
+        <div class="hifiz-pages-grid">
+          ${pageStatuses.map((status, idx) => `
+            <div class="hifiz-page-box status-${status}" data-page="${idx}" title="Sayfa ${idx + 1}: ${translations[state.currentLang][`hifiz_status_${status}` as keyof typeof translations.tr]}">
+              ${idx + 1}
+            </div>
+          `).join("")}
+        </div>
+        <div class="hifiz-progress-text">${memorizedPages}/${totalPages} ${translations[state.currentLang].hifiz_progress_pages}</div>
+      </div>
+    `;
+  }
+
   return `
     <div class="hifiz-card-top">
       <span class="hifiz-cat-badge">${catLabel}</span>
@@ -25,6 +50,7 @@ export function createCardHTML(
     <div class="hifiz-card-body">
       <h3>${item.title}</h3>
       ${item.description ? `<p class="hifiz-desc">${item.description}</p>` : ""}
+      ${pagesHTML}
     </div>
     <div class="hifiz-card-footer">
       <span class="status-text">${statusText}</span>
@@ -68,4 +94,42 @@ export function updateHifizStats(progress: HifizProgress[]) {
   if (sTotal) {
     sTotal.textContent = totalCount.toString();
   }
+
+  // Overall Progress Calculation
+  let totalPages = 0;
+  let memorizedPages = 0;
+
+  INITIAL_HIFIZ_ITEMS.forEach((item) => {
+    const total = item.totalPages || 1;
+    totalPages += total;
+
+    const itemProgress = progress.find((p) => p.itemId === item.id);
+    if (itemProgress) {
+      if (itemProgress.status === "memorized") {
+        memorizedPages += total;
+      } else if (itemProgress.pageStatuses) {
+        memorizedPages += itemProgress.pageStatuses.filter(
+          (s) => s === "memorized",
+        ).length;
+      }
+    }
+  });
+
+  const overallPercent =
+    totalPages > 0
+      ? Math.round((memorizedPages / totalPages) * 100)
+      : 0;
+
+  const oPercent = elements.hifizOverallPercent();
+  const oFill = elements.hifizOverallFill();
+
+  if (oPercent) oPercent.textContent = `${overallPercent}%`;
+  if (oFill) oFill.style.width = `${overallPercent}%`;
+
+  // Update Yeterlikler Tab Progress (if visible)
+  const yPercent = elements.yeterliklerOverallPercent();
+  const yFill = elements.yeterliklerOverallFill();
+
+  if (yPercent) yPercent.textContent = `${overallPercent}%`;
+  if (yFill) yFill.style.width = `${overallPercent}%`;
 }

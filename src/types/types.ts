@@ -13,7 +13,10 @@ export type Language = "tr" | "en";
 export interface HifizItem {
   id: string;
   title: string;
-  category: "ayat" | "surahs" | "duas" | "juz30";
+  category: "surahs" | "duas";
+  level: "basic" | "advanced";
+  totalPages?: number;
+  pages?: number[];
   description?: string;
   url?: string;
 }
@@ -21,6 +24,7 @@ export interface HifizItem {
 export interface HifizProgress {
   itemId: string;
   status: "not_started" | "in_progress" | "memorized";
+  pageStatuses?: ("not_started" | "in_progress" | "memorized")[];
   lastUpdated: string;
 }
 
@@ -40,5 +44,11 @@ export interface KpssProgress {
 export interface CustomQuote {
   text: string;
   author?: string;
+}
+
+export interface KpssDailyStats {
+  date: string;
+  questions: number;
+  tests: number;
 }
 
