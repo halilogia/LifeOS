@@ -416,6 +416,13 @@ export async function initKpss() {
     }
   });
 
+  elements.kpssResetStatsBtn()?.addEventListener("click", async () => {
+    if (confirm("Tüm KPSS çalışma verileriniz silinecektir. Emin misiniz?")) {
+      await storage.setKpssDailyStats([]);
+      await renderHistoryChart();
+    }
+  });
+
   await renderKpssTopics();
   await renderHistoryChart();
 }

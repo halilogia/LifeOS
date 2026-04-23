@@ -103,6 +103,7 @@ export const elements = {
   kpssQuestionsInput: () => document.getElementById("kpss-questions-input") as HTMLInputElement,
   kpssSubjectSelect: () => document.getElementById("kpss-subject-select") as HTMLSelectElement,
   kpssSaveStatsBtn: () => document.getElementById("kpss-save-stats-btn") as HTMLButtonElement,
+  kpssResetStatsBtn: () => document.getElementById("kpss-reset-stats-btn") as HTMLButtonElement,
   kpssHistoryChart: () => document.getElementById("kpss-history-chart") as HTMLCanvasElement,
   kpssChartPlaceholder: () => document.getElementById("kpss-chart-placeholder") as HTMLDivElement,
   addQuoteBtn: () => document.getElementById("add-quote-btn") as HTMLButtonElement,
