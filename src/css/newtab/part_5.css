@@ -305,40 +305,42 @@
     font-weight: 500;
 }
 
-/* Hifiz Tabs */
+/* Hifiz Tabs - Styled like KPSS subject buttons */
 .hifiz-tabs {
     display: flex;
-    gap: 8px;
-    margin-bottom: 2.5rem;
-    background: rgba(255, 255, 255, 0.04);
-    padding: 6px;
+    gap: 12px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px;
     border-radius: 16px;
     width: fit-content;
-    border: 1px solid var(--card-border);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     margin-top: 10px;
 }
 
 .hifiz-tab-btn {
-    padding: 10px 28px;
+    padding: 12px 24px;
     border-radius: 12px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background: transparent;
     color: var(--text-secondary);
-    font-weight: 600;
     font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hifiz-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.03);
+    transform: translateY(-2px);
 }
 
 .hifiz-tab-btn.active {
     background: var(--accent-color);
     color: white;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Mushaf Viewer Modal - Full Screen */

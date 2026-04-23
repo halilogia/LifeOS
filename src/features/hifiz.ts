@@ -1,8 +1,11 @@
-import { HifizProgress } from "../types/types.js";
+import { HifizProgress, HifizItem } from "../types/types.js";
 import { elements } from "../ui/dom.js";
 import { storage } from "../core/storage.js";
 
-import { INITIAL_HIFIZ_ITEMS, YETERLIKLER_DATA } from "../features/hifizData.js";
+import {
+  INITIAL_HIFIZ_ITEMS,
+  YETERLIKLER_DATA,
+} from "../features/hifizData.js";
 import { createCardHTML, updateHifizStats } from "../ui/hifizRender.js";
 
 let currentCategory = "surahs";
@@ -10,7 +13,7 @@ let searchQuery = "";
 let currentSubView: "memorizations" | "yeterlikler" = "memorizations";
 
 // Mushaf Viewer State
-let activeItem: any = null;
+let activeItem: HifizItem | null = null;
 let currentPageIndex = 0;
 
 export async function initHifiz() {
@@ -50,82 +53,111 @@ export async function initHifiz() {
   }
 
   // Yeterlik Modal Listeners
-  elements.yeterlikModalClose()?.addEventListener("click", () => closeYeterlikModal());
-  elements.yeterlikModalOk()?.addEventListener("click", () => closeYeterlikModal());
+  elements
+    .yeterlikModalClose()
+    ?.addEventListener("click", () => closeYeterlikModal());
+  elements
+    .yeterlikModalOk()
+    ?.addEventListener("click", () => closeYeterlikModal());
   elements.yeterlikModal()?.addEventListener("click", (e) => {
-      if (e.target === elements.yeterlikModal()) closeYeterlikModal();
+    if (e.target === elements.yeterlikModal()) {
+      closeYeterlikModal();
+    }
   });
 
   // Mushaf Viewer Listeners
-  elements.hifizImageClose()?.addEventListener("click", () => closeMushafViewer());
+  elements
+    .hifizImageClose()
+    ?.addEventListener("click", () => closeMushafViewer());
   elements.hifizPrevPage()?.addEventListener("click", () => {
-      if (currentPageIndex > 0) {
-          currentPageIndex--;
-          updateMushafPage();
-      }
+    if (currentPageIndex > 0) {
+      currentPageIndex--;
+      updateMushafPage();
+    }
   });
   elements.hifizNextPage()?.addEventListener("click", () => {
-      if (activeItem && currentPageIndex < (activeItem.pages?.length || 0) - 1) {
-          currentPageIndex++;
-          updateMushafPage();
-      }
+    if (activeItem && currentPageIndex < (activeItem.pages?.length || 0) - 1) {
+      currentPageIndex++;
+      updateMushafPage();
+    }
   });
   elements.hifizImageModal()?.addEventListener("click", (e) => {
-      if (e.target === elements.hifizImageModal()) closeMushafViewer();
+    if (e.target === elements.hifizImageModal()) {
+      closeMushafViewer();
+    }
   });
 
   renderHifizView();
 }
 
 function openYeterlikModal(title: string, description: string) {
-    const modal = elements.yeterlikModal();
-    const mTitle = elements.yeterlikModalTitle();
-    const mDesc = elements.yeterlikModalDescription();
+  const modal = elements.yeterlikModal();
+  const mTitle = elements.yeterlikModalTitle();
+  const mDesc = elements.yeterlikModalDescription();
 
-    if (modal && mTitle && mDesc) {
-        mTitle.textContent = title;
-        mDesc.textContent = description;
-        modal.classList.add("active");
-    }
+  if (modal && mTitle && mDesc) {
+    mTitle.textContent = title;
+    mDesc.textContent = description;
+    modal.classList.add("active");
+  }
 }
 
 function closeYeterlikModal() {
-    elements.yeterlikModal()?.classList.remove("active");
+  elements.yeterlikModal()?.classList.remove("active");
 }
 
 /* Mushaf Viewer Functions */
-function openMushafViewer(item: any) {
-    if (!item.pages || item.pages.length === 0) return;
-    activeItem = item;
-    currentPageIndex = 0;
-    
-    const modal = elements.hifizImageModal();
-    if (modal) modal.classList.add("active");
-    
-    updateMushafPage();
+function openMushafViewer(item: HifizItem) {
+  if (!item.pages || item.pages.length === 0) {
+    return;
+  }
+  activeItem = item;
+  currentPageIndex = 0;
+
+  // Auto-close sidebar
+  document.body.classList.remove("sidebar-open");
+
+  const modal = elements.hifizImageModal();
+  if (modal) {
+    modal.classList.add("active");
+  }
+
+  updateMushafPage();
 }
 
 function updateMushafPage() {
-    if (!activeItem || !activeItem.pages) return;
-    
-    const page = activeItem.pages[currentPageIndex];
-    const title = elements.hifizImageTitle();
-    const info = elements.hifizPageInfo();
-    const img = elements.hifizMushafImg();
-    const prev = elements.hifizPrevPage();
-    const next = elements.hifizNextPage();
-    
-    if (title) title.textContent = activeItem.title;
-    if (info) info.textContent = `${currentPageIndex + 1} / ${activeItem.pages.length}`;
-    if (img) img.src = `data/quran_images/sayfa_${page.toString().padStart(3, '0')}.png`;
-    
-    if (prev) prev.disabled = currentPageIndex === 0;
-    if (next) next.disabled = currentPageIndex === activeItem.pages.length - 1;
+  if (!activeItem || !activeItem.pages) {
+    return;
+  }
+
+  const page = activeItem.pages[currentPageIndex];
+  const title = elements.hifizImageTitle();
+  const info = elements.hifizPageInfo();
+  const img = elements.hifizMushafImg();
+  const prev = elements.hifizPrevPage();
+  const next = elements.hifizNextPage();
+
+  if (title) {
+    title.textContent = activeItem.title;
+  }
+  if (info) {
+    info.textContent = `${currentPageIndex + 1} / ${activeItem.pages.length}`;
+  }
+  if (img) {
+    img.src = `data/quran_images/sayfa_${page.toString().padStart(3, "0")}.png`;
+  }
+
+  if (prev) {
+    prev.disabled = currentPageIndex === 0;
+  }
+  if (next) {
+    next.disabled = currentPageIndex === activeItem.pages.length - 1;
+  }
 }
 
 function closeMushafViewer() {
-    elements.hifizImageModal()?.classList.remove("active");
-    activeItem = null;
+  elements.hifizImageModal()?.classList.remove("active");
+  activeItem = null;
 }
 
 function updateSubViewUI() {
@@ -229,7 +261,9 @@ async function renderMemorizationsGrid() {
 
 async function renderYeterlikler() {
   const list = elements.yeterliklerList();
-  if (!list) return;
+  if (!list) {
+    return;
+  }
 
   const completed = await storage.getYeterlikler();
   list.innerHTML = "";
@@ -252,7 +286,9 @@ async function renderYeterlikler() {
 
     item.addEventListener("click", async (e) => {
       // Don't toggle if the info button was clicked
-      if ((e.target as HTMLElement).closest(".yeterlik-info-btn")) return;
+      if ((e.target as HTMLElement).closest(".yeterlik-info-btn")) {
+        return;
+      }
 
       const currentCompleted = await storage.getYeterlikler();
       if (currentCompleted.includes(index)) {
@@ -266,8 +302,8 @@ async function renderYeterlikler() {
     });
 
     item.querySelector(".yeterlik-info-btn")?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openYeterlikModal(itemData.title, itemData.description);
+      e.stopPropagation();
+      openYeterlikModal(itemData.title, itemData.description);
     });
 
     list.appendChild(item);
@@ -280,7 +316,7 @@ async function renderYeterlikler() {
 async function cycleStatus(itemId: string) {
   const progress = await storage.getHifizProgress();
   const itemIndex = progress.findIndex((p) => p.itemId === itemId);
-  const itemData = INITIAL_HIFIZ_ITEMS.find(i => i.id === itemId);
+  const itemData = INITIAL_HIFIZ_ITEMS.find((i) => i.id === itemId);
 
   const statuses: HifizProgress["status"][] = [
     "not_started",
@@ -295,20 +331,22 @@ async function cycleStatus(itemId: string) {
       lastUpdated: new Date().toISOString(),
     };
     if (itemData?.totalPages && itemData.totalPages > 1) {
-        newItem.pageStatuses = new Array(itemData.totalPages).fill("not_started");
+      newItem.pageStatuses = new Array(itemData.totalPages).fill("not_started");
     }
     progress.push(newItem);
   } else {
     const currentStatus = progress[itemIndex].status;
     const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
     const nextStatus = statuses[nextIndex];
-    
+
     progress[itemIndex].status = nextStatus;
     progress[itemIndex].lastUpdated = new Date().toISOString();
 
     // Sync page statuses if they exist
     if (progress[itemIndex].pageStatuses) {
-        progress[itemIndex].pageStatuses = progress[itemIndex].pageStatuses?.map(() => nextStatus);
+      progress[itemIndex].pageStatuses = progress[itemIndex].pageStatuses?.map(
+        () => nextStatus,
+      );
     }
   }
 
@@ -317,44 +355,56 @@ async function cycleStatus(itemId: string) {
 }
 
 async function cyclePageStatus(itemId: string, pageIdx: number) {
-    const progress = await storage.getHifizProgress();
-    const itemData = INITIAL_HIFIZ_ITEMS.find(i => i.id === itemId);
-    if (!itemData) return;
+  const progress = await storage.getHifizProgress();
+  const itemData = INITIAL_HIFIZ_ITEMS.find((i) => i.id === itemId);
+  if (!itemData) {
+    return;
+  }
 
-    let itemProgress = progress.find(p => p.itemId === itemId);
-    
-    if (!itemProgress) {
-        itemProgress = {
-            itemId,
-            status: "in_progress",
-            pageStatuses: new Array(itemData.totalPages || 1).fill("not_started"),
-            lastUpdated: new Date().toISOString()
-        };
-        progress.push(itemProgress);
-    }
+  let itemProgress = progress.find((p) => p.itemId === itemId);
 
-    if (!itemProgress.pageStatuses) {
-        itemProgress.pageStatuses = new Array(itemData.totalPages || 1).fill(itemProgress.status);
-    }
+  if (!itemProgress) {
+    itemProgress = {
+      itemId,
+      status: "in_progress",
+      pageStatuses: new Array(itemData.totalPages || 1).fill("not_started"),
+      lastUpdated: new Date().toISOString(),
+    };
+    progress.push(itemProgress);
+  }
 
-    const statuses: HifizProgress["status"][] = ["not_started", "in_progress", "memorized"];
-    const currentStatus = itemProgress.pageStatuses[pageIdx];
-    const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
-    itemProgress.pageStatuses[pageIdx] = statuses[nextIndex];
-    itemProgress.lastUpdated = new Date().toISOString();
+  if (!itemProgress.pageStatuses) {
+    itemProgress.pageStatuses = new Array(itemData.totalPages || 1).fill(
+      itemProgress.status,
+    );
+  }
 
-    // Derived overall status
-    const allMemorized = itemProgress.pageStatuses.every(s => s === "memorized");
-    const anyProgress = itemProgress.pageStatuses.some(s => s !== "not_started");
+  const statuses: HifizProgress["status"][] = [
+    "not_started",
+    "in_progress",
+    "memorized",
+  ];
+  const currentStatus = itemProgress.pageStatuses[pageIdx];
+  const nextIndex = (statuses.indexOf(currentStatus) + 1) % statuses.length;
+  itemProgress.pageStatuses[pageIdx] = statuses[nextIndex];
+  itemProgress.lastUpdated = new Date().toISOString();
 
-    if (allMemorized) {
-        itemProgress.status = "memorized";
-    } else if (anyProgress) {
-        itemProgress.status = "in_progress";
-    } else {
-        itemProgress.status = "not_started";
-    }
+  // Derived overall status
+  const allMemorized = itemProgress.pageStatuses.every(
+    (s) => s === "memorized",
+  );
+  const anyProgress = itemProgress.pageStatuses.some(
+    (s) => s !== "not_started",
+  );
 
-    await storage.setHifizProgress(progress);
-    renderMemorizationsGrid();
+  if (allMemorized) {
+    itemProgress.status = "memorized";
+  } else if (anyProgress) {
+    itemProgress.status = "in_progress";
+  } else {
+    itemProgress.status = "not_started";
+  }
+
+  await storage.setHifizProgress(progress);
+  renderMemorizationsGrid();
 }
