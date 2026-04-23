@@ -8,91 +8,379 @@ interface KpssTopic {
 
 const kpssData: Record<string, KpssTopic[]> = {
   turkce: [
-    { title: "Sözcükte Anlam", description: "Gerçek anlam, yan anlam, mecaz anlam, eş ve zıt anlamlı kelimeler, deyimler ve atasözleri konularını kapsar." },
-    { title: "Cümlede Anlam", description: "Öznel-nesnel yargılar, neden-sonuç, amaç-sonuç, koşul cümleleri ve cümle yorumlama." },
-    { title: "Paragraf Yapısı ve Anlamı", description: "Ana düşünce, yardımcı düşünceler, paragrafın yapısı (giriş, gelişme, sonuç) ve akışı bozan cümleler." },
-    { title: "Anlatım Teknikleri", description: "Öyküleme, betimleme, açıklama, tartışma yöntemleri ve düşünceyi geliştirme yolları." },
-    { title: "Ses Bilgisi", description: "Ünlü ve ünsüz düşmesi, türemesi, benzeşmesi, yumuşaması gibi dil bilgisi ses kuralları." },
-    { title: "Sözcükte Yapı", description: "Kök, gövde, yapım ve çekim ekleri, basit, türemiş ve birleşik sözcük yapıları." },
-    { title: "Sözcük Türleri (İsim, Sıfat, Zamir...)", description: "İsim, sıfat, zamir, zarf, edat, bağlaç, ünlem ve fiillerin özellikleri." },
-    { title: "Cümlenin Ögeleri", description: "Özne, yüklem, nesne, dolaylı tümleç ve zarf tümleci bulma yöntemleri." },
-    { title: "Cümle Türleri", description: "Yapısına (basit, birleşik, sıralı, bağlı) ve anlamına göre cümle çeşitleri." },
-    { title: "Yazım Kuralları", description: "Büyük harflerin kullanımı, sayıların yazımı, birleşik sözcüklerin yazımı ve kısaltmalar." },
-    { title: "Noktalama İşaretleri", description: "Nokta, virgül, noktalı virgül ve diğer işaretlerin doğru kullanım alanları." },
-    { title: "Anlatım Bozuklukları", description: "Anlamsal ve yapısal anlatım bozuklukları, gereksiz sözcük kullanımı ve mantık hataları." },
-    { title: "Sözel Mantık", description: "Verilen bilgiler ışığında akıl yürütme, tablolama ve çıkarım yapma soruları." },
+    {
+      title: "Sözcükte Anlam",
+      description:
+        "Gerçek anlam, yan anlam, mecaz anlam, eş ve zıt anlamlı kelimeler, deyimler ve atasözleri konularını kapsar.",
+    },
+    {
+      title: "Cümlede Anlam",
+      description:
+        "Öznel-nesnel yargılar, neden-sonuç, amaç-sonuç, koşul cümleleri ve cümle yorumlama.",
+    },
+    {
+      title: "Paragraf Yapısı ve Anlamı",
+      description:
+        "Ana düşünce, yardımcı düşünceler, paragrafın yapısı (giriş, gelişme, sonuç) ve akışı bozan cümleler.",
+    },
+    {
+      title: "Anlatım Teknikleri",
+      description:
+        "Öyküleme, betimleme, açıklama, tartışma yöntemleri ve düşünceyi geliştirme yolları.",
+    },
+    {
+      title: "Ses Bilgisi",
+      description:
+        "Ünlü ve ünsüz düşmesi, türemesi, benzeşmesi, yumuşaması gibi dil bilgisi ses kuralları.",
+    },
+    {
+      title: "Sözcükte Yapı",
+      description:
+        "Kök, gövde, yapım ve çekim ekleri, basit, türemiş ve birleşik sözcük yapıları.",
+    },
+    {
+      title: "Sözcük Türleri (İsim, Sıfat, Zamir...)",
+      description:
+        "İsim, sıfat, zamir, zarf, edat, bağlaç, ünlem ve fiillerin özellikleri.",
+    },
+    {
+      title: "Cümlenin Ögeleri",
+      description:
+        "Özne, yüklem, nesne, dolaylı tümleç ve zarf tümleci bulma yöntemleri.",
+    },
+    {
+      title: "Cümle Türleri",
+      description:
+        "Yapısına (basit, birleşik, sıralı, bağlı) ve anlamına göre cümle çeşitleri.",
+    },
+    {
+      title: "Yazım Kuralları",
+      description:
+        "Büyük harflerin kullanımı, sayıların yazımı, birleşik sözcüklerin yazımı ve kısaltmalar.",
+    },
+    {
+      title: "Noktalama İşaretleri",
+      description:
+        "Nokta, virgül, noktalı virgül ve diğer işaretlerin doğru kullanım alanları.",
+    },
+    {
+      title: "Anlatım Bozuklukları",
+      description:
+        "Anlamsal ve yapısal anlatım bozuklukları, gereksiz sözcük kullanımı ve mantık hataları.",
+    },
+    {
+      title: "Sözel Mantık",
+      description:
+        "Verilen bilgiler ışığında akıl yürütme, tablolama ve çıkarım yapma soruları.",
+    },
   ],
   matematik: [
-    { title: "Temel Kavramlar", description: "Rakamlar, sayılar, tam sayılar, doğal sayılar ve temel aritmetik işlemler." },
-    { title: "Tek / Çift Sayılar", description: "Sayıların teklik ve çiftlik özellikleri ve bu sayılarla yapılan işlemlerin kuralları." },
-    { title: "Ardışık Sayılar", description: "Belli bir kurala göre ardı ardına gelen sayı dizileri ve bunların toplam formülleri." },
-    { title: "Sayı Basamakları", description: "Çözümleme, basamak değeri ve basamaklar arası işlemler." },
-    { title: "Bölünebilme Kuralları", description: "2, 3, 4, 5, 8, 9, 10 ve 11 ile bölünebilme kuralları ve kalan bulma." },
-    { title: "Faktöriyel / Asal Sayılar", description: "Faktöriyel kavramı, asal sayılar ve aralarında asal sayılar özellikleri." },
-    { title: "Basit Eşitsizlikler", description: "Büyüklük-küçüklük bağıntıları ve eşitsizliklerin çözüm kümeleri." },
-    { title: "Mutlak Değer", description: "Bir sayının başlangıç noktasına uzaklığı ve mutlak değerli denklem/eşitsizlikler." },
-    { title: "Rasyonel Sayılar", description: "Kesirler, ondalık gösterimler ve rasyonel sayılarda dört işlem." },
-    { title: "Üslü / Köklü Sayılar", description: "Üslü ifadeler, köklü ifadeler ve bu ifadelerle yapılan temel matematiksel işlemler." },
-    { title: "Çarpanlara Ayırma", description: "Özdeşlikler, ortak çarpan parantezine alma ve sadeleştirme yöntemleri." },
-    { title: "1. Dereceden Denklemler", description: "Bilinmeyenli denklemler ve çözüm yolları." },
-    { title: "Oran Orantı", description: "Doğru orantı, ters orantı, bileşik orantı ve ortalama kavramları." },
-    { title: "Sayı / Kesir Problemleri", description: "Muhakeme yeteneğini ölçen sayısal ve kesirli problem türleri." },
-    { title: "Yaş / Hareket Problemleri", description: "Yaş hesaplama ve hız-zaman-yol ilişkisi üzerine kurulu problemler." },
-    { title: "Yüzde / Kar / Zarar / Karışım", description: "Yüzde hesaplamaları, ticari kar-zarar ve madde karışım problemleri." },
-    { title: "İstatistik", description: "Mod, medyan, açıklık ve standart sapma gibi temel istatistiksel veriler." },
-    { title: "Sayısal Mantık", description: "Şekil yeteneği, sayı dizileri ve mantıksal çıkarım soruları." },
+    {
+      title: "Temel Kavramlar",
+      description:
+        "Rakamlar, sayılar, tam sayılar, doğal sayılar ve temel aritmetik işlemler.",
+    },
+    {
+      title: "Tek / Çift Sayılar",
+      description:
+        "Sayıların teklik ve çiftlik özellikleri ve bu sayılarla yapılan işlemlerin kuralları.",
+    },
+    {
+      title: "Ardışık Sayılar",
+      description:
+        "Belli bir kurala göre ardı ardına gelen sayı dizileri ve bunların toplam formülleri.",
+    },
+    {
+      title: "Sayı Basamakları",
+      description: "Çözümleme, basamak değeri ve basamaklar arası işlemler.",
+    },
+    {
+      title: "Bölünebilme Kuralları",
+      description:
+        "2, 3, 4, 5, 8, 9, 10 ve 11 ile bölünebilme kuralları ve kalan bulma.",
+    },
+    {
+      title: "Faktöriyel / Asal Sayılar",
+      description:
+        "Faktöriyel kavramı, asal sayılar ve aralarında asal sayılar özellikleri.",
+    },
+    {
+      title: "Basit Eşitsizlikler",
+      description:
+        "Büyüklük-küçüklük bağıntıları ve eşitsizliklerin çözüm kümeleri.",
+    },
+    {
+      title: "Mutlak Değer",
+      description:
+        "Bir sayının başlangıç noktasına uzaklığı ve mutlak değerli denklem/eşitsizlikler.",
+    },
+    {
+      title: "Rasyonel Sayılar",
+      description:
+        "Kesirler, ondalık gösterimler ve rasyonel sayılarda dört işlem.",
+    },
+    {
+      title: "Üslü / Köklü Sayılar",
+      description:
+        "Üslü ifadeler, köklü ifadeler ve bu ifadelerle yapılan temel matematiksel işlemler.",
+    },
+    {
+      title: "Çarpanlara Ayırma",
+      description:
+        "Özdeşlikler, ortak çarpan parantezine alma ve sadeleştirme yöntemleri.",
+    },
+    {
+      title: "1. Dereceden Denklemler",
+      description: "Bilinmeyenli denklemler ve çözüm yolları.",
+    },
+    {
+      title: "Oran Orantı",
+      description:
+        "Doğru orantı, ters orantı, bileşik orantı ve ortalama kavramları.",
+    },
+    {
+      title: "Sayı / Kesir Problemleri",
+      description:
+        "Muhakeme yeteneğini ölçen sayısal ve kesirli problem türleri.",
+    },
+    {
+      title: "Yaş / Hareket Problemleri",
+      description:
+        "Yaş hesaplama ve hız-zaman-yol ilişkisi üzerine kurulu problemler.",
+    },
+    {
+      title: "Yüzde / Kar / Zarar / Karışım",
+      description:
+        "Yüzde hesaplamaları, ticari kar-zarar ve madde karışım problemleri.",
+    },
+    {
+      title: "İstatistik",
+      description:
+        "Mod, medyan, açıklık ve standart sapma gibi temel istatistiksel veriler.",
+    },
+    {
+      title: "Sayısal Mantık",
+      description:
+        "Şekil yeteneği, sayı dizileri ve mantıksal çıkarım soruları.",
+    },
   ],
   geometri: [
-    { title: "Geometrik Kavramlar ve Açılar", description: "Nokta, doğru, düzlem kavramları ve temel açı çeşitleri." },
-    { title: "Doğruda ve Üçgende Açılar", description: "Paralel doğrular arası açılar ve üçgenin iç/dış açılarının özellikleri." },
-    { title: "Özel Üçgenler", description: "Dik üçgen, ikizkenar üçgen ve eşkenar üçgenin kendine has özellikleri ve Pisagor teoremi." },
-    { title: "Açıortay / Kenarortay", description: "Üçgende iç ve dış açıortay ile kenarortay teoremleri." },
-    { title: "Üçgende Alan / Benzerlik", description: "Üçgenin alan formülleri ve üçgenler arasındaki benzerlik oranları." },
-    { title: "Çokgenler ve Dörtgenler", description: "Kare, dikdörtgen, paralelkenar ve yamuk gibi geometrik şekillerin özellikleri." },
-    { title: "Çember ve Daire", description: "Çemberde açılar, uzunluk ve dairenin alan/çevre hesaplamaları." },
-    { title: "Analitik Geometri", description: "Koordinat sistemi, doğru denklemleri ve nokta-doğru ilişkileri." },
-    { title: "Katı Cisimler", description: "Prizmalar, silindir, piramit ve küre gibi üç boyutlu şekillerin hacim ve alanları." },
+    {
+      title: "Geometrik Kavramlar ve Açılar",
+      description: "Nokta, doğru, düzlem kavramları ve temel açı çeşitleri.",
+    },
+    {
+      title: "Doğruda ve Üçgende Açılar",
+      description:
+        "Paralel doğrular arası açılar ve üçgenin iç/dış açılarının özellikleri.",
+    },
+    {
+      title: "Özel Üçgenler",
+      description:
+        "Dik üçgen, ikizkenar üçgen ve eşkenar üçgenin kendine has özellikleri ve Pisagor teoremi.",
+    },
+    {
+      title: "Açıortay / Kenarortay",
+      description: "Üçgende iç ve dış açıortay ile kenarortay teoremleri.",
+    },
+    {
+      title: "Üçgende Alan / Benzerlik",
+      description:
+        "Üçgenin alan formülleri ve üçgenler arasındaki benzerlik oranları.",
+    },
+    {
+      title: "Çokgenler ve Dörtgenler",
+      description:
+        "Kare, dikdörtgen, paralelkenar ve yamuk gibi geometrik şekillerin özellikleri.",
+    },
+    {
+      title: "Çember ve Daire",
+      description:
+        "Çemberde açılar, uzunluk ve dairenin alan/çevre hesaplamaları.",
+    },
+    {
+      title: "Analitik Geometri",
+      description:
+        "Koordinat sistemi, doğru denklemleri ve nokta-doğru ilişkileri.",
+    },
+    {
+      title: "Katı Cisimler",
+      description:
+        "Prizmalar, silindir, piramit ve küre gibi üç boyutlu şekillerin hacim ve alanları.",
+    },
   ],
   tarih: [
-    { title: "Tarih Bilimi ve Kronoloji", description: "Tarih araştırmaları, takvimler ve ana tarihi dönemlerin sınıflandırılması." },
-    { title: "İslamiyet Öncesi Türk Tarihi", description: "Orta Asya Türk devletleri (Hunlar, Göktürkler, Uygurlar) ve göç hareketleri." },
-    { title: "İlk Türk İslam Devletleri", description: "Karahanlılar, Gazneliler ve Selçuklular dönemi siyasi ve kültürel gelişmeler." },
-    { title: "Anadolu Selçuklu ve Beylikler", description: "Anadolu'nun türkleşmesi, Selçuklu devleti ve II. Beylikler dönemi." },
-    { title: "Osmanlı Kültür ve Medeniyeti", description: "Devlet yönetimi, ordu, eğitim ve toplumsal yapı gibi Osmanlı kurumları." },
-    { title: "Osmanlı Siyaseti (Kuruluş-Dağılma)", description: "Padişahlar dönemi fetihler, antlaşmalar ve devletin siyasi gelişimi." },
-    { title: "20. Yüzyılda Osmanlı", description: "Trablusgarp Savaşı, Balkan Savaşları ve I. Dünya Savaşı süreci." },
-    { title: "Kurtuluş Savaşı Hazırlık", description: "Genelgeler, kongreler ve Milli Mücadele'nin teşkilatlanma aşaması." },
-    { title: "I. TBMM ve Ayaklanmalar", description: "Meclisin açılışı, kabul edilen kanunlar ve iç isyanlara karşı önlemler." },
-    { title: "Kurtuluş Savaşı Cepheler", description: "Doğu, Güney ve Batı cepheleri; düzenli ordunun savaşları (Sakarya, Büyük Taarruz)." },
-    { title: "Cumhuriyet ve İnkılaplar", description: "Siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları." },
-    { title: "Atatürk İlkeleri", description: "Cumhuriyetçilik, Milliyetçilik, Halkçılık, Laiklik, Devletçilik, İnkılapçılık." },
-    { title: "Atatürk Dönemi Politika", description: "İç politika gelişmeleri ve yurtta sulh cihanda sulh temelli dış politika." },
-    { title: "Çağdaş Türk ve Dünya Tarihi", description: "II. Dünya Savaşı sonrası Türkiye ve dünyadaki önemli gelişmeler." },
+    {
+      title: "Tarih Bilimi ve Kronoloji",
+      description:
+        "Tarih araştırmaları, takvimler ve ana tarihi dönemlerin sınıflandırılması.",
+    },
+    {
+      title: "İslamiyet Öncesi Türk Tarihi",
+      description:
+        "Orta Asya Türk devletleri (Hunlar, Göktürkler, Uygurlar) ve göç hareketleri.",
+    },
+    {
+      title: "İlk Türk İslam Devletleri",
+      description:
+        "Karahanlılar, Gazneliler ve Selçuklular dönemi siyasi ve kültürel gelişmeler.",
+    },
+    {
+      title: "Anadolu Selçuklu ve Beylikler",
+      description:
+        "Anadolu'nun türkleşmesi, Selçuklu devleti ve II. Beylikler dönemi.",
+    },
+    {
+      title: "Osmanlı Kültür ve Medeniyeti",
+      description:
+        "Devlet yönetimi, ordu, eğitim ve toplumsal yapı gibi Osmanlı kurumları.",
+    },
+    {
+      title: "Osmanlı Siyaseti (Kuruluş-Dağılma)",
+      description:
+        "Padişahlar dönemi fetihler, antlaşmalar ve devletin siyasi gelişimi.",
+    },
+    {
+      title: "20. Yüzyılda Osmanlı",
+      description:
+        "Trablusgarp Savaşı, Balkan Savaşları ve I. Dünya Savaşı süreci.",
+    },
+    {
+      title: "Kurtuluş Savaşı Hazırlık",
+      description:
+        "Genelgeler, kongreler ve Milli Mücadele'nin teşkilatlanma aşaması.",
+    },
+    {
+      title: "I. TBMM ve Ayaklanmalar",
+      description:
+        "Meclisin açılışı, kabul edilen kanunlar ve iç isyanlara karşı önlemler.",
+    },
+    {
+      title: "Kurtuluş Savaşı Cepheler",
+      description:
+        "Doğu, Güney ve Batı cepheleri; düzenli ordunun savaşları (Sakarya, Büyük Taarruz).",
+    },
+    {
+      title: "Cumhuriyet ve İnkılaplar",
+      description:
+        "Siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları.",
+    },
+    {
+      title: "Atatürk İlkeleri",
+      description:
+        "Cumhuriyetçilik, Milliyetçilik, Halkçılık, Laiklik, Devletçilik, İnkılapçılık.",
+    },
+    {
+      title: "Atatürk Dönemi Politika",
+      description:
+        "İç politika gelişmeleri ve yurtta sulh cihanda sulh temelli dış politika.",
+    },
+    {
+      title: "Çağdaş Türk ve Dünya Tarihi",
+      description:
+        "II. Dünya Savaşı sonrası Türkiye ve dünyadaki önemli gelişmeler.",
+    },
   ],
   cografya: [
-    { title: "Harita Bilgisi", description: "Ölçekler, projeksiyonlar ve harita okuma teknikleri." },
-    { title: "Türkiye’nin Coğrafi Konumu", description: "Matematiksel ve özel konum, yerel saat farkları ve kuşak özellikleri." },
-    { title: "Türkiye’nin İklimi / Bitki Örtüsü", description: "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri." },
-    { title: "Türkiye’nin Fiziki Özellikleri", description: "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri." },
-    { title: "Nüfus ve Yerleşme", description: "Nüfus sayımları, göçler, yerleşme tipleri ve nüfusun dağılışı." },
-    { title: "Doğal Afetler", description: "Deprem, heyelan, erozyon ve sel gibi olayların nedenleri ve sonuçları." },
-    { title: "Tarım / Hayvancılık", description: "Yetiştirilen tarım ürünleri ve bölgelere göre hayvancılık faaliyetleri." },
-    { title: "Madenler / Enerji Kaynakları", description: "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez enerji kaynakları." },
-    { title: "Sanayi ve Endüstri", description: "Sanayi kollarının dağılışı, hammadde ve pazar ilişkileri." },
-    { title: "Ulaşım / Ticaret / Turizm", description: "Türkiye'nin iç ve dış ticareti, ulaşım ağları ve önemli turizm merkezleri." },
-    { title: "Bölgeler Coğrafyası", description: "Türkiye'nin 7 bölgesinin kendine has fiziki ve beşeri özellikleri." },
+    {
+      title: "Harita Bilgisi",
+      description: "Ölçekler, projeksiyonlar ve harita okuma teknikleri.",
+    },
+    {
+      title: "Türkiye’nin Coğrafi Konumu",
+      description:
+        "Matematiksel ve özel konum, yerel saat farkları ve kuşak özellikleri.",
+    },
+    {
+      title: "Türkiye’nin İklimi / Bitki Örtüsü",
+      description:
+        "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri.",
+    },
+    {
+      title: "Türkiye’nin Fiziki Özellikleri",
+      description:
+        "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri.",
+    },
+    {
+      title: "Nüfus ve Yerleşme",
+      description:
+        "Nüfus sayımları, göçler, yerleşme tipleri ve nüfusun dağılışı.",
+    },
+    {
+      title: "Doğal Afetler",
+      description:
+        "Deprem, heyelan, erozyon ve sel gibi olayların nedenleri ve sonuçları.",
+    },
+    {
+      title: "Tarım / Hayvancılık",
+      description:
+        "Yetiştirilen tarım ürünleri ve bölgelere göre hayvancılık faaliyetleri.",
+    },
+    {
+      title: "Madenler / Enerji Kaynakları",
+      description:
+        "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez enerji kaynakları.",
+    },
+    {
+      title: "Sanayi ve Endüstri",
+      description: "Sanayi kollarının dağılışı, hammadde ve pazar ilişkileri.",
+    },
+    {
+      title: "Ulaşım / Ticaret / Turizm",
+      description:
+        "Türkiye'nin iç ve dış ticareti, ulaşım ağları ve önemli turizm merkezleri.",
+    },
+    {
+      title: "Bölgeler Coğrafyası",
+      description:
+        "Türkiye'nin 7 bölgesinin kendine has fiziki ve beşeri özellikleri.",
+    },
   ],
   vatandaslik: [
-    { title: "Temel Hukuk Kavramları", description: "Hukuk kuralları, haklar, ehliyetler ve yaptırım türleri." },
-    { title: "Anayasa Hukuku ve Devlet Yapısı", description: "Devletin temel nitelikleri ve anayasal ilkeler." },
-    { title: "Türk Anayasa Tarihi", description: "1921, 1924, 1961 ve 1982 anayasalarının temel özellikleri." },
-    { title: "Temel Hak ve Ödevler", description: "Kişisel, sosyal ve siyasi hakların kapsamı ve güvenceleri." },
-    { title: "Yasama / Yürütme / Yargı", description: "TBMM, Cumhurbaşkanlığı ve mahkemelerin görev, yetki ve işleyişleri." },
-    { title: "İdare Hukuku", description: "Merkezden ve yerinden yönetim kuruluşları ve kamu görevlileri." },
-    { title: "Seçim ve Siyasi Partiler", description: "Seçim sistemleri, partilerin kurulması ve siyasi katılım." },
-    { title: "Uluslararası Örgütler", description: "BM, NATO, AB ve Türkiye'nin üye olduğu diğer uluslararası kuruluşlar." },
-    { title: "Bilim ve Teknoloji Gelişmeleri", description: "Son yıllardaki bilimsel keşifler ve teknolojik yenilikler." },
-    { title: "Güncel Olaylar", description: "Yılın önemli haberleri, kültürel başarılar ve güncel tartışmalar." },
+    {
+      title: "Temel Hukuk Kavramları",
+      description: "Hukuk kuralları, haklar, ehliyetler ve yaptırım türleri.",
+    },
+    {
+      title: "Anayasa Hukuku ve Devlet Yapısı",
+      description: "Devletin temel nitelikleri ve anayasal ilkeler.",
+    },
+    {
+      title: "Türk Anayasa Tarihi",
+      description: "1921, 1924, 1961 ve 1982 anayasalarının temel özellikleri.",
+    },
+    {
+      title: "Temel Hak ve Ödevler",
+      description: "Kişisel, sosyal ve siyasi hakların kapsamı ve güvenceleri.",
+    },
+    {
+      title: "Yasama / Yürütme / Yargı",
+      description:
+        "TBMM, Cumhurbaşkanlığı ve mahkemelerin görev, yetki ve işleyişleri.",
+    },
+    {
+      title: "İdare Hukuku",
+      description:
+        "Merkezden ve yerinden yönetim kuruluşları ve kamu görevlileri.",
+    },
+    {
+      title: "Seçim ve Siyasi Partiler",
+      description: "Seçim sistemleri, partilerin kurulması ve siyasi katılım.",
+    },
+    {
+      title: "Uluslararası Örgütler",
+      description:
+        "BM, NATO, AB ve Türkiye'nin üye olduğu diğer uluslararası kuruluşlar.",
+    },
+    {
+      title: "Bilim ve Teknoloji Gelişmeleri",
+      description: "Son yıllardaki bilimsel keşifler ve teknolojik yenilikler.",
+    },
+    {
+      title: "Güncel Olaylar",
+      description:
+        "Yılın önemli haberleri, kültürel başarılar ve güncel tartışmalar.",
+    },
   ],
 };
 
@@ -118,12 +406,11 @@ export async function initKpss() {
   elements.kpssSaveStatsBtn()?.addEventListener("click", async () => {
     const questions = parseInt(elements.kpssQuestionsInput()?.value || "0");
     const subject = elements.kpssSubjectSelect()?.value || "turkce";
-    
+
     if (questions > 0) {
       await saveKpssDailyStats(questions, subject);
-      alert("İlerleme kaydedildi!");
       if (elements.kpssQuestionsInput()) {
-          elements.kpssQuestionsInput()!.value = "";
+        elements.kpssQuestionsInput()!.value = "";
       }
       renderHistoryChart();
     }
@@ -136,25 +423,29 @@ export async function initKpss() {
 async function saveKpssDailyStats(questions: number, subject: string) {
   const today = new Date().toISOString().split("T")[0];
   const stats = await storage.getKpssDailyStats();
-  
-  const existingIdx = stats.findIndex(s => s.date === today);
+
+  const existingIdx = stats.findIndex((s) => s.date === today);
   if (existingIdx !== -1) {
-    stats[existingIdx].questions = questions;
+    stats[existingIdx].questions += questions;
     stats[existingIdx].subject = subject;
   } else {
     stats.push({ date: today, questions, subject });
   }
-  
+
   // Keep only last 30 days
-  if (stats.length > 30) stats.shift();
-  
+  if (stats.length > 30) {
+    stats.shift();
+  }
+
   await storage.setKpssDailyStats(stats);
 }
 
 async function renderHistoryChart() {
   const canvas = elements.kpssHistoryChart();
   const placeholder = elements.kpssChartPlaceholder();
-  if (!canvas) return;
+  if (!canvas) {
+    return;
+  }
 
   const stats = await storage.getKpssDailyStats();
   const last7Days = stats.slice(-7);
@@ -169,7 +460,9 @@ async function renderHistoryChart() {
   canvas.style.display = "block";
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) {
+    return;
+  }
 
   // Set canvas size
   const dpr = window.devicePixelRatio || 1;
@@ -184,7 +477,7 @@ async function renderHistoryChart() {
   const chartWidth = width - padding * 2;
   const chartHeight = height - padding * 2;
 
-  const maxQuestions = Math.max(...last7Days.map(s => s.questions), 10);
+  const maxQuestions = Math.max(...last7Days.map((s) => s.questions), 10);
 
   ctx.clearRect(0, 0, width, height);
 
@@ -199,21 +492,27 @@ async function renderHistoryChart() {
 
   // Draw Bars
   const barGap = 15;
-  const barWidth = (chartWidth - (barGap * (last7Days.length - 1))) / last7Days.length;
+  const barWidth =
+    (chartWidth - barGap * (last7Days.length - 1)) / last7Days.length;
 
   last7Days.forEach((stat, i) => {
     const x = padding + i * (barWidth + barGap);
     const barHeight = (stat.questions / maxQuestions) * chartHeight;
     const y = height - padding - barHeight;
 
+    const accentColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent-color")
+        .trim() || "#8b5cf6";
+
     // Gradient bar
     const gradient = ctx.createLinearGradient(x, y, x, height - padding);
-    gradient.addColorStop(0, "var(--accent-color)");
-    gradient.addColorStop(1, "rgba(var(--accent-color-rgb), 0.3)");
-    
-    ctx.fillStyle = "rgba(100, 108, 255, 0.8)"; // Fallback
+    gradient.addColorStop(0, accentColor);
+    gradient.addColorStop(1, "rgba(139, 92, 246, 0.2)");
+
+    ctx.fillStyle = accentColor; // Fallback
     ctx.fillStyle = gradient;
-    
+
     // Rounded corners for bar
     const radius = 4;
     ctx.beginPath();
@@ -235,7 +534,7 @@ async function renderHistoryChart() {
     ctx.textAlign = "center";
     const dateLabel = stat.date.split("-").slice(1).reverse().join("/");
     ctx.fillText(dateLabel, x + barWidth / 2, height - padding + 15);
-    
+
     ctx.fillStyle = "white";
     ctx.fillText(stat.questions.toString(), x + barWidth / 2, y - 5);
   });
@@ -277,7 +576,9 @@ async function renderKpssTopics() {
 
     item.onclick = async (e) => {
       // Don't toggle if the info button was clicked
-      if ((e.target as HTMLElement).closest(".kpss-info-btn")) return;
+      if ((e.target as HTMLElement).closest(".kpss-info-btn")) {
+        return;
+      }
 
       const currentStatus = parseInt(item.getAttribute("data-status") || "0");
       const nextStatus: 0 | 1 | 2 = ((currentStatus + 1) % 3) as 0 | 1 | 2;
@@ -288,8 +589,8 @@ async function renderKpssTopics() {
     };
 
     item.querySelector(".kpss-info-btn")?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openDetailModal(topicData.title, topicData.description);
+      e.stopPropagation();
+      openDetailModal(topicData.title, topicData.description);
     });
 
     container.appendChild(item);
@@ -299,15 +600,15 @@ async function renderKpssTopics() {
 }
 
 function openDetailModal(title: string, description: string) {
-    const modal = elements.yeterlikModal();
-    const mTitle = elements.yeterlikModalTitle();
-    const mDesc = elements.yeterlikModalDescription();
+  const modal = elements.yeterlikModal();
+  const mTitle = elements.yeterlikModalTitle();
+  const mDesc = elements.yeterlikModalDescription();
 
-    if (modal && mTitle && mDesc) {
-        mTitle.textContent = title;
-        mDesc.textContent = description;
-        modal.classList.add("active");
-    }
+  if (modal && mTitle && mDesc) {
+    mTitle.textContent = title;
+    mDesc.textContent = description;
+    modal.classList.add("active");
+  }
 }
 
 async function updateTopicStatus(
