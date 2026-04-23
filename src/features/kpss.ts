@@ -443,9 +443,7 @@ async function saveKpssDailyStats(questions: number, subject: string) {
 async function renderHistoryChart() {
   const canvas = elements.kpssHistoryChart();
   const placeholder = elements.kpssChartPlaceholder();
-  if (!canvas) {
-    return;
-  }
+  if (!canvas) return;
 
   const stats = await storage.getKpssDailyStats();
   const last7Days = stats.slice(-7);
@@ -459,84 +457,81 @@ async function renderHistoryChart() {
   placeholder?.classList.add("hidden");
   canvas.style.display = "block";
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    return;
-  }
-
-  // Set canvas size
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-
-  const width = rect.width;
-  const height = rect.height;
-  const padding = 30;
-  const chartWidth = width - padding * 2;
-  const chartHeight = height - padding * 2;
-
-  const maxQuestions = Math.max(...last7Days.map((s) => s.questions), 10);
-
-  ctx.clearRect(0, 0, width, height);
-
-  // Draw axes
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padding, padding);
-  ctx.lineTo(padding, height - padding);
-  ctx.lineTo(width - padding, height - padding);
-  ctx.stroke();
-
-  // Draw Bars
-  const barGap = 15;
-  const barWidth =
-    (chartWidth - barGap * (last7Days.length - 1)) / last7Days.length;
-
-  last7Days.forEach((stat, i) => {
-    const x = padding + i * (barWidth + barGap);
-    const barHeight = (stat.questions / maxQuestions) * chartHeight;
-    const y = height - padding - barHeight;
-
-    const accentColor =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent-color")
-        .trim() || "#8b5cf6";
-
-    // Gradient bar
-    const gradient = ctx.createLinearGradient(x, y, x, height - padding);
-    gradient.addColorStop(0, accentColor);
-    gradient.addColorStop(1, "rgba(139, 92, 246, 0.2)");
-
-    ctx.fillStyle = accentColor; // Fallback
-    ctx.fillStyle = gradient;
-
-    // Rounded corners for bar
-    const radius = 4;
-    ctx.beginPath();
-    if (barHeight > radius) {
-      ctx.moveTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.lineTo(x + barWidth - radius, y);
-      ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
-      ctx.lineTo(x + barWidth, height - padding);
-      ctx.lineTo(x, height - padding);
-    } else {
-      ctx.rect(x, y, barWidth, barHeight);
+  // Ensure layout is settled
+  requestAnimationFrame(() => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0) {
+      // If still 0, try one more time
+      setTimeout(() => renderHistoryChart(), 50);
+      return;
     }
-    ctx.fill();
 
-    // Labels
-    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.font = "10px Inter";
-    ctx.textAlign = "center";
-    const dateLabel = stat.date.split("-").slice(1).reverse().join("/");
-    ctx.fillText(dateLabel, x + barWidth / 2, height - padding + 15);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    ctx.fillStyle = "white";
-    ctx.fillText(stat.questions.toString(), x + barWidth / 2, y - 5);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const width = rect.width;
+    const height = rect.height;
+    const padding = 35;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+
+    const maxQuestions = Math.max(...last7Days.map(s => s.questions), 10);
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw background lines
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+       const y = padding + (chartHeight / 4) * i;
+       ctx.beginPath();
+       ctx.moveTo(padding, y);
+       ctx.lineTo(width - padding, y);
+       ctx.stroke();
+    }
+
+    const barGap = 15;
+    const barWidth = (chartWidth - (barGap * (last7Days.length - 1))) / last7Days.length;
+
+    last7Days.forEach((stat, i) => {
+      const x = padding + i * (barWidth + barGap);
+      const barHeight = (stat.questions / maxQuestions) * chartHeight;
+      const y = height - padding - barHeight;
+
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#8b5cf6';
+
+      // Bar
+      const gradient = ctx.createLinearGradient(x, y, x, height - padding);
+      gradient.addColorStop(0, accentColor);
+      gradient.addColorStop(1, 'rgba(139, 92, 246, 0.1)');
+      
+      ctx.fillStyle = gradient;
+      
+      const radius = 6;
+      ctx.beginPath();
+      if (barHeight > radius) {
+        ctx.roundRect(x, y, barWidth, barHeight, [radius, radius, 0, 0]);
+      } else {
+        ctx.rect(x, y, barWidth, Math.max(barHeight, 2));
+      }
+      ctx.fill();
+
+      // Labels
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.font = "500 10px Inter";
+      ctx.textAlign = "center";
+      const dateLabel = stat.date.split("-").slice(2).join("/") + "/" + stat.date.split("-")[1];
+      ctx.fillText(dateLabel, x + barWidth / 2, height - padding + 18);
+      
+      ctx.fillStyle = "white";
+      ctx.font = "bold 11px Inter";
+      ctx.fillText(stat.questions.toString(), x + barWidth / 2, y - 8);
+    });
   });
 }
 

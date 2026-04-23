@@ -1,5 +1,3 @@
-import { elements } from "../ui/dom.js";
-
 // Main Pomodoro State
 let pomoTimer: number | null = null;
 let pomoTimeLeft = 25 * 60;
