@@ -1,5 +1,5 @@
-import { Todo } from "../types/types.js";
-import { getStartOfWeek } from "../utils/utils.js";
+import { Todo } from "@/types/types.js";
+import { getStartOfWeek } from "@/utils/utils.js";
 
 export function checkAndResetRepeatingTasks(todos: Todo[]): boolean {
   const now = new Date();

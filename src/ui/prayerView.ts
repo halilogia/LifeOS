@@ -1,6 +1,6 @@
-import { prayerService, PrayerTimes } from "../services/prayerService.js";
-import { state } from "../core/state.js";
-import { storage } from "../core/storage.js";
+import { prayerService, PrayerTimes } from "@/services/prayerService.js";
+import { state } from "@/core/state.js";
+import { storage } from "@/core/storage.js";
 
 const TURKEY_CITIES = [
   "Adana", "Adiyaman", "Afyonkarahisar", "Agri", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin",

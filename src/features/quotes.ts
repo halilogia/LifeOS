@@ -1,5 +1,5 @@
-import { storage } from "../core/storage.js";
-import { elements } from "../ui/dom.js";
+import { storage } from "@/core/storage.js";
+import { elements } from "@/ui/dom.js";
 
 export function initQuotes(): void {
   elements.addQuoteBtn().addEventListener("click", () => {

@@ -1,32 +1,32 @@
-import { Todo } from "./types/types.js";
-import { applyI18n, translations } from "./utils/i18n.js";
-import { updateTime, setRandomQuote } from "./utils/utils.js";
-import { elements } from "./ui/dom.js";
-import { state } from "./core/state.js";
-import { storage } from "./core/storage.js";
+import { Todo } from "@/types/types.js";
+import { applyI18n, translations } from "@/utils/i18n.js";
+import { updateTime, setRandomQuote } from "@/utils/utils.js";
+import { elements } from "@/ui/dom.js";
+import { state } from "@/core/state.js";
+import { storage } from "@/core/storage.js";
 import {
   renderTodo,
   renderKanbanItem,
   switchView,
   switchTab,
   setupKanbanListeners,
-} from "./render.js";
-import { handleBackup, handleRestore } from "./core/backup.js";
+} from "@/render.js";
+import { handleBackup, handleRestore } from "@/core/backup.js";
 import {
   checkAndResetRepeatingTasks,
   moveTaskWithStatus,
   getUpdatedStatuses,
-} from "./features/tasks.js";
-import { initHifiz } from "./features/hifiz.js";
-import { initNotes } from "./features/notes.js";
-import { initSrs } from "./ui/srsView.js";
-import { initPomodoro } from "./features/pomodoro.js";
-import { initCalendar, renderCalendar } from "./features/calendar.js";
-import { initPrayers } from "./ui/prayerView.js";
-import { initKpss } from "./features/kpss.js";
-import { initQuotes } from "./features/quotes.js";
-import { initSidebar } from "./ui/sidebar.js";
-import { initFreeGames } from "./features/freeGames.js";
+} from "@/features/tasks.js";
+import { initHifiz } from "@/features/hifiz.js";
+import { initNotes } from "@/features/notes.js";
+import { initSrs } from "@/ui/srsView.js";
+import { initPomodoro } from "@/features/pomodoro.js";
+import { initCalendar, renderCalendar } from "@/features/calendar.js";
+import { initPrayers } from "@/ui/prayerView.js";
+import { initKpss } from "@/features/kpss.js";
+import { initQuotes } from "@/features/quotes.js";
+import { initSidebar } from "@/ui/sidebar.js";
+import { initFreeGames } from "@/features/freeGames.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
