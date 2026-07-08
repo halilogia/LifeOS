@@ -1,78 +1,17 @@
-import { elements } from "../ui/dom.js";
-import { state } from "../core/state.js";
-import { translations } from "../utils/i18n.js";
-
-export interface Giveaway {
-  id: number;
-  title: string;
-  worth: string;
-  thumbnail: string;
-  image: string;
-  description: string;
-  instructions: string;
-  open_giveaway_url: string;
-  published_date: string;
-  platforms: string;
-  end_date: string;
-  type: string;
-  status: string;
-}
-
-interface CachedData {
-  timestamp: number;
-  data: Giveaway[];
-}
-
-interface HistoricalEpicGame {
-  gameTitle: string;
-  freeDate: string;
-  epicStoreLink?: string;
-  metacriticScore?: number;
-  metacriticUrl?: string;
-  steamDBRating?: number;
-  steamUrl?: string;
-}
-
-interface HistoryCache {
-  timestamp: number;
-  data: HistoricalEpicGame[];
-}
-
-interface ExclusionSettings {
-  steam: boolean;
-  epic: boolean;
-  gog: boolean;
-  humble: boolean;
-  indiegala: boolean;
-  itch: boolean;
-  other: boolean;
-}
-
-const CACHE_KEY = "free_games_cache";
-const CACHE_EXPIRY = 15 * 60 * 1000; // 15 minutes
-
-const HISTORY_CACHE_KEY = "epic_history_cache";
-const HISTORY_CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
+/* eslint-disable max-lines */
+import { elements } from "@/ui/dom.js";
+import { state } from "@/core/state.js";
+import { translations } from "@/utils/i18n.js";
+import { gamesService, Giveaway, ExclusionSettings, defaultExclusions } from "@/services/gamesService.js";
 
 let allGiveaways: Giveaway[] = [];
 let isInitialized = false;
 let currentTab: "giveaways" | "wasitfree" = "giveaways";
-
-const defaultExclusions: ExclusionSettings = {
-  steam: true,
-  epic: true,
-  gog: true,
-  humble: true,
-  indiegala: true,
-  itch: true,
-  other: true,
-};
-
 let currentExclusions: ExclusionSettings = { ...defaultExclusions };
 
 export async function initFreeGames(): Promise<void> {
-  // Load saved exclusions from local storage
-  currentExclusions = await loadExclusionSettings();
+  // Load saved exclusions from service
+  currentExclusions = await gamesService.loadExclusionSettings();
 
   if (isInitialized) {
     applyExclusionsToCheckboxes();
@@ -133,7 +72,7 @@ function setupCheckboxListeners(): void {
   checkboxIds.forEach(({ id, el }) => {
     el()?.addEventListener("change", (e) => {
       currentExclusions[id] = (e.target as HTMLInputElement).checked;
-      saveExclusionSettings(currentExclusions);
+      gamesService.saveExclusionSettings(currentExclusions);
       renderFreeGames();
     });
   });
@@ -173,9 +112,9 @@ function switchFreeGamesTab(tab: "giveaways" | "wasitfree"): void {
   } else {
     // Clear search results and input on switch
     const input = elements.wasItFreeInput();
-    if (input) input.value = "";
+    if (input) {input.value = "";}
     const results = elements.wasItFreeResults();
-    if (results) results.innerHTML = "";
+    if (results) {results.innerHTML = "";}
     showHistoryEmpty(false);
   }
 }
@@ -185,43 +124,10 @@ async function loadFreeGames(forceFresh = false): Promise<void> {
   showError(false);
 
   try {
-    if (!forceFresh) {
-      const cached = await getCachedGames();
-      if (cached && Date.now() - cached.timestamp < CACHE_EXPIRY) {
-        allGiveaways = cached.data;
-        renderFreeGames();
-        showLoading(false);
-        return;
-      }
-    }
-
-    // Fetch fresh data
-    const response = await fetch("https://www.gamerpower.com/api/giveaways");
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.ok ? await response.json() : [];
-    if (Array.isArray(data)) {
-      allGiveaways = data;
-    } else {
-      allGiveaways = [];
-    }
-
-    // Save to cache
-    await setCachedGames(allGiveaways);
+    allGiveaways = await gamesService.fetchLiveGiveaways(forceFresh);
     renderFreeGames();
-  } catch (error) {
-    console.error("Failed to fetch giveaways from GamerPower API:", error);
-    // If fetch failed but we have stale cache, let's use it as a fallback
-    const cached = await getCachedGames();
-    if (cached && cached.data.length > 0) {
-      allGiveaways = cached.data;
-      renderFreeGames();
-      console.log("Using expired cache as fallback due to network failure.");
-    } else {
-      showError(true);
-    }
+  } catch {
+    showError(true);
   } finally {
     showLoading(false);
   }
@@ -230,18 +136,18 @@ async function loadFreeGames(forceFresh = false): Promise<void> {
 function getGiveawaySite(platforms: string, title: string): keyof ExclusionSettings {
   const p = platforms.toLowerCase();
   const t = title.toLowerCase();
-  if (p.includes("steam") || t.includes("steam")) return "steam";
-  if (p.includes("epic") || t.includes("epic")) return "epic";
-  if (p.includes("gog") || t.includes("gog")) return "gog";
-  if (p.includes("humble") || t.includes("humble")) return "humble";
-  if (p.includes("indiegala") || t.includes("indiegala")) return "indiegala";
-  if (p.includes("itch") || t.includes("itch")) return "itch";
+  if (p.includes("steam") || t.includes("steam")) {return "steam";}
+  if (p.includes("epic") || t.includes("epic")) {return "epic";}
+  if (p.includes("gog") || t.includes("gog")) {return "gog";}
+  if (p.includes("humble") || t.includes("humble")) {return "humble";}
+  if (p.includes("indiegala") || t.includes("indiegala")) {return "indiegala";}
+  if (p.includes("itch") || t.includes("itch")) {return "itch";}
   return "other";
 }
 
 function renderFreeGames(): void {
   const grid = elements.freeGamesGrid();
-  if (!grid) return;
+  if (!grid) {return;}
 
   grid.innerHTML = "";
 
@@ -299,12 +205,9 @@ function renderFreeGames(): void {
       : `<span class="game-worth-badge free">${translations[lang].worth_free}</span>`;
 
     // Try to format end date beautifully
-    let expiryText = "";
-    if (game.end_date && game.end_date !== "N/A") {
-      expiryText = `${translations[lang].ends_in} ${game.end_date}`;
-    } else {
-      expiryText = lang === "tr" ? "Kalıcı / Süresiz" : "Keep Forever / Permanent";
-    }
+    const expiryText = (game.end_date && game.end_date !== "N/A")
+      ? `${translations[lang].ends_in} ${game.end_date}`
+      : (lang === "tr" ? "Kalıcı / Süresiz" : "Keep Forever / Permanent");
 
     // Extract cleaner platform names for badges
     const displayPlatforms = getCleanerPlatforms(game.platforms, game.title);
@@ -341,7 +244,7 @@ function renderFreeGames(): void {
 async function performHistorySearch(): Promise<void> {
   const query = elements.wasItFreeInput()?.value.trim();
   const resultsGrid = elements.wasItFreeResults();
-  if (!resultsGrid) return;
+  if (!resultsGrid) {return;}
 
   resultsGrid.innerHTML = "";
   showHistoryEmpty(false);
@@ -353,7 +256,7 @@ async function performHistorySearch(): Promise<void> {
   showHistoryLoading(true);
 
   try {
-    const historyList = await fetchEpicHistoryData();
+    const historyList = await gamesService.fetchHistoricalGiveaways();
     const lang = state.currentLang;
 
     // Filter games
@@ -424,42 +327,11 @@ async function performHistorySearch(): Promise<void> {
   }
 }
 
-async function fetchEpicHistoryData(): Promise<HistoricalEpicGame[]> {
-  const cached = await getHistoryCache();
-  if (cached && Date.now() - cached.timestamp < HISTORY_CACHE_EXPIRY) {
-    return cached.data;
-  }
-
-  // Fetch from raw content josephmate/EpicFreeGamesList
-  const url = "https://raw.githubusercontent.com/josephmate/EpicFreeGamesList/master/epic_free_games.json";
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to load Epic Games Store history: ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  if (Array.isArray(data)) {
-    const mapped: HistoricalEpicGame[] = data.map((item: any) => ({
-      gameTitle: item.gameTitle || "",
-      freeDate: item.freeDate || "",
-      epicStoreLink: item.epicStoreLink || undefined,
-      metacriticScore: item.metacriticScore || undefined,
-      metacriticUrl: item.metacriticUrl || undefined,
-      steamDBRating: item.steamDBRating || undefined,
-      steamUrl: item.steamUrl || undefined,
-    }));
-    await setHistoryCache(mapped);
-    return mapped;
-  }
-
-  return [];
-}
-
 function formatHistoryDate(dateStr: string, lang: string): string {
-  if (!dateStr) return "";
+  if (!dateStr) {return "";}
   try {
     const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return dateStr;
+    if (isNaN(date.getTime())) {return dateStr;}
 
     if (lang === "tr") {
       const months = [
@@ -471,7 +343,7 @@ function formatHistoryDate(dateStr: string, lang: string): string {
       const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
       return date.toLocaleDateString("en-US", options);
     }
-  } catch (e) {
+  } catch {
     return dateStr;
   }
 }
@@ -543,54 +415,4 @@ function showHistoryEmpty(show: boolean): void {
   if (emptyPanel) {
     emptyPanel.classList.toggle("hidden", !show);
   }
-}
-
-function getCachedGames(): Promise<CachedData | null> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get([CACHE_KEY], (res) => {
-      resolve((res[CACHE_KEY] as CachedData) || null);
-    });
-  });
-}
-
-function setCachedGames(data: Giveaway[]): Promise<void> {
-  return new Promise((resolve) => {
-    const cacheVal: CachedData = {
-      timestamp: Date.now(),
-      data,
-    };
-    chrome.storage.local.set({ [CACHE_KEY]: cacheVal }, resolve);
-  });
-}
-
-function getHistoryCache(): Promise<HistoryCache | null> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get([HISTORY_CACHE_KEY], (res) => {
-      resolve((res[HISTORY_CACHE_KEY] as HistoryCache) || null);
-    });
-  });
-}
-
-function setHistoryCache(data: HistoricalEpicGame[]): Promise<void> {
-  return new Promise((resolve) => {
-    const cacheVal: HistoryCache = {
-      timestamp: Date.now(),
-      data,
-    };
-    chrome.storage.local.set({ [HISTORY_CACHE_KEY]: cacheVal }, resolve);
-  });
-}
-
-function loadExclusionSettings(): Promise<ExclusionSettings> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(["fg_exclusions"], (res) => {
-      resolve((res.fg_exclusions as ExclusionSettings) || { ...defaultExclusions });
-    });
-  });
-}
-
-function saveExclusionSettings(settings: ExclusionSettings): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.local.set({ fg_exclusions: settings }, resolve);
-  });
 }

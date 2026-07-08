@@ -10,7 +10,12 @@
     "noImplicitAny": false,
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["chrome"]
+    "types": ["chrome"],
+    "ignoreDeprecations": "6.0",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

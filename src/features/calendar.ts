@@ -1,6 +1,6 @@
-import { storage } from "../core/storage.js";
-import { elements } from "../ui/dom.js";
-import { state } from "../core/state.js";
+import { storage } from "@/core/storage.js";
+import { elements } from "@/ui/dom.js";
+import { state } from "@/core/state.js";
 
 const currentDisplayDate = new Date();
 

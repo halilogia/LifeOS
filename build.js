@@ -12,6 +12,10 @@ console.log('Compiling TypeScript...');
 try {
   const tscPath = path.resolve('node_modules/typescript/bin/tsc');
   execSync(`node "${tscPath}"`, { stdio: 'inherit' });
+  
+  console.log('Resolving path aliases...');
+  const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  execSync(`${npxCmd} tsc-alias`, { stdio: 'inherit' });
 } catch (error) {
   console.error('TypeScript compilation failed');
   process.exit(1);
