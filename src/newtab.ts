@@ -26,6 +26,7 @@ import { initPrayers } from "./ui/prayerView.js";
 import { initKpss } from "./features/kpss.js";
 import { initQuotes } from "./features/quotes.js";
 import { initSidebar } from "./ui/sidebar.js";
+import { initFreeGames } from "./features/freeGames.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -189,6 +190,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  document.addEventListener("keydown", (e) => {
+    const activeEl = document.activeElement;
+    if (
+      activeEl &&
+      (activeEl.tagName === "INPUT" ||
+        activeEl.tagName === "TEXTAREA" ||
+        activeEl.hasAttribute("contenteditable"))
+    ) {
+      return;
+    }
+
+    if (e.key === "+") {
+      e.preventDefault();
+      elements.todoInput().focus();
+    }
+  });
+
   elements.backupBtn().addEventListener("click", handleBackup);
   elements
     .restoreInput()
@@ -227,6 +245,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     viewKpssBtn: () => {
       switchView("kpss");
       initKpss();
+    },
+    viewFreeGamesBtn: () => {
+      switchView("free-games");
+      initFreeGames();
     },
     navFocusBtn: () => {
       switchView("list");
@@ -300,7 +322,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   initCalendar();
   initKpss();
   initQuotes();
-  switchView("pomodoro");
+  switchView("free-games");
+  initFreeGames();
+  switchTab("focus");
+  elements.repeatSelect().value = "none";
   setInterval(
     () => updateTime(elements.clock(), elements.date(), state.currentLang),
     1000,

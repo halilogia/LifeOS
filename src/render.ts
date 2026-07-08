@@ -96,7 +96,7 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer" | "kpss",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer" | "kpss" | "free-games",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
@@ -107,6 +107,7 @@ export function switchView(
   const isCalendar = view === "calendar";
   const isPrayer = view === "prayer";
   const isKpss = view === "kpss";
+  const isFreeGames = view === "free-games";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -126,6 +127,9 @@ export function switchView(
   }
   if (elements.viewKpssBtn()) {
     elements.viewKpssBtn().classList.toggle("active", isKpss);
+  }
+  if (elements.viewFreeGamesBtn()) {
+    elements.viewFreeGamesBtn().classList.toggle("active", isFreeGames);
   }
 
   // Deactivate focus/routines tabs if not in list view
@@ -151,6 +155,9 @@ export function switchView(
   if (elements.kpssView()) {
     elements.kpssView().classList.toggle("active", isKpss);
   }
+  if (elements.freeGamesView()) {
+    elements.freeGamesView().classList.toggle("active", isFreeGames);
+  }
 
   const hero = elements.hero();
   const topHeader = elements.topHeader();
@@ -169,26 +176,30 @@ export function switchView(
         ? "100%"
         : isHifiz
           ? "1200px"
-          : isPomodoro
-            ? "600px"
-            : isCalendar
-              ? "1400px"
-              : isKpss 
-                ? "1100px"
-                : "1250px";
+          : isFreeGames
+            ? "1200px"
+            : isPomodoro
+              ? "600px"
+              : isCalendar
+                ? "1400px"
+                : isKpss 
+                  ? "1100px"
+                  : "1250px";
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
         ? "20px auto 0 auto"
         : isHifiz
           ? "40px auto 0 auto"
-          : isPomodoro
-            ? "100px auto 0 auto"
-            : isCalendar
-              ? "40px auto 0 auto"
-              : isKpss
+          : isFreeGames
+            ? "40px auto 0 auto"
+            : isPomodoro
+              ? "100px auto 0 auto"
+              : isCalendar
                 ? "40px auto 0 auto"
-                : "60px auto 0 auto";
+                : isKpss
+                  ? "40px auto 0 auto"
+                  : "60px auto 0 auto";
   }
 }
 

@@ -117,4 +117,35 @@ export const elements = {
   yeterlikModalDescription: () => document.getElementById("yeterlik-modal-description") as HTMLParagraphElement,
   yeterlikModalClose: () => document.getElementById("yeterlik-modal-close") as HTMLButtonElement,
   yeterlikModalOk: () => document.getElementById("yeterlik-modal-ok") as HTMLButtonElement,
+  viewFreeGamesBtn: () => document.getElementById("view-free-games-btn") as HTMLButtonElement,
+  freeGamesView: () => document.getElementById("free-games-view") as HTMLElement,
+  freeGamesPlatformSelect: () => document.getElementById("free-games-platform-select") as HTMLSelectElement,
+  freeGamesTypeSelect: () => document.getElementById("free-games-type-select") as HTMLSelectElement,
+  freeGamesLoading: () => document.getElementById("free-games-loading") as HTMLDivElement,
+  freeGamesError: () => document.getElementById("free-games-error") as HTMLDivElement,
+  freeGamesRetryBtn: () => document.getElementById("free-games-retry-btn") as HTMLButtonElement,
+  freeGamesGrid: () => document.getElementById("free-games-grid") as HTMLDivElement,
+  
+  // Free Games Sub-Tabs and Views
+  fgTabGiveaways: () => document.getElementById("fg-tab-giveaways") as HTMLButtonElement,
+  fgTabWasItFree: () => document.getElementById("fg-tab-wasitfree") as HTMLButtonElement,
+  fgLiveContainer: () => document.getElementById("fg-live-container") as HTMLDivElement,
+  fgWasItFreeContainer: () => document.getElementById("fg-was-it-free-container") as HTMLDivElement,
+  
+  // Source Exclusion Checkboxes
+  filterSiteSteam: () => document.getElementById("filter-site-steam") as HTMLInputElement,
+  filterSiteEpic: () => document.getElementById("filter-site-epic") as HTMLInputElement,
+  filterSiteGog: () => document.getElementById("filter-site-gog") as HTMLInputElement,
+  filterSiteHumble: () => document.getElementById("filter-site-humble") as HTMLInputElement,
+  filterSiteIndiegala: () => document.getElementById("filter-site-indiegala") as HTMLInputElement,
+  filterSiteItch: () => document.getElementById("filter-site-itch") as HTMLInputElement,
+  filterSiteOther: () => document.getElementById("filter-site-other") as HTMLInputElement,
+
+  // Was It Free Search Lookup
+  wasItFreeInput: () => document.getElementById("was-it-free-input") as HTMLInputElement,
+  wasItFreeBtn: () => document.getElementById("was-it-free-btn") as HTMLButtonElement,
+  wasItFreeLoading: () => document.getElementById("was-it-free-loading") as HTMLDivElement,
+  wasItFreeEmpty: () => document.getElementById("was-it-free-empty") as HTMLDivElement,
+  wasItFreeEmptyText: () => document.getElementById("was-it-free-empty-text") as HTMLParagraphElement,
+  wasItFreeResults: () => document.getElementById("was-it-free-results") as HTMLDivElement,
 };

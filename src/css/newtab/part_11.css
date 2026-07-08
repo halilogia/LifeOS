@@ -1,0 +1,693 @@
+/* Free Games Page Styling */
+.free-games-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Sub-Tabs Navigation */
+.free-games-tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    align-self: flex-start;
+    backdrop-filter: blur(8px);
+}
+
+.fg-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fg-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.fg-tab-btn.active {
+    color: var(--text-primary);
+    background: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.25);
+}
+
+.free-games-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.free-games-header h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.free-games-filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.free-games-select {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 0.5rem 1.75rem 0.5rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 14px;
+}
+
+.free-games-select:hover, .free-games-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(var(--accent-color-rgb), 0.15);
+}
+
+.free-games-select option {
+    background: #0d0d12;
+    color: var(--text-primary);
+}
+
+/* Source Checkboxes Exclusion Filter */
+.free-games-sources {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    backdrop-filter: blur(8px);
+}
+
+.sources-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
+.sources-grid {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.source-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.source-label:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+}
+
+.source-label input[type="checkbox"] {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--text-secondary);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.source-label input[type="checkbox"]:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.source-label input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    width: 3px;
+    height: 6px;
+    border: solid white;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+}
+
+.source-label:has(input[type="checkbox"]:checked) {
+    background: rgba(var(--accent-color-rgb), 0.1);
+    border-color: rgba(var(--accent-color-rgb), 0.35);
+    color: var(--text-primary);
+}
+
+/* Grid Layout */
+.free-games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* Game Card */
+.game-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(var(--accent-color-rgb), 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(var(--accent-color-rgb), 0.1);
+}
+
+.game-card-image {
+    width: 100%;
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+.game-card:hover .game-card-image {
+    transform: scale(1.02);
+}
+
+.game-badges {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.game-worth-badge {
+    background: rgba(15, 15, 20, 0.85);
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.game-worth-badge.free {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    text-decoration: none;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.game-card-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.game-platforms-container {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.game-platform-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+}
+
+/* Custom Platform Badge Colors */
+.game-platform-badge.steam {
+    background: rgba(27, 40, 56, 0.6);
+    color: #66c0f4;
+    border-color: rgba(102, 192, 244, 0.2);
+}
+
+.game-platform-badge.epic-games {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.game-platform-badge.gog {
+    background: rgba(149, 117, 205, 0.15);
+    color: #d1c4e9;
+    border-color: rgba(209, 196, 233, 0.3);
+}
+
+.game-platform-badge.pc {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+.game-platform-badge.playstation {
+    background: rgba(0, 112, 204, 0.15);
+    color: #0070cc;
+    border-color: rgba(0, 112, 204, 0.3);
+}
+
+.game-platform-badge.xbox {
+    background: rgba(16, 124, 16, 0.15);
+    color: #107c10;
+    border-color: rgba(16, 124, 16, 0.3);
+}
+
+.game-platform-badge.indiegala {
+    background: rgba(220, 38, 38, 0.15);
+    color: #ef4444;
+    border-color: rgba(220, 38, 38, 0.3);
+}
+
+.game-platform-badge.itch-io {
+    background: rgba(250, 92, 92, 0.15);
+    color: #fa5c5c;
+    border-color: rgba(250, 92, 92, 0.3);
+}
+
+.game-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.game-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.game-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    gap: 8px;
+}
+
+.game-expiry {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.game-expiry svg {
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.game-claim-btn {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent-color);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.game-claim-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.03);
+}
+
+/* Was It Free? Search Panel Styling */
+.was-it-free-search-box {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.search-input-group {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 6px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.search-input-group:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(var(--accent-color-rgb), 0.2);
+}
+
+.search-input-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    padding: 8px 16px;
+    font-size: 0.95rem;
+}
+
+.search-input-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.was-it-free-search-btn {
+    background: var(--accent-color);
+    border: none;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.was-it-free-search-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.02);
+}
+
+/* Was It Free Results Grid */
+.was-it-free-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.history-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.history-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--accent-color-rgb), 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.history-card-header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.history-check-icon {
+    width: 24px;
+    height: 24px;
+    background: rgba(16, 185, 129, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.history-card-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.history-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.history-success-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.history-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-left: 36px;
+}
+
+.history-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+.history-label {
+    color: var(--text-secondary);
+}
+
+.history-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.history-ratings {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.rating-item {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: flex;
+    gap: 4px;
+}
+
+.rating-item.metacritic {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.rating-item.steamdb {
+    background: rgba(102, 192, 244, 0.1);
+    color: #66c0f4;
+    border: 1px solid rgba(102, 192, 244, 0.2);
+}
+
+.rating-val {
+    font-weight: 700;
+}
+
+.history-card-footer {
+    padding-left: 36px;
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.history-link-btn {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.history-link-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+}
+
+/* Spinner & States */
+.free-games-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    gap: 1rem;
+    width: 100%;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.05);
+    border-top: 3px solid var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error and Empty States */
+.free-games-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    gap: 1rem;
+    width: 100%;
+}
+
+.free-games-error p {
+    color: var(--danger);
+    font-size: 0.95rem;
+}
+
+.free-games-error button {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 6px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.free-games-error button:hover {
+    border-color: var(--accent-color);
+    background: rgba(var(--accent-color-rgb), 0.1);
+}
+
+.free-games-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 0;
+    text-align: center;
+}
+
+/* Attribution styling */
+.gamerpower-attribution {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    text-align: center;
+}
+
+.gamerpower-attribution p {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.gamerpower-attribution a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.gamerpower-attribution a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .free-games-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

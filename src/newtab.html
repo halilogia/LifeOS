@@ -21,7 +21,11 @@
             <h2 class="logo">Life OS</h2>
         </div>
         <nav class="sidebar-nav">
-            <button id="view-pomodoro-btn" class="sidebar-btn active">
+            <button id="view-free-games-btn" class="sidebar-btn active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4M8 10v4M15 11v.01M18 13v.01"/></svg>
+                <span data-i18n="view_free_games">Ücretsiz Oyunlar</span>
+            </button>
+            <button id="view-pomodoro-btn" class="sidebar-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4"></path><path d="M12 14v-4"></path><path d="M4 13a8 8 0 0 1 8-7 8 8 0 1 1-8 7z"></path></svg>
                 <span data-i18n="view_pomodoro">Pomodoro</span>
             </button>
@@ -131,7 +135,7 @@
         </header>
 
         <!-- Pomodoro View -->
-        <section id="pomodoro-view" class="view-content active">
+        <section id="pomodoro-view" class="view-content">
             <div class="pomodoro-dashboard">
                 <!-- Main Pomodoro -->
                 <div class="pomodoro-main-card">
@@ -443,6 +447,102 @@
                 </div>
             </div>
         </section>
+
+        <!-- Free Games View -->
+        <section id="free-games-view" class="view-content active">
+            <div class="free-games-container">
+                <div class="free-games-tabs">
+                    <button id="fg-tab-giveaways" class="fg-tab-btn active" data-i18n="fg_tab_giveaways">Aktif Fırsatlar</button>
+                    <button id="fg-tab-wasitfree" class="fg-tab-btn" data-i18n="fg_tab_wasitfree">Was it free?</button>
+                </div>
+
+                <!-- Live Giveaways Container -->
+                <div id="fg-live-container">
+                    <header class="free-games-header">
+                        <h2 data-i18n="free_games_title">Ücretsiz Oyunlar & Fırsatlar</h2>
+                        <div class="free-games-filters">
+                            <div class="filter-group">
+                                <label data-i18n="filter_platform">Platform:</label>
+                                <select id="free-games-platform-select" class="free-games-select">
+                                    <option value="all" data-i18n="platform_all">Tümü</option>
+                                    <option value="pc" data-i18n="platform_pc">PC (Tümü)</option>
+                                    <option value="steam" data-i18n="platform_steam">Steam</option>
+                                    <option value="epic-games-store" data-i18n="platform_epic">Epic Games</option>
+                                    <option value="gog" data-i18n="platform_gog">GOG</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label data-i18n="filter_type">Tür:</label>
+                                <select id="free-games-type-select" class="free-games-select">
+                                    <option value="game" data-i18n="type_game">Oyun</option>
+                                    <option value="loot" data-i18n="type_loot">Loot / DLC</option>
+                                    <option value="beta" data-i18n="type_beta">Beta Anahtarı</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Source site checkbox filters -->
+                    <div class="free-games-sources">
+                        <span class="sources-title" data-i18n="filter_sources">Kaynak Siteler:</span>
+                        <div class="sources-grid">
+                            <label class="source-label"><input type="checkbox" id="filter-site-steam" checked> <span>Steam</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-epic" checked> <span>Epic Games</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-gog" checked> <span>GOG</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-humble" checked> <span>Humble Bundle</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-indiegala" checked> <span>Indiegala</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-itch" checked> <span>Itch.io</span></label>
+                            <label class="source-label"><input type="checkbox" id="filter-site-other" checked> <span>Diğer</span></label>
+                        </div>
+                    </div>
+                    
+                    <div id="free-games-loading" class="free-games-loading hidden">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading_games">Oyun fırsatları yükleniyor...</p>
+                    </div>
+                    
+                    <div id="free-games-error" class="free-games-error hidden">
+                        <p data-i18n="error_games">Fırsatlar yüklenirken bir hata oluştu.</p>
+                        <button id="free-games-retry-btn" data-i18n="retry">Tekrar Dene</button>
+                    </div>
+
+                    <div id="free-games-grid" class="free-games-grid">
+                        <!-- Free game cards will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Was It Free History Search Container -->
+                <div id="fg-was-it-free-container" class="hidden">
+                    <div class="was-it-free-search-box">
+                        <div class="search-input-group">
+                            <input type="text" id="was-it-free-input" data-i18n-placeholder="search_game_placeholder" placeholder="Oyun adı ara...">
+                            <button id="was-it-free-btn" class="was-it-free-search-btn">
+                                <span data-i18n="search_btn">Ara</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="was-it-free-loading" class="free-games-loading hidden">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading_history">Epic Games geçmişi aranıyor...</p>
+                    </div>
+
+                    <div id="was-it-free-empty" class="free-games-empty hidden">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); opacity: 0.5; margin-bottom: 12px;"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <p id="was-it-free-empty-text" style="color: var(--text-secondary); font-size: 0.95rem;" data-i18n="was_not_free">Bu oyun Epic Games'te daha önce ücretsiz dağıtılmadı veya listede yok.</p>
+                    </div>
+
+                    <div id="was-it-free-results" class="was-it-free-results">
+                        <!-- Search results will go here -->
+                    </div>
+                </div>
+                
+                <footer class="gamerpower-attribution">
+                    <p>Live data provided by <a href="https://www.gamerpower.com/" target="_blank" rel="noopener noreferrer">GamerPower API</a>. History data by <a href="https://github.com/josephmate/EpicFreeGamesList" target="_blank" rel="noopener noreferrer">EpicFreeGamesList</a>.</p>
+                </footer>
+            </div>
+        </section>
+
         <!-- Notes View -->
         <section id="notes-view" class="view-content">
             <div class="notes-container">
