@@ -18,10 +18,13 @@
     const isTimeActive = endTime === -1 || endTime > Date.now(); // -1 represents permanent
 
     if (enabled && isBlockedHost && isTimeActive) {
-      // Keep display hidden until DOM is loaded to override
-      document.addEventListener('DOMContentLoaded', () => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setupBlockPage(endTime, settings.custom_quotes || [], lang);
+        });
+      } else {
         setupBlockPage(endTime, settings.custom_quotes || [], lang);
-      });
+      }
     } else {
       // Remove hiding stylesheet if detox is not active
       if (styleEl.parentNode) {
@@ -35,18 +38,23 @@
     if (styleEl && styleEl.parentNode) {
       styleEl.parentNode.removeChild(styleEl);
     }
-    // Basic resets for override
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.style.height = '100vh';
-    document.body.style.width = '100vw';
-    document.body.style.overflow = 'hidden';
-    document.body.style.background = 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%)';
-    document.body.style.color = '#f8fafc';
-    document.body.style.fontFamily = "'Inter', sans-serif";
-    document.body.style.display = 'flex';
-    document.body.style.alignItems = 'center';
-    document.body.style.justifyContent = 'center';
+
+    // Apply viewport styles
+    const applyStyles = () => {
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+      document.body.style.height = '100vh';
+      document.body.style.width = '100vw';
+      document.body.style.overflow = 'hidden';
+      document.body.style.background = 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%)';
+      document.body.style.color = '#f8fafc';
+      document.body.style.fontFamily = "'Inter', sans-serif";
+      document.body.style.display = 'flex';
+      document.body.style.alignItems = 'center';
+      document.body.style.justifyContent = 'center';
+    };
+
+    applyStyles();
 
     // Load fonts
     const fontLink = document.createElement('link');
@@ -83,8 +91,7 @@
     const timeRemainingLabel = lang === 'tr' ? 'Detoks Süresi' : 'Detox Duration';
     const permanentLabel = lang === 'tr' ? 'Süresiz Blok' : 'Permanent Block';
 
-    // Main Card HTML
-    document.body.innerHTML = `
+    const blockHtml = `
       <div id="detox-block-card" style="
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(16px);
@@ -119,8 +126,8 @@
           </svg>
         </div>
 
-        <h1 style="font-size: 1.8rem; font-weight: 700; margin: 0; color: #f8fafc;">${titleText}</h1>
-        <p style="font-size: 0.95rem; color: #94a3b8; line-height: 1.6; margin: 0;">${descText}</p>
+        <h1 style="font-size: 1.8rem; font-weight: 700; margin: 0; color: #f8fafc; font-family: 'Inter', sans-serif;">${titleText}</h1>
+        <p style="font-size: 0.95rem; color: #94a3b8; line-height: 1.6; margin: 0; font-family: 'Inter', sans-serif;">${descText}</p>
 
         <!-- Quote -->
         <div style="
@@ -133,6 +140,7 @@
           color: #94a3b8;
           border-left: 3px solid #8b5cf6;
           width: 100%;
+          font-family: 'Inter', sans-serif;
         ">
           ${randomQuote}
         </div>
@@ -148,6 +156,7 @@
           display: inline-flex;
           align-items: center;
           gap: 6px;
+          font-family: 'Inter', sans-serif;
         ">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
@@ -169,6 +178,7 @@
           transition: all 0.3s ease;
           width: 100%;
           box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+          font-family: 'Inter', sans-serif;
         " onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">
           ${buttonText}
         </a>
@@ -185,34 +195,56 @@
     `;
     document.head.appendChild(animStyle);
 
-    // Setup Live Countdown
-    const timerText = document.getElementById('detox-timer-text');
-    const timerBadge = document.getElementById('detox-timer-badge');
+    let timerInterval = null;
 
-    if (endTime === -1) {
-      timerText.textContent = permanentLabel;
-    } else {
-      const updateTimer = () => {
-        const remaining = endTime - Date.now();
-        if (remaining <= 0) {
-          window.location.reload(); // Reload site once detox finishes
-          return;
-        }
+    const setupDOMAndTimer = () => {
+      applyStyles();
+      document.body.innerHTML = blockHtml;
+      const timerText = document.getElementById('detox-timer-text');
+      
+      if (timerInterval) clearInterval(timerInterval);
 
-        const hrs = Math.floor(remaining / 3600000);
-        const mins = Math.floor((remaining % 3600000) / 60000);
-        const secs = Math.floor((remaining % 60000) / 1000);
+      if (endTime === -1) {
+        if (timerText) timerText.textContent = permanentLabel;
+      } else {
+        const updateTimer = () => {
+          const remaining = endTime - Date.now();
+          if (remaining <= 0) {
+            window.location.reload();
+            return;
+          }
 
-        let timeString = '';
-        if (hrs > 0) {
-          timeString += `${hrs.toString().padStart(2, '0')}:`;
-        }
-        timeString += `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        timerText.textContent = `${timeRemainingLabel}: ${timeString}`;
-      };
+          const hrs = Math.floor(remaining / 3600000);
+          const mins = Math.floor((remaining % 3600000) / 60000);
+          const secs = Math.floor((remaining % 60000) / 1000);
 
-      updateTimer();
-      setInterval(updateTimer, 1000);
-    }
+          let timeString = '';
+          if (hrs > 0) {
+            timeString += `${hrs.toString().padStart(2, '0')}:`;
+          }
+          timeString += `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          
+          const currentTimerText = document.getElementById('detox-timer-text');
+          if (currentTimerText) {
+            currentTimerText.textContent = `${timeRemainingLabel}: ${timeString}`;
+          }
+        };
+
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+    };
+
+    setupDOMAndTimer();
+
+    // Lock page structure with MutationObserver to block Single-Page-App client-side rendering
+    const observer = new MutationObserver(() => {
+      if (!document.getElementById('detox-block-card')) {
+        observer.disconnect();
+        setupDOMAndTimer();
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 })();
