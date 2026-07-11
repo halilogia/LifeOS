@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { Language } from '../types/types.js';
 import { translations } from '../utils/i18n.js';
+import { pomodoroManager } from '../core/pomodoroManager.js';
 
 interface PomodoroViewProps {
   lang: Language;
@@ -18,6 +19,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   const [pomoTimeLeft, setPomoTimeLeft] = useState(25 * 60);
   const [pomoTotalTime, setPomoTotalTime] = useState(25 * 60);
   const [pomoRunning, setPomoRunning] = useState(false);
+  const [pomoEndTime, setPomoEndTime] = useState(0);
   const pomoTimerRef = useRef<number | null>(null);
 
   // Stopwatch State
@@ -30,55 +32,74 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   const [alarmRunning, setAlarmRunning] = useState(false);
   const alarmTimerRef = useRef<number | null>(null);
 
-  // Cleanup timers on unmount
+  // Sync with storage on mount and subscribe to changes
   useEffect(() => {
+    pomodoroManager.getState().then((state) => {
+      setPomoMode(state.mode);
+      setPomoTimeLeft(state.timeLeft);
+      setPomoTotalTime(state.totalTime);
+      setPomoRunning(state.running);
+      setPomoEndTime(state.endTime);
+    });
+
+    const unsubscribe = pomodoroManager.onStateChanged((state) => {
+      setPomoMode(state.mode);
+      setPomoTimeLeft(state.timeLeft);
+      setPomoTotalTime(state.totalTime);
+      setPomoRunning(state.running);
+      setPomoEndTime(state.endTime);
+    });
+
     return () => {
+      unsubscribe();
       if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
       if (swTimerRef.current) clearInterval(swTimerRef.current);
       if (alarmTimerRef.current) clearInterval(alarmTimerRef.current);
     };
   }, []);
 
-  // --- Main Pomodoro Logic ---
-  const handlePomoModeChange = (mode: 'focus' | 'short' | 'long') => {
-    handlePomoPause();
-    setPomoMode(mode);
-    setPomoTimeLeft(MODE_TIMES[mode]);
-    setPomoTotalTime(MODE_TIMES[mode]);
-  };
-
-  const handlePomoStart = () => {
-    if (pomoRunning) return;
-    setPomoRunning(true);
-    pomoTimerRef.current = window.setInterval(() => {
-      setPomoTimeLeft((prev) => {
-        if (prev <= 1) {
-          handlePomoPause();
-          notify('Pomodoro finished!');
-          // Auto switch mode
-          const nextMode = pomoMode === 'focus' ? 'short' : 'focus';
-          setPomoMode(nextMode);
-          setPomoTimeLeft(MODE_TIMES[nextMode]);
-          setPomoTotalTime(MODE_TIMES[nextMode]);
-          return MODE_TIMES[nextMode];
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const handlePomoPause = () => {
+  // Tick timer locally based on running state and endTime
+  useEffect(() => {
     if (pomoTimerRef.current) {
       clearInterval(pomoTimerRef.current);
       pomoTimerRef.current = null;
     }
-    setPomoRunning(false);
+
+    if (pomoRunning) {
+      pomoTimerRef.current = window.setInterval(() => {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.round((pomoEndTime - now) / 1000));
+
+        setPomoTimeLeft(remaining);
+        if (remaining === 0) {
+          if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
+          setPomoRunning(false);
+          notify('Pomodoro finished!');
+        }
+      }, 1000);
+    }
+
+    return () => {
+      if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
+    };
+  }, [pomoRunning, pomoEndTime]);
+
+  // --- Main Pomodoro Logic ---
+  const handlePomoModeChange = async (mode: 'focus' | 'short' | 'long') => {
+    const totalTime = MODE_TIMES[mode];
+    await pomodoroManager.resetTimer(mode, totalTime);
   };
 
-  const handlePomoReset = () => {
-    handlePomoPause();
-    setPomoTimeLeft(MODE_TIMES[pomoMode]);
-    setPomoTotalTime(MODE_TIMES[pomoMode]);
+  const handlePomoStart = async () => {
+    await pomodoroManager.startTimer(pomoTimeLeft, pomoMode, pomoTotalTime);
+  };
+
+  const handlePomoPause = async () => {
+    await pomodoroManager.pauseTimer(pomoTimeLeft);
+  };
+
+  const handlePomoReset = async () => {
+    await pomodoroManager.resetTimer(pomoMode, pomoTotalTime);
   };
 
   // --- Stopwatch Logic ---

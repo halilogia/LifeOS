@@ -17,6 +17,7 @@ import { CalendarView } from './components/CalendarView.js';
 import { PrayerView } from './components/PrayerView.js';
 import { KpssView } from './components/KpssView.js';
 import { FreeGamesView } from './components/FreeGamesView.js';
+import { DetoxView } from './components/DetoxView.js';
 
 export function App() {
   // Navigation & UI States
@@ -291,6 +292,8 @@ export function App() {
         return <KpssView lang={lang} />;
       case 'free-games':
         return <FreeGamesView lang={lang} />;
+      case 'detox':
+        return <DetoxView lang={lang} />;
       default:
         return <FreeGamesView lang={lang} />;
     }
