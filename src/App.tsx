@@ -447,7 +447,7 @@ export function App() {
 
       {/* Main Card Viewport Container */}
       <main id="container" className="container">
-        {activeView === 'list' && (
+        {activeView === 'free-games' && (
           <header className="hero">
             <div id="clock" className="clock">{clockText}</div>
             <div id="date" className="date">{dateText}</div>
