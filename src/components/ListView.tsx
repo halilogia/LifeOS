@@ -6,7 +6,6 @@ interface ListViewProps {
   todos: Todo[];
   activeTab: 'focus' | 'routines';
   lang: Language;
-  onAddTodo: (text: string, repeat: Todo['repeat']) => void;
   onToggleTodo: (index: number) => void;
   onDeleteTodo: (index: number) => void;
 }
@@ -15,31 +14,10 @@ export function ListView({
   todos,
   activeTab,
   lang,
-  onAddTodo,
   onToggleTodo,
   onDeleteTodo,
 }: ListViewProps) {
   const t = translations[lang];
-  const [text, setText] = useState('');
-  const [repeat, setRepeat] = useState<Todo['repeat']>(activeTab === 'focus' ? 'none' : 'daily');
-
-  // Synchronize default repeat selection when tab changes
-  const handleTabRepeatPreset = (newRepeat: Todo['repeat']) => {
-    setRepeat(newRepeat);
-  };
-
-  const handleAdd = () => {
-    if (!text.trim()) return;
-    onAddTodo(text.trim(), repeat);
-    setText('');
-    setRepeat(activeTab === 'focus' ? 'none' : 'daily');
-  };
-
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleAdd();
-    }
-  };
 
   // Filter tasks based on repeating / non-repeating
   const filteredTodos = todos.map((todo, idx) => ({ todo, originalIndex: idx })).filter(({ todo }) => {
@@ -52,48 +30,6 @@ export function ListView({
 
   return (
     <div id="list-view" className="view-content active">
-      {/* Top Input Header embedded in the list view */}
-      <header className="top-header" style={{ display: 'flex' }}>
-        <div className="global-input-container">
-          <div className="input-group">
-            <input
-              type="text"
-              id="todo-input"
-              value={text}
-              onInput={(e) => setText((e.target as HTMLInputElement).value)}
-              onKeyPress={handleKeyPress}
-              placeholder={t.todo_placeholder}
-              autocomplete="off"
-            />
-            <select
-              id="repeat-select"
-              className="repeat-select"
-              value={repeat}
-              onChange={(e) => setRepeat((e.target as HTMLSelectElement).value as Todo['repeat'])}
-            >
-              <option value="none">{t.repeat_none}</option>
-              <option value="daily">{t.repeat_daily}</option>
-              <option value="weekly">{t.repeat_weekly}</option>
-              <option value="monthly">{t.repeat_monthly}</option>
-            </select>
-            <button id="add-btn" onClick={handleAdd} aria-label="Add Task">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
 
       <div className="todo-card">
         <h1 className="greeting">{t.greeting}</h1>
