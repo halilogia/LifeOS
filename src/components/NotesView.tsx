@@ -121,11 +121,10 @@ export function NotesView({ lang }: NotesViewProps) {
       <div className="notes-container">
         <div className="notes-header">
           <h2>{t.notes_title}</h2>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
             <button
               id="add-quote-btn"
-              className="add-note-action-btn"
-              style={{ background: 'var(--accent-color)', borderColor: 'var(--accent-color)' }}
+              className="add-note-action-btn secondary"
               onClick={() => setIsQuoteModalOpen(true)}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -135,7 +134,7 @@ export function NotesView({ lang }: NotesViewProps) {
             </button>
             <button
               id="add-note-btn"
-              className="add-note-action-btn"
+              className="add-note-action-btn primary"
               onClick={() => handleOpenNoteModal()}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

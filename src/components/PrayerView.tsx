@@ -5,6 +5,7 @@ import { Language } from '../types/types.js';
 
 interface PrayerViewProps {
   lang: Language;
+  compact?: boolean;
 }
 
 const TURKEY_CITIES = [
@@ -39,7 +40,7 @@ const PRAYER_NAMES: Record<string, Record<string, string>> = {
   },
 };
 
-export function PrayerView({ lang }: PrayerViewProps) {
+export function PrayerView({ lang, compact = false }: PrayerViewProps) {
   const labels = PRAYER_NAMES[lang] || PRAYER_NAMES.tr;
 
   const [loading, setLoading] = useState(true);
@@ -138,6 +139,54 @@ export function PrayerView({ lang }: PrayerViewProps) {
     { label: labels.Maghrib, time: times.Maghrib },
     { label: labels.Isha, time: times.Isha },
   ];
+
+  if (compact) {
+    return (
+      <div className="prayer-times-widget">
+        <div className="prayer-widget-header" style={{ position: 'relative' }}>
+          <h3>{labels.title}</h3>
+          <span
+            className="prayer-city-tag"
+            onClick={() => setIsFormOpen((prev) => !prev)}
+            style={{ cursor: 'pointer' }}
+          >
+            {city}
+          </span>
+        </div>
+
+        {isFormOpen && (
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '12px', border: '1px solid var(--card-border)', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <select
+                style={{ flex: 1, background: 'var(--bg-color)', border: '1px solid var(--card-border)', color: 'var(--text-primary)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.8rem', outline: 'none' }}
+                value={city}
+                onChange={(e) => setCity((e.target as HTMLSelectElement).value)}
+              >
+                {TURKEY_CITIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+              <button
+                style={{ background: 'var(--accent-color)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+                onClick={() => handleSaveCity(city)}
+              >
+                {lang === 'tr' ? 'Ok' : 'Ok'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="prayer-list">
+          {prayerItems.map((item, idx) => (
+            <div key={idx} className={`prayer-item ${idx === currentPrayerIdx ? 'active' : ''}`} data-time={item.time}>
+              <span className="prayer-name">{item.label}</span>
+              <span className="prayer-time">{item.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="prayer-view" className="view-content active">

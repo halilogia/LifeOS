@@ -259,6 +259,7 @@ export function App() {
             todos={todos}
             activeTab={activeTab}
             lang={lang}
+            onTabChange={setActiveTab}
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
           />

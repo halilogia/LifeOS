@@ -4,6 +4,29 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.2.0] - 2026-07-11
+### Eklendi
+- **Görevler ve Rutinler Tek Sayfa Birleşimi**:
+  - Sidebar üzerindeki ayrı "Odağım" ve "Rutinler" bağlantıları kaldırılarak tek bir "Liste" butonu altında birleştirildi.
+  - Görev listesi içerisine (ListView) yerleştirilen şık, glassmorphic sekme değiştirici (`.todo-tabs`) ile Odağım (Focus) ve Rutinler (Routines) görevleri arasında tek sayfa içinde butonla geçiş yapılması sağlandı.
+
+### Değişti
+- **Notlar Sayfası Arayüz İyileştirmesi**:
+  - Notlar ekranındaki yan yana bitişik duran ve aynı renk olan butonlar ayrıştırılarak görsel hiyerarşi kazandırıldı.
+  - "Yeni Not" butonu ana eylem olarak dolu mor arka planla (`.primary`), "Yeni Söz" butonu ise ikincil eylem olarak yarı saydam outlinesız buzlu cam tarzıyla (`.secondary`) tasarlandı, aralarındaki mesafe `12px` yapılarak ferahlatıldı.
+- **Kişisel Disiplin Konumu**:
+  - Sidebar üzerinde en altta duran "Kişisel Disiplin" (Willpower) bağlantısı, kullanıcının talebi üzerine "Pomodoro" sayacının hemen altına taşındı.
+
+### Düzeltildi
+- **Boş Kanban Görünümü Bug'ı**:
+  - Todo listesinde durumu (status) olmayan eski görevlerin Kanban tahtasında listelenmemesi hatası giderildi. Durumu tanımlanmamış tüm görevler varsayılan olarak "Yapılacak" (todo) kolonuna aktarılarak Kanban tahtasının dolması sağlandı.
+- **Takvim Ekranı Hizalama Bozulması**:
+  - Namaz vakitlerinin Calendar görünümünde yan tarafta düzgün listelenememesi sebebiyle bozulan ekran yapısı düzeltildi.
+  - Takvim sayfası modülü, kendi içinde `.split-view-container` yapısına alınarak sol panele yerel ve daha kompakt olan bir Ezan Vakitleri widget'ı (`<PrayerView compact={true} />`) eklendi.
+  - `.calendar-container` sınıfına `flex: 1` ve `min-width: 0` özellikleri eklenerek takvim kartının ekran genişliğini dinamik doldurması sağlandı.
+
+---
+
 ## [2.1.0] - 2026-07-11
 ### Eklendi
 - **Modüler CSS Yapısı (Clean Code & Architecture)**:
