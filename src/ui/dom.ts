@@ -148,4 +148,13 @@ export const elements = {
   wasItFreeEmpty: () => document.getElementById("was-it-free-empty") as HTMLDivElement,
   wasItFreeEmptyText: () => document.getElementById("was-it-free-empty-text") as HTMLParagraphElement,
   wasItFreeResults: () => document.getElementById("was-it-free-results") as HTMLDivElement,
+  viewWillpowerBtn: () => document.getElementById("view-willpower-btn") as HTMLButtonElement,
+  willpowerView: () => document.getElementById("willpower-view") as HTMLElement,
+  willpowerBestStreak: () => document.getElementById("willpower-best-streak") as HTMLSpanElement,
+  willpowerResetBtn: () => document.getElementById("willpower-reset-btn") as HTMLButtonElement,
+  willpowerHistoryList: () => document.getElementById("willpower-history-list") as HTMLDivElement,
+  willpowerRankText: () => document.getElementById("willpower-rank-text") as HTMLSpanElement,
+  willpowerRankDesc: () => document.getElementById("willpower-rank-desc") as HTMLParagraphElement,
+  willpowerNoteInput: () => document.getElementById("willpower-note-input") as HTMLInputElement,
 };
+

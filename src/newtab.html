@@ -70,6 +70,10 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M12 6v4"></path><path d="M12 14v.01"></path></svg>
                 <span>KPSS</span>
             </button>
+            <button id="view-willpower-btn" class="sidebar-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span data-i18n="view_willpower">Kişisel Disiplin</span>
+            </button>
             <div class="sidebar-divider"></div>
             <button id="settings-btn" class="sidebar-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -561,6 +565,79 @@
                 </div>
                 <div id="notes-grid" class="notes-grid">
                     <!-- Notes will be rendered here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Willpower View -->
+        <section id="willpower-view" class="view-content">
+            <div class="willpower-container">
+                <div class="willpower-header">
+                    <h2 data-i18n="willpower_title">Kişisel Disiplin İlerlemen</h2>
+                    <div class="best-streak-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <span data-i18n="willpower_best_streak">En Uzun Süreç</span>: <span id="willpower-best-streak">0</span> <span data-i18n="willpower_clean_days">Gün</span>
+                    </div>
+                </div>
+
+                <!-- Clock / Countdown Dashboard -->
+                <div class="willpower-card main-counter-card">
+                    <div id="willpower-current-streak" class="willpower-countdown">
+                        <div class="time-block">
+                            <span id="wp-days" class="time-val">00</span>
+                            <span class="time-label" data-i18n="willpower_clean_days">Gün</span>
+                        </div>
+                        <div class="time-colon">:</div>
+                        <div class="time-block">
+                            <span id="wp-hours" class="time-val">00</span>
+                            <span class="time-label" data-i18n="willpower_hours">Saat</span>
+                        </div>
+                        <div class="time-colon">:</div>
+                        <div class="time-block">
+                            <span id="wp-minutes" class="time-val">00</span>
+                            <span class="time-label" data-i18n="willpower_minutes">Dakika</span>
+                        </div>
+                        <div class="time-colon">:</div>
+                        <div class="time-block">
+                            <span id="wp-seconds" class="time-val">00</span>
+                            <span class="time-label" data-i18n="willpower_seconds">Saniye</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rank Card -->
+                <div class="willpower-card rank-card">
+                    <div class="rank-badge-container">
+                        <div class="rank-icon-wrapper">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div class="rank-info">
+                            <div class="rank-header">
+                                <span class="rank-title-label" data-i18n="willpower_level_label">İrade Derecesi:</span>
+                                <span id="willpower-rank-text" class="rank-value">Başlangıç</span>
+                            </div>
+                            <p id="willpower-rank-desc" class="rank-desc">Her büyük yolculuk küçük bir adımlarla başlar. Zihnini koru, kararlı ol.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Input & Button -->
+                <div class="willpower-card control-card">
+                    <div class="control-input-group">
+                        <input type="text" id="willpower-note-input" class="willpower-note-input" data-i18n-placeholder="willpower_note_placeholder" placeholder="Bu süreç hakkında bir not yazın (isteğe bağlı)..." autocomplete="off">
+                        <button id="willpower-reset-btn" class="willpower-reset-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+                            <span data-i18n="willpower_reset_btn">Yeni Başlangıç Yap</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div class="willpower-card history-card">
+                    <h3 class="history-title" data-i18n="willpower_history">Süreç Geçmişi</h3>
+                    <div id="willpower-history-list" class="history-list">
+                        <!-- History items will be injected here -->
+                    </div>
                 </div>
             </div>
         </section>

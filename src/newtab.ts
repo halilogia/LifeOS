@@ -27,6 +27,7 @@ import { initKpss } from "@/features/kpss.js";
 import { initQuotes } from "@/features/quotes.js";
 import { initSidebar } from "@/ui/sidebar.js";
 import { initFreeGames } from "@/features/freeGames.js";
+import { initWillpower } from "@/features/willpower.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Restore local data to sync on first run
@@ -250,6 +251,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       switchView("free-games");
       initFreeGames();
     },
+    viewWillpowerBtn: () => {
+      switchView("willpower");
+      initWillpower();
+    },
     navFocusBtn: () => {
       switchView("list");
       switchTab("focus");
@@ -322,6 +327,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initCalendar();
   initKpss();
   initQuotes();
+  initWillpower();
   switchView("free-games");
   initFreeGames();
   switchTab("focus");

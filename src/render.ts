@@ -96,7 +96,7 @@ export function renderKanbanItem(
 }
 
 export function switchView(
-  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer" | "kpss" | "free-games",
+  view: "list" | "kanban" | "hifiz" | "notes" | "srs" | "pomodoro" | "calendar" | "prayer" | "kpss" | "free-games" | "willpower",
 ): void {
   const isList = view === "list";
   const isKanban = view === "kanban";
@@ -108,6 +108,7 @@ export function switchView(
   const isPrayer = view === "prayer";
   const isKpss = view === "kpss";
   const isFreeGames = view === "free-games";
+  const isWillpower = view === "willpower";
 
   elements.viewListBtn().classList.toggle("active", isList);
   elements.viewKanbanBtn().classList.toggle("active", isKanban);
@@ -130,6 +131,9 @@ export function switchView(
   }
   if (elements.viewFreeGamesBtn()) {
     elements.viewFreeGamesBtn().classList.toggle("active", isFreeGames);
+  }
+  if (elements.viewWillpowerBtn()) {
+    elements.viewWillpowerBtn().classList.toggle("active", isWillpower);
   }
 
   // Deactivate focus/routines tabs if not in list view
@@ -158,6 +162,9 @@ export function switchView(
   if (elements.freeGamesView()) {
     elements.freeGamesView().classList.toggle("active", isFreeGames);
   }
+  if (elements.willpowerView()) {
+    elements.willpowerView().classList.toggle("active", isWillpower);
+  }
 
   const hero = elements.hero();
   const topHeader = elements.topHeader();
@@ -184,7 +191,9 @@ export function switchView(
                 ? "1400px"
                 : isKpss 
                   ? "1100px"
-                  : "1250px";
+                  : isWillpower
+                    ? "600px"
+                    : "1250px";
     container.style.margin = isList
       ? "120px auto 0 auto"
       : isKanban
@@ -199,7 +208,9 @@ export function switchView(
                 ? "40px auto 0 auto"
                 : isKpss
                   ? "40px auto 0 auto"
-                  : "60px auto 0 auto";
+                  : isWillpower
+                    ? "80px auto 0 auto"
+                    : "60px auto 0 auto";
   }
 }
 
