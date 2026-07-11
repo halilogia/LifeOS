@@ -1,4 +1,4 @@
-import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote, KpssDailyStats } from "../types/types.js";
+import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote, KpssDailyStats, WillpowerStreak } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
 interface SettingsResult {
@@ -9,6 +9,18 @@ interface SettingsResult {
 }
 
 export const storage = {
+  getWillpowerStreak: (): Promise<WillpowerStreak | null> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["willpowerStreak"], (result) => {
+        resolve((result.willpowerStreak as WillpowerStreak) || null);
+      });
+    });
+  },
+  setWillpowerStreak: (willpowerStreak: WillpowerStreak): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ willpowerStreak }, resolve);
+    });
+  },
   getTodos: (): Promise<Todo[]> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["todos"], (result) => {
@@ -158,8 +170,37 @@ export const storage = {
           // Check if sync already has data to avoid overwriting existing cloud data unnecessarily
           chrome.storage.sync.get(null, async (syncData) => {
             if (!syncData || Object.keys(syncData).length <= 1) { // <= 1 because lang might be there
-              await chrome.storage.sync.set(localData);
-              console.log("Data migrated to sync storage.");
+              // Only migrate keys meant for sync storage to avoid exceeding sync quotas with large local caches (e.g. free_games_cache)
+              const syncKeys = [
+                "todos",
+                "notes",
+                "hifizProgress",
+                "srsProgress",
+                "customCategories",
+                "kpssProgress",
+                "customQuotes",
+                "yeterlikler",
+                "kpssDailyStats",
+                "lang",
+                "sidebarOpen",
+                "prayerCity",
+                "prayerCountry",
+                "willpowerStreak"
+              ];
+              const filteredData: Record<string, any> = {};
+              for (const key of syncKeys) {
+                if (localData[key] !== undefined) {
+                  filteredData[key] = localData[key];
+                }
+              }
+              if (Object.keys(filteredData).length > 0) {
+                try {
+                  await chrome.storage.sync.set(filteredData);
+                  console.log("Data migrated to sync storage.");
+                } catch (error) {
+                  console.error("Migration to sync storage failed:", error);
+                }
+              }
             }
             resolve();
           });

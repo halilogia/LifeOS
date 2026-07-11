@@ -52,3 +52,14 @@ export interface KpssDailyStats {
   subject: string;
 }
 
+export interface WillpowerStreak {
+  startDate: string;
+  bestStreakDays: number;
+  history: {
+    startDate: string;
+    endDate: string;
+    days: number;
+    note?: string;
+  }[];
+}
+
