@@ -4,6 +4,34 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.3.0] - 2026-07-11
+### Eklendi
+- **Manuel Detoks Adresi Engelleme**:
+  - Detoks görünümü içerisine kullanıcının kendi istediği adresleri manuel yazıp ekleyebileceği bir özel alan ve engellenen adresleri listeleyen dinamik rozetler eklendi.
+  - Bu manuel adreslerin engellenmesini sağlamak için `manifest.json` dosyasındaki içerik betikleri eşleşme kuralı tüm adresleri (`<all_urls>`) kapsayacak şekilde güncellendi.
+- **Sağ Üst Eklenti Pop-up Panelinde Çoklu Özellik Desteği (Pomodoro & Detoks)**:
+  - Tarayıcının sağ üstündeki eklenti ikonuna tıklandığında açılan popup arayüzü tamamen yenilenerek iki sekmeli bir yapıya geçildi: **Pomodoro & Alarmlar** ve **Detoks**.
+  - **Pomodoro Sekmesi**: Ortak Pomodoro sayacı kontrolü, anlık senkronize olan bir Kronometre paneli ve telefon tarzı kurulmuş alarmları gösterip açıp kapatabileceğiniz bir Alarmlar paneli içerir.
+  - **Detoks Sekmesi**: Yeni sekme açmaya gerek kalmadan detoks oturumunu başlatma/bitirme, süre seçme, manuel engellenecek site ekleme ve engelli siteleri listeleme özelliklerini barındırır.
+- **Telefon Tarzı Çoklu Alarmlar Sistemi**:
+  - Tek ve kontrolü zahmetli olan eski alarm kurma kutusu kaldırılarak tamamen telefon uygulamalarındaki gibi dinamik ve birden çok alarm eklenebilen bir alarmlar listesi geliştirildi.
+  - Alarmlar listesinde her alarm; büyük saat karakterleri, aktif/pasif etme anahtarı (toggle switch) ve silme butonuyla birlikte gösterilir. Kurulan saat geldiğinde alarm tetiklenir, otomatik pasife alınır ve masaüstü bildirimi gönderilir.
+
+### Düzeltildi
+- **Kronometre & Alarm Senkronizasyonu**:
+  - Kronometre ve telefon tarzı alarmların durumu `chrome.storage.local` üzerinde ortak bir yapıya alınarak Yeni Sekme ekranı ile Sağ Üst popup ekranı arasında 100% anlık senkronizasyon sağlandı.
+
+---
+
+## [2.2.5] - 2026-07-11
+### Düzeltildi
+- **Detoks Engelleme Ekranı Kilitlenme ve Yükleme Sorunları**:
+  - `DOMContentLoaded` olayının, storage sorgusu tamamlanmadan önce gerçekleştiği race condition (yarış durumu) hatası düzeltilerek bloke ekranının anında yüklenmesi sağlandı.
+  - Tek Sayfa Uygulamalarının (Single-Page-Apps) (Twitter/X, Instagram, YouTube vb.) kendi istemci taraflı JavaScript kodlarıyla eklentimizin engelleyici ekranını ezmelerini (React hydration override) engellemek amacıyla **MutationObserver** mekanizması entegre edildi.
+  - Engellenen sitelere girildiğinde artık kilit simgesi, kalan detoks süresi sayacı ve rastgele motive edici bir söz içeren glassmorphic bloke kartı kesintisiz ve kararlı bir şekilde ekranda kilitlenmektedir.
+
+---
+
 ## [2.2.4] - 2026-07-11
 ### Değişti
 - **Görev Girişi ve Kart Arası Mesafe**:

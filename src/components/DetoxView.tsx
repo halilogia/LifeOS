@@ -31,6 +31,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
   const [endTime, setEndTime] = useState(0);
   const [selectedDuration, setSelectedDuration] = useState(30 * 60 * 1000); // 30m default
   const [timeLeft, setTimeLeft] = useState(0);
+  const [customSiteInput, setCustomSiteInput] = useState('');
 
   // Load configuration from storage
   useEffect(() => {
@@ -41,7 +42,6 @@ export function DetoxView({ lang }: DetoxViewProps) {
 
       // Check if time expired
       if (isEnabled && end !== -1 && end <= Date.now()) {
-        // Expired, auto disable
         handleDisableDetox();
       } else {
         setEnabled(isEnabled);
@@ -77,13 +77,41 @@ export function DetoxView({ lang }: DetoxViewProps) {
 
   const handleToggleSite = (siteDomains: string[]) => {
     setBlockedSites((prev) => {
-      // Check if first domain is already in list
       const exists = prev.includes(siteDomains[0]);
+      let updated;
       if (exists) {
-        return prev.filter((d) => !siteDomains.includes(d));
+        updated = prev.filter((d) => !siteDomains.includes(d));
       } else {
-        return [...prev, ...siteDomains];
+        updated = [...prev, ...siteDomains];
       }
+      if (enabled) {
+        chrome.storage.sync.set({ detox_blocked_sites: updated });
+      }
+      return updated;
+    });
+  };
+
+  const handleAddCustomSite = () => {
+    let site = customSiteInput.trim().toLowerCase();
+    if (!site) return;
+    // Strip protocols
+    site = site.replace(/^(https?:\/\/)?(www\.)?/, '');
+    if (!site) return;
+
+    setBlockedSites((prev) => {
+      if (prev.includes(site)) return prev;
+      const updated = [...prev, site];
+      chrome.storage.sync.set({ detox_blocked_sites: updated });
+      return updated;
+    });
+    setCustomSiteInput('');
+  };
+
+  const handleRemoveCustomSite = (site: string) => {
+    setBlockedSites((prev) => {
+      const updated = prev.filter((s) => s !== site);
+      chrome.storage.sync.set({ detox_blocked_sites: updated });
+      return updated;
     });
   };
 
@@ -131,6 +159,10 @@ export function DetoxView({ lang }: DetoxViewProps) {
     str += `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     return str;
   };
+
+  // Filter built-in vs custom sites for presentation
+  const defaultDomains = SUPPORTED_SITES.flatMap(s => s.domains);
+  const customBlockedSites = blockedSites.filter(site => !defaultDomains.includes(site));
 
   return (
     <div id="detox-view" className="view-content active">
@@ -203,6 +235,69 @@ export function DetoxView({ lang }: DetoxViewProps) {
                     );
                   })}
                 </div>
+              </div>
+
+              {/* Manual URL entry section */}
+              <div className="setup-section" style={{ borderTop: '1px solid var(--card-border)', paddingTop: '1.5rem' }}>
+                <h3>{lang === 'tr' ? 'Özel Adres Engelle (Manuel)' : 'Block Custom Address (Manual)'}</h3>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '0.5rem' }}>
+                  <input
+                    type="text"
+                    className="free-games-select detox-select"
+                    style={{ flex: 1, height: '42px', padding: '0 15px', background: 'rgba(255,255,255,0.02)' }}
+                    placeholder={lang === 'tr' ? 'Örn: reddit.com, linkedin.com...' : 'E.g. reddit.com, linkedin.com...'}
+                    value={customSiteInput}
+                    onInput={(e) => setCustomSiteInput((e.target as HTMLInputElement).value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleAddCustomSite();
+                    }}
+                  />
+                  <button
+                    className="detox-btn primary"
+                    style={{ width: 'auto', height: '42px', padding: '0 24px', borderRadius: '12px' }}
+                    onClick={handleAddCustomSite}
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Custom sites list */}
+                {customBlockedSites.length > 0 && (
+                  <div className="custom-sites-list" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '1rem' }}>
+                    {customBlockedSites.map((site) => (
+                      <div key={site} className="custom-site-badge" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid var(--card-border)',
+                        padding: '6px 12px',
+                        borderRadius: '50px',
+                        fontSize: '0.8rem',
+                        color: 'var(--text-primary)'
+                      }}>
+                        <span>{site}</span>
+                        <button
+                          onClick={() => handleRemoveCustomSite(site)}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'var(--text-secondary)',
+                            cursor: 'pointer',
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontSize: '1rem'
+                          }}
+                          onMouseOver={(e) => (e.currentTarget.style.color = 'var(--danger)')}
+                          onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="setup-section duration-section">
