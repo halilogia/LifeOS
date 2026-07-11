@@ -14,6 +14,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         newtab: path.resolve(__dirname, 'newtab.html'),
+        popup: path.resolve(__dirname, 'popup.html'),
       },
     },
   },
