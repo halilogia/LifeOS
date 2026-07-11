@@ -36,6 +36,14 @@ export function App() {
   // Global Sync Todos State
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  // Todo Input States (moved to root level for correct fixed-position layout alignment)
+  const [todoText, setTodoText] = useState('');
+  const [todoRepeat, setTodoRepeat] = useState<Todo['repeat']>('none');
+
+  useEffect(() => {
+    setTodoRepeat(activeTab === 'focus' ? 'none' : 'daily');
+  }, [activeTab]);
+
   const t = translations[lang];
 
   // Initialize and load configurations
@@ -251,7 +259,6 @@ export function App() {
             todos={todos}
             activeTab={activeTab}
             lang={lang}
-            onAddTodo={handleAddTodo}
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
           />
@@ -307,6 +314,67 @@ export function App() {
         onSidebarToggle={handleSidebarToggle}
         onSettingsOpen={() => setSettingsOpen(true)}
       />
+
+      {/* Top Input Header (fixed positioning at the top viewport) */}
+      {activeView === 'list' && (
+        <header className="top-header" style={{ display: 'flex' }}>
+          <div className="global-input-container">
+            <div className="input-group">
+              <input
+                type="text"
+                id="todo-input"
+                value={todoText}
+                onInput={(e) => setTodoText((e.target as HTMLInputElement).value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    if (todoText.trim()) {
+                      handleAddTodo(todoText.trim(), todoRepeat);
+                      setTodoText('');
+                    }
+                  }
+                }}
+                placeholder={t.todo_placeholder}
+                autocomplete="off"
+              />
+              <select
+                id="repeat-select"
+                className="repeat-select"
+                value={todoRepeat}
+                onChange={(e) => setTodoRepeat((e.target as HTMLSelectElement).value as Todo['repeat'])}
+              >
+                <option value="none">{t.repeat_none}</option>
+                <option value="daily">{t.repeat_daily}</option>
+                <option value="weekly">{t.repeat_weekly}</option>
+                <option value="monthly">{t.repeat_monthly}</option>
+              </select>
+              <button
+                id="add-btn"
+                onClick={() => {
+                  if (todoText.trim()) {
+                    handleAddTodo(todoText.trim(), todoRepeat);
+                    setTodoText('');
+                  }
+                }}
+                aria-label="Add Task"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+      )}
 
       {/* Settings Panel Drawer Modal */}
       {settingsOpen && (
