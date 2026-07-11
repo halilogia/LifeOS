@@ -4,6 +4,38 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.2.4] - 2026-07-11
+### Değişti
+- **Görev Girişi ve Kart Arası Mesafe**:
+  - Liste görünümünde üstteki sabit görev ekleme çubuğu ile alttaki "Bugünkü odağın nedir?" kartı arasındaki üst üste binme sorunu giderildi.
+  - `#list-view` seçicisine `margin-top: 110px;` eklenerek iki arayüz bloğu arasında dengeli bir boşluk bırakıldı ve sayfa dikey olarak kusursuzca ortalandı.
+
+---
+
+## [2.2.3] - 2026-07-11
+### Değişti
+- **Saat ve Tarih Konumu (Ücretsiz Oyunlar)**:
+  - Saat ve tarih (Hero header), "Liste" görünümünden kaldırılarak kullanıcının talebi üzerine tekrar "Ücretsiz Oyunlar" (Ana/İlk ekran) görünümüne alındı.
+- **Sidebar Menü Sıralaması**:
+  - Sol menüdeki düğmeler kullanıcının istediği sıraya alındı:
+    1. Ücretsiz Oyunlar (1. sıra)
+    2. Liste (2. sıra)
+    3. Kişisel Disiplin (3. sıra)
+    4. Pomodoro (4. sıra)
+
+---
+
+## [2.2.2] - 2026-07-11
+### Düzeltildi
+- **Kanban & Takvim Genişlik Hatası**:
+  - Uzantının React kök düğümü olan `#app` seçicisine genişlik kuralları (`width: 100%; min-height: 100vh;`) eklenerek, flex yapısından ötürü çöken ve Kanban/Takvim bileşenlerini 300px genişliğe sıkıştıran ana arayüz genişleme hatası giderildi.
+- **KPSS Hazırlık Sidebar Yazısı**:
+  - Sidebar üzerinde KPSS ikonu yanında görünmeyen "KPSS Hazırlık" yazısı geri getirilerek i18n dillerine (`view_kpss`) bağlandı.
+- **Detoks Bloke Arayüzü**:
+  - Detoks modunda siteler engellendiğinde sayfanın sadece boş beyaz ekran olarak kalmasına neden olan `!important` CSS ön-yükleme stili temizlendi. Artık engellenen sitelere girildiğinde kalan süre sayacı ve rastgele motive edici bir sözün yer aldığı şık glassmorphic kart arayüzü düzgünce yüklenmektedir.
+
+---
+
 ## [2.2.1] - 2026-07-11
 ### Değişti
 - **Genişletilmiş Dashboard Arayüzü**:

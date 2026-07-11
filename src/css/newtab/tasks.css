@@ -57,6 +57,10 @@ body.sidebar-open .top-header {
 }
 
 /* Todo Card Layout */
+#list-view {
+    margin-top: 110px;
+}
+
 #list-view .todo-card {
     max-width: 600px;
     margin: 0 auto;

@@ -31,9 +31,11 @@
   });
 
   function setupBlockPage(endTime, customQuotes, lang) {
+    // Remove temporary hiding style element
+    if (styleEl && styleEl.parentNode) {
+      styleEl.parentNode.removeChild(styleEl);
+    }
     // Basic resets for override
-    document.documentElement.style.display = 'block';
-    document.body.style.display = 'block';
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.height = '100vh';

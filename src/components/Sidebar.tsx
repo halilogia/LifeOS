@@ -74,48 +74,6 @@ export function Sidebar({
           </button>
 
           <button
-            id="view-pomodoro-btn"
-            className={`sidebar-btn ${activeView === 'pomodoro' ? 'active' : ''}`}
-            onClick={() => onViewChange('pomodoro')}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M10 2h4"></path>
-              <path d="M12 14v-4"></path>
-              <path d="M4 13a8 8 0 0 1 8-7 8 8 0 1 1-8 7z"></path>
-            </svg>
-            <span>{t.view_pomodoro}</span>
-          </button>
-
-          <button
-            id="view-willpower-btn"
-            className={`sidebar-btn ${activeView === 'willpower' ? 'active' : ''}`}
-            onClick={() => onViewChange('willpower')}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <span>{t.view_willpower}</span>
-          </button>
-
-          <button
             id="view-list-btn"
             className={`sidebar-btn ${activeView === 'list' ? 'active' : ''}`}
             onClick={() => {
@@ -141,6 +99,48 @@ export function Sidebar({
               <line x1="3" y1="18" x2="3.01" y2="18"></line>
             </svg>
             <span>{t.view_list}</span>
+          </button>
+
+          <button
+            id="view-willpower-btn"
+            className={`sidebar-btn ${activeView === 'willpower' ? 'active' : ''}`}
+            onClick={() => onViewChange('willpower')}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>{t.view_willpower}</span>
+          </button>
+
+          <button
+            id="view-pomodoro-btn"
+            className={`sidebar-btn ${activeView === 'pomodoro' ? 'active' : ''}`}
+            onClick={() => onViewChange('pomodoro')}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M10 2h4"></path>
+              <path d="M12 14v-4"></path>
+              <path d="M4 13a8 8 0 0 1 8-7 8 8 0 1 1-8 7z"></path>
+            </svg>
+            <span>{t.view_pomodoro}</span>
           </button>
 
           <button
@@ -294,6 +294,7 @@ export function Sidebar({
               <path d="M12 6v4"></path>
               <path d="M12 14v.01"></path>
             </svg>
+            <span>{t.view_kpss}</span>
           </button>
 
           <button
