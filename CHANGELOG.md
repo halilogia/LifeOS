@@ -4,6 +4,44 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.0.0] - 2026-07-11
+### Değişti
+- **Vite + Preact + TypeScript (TSX) Göçü**:
+  - Proje, eski HTML + JavaScript yapısından modern, tip güvenli ve performanslı **Vite + Preact + TSX** mimarisine taşındı.
+  - Bileşen odaklı yapıya geçilerek tüm ekranlar [src/components/](file:///c:/GitHub/Done/chrome-extension/src/components) altında parçalara bölündü:
+    - `App.tsx` (Global durum yönetimi, dil, yedekleme, saat-tarih ve navigasyon)
+    - `Sidebar.tsx` (Buzlu cam tasarımlı menü)
+    - `ListView.tsx` & `KanbanView.tsx` (Görevler ve rutinlerin listelendiği panolar)
+    - `NotesView.tsx` (Notlar ve özlü söz ekleme arayüzü)
+    - `PomodoroView.tsx` (Odaklanma sayacı, kronometre ve alarm paneli)
+    - `WillpowerView.tsx` (Kişisel disiplin sayacı paneli)
+    - `HifizView.tsx` (Ezber takip ve yeterlilik checklisti paneli)
+    - `SrsView.tsx` (Aralıklı tekrar kelime kartı paneli)
+    - `CalendarView.tsx` (Takvim üzerinde tamamlanan görevler)
+    - `PrayerView.tsx` (Konuma göre ezan saatleri)
+    - `KpssView.tsx` (KPSS konuları ve Canvas grafiği)
+    - `FreeGamesView.tsx` (Ücretsiz oyun takibi ve arama paneli)
+  - Derleyici altyapısı olarak Vite entegre edildi (`vite.config.ts` ve `tsconfig.json`).
+  - Derleme sonrası manifest ve veri klasörlerini kopyalayan `postbuild.js` yazıldı.
+
+### Silindi
+- Kullanımı sona eren tüm eski monolitik yapılar ve DOM manipülasyon dosyaları kaldırıldı:
+  - `src/newtab.html`, `src/newtab.ts`, `src/render.ts`, `build.js`
+  - `src/ui/` altındaki `dom.ts`, `sidebar.ts`, `hifizRender.ts`, `prayerView.ts`, `srsView.ts`
+  - `src/features/` altındaki el ile buton yöneten `willpower.ts`, `hifiz.ts`, `pomodoro.ts` vb. mantıksal event bağlayıcılar.
+
+---
+
+## [1.2.0] - 2026-07-10
+### Eklendi
+- **Kişisel Disiplin Takipçisi (Willpower Tracker)**:
+  - Hassas terimler içermeyen, tamamen profesyonel motivasyonel unvanlara dayalı gizli bir kişisel disiplin/willpower sayacı eklendi.
+  - Gün:Saat:Dakika:Saniye bazında gerçek zamanlı çalışan sayaç tasarlandı.
+  - Başlangıç tarihi, en iyi derece (Best Streak) verileri ve sıfırlama geçmişi `chrome.storage.sync` ile buluta yedeklenecek şekilde bağlandı.
+  - Sayaç gün sayısına göre değişen rütbe kademeleri (Initiate, Control, Warrior, Knight, Master vb.) ve özel rütbe açıklamaları i18n dil dosyalarına eklendi.
+
+---
+
 ## [1.1.0] - 2026-07-08
 ### Eklendi
 - **Ücretsiz Oyunlar & Fırsatlar Paneli (Free Games Tracker)**:

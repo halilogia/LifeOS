@@ -1,0 +1,244 @@
+import { useState } from 'preact/hooks';
+import { Todo, Language } from '../types/types.js';
+import { translations } from '../utils/i18n.js';
+
+interface ListViewProps {
+  todos: Todo[];
+  activeTab: 'focus' | 'routines';
+  lang: Language;
+  onAddTodo: (text: string, repeat: Todo['repeat']) => void;
+  onToggleTodo: (index: number) => void;
+  onDeleteTodo: (index: number) => void;
+}
+
+export function ListView({
+  todos,
+  activeTab,
+  lang,
+  onAddTodo,
+  onToggleTodo,
+  onDeleteTodo,
+}: ListViewProps) {
+  const t = translations[lang];
+  const [text, setText] = useState('');
+  const [repeat, setRepeat] = useState<Todo['repeat']>(activeTab === 'focus' ? 'none' : 'daily');
+
+  // Synchronize default repeat selection when tab changes
+  const handleTabRepeatPreset = (newRepeat: Todo['repeat']) => {
+    setRepeat(newRepeat);
+  };
+
+  const handleAdd = () => {
+    if (!text.trim()) return;
+    onAddTodo(text.trim(), repeat);
+    setText('');
+    setRepeat(activeTab === 'focus' ? 'none' : 'daily');
+  };
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleAdd();
+    }
+  };
+
+  // Filter tasks based on repeating / non-repeating
+  const filteredTodos = todos.map((todo, idx) => ({ todo, originalIndex: idx })).filter(({ todo }) => {
+    if (activeTab === 'focus') {
+      return todo.repeat === 'none';
+    } else {
+      return todo.repeat !== 'none';
+    }
+  });
+
+  return (
+    <div id="list-view" className="view-content active">
+      {/* Top Input Header embedded in the list view */}
+      <header className="top-header" style={{ display: 'flex' }}>
+        <div className="global-input-container">
+          <div className="input-group">
+            <input
+              type="text"
+              id="todo-input"
+              value={text}
+              onInput={(e) => setText((e.target as HTMLInputElement).value)}
+              onKeyPress={handleKeyPress}
+              placeholder={t.todo_placeholder}
+              autocomplete="off"
+            />
+            <select
+              id="repeat-select"
+              className="repeat-select"
+              value={repeat}
+              onChange={(e) => setRepeat((e.target as HTMLSelectElement).value as Todo['repeat'])}
+            >
+              <option value="none">{t.repeat_none}</option>
+              <option value="daily">{t.repeat_daily}</option>
+              <option value="weekly">{t.repeat_weekly}</option>
+              <option value="monthly">{t.repeat_monthly}</option>
+            </select>
+            <button id="add-btn" onClick={handleAdd} aria-label="Add Task">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="todo-card">
+        <h1 className="greeting">{t.greeting}</h1>
+
+        <div className="sections-grid single-column">
+          <div
+            id="tasks-section"
+            className={`tasks-container ${activeTab === 'focus' ? 'active' : ''}`}
+          >
+            <h2 className="section-title">{t.section_tasks}</h2>
+            <ul id="todo-list" className="todo-list">
+              {activeTab === 'focus' &&
+                filteredTodos.map(({ todo, originalIndex }) => (
+                  <li
+                    key={originalIndex}
+                    className={`todo-item ${todo.completed ? 'completed' : ''}`}
+                  >
+                    <div className="checkbox" onClick={() => onToggleTodo(originalIndex)}>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <div
+                      className="todo-content"
+                      style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                      }}
+                      onClick={() => onToggleTodo(originalIndex)}
+                    >
+                      <span className="todo-text">{todo.text}</span>
+                    </div>
+                    <button
+                      className="delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteTodo(originalIndex);
+                      }}
+                    >
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          <div
+            id="recurring-section"
+            className={`tasks-container ${activeTab === 'routines' ? 'active' : ''}`}
+          >
+            <h2 className="section-title">{t.section_recurring}</h2>
+            <ul id="recurring-list" className="todo-list">
+              {activeTab === 'routines' &&
+                filteredTodos.map(({ todo, originalIndex }) => {
+                  const key = `repeat_${todo.repeat}` as keyof typeof t;
+                  const repeatLabel = t[key] || todo.repeat;
+                  return (
+                    <li
+                      key={originalIndex}
+                      className={`todo-item ${todo.completed ? 'completed' : ''}`}
+                    >
+                      <div className="checkbox" onClick={() => onToggleTodo(originalIndex)}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                      <div
+                        className="todo-content"
+                        style={{
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '4px',
+                        }}
+                        onClick={() => onToggleTodo(originalIndex)}
+                      >
+                        <span className="todo-text">{todo.text}</span>
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                          <span className="repeat-badge">{repeatLabel}</span>
+                        </div>
+                      </div>
+                      <button
+                        className="delete-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteTodo(originalIndex);
+                        }}
+                      >
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        </div>
+
+        <div className={`empty-state ${filteredTodos.length === 0 ? 'active' : ''}`}>
+          <p>{t.empty_state}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
