@@ -87,7 +87,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     padding: 2rem;
     z-index: 1;
     display: flex;
@@ -95,6 +95,7 @@ body {
     gap: 1.5rem;
     margin: 40px auto 0 auto;
     transition: padding-left 0.4s ease;
+    align-self: stretch;
 }
 
 .hidden {
@@ -163,7 +164,9 @@ body {
 }
 
 .settings-content {
-    background: var(--card-bg);
+    background: rgba(15, 15, 22, 0.98);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--card-border);
     border-radius: 24px;
     padding: 2rem;
