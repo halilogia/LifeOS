@@ -6,10 +6,14 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications"],
+  "permissions": ["storage", "notifications", "tabs"],
   "host_permissions": [
     "https://www.gamerpower.com/*"
   ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Life OS - Pomodoro"

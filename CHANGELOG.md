@@ -4,6 +4,21 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.4.0] - 2026-07-11
+### Eklendi
+- **Günlük Ekran Süresi Takipçisi (Screen-Time Tracker)**:
+  - Arka planda aktif sekmeleri izleyen, domain bazlı aktif geçirilen süreyi saniye hassasiyetinde ölçen yeni bir servis betiği (`background.js`) yazıldı.
+  - Tarayıcının veya aktif sekmenin odağını kaybetmesi durumunda sayaç durur, böylece yalnızca gerçek aktif kullanım süreleri doğru şekilde hesaplanır.
+  - Performansı korumak amacıyla veriler arka planda biriktirilir (buffer) ve her 10 saniyede bir toplu olarak yerel depolama alanına (`chrome.storage.local`) kaydedilir.
+- **Detoks Sekmesinde Kullanım Analiz Paneli**:
+  - Sosyal Medya Detoksu görünümünün en üstüne yeni bir analiz kartı eklendi: *"Bugün Chrome'da Ne Kadar Vakit Geçirdin?"*.
+  - Bu panelde, bugün tarayıcıda geçirilen toplam süre büyük dijital bir saat formatında gösterilir.
+  - Altında, en çok vakit geçirilen siteler (domainler) süreleri ve yüzde paylarıyla birlikte listelenir.
+  - Her sitenin altında, sürenin büyüklüğüne göre dolan, mor-mor/leylak renk geçişine sahip modern glassmorphic ilerleme çubukları (progress bars) bulunur.
+  - En çok ziyaret edilen ilk 5 site gösterilir; daha fazlası için "Tümünü Göster" butonuyla genişletilebilir dinamik liste yapısı eklendi.
+
+---
+
 ## [2.3.0] - 2026-07-11
 ### Eklendi
 - **Manuel Detoks Adresi Engelleme**:

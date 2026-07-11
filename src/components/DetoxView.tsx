@@ -33,6 +33,10 @@ export function DetoxView({ lang }: DetoxViewProps) {
   const [timeLeft, setTimeLeft] = useState(0);
   const [customSiteInput, setCustomSiteInput] = useState('');
 
+  // Screen Time Stats
+  const [screenTimeStats, setScreenTimeStats] = useState<Record<string, number>>({});
+  const [showAllStats, setShowAllStats] = useState(false);
+
   // Load configuration from storage
   useEffect(() => {
     chrome.storage.sync.get(['detox_enabled', 'detox_blocked_sites', 'detox_end_time'], (res) => {
@@ -49,6 +53,21 @@ export function DetoxView({ lang }: DetoxViewProps) {
         setEndTime(end);
       }
     });
+  }, []);
+
+  // Load screen time tracking stats
+  useEffect(() => {
+    const loadStats = () => {
+      const todayStr = new Date().toLocaleDateString('sv');
+      chrome.storage.local.get(['screen_time_stats'], (res) => {
+        const stats = res.screen_time_stats?.[todayStr] || {};
+        setScreenTimeStats(stats);
+      });
+    };
+
+    loadStats();
+    const interval = setInterval(loadStats, 5000); // Refresh every 5 seconds
+    return () => clearInterval(interval);
   }, []);
 
   // Tick local countdown timer if active
@@ -94,7 +113,6 @@ export function DetoxView({ lang }: DetoxViewProps) {
   const handleAddCustomSite = () => {
     let site = customSiteInput.trim().toLowerCase();
     if (!site) return;
-    // Strip protocols
     site = site.replace(/^(https?:\/\/)?(www\.)?/, '');
     if (!site) return;
 
@@ -160,7 +178,24 @@ export function DetoxView({ lang }: DetoxViewProps) {
     return str;
   };
 
-  // Filter built-in vs custom sites for presentation
+  const formatDurationText = (totalSecs: number) => {
+    const h = Math.floor(totalSecs / 3600);
+    const m = Math.floor((totalSecs % 3600) / 60);
+    const s = totalSecs % 60;
+    if (h > 0) {
+      return lang === 'tr' ? `${h} sa ${m} dk` : `${h}h ${m}m`;
+    }
+    if (m > 0) {
+      return lang === 'tr' ? `${m} dk ${s} sn` : `${m}m ${s}s`;
+    }
+    return lang === 'tr' ? `${s} sn` : `${s}s`;
+  };
+
+  // Screen time details calculations
+  const totalScreenTimeSeconds = Object.values(screenTimeStats).reduce((acc, val) => acc + val, 0);
+  const sortedScreenTimeSites = Object.entries(screenTimeStats).sort((a, b) => b[1] - a[1]);
+  const visibleScreenTimeSites = showAllStats ? sortedScreenTimeSites : sortedScreenTimeSites.slice(0, 5);
+
   const defaultDomains = SUPPORTED_SITES.flatMap(s => s.domains);
   const customBlockedSites = blockedSites.filter(site => !defaultDomains.includes(site));
 
@@ -168,6 +203,64 @@ export function DetoxView({ lang }: DetoxViewProps) {
     <div id="detox-view" className="view-content active">
       <div className="detox-container">
         
+        {/* Screen Time Usage Dashboard Card */}
+        <div className="detox-card" style={{ padding: '2rem' }}>
+          <div className="detox-status-header" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+            <div className="detox-title-group">
+              <h2>{lang === 'tr' ? 'Bugün Chrome\'da Ne Kadar Vakit Geçirdin?' : 'Screen Time on Chrome Today'}</h2>
+              <p>{lang === 'tr' ? 'Tarayıcıda harcadığınız aktif süreyi takip edin.' : 'Track your active time spent on domains.'}</p>
+            </div>
+            <div className="detox-status-badge active" style={{ background: 'rgba(139, 92, 246, 0.1)', borderColor: 'rgba(139, 92, 246, 0.2)', color: 'var(--accent-color)' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: '800' }}>{formatDurationText(totalScreenTimeSeconds)}</span>
+            </div>
+          </div>
+
+          {sortedScreenTimeSites.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic' }}>
+              {lang === 'tr' ? 'Bugün henüz başka sitelerde aktif vakit geçirmediniz.' : 'No active domain usage recorded today yet.'}
+            </div>
+          ) : (
+            <div className="screen-time-stats-list" style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '1rem' }}>
+              {visibleScreenTimeSites.map(([domain, secs]) => {
+                const percentage = totalScreenTimeSeconds > 0 ? Math.round((secs / totalScreenTimeSeconds) * 100) : 0;
+                return (
+                  <div key={domain} className="screen-time-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                      <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{domain}</span>
+                      <span style={{ color: 'var(--text-secondary)', fontWeight: '500' }}>
+                        {formatDurationText(secs)} <span style={{ opacity: 0.5, fontSize: '0.75rem', marginLeft: '6px' }}>({percentage}%)</span>
+                      </span>
+                    </div>
+                    {/* Glassmorphic progress bar */}
+                    <div className="screen-time-bar-track" style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', borderRadius: '10px', overflow: 'hidden' }}>
+                      <div className="screen-time-bar-fill" style={{
+                        width: `${percentage}%`,
+                        height: '100%',
+                        background: 'linear-gradient(90deg, var(--accent-color) 0%, #a78bfa 100%)',
+                        borderRadius: '10px',
+                        transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                      }}></div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {sortedScreenTimeSites.length > 5 && (
+                <button
+                  className="text-btn"
+                  onClick={() => setShowAllStats(!showAllStats)}
+                  style={{ alignSelf: 'center', marginTop: '10px', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: '600', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                >
+                  {showAllStats 
+                    ? (lang === 'tr' ? 'Daha Az Göster' : 'Show Less') 
+                    : (lang === 'tr' ? `Tümünü Göster (${sortedScreenTimeSites.length})` : `Show All (${sortedScreenTimeSites.length})`)
+                  }
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* Main Status Block Card */}
         <div className="detox-card">
           <div className="detox-status-header">
