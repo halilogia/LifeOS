@@ -282,17 +282,15 @@ function PopupApp() {
     <div className="popup-container" style={{ padding: '1rem', width: '330px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       
       {/* Header with App Tab Switchers */}
-      <div className="popup-tabs" style={{ background: 'rgba(255,255,255,0.02)', padding: '3px', borderRadius: '12px', border: '1px solid var(--card-border)', width: '100%', display: 'flex' }}>
+      <div className="popup-tabs">
         <button
           className={`popup-tab-btn ${popupTab === 'pomo' ? 'active' : ''}`}
-          style={{ flex: 1, padding: '8px 0', border: 'none', background: 'transparent', cursor: 'pointer', borderRadius: '8px', fontWeight: '600', fontSize: '0.8rem' }}
           onClick={() => setPopupTab('pomo')}
         >
           Pomodoro & Alarmlar
         </button>
         <button
           className={`popup-tab-btn ${popupTab === 'detox' ? 'active' : ''}`}
-          style={{ flex: 1, padding: '8px 0', border: 'none', background: 'transparent', cursor: 'pointer', borderRadius: '8px', fontWeight: '600', fontSize: '0.8rem' }}
           onClick={() => setPopupTab('detox')}
         >
           Detoks
@@ -471,13 +469,18 @@ function PopupApp() {
         // --- DETOKS INTERFACE LAYOUT ---
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '14px' }}>
-            <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Durum</span>
-                <span style={{ fontSize: '1.1rem', fontWeight: '700', color: detoxEnabled ? '#10b981' : 'var(--text-secondary)', marginTop: '2px' }}>
-                  {detoxEnabled ? 'Aktif' : 'Pasif'}
-                </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '14px' }}>
+            
+            {/* Status row */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Detoks Durumu</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: detoxEnabled ? '#10b981' : 'var(--text-secondary)' }}></span>
+                  <span style={{ fontSize: '1rem', fontWeight: '700', color: detoxEnabled ? '#10b981' : 'var(--text-secondary)' }}>
+                    {detoxEnabled ? 'Aktif' : 'Pasif'}
+                  </span>
+                </div>
               </div>
 
               {detoxEnabled && (
@@ -488,17 +491,16 @@ function PopupApp() {
             </div>
 
             {detoxEnabled ? (
-              <button className="detox-btn danger" style={{ padding: '8px 0', fontSize: '0.8rem', borderRadius: '8px' }} onClick={handleDisableDetox}>
+              <button className="detox-btn danger" onClick={handleDisableDetox}>
                 Detoksu Sonlandır
               </button>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {/* Duration select */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Süre Belirleyin</span>
                   <select
-                    className="free-games-select detox-select"
-                    style={{ width: '120px', height: '30px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.02)' }}
+                    className="detox-select"
                     value={detoxDuration}
                     onChange={(e) => setDetoxDuration(Number((e.target as HTMLSelectElement).value))}
                   >
@@ -512,20 +514,20 @@ function PopupApp() {
                 </div>
 
                 {/* Manual site entry */}
-                <div style={{ display: 'flex', gap: '6px', marginTop: '4px' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
                   <input
                     type="text"
-                    style={{ flex: 1, height: '30px', fontSize: '0.75rem', padding: '0 8px', borderRadius: '8px', border: '1px solid var(--card-border)', background: 'rgba(255,255,255,0.02)', color: 'white' }}
                     placeholder="Site Ekle: reddit.com..."
                     value={detoxInput}
                     onInput={(e) => setDetoxInput((e.target as HTMLInputElement).value)}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') handleAddDetoxSite();
                     }}
+                    style={{ flex: 1, height: '32px' }}
                   />
                   <button
-                    className="mini-btn primary"
-                    style={{ borderRadius: '8px', height: '30px', padding: '0 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}
+                    className="detox-btn primary"
+                    style={{ width: '36px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', padding: 0 }}
                     onClick={handleAddDetoxSite}
                   >
                     +
@@ -533,16 +535,16 @@ function PopupApp() {
                 </div>
 
                 {/* custom blocked list scroll */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '110px', overflowY: 'auto', margin: '4px 0', paddingRight: '2px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '110px', overflowY: 'auto', paddingRight: '2px' }}>
                   {detoxBlockedSites.length === 0 ? (
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textAlign: 'center', padding: '10px 0' }}>Engelli site yok</div>
                   ) : (
                     detoxBlockedSites.map((site) => (
-                      <div key={site} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 8px', background: 'rgba(255,255,255,0.01)', border: '1px solid var(--card-border)', borderRadius: '8px', gap: '8px' }}>
-                        <span style={{ fontSize: '0.75rem', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>{site}</span>
+                      <div key={site} className="custom-site-item">
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>{site}</span>
                         <button
                           onClick={() => handleRemoveDetoxSite(site)}
-                          style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0 }}
+                          style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0, fontSize: '1.1rem', lineHeight: '1' }}
                           onMouseOver={(e) => (e.currentTarget.style.color = 'var(--danger)')}
                           onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
                         >
@@ -553,7 +555,7 @@ function PopupApp() {
                   )}
                 </div>
 
-                <button className="detox-btn primary" style={{ padding: '8px 0', fontSize: '0.8rem', borderRadius: '8px', width: '100%', marginTop: '6px' }} onClick={handleEnableDetox}>
+                <button className="detox-btn primary" style={{ marginTop: '4px' }} onClick={handleEnableDetox}>
                   Detoksu Başlat
                 </button>
               </div>

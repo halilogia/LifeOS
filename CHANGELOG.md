@@ -4,6 +4,17 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.4.1] - 2026-07-11
+### Düzeltildi
+- **Sağ Üst Popup Arayüzü İyileştirmeleri ve Font Düzeltmeleri**:
+  - Chrome eklentilerinde varsayılan form denetimlerinin (butonlar, select kutuları ve inputlar) tarayıcı varsayılan serif yazı tipine (Times New Roman) düşmesini engellemek için `button, input, select, textarea { font-family: inherit; }` kuralı eklendi.
+  - Tab geçiş butonlarındaki çakışan inline `background: transparent` kodları kaldırıldı. Bu sayede aktif sekmenin mor (`#8b5cf6`) arka plan rengi ve yumuşak gölgesi artık kararlı ve göz alıcı bir şekilde çalışıyor.
+  - Tıklama sonrasında tarayıcının butonlara uyguladığı kaba, çiğ beyaz odaklanma çerçevesi/arka planı (`:focus`) engellendi.
+  - Detoks başlatma ve bitirme butonları, çiğ beyaz dikdörtgen görünümden kurtarılarak mor renk geçişine (gradient), yuvarlatılmış köşelere, yumuşak gölgeye ve hover animasyonlarına sahip premium butonlarla değiştirildi.
+  - Site listesindeki koyu ve çiğ arka planlar kaldırılarak tamamen şeffaf, ince kenarlıklı glassmorphic tasarıma geçildi.
+
+---
+
 ## [2.4.0] - 2026-07-11
 ### Eklendi
 - **Günlük Ekran Süresi Takipçisi (Screen-Time Tracker)**:
