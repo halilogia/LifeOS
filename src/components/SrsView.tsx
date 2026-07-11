@@ -98,7 +98,7 @@ export function SrsView({ lang }: SrsViewProps) {
     return (
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
-          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)', animation: 'pulse 1.5s infinite' }}>
+          <div className="srs-preparing">
             {lang === 'tr' ? 'Kelime havuzu hazırlanıyor...' : 'Preparing vocabulary pool...'}
           </div>
         </div>
@@ -110,7 +110,7 @@ export function SrsView({ lang }: SrsViewProps) {
     return (
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
-          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--danger)' }}>
+          <div className="srs-error">
             {lang === 'tr' ? 'Kelime havuzu yüklenirken bir hata oluştu.' : 'An error occurred while loading the vocabulary pool.'}
           </div>
         </div>
@@ -124,7 +124,7 @@ export function SrsView({ lang }: SrsViewProps) {
     return (
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
-          <div style={{ textAlign: 'center', padding: '5rem 2rem', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div className="srs-finished">
             <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
             <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--success)', fontWeight: 700 }}>
               {lang === 'tr' ? 'Harika İş!' : 'Great Job!'}
@@ -134,7 +134,7 @@ export function SrsView({ lang }: SrsViewProps) {
             </p>
             <button
               onClick={loadSrsQueue}
-              style={{ marginTop: '2rem', background: 'var(--accent-color)', color: 'white', border: 'none', padding: '12px 30px', borderRadius: '12px', cursor: 'pointer', fontWeight: 600, transition: 'transform 0.2s' }}
+              className="srs-restart-btn"
             >
               {lang === 'tr' ? 'Yeniden Başla' : 'Restart'}
             </button>
@@ -166,60 +166,23 @@ export function SrsView({ lang }: SrsViewProps) {
     <div id="srs-view" className="view-content active">
       <div className="srs-container">
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', padding: '0 1rem' }}>
+          <div className="srs-header">
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               {lang === 'tr' ? 'Aralıklı Tekrar' : 'Spaced Repetition'}
             </h2>
-            <div style={{ background: 'rgba(255,255,255,0.08)', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '1px' }}>
+            <div className="srs-progress">
               {currentWordIndex + 1} / {currentQueue.length}
             </div>
           </div>
 
-          <div
-            className="flashcard-container"
-            style={{
-              perspective: '1200px',
-              width: '100%',
-              height: '380px',
-              marginBottom: '2rem',
-            }}
-          >
+          <div className="flashcard-container">
             <div
               id="flashcard-inner"
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                textAlign: 'center',
-                transition: 'transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease, filter 0.4s ease',
-                transformStyle: 'preserve-3d',
-                cursor: 'pointer',
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                opacity: fadeState === 'slide-out' ? 0 : 1,
-                filter: fadeState === 'slide-out' ? 'blur(5px)' : 'none',
-              }}
+              className={`flashcard-inner ${isFlipped ? 'flipped' : ''} ${fadeState === 'slide-out' ? 'fade-out' : ''}`}
               onClick={() => setIsFlipped((prev) => !prev)}
             >
               {/* Front Side */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  backfaceVisibility: 'hidden',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '32px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '3rem',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
-              >
+              <div className="flashcard-side flashcard-front">
                 <div style={{ position: 'absolute', top: '2rem', right: '2rem', fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '4px 12px', borderRadius: '8px', color: 'var(--accent-light)' }}>
                   {wordInfo.level || 'General'}
                 </div>
@@ -232,26 +195,7 @@ export function SrsView({ lang }: SrsViewProps) {
               </div>
 
               {/* Back Side */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  backfaceVisibility: 'hidden',
-                  background: 'linear-gradient(135deg, rgba(88, 28, 135, 0.2), rgba(15, 23, 42, 0.95))',
-                  border: '1px solid rgba(139, 92, 246, 0.3)',
-                  borderRadius: '32px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '2.5rem',
-                  transform: 'rotateY(180deg)',
-                  boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15)',
-                  backdropFilter: 'blur(15px)',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
-              >
+              <div className="flashcard-side flashcard-back">
                 <div style={{ width: '100%', overflowY: 'auto', maxHeight: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <h2 style={{ fontSize: meaningFontSize, marginBottom: '1.5rem', color: '#fff', fontWeight: 600, lineHeight: 1.4, maxWidth: '90%' }}>
                     {meaning}
@@ -267,19 +211,15 @@ export function SrsView({ lang }: SrsViewProps) {
 
                 <div
                   id="srs-actions"
+                  className="srs-actions"
                   style={{
-                    display: 'flex',
-                    gap: '0.8rem',
-                    marginTop: '1rem',
                     opacity: isFlipped ? 1 : 0,
                     transform: isFlipped ? 'translateY(0)' : 'translateY(10px)',
-                    transition: 'all 0.4s ease 0.3s',
                     pointerEvents: isFlipped ? 'auto' : 'none',
                   }}
                 >
                   <button
-                    className="srs-btn"
-                    style={{ background: '#ef4444', color: 'white' }}
+                    className="srs-btn srs-btn-hard"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleReview('hard');
@@ -288,8 +228,7 @@ export function SrsView({ lang }: SrsViewProps) {
                     {lang === 'tr' ? 'Zor' : 'Hard'}
                   </button>
                   <button
-                    className="srs-btn"
-                    style={{ background: '#f59e0b', color: 'white' }}
+                    className="srs-btn srs-btn-medium"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleReview('medium');
@@ -298,8 +237,7 @@ export function SrsView({ lang }: SrsViewProps) {
                     {lang === 'tr' ? 'Orta' : 'Medium'}
                   </button>
                   <button
-                    className="srs-btn"
-                    style={{ background: '#10b981', color: 'white' }}
+                    className="srs-btn srs-btn-easy"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleReview('easy');
@@ -313,31 +251,6 @@ export function SrsView({ lang }: SrsViewProps) {
           </div>
         </div>
       </div>
-
-      <style>{`
-        .srs-btn {
-          padding: 12px 28px;
-          border-radius: 14px;
-          border: none;
-          cursor: pointer;
-          font-weight: 700;
-          font-size: 0.95rem;
-          transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .srs-btn:hover {
-          transform: translateY(-4px) scale(1.05);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-        .srs-btn:active {
-          transform: translateY(0) scale(0.95);
-        }
-        @keyframes pulse {
-          0% { opacity: 0.5; }
-          50% { opacity: 1; }
-          100% { opacity: 0.5; }
-        }
-      `}</style>
     </div>
   );
 }

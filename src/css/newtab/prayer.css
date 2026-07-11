@@ -1,22 +1,4 @@
-.split-view-container {
-    display: flex;
-    gap: 2rem;
-    width: 100%;
-    align-items: flex-start;
-}
-
-.left-panel {
-    flex: 0 0 280px;
-    position: sticky;
-    top: 2rem;
-    animation: fadeInLeft 0.6s ease-out;
-}
-
-.srs-container, .calendar-container {
-    flex: 1;
-    min-width: 0;
-}
-
+/* Prayer View Styles */
 .prayer-times-widget {
     background: var(--card-bg);
     backdrop-filter: blur(var(--glass-blur));
@@ -103,22 +85,6 @@
     font-variant-numeric: tabular-nums;
 }
 
-@keyframes fadeInLeft {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@media (max-width: 1000px) {
-    .split-view-container {
-        flex-direction: column;
-    }
-    .left-panel {
-        flex: none;
-        width: 100%;
-        position: static;
-    }
-}
-
 .prayer-standalone-container {
     display: flex;
     justify-content: center;
@@ -137,10 +103,5 @@
     width: 100%;
     max-width: 600px;
     box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
-    animation: scaleUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes scaleUp {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    animation: scaleUpModal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

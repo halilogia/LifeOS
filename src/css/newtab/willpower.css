@@ -1,5 +1,4 @@
 /* Willpower Tracker Custom Styles */
-
 .willpower-container {
     display: flex;
     flex-direction: column;
@@ -209,13 +208,13 @@
     transform: rotate(-180deg);
 }
 
-.history-card {
+.willpower-container .history-card {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.history-title {
+.willpower-container .history-title {
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -223,7 +222,7 @@
     padding-bottom: 0.75rem;
 }
 
-.history-list {
+.willpower-container .history-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -232,25 +231,24 @@
     padding-right: 6px;
 }
 
-/* Custom Scrollbar for History */
-.history-list::-webkit-scrollbar {
+.willpower-container .history-list::-webkit-scrollbar {
     width: 6px;
 }
 
-.history-list::-webkit-scrollbar-track {
+.willpower-container .history-list::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.history-list::-webkit-scrollbar-thumb {
+.willpower-container .history-list::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.08);
     border-radius: 4px;
 }
 
-.history-list::-webkit-scrollbar-thumb:hover {
+.willpower-container .history-list::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.15);
 }
 
-.history-item {
+.willpower-container .history-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -261,12 +259,12 @@
     transition: all 0.2s ease;
 }
 
-.history-item:hover {
+.willpower-container .history-item:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-.history-item-left {
+.willpower-container .history-item-left {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -274,12 +272,12 @@
     min-width: 0;
 }
 
-.history-date {
+.willpower-container .history-date {
     font-size: 0.8rem;
     color: var(--text-secondary);
 }
 
-.history-note {
+.willpower-container .history-note {
     font-size: 0.85rem;
     color: var(--text-primary);
     font-style: italic;
@@ -289,18 +287,18 @@
     padding-right: 12px;
 }
 
-.history-item-right {
+.willpower-container .history-item-right {
     text-align: right;
     white-space: nowrap;
 }
 
-.history-duration {
+.willpower-container .history-duration {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--accent-color);
 }
 
-.history-empty {
+.willpower-container .history-empty {
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.9rem;
