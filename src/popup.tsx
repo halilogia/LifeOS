@@ -5,6 +5,14 @@ import { pomodoroManager, PomoState, AlarmItem, StopwatchState } from './core/po
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 55; // Smaller circle for compact view (r=55)
 
+const SUPPORTED_SITES = [
+  { id: 'x.com', label: 'Twitter / X', domains: ['x.com', 'twitter.com'] },
+  { id: 'instagram.com', label: 'Instagram', domains: ['instagram.com'] },
+  { id: 'youtube.com', label: 'YouTube', domains: ['youtube.com'] },
+  { id: 'tiktok.com', label: 'TikTok', domains: ['tiktok.com'] },
+  { id: 'facebook.com', label: 'Facebook', domains: ['facebook.com'] },
+];
+
 function PopupApp() {
   const [popupTab, setPopupTab] = useState<'pomo' | 'detox'>('pomo');
 
@@ -212,20 +220,14 @@ function PopupApp() {
   };
 
   // --- Detoks Action Handles ---
-  const handleAddDetoxSite = () => {
-    let site = detoxInput.trim().toLowerCase();
-    if (!site) return;
-    site = site.replace(/^(https?:\/\/)?(www\.)?/, '');
-    if (!site) return;
-
-    const updated = [...detoxBlockedSites, site];
-    setDetoxBlockedSites(updated);
-    chrome.storage.sync.set({ detox_blocked_sites: updated });
-    setDetoxInput('');
-  };
-
-  const handleRemoveDetoxSite = (site: string) => {
-    const updated = detoxBlockedSites.filter((s) => s !== site);
+  const handleTogglePopupSite = (siteDomains: string[]) => {
+    const isSelected = detoxBlockedSites.includes(siteDomains[0]);
+    let updated;
+    if (isSelected) {
+      updated = detoxBlockedSites.filter((d) => !siteDomains.includes(d));
+    } else {
+      updated = [...detoxBlockedSites, ...siteDomains];
+    }
     setDetoxBlockedSites(updated);
     chrome.storage.sync.set({ detox_blocked_sites: updated });
   };
@@ -513,46 +515,63 @@ function PopupApp() {
                   </select>
                 </div>
 
-                {/* Manual site entry */}
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <input
-                    type="text"
-                    placeholder="Site Ekle: reddit.com..."
-                    value={detoxInput}
-                    onInput={(e) => setDetoxInput((e.target as HTMLInputElement).value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleAddDetoxSite();
-                    }}
-                    style={{ flex: 1, height: '32px' }}
-                  />
-                  <button
-                    className="detox-btn primary"
-                    style={{ width: '36px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', padding: 0 }}
-                    onClick={handleAddDetoxSite}
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* custom blocked list scroll */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '110px', overflowY: 'auto', paddingRight: '2px' }}>
-                  {detoxBlockedSites.length === 0 ? (
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textAlign: 'center', padding: '10px 0' }}>Engelli site yok</div>
-                  ) : (
-                    detoxBlockedSites.map((site) => (
-                      <div key={site} className="custom-site-item">
-                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '160px' }}>{site}</span>
+                {/* Popular platforms grid */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'left', fontWeight: '500' }}>Engellenecek Platformları Seçin</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', marginTop: '4px' }}>
+                    {SUPPORTED_SITES.map((site) => {
+                      const isChecked = detoxBlockedSites.includes(site.domains[0]);
+                      return (
                         <button
-                          onClick={() => handleRemoveDetoxSite(site)}
-                          style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0, fontSize: '1.1rem', lineHeight: '1' }}
-                          onMouseOver={(e) => (e.currentTarget.style.color = 'var(--danger)')}
-                          onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+                          key={site.id}
+                          onClick={() => handleTogglePopupSite(site.domains)}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '6px',
+                            background: isChecked ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255,255,255,0.02)',
+                            border: isChecked ? '1px solid var(--accent-color)' : '1px solid var(--card-border)',
+                            borderRadius: '10px',
+                            padding: '8px 0',
+                            cursor: 'pointer',
+                            color: isChecked ? 'var(--accent-color)' : 'var(--text-secondary)',
+                            transition: 'all 0.3s ease',
+                          }}
                         >
-                          &times;
+                          {/* Platform SVG Icon */}
+                          {site.id === 'x.com' && (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                          )}
+                          {site.id === 'instagram.com' && (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                          )}
+                          {site.id === 'youtube.com' && (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107c.502-1.884.502-5.837.502-5.837s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                          )}
+                          {site.id === 'tiktok.com' && (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95 1.15 2.27 1.94 3.73 2.21v3.91c-1.39-.08-2.74-.53-3.89-1.31-.79-.53-1.46-1.23-1.97-2.04v6.84c.03 2.19-.6 4.39-1.89 6.13-1.42 1.95-3.69 3.11-6.1 3.12-2.85.03-5.6-1.54-6.93-4.06-1.37-2.52-1.27-5.69.24-8.11 1.4-2.28 3.89-3.71 6.59-3.73.18-.01.35-.01.53 0v4.06c-1.12.02-2.2.53-2.92 1.4-.76.9-1.07 2.12-.85 3.28.21 1.16.94 2.15 1.98 2.66.97.48 2.1.47 3.06-.02 1-.5 1.67-1.49 1.77-2.61.03-1.25.01-2.5.02-3.75V0l-.02.02z"/>
+                            </svg>
+                          )}
+                          {site.id === 'facebook.com' && (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                          )}
+                          <span style={{ fontSize: '0.55rem', fontWeight: '700' }}>{site.label.split(' ')[0]}</span>
                         </button>
-                      </div>
-                    ))
-                  )}
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <button className="detox-btn primary" style={{ marginTop: '4px' }} onClick={handleEnableDetox}>

@@ -4,6 +4,16 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.4.2] - 2026-07-11
+### Değişti
+- **Sağ Üst Popup Detoks Arayüzü Kolay Seçim Modu**:
+  - Popup penceresindeki manuel adres yazma kutusu ve site listesi kaldırıldı. Manuel adres engelleme işlemi artık tamamen Yeni Sekme (New Tab) paneline taşındı.
+  - Bunun yerine, pop-up ekranına 5 popüler sosyal medya sitesinin (Twitter/X, Instagram, YouTube, TikTok, Facebook) logolarıyla (SVG ikonları) seçilebileceği 5 sütunlu, modern bir seçim tablosu eklendi.
+  - Seçilen popüler siteler, soft mor arka plan ve mor renkli ikon aydınlatmalarıyla görsel olarak seçildiğini belirtir hale getirildi. Seçimi kaldırmak ise tek tıkla oldukça pratik bir hale getirildi.
+  - Yeni Sekmeden manuel eklenen diğer özel siteler, popup ekranında bu butonlara tıklandığında silinmez veya bozulmaz; sadece seçilen popüler sitelerin alan adları listede güncellenerek güvenli bir şekilde senkronize edilir.
+
+---
+
 ## [2.4.1] - 2026-07-11
 ### Düzeltildi
 - **Sağ Üst Popup Arayüzü İyileştirmeleri ve Font Düzeltmeleri**:
