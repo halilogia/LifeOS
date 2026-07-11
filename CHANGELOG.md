@@ -4,6 +4,34 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.1.0] - 2026-07-11
+### Eklendi
+- **Modüler CSS Yapısı (Clean Code & Architecture)**:
+  - Eski monolitik ve ardışık `part_1.css` - `part_12.css` dosyaları tamamen kaldırılarak bileşen bazlı CSS dosyaları oluşturuldu:
+    - `base.css` (Değişkenler, scroll, resetler, modal drawer, animasyonlar)
+    - `sidebar.css` (Navigasyon menüsü stilleri)
+    - `tasks.css` (Görevler, listeler ve Kanban panosu)
+    - `notes.css` (Not defteri kartları ve editör)
+    - `pomodoro.css` (SVG halkası, stopwatch, alarm)
+    - `willpower.css` (Kişisel disiplin sayacı ve geçmiş rütbeleri)
+    - `hifiz.css` (Ezber sayfaları ve Mushaf modalı)
+    - `srs.css` (Aralıklı tekrar kelime kartı çevirme animasyonu)
+    - `calendar.css` (Aylık takvim gridi ve gün detayları)
+    - `prayer.css` (Ezan vakitleri widget'ı)
+    - `kpss.css` (Konu listeleri ve grafikler)
+    - `free-games.css` (Fırsat kartları ve arama kutusu)
+  - `src/newtab.css` dosyası yeni modüler dosyaları çağıracak şekilde güncellendi.
+  - `.agents/AGENTS.md` içerisindeki CSS kuralları yeni modüler tasarıma göre güncellendi.
+
+### Düzeltildi
+- **Yeni Görev Ekleme Barı Hizalama Hatası**:
+  - Görev ekleme barının (`.top-header`) container transform animasyonlarından etkilenerek aşağı kayması ve "Bugünkü odağın nedir?" kartıyla çakışması engellendi.
+  - Giriş barı en üst katmana (`App.tsx` seviyesine) taşınarak ekranın en üstündeki sabit yerinde kusursuzca başlaması sağlandı.
+  - Sadece görev listesi aktifken render edilmesi sağlandı.
+  - `SrsView.tsx` içerisindeki tüm gömülü inline stiller ve `<style>` blokları `srs.css` dosyasına taşınarak arayüz kodları Clean Code standartlarına kavuşturuldu.
+
+---
+
 ## [2.0.0] - 2026-07-11
 ### Değişti
 - **Vite + Preact + TypeScript (TSX) Göçü**:

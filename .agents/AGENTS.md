@@ -26,7 +26,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
   * [state.ts](file:///c:/GitHub/Done/chrome-extension/src/core/state.ts): Main in-memory states context.
   * [backup.ts](file:///c:/GitHub/Done/chrome-extension/src/core/backup.ts): JSON backup utilities.
 * **`src/css/newtab/`**:
-  * CSS files divided into parts (`part_1.css` to `part_12.css`). Import stylesheet changes in [newtab.css](file:///c:/GitHub/Done/chrome-extension/src/newtab.css).
+  * CSS files divided into feature-specific stylesheets (e.g. `base.css`, `sidebar.css`, `tasks.css`, etc.). Import stylesheet changes in [newtab.css](file:///c:/GitHub/Done/chrome-extension/src/newtab.css).
 
 ---
 
@@ -34,7 +34,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 2.1 CSS & Styling
 * **No Tailwind CSS**: Use vanilla CSS only.
-* Write custom styles in modular chunks under `src/css/newtab/part_*.css`.
+* Write custom styles in modular, domain-specific chunks under `src/css/newtab/<feature>.css` (e.g. `pomodoro.css`, `willpower.css`, `tasks.css`).
 * Respect the dark glassmorphic design system: use vibrant accents, smooth borders, and micro-interactions.
 
 ### 2.2 Preact Declarative States (No Manual DOM Queries)

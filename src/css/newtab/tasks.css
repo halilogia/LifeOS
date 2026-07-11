@@ -1,0 +1,478 @@
+/* Top Header */
+.top-header {
+    position: fixed;
+    top: 24px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: transparent;
+    z-index: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    padding-left: 80px;
+    transition: padding-left 0.4s ease;
+}
+
+body.sidebar-open .top-header {
+    padding-left: 300px;
+}
+
+@media (max-width: 1199px) {
+    body.sidebar-open .top-header {
+        padding-left: 80px;
+    }
+}
+
+.global-input-container {
+    pointer-events: auto;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.category-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#todo-category-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 6px 12px;
+    width: 140px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#todo-category-input:focus {
+    border-color: var(--accent-color);
+    width: 180px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Todo Card Layout */
+#list-view .todo-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.todo-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.greeting {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+#todo-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#todo-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.repeat-select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.repeat-select:focus, .category-select:focus {
+    border-color: var(--accent-color);
+}
+
+.repeat-select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.category-select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.category-select option {
+    background: var(--bg-color);
+    color: var(--text-primary);
+}
+
+#add-btn {
+    background: var(--accent-color);
+    border: none;
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#add-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.05);
+}
+
+#add-btn:active {
+    transform: scale(0.95);
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filter-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--accent-color);
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+/* Task Layout Sections */
+.sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.sections-grid.single-column {
+    grid-template-columns: 1fr;
+}
+
+@media (max-width: 900px) {
+    .sections-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tasks-container {
+    display: none;
+}
+
+.tasks-container.active {
+    display: block;
+}
+
+.section-title {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent-color);
+    border-radius: 50%;
+}
+
+.todo-list {
+    list-style: none;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.todo-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.todo-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 10px;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.todo-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--card-border);
+}
+
+.todo-item.completed span {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-color);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.todo-item.completed .checkbox {
+    background: var(--accent-color);
+}
+
+.checkbox svg {
+    display: none;
+    color: white;
+}
+
+.todo-item.completed .checkbox svg {
+    display: block;
+}
+
+.todo-text {
+    flex: 1;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.repeat-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-color);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.category-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid var(--card-border);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.todo-item:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    color: var(--danger);
+}
+
+/* Kanban Styles */
+.kanban-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+    min-height: calc(100vh - 160px);
+    margin: 0;
+}
+
+.kanban-column {
+    background: rgba(20, 20, 25, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.kanban-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+    text-align: center;
+}
+
+.kanban-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.kanban-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kanban-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.kanban-item-text {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.kanban-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.move-btn {
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    color: var(--accent-color);
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.move-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.move-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    background: transparent;
+    border-color: var(--card-border);
+    color: var(--text-secondary);
+}
+
+.kanban-column.drag-over {
+    border-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.kanban-item.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+}

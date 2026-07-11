@@ -1,3 +1,76 @@
+/* Hifiz View Styles */
+.hifiz-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 4rem;
+}
+
+.hifiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.hifiz-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.hifiz-search-box {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.hifiz-search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+#hifiz-search {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 10px 12px 10px 40px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#hifiz-search:focus {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.hifiz-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.hifiz-stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.hifiz-stat-card:hover {
+    transform: translateY(-5px);
+}
+
 .stat-icon {
     width: 48px;
     height: 48px;
@@ -88,7 +161,7 @@
 }
 
 .hifiz-level-btn.active {
-    background: #3b82f6; /* Use a different color for level filter to distinguish it, or match accent */
+    background: #3b82f6;
     color: #fff;
     border-color: #3b82f6;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -98,7 +171,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.25rem;
-    padding-bottom: 200px; /* Alttaki footer'ın üstüne binmemesi ve kaydırma için alan */
+    padding-bottom: 200px;
 }
 
 /* Overall Progress Bar Styles */
@@ -176,11 +249,16 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
+    transition: all 0.2s ease;
 }
 
 .hifiz-status-badge.status-not_started { background: #94a3b8; }
 .hifiz-status-badge.status-in_progress { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
 .hifiz-status-badge.status-memorized { background: #10b981; box-shadow: 0 0 8px #10b981; }
+
+.hifiz-status-badge:hover {
+    transform: scale(1.5);
+}
 
 .hifiz-card h3 {
     font-size: 1.1rem;
@@ -228,10 +306,6 @@
     background: var(--accent-color);
     color: white;
     border-color: var(--accent-color);
-}
-
-.hifiz-status-badge:hover {
-    transform: scale(1.5);
 }
 
 /* Page Progress Styles */
@@ -305,7 +379,49 @@
     font-weight: 500;
 }
 
-/* Hifiz Tabs - Styled like KPSS subject buttons */
+.hifiz-sub-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1rem;
+}
+
+.hifiz-nav-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hifiz-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border-color: var(--accent-color);
+}
+
+.hifiz-nav-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.hifiz-sub-view {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.hifiz-sub-view.active {
+    display: block;
+}
+
+/* Hifiz Tabs */
 .hifiz-tabs {
     display: flex;
     gap: 12px;
@@ -343,7 +459,99 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Mushaf Viewer Modal - Full Screen */
+/* Yeterlikler / Imam Hatip Checklist Specifics */
+.yeterlikler-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.yeterlik-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.yeterlik-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.yeterlik-item.completed {
+    background: rgba(139, 92, 246, 0.05);
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.yeterlik-item.completed .yeterlik-text {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.yeterlik-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--accent-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.yeterlik-item.completed .yeterlik-checkbox {
+    background: var(--accent-color);
+}
+
+.yeterlik-checkbox svg {
+    color: white;
+    display: none;
+}
+
+.yeterlik-item.completed .yeterlik-checkbox svg {
+    display: block;
+}
+
+.yeterlik-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.yeterlik-info-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.yeterlik-info-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+/* Mushaf Viewer Modal - Full Screen override */
 #hifiz-image-modal .hifiz-modal-content {
     background: #ffffff; 
     width: 100vw;
@@ -353,7 +561,7 @@
     margin: 0;
     padding: 0;
     box-shadow: none;
-    animation: none; /* Remove small slide up for full screen */
+    animation: none;
 }
 
 #hifiz-image-modal .settings-header {
@@ -409,7 +617,7 @@
     box-shadow: 0 5px 30px rgba(0,0,0,0.05);
 }
 
-.hifiz-nav-btn {
+#hifiz-image-modal .hifiz-nav-btn {
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.08);
     color: #334155;
@@ -426,26 +634,23 @@
     margin: 0 30px;
 }
 
-.hifiz-nav-btn:hover {
+#hifiz-image-modal .hifiz-nav-btn:hover {
     background: var(--accent-color);
     color: white;
     transform: scale(1.1);
 }
 
-.hifiz-nav-btn:disabled {
+#hifiz-image-modal .hifiz-nav-btn:disabled {
     opacity: 0.1;
     cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
-    .hifiz-nav-btn {
+    #hifiz-image-modal .hifiz-nav-btn {
         width: 48px;
         height: 48px;
         margin: 0 10px;
     }
-}
-
-@media (max-width: 768px) {
     .hifiz-header {
         flex-direction: column;
         align-items: flex-start;
@@ -453,124 +658,4 @@
     .hifiz-search-box {
         max-width: 100%;
     }
-}
-
-/* Notes View Styles */
-.notes-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding-bottom: 4rem;
-}
-
-.notes-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notes-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.add-note-action-btn {
-    background: var(--accent-color);
-    border: none;
-    border-radius: 12px;
-    padding: 10px 20px;
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.add-note-action-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-}
-
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-}
-
-.note-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 20px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    height: 220px;
-    position: relative;
-    overflow: hidden;
-}
-
-.note-card:hover {
-    border-color: var(--accent-color);
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
-
-.note-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.note-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.note-delete-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 4px;
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.2s ease;
-}
-
-.note-card:hover .note-delete-btn {
-    opacity: 0.6;
-}
-
-.note-delete-btn:hover {
-    color: var(--danger);
-    opacity: 1 !important;
-}
-
-.note-card-content {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex: 1;
-}
-
-.note-card-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: auto;
 }

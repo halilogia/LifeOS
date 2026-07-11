@@ -1,0 +1,108 @@
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background: rgba(15, 15, 20, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-right: 1px solid var(--card-border);
+    padding: 5rem 1.5rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.open, .sidebar.active {
+    left: 0;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-header {
+    margin-bottom: 3rem;
+    padding-left: 0.5rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, white, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 4px;
+}
+
+.sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.sidebar-btn.active {
+    background: rgba(124, 58, 237, 0.1);
+    color: var(--accent-color);
+}
+
+#lang-text {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: var(--card-border);
+    margin: 1.5rem 0.5rem;
+    flex-shrink: 0;
+}
+
+body.sidebar-open .sidebar {
+    left: 0;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+}
