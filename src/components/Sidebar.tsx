@@ -96,12 +96,9 @@ export function Sidebar({
           </button>
 
           <button
-            id="nav-focus-btn"
-            className={`sidebar-btn ${activeView === 'list' && activeTab === 'focus' ? 'active' : ''}`}
-            onClick={() => {
-              onViewChange('list');
-              onTabChange('focus');
-            }}
+            id="view-willpower-btn"
+            className={`sidebar-btn ${activeView === 'willpower' ? 'active' : ''}`}
+            onClick={() => onViewChange('willpower')}
           >
             <svg
               width="20"
@@ -113,40 +110,14 @@ export function Sidebar({
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
-            <span>{t.section_tasks}</span>
+            <span>{t.view_willpower}</span>
           </button>
-
-          <button
-            id="nav-routines-btn"
-            className={`sidebar-btn ${activeView === 'list' && activeTab === 'routines' ? 'active' : ''}`}
-            onClick={() => {
-              onViewChange('list');
-              onTabChange('routines');
-            }}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-            </svg>
-            <span>{t.section_recurring}</span>
-          </button>
-
-          <div className="sidebar-divider"></div>
 
           <button
             id="view-list-btn"
-            className={`sidebar-btn ${activeView === 'list' && activeTab === 'focus' ? 'active' : ''}`}
+            className={`sidebar-btn ${activeView === 'list' ? 'active' : ''}`}
             onClick={() => {
               onViewChange('list');
               onTabChange('focus');
@@ -326,25 +297,7 @@ export function Sidebar({
             <span>KPSS</span>
           </button>
 
-          <button
-            id="view-willpower-btn"
-            className={`sidebar-btn ${activeView === 'willpower' ? 'active' : ''}`}
-            onClick={() => onViewChange('willpower')}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <span>{t.view_willpower}</span>
-          </button>
+
 
           <div className="sidebar-divider"></div>
 

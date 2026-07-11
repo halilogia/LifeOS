@@ -19,24 +19,39 @@
 }
 
 .add-note-action-btn {
-    background: var(--accent-color);
-    border: none;
+    border: 1px solid transparent;
     border-radius: 12px;
     padding: 10px 20px;
-    color: white;
     font-size: 0.9rem;
     font-weight: 600;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.add-note-action-btn:hover {
+.add-note-action-btn.primary {
+    background: var(--accent-color);
+    color: white;
+}
+
+.add-note-action-btn.primary:hover {
     background: var(--accent-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.add-note-action-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+}
+
+.add-note-action-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 .notes-grid {

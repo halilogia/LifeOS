@@ -62,7 +62,7 @@ export function KanbanView({
         {columns.map((col) => {
           const colTodos = todos
             .map((todo, idx) => ({ todo, originalIndex: idx }))
-            .filter(({ todo }) => todo.status === col.status);
+            .filter(({ todo }) => (todo.status || 'todo') === col.status);
 
           return (
             <div

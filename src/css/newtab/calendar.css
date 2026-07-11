@@ -1,5 +1,7 @@
 /* Calendar View Styles */
 .calendar-container {
+    flex: 1;
+    min-width: 0;
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     border: 1px solid var(--card-border);

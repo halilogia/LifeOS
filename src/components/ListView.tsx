@@ -6,6 +6,7 @@ interface ListViewProps {
   todos: Todo[];
   activeTab: 'focus' | 'routines';
   lang: Language;
+  onTabChange: (tab: 'focus' | 'routines') => void;
   onToggleTodo: (index: number) => void;
   onDeleteTodo: (index: number) => void;
 }
@@ -14,6 +15,7 @@ export function ListView({
   todos,
   activeTab,
   lang,
+  onTabChange,
   onToggleTodo,
   onDeleteTodo,
 }: ListViewProps) {
@@ -33,6 +35,21 @@ export function ListView({
 
       <div className="todo-card">
         <h1 className="greeting">{t.greeting}</h1>
+
+        <div className="todo-tabs">
+          <button
+            className={`todo-tab-btn ${activeTab === 'focus' ? 'active' : ''}`}
+            onClick={() => onTabChange('focus')}
+          >
+            {t.section_tasks}
+          </button>
+          <button
+            className={`todo-tab-btn ${activeTab === 'routines' ? 'active' : ''}`}
+            onClick={() => onTabChange('routines')}
+          >
+            {t.section_recurring}
+          </button>
+        </div>
 
         <div className="sections-grid single-column">
           <div
