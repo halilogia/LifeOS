@@ -4,6 +4,20 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.2.1] - 2026-07-11
+### Değişti
+- **Genişletilmiş Dashboard Arayüzü**:
+  - `.container` seçicisinin varsayılan maksimum genişliği `1000px` değerinden `1200px` değerine çıkarıldı.
+  - Sıkışık olan Kanban panosunun ekranı daha geniş kaplaması ve esnekçe yayılması sağlandı.
+- **Ayarlar Ekranı Okunabilirliği**:
+  - Şeffaflık yüzünden arka plandaki yazılarla çakışan Ayarlar paneli (`.settings-content`), `rgba(15, 15, 22, 0.98)` rengiyle opak hale getirilerek okunabilirliği artırıldı.
+- **Takvim ve Namaz Vakitleri Ayrımı**:
+  - Takvim sayfası içerisindeki Ezan Vakitleri widget'ı kaldırıldı; takvim bileşeni artık tüm ekran genişliğini kaplamaktadır.
+- **Saat ve Tarih Konumu**:
+  - Saat ve tarih alanı, diğer araçlarda dikkati dağıtmaması için yalnızca "Liste" (ana ekran) görünümünde aktif olacak şekilde sınırlandırıldı.
+
+---
+
 ## [2.2.0] - 2026-07-11
 ### Eklendi
 - **Görevler ve Rutinler Tek Sayfa Birleşimi**:

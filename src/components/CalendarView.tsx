@@ -1,7 +1,6 @@
 import { useState } from 'preact/hooks';
 import { Todo, Language } from '../types/types.js';
 import { translations } from '../utils/i18n.js';
-import { PrayerView } from './PrayerView.js';
 
 interface CalendarViewProps {
   todos: Todo[];
@@ -101,39 +100,34 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
 
   return (
     <div id="calendar-view" className="view-content active">
-      <div className="split-view-container">
-        <div className="left-panel">
-          <PrayerView lang={lang} compact={true} />
+      <div className="calendar-container">
+        <div className="calendar-header">
+          <h2>{t.calendar_title}</h2>
+          <div className="calendar-nav">
+            <button id="prev-month-btn" className="calendar-nav-btn" onClick={handlePrevMonth}>
+              &lt;
+            </button>
+            <span id="current-month-year" className="current-month-year">
+              {monthName} {year}
+            </span>
+            <button id="next-month-btn" className="calendar-nav-btn" onClick={handleNextMonth}>
+              &gt;
+            </button>
+          </div>
         </div>
-        <div className="calendar-container">
-          <div className="calendar-header">
-            <h2>{t.calendar_title}</h2>
-            <div className="calendar-nav">
-              <button id="prev-month-btn" className="calendar-nav-btn" onClick={handlePrevMonth}>
-                &lt;
-              </button>
-              <span id="current-month-year" className="current-month-year">
-                {monthName} {year}
-              </span>
-              <button id="next-month-btn" className="calendar-nav-btn" onClick={handleNextMonth}>
-                &gt;
-              </button>
-            </div>
-          </div>
 
-          <div className="calendar-grid-header">
-            <div>{t.day_mon}</div>
-            <div>{t.day_tue}</div>
-            <div>{t.day_wed}</div>
-            <div>{t.day_thu}</div>
-            <div>{t.day_fri}</div>
-            <div>{t.day_sat}</div>
-            <div>{t.day_sun}</div>
-          </div>
+        <div className="calendar-grid-header">
+          <div>{t.day_mon}</div>
+          <div>{t.day_tue}</div>
+          <div>{t.day_wed}</div>
+          <div>{t.day_thu}</div>
+          <div>{t.day_fri}</div>
+          <div>{t.day_sat}</div>
+          <div>{t.day_sun}</div>
+        </div>
 
-          <div id="calendar-grid" className="calendar-grid">
-            {dayCells}
-          </div>
+        <div id="calendar-grid" className="calendar-grid">
+          {dayCells}
         </div>
       </div>
 

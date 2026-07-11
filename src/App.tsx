@@ -447,10 +447,12 @@ export function App() {
 
       {/* Main Card Viewport Container */}
       <main id="container" className="container">
-        <header className="hero">
-          <div id="clock" className="clock">{clockText}</div>
-          <div id="date" className="date">{dateText}</div>
-        </header>
+        {activeView === 'list' && (
+          <header className="hero">
+            <div id="clock" className="clock">{clockText}</div>
+            <div id="date" className="date">{dateText}</div>
+          </header>
+        )}
 
         {renderActiveViewComponent()}
 
