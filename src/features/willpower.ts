@@ -95,53 +95,24 @@ export async function updateWillpowerUI(): Promise<void> {
   }
 
   // Determine Rank Class, Title and Description
-  let rankText = "";
-  let rankDesc = "";
-  let rankClass = "";
-
+  let rankKey = "";
   if (days < 3) {
-    rankText = state.currentLang === "tr" ? "Başlangıç" : "Initiate";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "Her büyük yolculuk küçük bir adımla başlar. Zihnini koru, kararlı ol."
-        : "Every great journey starts with a single step. Guard your mind, stay determined.";
-    rankClass = "rank-initiate";
+    rankKey = "initiate";
   } else if (days < 7) {
-    rankText = state.currentLang === "tr" ? "Demir İrade" : "Iron Will";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "İlk kritik aşamayı geçtin. Zihnindeki sesleri sustur ve yoluna devam et."
-        : "You passed the first critical phase. Silence the noise in your mind and keep moving forward.";
-    rankClass = "rank-iron";
+    rankKey = "iron";
   } else if (days < 14) {
-    rankText = state.currentLang === "tr" ? "Özdenetim" : "Self-Control";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "Bir haftalık temiz süreci geride bıraktın. Disiplinin meyvelerini vermeye başlıyor."
-        : "You've left a clean week behind. Your discipline is starting to bear fruit.";
-    rankClass = "rank-control";
+    rankKey = "control";
   } else if (days < 30) {
-    rankText = state.currentLang === "tr" ? "Savaşçı" : "Warrior";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "İki haftadan fazladır savaşıyorsun. Alışkanlıklar kırılıyor, gücünü hisset."
-        : "You've been fighting for over two weeks. Habits are breaking, feel your strength.";
-    rankClass = "rank-warrior";
+    rankKey = "warrior";
   } else if (days < 90) {
-    rankText = state.currentLang === "tr" ? "Şövalye" : "Knight";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "Kritik 30 günlük barajı aştın! Kararlılığın herkese ilham veriyor."
-        : "You have crossed the critical 30-day mark! Your determination is inspiring.";
-    rankClass = "rank-knight";
+    rankKey = "knight";
   } else {
-    rankText = state.currentLang === "tr" ? "Üstat" : "Master";
-    rankDesc =
-      state.currentLang === "tr"
-        ? "90 günden fazla süredir iradenin mutlak hakimisin. Zihnin tamamen berrak."
-        : "Over 90 days of absolute willpower mastery. Your mind is completely clear.";
-    rankClass = "rank-master";
+    rankKey = "master";
   }
+
+  const rankText = translations[state.currentLang][`willpower_rank_${rankKey}` as keyof typeof translations["tr"]];
+  const rankDesc = translations[state.currentLang][`willpower_rank_${rankKey}_desc` as keyof typeof translations["tr"]];
+  const rankClass = `rank-${rankKey}`;
 
   const rankContainer = document.querySelector(".rank-badge-container");
   if (rankContainer) {
