@@ -1,41 +1,51 @@
 # Life OS - Personal Dashboard
 
-Bu eklenti, tüm kişisel ihtiyaçlarımı, eğitim sürecimi, günlük görevlerimi ve ilgi alanlarımı tek bir noktadan yönettiğim özel ve tamamen kişiselleştirilmiş bir **"Life OS"** (Yaşam İşletim Sistemi) New Tab arayüzüdür.
+Bu eklenti, tüm kişisel ihtiyaçlarımı, eğitim sürecimi, günlük görevlerimi, odaklanma seanslarımı ve ilgi alanlarımı tek bir noktadan yönettiğim özel ve tamamen kişiselleştirilmiş bir **"Life OS"** (Yaşam İşletim Sistemi) New Tab arayüzüdür.
 
-Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştirerek size modern, minimalist ve yüksek performanslı bir çalışma alanı sunar.
+Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştirerek size modern, minimalist, yüksek güvenlikli ve yüksek performanslı bir çalışma alanı sunar.
 
 ---
 
 ## 🚀 Öne Çıkan Özellikler
 
-- **🎯 Odaklanma (Pomodoro)**: Verimli çalışma seansları için özelleştirilebilir odaklanma zamanlayıcısı (Focus, Kısa Mola, Uzun Mola modları), dairesel SVG ilerleme çubuğu, entegre kronometre ve alarm aracı.
+- **🎯 Gelişmiş Odaklanma (Pomodoro, Kronometre ve Alarmlar)**:
+  - Verimli çalışma seansları için özelleştirilebilir odaklanma zamanlayıcısı (Focus, Kısa Mola, Uzun Mola modları) ve dairesel SVG ilerleme çubuğu.
+  - **Telefon Tipi Alarmlar**: Klasik alarm arayüzleri gibi çalışabilen, aktif/pasif hale getirilebilen, listeden silinebilen ve çaldığında otomatik kapanan çoklu alarm modülü.
+  - **Senkronize Kronometre**: Sekmeler ve sağ üst pop-up penceresi arasında canlı olarak senkronize olan entegre kronometre.
 - **📋 Görev Yönetimi (To-Do & Kanban)**:
-  - Günlük hedefleri yönettiğiniz **Odağım** bölümü.
+  - Günlük hedefleri yönettiğiniz ve ortalanmış şık odak kartına sahip **Odağım** bölümü.
   - Günlük, haftalık veya aylık tekrarlanan görevler için **Rutinler** listesi.
   - Sürükle-bırak (Drag-and-Drop) ve kolay taşımayı destekleyen modern **Kanban Panosu**.
-- **📚 KPSS Hazırlık Takibi**: Detaylı konu checklistleri, dinamik ilerleme çubuğu, çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
-- **🕌 Namaz Vakitleri**: Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
+- **📚 KPSS Hazırlık Takibi**:
+  - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
+- **🕌 Namaz Vakitleri**:
+  - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
-  - Sure, dua ve ayet ezber takibi.
-  - Aday Din Görevlisi (İmam-Hatip) ezber ve yeterlilik müfredat checklist'i.
-  - Surelerin Mushaf sayfalarını eklenti içinden okumanızı sağlayan **Mushaf Sayfa Görüntüleyicisi**.
-- **🎮 Ücretsiz Oyun Takibi (Free Games Tracker) [Yeni]**:
-  - Steam, Epic Games, GOG ve diğer platformlardaki güncel ücretsiz oyun ve loot fırsatlarını listeleyen premium arayüz.
-  - **GamerPower API** entegrasyonu ve kota aşımını engelleyip açılışı hızlandıran **15 dakikalık akıllı önbellekleme (local cache)** sistemi.
-  - Platform ve fırsat türüne göre gelişmiş filtreleme seçenekleri.
-- **✍️ Notlarım & Motivasyon Sözleri**: Renkli kartlarla not tutma, düzenleme ve kendi eklediğiniz motivasyon sözlerinden oluşan dinamik bir söz havuzu.
-- **🔄 Aralıklı Tekrar (Spaced Repetition - SRS)**: Kelime ezberi veya önemli notları bilimsel aralıklarla tekrar etmenizi sağlayan sistem.
-- **📅 Entegre Takvim**: Günlük görevleri, planları tarih bazlı takip etmeyi sağlayan modern takvim paneli.
-- **⚙️ Veri & Dil Yönetimi**:
-  - Türkçe ve İngilizce dilleri arasında dinamik geçiş (i18n).
-  - Tüm verileri JSON olarak tek tıkla yedekleme (Backup) ve yedekten geri yükleme (Restore).
-- **✨ Premium Tasarım**: Glassmorphism (buzlu cam) estetiği, yanıp sönen durum ışıkları, dinamik sidebar, yumuşak hover efektleri, platform bazlı özel renkler ve göz yormayan koyu mod tasarımı.
+  - Sure, dua ve ayet ezber takibi. Aday Din Görevlisi (İmam-Hatip) ezber müfredat checklist'i.
+  - Surelerin Mushaf sayfalarını okumanızı sağlayan **Mushaf Sayfa Görüntüleyicisi**.
+- **🔄 Kelime Ezberi & Aralıklı Tekrar (Spaced Repetition - SRS)**:
+  - Kelime ezberini bilimsel aralıklarla yapmanızı sağlayan A1, A2, B1, B2, C1, GRE, Phrasal Verbs ve Düzensiz Fiiller listelerine sahip Spaced Repetition modülü.
+- **📅 Tarih Bazlı Takvim**:
+  - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
+- **✍️ Notlarım & Motivasyon Sözleri**:
+  - Renkli kartlarla not tutma, düzenleme ve kendi eklediğiniz motivasyon sözlerinden oluşan dinamik bir söz havuzu.
+- **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
+  - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
+  - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.
+- **🚫 Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:
+  - **Derin Bloklama**: Twitter/X, Instagram, YouTube, TikTok ve Facebook platformlarını veya manuel girdiğiniz siteleri tamamen engeller. Hydration/SPA güncellemelerini `MutationObserver` ile izleyerek engelin aşılmasını önler.
+  - **Popup Hızlı Seçim Grid**: Pop-up panelinde, manuel site yazmak yerine logoları (SVG ikonları) ile popüler sosyal ağları hızlıca kilitlemenizi sağlayan 5 sütunlu görsel seçim tablosu.
+  - **Ekran Süresi Sayacı**: Günlük hangi sitede kaç dakika geçirdiğinizi arkaplanda (`background.js`) takip edip Detox panelinde grafiksel bar şeklinde listeler.
+- **🛡️ Güvenlik Hardening**:
+  - **DOM XSS Koruması**: Detoks bloke ekranına basılan metinlerin DOM XSS oluşturmaması için güvenli `escapeHtml` filtreleri.
+  - **Zod Şema Doğrulaması**: Veri yedeklerini geri yüklerken zararlı kod enjeksiyonunu engellemek amacıyla Zod kütüphanesi ile veri şeması kontrolü.
+- **✨ Premium Tasarım**:
+  - Gri sistem pencereleri (`confirm()`) yerine tasarlanmış, mor gradientli glassmorphic **ConfirmModal** onay kutusu.
+  - Glassmorphism (buzlu cam) estetiği, yanıp sönen durum ışıkları, yumuşak hover efektleri ve eklentiye özel marka logosu.
 
 ---
 
 ## 🛠️ Kurulum ve Geliştirme
-
-Eklentiyi bilgisayarınıza kurmak ve derlemek için aşağıdaki adımları izleyin:
 
 ### Gereksinimler
 - Bilgisayarınızda **Node.js** yüklü olmalıdır.
@@ -49,9 +59,8 @@ npm install
 ### 2. Adım: Projeyi Derleyin
 TypeScript kodlarını derlemek ve HTML/CSS/Görsel dosyalarını `dist/` klasörüne kopyalamak için derleme betiğini çalıştırın:
 ```bash
-node build.js
+npm run build
 ```
-*(Eğer sisteminizde PowerShell script çalıştırma politikası izin veriyorsa `npm run build` komutunu da kullanabilirsiniz).*
 
 ### 3. Adım: Chrome'a Yükleyin
 1. Google Chrome tarayıcınızı açın ve `chrome://extensions/` adresine gidin.
@@ -59,7 +68,5 @@ node build.js
 3. Sol üstte çıkan **Paketlenmemiş öğe yükle** (Load unpacked) butonuna tıklayın.
 4. Bu proje klasörünün içindeki **`dist`** klasörünü seçin.
 
-Artık tarayıcınızda her yeni sekme açtığınızda **Life OS** paneliniz yüklenecektir! Değişiklik yaptıktan sonra eklentiyi güncellemek için `chrome://extensions/` sayfasındaki yenileme simgesine tıklamanız yeterlidir.
-
 ---
-*Bu çalışma; üretkenliği artırmak, kişisel hedeflere (KPSS, Hıfız, Yazılım) odaklanmak ve güncel fırsatları tek ekranda toplamak için geliştirilmiştir.*
+*Bu çalışma; kişisel üretkenliği artırmak, hedeflere (KPSS, Hıfız, Yazılım) odaklanmak ve güncel ücretsiz oyun fırsatlarını tek ekranda toplamak için geliştirilmiştir.*

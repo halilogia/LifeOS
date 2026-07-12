@@ -206,3 +206,50 @@ chrome.notifications.onClicked.addListener((notificationId) => {
     });
   }
 });
+
+// Translation Relay Service
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "translate_text") {
+    chrome.storage.sync.get(["lang"], async (res) => {
+      let targetLang = res.lang === "tr" ? "tr" : "en";
+      try {
+        let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
+          message.text,
+        )}`;
+        let response = await fetch(url);
+        if (!response.ok) {
+          sendResponse({ error: "Translation fetch failed" });
+          return;
+        }
+        let data = await response.json();
+        if (data && data[0]) {
+          const detectedLang = data[2];
+          // Auto-swap target language if input language matches target language
+          if (detectedLang === targetLang) {
+            const swappedLang = targetLang === "tr" ? "en" : "tr";
+            url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
+              message.text,
+            )}`;
+            response = await fetch(url);
+            if (response.ok) {
+              data = await response.json();
+            }
+          }
+
+          if (data && data[0]) {
+            const translated = data[0].map((item) => item[0]).join("");
+            sendResponse({ translation: translated });
+          } else {
+            sendResponse({ error: "Invalid translation response" });
+          }
+        } else {
+          sendResponse({ error: "Invalid translation response" });
+        }
+      } catch (err) {
+        console.error("Translation query failed:", err);
+        sendResponse({ error: err.message });
+      }
+    });
+    return true; // Keeps the message channel open for asynchronous sendResponse
+  }
+});

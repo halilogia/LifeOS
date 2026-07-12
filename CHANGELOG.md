@@ -4,6 +4,58 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.7.2] - 2026-07-12
+### Düzeltildi
+- **Ayar Seçeneklerinin Okunamama Hatası**:
+  - Ayarlar panelinde kısayol tuşu seçimi açılır kutusundaki (`select`) seçeneklerin (`option`) beyaz üzerine beyaz çıkması nedeniyle yazının okunmaması hatası, tarayıcı/sistem koyu modlarıyla uyumlu olacak şekilde özel CSS stilleri ile düzeltildi.
+- **Karakter Sınırının Artırılması (5000 karakter)**:
+  - Uzun paragrafları veya makaleleri seçtiğinizde çeviri balonunun çalışmasını engelleyen 500 karakterlik limit, API ve URL uzunluk sınırları gözetilerek **5000 karaktere** çıkarıldı. Böylece uzun metinleri de sorunsuz şekilde çevirebilirsiniz.
+- **Tıklamayla Kapatma & Sıfırlama Mekanizması**:
+  - Çeviri balonunun web sayfasında boş bir alana tıklandığında hemen kapanması ve mouseup anında eski seçimlerin sıfırlanıp balonun tekrar açılması sorunu, `selection.isCollapsed` kontrolü eklenerek tamamen çözüldü.
+
+---
+
+## [2.7.1] - 2026-07-12
+### Düzeltildi
+- **Akıllı Çeviri Hedef Dili Algılama ve Değiştirme (Auto-Swap)**:
+  - Seçilen metnin dili ile hedef dilin aynı olması durumunda (örneğin İngilizce metin seçildiğinde eklenti hedefinin de İngilizce olması) kelimenin aynen geri dönmesi hatası giderildi.
+  - Artık kaynak dil ile hedef dil çakıştığında, eklenti dili otomatik olarak diğer dile (Türkçe ise İngilizce'ye, İngilizce ise Türkçe'ye) çevirerek her durumda doğru sonucu gösterir.
+
+---
+
+## [2.7.0] - 2026-07-12
+### Eklendi
+- **Sayfa İçi Premium Çeviri Balonu (Universal Info Box Entegrasyonu)**:
+  - PyQt6 tabanlı masaüstü uygulamanızın (`Universal_Info_Box_Standalone`) işlevselliği, tarayıcımıza bir content script modülü olarak entegre edildi.
+  - **Shadow DOM İzolasyonu**: Çeviri balonunun HTML ve CSS kodları tamamen Shadow DOM (`shadowRoot`) kullanılarak izole edildi. Bu sayede hiçbir web sitesinin stili balonumuzun görünümünü bozamaz.
+  - **Güvenli Background İletişimi**: Sitelerdeki katı güvenlik politikalarını (CSP) aşmak için kelime istekleri arkaplan servisine (`background.js`) yönlendirilerek Google Translate gtx servisi üzerinden güvenli şekilde çevrilir.
+  - **Ayarlar Drawer Desteği**: Eklenti ayarları içine balonun tamamen açılıp kapatılabileceği bir kontrol butonu ve hangi kısayol tuşu ile (Alt, Ctrl, Shift veya Hiçbiri) tetikleneceğini seçebileceğiniz bir açılır liste yerleştirildi.
+
+---
+
+## [2.6.3] - 2026-07-12
+### Eklendi
+- **Yol Haritasına Universal Info Box Entegrasyonu Eklendi (ROADMAP.md)**:
+  - Daha önce geliştirilen Python PyQt6 tabanlı masaüstü çeviri uygulamasının (`Universal_Info_Box_Standalone`) işlevsel yapısı ve premium görsel balonu, tarayıcı sayfaları içerisine entegre edilmek üzere **Universal Info Box & Inline Translator** adıyla gelecek planları yol haritasına dahil edildi.
+
+---
+
+## [2.6.2] - 2026-07-12
+### Eklendi
+- **Yol Haritasına Çeviri Aracı Eklendi (ROADMAP.md)**:
+  - Sayfa içi seçili metinleri anlık olarak çevirebilecek, ücretsiz API'leri veya yerel Ollama modellerini destekleyen bir **Sayfa İçi Metin Çevirici (Inline Text Translator)** planı gelecek hedeflere dahil edildi.
+
+---
+
+## [2.6.1] - 2026-07-12
+### Eklendi
+- **Gelecek Planları Yol Haritası (ROADMAP.md)**:
+  - Gelecek hedefleri olan yerel yapay zeka (Ollama Asistanı), gelişmiş Manifest V3 reklam engelleyicisi ve çerez onaylarını otomatik reddeden robot planları GitHub standartlarında `ROADMAP.md` dosyasına kaydedildi.
+- **Beni Oku Güncellemesi (README.md)**:
+  - Projenin ana dokümantasyon dosyası, eklenen tüm yeni özellikler (Detoks arayüzü, ekran süre takibi, telefon tipi alarmlar, Zod/XSS güvenlik korumaları ve özel mor onay modalı) göz önünde bulundurularak kapsamlı bir şekilde güncellendi.
+
+---
+
 ## [2.6.0] - 2026-07-12
 ### Eklendi
 - **Özel Onay Penceresi (ConfirmModal.tsx ve confirm.css)**:
