@@ -5,9 +5,10 @@ import { translations } from "../utils/i18n.js";
 
 interface WillpowerViewProps {
   lang: Language;
+  onShowConfirm: (message: string, onConfirm: () => void) => void;
 }
 
-export function WillpowerView({ lang }: WillpowerViewProps) {
+export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
   const t = translations[lang];
 
   const [data, setData] = useState<WillpowerStreak | null>(null);
@@ -64,51 +65,49 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
     setSeconds(diffSecs % 60);
   };
 
-  const handleReset = async () => {
+  const handleReset = () => {
     if (!data) {
       return;
     }
 
     const confirmMsg = t.willpower_reset_confirm;
-    if (!confirm(confirmMsg)) {
-      return;
-    }
+    onShowConfirm(confirmMsg, async () => {
+      // Calculate elapsed days
+      const start = new Date(data.startDate).getTime();
+      const now = new Date().getTime();
+      const diffMs = Math.max(0, now - start);
+      const diffSecs = Math.floor(diffMs / 1000);
+      const finalDays = Math.floor(diffSecs / 86400);
 
-    // Calculate elapsed days
-    const start = new Date(data.startDate).getTime();
-    const now = new Date().getTime();
-    const diffMs = Math.max(0, now - start);
-    const diffSecs = Math.floor(diffMs / 1000);
-    const finalDays = Math.floor(diffSecs / 86400);
+      const nowStr = new Date().toISOString();
 
-    const nowStr = new Date().toISOString();
+      // Push new history item
+      const historyItem = {
+        startDate: data.startDate,
+        endDate: nowStr,
+        days: finalDays,
+        note: note.trim() || undefined,
+      };
 
-    // Push new history item
-    const historyItem = {
-      startDate: data.startDate,
-      endDate: nowStr,
-      days: finalDays,
-      note: note.trim() || undefined,
-    };
+      const updatedData: WillpowerStreak = {
+        startDate: nowStr,
+        bestStreakDays: Math.max(data.bestStreakDays, finalDays),
+        history: [...data.history, historyItem],
+      };
 
-    const updatedData: WillpowerStreak = {
-      startDate: nowStr,
-      bestStreakDays: Math.max(data.bestStreakDays, finalDays),
-      history: [...data.history, historyItem],
-    };
-
-    await storage.setWillpowerStreak(updatedData);
-    setNote("");
-    setData(updatedData);
-    calculateTime(nowStr);
-
-    // Restart timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    timerRef.current = window.setInterval(() => {
+      await storage.setWillpowerStreak(updatedData);
+      setNote("");
+      setData(updatedData);
       calculateTime(nowStr);
-    }, 1000);
+
+      // Restart timer
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      timerRef.current = window.setInterval(() => {
+        calculateTime(nowStr);
+      }, 1000);
+    });
   };
 
   // Determine Rank Metadata

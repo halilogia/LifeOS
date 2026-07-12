@@ -5,9 +5,10 @@ import { translations } from "../utils/i18n.js";
 
 interface NotesViewProps {
   lang: Language;
+  onShowConfirm: (message: string, onConfirm: () => void) => void;
 }
 
-export function NotesView({ lang }: NotesViewProps) {
+export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const t = translations[lang];
 
   const [notes, setNotes] = useState<Note[]>([]);
@@ -82,18 +83,18 @@ export function NotesView({ lang }: NotesViewProps) {
     loadData();
   };
 
-  const handleDeleteNote = async (e: MouseEvent, id: string) => {
+  const handleDeleteNote = (e: MouseEvent, id: string) => {
     e.stopPropagation();
     const confirmMsg =
       lang === "tr"
         ? "Bu notu silmek istediğinize emin misiniz?"
         : "Are you sure you want to delete this note?";
-    if (confirm(confirmMsg)) {
+    onShowConfirm(confirmMsg, async () => {
       const currentNotes = await storage.getNotes();
       const filtered = currentNotes.filter((n) => n.id !== id);
       await storage.setNotes(filtered);
       loadData();
-    }
+    });
   };
 
   // Quotes Operations
@@ -114,17 +115,17 @@ export function NotesView({ lang }: NotesViewProps) {
     loadData();
   };
 
-  const handleDeleteQuote = async (index: number) => {
+  const handleDeleteQuote = (index: number) => {
     const confirmMsg =
       lang === "tr"
         ? "Bu sözü silmek istediğinize emin misiniz?"
         : "Are you sure you want to delete this quote?";
-    if (confirm(confirmMsg)) {
+    onShowConfirm(confirmMsg, async () => {
       const currentQuotes = await storage.getCustomQuotes();
       currentQuotes.splice(index, 1);
       await storage.setCustomQuotes(currentQuotes);
       loadData();
-    }
+    });
   };
 
   return (

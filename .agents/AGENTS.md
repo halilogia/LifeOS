@@ -55,6 +55,12 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * Dashboard routing is managed inside [App.tsx](file:///c:/GitHub/Done/chrome-extension/src/App.tsx) via the state variable `activeView`.
 * To introduce a new panel, declare it under the `renderActiveViewComponent` router and wire its navigation triggers to [Sidebar.tsx](file:///c:/GitHub/Done/chrome-extension/src/components/Sidebar.tsx).
 
+### 2.6 Path Aliases
+* **Module Aliases Requirement**: Always use path alias syntax `@/` for importing internal modules (e.g. `@/core/...`, `@/components/...`, `@/utils/...`) rather than relative directory nesting references (`../../`).
+
+### 2.7 Confirm Dialog Deprecation
+* **No browser confirmations**: Do not invoke native browser `confirm()` or alert popups. Always trigger the custom declarative `<ConfirmModal />` component to obtain confirmation actions.
+
 ---
 
 ## 3. Architecture Philosophy
