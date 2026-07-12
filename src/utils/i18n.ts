@@ -161,6 +161,9 @@ export const translations = {
     detox_duration_2h: "2 Saat",
     detox_duration_4h: "4 Saat",
     detox_duration_permanent: "Süresiz",
+    free_games_notifications_title: "Ücretsiz Oyun Bildirimleri",
+    enabled: "Açık",
+    disabled: "Kapalı",
   },
   en: {
     view_list: "List",
@@ -320,6 +323,9 @@ export const translations = {
     detox_duration_2h: "2 Hours",
     detox_duration_4h: "4 Hours",
     detox_duration_permanent: "Permanent",
+    free_games_notifications_title: "Free Game Notifications",
+    enabled: "Enabled",
+    disabled: "Disabled",
   },
 };
 

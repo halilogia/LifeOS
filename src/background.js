@@ -96,3 +96,113 @@ chrome.windows.onFocusChanged.addListener(updateActiveTab);
 
 // Trigger flushing accumulator to local storage every 10 seconds
 setInterval(saveBufferToStorage, 10000);
+
+// --- Steam, Epic Games, GOG Free Giveaway Checking System ---
+async function checkFreeGames() {
+  chrome.storage.sync.get(
+    ["freeGamesNotificationsEnabled", "lang"],
+    async (syncRes) => {
+      const notificationsEnabled =
+        syncRes.freeGamesNotificationsEnabled ?? true;
+      if (!notificationsEnabled) {
+        return;
+      }
+
+      const lang = syncRes.lang || "tr";
+
+      try {
+        const response = await fetch(
+          "https://www.gamerpower.com/api/giveaways",
+        );
+        if (!response.ok) {
+          return;
+        }
+        const giveaways = await response.json();
+        if (!Array.isArray(giveaways)) {
+          return;
+        }
+
+        // Filter for Steam, Epic Games, GOG only
+        const targetPlatforms = ["steam", "epic games store", "gog"];
+        const filtered = giveaways.filter((item) => {
+          if (!item.platforms) {
+            return false;
+          }
+          const platformsLower = item.platforms.toLowerCase();
+          return targetPlatforms.some((plat) => platformsLower.includes(plat));
+        });
+
+        if (filtered.length === 0) {
+          return;
+        }
+
+        chrome.storage.local.get(["notified_giveaway_ids"], (localRes) => {
+          const notifiedIds = localRes.notified_giveaway_ids || [];
+          const newGiveaways = filtered.filter(
+            (item) => !notifiedIds.includes(item.id),
+          );
+
+          if (newGiveaways.length === 0) {
+            return;
+          }
+
+          // Notify user for each new giveaway
+          newGiveaways.forEach((item) => {
+            const title =
+              lang === "tr"
+                ? `Ücretsiz Oyun: ${item.title}`
+                : `Free Game: ${item.title}`;
+            const message =
+              lang === "tr"
+                ? `Değeri: ${item.worth}. Almak için tıkla!`
+                : `Worth: ${item.worth}. Click to claim!`;
+
+            chrome.notifications.create(String(item.id), {
+              type: "basic",
+              iconUrl: "icons/icon-128.png",
+              title: title,
+              message: message,
+              priority: 2,
+            });
+          });
+
+          // Save updated notified IDs list
+          const updatedIds = [
+            ...notifiedIds,
+            ...newGiveaways.map((item) => item.id),
+          ];
+          chrome.storage.local.set({ notified_giveaway_ids: updatedIds });
+        });
+      } catch (err) {
+        console.error("Failed to check free games:", err);
+      }
+    },
+  );
+}
+
+// Alarm Trigger Listener
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "check_free_games") {
+    checkFreeGames();
+  }
+});
+
+// Register Alarms on installation and browser startup
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
+  checkFreeGames();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
+});
+
+// Listen for notification clicks to open the giveaway claim links
+chrome.notifications.onClicked.addListener((notificationId) => {
+  const giveawayId = parseInt(notificationId, 10);
+  if (!isNaN(giveawayId)) {
+    chrome.tabs.create({
+      url: `https://www.gamerpower.com/open/${giveawayId}`,
+    });
+  }
+});

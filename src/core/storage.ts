@@ -15,6 +15,7 @@ interface SettingsResult {
   sidebarOpen?: boolean;
   prayerCity?: string;
   prayerCountry?: string;
+  freeGamesNotificationsEnabled?: boolean;
 }
 
 export const storage = {
@@ -143,18 +144,35 @@ export const storage = {
     sidebarOpen?: boolean;
     prayerCity?: string;
     prayerCountry?: string;
+    freeGamesNotificationsEnabled: boolean;
   }> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
-        ["lang", "sidebarOpen", "prayerCity", "prayerCountry"],
+        [
+          "lang",
+          "sidebarOpen",
+          "prayerCity",
+          "prayerCountry",
+          "freeGamesNotificationsEnabled",
+        ],
         (result: SettingsResult) => {
           resolve({
             lang: (result.lang as Language) || "tr",
             sidebarOpen: result.sidebarOpen ?? true,
             prayerCity: result.prayerCity || "Istanbul",
             prayerCountry: result.prayerCountry || "Turkey",
+            freeGamesNotificationsEnabled:
+              result.freeGamesNotificationsEnabled ?? true,
           });
         },
+      );
+    });
+  },
+  setFreeGamesNotificationsEnabled: (enabled: boolean): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { freeGamesNotificationsEnabled: enabled },
+        resolve,
       );
     });
   },
@@ -207,6 +225,7 @@ export const storage = {
                 "prayerCity",
                 "prayerCountry",
                 "willpowerStreak",
+                "freeGamesNotificationsEnabled",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

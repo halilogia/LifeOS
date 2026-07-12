@@ -4,6 +4,7 @@ import { KpssProgress, KpssDailyStats, Language } from "../types/types.js";
 
 interface KpssViewProps {
   lang: Language;
+  onShowConfirm: (message: string, onConfirm: () => void) => void;
 }
 
 const SUBJECT_NAMES: Record<string, Record<string, string>> = {
@@ -44,7 +45,7 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
   },
 };
 
-export function KpssView({ lang }: KpssViewProps) {
+export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -199,11 +200,11 @@ export function KpssView({ lang }: KpssViewProps) {
   };
 
   // Clear study history stats
-  const handleResetStats = async () => {
-    if (confirm(labels.reset_confirm)) {
+  const handleResetStats = () => {
+    onShowConfirm(labels.reset_confirm, async () => {
       await kpssService.setKpssDailyStats([]);
       loadKpssData();
-    }
+    });
   };
 
   const topics = kpssData[currentSubject] || [];

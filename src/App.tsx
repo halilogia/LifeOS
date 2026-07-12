@@ -22,6 +22,7 @@ import { PrayerView } from "./components/PrayerView.js";
 import { KpssView } from "./components/KpssView.js";
 import { FreeGamesView } from "./components/FreeGamesView.js";
 import { DetoxView } from "./components/DetoxView.js";
+import { ConfirmModal } from "@/components/ConfirmModal.js";
 
 export function App() {
   // Navigation & UI States
@@ -30,6 +31,32 @@ export function App() {
   const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // Free games notification toggle
+  const [freeGamesNotificationsEnabled, setFreeGamesNotificationsEnabled] =
+    useState(true);
+
+  // Custom confirm dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    message: "",
+    onConfirm: () => {},
+  });
+
+  const showConfirm = (message: string, onConfirm: () => void) => {
+    setConfirmDialog({
+      isOpen: true,
+      message,
+      onConfirm: () => {
+        onConfirm();
+        setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
+  };
 
   // Time & Date State
   const [clockText, setClockText] = useState("00:00");
@@ -61,6 +88,9 @@ export function App() {
       const config = await storage.getSettings();
       setLang(config.lang);
       setSidebarOpen(config.sidebarOpen ?? true);
+      setFreeGamesNotificationsEnabled(
+        config.freeGamesNotificationsEnabled ?? true,
+      );
 
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
@@ -264,16 +294,22 @@ export function App() {
     reader.readAsText(input.files[0]);
   };
 
+  const handleToggleFreeGamesNotifications = async () => {
+    const nextVal = !freeGamesNotificationsEnabled;
+    await storage.setFreeGamesNotificationsEnabled(nextVal);
+    setFreeGamesNotificationsEnabled(nextVal);
+  };
+
   const handleClearAllData = async () => {
     const confirmMsg =
       lang === "tr"
         ? "Tüm verileriniz kalıcı olarak silinecektir. Emin misiniz?"
         : "All your data will be permanently deleted. Are you sure?";
 
-    if (confirm(confirmMsg)) {
+    showConfirm(confirmMsg, async () => {
       await storage.clearAll(lang);
       window.location.reload();
-    }
+    });
   };
 
   // Render current dashboard card sub-view
@@ -300,11 +336,11 @@ export function App() {
           />
         );
       case "notes":
-        return <NotesView lang={lang} />;
+        return <NotesView lang={lang} onShowConfirm={showConfirm} />;
       case "pomodoro":
         return <PomodoroView lang={lang} />;
       case "willpower":
-        return <WillpowerView lang={lang} />;
+        return <WillpowerView lang={lang} onShowConfirm={showConfirm} />;
       case "hifiz":
         return <HifizView lang={lang} />;
       case "srs":
@@ -314,7 +350,7 @@ export function App() {
       case "prayer":
         return <PrayerView lang={lang} />;
       case "kpss":
-        return <KpssView lang={lang} />;
+        return <KpssView lang={lang} onShowConfirm={showConfirm} />;
       case "free-games":
         return <FreeGamesView lang={lang} />;
       case "detox":
@@ -465,6 +501,38 @@ export function App() {
                   </span>
                 </button>
 
+                {/* Free Games Notifications Toggle */}
+                <button
+                  className="settings-action-btn"
+                  onClick={handleToggleFreeGamesNotifications}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>{t.free_games_notifications_title}</span>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontWeight: 700,
+                      color: freeGamesNotificationsEnabled
+                        ? "var(--accent-color)"
+                        : "var(--text-secondary)",
+                    }}
+                  >
+                    {freeGamesNotificationsEnabled ? t.enabled : t.disabled}
+                  </span>
+                </button>
+
                 {/* Export Backup */}
                 <button
                   className="settings-action-btn"
@@ -579,6 +647,16 @@ export function App() {
           </footer>
         )}
       </main>
+
+      <ConfirmModal
+        isOpen={confirmDialog.isOpen}
+        message={confirmDialog.message}
+        lang={lang}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() =>
+          setConfirmDialog((prev) => ({ ...prev, isOpen: false }))
+        }
+      />
     </>
   );
 }

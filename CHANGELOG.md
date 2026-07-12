@@ -4,6 +4,25 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.6.0] - 2026-07-12
+### Eklendi
+- **Özel Onay Penceresi (ConfirmModal.tsx ve confirm.css)**:
+  - Tarayıcının yerleşik gri ve ucuz görünümlü `confirm()` pencereleri tamamen yasaklandı.
+  - Bunun yerine, eklentinin karanlık teması ve görsel bütünlüğüyle uyumlu, şık bir glassmorphic **ConfirmModal** bileşeni geliştirildi.
+  - Onay penceresi pürüzsüz animasyonlar (açılışta ölçeklenme ve arkaplan bulanıklaşması), mor gradient butonlar ve uyarı ikonu ile zenginleştirildi.
+  - Not silme (NotesView), söz silme (NotesView), irade sıfırlama (WillpowerView), KPSS istatistik sıfırlama (KpssView) ve tüm verileri silme (App.tsx) onay pencereleri bu özel bileşene taşındı.
+- **Ücretsiz Oyun Alarm & Masaüstü Bildirim Servisi (Steam, Epic, GOG)**:
+  - GamerPower API ile entegre, saatlik çalışan bir Chrome alarm servisi (`chrome.alarms`) arka plan dosyasına (`background.js`) eklendi.
+  - Sadece **Steam, Epic Games ve GOG** platformlarında yeni bir ücretsiz oyun dağıtıldığında kullanıcıya masaüstü bildirimi gönderilir.
+  - Gönderilen bildirime tıklandığında oyunun alınacağı claim sayfası otomatik olarak yeni tarayıcı sekmesinde açılır.
+  - Daha önce bildirimi gönderilmiş oyunlar tekrar edilmesin diye yerel depolamada (`notified_giveaway_ids`) filtrelenir.
+- **Bildirim Açma/Kapatma Ayarı**:
+  - Ayarlar panelinde ücretsiz oyun bildirimlerinin açılıp kapatılabileceği bir toggle butonu oluşturuldu. Tercih bulut senkronizasyonu (`storage.sync`) ile korunmaktadır.
+- **Eklenti Marka Logosu (logo_icon)**:
+  - Bildirimlerde ve eklenti paketinde kullanılmak üzere minimalist mor neon temalı bir eklenti logosu oluşturulup projenin `icons/` dizinine eklendi.
+
+---
+
 ## [2.5.0] - 2026-07-11
 ### Eklendi
 - **Veri Yedekleme ve Yükleme Şema Güvenliği (Zod Entegrasyonu)**:
