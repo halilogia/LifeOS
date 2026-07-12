@@ -1,5 +1,5 @@
 export interface PomoState {
-  mode: 'focus' | 'short' | 'long';
+  mode: "focus" | "short" | "long";
   running: boolean;
   timeLeft: number;
   totalTime: number;
@@ -18,14 +18,14 @@ export interface AlarmItem {
   enabled: boolean;
 }
 
-const POMO_KEY = 'pomodoro_timer_state';
-const STOPWATCH_KEY = 'stopwatch_state';
-const ALARMS_KEY = 'pomodoro_alarms';
+const POMO_KEY = "pomodoro_timer_state";
+const STOPWATCH_KEY = "stopwatch_state";
+const ALARMS_KEY = "pomodoro_alarms";
 
 const DEFAULT_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 
 const defaultPomoState: PomoState = {
-  mode: 'focus',
+  mode: "focus",
   running: false,
   timeLeft: DEFAULT_TIMES.focus,
   totalTime: DEFAULT_TIMES.focus,
@@ -47,7 +47,10 @@ export const pomodoroManager = {
           const state = res[POMO_KEY] as PomoState;
           if (state.running) {
             const now = Date.now();
-            const remaining = Math.max(0, Math.round((state.endTime - now) / 1000));
+            const remaining = Math.max(
+              0,
+              Math.round((state.endTime - now) / 1000),
+            );
             state.timeLeft = remaining;
             if (remaining === 0) {
               state.running = false;
@@ -69,7 +72,11 @@ export const pomodoroManager = {
     });
   },
 
-  async startTimer(timeLeft: number, mode: 'focus' | 'short' | 'long', totalTime: number): Promise<PomoState> {
+  async startTimer(
+    timeLeft: number,
+    mode: "focus" | "short" | "long",
+    totalTime: number,
+  ): Promise<PomoState> {
     const endTime = Date.now() + timeLeft * 1000;
     const newState: PomoState = {
       mode,
@@ -94,7 +101,10 @@ export const pomodoroManager = {
     return newState;
   },
 
-  async resetTimer(mode: 'focus' | 'short' | 'long', totalTime: number): Promise<PomoState> {
+  async resetTimer(
+    mode: "focus" | "short" | "long",
+    totalTime: number,
+  ): Promise<PomoState> {
     const newState: PomoState = {
       mode,
       running: false,
@@ -107,13 +117,19 @@ export const pomodoroManager = {
   },
 
   onStateChanged(callback: (state: PomoState) => void): () => void {
-    const listener = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName === 'local' && changes[POMO_KEY]) {
+    const listener = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string,
+    ) => {
+      if (areaName === "local" && changes[POMO_KEY]) {
         const state = changes[POMO_KEY].newValue as PomoState;
         if (state) {
           if (state.running) {
             const now = Date.now();
-            const remaining = Math.max(0, Math.round((state.endTime - now) / 1000));
+            const remaining = Math.max(
+              0,
+              Math.round((state.endTime - now) / 1000),
+            );
             state.timeLeft = remaining;
             if (remaining === 0) {
               state.running = false;
@@ -136,7 +152,8 @@ export const pomodoroManager = {
         if (res[STOPWATCH_KEY]) {
           const state = res[STOPWATCH_KEY] as StopwatchState;
           if (state.running) {
-            const elapsed = state.time + Math.floor((Date.now() - state.startTime) / 1000);
+            const elapsed =
+              state.time + Math.floor((Date.now() - state.startTime) / 1000);
             state.time = elapsed;
           }
           resolve(state);
@@ -182,12 +199,16 @@ export const pomodoroManager = {
   },
 
   onStopwatchChanged(callback: (state: StopwatchState) => void): () => void {
-    const listener = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName === 'local' && changes[STOPWATCH_KEY]) {
+    const listener = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string,
+    ) => {
+      if (areaName === "local" && changes[STOPWATCH_KEY]) {
         const state = changes[STOPWATCH_KEY].newValue as StopwatchState;
         if (state) {
           if (state.running) {
-            const elapsed = state.time + Math.floor((Date.now() - state.startTime) / 1000);
+            const elapsed =
+              state.time + Math.floor((Date.now() - state.startTime) / 1000);
             state.time = elapsed;
           }
           callback(state);
@@ -220,7 +241,7 @@ export const pomodoroManager = {
   async addAlarm(time: string): Promise<AlarmItem[]> {
     const alarms = await this.getAlarms();
     // Prevent duplicate times
-    if (alarms.some(a => a.time === time)) {
+    if (alarms.some((a) => a.time === time)) {
       return alarms;
     }
     const newAlarm: AlarmItem = {
@@ -228,28 +249,33 @@ export const pomodoroManager = {
       time,
       enabled: true,
     };
-    const updated = [...alarms, newAlarm].sort((a, b) => a.time.localeCompare(b.time));
+    const updated = [...alarms, newAlarm].sort((a, b) =>
+      a.time.localeCompare(b.time),
+    );
     await this.saveAlarms(updated);
     return updated;
   },
 
   async toggleAlarm(id: string, enabled: boolean): Promise<AlarmItem[]> {
     const alarms = await this.getAlarms();
-    const updated = alarms.map(a => a.id === id ? { ...a, enabled } : a);
+    const updated = alarms.map((a) => (a.id === id ? { ...a, enabled } : a));
     await this.saveAlarms(updated);
     return updated;
   },
 
   async deleteAlarm(id: string): Promise<AlarmItem[]> {
     const alarms = await this.getAlarms();
-    const updated = alarms.filter(a => a.id !== id);
+    const updated = alarms.filter((a) => a.id !== id);
     await this.saveAlarms(updated);
     return updated;
   },
 
   onAlarmsChanged(callback: (alarms: AlarmItem[]) => void): () => void {
-    const listener = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName === 'local' && changes[ALARMS_KEY]) {
+    const listener = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string,
+    ) => {
+      if (areaName === "local" && changes[ALARMS_KEY]) {
         const alarms = changes[ALARMS_KEY].newValue as AlarmItem[];
         if (alarms) {
           callback(alarms);

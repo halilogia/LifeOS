@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
-import { storage } from '../core/storage.js';
-import { WillpowerStreak, Language } from '../types/types.js';
-import { translations } from '../utils/i18n.js';
+import { useState, useEffect, useRef } from "preact/hooks";
+import { storage } from "../core/storage.js";
+import { WillpowerStreak, Language } from "../types/types.js";
+import { translations } from "../utils/i18n.js";
 
 interface WillpowerViewProps {
   lang: Language;
@@ -11,7 +11,7 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
   const t = translations[lang];
 
   const [data, setData] = useState<WillpowerStreak | null>(null);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState("");
 
   // Elapsed countdown states
   const [days, setDays] = useState(0);
@@ -24,7 +24,9 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
   useEffect(() => {
     loadData();
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
   }, []);
 
@@ -42,7 +44,9 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
     calculateTime(streakData.startDate);
 
     // Setup active countdown timer
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
     timerRef.current = window.setInterval(() => {
       calculateTime(streakData!.startDate);
     }, 1000);
@@ -61,10 +65,14 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
   };
 
   const handleReset = async () => {
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
     const confirmMsg = t.willpower_reset_confirm;
-    if (!confirm(confirmMsg)) return;
+    if (!confirm(confirmMsg)) {
+      return;
+    }
 
     // Calculate elapsed days
     const start = new Date(data.startDate).getTime();
@@ -90,35 +98,37 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
     };
 
     await storage.setWillpowerStreak(updatedData);
-    setNote('');
+    setNote("");
     setData(updatedData);
     calculateTime(nowStr);
 
     // Restart timer
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
     timerRef.current = window.setInterval(() => {
       calculateTime(nowStr);
     }, 1000);
   };
 
   // Determine Rank Metadata
-  let rankKey = 'initiate';
+  let rankKey: string;
   if (days < 3) {
-    rankKey = 'initiate';
+    rankKey = "initiate";
   } else if (days < 7) {
-    rankKey = 'iron';
+    rankKey = "iron";
   } else if (days < 14) {
-    rankKey = 'control';
+    rankKey = "control";
   } else if (days < 30) {
-    rankKey = 'warrior';
+    rankKey = "warrior";
   } else if (days < 90) {
-    rankKey = 'knight';
+    rankKey = "knight";
   } else {
-    rankKey = 'master';
+    rankKey = "master";
   }
 
   const rankText = t[`willpower_rank_${rankKey}` as keyof typeof t] || rankKey;
-  const rankDesc = t[`willpower_rank_${rankKey}_desc` as keyof typeof t] || '';
+  const rankDesc = t[`willpower_rank_${rankKey}_desc` as keyof typeof t] || "";
   const rankClass = `rank-${rankKey}`;
 
   const currentBest = data ? Math.max(data.bestStreakDays, days) : days;
@@ -130,10 +140,20 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
         <div className="willpower-header">
           <h2>{t.willpower_title}</h2>
           <div className="best-streak-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
-            <span>{t.willpower_best_streak}</span>: <span>{currentBest}</span> <span>{t.willpower_clean_days}</span>
+            <span>{t.willpower_best_streak}</span>: <span>{currentBest}</span>{" "}
+            <span>{t.willpower_clean_days}</span>
           </div>
         </div>
 
@@ -141,22 +161,30 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
         <div className="willpower-card main-counter-card">
           <div id="willpower-current-streak" className="willpower-countdown">
             <div className="time-block">
-              <span id="wp-days" className="time-val">{String(days).padStart(2, '0')}</span>
+              <span id="wp-days" className="time-val">
+                {String(days).padStart(2, "0")}
+              </span>
               <span className="time-label">{t.willpower_clean_days}</span>
             </div>
             <div className="time-colon">:</div>
             <div className="time-block">
-              <span id="wp-hours" class="time-val">{String(hours).padStart(2, '0')}</span>
+              <span id="wp-hours" class="time-val">
+                {String(hours).padStart(2, "0")}
+              </span>
               <span className="time-label">{t.willpower_hours}</span>
             </div>
             <div className="time-colon">:</div>
             <div className="time-block">
-              <span id="wp-minutes" class="time-val">{String(minutes).padStart(2, '0')}</span>
+              <span id="wp-minutes" class="time-val">
+                {String(minutes).padStart(2, "0")}
+              </span>
               <span className="time-label">{t.willpower_minutes}</span>
             </div>
             <div className="time-colon">:</div>
             <div className="time-block">
-              <span id="wp-seconds" class="time-val">{String(seconds).padStart(2, '0')}</span>
+              <span id="wp-seconds" class="time-val">
+                {String(seconds).padStart(2, "0")}
+              </span>
               <span className="time-label">{t.willpower_seconds}</span>
             </div>
           </div>
@@ -166,16 +194,31 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
         <div className="willpower-card rank-card">
           <div className={`rank-badge-container ${rankClass}`}>
             <div className="rank-icon-wrapper">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
             </div>
             <div className="rank-info">
               <div className="rank-header">
-                <span className="rank-title-label">{t.willpower_level_label}:</span>
-                <span id="willpower-rank-text" className="rank-value">{rankText}</span>
+                <span className="rank-title-label">
+                  {t.willpower_level_label}:
+                </span>
+                <span id="willpower-rank-text" className="rank-value">
+                  {rankText}
+                </span>
               </div>
-              <p id="willpower-rank-desc" className="rank-desc">{rankDesc}</p>
+              <p id="willpower-rank-desc" className="rank-desc">
+                {rankDesc}
+              </p>
             </div>
           </div>
         </div>
@@ -189,12 +232,25 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
               className="willpower-note-input"
               value={note}
               onInput={(e) => setNote((e.target as HTMLInputElement).value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleReset()}
+              onKeyPress={(e) => e.key === "Enter" && handleReset()}
               placeholder={t.willpower_note_placeholder}
               autocomplete="off"
             />
-            <button id="willpower-reset-btn" className="willpower-reset-btn" onClick={handleReset}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button
+              id="willpower-reset-btn"
+              className="willpower-reset-btn"
+              onClick={handleReset}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                 <polyline points="3 3 3 8 8 8"></polyline>
               </svg>
@@ -211,16 +267,30 @@ export function WillpowerView({ lang }: WillpowerViewProps) {
               <div className="history-empty">{t.willpower_history_empty}</div>
             ) : (
               [...historyList]
-                .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+                .sort(
+                  (a, b) =>
+                    new Date(b.startDate).getTime() -
+                    new Date(a.startDate).getTime(),
+                )
                 .map((item, idx) => {
-                  const startDateFormatted = new Date(item.startDate).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US');
-                  const endDateFormatted = new Date(item.endDate).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US');
+                  const startDateFormatted = new Date(
+                    item.startDate,
+                  ).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
+                  const endDateFormatted = new Date(
+                    item.endDate,
+                  ).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
                   const durationText = `${item.days} ${t.willpower_clean_days.toLowerCase()}`;
                   return (
                     <div key={idx} className="history-item">
                       <div className="history-item-left">
-                        <span className="history-date">{startDateFormatted} - {endDateFormatted}</span>
-                        {item.note && <span className="history-note" title={item.note}>"{item.note}"</span>}
+                        <span className="history-date">
+                          {startDateFormatted} - {endDateFormatted}
+                        </span>
+                        {item.note && (
+                          <span className="history-note" title={item.note}>
+                            "{item.note}"
+                          </span>
+                        )}
                       </div>
                       <div className="history-item-right">
                         <span className="history-duration">{durationText}</span>

@@ -4,6 +4,25 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.5.0] - 2026-07-11
+### Eklendi
+- **Veri Yedekleme ve Yükleme Şema Güvenliği (Zod Entegrasyonu)**:
+  - Yedekleme/Geri yükleme mekanizması (`backup.ts`) içerisine **Zod** şema doğrulayıcı kütüphanesi entegre edildi.
+  - JSON yedek dosyaları yüklenirken artık tüm görev nesneleri tek tek model şemasına göre sıkı bir doğrulamadan geçirilir. Bu sayede zararlı kod veya hatalı yapı enjekte edilmiş sahte yedek dosyaları Chrome yerel depolama alanına (Storage) yazılmadan önce engellenir.
+- **Detoks Ekranı XSS Güvenlik Filtresi (HTML Escaper)**:
+  - Kullanıcıların kendi notlarından/sözlerinden çekilen verilerin detoks bloke ekranına basılması esnasında oluşabilecek DOM-tabanlı XSS (Cross-Site Scripting) zafiyetlerini önlemek için `content.js` içerisine güvenli bir `escapeHtml` yardımcı fonksiyonu entegre edildi.
+  - HTML etiketleri (`<`, `>`, `&`, `"`, `'`) içeren tüm metinler sayfaya basılmadan önce otomatik olarak sanitize edilir.
+- **TypeScript CSS Side-Effect Bildirimi (`css.d.ts`)**:
+  - `src/types/css.d.ts` dosyası oluşturularak side-effect CSS dosyalarının import edilmesine yönelik TypeScript derleyici uyarıları giderildi.
+
+### Düzeltildi
+- **TypeScript & ESLint Kod Temizliği**:
+  - `npx tsc` derleme aşamasında hata veren takvim gün hücreleri (`never[]`), storage okuma parametre tipi eşleşmeleri (`res as Record<string, any>`) ve App.tsx'teki eksik model değişkenleri (`category`, `lastCompletedDate`) tamamen çözüldü.
+  - ESLint tarafındaki 65 adet kural ihlali (tek satırlık `if` deyimlerindeki süslü parantez eksiklikleri, kullanılmayan import ve değişken tanımlamaları, gereksiz atamalar) sıfırlandı.
+  - Prettier biçimlendiricisi tüm proje genelinde (54 dosya) çalıştırılarak kod girintileri, boşluklar ve genel yazım formatı kusursuz bir standarda kavuşturuldu.
+
+---
+
 ## [2.4.2] - 2026-07-11
 ### Değişti
 - **Sağ Üst Popup Detoks Arayüzü Kolay Seçim Modu**:

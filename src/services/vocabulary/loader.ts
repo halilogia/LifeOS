@@ -16,17 +16,10 @@ export interface RawWord {
 }
 
 export type LevelKey =
-  | "A1"
-  | "A2"
-  | "B1"
-  | "B2"
-  | "C1"
-  | "idiom"
-  | "phrasal"
-  | "gre"
-  | "irregular";
+  "A1" | "A2" | "B1" | "B2" | "C1" | "idiom" | "phrasal" | "gre" | "irregular";
 
-export const mergeTR = (enWords: RawWord[]): Word[] => enWords as unknown as Word[];
+export const mergeTR = (enWords: RawWord[]): Word[] =>
+  enWords as unknown as Word[];
 
 export const enrich = (words: Word[], level: string): Word[] =>
   words.map((w) => ({ ...w, level: w.level || level }));

@@ -8,9 +8,17 @@ export interface PrayerTimes {
 }
 
 export const prayerService = {
-  _cache: null as { date: string; city: string; country: string; times: PrayerTimes } | null,
+  _cache: null as {
+    date: string;
+    city: string;
+    country: string;
+    times: PrayerTimes;
+  } | null,
 
-  async getPrayerTimes(city: string = "Istanbul", country: string = "Turkey"): Promise<PrayerTimes> {
+  async getPrayerTimes(
+    city: string = "Istanbul",
+    country: string = "Turkey",
+  ): Promise<PrayerTimes> {
     const today = new Date().toISOString().split("T")[0];
     if (
       this._cache &&
@@ -23,7 +31,7 @@ export const prayerService = {
 
     try {
       const response = await fetch(
-        `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=13`
+        `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=13`,
       );
       const data = await response.json();
       this._cache = { date: today, city, country, times: data.data.timings };

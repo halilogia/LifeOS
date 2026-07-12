@@ -22,7 +22,9 @@
     "word": "this",
     "class": "adverb",
     "definitions": ["to this degree; so"],
-    "examples": ["It's about this high (= as high as I am showing you with my hands)."],
+    "examples": [
+      "It's about this high (= as high as I am showing you with my hands)."
+    ],
     "freq": 6.82
   },
   {
@@ -55,8 +57,12 @@
     "id": "b1-7",
     "word": "now",
     "class": "conjunction",
-    "definitions": ["because the thing mentioned is happening or has just happened"],
-    "examples": ["Now that the kids have left home we've got a lot of extra space."],
+    "definitions": [
+      "because the thing mentioned is happening or has just happened"
+    ],
+    "examples": [
+      "Now that the kids have left home we've got a lot of extra space."
+    ],
     "freq": 6.18
   },
   {
@@ -74,7 +80,9 @@
     "definitions": [
       "used to state that something is/was not necessary or that only very little is/was necessary; used to ask if something is/was necessary"
     ],
-    "examples": ["need (not) do something, You needn't bother asking Rick—I know he's too busy."],
+    "examples": [
+      "need (not) do something, You needn't bother asking Rick—I know he's too busy."
+    ],
     "freq": 5.97
   },
   {
@@ -97,8 +105,12 @@
     "id": "b1-12",
     "word": "used",
     "class": "adjective",
-    "definitions": ["familiar with something because you do it or experience it often"],
-    "examples": ["used to doing something, I'm not used to eating so much at lunchtime."],
+    "definitions": [
+      "familiar with something because you do it or experience it often"
+    ],
+    "examples": [
+      "used to doing something, I'm not used to eating so much at lunchtime."
+    ],
     "freq": 5.8
   },
   {
@@ -113,8 +125,12 @@
     "id": "b1-14",
     "word": "state",
     "class": "verb",
-    "definitions": ["to formally write or say something, especially in a careful and clear way"],
-    "examples": ["state something, He has already stated his intention to run for election."],
+    "definitions": [
+      "to formally write or say something, especially in a careful and clear way"
+    ],
+    "examples": [
+      "state something, He has already stated his intention to run for election."
+    ],
     "freq": 5.78
   },
   {
@@ -129,7 +145,9 @@
     "id": "b1-16",
     "word": "since",
     "class": "adverb",
-    "definitions": ["from a time in the past until a later past time, or until now"],
+    "definitions": [
+      "from a time in the past until a later past time, or until now"
+    ],
     "examples": ["She went for a run on Monday and has not been seen since."],
     "freq": 5.75
   },
@@ -155,7 +173,9 @@
     "id": "b1-19",
     "word": "set",
     "class": "noun",
-    "definitions": ["a group of similar things that belong together in some way"],
+    "definitions": [
+      "a group of similar things that belong together in some way"
+    ],
     "examples": ["a set of six chairs"],
     "freq": 5.59
   },
@@ -163,7 +183,9 @@
     "id": "b1-20",
     "word": "set",
     "class": "verb",
-    "definitions": ["to prepare or arrange something so that it is ready for use or in position"],
+    "definitions": [
+      "to prepare or arrange something so that it is ready for use or in position"
+    ],
     "examples": ["set something, Have you set the alarm clock?"],
     "freq": 5.59
   },
@@ -313,7 +335,9 @@
     "id": "b1-37",
     "word": "court",
     "class": "noun",
-    "definitions": ["the place where legal trials take place and where crimes, etc. are judged"],
+    "definitions": [
+      "the place where legal trials take place and where crimes, etc. are judged"
+    ],
     "examples": ["the civil/criminal courts"],
     "freq": 5.41
   },
@@ -345,7 +369,9 @@
     "id": "b1-41",
     "word": "wrong",
     "class": "adverb",
-    "definitions": ["in a way that produces a result that is not correct or that you do not want"],
+    "definitions": [
+      "in a way that produces a result that is not correct or that you do not want"
+    ],
     "examples": ["My name is spelt wrong."],
     "freq": 5.39
   },
@@ -361,7 +387,9 @@
     "id": "b1-43",
     "word": "due",
     "class": "adjective",
-    "definitions": ["caused by somebody/something; because of somebody/something"],
+    "definitions": [
+      "caused by somebody/something; because of somebody/something"
+    ],
     "examples": ["The team's success was largely due to her efforts."],
     "freq": 5.35
   },
@@ -395,7 +423,9 @@
     "id": "b1-47",
     "word": "whether",
     "class": "conjunction",
-    "definitions": ["used to express a doubt or choice between two possibilities"],
+    "definitions": [
+      "used to express a doubt or choice between two possibilities"
+    ],
     "examples": ["He seemed undecided whether to go or stay."],
     "freq": 5.32
   },
@@ -453,7 +483,9 @@
     "id": "b1-54",
     "word": "market",
     "class": "verb",
-    "definitions": ["to advertise a product in a particular way in order to make people want it"],
+    "definitions": [
+      "to advertise a product in a particular way in order to make people want it"
+    ],
     "examples": [
       "market something, The company utilizes every media tool available to market its products."
     ],
@@ -479,8 +511,12 @@
     "id": "b1-57",
     "word": "experience",
     "class": "verb",
-    "definitions": ["to have a particular situation affect you or happen to you"],
-    "examples": ["Many people have never experienced these difficulties first-hand."],
+    "definitions": [
+      "to have a particular situation affect you or happen to you"
+    ],
+    "examples": [
+      "Many people have never experienced these difficulties first-hand."
+    ],
     "freq": 5.27
   },
   {
@@ -497,7 +533,9 @@
     "id": "b1-59",
     "word": "type",
     "class": "verb",
-    "definitions": ["to write something using a computer keyboard or typewriter"],
+    "definitions": [
+      "to write something using a computer keyboard or typewriter"
+    ],
     "examples": ["How fast can you type?"],
     "freq": 5.27
   },
@@ -505,8 +543,12 @@
     "id": "b1-60",
     "word": "clear",
     "class": "verb",
-    "definitions": ["to remove things that are not wanted or needed from something"],
-    "examples": ["clear something, The settlers cleared the land and planted crops."],
+    "definitions": [
+      "to remove things that are not wanted or needed from something"
+    ],
+    "examples": [
+      "clear something, The settlers cleared the land and planted crops."
+    ],
     "freq": 5.25
   },
   {
@@ -529,23 +571,33 @@
     "id": "b1-63",
     "word": "force",
     "class": "noun",
-    "definitions": ["violent physical action used to obtain or achieve something"],
-    "examples": ["The release of the hostages could not be achieved without the use of force."],
+    "definitions": [
+      "violent physical action used to obtain or achieve something"
+    ],
+    "examples": [
+      "The release of the hostages could not be achieved without the use of force."
+    ],
     "freq": 5.23
   },
   {
     "id": "b1-64",
     "word": "force",
     "class": "verb",
-    "definitions": ["to make somebody do something that they do not want to do"],
-    "examples": ["be forced into doing something, The President was forced into resigning."],
+    "definitions": [
+      "to make somebody do something that they do not want to do"
+    ],
+    "examples": [
+      "be forced into doing something, The President was forced into resigning."
+    ],
     "freq": 5.23
   },
   {
     "id": "b1-65",
     "word": "issue",
     "class": "noun",
-    "definitions": ["an important topic that people are discussing or arguing about"],
+    "definitions": [
+      "an important topic that people are discussing or arguing about"
+    ],
     "examples": ["a key/major issue"],
     "freq": 5.23
   },
@@ -611,8 +663,12 @@
     "id": "b1-72",
     "word": "share",
     "class": "noun",
-    "definitions": ["one part of something that is divided between two or more people"],
-    "examples": ["share of something, Next year we hope to have a greater share of the market."],
+    "definitions": [
+      "one part of something that is divided between two or more people"
+    ],
+    "examples": [
+      "share of something, Next year we hope to have a greater share of the market."
+    ],
     "freq": 5.2
   },
   {
@@ -647,8 +703,12 @@
     "id": "b1-76",
     "word": "policy",
     "class": "noun",
-    "definitions": ["a plan of action agreed or chosen by a political party, a business, etc."],
-    "examples": ["policy on something, the present government’s policy on education"],
+    "definitions": [
+      "a plan of action agreed or chosen by a political party, a business, etc."
+    ],
+    "examples": [
+      "policy on something, the present government’s policy on education"
+    ],
     "freq": 5.17
   },
   {
@@ -673,7 +733,9 @@
     "id": "b1-79",
     "word": "performance",
     "class": "noun",
-    "definitions": ["the act of performing a play, concert or some other form of entertainment"],
+    "definitions": [
+      "the act of performing a play, concert or some other form of entertainment"
+    ],
     "examples": ["The performance starts at seven."],
     "freq": 5.16
   },
@@ -705,7 +767,9 @@
     "id": "b1-83",
     "word": "cool",
     "class": "verb",
-    "definitions": ["to become cool or cooler; to make somebody/something become cool or cooler"],
+    "definitions": [
+      "to become cool or cooler; to make somebody/something become cool or cooler"
+    ],
     "examples": ["Glass contracts as it cools."],
     "freq": 5.15
   },
@@ -723,7 +787,9 @@
     "id": "b1-85",
     "word": "official",
     "class": "adjective",
-    "definitions": ["agreed to, said, done, etc. by somebody who is in a position of authority"],
+    "definitions": [
+      "agreed to, said, done, etc. by somebody who is in a position of authority"
+    ],
     "examples": ["an official announcement/decision/statement"],
     "freq": 5.14
   },
@@ -761,8 +827,12 @@
     "id": "b1-89",
     "word": "tax",
     "class": "verb",
-    "definitions": ["to put a tax on somebody/something; to make somebody pay tax"],
-    "examples": ["tax somebody/something, His declared aim was to tax the rich."],
+    "definitions": [
+      "to put a tax on somebody/something; to make somebody pay tax"
+    ],
+    "examples": [
+      "tax somebody/something, His declared aim was to tax the rich."
+    ],
     "freq": 5.14
   },
   {
@@ -785,7 +855,9 @@
     "id": "b1-92",
     "word": "management",
     "class": "noun",
-    "definitions": ["the activity of running and controlling a business or similar organization"],
+    "definitions": [
+      "the activity of running and controlling a business or similar organization"
+    ],
     "examples": ["a career in management"],
     "freq": 5.13
   },
@@ -810,7 +882,9 @@
     "word": "range",
     "class": "noun",
     "definitions": ["a variety of things of a particular type"],
-    "examples": ["range of something, The hotel offers a wide range of facilities."],
+    "examples": [
+      "range of something, The hotel offers a wide range of facilities."
+    ],
     "freq": 5.12
   },
   {
@@ -859,7 +933,9 @@
     "id": "b1-101",
     "word": "property",
     "class": "noun",
-    "definitions": ["a thing or things that are owned by somebody; a possession or possessions"],
+    "definitions": [
+      "a thing or things that are owned by somebody; a possession or possessions"
+    ],
     "examples": ["personal/stolen property"],
     "freq": 5.11
   },
@@ -900,7 +976,9 @@
     "definitions": [
       "taking part in something; being part of something or connected with something"
     ],
-    "examples": ["Some people tried to stop the fight but I didn't want to get involved."],
+    "examples": [
+      "Some people tried to stop the fight but I didn't want to get involved."
+    ],
     "freq": 5.1
   },
   {
@@ -917,7 +995,9 @@
     "id": "b1-107",
     "word": "release",
     "class": "noun",
-    "definitions": ["the act of setting a person or an animal free; the state of being set free"],
+    "definitions": [
+      "the act of setting a person or an animal free; the state of being set free"
+    ],
     "examples": [
       "release of somebody/something, The government has been working to secure the release of the hostages."
     ],
@@ -997,7 +1077,9 @@
     "id": "b1-116",
     "word": "staff",
     "class": "noun",
-    "definitions": ["all the workers employed in an organization considered as a group"],
+    "definitions": [
+      "all the workers employed in an organization considered as a group"
+    ],
     "examples": ["medical/nursing/teaching/coaching staff"],
     "freq": 5.08
   },
@@ -1036,14 +1118,18 @@
     "definitions": [
       "a form of something that is slightly different from an earlier form or from other forms of the same thing"
     ],
-    "examples": ["version of something, the latest version of the software package"],
+    "examples": [
+      "version of something, the latest version of the software package"
+    ],
     "freq": 5.07
   },
   {
     "id": "b1-121",
     "word": "access",
     "class": "noun",
-    "definitions": ["the opportunity or right to use something or to see somebody/something"],
+    "definitions": [
+      "the opportunity or right to use something or to see somebody/something"
+    ],
     "examples": ["High-speed internet access has become a necessity."],
     "freq": 5.05
   },
@@ -1140,7 +1226,9 @@
     "word": "note",
     "class": "verb",
     "definitions": ["to notice or pay careful attention to something"],
-    "examples": ["note something, Note the fine early Baroque altar inside the chapel."],
+    "examples": [
+      "note something, Note the fine early Baroque altar inside the chapel."
+    ],
     "freq": 5.04
   },
   {
@@ -1177,7 +1265,9 @@
     "id": "b1-135",
     "word": "standard",
     "class": "adjective",
-    "definitions": ["average or normal rather than having special or unusual features"],
+    "definitions": [
+      "average or normal rather than having special or unusual features"
+    ],
     "examples": ["the standard rate of tax (= paid by everyone)"],
     "freq": 5.03
   },
@@ -1185,7 +1275,9 @@
     "id": "b1-136",
     "word": "standard",
     "class": "noun",
-    "definitions": ["a level of quality, especially one that people think is acceptable"],
+    "definitions": [
+      "a level of quality, especially one that people think is acceptable"
+    ],
     "examples": ["There has been a fall in living standards."],
     "freq": 5.03
   },
@@ -1201,7 +1293,9 @@
     "id": "b1-138",
     "word": "charge",
     "class": "noun",
-    "definitions": ["the amount of money that somebody asks for goods and services"],
+    "definitions": [
+      "the amount of money that somebody asks for goods and services"
+    ],
     "examples": ["admission charges"],
     "freq": 5.02
   },
@@ -1217,7 +1311,9 @@
     "id": "b1-140",
     "word": "except",
     "class": "conjunction",
-    "definitions": ["used before you mention something that makes a statement not completely true"],
+    "definitions": [
+      "used before you mention something that makes a statement not completely true"
+    ],
     "examples": ["I didn't tell him anything except that I needed the money."],
     "freq": 5.02
   },
@@ -1225,8 +1321,12 @@
     "id": "b1-141",
     "word": "store",
     "class": "verb",
-    "definitions": ["to put something somewhere and keep it there to use later"],
-    "examples": ["store something, We do not have adequate space to store these documents."],
+    "definitions": [
+      "to put something somewhere and keep it there to use later"
+    ],
+    "examples": [
+      "store something, We do not have adequate space to store these documents."
+    ],
     "freq": 5.02
   },
   {
@@ -1258,15 +1358,21 @@
     "word": "normal",
     "class": "noun",
     "definitions": ["the usual or average state, level or standard"],
-    "examples": ["above/below normal, The rainfall has been above normal for the time of year."],
+    "examples": [
+      "above/below normal, The rainfall has been above normal for the time of year."
+    ],
     "freq": 5.01
   },
   {
     "id": "b1-146",
     "word": "pressure",
     "class": "noun",
-    "definitions": ["the act of trying to persuade or to force somebody to do something"],
-    "examples": ["pressure for something, The pressure for change continued to mount."],
+    "definitions": [
+      "the act of trying to persuade or to force somebody to do something"
+    ],
+    "examples": [
+      "pressure for something, The pressure for change continued to mount."
+    ],
     "freq": 5.01
   },
   {
@@ -1304,7 +1410,9 @@
     "definitions": [
       "to take part in or lead a campaign, for example to achieve social or political change, or in order to win an election"
     ],
-    "examples": ["The party campaigned vigorously in the north of the country."],
+    "examples": [
+      "The party campaigned vigorously in the north of the country."
+    ],
     "freq": 5
   },
   {
@@ -1322,7 +1430,9 @@
     "definitions": [
       "used to show that something happened or is true although something else might have happened to prevent it"
     ],
-    "examples": ["Her voice was shaking despite all her efforts to control it."],
+    "examples": [
+      "Her voice was shaking despite all her efforts to control it."
+    ],
     "freq": 5
   },
   {
@@ -1337,7 +1447,9 @@
     "id": "b1-154",
     "word": "previous",
     "class": "adjective",
-    "definitions": ["happening or existing before the event or object that you are talking about"],
+    "definitions": [
+      "happening or existing before the event or object that you are talking about"
+    ],
     "examples": ["No previous experience is necessary for this job."],
     "freq": 5
   },
@@ -1348,22 +1460,30 @@
     "definitions": [
       "to arrange things in groups or in a particular order according to their type, etc.; to separate things of one type from others"
     ],
-    "examples": ["sort something, I started at the bottom, answering phones and sorting the mail."],
+    "examples": [
+      "sort something, I started at the bottom, answering phones and sorting the mail."
+    ],
     "freq": 5
   },
   {
     "id": "b1-156",
     "word": "contact",
     "class": "noun",
-    "definitions": ["the act of communicating with somebody, especially regularly"],
-    "examples": ["contact with somebody, I don't have much contact with my uncle."],
+    "definitions": [
+      "the act of communicating with somebody, especially regularly"
+    ],
+    "examples": [
+      "contact with somebody, I don't have much contact with my uncle."
+    ],
     "freq": 4.99
   },
   {
     "id": "b1-157",
     "word": "contact",
     "class": "verb",
-    "definitions": ["to communicate with somebody, for example by phone, letter or email"],
+    "definitions": [
+      "to communicate with somebody, for example by phone, letter or email"
+    ],
     "examples": ["I've been trying to contact you all day."],
     "freq": 4.99
   },
@@ -1413,7 +1533,9 @@
     "id": "b1-163",
     "word": "extra",
     "class": "adverb",
-    "definitions": ["in addition; more than is usual, expected or exists already"],
+    "definitions": [
+      "in addition; more than is usual, expected or exists already"
+    ],
     "examples": ["to pay/cost extra"],
     "freq": 4.98
   },
@@ -1424,7 +1546,9 @@
     "definitions": [
       "a thing that is added to something that is not usual, standard or necessary and that costs more"
     ],
-    "examples": ["The monthly fee is fixed and there are no hidden extras (= unexpected costs)."],
+    "examples": [
+      "The monthly fee is fixed and there are no hidden extras (= unexpected costs)."
+    ],
     "freq": 4.98
   },
   {
@@ -1434,7 +1558,9 @@
     "definitions": [
       "used to say that something can only happen or be true in a particular situation"
     ],
-    "examples": ["You won't get paid for time off unless you have a doctor's note."],
+    "examples": [
+      "You won't get paid for time off unless you have a doctor's note."
+    ],
     "freq": 4.98
   },
   {
@@ -1451,7 +1577,9 @@
     "id": "b1-167",
     "word": "safety",
     "class": "noun",
-    "definitions": ["the state of being safe and protected from danger or harm"],
+    "definitions": [
+      "the state of being safe and protected from danger or harm"
+    ],
     "examples": ["in safety, a place where children can play in safety"],
     "freq": 4.97
   },
@@ -1459,7 +1587,9 @@
     "id": "b1-168",
     "word": "coach",
     "class": "verb",
-    "definitions": ["to train somebody to play a sport, to do a job better, or to improve a skill"],
+    "definitions": [
+      "to train somebody to play a sport, to do a job better, or to improve a skill"
+    ],
     "examples": ["coach somebody, He has coached the team for five years."],
     "freq": 4.96
   },
@@ -1467,7 +1597,9 @@
     "id": "b1-169",
     "word": "collection",
     "class": "noun",
-    "definitions": ["a group of objects, often of the same sort, that have been collected"],
+    "definitions": [
+      "a group of objects, often of the same sort, that have been collected"
+    ],
     "examples": ["He wanted to share his vast art collection with the world."],
     "freq": 4.96
   },
@@ -1518,14 +1650,18 @@
     "definitions": [
       "to say that something is true although it has not been proved and other people may not believe it"
     ],
-    "examples": ["claim (that)…, He claims (that) he was not given a fair hearing."],
+    "examples": [
+      "claim (that)…, He claims (that) he was not given a fair hearing."
+    ],
     "freq": 4.95
   },
   {
     "id": "b1-175",
     "word": "fear",
     "class": "verb",
-    "definitions": ["to be frightened of somebody/something or frightened of doing something"],
+    "definitions": [
+      "to be frightened of somebody/something or frightened of doing something"
+    ],
     "examples": ["fear somebody/something, All his employees fear him."],
     "freq": 4.95
   },
@@ -1569,7 +1705,9 @@
     "id": "b1-180",
     "word": "plus",
     "class": "preposition",
-    "definitions": ["used when the two numbers or amounts mentioned are being added together"],
+    "definitions": [
+      "used when the two numbers or amounts mentioned are being added together"
+    ],
     "examples": ["Two plus five is seven."],
     "freq": 4.95
   },
@@ -1587,7 +1725,9 @@
     "id": "b1-182",
     "word": "rule",
     "class": "verb",
-    "definitions": ["to control and have authority over a country, a group of people, etc."],
+    "definitions": [
+      "to control and have authority over a country, a group of people, etc."
+    ],
     "examples": ["rule (something), At that time, King John ruled England."],
     "freq": 4.94
   },
@@ -1616,7 +1756,9 @@
     "definitions": [
       "to think about something and try to decide what is true, what will happen, what you should do, etc."
     ],
-    "examples": ["‘Why do you want to know?’ ‘No particular reason. I was just wondering.’"],
+    "examples": [
+      "‘Why do you want to know?’ ‘No particular reason. I was just wondering.’"
+    ],
     "freq": 4.93
   },
   {
@@ -1631,7 +1773,9 @@
     "id": "b1-187",
     "word": "commercial",
     "class": "adjective",
-    "definitions": ["connected with the buying and selling of goods and services"],
+    "definitions": [
+      "connected with the buying and selling of goods and services"
+    ],
     "examples": ["residential and commercial properties"],
     "freq": 4.92
   },
@@ -1639,7 +1783,9 @@
     "id": "b1-188",
     "word": "commercial",
     "class": "noun",
-    "definitions": ["an advertisement on television, on the radio or on a website"],
+    "definitions": [
+      "an advertisement on television, on the radio or on a website"
+    ],
     "examples": ["a TV/television commercial"],
     "freq": 4.92
   },
@@ -1647,7 +1793,9 @@
     "id": "b1-189",
     "word": "effort",
     "class": "noun",
-    "definitions": ["an attempt to do something especially when it is difficult to do"],
+    "definitions": [
+      "an attempt to do something especially when it is difficult to do"
+    ],
     "examples": ["The project was a team effort."],
     "freq": 4.92
   },
@@ -1655,15 +1803,21 @@
     "id": "b1-190",
     "word": "fighting",
     "class": "noun",
-    "definitions": ["the activity of being involved in a battle against an enemy"],
-    "examples": ["Fighting broke out in three districts of the city last night."],
+    "definitions": [
+      "the activity of being involved in a battle against an enemy"
+    ],
+    "examples": [
+      "Fighting broke out in three districts of the city last night."
+    ],
     "freq": 4.92
   },
   {
     "id": "b1-191",
     "word": "impact",
     "class": "noun",
-    "definitions": ["the powerful effect that something has on somebody/something"],
+    "definitions": [
+      "the powerful effect that something has on somebody/something"
+    ],
     "examples": ["a positive/a negative/an adverse impact"],
     "freq": 4.92
   },
@@ -1681,7 +1835,9 @@
     "id": "b1-193",
     "word": "lack",
     "class": "noun",
-    "definitions": ["the state of not having something or not having enough of something"],
+    "definitions": [
+      "the state of not having something or not having enough of something"
+    ],
     "examples": ["lack of something, a lack of understanding/knowledge"],
     "freq": 4.92
   },
@@ -1741,7 +1897,9 @@
     "id": "b1-200",
     "word": "marriage",
     "class": "noun",
-    "definitions": ["the legal relationship between two people who are married to each other"],
+    "definitions": [
+      "the legal relationship between two people who are married to each other"
+    ],
     "examples": ["a happy/an unhappy marriage"],
     "freq": 4.91
   },
@@ -1785,7 +1943,9 @@
     "id": "b1-205",
     "word": "doubt",
     "class": "noun",
-    "definitions": ["a feeling of being uncertain about something or not believing something"],
+    "definitions": [
+      "a feeling of being uncertain about something or not believing something"
+    ],
     "examples": ["a feeling of doubt and uncertainty"],
     "freq": 4.9
   },
@@ -1883,7 +2043,9 @@
     "id": "b1-216",
     "word": "agreement",
     "class": "noun",
-    "definitions": ["an arrangement, a promise or a contract made with somebody"],
+    "definitions": [
+      "an arrangement, a promise or a contract made with somebody"
+    ],
     "examples": ["an international peace agreement"],
     "freq": 4.88
   },
@@ -1923,7 +2085,9 @@
     "id": "b1-220",
     "word": "challenge",
     "class": "noun",
-    "definitions": ["a new or difficult task that tests somebody’s ability and skill"],
+    "definitions": [
+      "a new or difficult task that tests somebody’s ability and skill"
+    ],
     "examples": ["a tough/major/significant challenge"],
     "freq": 4.88
   },
@@ -1948,7 +2112,9 @@
     "word": "killing",
     "class": "noun",
     "definitions": ["an act of killing somebody deliberately"],
-    "examples": ["Their leader condemned the torture and killing of innocent civilians."],
+    "examples": [
+      "Their leader condemned the torture and killing of innocent civilians."
+    ],
     "freq": 4.88
   },
   {
@@ -2057,7 +2223,9 @@
     "id": "b1-234",
     "word": "location",
     "class": "noun",
-    "definitions": ["a place where something happens or exists; the position of something"],
+    "definitions": [
+      "a place where something happens or exists; the position of something"
+    ],
     "examples": ["a honeymoon in a secret location"],
     "freq": 4.86
   },
@@ -2135,7 +2303,9 @@
     "id": "b1-243",
     "word": "royal",
     "class": "adjective",
-    "definitions": ["connected with or belonging to the king or queen of a country"],
+    "definitions": [
+      "connected with or belonging to the king or queen of a country"
+    ],
     "examples": ["the royal family"],
     "freq": 4.85
   },
@@ -2143,7 +2313,9 @@
     "id": "b1-244",
     "word": "slow",
     "class": "verb",
-    "definitions": ["to go or to make something/somebody go at a slower speed or be less active"],
+    "definitions": [
+      "to go or to make something/somebody go at a slower speed or be less active"
+    ],
     "examples": ["Economic growth has slowed a little."],
     "freq": 4.85
   },
@@ -2178,7 +2350,9 @@
     "word": "worry",
     "class": "noun",
     "definitions": ["the state of worrying about something"],
-    "examples": ["The threat of losing their jobs is a constant source of worry to them."],
+    "examples": [
+      "The threat of losing their jobs is a constant source of worry to them."
+    ],
     "freq": 4.84
   },
   {
@@ -2205,8 +2379,12 @@
     "id": "b1-251",
     "word": "count",
     "class": "noun",
-    "definitions": ["an act of counting to find the total number of somebody/something"],
-    "examples": ["If the election result is close, there will be a second count."],
+    "definitions": [
+      "an act of counting to find the total number of somebody/something"
+    ],
+    "examples": [
+      "If the election result is close, there will be a second count."
+    ],
     "freq": 4.83
   },
   {
@@ -2221,7 +2399,9 @@
     "id": "b1-253",
     "word": "mental",
     "class": "adjective",
-    "definitions": ["connected with or happening in the mind; involving the process of thinking"],
+    "definitions": [
+      "connected with or happening in the mind; involving the process of thinking"
+    ],
     "examples": ["the mental process of remembering"],
     "freq": 4.83
   },
@@ -2237,7 +2417,9 @@
     "id": "b1-255",
     "word": "remain",
     "class": "verb",
-    "definitions": ["to continue to be something; to be still in the same state or condition"],
+    "definitions": [
+      "to continue to be something; to be still in the same state or condition"
+    ],
     "examples": ["remain + adj., to remain silent"],
     "freq": 4.83
   },
@@ -2255,7 +2437,9 @@
     "id": "b1-257",
     "word": "smart",
     "class": "adjective",
-    "definitions": ["looking clean and neat; well dressed in fashionable and/or formal clothes"],
+    "definitions": [
+      "looking clean and neat; well dressed in fashionable and/or formal clothes"
+    ],
     "examples": ["I have to be smart for work."],
     "freq": 4.83
   },
@@ -2279,15 +2463,21 @@
     "id": "b1-260",
     "word": "benefit",
     "class": "verb",
-    "definitions": ["to be useful to somebody or improve their life in some way"],
-    "examples": ["We should spend the money on something that will benefit everyone."],
+    "definitions": [
+      "to be useful to somebody or improve their life in some way"
+    ],
+    "examples": [
+      "We should spend the money on something that will benefit everyone."
+    ],
     "freq": 4.82
   },
   {
     "id": "b1-261",
     "word": "click",
     "class": "noun",
-    "definitions": ["the act of pressing the button on a computer mouse or touchpad"],
+    "definitions": [
+      "the act of pressing the button on a computer mouse or touchpad"
+    ],
     "examples": ["a mouse click"],
     "freq": 4.82
   },
@@ -2305,7 +2495,9 @@
     "id": "b1-263",
     "word": "feature",
     "class": "verb",
-    "definitions": ["to include a particular person or thing as a special feature"],
+    "definitions": [
+      "to include a particular person or thing as a special feature"
+    ],
     "examples": [
       "feature somebody/something as somebody/something, The film features Cary Grant as a professor."
     ],
@@ -2367,7 +2559,9 @@
     "id": "b1-270",
     "word": "basis",
     "class": "noun",
-    "definitions": ["the way things are organized or arranged; how often something happens"],
+    "definitions": [
+      "the way things are organized or arranged; how often something happens"
+    ],
     "examples": ["We are in contact on a regular basis."],
     "freq": 4.81
   },
@@ -2393,7 +2587,9 @@
     "id": "b1-273",
     "word": "supply",
     "class": "noun",
-    "definitions": ["an amount of something that is provided or available to be used"],
+    "definitions": [
+      "an amount of something that is provided or available to be used"
+    ],
     "examples": ["Advances in agriculture increased the food supply."],
     "freq": 4.81
   },
@@ -2413,7 +2609,9 @@
     "id": "b1-275",
     "word": "waste",
     "class": "adjective",
-    "definitions": ["no longer needed for a particular process and therefore thrown away"],
+    "definitions": [
+      "no longer needed for a particular process and therefore thrown away"
+    ],
     "examples": ["the disposal of waste material"],
     "freq": 4.81
   },
@@ -2488,7 +2686,9 @@
     "definitions": [
       "the part of a person that includes their mind, feelings and character rather than their body"
     ],
-    "examples": ["You are underestimating the power of the human spirit to overcome difficulties."],
+    "examples": [
+      "You are underestimating the power of the human spirit to overcome difficulties."
+    ],
     "freq": 4.79
   },
   {
@@ -2602,7 +2802,9 @@
     "word": "require",
     "class": "verb",
     "definitions": ["to need something; to depend on somebody/something"],
-    "examples": ["require something, These pets require a lot of care and attention."],
+    "examples": [
+      "require something, These pets require a lot of care and attention."
+    ],
     "freq": 4.78
   },
   {
@@ -2619,7 +2821,9 @@
     "id": "b1-298",
     "word": "journal",
     "class": "noun",
-    "definitions": ["a newspaper or magazine that deals with a particular subject or profession"],
+    "definitions": [
+      "a newspaper or magazine that deals with a particular subject or profession"
+    ],
     "examples": ["a scientific/an academic journal"],
     "freq": 4.77
   },
@@ -2627,7 +2831,9 @@
     "id": "b1-299",
     "word": "length",
     "class": "noun",
-    "definitions": ["the size or measurement of something from one end to the other"],
+    "definitions": [
+      "the size or measurement of something from one end to the other"
+    ],
     "examples": ["Measure the length of the line from A to B."],
     "freq": 4.77
   },
@@ -2655,8 +2861,12 @@
     "id": "b1-302",
     "word": "prove",
     "class": "verb",
-    "definitions": ["to use facts, evidence, etc. to show that something is true"],
-    "examples": ["prove something, They hope this new evidence will prove her innocence."],
+    "definitions": [
+      "to use facts, evidence, etc. to show that something is true"
+    ],
+    "examples": [
+      "prove something, They hope this new evidence will prove her innocence."
+    ],
     "freq": 4.77
   },
   {
@@ -2681,7 +2891,9 @@
     "id": "b1-305",
     "word": "software",
     "class": "noun",
-    "definitions": ["the programs used by a computer for doing particular jobs"],
+    "definitions": [
+      "the programs used by a computer for doing particular jobs"
+    ],
     "examples": ["management/editing software"],
     "freq": 4.77
   },
@@ -2689,7 +2901,9 @@
     "id": "b1-306",
     "word": "ad",
     "class": "noun",
-    "definitions": ["a notice, picture or film telling people about a product, job or service"],
+    "definitions": [
+      "a notice, picture or film telling people about a product, job or service"
+    ],
     "examples": ["The TV ads were first run last year."],
     "freq": 4.76
   },
@@ -2762,14 +2976,18 @@
     "definitions": [
       "to ask for something or ask somebody to do something in a polite or formal way"
     ],
-    "examples": ["request something, She requested permission to film at the White House."],
+    "examples": [
+      "request something, She requested permission to film at the White House."
+    ],
     "freq": 4.76
   },
   {
     "id": "b1-314",
     "word": "stick",
     "class": "noun",
-    "definitions": ["a thin piece of wood that has fallen or been broken from a tree"],
+    "definitions": [
+      "a thin piece of wood that has fallen or been broken from a tree"
+    ],
     "examples": ["We collected dry sticks to start a fire."],
     "freq": 4.76
   },
@@ -2780,15 +2998,21 @@
     "definitions": [
       "to fix something to something else, usually with a sticky substance; to become fixed to something in this way"
     ],
-    "examples": ["stick something + adv./prep., He stuck a stamp on the envelope."],
+    "examples": [
+      "stick something + adv./prep., He stuck a stamp on the envelope."
+    ],
     "freq": 4.76
   },
   {
     "id": "b1-316",
     "word": "beauty",
     "class": "noun",
-    "definitions": ["the quality of giving pleasure to the senses or to the mind"],
-    "examples": ["beauty of something, the beauty of the sunset/of poetry/of his singing"],
+    "definitions": [
+      "the quality of giving pleasure to the senses or to the mind"
+    ],
+    "examples": [
+      "beauty of something, the beauty of the sunset/of poetry/of his singing"
+    ],
     "freq": 4.75
   },
   {
@@ -2813,7 +3037,9 @@
     "id": "b1-319",
     "word": "file",
     "class": "noun",
-    "definitions": ["a box or folded piece of card for keeping loose papers together and in order"],
+    "definitions": [
+      "a box or folded piece of card for keeping loose papers together and in order"
+    ],
     "examples": ["a box file"],
     "freq": 4.75
   },
@@ -2860,7 +3086,9 @@
     "definitions": [
       "connected with the practical use of machines, methods, etc. in science and industry"
     ],
-    "examples": ["We offer free technical support for those buying our software."],
+    "examples": [
+      "We offer free technical support for those buying our software."
+    ],
     "freq": 4.75
   },
   {
@@ -2868,7 +3096,9 @@
     "word": "treat",
     "class": "verb",
     "definitions": ["to behave in a particular way towards somebody/something"],
-    "examples": ["treat somebody/something with something, to treat people with respect"],
+    "examples": [
+      "treat somebody/something with something, to treat people with respect"
+    ],
     "freq": 4.75
   },
   {
@@ -2878,7 +3108,9 @@
     "definitions": [
       "the time of life when a person is young, especially the time before a child becomes an adult"
     ],
-    "examples": ["in somebody's youth, He had been a talented musician in his youth."],
+    "examples": [
+      "in somebody's youth, He had been a talented musician in his youth."
+    ],
     "freq": 4.75
   },
   {
@@ -2886,7 +3118,9 @@
     "word": "appreciate",
     "class": "verb",
     "definitions": ["to recognize the good qualities of somebody/something"],
-    "examples": ["Over the years he came to appreciate the beauty and tranquillity of the river."],
+    "examples": [
+      "Over the years he came to appreciate the beauty and tranquillity of the river."
+    ],
     "freq": 4.74
   },
   {
@@ -2903,7 +3137,9 @@
     "id": "b1-329",
     "word": "forever",
     "class": "adverb",
-    "definitions": ["used to say that a particular situation or state will always exist"],
+    "definitions": [
+      "used to say that a particular situation or state will always exist"
+    ],
     "examples": ["I'll love you forever!"],
     "freq": 4.74
   },
@@ -2977,7 +3213,9 @@
     "id": "b1-337",
     "word": "guard",
     "class": "verb",
-    "definitions": ["to protect property, places or people from attack or danger"],
+    "definitions": [
+      "to protect property, places or people from attack or danger"
+    ],
     "examples": ["Armed officers guarded the entrance."],
     "freq": 4.73
   },
@@ -2993,7 +3231,9 @@
     "id": "b1-339",
     "word": "mention",
     "class": "noun",
-    "definitions": ["an act of referring to somebody/something in speech or writing"],
+    "definitions": [
+      "an act of referring to somebody/something in speech or writing"
+    ],
     "examples": ["He made no mention of her work."],
     "freq": 4.73
   },
@@ -3019,7 +3259,9 @@
     "id": "b1-342",
     "word": "reaction",
     "class": "noun",
-    "definitions": ["what you do, say or think as a result of something that has happened"],
+    "definitions": [
+      "what you do, say or think as a result of something that has happened"
+    ],
     "examples": ["to provoke/cause/get a reaction"],
     "freq": 4.73
   },
@@ -3027,7 +3269,9 @@
     "id": "b1-343",
     "word": "shoot",
     "class": "verb",
-    "definitions": ["to fire a gun or other weapon; to fire something from a weapon"],
+    "definitions": [
+      "to fire a gun or other weapon; to fire something from a weapon"
+    ],
     "examples": ["Don't shoot—I surrender."],
     "freq": 4.73
   },
@@ -3043,7 +3287,9 @@
     "id": "b1-345",
     "word": "solid",
     "class": "noun",
-    "definitions": ["a substance or an object that is solid, not a liquid or a gas"],
+    "definitions": [
+      "a substance or an object that is solid, not a liquid or a gas"
+    ],
     "examples": ["liquids and solids"],
     "freq": 4.73
   },
@@ -3054,14 +3300,18 @@
     "definitions": [
       "a sudden serious and dangerous event or situation that needs immediate action to deal with it"
     ],
-    "examples": ["This is a medical emergency needing urgent treatment with antibiotics."],
+    "examples": [
+      "This is a medical emergency needing urgent treatment with antibiotics."
+    ],
     "freq": 4.72
   },
   {
     "id": "b1-347",
     "word": "fuel",
     "class": "noun",
-    "definitions": ["any material that produces heat or power, usually when it is burnt"],
+    "definitions": [
+      "any material that produces heat or power, usually when it is burnt"
+    ],
     "examples": ["diesel/jet/rocket fuel"],
     "freq": 4.72
   },
@@ -3069,7 +3319,9 @@
     "id": "b1-348",
     "word": "kick",
     "class": "noun",
-    "definitions": ["a movement with the foot or the leg, usually to hit something with the foot"],
+    "definitions": [
+      "a movement with the foot or the leg, usually to hit something with the foot"
+    ],
     "examples": ["the first kick of the game"],
     "freq": 4.72
   },
@@ -3111,8 +3363,12 @@
     "id": "b1-353",
     "word": "advanced",
     "class": "adjective",
-    "definitions": ["having the most modern and recently developed ideas, methods, etc."],
-    "examples": ["Scientists are working on highly advanced technology to replace fossil fuels."],
+    "definitions": [
+      "having the most modern and recently developed ideas, methods, etc."
+    ],
+    "examples": [
+      "Scientists are working on highly advanced technology to replace fossil fuels."
+    ],
     "freq": 4.71
   },
   {
@@ -3138,7 +3394,9 @@
     "definitions": [
       "something that you feel you have to do because it is your moral or legal responsibility"
     ],
-    "examples": ["duty to do something, It is my duty to report it to the police."],
+    "examples": [
+      "duty to do something, It is my duty to report it to the police."
+    ],
     "freq": 4.71
   },
   {
@@ -3146,7 +3404,9 @@
     "word": "mix",
     "class": "noun",
     "definitions": ["a combination of different people or things"],
-    "examples": ["It's a school with a good social and ethnic mix of children."],
+    "examples": [
+      "It's a school with a good social and ethnic mix of children."
+    ],
     "freq": 4.71
   },
   {
@@ -3163,7 +3423,9 @@
     "id": "b1-359",
     "word": "path",
     "class": "noun",
-    "definitions": ["a way or track that is built or is made by the action of people walking"],
+    "definitions": [
+      "a way or track that is built or is made by the action of people walking"
+    ],
     "examples": ["a dirt/gravel/concrete path"],
     "freq": 4.71
   },
@@ -3181,15 +3443,21 @@
     "id": "b1-361",
     "word": "warm",
     "class": "verb",
-    "definitions": ["to make something/somebody warm or warmer; to become warm or warmer"],
-    "examples": ["warm something/somebody/yourself, Come in and warm yourself by the fire."],
+    "definitions": [
+      "to make something/somebody warm or warmer; to become warm or warmer"
+    ],
+    "examples": [
+      "warm something/somebody/yourself, Come in and warm yourself by the fire."
+    ],
     "freq": 4.71
   },
   {
     "id": "b1-362",
     "word": "border",
     "class": "noun",
-    "definitions": ["the line that divides two countries or areas; the land near this line"],
+    "definitions": [
+      "the line that divides two countries or areas; the land near this line"
+    ],
     "examples": ["I live in a small town in the US, near the Canadian border."],
     "freq": 4.7
   },
@@ -3197,7 +3465,9 @@
     "id": "b1-363",
     "word": "enemy",
     "class": "noun",
-    "definitions": ["a person who hates somebody or who acts or speaks against somebody/something"],
+    "definitions": [
+      "a person who hates somebody or who acts or speaks against somebody/something"
+    ],
     "examples": ["She didn't have an enemy in the world."],
     "freq": 4.7
   },
@@ -3216,7 +3486,9 @@
     "word": "fixed",
     "class": "adjective",
     "definitions": ["staying the same; not changing or able to be changed"],
-    "examples": ["These fixed prices give farmers a degree of financial security."],
+    "examples": [
+      "These fixed prices give farmers a degree of financial security."
+    ],
     "freq": 4.7
   },
   {
@@ -3233,7 +3505,9 @@
     "id": "b1-367",
     "word": "limit",
     "class": "noun",
-    "definitions": ["the greatest or smallest amount of something that is allowed"],
+    "definitions": [
+      "the greatest or smallest amount of something that is allowed"
+    ],
     "examples": ["They imposed a strict spending limit."],
     "freq": 4.7
   },
@@ -3241,7 +3515,9 @@
     "id": "b1-368",
     "word": "limit",
     "class": "verb",
-    "definitions": ["to stop something from increasing beyond a particular amount or level"],
+    "definitions": [
+      "to stop something from increasing beyond a particular amount or level"
+    ],
     "examples": ["measures to limit carbon dioxide emissions"],
     "freq": 4.7
   },
@@ -3260,7 +3536,9 @@
     "word": "suit",
     "class": "verb",
     "definitions": ["to be convenient or useful for somebody"],
-    "examples": ["suit somebody/something, If we met at two, would that suit you?"],
+    "examples": [
+      "suit somebody/something, If we met at two, would that suit you?"
+    ],
     "freq": 4.7
   },
   {
@@ -3333,7 +3611,9 @@
     "id": "b1-378",
     "word": "flow",
     "class": "noun",
-    "definitions": ["the steady and continuous movement of something/somebody in one direction"],
+    "definitions": [
+      "the steady and continuous movement of something/somebody in one direction"
+    ],
     "examples": ["the flow of an electric current"],
     "freq": 4.68
   },
@@ -3357,7 +3637,9 @@
     "id": "b1-381",
     "word": "transport",
     "class": "verb",
-    "definitions": ["to take something/somebody from one place to another in a vehicle"],
+    "definitions": [
+      "to take something/somebody from one place to another in a vehicle"
+    ],
     "examples": ["to transport goods/passengers"],
     "freq": 4.68
   },
@@ -3381,7 +3663,9 @@
     "id": "b1-384",
     "word": "candidate",
     "class": "noun",
-    "definitions": ["a person who is trying to be elected or is applying for a job"],
+    "definitions": [
+      "a person who is trying to be elected or is applying for a job"
+    ],
     "examples": ["a presidential candidate"],
     "freq": 4.66
   },
@@ -3427,7 +3711,9 @@
     "id": "b1-389",
     "word": "chapter",
     "class": "noun",
-    "definitions": ["a separate section of a book, usually with a number or title"],
+    "definitions": [
+      "a separate section of a book, usually with a number or title"
+    ],
     "examples": ["to read/write a chapter"],
     "freq": 4.65
   },
@@ -3435,7 +3721,9 @@
     "id": "b1-390",
     "word": "equal",
     "class": "adjective",
-    "definitions": ["the same in size, quantity, value, etc. as something else"],
+    "definitions": [
+      "the same in size, quantity, value, etc. as something else"
+    ],
     "examples": ["There is an equal number of boys and girls in the class."],
     "freq": 4.65
   },
@@ -3443,7 +3731,9 @@
     "id": "b1-391",
     "word": "equal",
     "class": "verb",
-    "definitions": ["to be the same in size, quantity, value, etc. as something else"],
+    "definitions": [
+      "to be the same in size, quantity, value, etc. as something else"
+    ],
     "examples": ["2x plus y equals 7 (= 2x+y=7)"],
     "freq": 4.65
   },
@@ -3452,14 +3742,18 @@
     "word": "identity",
     "class": "noun",
     "definitions": ["who or what somebody/something is"],
-    "examples": ["The police are trying to discover the identity of the killer."],
+    "examples": [
+      "The police are trying to discover the identity of the killer."
+    ],
     "freq": 4.65
   },
   {
     "id": "b1-393",
     "word": "measure",
     "class": "noun",
-    "definitions": ["an official action that is done in order to achieve a particular aim"],
+    "definitions": [
+      "an official action that is done in order to achieve a particular aim"
+    ],
     "examples": ["safety/austerity measures"],
     "freq": 4.65
   },
@@ -3467,7 +3761,9 @@
     "id": "b1-394",
     "word": "measure",
     "class": "verb",
-    "definitions": ["to find the size, quantity, etc. of something in standard units"],
+    "definitions": [
+      "to find the size, quantity, etc. of something in standard units"
+    ],
     "examples": [
       "measure something/somebody, a device that measures the level of radiation in the atmosphere"
     ],
@@ -3498,7 +3794,9 @@
     "definitions": [
       "having made a definite decision to do something and not letting anyone prevent you"
     ],
-    "examples": ["The opposition to her plan made her more determined than ever."],
+    "examples": [
+      "The opposition to her plan made her more determined than ever."
+    ],
     "freq": 4.64
   },
   {
@@ -3528,7 +3826,9 @@
     "definitions": [
       "to put somebody/something in a particular position, especially when it is done gently or carefully"
     ],
-    "examples": ["lay somebody/something + adv./prep., He laid a hand on my arm."],
+    "examples": [
+      "lay somebody/something + adv./prep., He laid a hand on my arm."
+    ],
     "freq": 4.64
   },
   {
@@ -3551,7 +3851,9 @@
     "id": "b1-403",
     "word": "determine",
     "class": "verb",
-    "definitions": ["to discover the facts about something; to calculate something exactly"],
+    "definitions": [
+      "to discover the facts about something; to calculate something exactly"
+    ],
     "examples": [
       "determine something, An inquiry was set up to determine the cause of the accident."
     ],
@@ -3561,7 +3863,9 @@
     "id": "b1-404",
     "word": "experienced",
     "class": "adjective",
-    "definitions": ["having knowledge or skill in a particular job or activity"],
+    "definitions": [
+      "having knowledge or skill in a particular job or activity"
+    ],
     "examples": ["an experienced player/teacher"],
     "freq": 4.63
   },
@@ -3570,7 +3874,9 @@
     "word": "obvious",
     "class": "adjective",
     "definitions": ["easy to see or understand"],
-    "examples": ["I know you don't like her but try not to make it so obvious."],
+    "examples": [
+      "I know you don't like her but try not to make it so obvious."
+    ],
     "freq": 4.63
   },
   {
@@ -3595,7 +3901,9 @@
     "id": "b1-408",
     "word": "champion",
     "class": "noun",
-    "definitions": ["a person, team, etc. that has won a competition, especially in a sport"],
+    "definitions": [
+      "a person, team, etc. that has won a competition, especially in a sport"
+    ],
     "examples": ["the world/European/national/Olympic champion"],
     "freq": 4.62
   },
@@ -3621,15 +3929,21 @@
     "id": "b1-411",
     "word": "giant",
     "class": "adjective",
-    "definitions": ["very large; much larger or more important than similar things usually are"],
-    "examples": ["The match was shown on a giant screen outside the town hall."],
+    "definitions": [
+      "very large; much larger or more important than similar things usually are"
+    ],
+    "examples": [
+      "The match was shown on a giant screen outside the town hall."
+    ],
     "freq": 4.62
   },
   {
     "id": "b1-412",
     "word": "giant",
     "class": "noun",
-    "definitions": ["(in stories) a very large strong person who is often cruel and stupid"],
+    "definitions": [
+      "(in stories) a very large strong person who is often cruel and stupid"
+    ],
     "examples": ["tales of giants and ogres"],
     "freq": 4.62
   },
@@ -3657,7 +3971,9 @@
     "id": "b1-415",
     "word": "signal",
     "class": "verb",
-    "definitions": ["to make a movement or sound to give somebody a message, an order, etc."],
+    "definitions": [
+      "to make a movement or sound to give somebody a message, an order, etc."
+    ],
     "examples": ["Don't fire until I signal."],
     "freq": 4.62
   },
@@ -3665,7 +3981,9 @@
     "id": "b1-416",
     "word": "theme",
     "class": "noun",
-    "definitions": ["the subject or main idea in a talk, piece of writing or work of art"],
+    "definitions": [
+      "the subject or main idea in a talk, piece of writing or work of art"
+    ],
     "examples": ["the central/main/key/major theme"],
     "freq": 4.62
   },
@@ -3681,7 +3999,9 @@
     "id": "b1-418",
     "word": "typically",
     "class": "adverb",
-    "definitions": ["used to say that something usually happens in the way that you are stating"],
+    "definitions": [
+      "used to say that something usually happens in the way that you are stating"
+    ],
     "examples": [
       "The standard chips are typically used for databases and other business software."
     ],
@@ -3701,7 +4021,9 @@
     "id": "b1-420",
     "word": "alcohol",
     "class": "noun",
-    "definitions": ["drinks such as beer, wine, etc. that can make people drunk"],
+    "definitions": [
+      "drinks such as beer, wine, etc. that can make people drunk"
+    ],
     "examples": ["He never drinks alcohol."],
     "freq": 4.61
   },
@@ -3709,7 +4031,9 @@
     "id": "b1-421",
     "word": "drunk",
     "class": "adjective",
-    "definitions": ["having drunk so much alcohol that it is impossible to think or speak clearly"],
+    "definitions": [
+      "having drunk so much alcohol that it is impossible to think or speak clearly"
+    ],
     "examples": ["They were clearly too drunk to drive."],
     "freq": 4.61
   },
@@ -3727,7 +4051,9 @@
     "id": "b1-423",
     "word": "familiar",
     "class": "adjective",
-    "definitions": ["well known to you; often seen or heard and therefore easy to recognize"],
+    "definitions": [
+      "well known to you; often seen or heard and therefore easy to recognize"
+    ],
     "examples": ["to look/sound/seem familiar"],
     "freq": 4.61
   },
@@ -3763,15 +4089,21 @@
     "id": "b1-427",
     "word": "unable",
     "class": "adjective",
-    "definitions": ["not having the skill, strength, time, knowledge, etc. to do something"],
-    "examples": ["a former soldier who has been unable to find work since the war ended"],
+    "definitions": [
+      "not having the skill, strength, time, knowledge, etc. to do something"
+    ],
+    "examples": [
+      "a former soldier who has been unable to find work since the war ended"
+    ],
     "freq": 4.61
   },
   {
     "id": "b1-428",
     "word": "upset",
     "class": "adjective",
-    "definitions": ["unhappy or disappointed because of something unpleasant that has happened"],
+    "definitions": [
+      "unhappy or disappointed because of something unpleasant that has happened"
+    ],
     "examples": ["I understand how upset you must be feeling."],
     "freq": 4.61
   },
@@ -3779,8 +4111,12 @@
     "id": "b1-429",
     "word": "upset",
     "class": "verb",
-    "definitions": ["to make somebody/yourself feel unhappy, anxious or annoyed"],
-    "examples": ["upset somebody/yourself, This decision is likely to upset a lot of people."],
+    "definitions": [
+      "to make somebody/yourself feel unhappy, anxious or annoyed"
+    ],
+    "examples": [
+      "upset somebody/yourself, This decision is likely to upset a lot of people."
+    ],
     "freq": 4.61
   },
   {
@@ -3825,7 +4161,9 @@
     "id": "b1-434",
     "word": "entertainment",
     "class": "noun",
-    "definitions": ["films, music, etc. used to entertain people; an example of this"],
+    "definitions": [
+      "films, music, etc. used to entertain people; an example of this"
+    ],
     "examples": ["radio, television and other forms of entertainment"],
     "freq": 4.6
   },
@@ -3869,7 +4207,9 @@
     "id": "b1-439",
     "word": "switch",
     "class": "verb",
-    "definitions": ["to change or make something change from one thing to another"],
+    "definitions": [
+      "to change or make something change from one thing to another"
+    ],
     "examples": [
       "switch (over) to something, We're in the process of switching over to a new system of invoicing."
     ],
@@ -3890,7 +4230,9 @@
     "word": "empty",
     "class": "verb",
     "definitions": ["to remove everything that is in a container, etc."],
-    "examples": ["empty something, She emptied the bins, washed the glasses and went to bed."],
+    "examples": [
+      "empty something, She emptied the bins, washed the glasses and went to bed."
+    ],
     "freq": 4.59
   },
   {
@@ -3993,7 +4335,9 @@
     "id": "b1-452",
     "word": "plot",
     "class": "noun",
-    "definitions": ["the series of events that form the story of a novel, play, film, etc."],
+    "definitions": [
+      "the series of events that form the story of a novel, play, film, etc."
+    ],
     "examples": ["It's hard to follow the plot of the film."],
     "freq": 4.58
   },
@@ -4033,7 +4377,9 @@
     "id": "b1-456",
     "word": "academic",
     "class": "adjective",
-    "definitions": ["connected with education, especially studying in schools and universities"],
+    "definitions": [
+      "connected with education, especially studying in schools and universities"
+    ],
     "examples": ["high/low academic standards"],
     "freq": 4.57
   },
@@ -4049,7 +4395,9 @@
     "id": "b1-458",
     "word": "category",
     "class": "noun",
-    "definitions": ["a group of people or things with particular features in common"],
+    "definitions": [
+      "a group of people or things with particular features in common"
+    ],
     "examples": ["These are the nominees from each category."],
     "freq": 4.57
   },
@@ -4091,7 +4439,9 @@
     "id": "b1-463",
     "word": "personally",
     "class": "adverb",
-    "definitions": ["used to show that you are giving your own opinion about something"],
+    "definitions": [
+      "used to show that you are giving your own opinion about something"
+    ],
     "examples": ["Personally, I prefer the second option."],
     "freq": 4.57
   },
@@ -4127,7 +4477,9 @@
     "id": "b1-467",
     "word": "tight",
     "class": "adjective",
-    "definitions": ["held or fixed in position securely; difficult to move, open or separate"],
+    "definitions": [
+      "held or fixed in position securely; difficult to move, open or separate"
+    ],
     "examples": ["He kept a tight grip on her arm."],
     "freq": 4.57
   },
@@ -4161,7 +4513,9 @@
     "id": "b1-471",
     "word": "employment",
     "class": "noun",
-    "definitions": ["work, especially when it is done to earn money; the state of being employed"],
+    "definitions": [
+      "work, especially when it is done to earn money; the state of being employed"
+    ],
     "examples": ["full-time/part-time employment"],
     "freq": 4.56
   },
@@ -4188,7 +4542,9 @@
     "definitions": [
       "to help sell a product, service, etc. or make it more popular by advertising it or offering it at a special price"
     ],
-    "examples": ["promote something, The band has gone on tour to promote their new album."],
+    "examples": [
+      "promote something, The band has gone on tour to promote their new album."
+    ],
     "freq": 4.56
   },
   {
@@ -4216,7 +4572,9 @@
     "definitions": [
       "if the police arrest somebody, the person is taken to a police station and kept there because the police believe they may be guilty of a crime"
     ],
-    "examples": ["arrest somebody, A man has been arrested in connection with the robbery."],
+    "examples": [
+      "arrest somebody, A man has been arrested in connection with the robbery."
+    ],
     "freq": 4.55
   },
   {
@@ -4231,16 +4589,24 @@
     "id": "b1-479",
     "word": "ban",
     "class": "verb",
-    "definitions": ["to decide or say officially that something is not allowed"],
-    "examples": ["ban something, The law effectively bans smoking in all public places."],
+    "definitions": [
+      "to decide or say officially that something is not allowed"
+    ],
+    "examples": [
+      "ban something, The law effectively bans smoking in all public places."
+    ],
     "freq": 4.55
   },
   {
     "id": "b1-480",
     "word": "deliver",
     "class": "verb",
-    "definitions": ["to take goods, letters, etc. to the person or people they have been sent to"],
-    "examples": ["deliver something, I get my food delivered from the supermarket to save time."],
+    "definitions": [
+      "to take goods, letters, etc. to the person or people they have been sent to"
+    ],
+    "examples": [
+      "deliver something, I get my food delivered from the supermarket to save time."
+    ],
     "freq": 4.55
   },
   {
@@ -4260,7 +4626,9 @@
     "definitions": [
       "to give somebody an extra amount of money to thank them for something they have done for you as part of their job"
     ],
-    "examples": ["Americans were always welcome because they tended to tip heavily."],
+    "examples": [
+      "Americans were always welcome because they tended to tip heavily."
+    ],
     "freq": 4.55
   },
   {
@@ -4409,7 +4777,9 @@
     "id": "b1-499",
     "word": "chest",
     "class": "noun",
-    "definitions": ["the top part of the front of the body, between the neck and the stomach"],
+    "definitions": [
+      "the top part of the front of the body, between the neck and the stomach"
+    ],
     "examples": ["chest pains"],
     "freq": 4.52
   },
@@ -4459,7 +4829,9 @@
     "id": "b1-505",
     "word": "aim",
     "class": "noun",
-    "definitions": ["the purpose of doing something; what somebody is trying to achieve"],
+    "definitions": [
+      "the purpose of doing something; what somebody is trying to achieve"
+    ],
     "examples": ["the stated aims of the study"],
     "freq": 4.51
   },
@@ -4475,7 +4847,9 @@
     "id": "b1-507",
     "word": "campus",
     "class": "noun",
-    "definitions": ["the buildings of a university or college and the land around them"],
+    "definitions": [
+      "the buildings of a university or college and the land around them"
+    ],
     "examples": ["university/college campuses"],
     "freq": 4.51
   },
@@ -4549,7 +4923,9 @@
     "id": "b1-515",
     "word": "quote",
     "class": "verb",
-    "definitions": ["to repeat the exact words that another person has said or written"],
+    "definitions": [
+      "to repeat the exact words that another person has said or written"
+    ],
     "examples": ["quote something, to quote Shakespeare"],
     "freq": 4.51
   },
@@ -4557,7 +4933,9 @@
     "id": "b1-516",
     "word": "trend",
     "class": "noun",
-    "definitions": ["a general direction in which a situation is changing or developing"],
+    "definitions": [
+      "a general direction in which a situation is changing or developing"
+    ],
     "examples": ["social/economic/political/demographic trends"],
     "freq": 4.51
   },
@@ -4597,7 +4975,9 @@
     "id": "b1-521",
     "word": "graduate",
     "class": "verb",
-    "definitions": ["to get a degree, especially your first degree, from a university or college"],
+    "definitions": [
+      "to get a degree, especially your first degree, from a university or college"
+    ],
     "examples": ["She taught in France after she graduated."],
     "freq": 4.5
   },
@@ -4633,7 +5013,9 @@
     "id": "b1-525",
     "word": "effectively",
     "class": "adverb",
-    "definitions": ["in a way that produces the intended result or a successful result"],
+    "definitions": [
+      "in a way that produces the intended result or a successful result"
+    ],
     "examples": ["The company must reduce costs to compete effectively."],
     "freq": 4.49
   },
@@ -4661,15 +5043,21 @@
     "id": "b1-528",
     "word": "improvement",
     "class": "noun",
-    "definitions": ["the act of making something better; the process of something becoming better"],
-    "examples": ["The economy has shown significant improvement over the past 9 months."],
+    "definitions": [
+      "the act of making something better; the process of something becoming better"
+    ],
+    "examples": [
+      "The economy has shown significant improvement over the past 9 months."
+    ],
     "freq": 4.49
   },
   {
     "id": "b1-529",
     "word": "repeat",
     "class": "noun",
-    "definitions": ["an event that is very similar to something that happened before"],
+    "definitions": [
+      "an event that is very similar to something that happened before"
+    ],
     "examples": [
       "repeat of something, She didn't want a repeat performance of what had happened the night before."
     ],
@@ -4688,7 +5076,9 @@
     "word": "ignore",
     "class": "verb",
     "definitions": ["to pay no attention to something"],
-    "examples": ["He ignored all the ‘No Smoking’ signs and lit up a cigarette."],
+    "examples": [
+      "He ignored all the ‘No Smoking’ signs and lit up a cigarette."
+    ],
     "freq": 4.48
   },
   {
@@ -4696,7 +5086,9 @@
     "word": "meanwhile",
     "class": "adverb",
     "definitions": ["while something else is happening"],
-    "examples": ["Leave the cake to cool completely. Meanwhile, make the topping."],
+    "examples": [
+      "Leave the cake to cool completely. Meanwhile, make the topping."
+    ],
     "freq": 4.48
   },
   {
@@ -4731,7 +5123,9 @@
     "id": "b1-536",
     "word": "practical",
     "class": "adjective",
-    "definitions": ["connected with real situations rather than with ideas or theories"],
+    "definitions": [
+      "connected with real situations rather than with ideas or theories"
+    ],
     "examples": ["to have gained practical experience of the work"],
     "freq": 4.48
   },
@@ -4739,7 +5133,9 @@
     "id": "b1-537",
     "word": "relative",
     "class": "adjective",
-    "definitions": ["considered and judged by being compared with something else"],
+    "definitions": [
+      "considered and judged by being compared with something else"
+    ],
     "examples": ["You must consider the relative merits of the two plans."],
     "freq": 4.48
   },
@@ -4795,7 +5191,9 @@
     "id": "b1-543",
     "word": "impressive",
     "class": "adjective",
-    "definitions": ["making you admire them, because they are very large, good, skilful, etc."],
+    "definitions": [
+      "making you admire them, because they are very large, good, skilful, etc."
+    ],
     "examples": ["an impressive performance"],
     "freq": 4.47
   },
@@ -4811,7 +5209,9 @@
     "id": "b1-545",
     "word": "strongly",
     "class": "adverb",
-    "definitions": ["in a way that shows definite and serious opinions or beliefs"],
+    "definitions": [
+      "in a way that shows definite and serious opinions or beliefs"
+    ],
     "examples": ["a strongly worded protest"],
     "freq": 4.47
   },
@@ -4830,7 +5230,9 @@
     "word": "atmosphere",
     "class": "noun",
     "definitions": ["the mixture of gases that surrounds the earth"],
-    "examples": ["Wind power doesn't release carbon dioxide into the atmosphere."],
+    "examples": [
+      "Wind power doesn't release carbon dioxide into the atmosphere."
+    ],
     "freq": 4.46
   },
   {
@@ -4859,7 +5261,9 @@
     "id": "b1-550",
     "word": "contrast",
     "class": "verb",
-    "definitions": ["to compare two things in order to show the differences between them"],
+    "definitions": [
+      "to compare two things in order to show the differences between them"
+    ],
     "examples": ["contrast A and B, The poem contrasts youth and age."],
     "freq": 4.46
   },
@@ -4925,7 +5329,9 @@
     "id": "b1-557",
     "word": "innocent",
     "class": "adjective",
-    "definitions": ["not guilty of a crime, etc.; not having done something wrong"],
+    "definitions": [
+      "not guilty of a crime, etc.; not having done something wrong"
+    ],
     "examples": ["They have imprisoned an innocent man."],
     "freq": 4.45
   },
@@ -4941,7 +5347,9 @@
     "id": "b1-559",
     "word": "photography",
     "class": "noun",
-    "definitions": ["the art, process or job of taking photographs or filming something"],
+    "definitions": [
+      "the art, process or job of taking photographs or filming something"
+    ],
     "examples": ["Her hobbies include hiking and photography."],
     "freq": 4.45
   },
@@ -4969,7 +5377,9 @@
     "id": "b1-562",
     "word": "silent",
     "class": "adjective",
-    "definitions": ["where there is little or no sound; making little or no sound"],
+    "definitions": [
+      "where there is little or no sound; making little or no sound"
+    ],
     "examples": ["At last the traffic fell silent."],
     "freq": 4.45
   },
@@ -5021,7 +5431,9 @@
     "id": "b1-568",
     "word": "horrible",
     "class": "adjective",
-    "definitions": ["very bad or unpleasant; used to describe something that you do not like"],
+    "definitions": [
+      "very bad or unpleasant; used to describe something that you do not like"
+    ],
     "examples": ["What horrible weather!"],
     "freq": 4.44
   },
@@ -5030,7 +5442,9 @@
     "word": "mood",
     "class": "noun",
     "definitions": ["the way you are feeling at a particular time"],
-    "examples": ["in a … mood, She's in a good mood today (= happy and friendly)."],
+    "examples": [
+      "in a … mood, She's in a good mood today (= happy and friendly)."
+    ],
     "freq": 4.44
   },
   {
@@ -5047,7 +5461,9 @@
     "id": "b1-571",
     "word": "passion",
     "class": "noun",
-    "definitions": ["a very strong feeling of love, hate, anger, enthusiasm, etc."],
+    "definitions": [
+      "a very strong feeling of love, hate, anger, enthusiasm, etc."
+    ],
     "examples": ["I admire the passion and commitment shown by the players."],
     "freq": 4.44
   },
@@ -5093,7 +5509,9 @@
     "id": "b1-576",
     "word": "confident",
     "class": "adjective",
-    "definitions": ["feeling sure about your own ability to do things and be successful"],
+    "definitions": [
+      "feeling sure about your own ability to do things and be successful"
+    ],
     "examples": ["She was in a relaxed, confident mood."],
     "freq": 4.43
   },
@@ -5101,7 +5519,9 @@
     "id": "b1-577",
     "word": "custom",
     "class": "noun",
-    "definitions": ["an accepted way of behaving or of doing things in a society or a community"],
+    "definitions": [
+      "an accepted way of behaving or of doing things in a society or a community"
+    ],
     "examples": ["It's a local custom."],
     "freq": 4.43
   },
@@ -5127,8 +5547,12 @@
     "id": "b1-580",
     "word": "label",
     "class": "verb",
-    "definitions": ["to fix a label on something or write information on something"],
-    "examples": ["label something, Make sure that your luggage is clearly labelled."],
+    "definitions": [
+      "to fix a label on something or write information on something"
+    ],
+    "examples": [
+      "label something, Make sure that your luggage is clearly labelled."
+    ],
     "freq": 4.43
   },
   {
@@ -5181,7 +5605,9 @@
     "id": "b1-586",
     "word": "dressed",
     "class": "adjective",
-    "definitions": ["wearing clothes and not naked or wearing clothes for sleeping"],
+    "definitions": [
+      "wearing clothes and not naked or wearing clothes for sleeping"
+    ],
     "examples": ["Hurry up and get dressed."],
     "freq": 4.42
   },
@@ -5215,7 +5641,9 @@
     "id": "b1-590",
     "word": "prayer",
     "class": "noun",
-    "definitions": ["words that you say to God giving thanks or asking for help"],
+    "definitions": [
+      "words that you say to God giving thanks or asking for help"
+    ],
     "examples": ["to say your prayers"],
     "freq": 4.42
   },
@@ -5231,7 +5659,9 @@
     "id": "b1-592",
     "word": "soil",
     "class": "noun",
-    "definitions": ["the top layer of the earth in which plants, trees, etc. grow"],
+    "definitions": [
+      "the top layer of the earth in which plants, trees, etc. grow"
+    ],
     "examples": ["instruments for measuring soil moisture"],
     "freq": 4.42
   },
@@ -5247,7 +5677,9 @@
     "id": "b1-594",
     "word": "dust",
     "class": "noun",
-    "definitions": ["a fine powder that consists of very small pieces of sand, earth, etc."],
+    "definitions": [
+      "a fine powder that consists of very small pieces of sand, earth, etc."
+    ],
     "examples": ["A cloud of dust rose as the truck drove off."],
     "freq": 4.41
   },
@@ -5292,7 +5724,9 @@
     "definitions": [
       "to state or show that something is definitely true or correct, especially by providing evidence"
     ],
-    "examples": ["confirm something, His guilty expression confirmed my suspicions."],
+    "examples": [
+      "confirm something, His guilty expression confirmed my suspicions."
+    ],
     "freq": 4.4
   },
   {
@@ -5310,7 +5744,9 @@
     "definitions": [
       "a quantity or sheet of something that lies over a surface or between surfaces"
     ],
-    "examples": ["layer (of something), A thin layer of dust covered everything."],
+    "examples": [
+      "layer (of something), A thin layer of dust covered everything."
+    ],
     "freq": 4.4
   },
   {
@@ -5333,7 +5769,9 @@
     "id": "b1-604",
     "word": "pray",
     "class": "verb",
-    "definitions": ["to speak to God, especially to give thanks or ask for help"],
+    "definitions": [
+      "to speak to God, especially to give thanks or ask for help"
+    ],
     "examples": ["They knelt down and prayed."],
     "freq": 4.4
   },
@@ -5351,7 +5789,9 @@
     "id": "b1-606",
     "word": "smooth",
     "class": "adjective",
-    "definitions": ["completely flat and even, without any rough areas or holes"],
+    "definitions": [
+      "completely flat and even, without any rough areas or holes"
+    ],
     "examples": ["the smooth surface of the metal"],
     "freq": 4.4
   },
@@ -5370,7 +5810,9 @@
     "word": "sudden",
     "class": "adjective",
     "definitions": ["happening or done quickly and unexpectedly"],
-    "examples": ["News of his sudden and unexpected death came as a great shock."],
+    "examples": [
+      "News of his sudden and unexpected death came as a great shock."
+    ],
     "freq": 4.4
   },
   {
@@ -5385,7 +5827,9 @@
     "id": "b1-610",
     "word": "entrance",
     "class": "noun",
-    "definitions": ["a door, gate, passage, etc. used for entering a room, building or place"],
+    "definitions": [
+      "a door, gate, passage, etc. used for entering a room, building or place"
+    ],
     "examples": ["the front/back/side entrance of the house"],
     "freq": 4.39
   },
@@ -5462,7 +5906,9 @@
     "definitions": [
       "to show the image of somebody/something on the surface of something such as a mirror, water or glass"
     ],
-    "examples": ["be reflected (in something), His face was reflected in the mirror."],
+    "examples": [
+      "be reflected (in something), His face was reflected in the mirror."
+    ],
     "freq": 4.39
   },
   {
@@ -5479,7 +5925,9 @@
     "id": "b1-621",
     "word": "shell",
     "class": "noun",
-    "definitions": ["the hard outer part of eggs, nuts, some seeds, and some animals"],
+    "definitions": [
+      "the hard outer part of eggs, nuts, some seeds, and some animals"
+    ],
     "examples": ["We collected shells on the beach."],
     "freq": 4.39
   },
@@ -5531,7 +5979,9 @@
     "id": "b1-627",
     "word": "suitable",
     "class": "adjective",
-    "definitions": ["right or appropriate for a particular purpose or occasion"],
+    "definitions": [
+      "right or appropriate for a particular purpose or occasion"
+    ],
     "examples": ["a suitable candidate"],
     "freq": 4.38
   },
@@ -5569,7 +6019,9 @@
     "id": "b1-631",
     "word": "seed",
     "class": "noun",
-    "definitions": ["the small hard part produced by a plant, from which a new plant can grow"],
+    "definitions": [
+      "the small hard part produced by a plant, from which a new plant can grow"
+    ],
     "examples": ["a packet of wild flower seeds"],
     "freq": 4.37
   },
@@ -5628,14 +6080,18 @@
     "definitions": [
       "a plant grown in warm countries for the soft white hairs around its seeds that are used to make cloth and thread"
     ],
-    "examples": ["From the age of six she worked in the fields, picking cotton."],
+    "examples": [
+      "From the age of six she worked in the fields, picking cotton."
+    ],
     "freq": 4.35
   },
   {
     "id": "b1-638",
     "word": "discount",
     "class": "noun",
-    "definitions": ["an amount of money that is taken off the usual cost of something"],
+    "definitions": [
+      "an amount of money that is taken off the usual cost of something"
+    ],
     "examples": ["to get/offer a discount"],
     "freq": 4.35
   },
@@ -5692,7 +6148,9 @@
     "word": "indicate",
     "class": "verb",
     "definitions": ["to show that something is true or exists"],
-    "examples": ["indicate something, Initial tests indicate the presence of oxygen."],
+    "examples": [
+      "indicate something, Initial tests indicate the presence of oxygen."
+    ],
     "freq": 4.35
   },
   {
@@ -5745,8 +6203,12 @@
     "id": "b1-650",
     "word": "flood",
     "class": "noun",
-    "definitions": ["a large amount of water covering an area that is usually dry"],
-    "examples": ["The heavy rain has caused floods in many parts of the country."],
+    "definitions": [
+      "a large amount of water covering an area that is usually dry"
+    ],
+    "examples": [
+      "The heavy rain has caused floods in many parts of the country."
+    ],
     "freq": 4.34
   },
   {
@@ -5781,7 +6243,9 @@
     "id": "b1-654",
     "word": "brave",
     "class": "adjective",
-    "definitions": ["willing to do things that are difficult, dangerous or painful; not afraid"],
+    "definitions": [
+      "willing to do things that are difficult, dangerous or painful; not afraid"
+    ],
     "examples": ["brave men and women"],
     "freq": 4.33
   },
@@ -5806,7 +6270,9 @@
     "word": "intention",
     "class": "noun",
     "definitions": ["what you intend or plan to do; your aim"],
-    "examples": ["intention of doing something, I have no intention of going to the wedding."],
+    "examples": [
+      "intention of doing something, I have no intention of going to the wedding."
+    ],
     "freq": 4.33
   },
   {
@@ -5859,7 +6325,9 @@
     "id": "b1-663",
     "word": "invest",
     "class": "verb",
-    "definitions": ["to buy property, shares in a company, etc. in the hope of making a profit"],
+    "definitions": [
+      "to buy property, shares in a company, etc. in the hope of making a profit"
+    ],
     "examples": ["Now is a good time to invest."],
     "freq": 4.32
   },
@@ -5875,7 +6343,9 @@
     "id": "b1-665",
     "word": "announcement",
     "class": "noun",
-    "definitions": ["a spoken or written statement that informs people about something"],
+    "definitions": [
+      "a spoken or written statement that informs people about something"
+    ],
     "examples": ["to make an announcement"],
     "freq": 4.31
   },
@@ -5899,7 +6369,9 @@
     "id": "b1-668",
     "word": "define",
     "class": "verb",
-    "definitions": ["to say or explain what the meaning of a word or phrase is"],
+    "definitions": [
+      "to say or explain what the meaning of a word or phrase is"
+    ],
     "examples": ["define something, The term ‘normal’ is difficult to define."],
     "freq": 4.31
   },
@@ -5907,7 +6379,9 @@
     "id": "b1-669",
     "word": "documentary",
     "class": "noun",
-    "definitions": ["a film or a radio or television programme giving facts about something"],
+    "definitions": [
+      "a film or a radio or television programme giving facts about something"
+    ],
     "examples": ["There were some interesting interviews in the documentary."],
     "freq": 4.31
   },
@@ -5915,8 +6389,12 @@
     "id": "b1-670",
     "word": "explore",
     "class": "verb",
-    "definitions": ["to travel to or around an area or a country in order to learn about it"],
-    "examples": ["As soon as we arrived on the island we were eager to explore."],
+    "definitions": [
+      "to travel to or around an area or a country in order to learn about it"
+    ],
+    "examples": [
+      "As soon as we arrived on the island we were eager to explore."
+    ],
     "freq": 4.31
   },
   {
@@ -5941,7 +6419,9 @@
     "id": "b1-673",
     "word": "laboratory",
     "class": "noun",
-    "definitions": ["a room or building used for scientific research, experiments, testing, etc."],
+    "definitions": [
+      "a room or building used for scientific research, experiments, testing, etc."
+    ],
     "examples": ["a clinical/research laboratory"],
     "freq": 4.31
   },
@@ -5972,7 +6452,9 @@
     "word": "unlikely",
     "class": "adjective",
     "definitions": ["not likely to happen; not probable"],
-    "examples": ["unlikely to do something, The project seemed unlikely to succeed."],
+    "examples": [
+      "unlikely to do something, The project seemed unlikely to succeed."
+    ],
     "freq": 4.31
   },
   {
@@ -6005,8 +6487,12 @@
     "id": "b1-680",
     "word": "celebration",
     "class": "noun",
-    "definitions": ["a special event that people organize in order to celebrate something"],
-    "examples": ["The occasion was the 40th anniversary celebrations of the orchestra."],
+    "definitions": [
+      "a special event that people organize in order to celebrate something"
+    ],
+    "examples": [
+      "The occasion was the 40th anniversary celebrations of the orchestra."
+    ],
     "freq": 4.29
   },
   {
@@ -6033,15 +6519,21 @@
     "id": "b1-683",
     "word": "reliable",
     "class": "adjective",
-    "definitions": ["that can be trusted to do something well; that you can rely on"],
-    "examples": ["We are looking for someone who is reliable and hard-working."],
+    "definitions": [
+      "that can be trusted to do something well; that you can rely on"
+    ],
+    "examples": [
+      "We are looking for someone who is reliable and hard-working."
+    ],
     "freq": 4.29
   },
   {
     "id": "b1-684",
     "word": "alarm",
     "class": "noun",
-    "definitions": ["a loud noise or a signal that warns people of danger or of a problem"],
+    "definitions": [
+      "a loud noise or a signal that warns people of danger or of a problem"
+    ],
     "examples": [
       "She decided to sound the alarm (= warn people that the situation was dangerous)."
     ],
@@ -6051,7 +6543,9 @@
     "id": "b1-685",
     "word": "breathing",
     "class": "noun",
-    "definitions": ["the action of taking air into the lungs and sending it out again"],
+    "definitions": [
+      "the action of taking air into the lungs and sending it out again"
+    ],
     "examples": ["Her breathing became steady and she fell asleep."],
     "freq": 4.28
   },
@@ -6151,7 +6645,9 @@
     "id": "b1-696",
     "word": "breathe",
     "class": "verb",
-    "definitions": ["to take air into your lungs and send it out again through your nose or mouth"],
+    "definitions": [
+      "to take air into your lungs and send it out again through your nose or mouth"
+    ],
     "examples": ["He breathed deeply before speaking again."],
     "freq": 4.26
   },
@@ -6169,7 +6665,9 @@
     "id": "b1-698",
     "word": "garage",
     "class": "noun",
-    "definitions": ["a building for keeping one or more cars or other vehicles in"],
+    "definitions": [
+      "a building for keeping one or more cars or other vehicles in"
+    ],
     "examples": ["a double garage (= one for two cars)"],
     "freq": 4.25
   },
@@ -6211,7 +6709,9 @@
     "id": "b1-703",
     "word": "destination",
     "class": "noun",
-    "definitions": ["a place to which somebody/something is going or being sent"],
+    "definitions": [
+      "a place to which somebody/something is going or being sent"
+    ],
     "examples": ["popular tourist/holiday destinations like the Bahamas"],
     "freq": 4.24
   },
@@ -6219,7 +6719,9 @@
     "id": "b1-704",
     "word": "dirt",
     "class": "noun",
-    "definitions": ["any substance that makes something dirty, for example dust, soil or mud"],
+    "definitions": [
+      "any substance that makes something dirty, for example dust, soil or mud"
+    ],
     "examples": ["His clothes were covered in dirt."],
     "freq": 4.24
   },
@@ -6243,7 +6745,9 @@
     "id": "b1-707",
     "word": "gather",
     "class": "verb",
-    "definitions": ["to come together, or bring people together, in one place to form a group"],
+    "definitions": [
+      "to come together, or bring people together, in one place to form a group"
+    ],
     "examples": ["A crowd soon gathered."],
     "freq": 4.24
   },
@@ -6252,14 +6756,18 @@
     "word": "relate",
     "class": "verb",
     "definitions": ["show or make a connection between two or more things"],
-    "examples": ["relate something, I found it difficult to relate the two ideas in my mind."],
+    "examples": [
+      "relate something, I found it difficult to relate the two ideas in my mind."
+    ],
     "freq": 4.24
   },
   {
     "id": "b1-709",
     "word": "robot",
     "class": "noun",
-    "definitions": ["a machine that can perform a complicated series of tasks by itself"],
+    "definitions": [
+      "a machine that can perform a complicated series of tasks by itself"
+    ],
     "examples": ["These cars are built by robots."],
     "freq": 4.24
   },
@@ -6267,7 +6775,9 @@
     "id": "b1-710",
     "word": "outdoor",
     "class": "adjective",
-    "definitions": ["used, happening or located outside rather than in a building"],
+    "definitions": [
+      "used, happening or located outside rather than in a building"
+    ],
     "examples": ["outdoor pursuits/recreation/activities"],
     "freq": 4.23
   },
@@ -6275,7 +6785,9 @@
     "id": "b1-711",
     "word": "substance",
     "class": "noun",
-    "definitions": ["a type of solid, liquid or gas that has particular qualities"],
+    "definitions": [
+      "a type of solid, liquid or gas that has particular qualities"
+    ],
     "examples": ["a sticky substance"],
     "freq": 4.23
   },
@@ -6311,7 +6823,9 @@
     "id": "b1-715",
     "word": "folk",
     "class": "adjective",
-    "definitions": ["traditional and typical of the ordinary people of a country or community"],
+    "definitions": [
+      "traditional and typical of the ordinary people of a country or community"
+    ],
     "examples": ["We visited an exhibition of folk art."],
     "freq": 4.22
   },
@@ -6327,7 +6841,9 @@
     "id": "b1-717",
     "word": "leaf",
     "class": "noun",
-    "definitions": ["a flat green part of a plant, growing from a stem or branch or from the root"],
+    "definitions": [
+      "a flat green part of a plant, growing from a stem or branch or from the root"
+    ],
     "examples": ["lettuce/cabbage/oak leaves"],
     "freq": 4.22
   },
@@ -6363,7 +6879,9 @@
     "id": "b1-721",
     "word": "continuous",
     "class": "adjective",
-    "definitions": ["happening or existing for a period of time without being interrupted"],
+    "definitions": [
+      "happening or existing for a period of time without being interrupted"
+    ],
     "examples": [
       "Recovery after the accident will be a continuous process that may take several months."
     ],
@@ -6383,7 +6901,9 @@
     "id": "b1-723",
     "word": "highlight",
     "class": "noun",
-    "definitions": ["the best, most interesting or most exciting part of something"],
+    "definitions": [
+      "the best, most interesting or most exciting part of something"
+    ],
     "examples": ["One of the highlights of the trip was seeing the Taj Mahal."],
     "freq": 4.21
   },
@@ -6391,15 +6911,21 @@
     "id": "b1-724",
     "word": "highlight",
     "class": "verb",
-    "definitions": ["to emphasize something, especially so that people give it more attention"],
-    "examples": ["The report highlighted the importance of exercise to maintain a healthy body."],
+    "definitions": [
+      "to emphasize something, especially so that people give it more attention"
+    ],
+    "examples": [
+      "The report highlighted the importance of exercise to maintain a healthy body."
+    ],
     "freq": 4.21
   },
   {
     "id": "b1-725",
     "word": "nail",
     "class": "noun",
-    "definitions": ["the thin hard layer covering the outer tip of the fingers or toes"],
+    "definitions": [
+      "the thin hard layer covering the outer tip of the fingers or toes"
+    ],
     "examples": ["Stop biting your nails!"],
     "freq": 4.21
   },
@@ -6547,7 +7073,9 @@
     "id": "b1-741",
     "word": "examine",
     "class": "verb",
-    "definitions": ["to consider or study an idea, a subject, etc. very carefully"],
+    "definitions": [
+      "to consider or study an idea, a subject, etc. very carefully"
+    ],
     "examples": [
       "examine something, This study sets out to examine in detail the possible effects of climate change."
     ],
@@ -6578,7 +7106,9 @@
     "word": "mixture",
     "class": "noun",
     "definitions": ["a combination of different things"],
-    "examples": ["She was a curious mixture, part grand lady, part wild child."],
+    "examples": [
+      "She was a curious mixture, part grand lady, part wild child."
+    ],
     "freq": 4.18
   },
   {
@@ -6586,7 +7116,9 @@
     "word": "unnecessary",
     "class": "adjective",
     "definitions": ["not needed; more than is needed"],
-    "examples": ["They were found guilty of causing unnecessary suffering to animals."],
+    "examples": [
+      "They were found guilty of causing unnecessary suffering to animals."
+    ],
     "freq": 4.18
   },
   {
@@ -6619,7 +7151,9 @@
     "id": "b1-749",
     "word": "apologize",
     "class": "verb",
-    "definitions": ["to say that you are sorry for doing something wrong or causing a problem"],
+    "definitions": [
+      "to say that you are sorry for doing something wrong or causing a problem"
+    ],
     "examples": ["Why should I apologize?"],
     "freq": 4.16
   },
@@ -6665,7 +7199,9 @@
     "id": "b1-754",
     "word": "shy",
     "class": "adjective",
-    "definitions": ["nervous or embarrassed about meeting and speaking to other people"],
+    "definitions": [
+      "nervous or embarrassed about meeting and speaking to other people"
+    ],
     "examples": ["He is not exactly the shy and retiring type."],
     "freq": 4.16
   },
@@ -6721,7 +7257,9 @@
     "id": "b1-761",
     "word": "bend",
     "class": "verb",
-    "definitions": ["to lean, or make something lean, in a particular direction"],
+    "definitions": [
+      "to lean, or make something lean, in a particular direction"
+    ],
     "examples": ["He bent and kissed her."],
     "freq": 4.13
   },
@@ -6732,7 +7270,9 @@
     "definitions": [
       "to come together to form a single thing or group; to join two or more things or groups together to form a single one"
     ],
-    "examples": ["combine to do something, Hydrogen and oxygen combine to form water."],
+    "examples": [
+      "combine to do something, Hydrogen and oxygen combine to form water."
+    ],
     "freq": 4.13
   },
   {
@@ -6757,7 +7297,9 @@
     "id": "b1-765",
     "word": "keen",
     "class": "adjective",
-    "definitions": ["wanting to do something or wanting something to happen very much"],
+    "definitions": [
+      "wanting to do something or wanting something to happen very much"
+    ],
     "examples": ["keen to do something, John was very keen to help."],
     "freq": 4.13
   },
@@ -6791,7 +7333,9 @@
     "id": "b1-769",
     "word": "cruel",
     "class": "adjective",
-    "definitions": ["having a desire to cause physical or mental pain and make somebody suffer"],
+    "definitions": [
+      "having a desire to cause physical or mental pain and make somebody suffer"
+    ],
     "examples": ["He was known to be a cruel dictator."],
     "freq": 4.12
   },
@@ -6799,7 +7343,9 @@
     "id": "b1-770",
     "word": "divide",
     "class": "verb",
-    "definitions": ["to separate into parts; to make something separate into parts"],
+    "definitions": [
+      "to separate into parts; to make something separate into parts"
+    ],
     "examples": ["The cells began to divide rapidly."],
     "freq": 4.12
   },
@@ -6863,7 +7409,9 @@
     "id": "b1-777",
     "word": "import",
     "class": "noun",
-    "definitions": ["a product or service that is brought into one country from another"],
+    "definitions": [
+      "a product or service that is brought into one country from another"
+    ],
     "examples": ["import from…, food imports from abroad"],
     "freq": 4.1
   },
@@ -6871,8 +7419,12 @@
     "id": "b1-778",
     "word": "import",
     "class": "verb",
-    "definitions": ["to bring a product, a service, an idea, etc. into one country from another"],
-    "examples": ["import something, The country has to import most of its raw materials."],
+    "definitions": [
+      "to bring a product, a service, an idea, etc. into one country from another"
+    ],
+    "examples": [
+      "import something, The country has to import most of its raw materials."
+    ],
     "freq": 4.1
   },
   {
@@ -6889,7 +7441,9 @@
     "id": "b1-780",
     "word": "advise",
     "class": "verb",
-    "definitions": ["to tell somebody what you think they should do in a particular situation"],
+    "definitions": [
+      "to tell somebody what you think they should do in a particular situation"
+    ],
     "examples": [
       "advise against doing something, I would strongly advise against going out on your own."
     ],
@@ -6917,7 +7471,9 @@
     "id": "b1-783",
     "word": "intend",
     "class": "verb",
-    "definitions": ["to have a plan, result or purpose in your mind when you do something"],
+    "definitions": [
+      "to have a plan, result or purpose in your mind when you do something"
+    ],
     "examples": ["We finished later than we had intended."],
     "freq": 4.09
   },
@@ -6953,7 +7509,9 @@
     "id": "b1-787",
     "word": "bride",
     "class": "noun",
-    "definitions": ["a woman on her wedding day, or just before or just after it"],
+    "definitions": [
+      "a woman on her wedding day, or just before or just after it"
+    ],
     "examples": ["a toast to the bride and groom"],
     "freq": 4.08
   },
@@ -6981,7 +7539,9 @@
     "id": "b1-790",
     "word": "poison",
     "class": "noun",
-    "definitions": ["a substance that causes death or harm if it gets into the body"],
+    "definitions": [
+      "a substance that causes death or harm if it gets into the body"
+    ],
     "examples": ["Some mushrooms contain a deadly poison."],
     "freq": 4.08
   },
@@ -6989,15 +7549,21 @@
     "id": "b1-791",
     "word": "poison",
     "class": "verb",
-    "definitions": ["to harm or kill a person or an animal by giving them poison"],
-    "examples": ["poison somebody/yourself, He was believed to poison his enemies."],
+    "definitions": [
+      "to harm or kill a person or an animal by giving them poison"
+    ],
+    "examples": [
+      "poison somebody/yourself, He was believed to poison his enemies."
+    ],
     "freq": 4.08
   },
   {
     "id": "b1-792",
     "word": "concentrate",
     "class": "verb",
-    "definitions": ["to give all your attention to something and not think about anything else"],
+    "definitions": [
+      "to give all your attention to something and not think about anything else"
+    ],
     "examples": ["I can't concentrate with all that noise going on."],
     "freq": 4.07
   },
@@ -7005,7 +7571,9 @@
     "id": "b1-793",
     "word": "consequence",
     "class": "noun",
-    "definitions": ["a result of something that has happened, especially an unpleasant result"],
+    "definitions": [
+      "a result of something that has happened, especially an unpleasant result"
+    ],
     "examples": ["Remember that actions have consequences."],
     "freq": 4.07
   },
@@ -7013,8 +7581,12 @@
     "id": "b1-794",
     "word": "scan",
     "class": "verb",
-    "definitions": ["to look quickly but not very carefully at a document, etc."],
-    "examples": ["scan something for something, I scanned the list quickly for my name."],
+    "definitions": [
+      "to look quickly but not very carefully at a document, etc."
+    ],
+    "examples": [
+      "scan something for something, I scanned the list quickly for my name."
+    ],
     "freq": 4.07
   },
   {
@@ -7055,8 +7627,12 @@
     "id": "b1-799",
     "word": "cheat",
     "class": "verb",
-    "definitions": ["to trick somebody or make them believe something that is not true"],
-    "examples": ["cheat somebody/something, She is accused of attempting to cheat the taxman."],
+    "definitions": [
+      "to trick somebody or make them believe something that is not true"
+    ],
+    "examples": [
+      "cheat somebody/something, She is accused of attempting to cheat the taxman."
+    ],
     "freq": 4.06
   },
   {
@@ -7073,7 +7649,9 @@
     "id": "b1-801",
     "word": "embarrassed",
     "class": "adjective",
-    "definitions": ["shy, uncomfortable or ashamed, especially in a social situation"],
+    "definitions": [
+      "shy, uncomfortable or ashamed, especially in a social situation"
+    ],
     "examples": ["I've never felt so embarrassed in my life!"],
     "freq": 4.05
   },
@@ -7131,7 +7709,9 @@
     "id": "b1-807",
     "word": "cloth",
     "class": "noun",
-    "definitions": ["material made by weaving or knitting cotton, wool, silk, etc."],
+    "definitions": [
+      "material made by weaving or knitting cotton, wool, silk, etc."
+    ],
     "examples": ["woollen/cotton/linen cloth"],
     "freq": 4.03
   },
@@ -7139,7 +7719,9 @@
     "id": "b1-808",
     "word": "container",
     "class": "noun",
-    "definitions": ["a box, bottle, etc. in which something can be stored or transported"],
+    "definitions": [
+      "a box, bottle, etc. in which something can be stored or transported"
+    ],
     "examples": ["a plastic container"],
     "freq": 4.03
   },
@@ -7147,7 +7729,9 @@
     "id": "b1-809",
     "word": "fur",
     "class": "noun",
-    "definitions": ["the soft thick mass of hair that grows on the body of some animals"],
+    "definitions": [
+      "the soft thick mass of hair that grows on the body of some animals"
+    ],
     "examples": ["The cat carefully licked its fur."],
     "freq": 4.03
   },
@@ -7183,7 +7767,9 @@
     "id": "b1-813",
     "word": "disappointing",
     "class": "adjective",
-    "definitions": ["not as good, successful, etc. as you had hoped; making you feel disappointed"],
+    "definitions": [
+      "not as good, successful, etc. as you had hoped; making you feel disappointed"
+    ],
     "examples": ["a disappointing result/performance/defeat"],
     "freq": 4.02
   },
@@ -7222,7 +7808,9 @@
     "definitions": [
       "a sheet of strong cloth which the wind blows against to make a boat or ship travel through the water"
     ],
-    "examples": ["As the boat moved down the river the wind began to fill the sails."],
+    "examples": [
+      "As the boat moved down the river the wind began to fill the sails."
+    ],
     "freq": 4.01
   },
   {
@@ -7325,7 +7913,9 @@
     "id": "b1-828",
     "word": "admire",
     "class": "verb",
-    "definitions": ["to respect somebody for what they have done or to respect their qualities"],
+    "definitions": [
+      "to respect somebody for what they have done or to respect their qualities"
+    ],
     "examples": ["admire somebody/something, I really admire your enthusiasm."],
     "freq": 3.97
   },
@@ -7351,7 +7941,9 @@
     "id": "b1-831",
     "word": "underwear",
     "class": "noun",
-    "definitions": ["clothes that you wear under other clothes and next to the skin"],
+    "definitions": [
+      "clothes that you wear under other clothes and next to the skin"
+    ],
     "examples": ["I never wear underwear."],
     "freq": 3.96
   },
@@ -7380,7 +7972,9 @@
     "definitions": [
       "to make somebody suffer because they have broken the law or done something wrong"
     ],
-    "examples": ["punish somebody, Those responsible for this crime will be severely punished."],
+    "examples": [
+      "punish somebody, Those responsible for this crime will be severely punished."
+    ],
     "freq": 3.95
   },
   {
@@ -7413,7 +8007,9 @@
     "id": "b1-838",
     "word": "neighbourhood",
     "class": "noun",
-    "definitions": ["a district or an area of a town; the people who live there"],
+    "definitions": [
+      "a district or an area of a town; the people who live there"
+    ],
     "examples": ["We grew up in the same neighbourhood."],
     "freq": 3.94
   },
@@ -7429,8 +8025,12 @@
     "id": "b1-840",
     "word": "translate",
     "class": "verb",
-    "definitions": ["to express the meaning of speech or writing in a different language"],
-    "examples": ["translate something into something, He translated the letter into English."],
+    "definitions": [
+      "to express the meaning of speech or writing in a different language"
+    ],
+    "examples": [
+      "translate something into something, He translated the letter into English."
+    ],
     "freq": 3.93
   },
   {
@@ -7453,7 +8053,9 @@
     "id": "b1-843",
     "word": "educate",
     "class": "verb",
-    "definitions": ["to teach somebody over a period of time at a school, university, etc."],
+    "definitions": [
+      "to teach somebody over a period of time at a school, university, etc."
+    ],
     "examples": ["be educated, She was educated in the US."],
     "freq": 3.92
   },
@@ -7523,7 +8125,9 @@
     "id": "b1-851",
     "word": "wool",
     "class": "noun",
-    "definitions": ["the soft hair that covers the body of sheep and some other animals"],
+    "definitions": [
+      "the soft hair that covers the body of sheep and some other animals"
+    ],
     "examples": ["Sheep were kept for their wool and meat."],
     "freq": 3.91
   },
@@ -7531,8 +8135,12 @@
     "id": "b1-852",
     "word": "conclude",
     "class": "verb",
-    "definitions": ["to decide or believe something as a result of what you have heard or seen"],
-    "examples": ["conclude something, It is too early for us to conclude anything."],
+    "definitions": [
+      "to decide or believe something as a result of what you have heard or seen"
+    ],
+    "examples": [
+      "conclude something, It is too early for us to conclude anything."
+    ],
     "freq": 3.9
   },
   {
@@ -7556,7 +8164,9 @@
     "word": "bury",
     "class": "verb",
     "definitions": ["to place a dead body in the ground"],
-    "examples": ["bury somebody/something, They killed her and buried her body."],
+    "examples": [
+      "bury somebody/something, They killed her and buried her body."
+    ],
     "freq": 3.89
   },
   {
@@ -7564,7 +8174,9 @@
     "word": "dislike",
     "class": "noun",
     "definitions": ["a feeling of not liking somebody/something"],
-    "examples": ["dislike of somebody/something, He did not try to hide his dislike of his boss."],
+    "examples": [
+      "dislike of somebody/something, He did not try to hide his dislike of his boss."
+    ],
     "freq": 3.89
   },
   {
@@ -7579,7 +8191,9 @@
     "id": "b1-858",
     "word": "fry",
     "class": "verb",
-    "definitions": ["to cook something in hot fat or oil; to be cooked in hot fat or oil"],
+    "definitions": [
+      "to cook something in hot fat or oil; to be cooked in hot fat or oil"
+    ],
     "examples": ["fry (something), fried fish"],
     "freq": 3.89
   },
@@ -7588,7 +8202,9 @@
     "word": "consume",
     "class": "verb",
     "definitions": ["to use something, especially fuel, energy or time"],
-    "examples": ["The electricity industry consumes large amounts of fossil fuels."],
+    "examples": [
+      "The electricity industry consumes large amounts of fossil fuels."
+    ],
     "freq": 3.88
   },
   {
@@ -7633,7 +8249,9 @@
     "id": "b1-864",
     "word": "entertain",
     "class": "verb",
-    "definitions": ["to interest somebody or make somebody laugh in order to please them"],
+    "definitions": [
+      "to interest somebody or make somebody laugh in order to please them"
+    ],
     "examples": ["The aim of the series is both to entertain and inform."],
     "freq": 3.83
   },
@@ -7641,8 +8259,12 @@
     "id": "b1-865",
     "word": "persuade",
     "class": "verb",
-    "definitions": ["to make somebody do something by giving them good reasons for doing it"],
-    "examples": ["persuade somebody to do something, Try to persuade him to come."],
+    "definitions": [
+      "to make somebody do something by giving them good reasons for doing it"
+    ],
+    "examples": [
+      "persuade somebody to do something, Try to persuade him to come."
+    ],
     "freq": 3.82
   },
   {
@@ -7667,7 +8289,9 @@
     "id": "b1-868",
     "word": "spicy",
     "class": "adjective",
-    "definitions": ["having a strong taste because spices have been added to it"],
+    "definitions": [
+      "having a strong taste because spices have been added to it"
+    ],
     "examples": ["I don't like spicy food."],
     "freq": 3.8
   },
@@ -7684,7 +8308,9 @@
     "word": "imaginary",
     "class": "adjective",
     "definitions": ["existing only in your mind or imagination"],
-    "examples": ["The equator is an imaginary line around the middle of the earth."],
+    "examples": [
+      "The equator is an imaginary line around the middle of the earth."
+    ],
     "freq": 3.79
   },
   {
@@ -7699,7 +8325,9 @@
     "id": "b1-872",
     "word": "queue",
     "class": "noun",
-    "definitions": ["a line of people, cars, etc. waiting for something or to do something"],
+    "definitions": [
+      "a line of people, cars, etc. waiting for something or to do something"
+    ],
     "examples": ["There were long queues at polling stations."],
     "freq": 3.78
   },
@@ -7734,7 +8362,9 @@
     "word": "attach",
     "class": "verb",
     "definitions": ["to fasten or join one thing to another"],
-    "examples": ["attach something, I attach a copy of my notes for your information."],
+    "examples": [
+      "attach something, I attach a copy of my notes for your information."
+    ],
     "freq": 3.75
   },
   {
@@ -7787,7 +8417,9 @@
     "id": "b1-882",
     "word": "confuse",
     "class": "verb",
-    "definitions": ["to make somebody unable to think clearly or understand something"],
+    "definitions": [
+      "to make somebody unable to think clearly or understand something"
+    ],
     "examples": [
       "confuse somebody, These two sets of statistics are guaranteed to confuse the public."
     ],
@@ -7813,7 +8445,9 @@
     "id": "b1-885",
     "word": "symptom",
     "class": "noun",
-    "definitions": ["a change in your body or mind that shows that you are not healthy"],
+    "definitions": [
+      "a change in your body or mind that shows that you are not healthy"
+    ],
     "examples": ["Symptoms include a headache and sore throat."],
     "freq": 3.64
   },
@@ -7847,7 +8481,9 @@
     "id": "b1-889",
     "word": "similarity",
     "class": "noun",
-    "definitions": ["the state of being similar to somebody/something but not exactly the same"],
+    "definitions": [
+      "the state of being similar to somebody/something but not exactly the same"
+    ],
     "examples": [
       "similarity between A and B, The report highlights the similarity between the two groups."
     ],
@@ -7865,7 +8501,9 @@
     "id": "b1-891",
     "word": "poisonous",
     "class": "adjective",
-    "definitions": ["causing death or illness if swallowed or taken into the body"],
+    "definitions": [
+      "causing death or illness if swallowed or taken into the body"
+    ],
     "examples": ["poisonous chemicals/fumes/plants"],
     "freq": 3.57
   },
@@ -7896,7 +8534,9 @@
     "definitions": [
       "to change your opinions or plans, for example because of something you have learned"
     ],
-    "examples": ["I can see I will have to revise my opinions of his abilities now."],
+    "examples": [
+      "I can see I will have to revise my opinions of his abilities now."
+    ],
     "freq": 3.48
   },
   {
@@ -7906,7 +8546,9 @@
     "definitions": [
       "to examine the nature or structure of something, especially by separating it into its parts, in order to understand or explain it"
     ],
-    "examples": ["analyse something, The job involves collecting and analysing data."],
+    "examples": [
+      "analyse something, The job involves collecting and analysing data."
+    ],
     "freq": 3.47
   },
   {
@@ -7914,7 +8556,9 @@
     "word": "annoy",
     "class": "verb",
     "definitions": ["to make somebody slightly angry"],
-    "examples": ["annoy somebody, His constant joking was beginning to annoy her."],
+    "examples": [
+      "annoy somebody, His constant joking was beginning to annoy her."
+    ],
     "freq": 3.46
   },
   {
@@ -7931,7 +8575,9 @@
     "id": "b1-898",
     "word": "decorate",
     "class": "verb",
-    "definitions": ["to make something look more attractive by putting things on it"],
+    "definitions": [
+      "to make something look more attractive by putting things on it"
+    ],
     "examples": [
       "decorate something with something, They decorated the room with flowers and balloons."
     ],
@@ -7941,7 +8587,9 @@
     "id": "b1-899",
     "word": "injure",
     "class": "verb",
-    "definitions": ["to harm yourself or somebody else physically, especially in an accident"],
+    "definitions": [
+      "to harm yourself or somebody else physically, especially in an accident"
+    ],
     "examples": ["He injured his knee playing hockey."],
     "freq": 3.27
   },

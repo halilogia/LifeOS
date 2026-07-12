@@ -1,10 +1,5 @@
 import { Word, WordCategory } from "../../types/word.js";
-import {
-  DEFAULT_ICON,
-  DEFAULT_DESC,
-  LevelKey,
-  buildLevel,
-} from "./loader.js";
+import { DEFAULT_ICON, DEFAULT_DESC, LevelKey, buildLevel } from "./loader.js";
 
 let CACHED_FULL: WordCategory[] | null = null;
 
@@ -29,35 +24,107 @@ export const getCoreVocabulary = async (
   lazy = false,
 ): Promise<WordCategory[]> =>
   Promise.all([
-    makeCategory("a1", "A1 Beginner", "blue", "A1", DEFAULT_ICON, DEFAULT_DESC, lazy),
-    makeCategory("a2", "A2 Elementary", "green", "A2", DEFAULT_ICON, DEFAULT_DESC, lazy),
-    makeCategory("b1", "B1 Intermediate", "yellow", "B1", DEFAULT_ICON, DEFAULT_DESC, lazy),
-    makeCategory("b2", "B2 Upper-Intermediate", "orange", "B2", DEFAULT_ICON, DEFAULT_DESC, lazy),
-    makeCategory("c1", "C1 Advanced", "red", "C1", DEFAULT_ICON, DEFAULT_DESC, lazy),
+    makeCategory(
+      "a1",
+      "A1 Beginner",
+      "blue",
+      "A1",
+      DEFAULT_ICON,
+      DEFAULT_DESC,
+      lazy,
+    ),
+    makeCategory(
+      "a2",
+      "A2 Elementary",
+      "green",
+      "A2",
+      DEFAULT_ICON,
+      DEFAULT_DESC,
+      lazy,
+    ),
+    makeCategory(
+      "b1",
+      "B1 Intermediate",
+      "yellow",
+      "B1",
+      DEFAULT_ICON,
+      DEFAULT_DESC,
+      lazy,
+    ),
+    makeCategory(
+      "b2",
+      "B2 Upper-Intermediate",
+      "orange",
+      "B2",
+      DEFAULT_ICON,
+      DEFAULT_DESC,
+      lazy,
+    ),
+    makeCategory(
+      "c1",
+      "C1 Advanced",
+      "red",
+      "C1",
+      DEFAULT_ICON,
+      DEFAULT_DESC,
+      lazy,
+    ),
   ]);
 
 export const getIdiomsVocabulary = async (
   lazy = false,
 ): Promise<WordCategory[]> => [
-  await makeCategory("idioms", "Idioms", "cyan", "idiom", "book", "English Idioms", lazy),
+  await makeCategory(
+    "idioms",
+    "Idioms",
+    "cyan",
+    "idiom",
+    "book",
+    "English Idioms",
+    lazy,
+  ),
 ];
 
 export const getPhrasalVocabulary = async (
   lazy = false,
 ): Promise<WordCategory[]> => [
-  await makeCategory("phrasal", "Phrasal Verbs", "indigo", "phrasal", "zap", "English Phrasal Verbs", lazy),
+  await makeCategory(
+    "phrasal",
+    "Phrasal Verbs",
+    "indigo",
+    "phrasal",
+    "zap",
+    "English Phrasal Verbs",
+    lazy,
+  ),
 ];
 
 export const getIrregularVocabulary = async (
   lazy = false,
 ): Promise<WordCategory[]> => [
-  await makeCategory("irregular", "Irregular Verbs", "rose", "irregular", "list", "English Irregular Verbs", lazy),
+  await makeCategory(
+    "irregular",
+    "Irregular Verbs",
+    "rose",
+    "irregular",
+    "list",
+    "English Irregular Verbs",
+    lazy,
+  ),
 ];
 
 export const getGreVocabulary = async (
   lazy = false,
 ): Promise<WordCategory[]> => [
-  await makeCategory("gre", "GRE Advanced", "purple", "gre", "brain", "Advanced academic vocabulary for GRE/TOEFL", lazy),
+  await makeCategory(
+    "gre",
+    "GRE Advanced",
+    "purple",
+    "gre",
+    "brain",
+    "Advanced academic vocabulary for GRE/TOEFL",
+    lazy,
+  ),
 ];
 
 export const getFullVocabulary = async (

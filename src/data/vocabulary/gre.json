@@ -3,14 +3,18 @@
     "id": "gre-362",
     "word": "Affected",
     "definitions": ["pretentious; phoney"],
-    "examples": ["She spoke with an affected accent that sounded very unnatural."],
+    "examples": [
+      "She spoke with an affected accent that sounded very unnatural."
+    ],
     "freq": 4.64
   },
   {
     "id": "gre-419",
     "word": "Cant",
     "definitions": ["insincere talk; language for a particular group"],
-    "examples": ["The politician's speech was full of empty cant that didn't really say anything."],
+    "examples": [
+      "The politician's speech was full of empty cant that didn't really say anything."
+    ],
     "freq": 4.35
   },
   {
@@ -42,7 +46,9 @@
     "id": "gre-422",
     "word": "Cardinal",
     "definitions": ["of foremost importance"],
-    "examples": ["The cardinal rule of the club is that everyone must be treated fairly."],
+    "examples": [
+      "The cardinal rule of the club is that everyone must be treated fairly."
+    ],
     "freq": 3.9
   },
   {
@@ -58,7 +64,9 @@
     "definitions": [
       "a mentor in spiritual or philosophical topic who is renowned for profound wisdom"
     ],
-    "examples": ["The young man sought advice from the old sage who lived in the mountains."],
+    "examples": [
+      "The young man sought advice from the old sage who lived in the mountains."
+    ],
     "freq": 3.83
   },
   {
@@ -72,7 +80,9 @@
     "id": "gre-428",
     "word": "Catalyst",
     "definitions": ["something that causes change"],
-    "examples": ["The new law was a catalyst for major changes in the industry."],
+    "examples": [
+      "The new law was a catalyst for major changes in the industry."
+    ],
     "freq": 3.76
   },
   {
@@ -86,42 +96,56 @@
     "id": "gre-455",
     "word": "Stoke",
     "definitions": ["stir up or tend; of a fire"],
-    "examples": ["He spent the evening stoking the fire to keep the house warm."],
+    "examples": [
+      "He spent the evening stoking the fire to keep the house warm."
+    ],
     "freq": 3.73
   },
   {
     "id": "gre-542",
     "word": "Covenant",
     "definitions": ["agreement between two or more people"],
-    "examples": ["The two nations signed a covenant to promote peace and cooperation."],
+    "examples": [
+      "The two nations signed a covenant to promote peace and cooperation."
+    ],
     "freq": 3.73
   },
   {
     "id": "gre-346",
     "word": "Volatile",
-    "definitions": ["a substance that changes readily from solid to liquid to vapour"],
-    "examples": ["The market is very volatile, with prices changing rapidly throughout the day."],
+    "definitions": [
+      "a substance that changes readily from solid to liquid to vapour"
+    ],
+    "examples": [
+      "The market is very volatile, with prices changing rapidly throughout the day."
+    ],
     "freq": 3.72
   },
   {
     "id": "gre-378",
     "word": "Apex",
     "definitions": ["at the highest point"],
-    "examples": ["The mountain climber reached the apex of the peak at sunrise."],
+    "examples": [
+      "The mountain climber reached the apex of the peak at sunrise."
+    ],
     "freq": 3.71
   },
   {
     "id": "gre-710",
     "word": "Apprentice",
     "definitions": ["a person who is learning a trade from a skilled employer"],
-    "examples": ["He worked as an apprentice to a master carpenter to learn the trade."],
+    "examples": [
+      "He worked as an apprentice to a master carpenter to learn the trade."
+    ],
     "freq": 3.7
   },
   {
     "id": "gre-315",
     "word": "Stigma",
     "definitions": ["a symbol of disgrace or infamy"],
-    "examples": ["There is still a stigma associated with mental illness in many societies."],
+    "examples": [
+      "There is still a stigma associated with mental illness in many societies."
+    ],
     "freq": 3.69
   },
   {
@@ -134,57 +158,77 @@
   {
     "id": "gre-445",
     "word": "Rouge",
-    "definitions": ["Any kind of reddish coloured makeup that is used to tint person's cheeks"],
-    "examples": ["She applied a little rouge to her cheeks to give them a healthy glow."],
+    "definitions": [
+      "Any kind of reddish coloured makeup that is used to tint person's cheeks"
+    ],
+    "examples": [
+      "She applied a little rouge to her cheeks to give them a healthy glow."
+    ],
     "freq": 3.66
   },
   {
     "id": "gre-458",
     "word": "Wagon Tire",
     "definitions": ["a methal hoop forming a thread of a wheel"],
-    "examples": ["The old wagon tire was rusted and broken, lying in the field."],
+    "examples": [
+      "The old wagon tire was rusted and broken, lying in the field."
+    ],
     "freq": 3.66
   },
   {
     "id": "gre-73",
     "word": "derivative",
-    "definitions": ["a compound obtained from, or regarded as derived from, another compound"],
+    "definitions": [
+      "a compound obtained from, or regarded as derived from, another compound"
+    ],
     "examples": ["Her work was seen as derivative and lacking in originality."],
     "freq": 3.65
   },
   {
     "id": "gre-517",
     "word": "Corporal",
-    "definitions": ["affecting or characteristic of the body as opposed to mind or spirit"],
+    "definitions": [
+      "affecting or characteristic of the body as opposed to mind or spirit"
+    ],
     "examples": ["The state school system has abolished corporal punishment."],
     "freq": 3.65
   },
   {
     "id": "gre-552",
     "word": "Satire",
-    "definitions": ["way of making fun of people by silly or exaggerated language"],
-    "examples": ["The movie is a biting satire of contemporary Hollywood culture."],
+    "definitions": [
+      "way of making fun of people by silly or exaggerated language"
+    ],
+    "examples": [
+      "The movie is a biting satire of contemporary Hollywood culture."
+    ],
     "freq": 3.65
   },
   {
     "id": "gre-312",
     "word": "plausible",
     "definitions": ["seemingly reasonable or probable"],
-    "examples": ["The explanation seemed plausible, but they still wanted more evidence."],
+    "examples": [
+      "The explanation seemed plausible, but they still wanted more evidence."
+    ],
     "freq": 3.64
   },
   {
     "id": "gre-317",
     "word": "Stint",
     "definitions": ["supply sparingly and with restricted quantities"],
-    "examples": ["They didn't stint on the food, providing a huge feast for everyone."],
+    "examples": [
+      "They didn't stint on the food, providing a huge feast for everyone."
+    ],
     "freq": 3.61
   },
   {
     "id": "gre-363",
     "word": "Affinity",
     "definitions": ["fondness; liking; similarity"],
-    "examples": ["He had a natural affinity for music, learning to play the piano at a young age."],
+    "examples": [
+      "He had a natural affinity for music, learning to play the piano at a young age."
+    ],
     "freq": 3.61
   },
   {
@@ -197,8 +241,12 @@
   {
     "id": "gre-426",
     "word": "Caste",
-    "definitions": ["any of the hereditary social classes in Hindu society; social stratifaction"],
-    "examples": ["The system of caste has a long history in some parts of the world."],
+    "definitions": [
+      "any of the hereditary social classes in Hindu society; social stratifaction"
+    ],
+    "examples": [
+      "The system of caste has a long history in some parts of the world."
+    ],
     "freq": 3.6
   },
   {
@@ -212,7 +260,9 @@
     "id": "gre-430",
     "word": "Caucus",
     "definitions": ["smaller group within an organization"],
-    "examples": ["The local caucus met to discuss the candidates for the upcoming election."],
+    "examples": [
+      "The local caucus met to discuss the candidates for the upcoming election."
+    ],
     "freq": 3.58
   },
   {
@@ -235,7 +285,9 @@
     "id": "gre-385",
     "word": "Archaeology",
     "definitions": ["the study of material evidence of past human life"],
-    "examples": ["He spent his summer working on an archaeology dig in Greece."],
+    "examples": [
+      "He spent his summer working on an archaeology dig in Greece."
+    ],
     "freq": 3.57
   },
   {
@@ -295,20 +347,26 @@
     "id": "gre-11",
     "word": "alleviate",
     "definitions": ["to make less severe"],
-    "examples": ["The doctor prescribed a new medicine to alleviate her chronic back pain."],
+    "examples": [
+      "The doctor prescribed a new medicine to alleviate her chronic back pain."
+    ],
     "freq": 3.52
   },
   {
     "id": "gre-18",
     "word": "anarchy",
     "definitions": ["a state of lawlessness and disorder"],
-    "examples": ["After the government collapsed, the country descended into total anarchy."],
+    "examples": [
+      "After the government collapsed, the country descended into total anarchy."
+    ],
     "freq": 3.52
   },
   {
     "id": "gre-242",
     "word": "Perennial",
-    "definitions": ["lasting or existing for a long or apparently infinite time"],
+    "definitions": [
+      "lasting or existing for a long or apparently infinite time"
+    ],
     "examples": ["The issue of climate change is a perennial concern."],
     "freq": 3.51
   },
@@ -332,7 +390,9 @@
     "id": "gre-258",
     "word": "Pragmatic",
     "definitions": ["concerned with practical matters"],
-    "examples": ["He took a pragmatic approach to the problem, focusing on what could be done."],
+    "examples": [
+      "He took a pragmatic approach to the problem, focusing on what could be done."
+    ],
     "freq": 3.49
   },
   {
@@ -362,7 +422,9 @@
     "id": "gre-400",
     "word": "Banter",
     "definitions": ["playful converation"],
-    "examples": ["The two friends enjoyed a bit of lighthearted banter while they worked."],
+    "examples": [
+      "The two friends enjoyed a bit of lighthearted banter while they worked."
+    ],
     "freq": 3.48
   },
   {
@@ -371,27 +433,35 @@
     "definitions": [
       "present at birth but not necessarily hereditary; aquired during fetal development"
     ],
-    "examples": ["She has an innate talent for music, learning to play the piano at a young age."],
+    "examples": [
+      "She has an innate talent for music, learning to play the piano at a young age."
+    ],
     "freq": 3.48
   },
   {
     "id": "gre-613",
     "word": "Hysterical",
     "definitions": ["affected by or deriving from wildly uncontrolled emotion"],
-    "examples": ["The crowd broke into hysterical laughter at the comedian's jokes."],
+    "examples": [
+      "The crowd broke into hysterical laughter at the comedian's jokes."
+    ],
     "freq": 3.48
   },
   {
     "id": "gre-576",
     "word": "Guise",
     "definitions": ["an artful simulated semblance"],
-    "examples": ["The soldiers entered the city under the guise of peacekeepers."],
+    "examples": [
+      "The soldiers entered the city under the guise of peacekeepers."
+    ],
     "freq": 3.47
   },
   {
     "id": "gre-175",
     "word": "implicit",
-    "definitions": ["implied through not directly expressed; inherent in the nature of something"],
+    "definitions": [
+      "implied through not directly expressed; inherent in the nature of something"
+    ],
     "examples": [
       "There was an implicit agreement between them that they would not speak of the incident."
     ],
@@ -403,7 +473,9 @@
     "definitions": [
       "fat or heavily built; strong and thick; having or showing courage and determination"
     ],
-    "examples": ["The ship was built with a stout hull to withstand the rough seas."],
+    "examples": [
+      "The ship was built with a stout hull to withstand the rough seas."
+    ],
     "freq": 3.45
   },
   {
@@ -416,8 +488,12 @@
   {
     "id": "gre-262",
     "word": "Precursor",
-    "definitions": ["something that precedes and indicates the approach of something or someone"],
-    "examples": ["The small tremors were a precursor to the massive earthquake."],
+    "definitions": [
+      "something that precedes and indicates the approach of something or someone"
+    ],
+    "examples": [
+      "The small tremors were a precursor to the massive earthquake."
+    ],
     "freq": 3.44
   },
   {
@@ -438,14 +514,18 @@
     "id": "gre-550",
     "word": "Sire",
     "definitions": ["animal's father"],
-    "examples": ["The stallion was a champion sire of many winning racehorses."],
+    "examples": [
+      "The stallion was a champion sire of many winning racehorses."
+    ],
     "freq": 3.43
   },
   {
     "id": "gre-54",
     "word": "compliant",
     "definitions": ["disposed or willing to comply"],
-    "examples": ["The company was found to be fully compliant with all safety regulations."],
+    "examples": [
+      "The company was found to be fully compliant with all safety regulations."
+    ],
     "freq": 3.42
   },
   {
@@ -477,13 +557,17 @@
     "id": "gre-479",
     "word": "Vitality",
     "definitions": ["vigorous and energetic; full of life"],
-    "examples": ["Even at eighty, she still possessed great vitality and energy."],
+    "examples": [
+      "Even at eighty, she still possessed great vitality and energy."
+    ],
     "freq": 3.41
   },
   {
     "id": "gre-592",
     "word": "Startling",
-    "definitions": ["so remarkly different or sudden to cause momentory shock or alaram"],
+    "definitions": [
+      "so remarkly different or sudden to cause momentory shock or alaram"
+    ],
     "examples": ["The news was startling and caught everyone by surprise."],
     "freq": 3.4
   },
@@ -491,7 +575,9 @@
     "id": "gre-151",
     "word": "futile",
     "definitions": ["producing no result or effect"],
-    "examples": ["Waiters who work for tips often lament the arrival of a party of twelve."],
+    "examples": [
+      "Waiters who work for tips often lament the arrival of a party of twelve."
+    ],
     "freq": 3.39
   },
   {
@@ -514,13 +600,17 @@
     "id": "gre-556",
     "word": "Suffrage",
     "definitions": ["the official right to vote in public elections"],
-    "examples": ["The 19th amendment granted women's suffrage in the United States."],
+    "examples": [
+      "The 19th amendment granted women's suffrage in the United States."
+    ],
     "freq": 3.38
   },
   {
     "id": "gre-115",
     "word": "eclectic",
-    "definitions": ["deriving ideas, style or taste from a broad and diverse range of sources"],
+    "definitions": [
+      "deriving ideas, style or taste from a broad and diverse range of sources"
+    ],
     "examples": ["His taste in music is very eclectic."],
     "freq": 3.37
   },
@@ -542,7 +632,9 @@
     "id": "gre-487",
     "word": "Annals",
     "definitions": ["chronological historical record"],
-    "examples": ["His name will be remembered in the annals of history forever."],
+    "examples": [
+      "His name will be remembered in the annals of history forever."
+    ],
     "freq": 3.37
   },
   {
@@ -556,28 +648,38 @@
     "id": "gre-558",
     "word": "Subdued",
     "definitions": ["restrain in style or quality"],
-    "examples": ["The room was decorated in subdued colors, creating a peaceful atmosphere."],
+    "examples": [
+      "The room was decorated in subdued colors, creating a peaceful atmosphere."
+    ],
     "freq": 3.37
   },
   {
     "id": "gre-17",
     "word": "analogous",
-    "definitions": ["similar or equivalent in some respects though otherwise dissimilar"],
-    "examples": ["The wings of a bird and the wings of a butterfly are analogous structures."],
+    "definitions": [
+      "similar or equivalent in some respects though otherwise dissimilar"
+    ],
+    "examples": [
+      "The wings of a bird and the wings of a butterfly are analogous structures."
+    ],
     "freq": 3.36
   },
   {
     "id": "gre-237",
     "word": "Pathological",
     "definitions": ["of or relating to the practice of pathology"],
-    "examples": ["His pathological lying made it difficult for anyone to trust him."],
+    "examples": [
+      "His pathological lying made it difficult for anyone to trust him."
+    ],
     "freq": 3.36
   },
   {
     "id": "gre-498",
     "word": "Feudal",
     "definitions": ["relates to medieval system of feudalism"],
-    "examples": ["The castle was built during the feudal period of the Middle Ages."],
+    "examples": [
+      "The castle was built during the feudal period of the Middle Ages."
+    ],
     "freq": 3.36
   },
   {
@@ -599,14 +701,20 @@
   {
     "id": "gre-457",
     "word": "Bay Wreath",
-    "definitions": ["a wreath of laurel foliage worn on head as an emblem of victory"],
-    "examples": ["The victor was crowned with a bay wreath in honor of his achievement."],
+    "definitions": [
+      "a wreath of laurel foliage worn on head as an emblem of victory"
+    ],
+    "examples": [
+      "The victor was crowned with a bay wreath in honor of his achievement."
+    ],
     "freq": 3.34
   },
   {
     "id": "gre-691",
     "word": "Avant-grade",
-    "definitions": ["new and experimental ideas and methods in art, music or literature"],
+    "definitions": [
+      "new and experimental ideas and methods in art, music or literature"
+    ],
     "examples": [
       "The artist was known for his avant-garde style that challenged traditional norms."
     ],
@@ -615,7 +723,9 @@
   {
     "id": "gre-76",
     "word": "deterrent",
-    "definitions": ["something immaterial that interfaces with or delays action or progress"],
+    "definitions": [
+      "something immaterial that interfaces with or delays action or progress"
+    ],
     "examples": ["The harsh penalties serve as a deterrent to crime."],
     "freq": 3.33
   },
@@ -623,7 +733,9 @@
     "id": "gre-265",
     "word": "Pristine",
     "definitions": ["immaculately clean and unused"],
-    "examples": ["The forest remained pristine, untouched by human development."],
+    "examples": [
+      "The forest remained pristine, untouched by human development."
+    ],
     "freq": 3.33
   },
   {
@@ -636,7 +748,9 @@
   {
     "id": "gre-515",
     "word": "Canine",
-    "definitions": ["one of four pointed conical teeth located between incisors and premolars"],
+    "definitions": [
+      "one of four pointed conical teeth located between incisors and premolars"
+    ],
     "examples": ["The dog showed its canines as a warning to the intruder."],
     "freq": 3.33
   },
@@ -651,14 +765,18 @@
     "id": "gre-489",
     "word": "Oblivion",
     "definitions": ["state of being forgotten"],
-    "examples": ["The ancient city had long since fallen into oblivion, buried under the sand."],
+    "examples": [
+      "The ancient city had long since fallen into oblivion, buried under the sand."
+    ],
     "freq": 3.32
   },
   {
     "id": "gre-573",
     "word": "Dodgy",
     "definitions": ["risky and suspicious situation"],
-    "examples": ["He was involved in some dodgy business deals that finally got him into trouble."],
+    "examples": [
+      "He was involved in some dodgy business deals that finally got him into trouble."
+    ],
     "freq": 3.32
   },
   {
@@ -706,7 +824,9 @@
     "definitions": [
       "interfering or busying oneself unduly with something that is not one's concern"
     ],
-    "examples": ["He was accused of meddling in affairs that didn't involve him."],
+    "examples": [
+      "He was accused of meddling in affairs that didn't involve him."
+    ],
     "freq": 3.3
   },
   {
@@ -720,21 +840,29 @@
     "id": "gre-567",
     "word": "Taper",
     "definitions": ["diminish gradually"],
-    "examples": ["The rain began to taper off toward the evening, much to everyone's relief."],
+    "examples": [
+      "The rain began to taper off toward the evening, much to everyone's relief."
+    ],
     "freq": 3.3
   },
   {
     "id": "gre-96",
     "word": "discrepancy",
-    "definitions": ["a difference between conflicting facts or claims or opinions"],
+    "definitions": [
+      "a difference between conflicting facts or claims or opinions"
+    ],
     "examples": ["There was a discrepancy between the two reports."],
     "freq": 3.29
   },
   {
     "id": "gre-314",
     "word": "Sporadic",
-    "definitions": ["recurring in scattered and irregular or unpredictable instances"],
-    "examples": ["There were sporadic reports of gunfire throughout the night."],
+    "definitions": [
+      "recurring in scattered and irregular or unpredictable instances"
+    ],
+    "examples": [
+      "There were sporadic reports of gunfire throughout the night."
+    ],
     "freq": 3.29
   },
   {
@@ -748,14 +876,20 @@
     "id": "gre-360",
     "word": "Adamant",
     "definitions": ["uncompromising; unyielding"],
-    "examples": ["He was adamant that he was right, despite all the evidence to the contrary."],
+    "examples": [
+      "He was adamant that he was right, despite all the evidence to the contrary."
+    ],
     "freq": 3.28
   },
   {
     "id": "gre-204",
     "word": "Latent",
-    "definitions": ["potentially existing but not presently evident or realised"],
-    "examples": ["He had a latent talent for music that he had never explored."],
+    "definitions": [
+      "potentially existing but not presently evident or realised"
+    ],
+    "examples": [
+      "He had a latent talent for music that he had never explored."
+    ],
     "freq": 3.27
   },
   {
@@ -820,14 +954,18 @@
     "id": "gre-211",
     "word": "Luminous",
     "definitions": ["softly bright or radiant"],
-    "examples": ["The luminous dial on the watch made it easy to see in the dark."],
+    "examples": [
+      "The luminous dial on the watch made it easy to see in the dark."
+    ],
     "freq": 3.24
   },
   {
     "id": "gre-255",
     "word": "Plethora",
     "definitions": ["extreme excess"],
-    "examples": ["There was a plethora of information available on the subject."],
+    "examples": [
+      "There was a plethora of information available on the subject."
+    ],
     "freq": 3.24
   },
   {
@@ -848,7 +986,9 @@
     "id": "gre-701",
     "word": "Moot",
     "definitions": ["subject to debate, dispute or uncertainity"],
-    "examples": ["Whether the change will actually improve things is a moot point."],
+    "examples": [
+      "Whether the change will actually improve things is a moot point."
+    ],
     "freq": 3.23
   },
   {
@@ -862,7 +1002,9 @@
     "id": "gre-478",
     "word": "Frivolous",
     "definitions": ["not serious in content or attitude or behaviour"],
-    "examples": ["He was criticized for his frivolous behavior during the meeting."],
+    "examples": [
+      "He was criticized for his frivolous behavior during the meeting."
+    ],
     "freq": 3.22
   },
   {
@@ -871,28 +1013,36 @@
     "definitions": [
       "medieval chemical philosophy based on changing metal into gold;  a seemingly magical power or process of transmutation"
     ],
-    "examples": ["He spent his life studying alchemy, trying to turn lead into gold."],
+    "examples": [
+      "He spent his life studying alchemy, trying to turn lead into gold."
+    ],
     "freq": 3.21
   },
   {
     "id": "gre-673",
     "word": "Botched",
     "definitions": ["carry out badly or carelessly"],
-    "examples": ["The repair job was botched, and the leak returned a day later."],
+    "examples": [
+      "The repair job was botched, and the leak returned a day later."
+    ],
     "freq": 3.21
   },
   {
     "id": "gre-22",
     "word": "appease",
     "definitions": ["pacify or placate by ascending to their demands"],
-    "examples": ["The government tried to appease the protesters with minor reforms."],
+    "examples": [
+      "The government tried to appease the protesters with minor reforms."
+    ],
     "freq": 3.2
   },
   {
     "id": "gre-65",
     "word": "craven",
     "definitions": ["contemptibly lacking in courage; cowardly"],
-    "examples": ["His craven behavior in the face of danger was disappointing."],
+    "examples": [
+      "His craven behavior in the face of danger was disappointing."
+    ],
     "freq": 3.19
   },
   {
@@ -906,7 +1056,9 @@
     "id": "gre-356",
     "word": "Abstinence",
     "definitions": ["the giving up of certain pleasures"],
-    "examples": ["He practiced total abstinence from alcohol for religious reasons."],
+    "examples": [
+      "He practiced total abstinence from alcohol for religious reasons."
+    ],
     "freq": 3.18
   },
   {
@@ -919,28 +1071,36 @@
   {
     "id": "gre-670",
     "word": "Tout",
-    "definitions": ["attempt to sell, typically by a direct and persistent approach"],
+    "definitions": [
+      "attempt to sell, typically by a direct and persistent approach"
+    ],
     "examples": ["He was touting his new book at the conference."],
     "freq": 3.18
   },
   {
     "id": "gre-56",
     "word": "condone",
-    "definitions": ["excuse, overlook, or make allowances for; be lenient with"],
+    "definitions": [
+      "excuse, overlook, or make allowances for; be lenient with"
+    ],
     "examples": ["The college does not condone any form of cheating."],
     "freq": 3.17
   },
   {
     "id": "gre-132",
     "word": "esoteric",
-    "definitions": ["confined to and understandable by only an enlightened inner circle"],
+    "definitions": [
+      "confined to and understandable by only an enlightened inner circle"
+    ],
     "examples": ["The subject matter of the book was very esoteric."],
     "freq": 3.17
   },
   {
     "id": "gre-454",
     "word": "Rapport",
-    "definitions": ["a relationship of mutual understanding or trust and agreement between people"],
+    "definitions": [
+      "a relationship of mutual understanding or trust and agreement between people"
+    ],
     "examples": ["She developed a good rapport with her new students."],
     "freq": 3.17
   },
@@ -961,7 +1121,9 @@
   {
     "id": "gre-322",
     "word": "Strut",
-    "definitions": ["to walk with a lofty gait, often in an attempt to impress others"],
+    "definitions": [
+      "to walk with a lofty gait, often in an attempt to impress others"
+    ],
     "examples": ["He strutted across the room, showing off his new suit."],
     "freq": 3.16
   },
@@ -976,20 +1138,26 @@
     "id": "gre-369",
     "word": "Entice",
     "definitions": ["attract or tempt by offering pleasure or advantage"],
-    "examples": ["The store used a series of sales to entice customers to enter."],
+    "examples": [
+      "The store used a series of sales to entice customers to enter."
+    ],
     "freq": 3.15
   },
   {
     "id": "gre-442",
     "word": "Clique",
     "definitions": ["a small exclusive group"],
-    "examples": ["The office was divided into several small cliques that didn't communicate well."],
+    "examples": [
+      "The office was divided into several small cliques that didn't communicate well."
+    ],
     "freq": 3.15
   },
   {
     "id": "gre-468",
     "word": "Raptor",
-    "definitions": ["any of numerous carnivorous birds that hunt and kill other animals"],
+    "definitions": [
+      "any of numerous carnivorous birds that hunt and kill other animals"
+    ],
     "examples": ["The hawk is a powerful raptor that hunts small animals."],
     "freq": 3.15
   },
@@ -997,7 +1165,9 @@
     "id": "gre-617",
     "word": "Proponent",
     "definitions": ["advocate of a theory, proposal or course of action"],
-    "examples": ["He is a leading proponent of the renewable energy initiative."],
+    "examples": [
+      "He is a leading proponent of the renewable energy initiative."
+    ],
     "freq": 3.15
   },
   {
@@ -1025,7 +1195,9 @@
     "id": "gre-554",
     "word": "Commotion",
     "definitions": ["a disorderly outbrust or tumult"],
-    "examples": ["There was a sudden commotion in the street as the parade passed by."],
+    "examples": [
+      "There was a sudden commotion in the street as the parade passed by."
+    ],
     "freq": 3.13
   },
   {
@@ -1038,7 +1210,9 @@
   {
     "id": "gre-609",
     "word": "Preposterous",
-    "definitions": ["contrary to reason or stock sense; utterly absurd or ridiculous"],
+    "definitions": [
+      "contrary to reason or stock sense; utterly absurd or ridiculous"
+    ],
     "examples": ["The idea that the earth is flat is preposterous."],
     "freq": 3.13
   },
@@ -1060,7 +1234,9 @@
     "id": "gre-574",
     "word": "Affliction",
     "definitions": ["something that makes one suffer"],
-    "examples": ["Her arthritis is a painful affliction that affects her daily life."],
+    "examples": [
+      "Her arthritis is a painful affliction that affects her daily life."
+    ],
     "freq": 3.11
   },
   {
@@ -1087,15 +1263,21 @@
   {
     "id": "gre-349",
     "word": "Whimsical",
-    "definitions": ["determined by chances or impulse or whim rather than necessity or reason"],
-    "examples": ["The book had a whimsical style that appealed to children and adults alike."],
+    "definitions": [
+      "determined by chances or impulse or whim rather than necessity or reason"
+    ],
+    "examples": [
+      "The book had a whimsical style that appealed to children and adults alike."
+    ],
     "freq": 3.1
   },
   {
     "id": "gre-411",
     "word": "Brazen",
     "definitions": ["bold; shameless"],
-    "examples": ["He made a brazen attempt to steal the car in broad daylight."],
+    "examples": [
+      "He made a brazen attempt to steal the car in broad daylight."
+    ],
     "freq": 3.1
   },
   {
@@ -1108,7 +1290,9 @@
   {
     "id": "gre-699",
     "word": "Parable",
-    "definitions": ["a simple story used to illustrate a moral or spiritual lesson"],
+    "definitions": [
+      "a simple story used to illustrate a moral or spiritual lesson"
+    ],
     "examples": [
       "The teacher told a parable to help the students understand the meaning of honesty."
     ],
@@ -1117,8 +1301,12 @@
   {
     "id": "gre-78",
     "word": "dichotomy",
-    "definitions": ["being two folded; a classification into two oppesed parts or subclasses"],
-    "examples": ["There is a dichotomy between the public and private lives of some politicians."],
+    "definitions": [
+      "being two folded; a classification into two oppesed parts or subclasses"
+    ],
+    "examples": [
+      "There is a dichotomy between the public and private lives of some politicians."
+    ],
     "freq": 3.09
   },
   {
@@ -1139,21 +1327,27 @@
     "id": "gre-323",
     "word": "Gait",
     "definitions": ["a person's manner of walking"],
-    "examples": ["He had a very distinctive gait that made him easy to recognize."],
+    "examples": [
+      "He had a very distinctive gait that made him easy to recognize."
+    ],
     "freq": 3.09
   },
   {
     "id": "gre-545",
     "word": "Heyday",
     "definitions": ["the period or greatest prosperity or productivity"],
-    "examples": ["In its heyday, the city was a major center of trade and culture."],
+    "examples": [
+      "In its heyday, the city was a major center of trade and culture."
+    ],
     "freq": 3.09
   },
   {
     "id": "gre-647",
     "word": "Motley",
     "definitions": ["disparate"],
-    "examples": ["The group of protesters was a motley crew of people from all walks of life."],
+    "examples": [
+      "The group of protesters was a motley crew of people from all walks of life."
+    ],
     "freq": 3.09
   },
   {
@@ -1177,7 +1371,9 @@
   {
     "id": "gre-564",
     "word": "Prerogative",
-    "definitions": ["a right reserved exclusively by particular person or group"],
+    "definitions": [
+      "a right reserved exclusively by particular person or group"
+    ],
     "examples": ["It is the governor's prerogative to pardon prisoners."],
     "freq": 3.08
   },
@@ -1199,14 +1395,18 @@
     "id": "gre-415",
     "word": "Callous",
     "definitions": ["thick-skinned; insensitive"],
-    "examples": ["His callous disregard for the feelings of others was shocking."],
+    "examples": [
+      "His callous disregard for the feelings of others was shocking."
+    ],
     "freq": 3.07
   },
   {
     "id": "gre-521",
     "word": "Mogul",
     "definitions": ["a very wealthy businessperson; a bump or ski on a rope"],
-    "examples": ["The media mogul owns several large newspapers and television stations."],
+    "examples": [
+      "The media mogul owns several large newspapers and television stations."
+    ],
     "freq": 3.07
   },
   {
@@ -1219,7 +1419,9 @@
   {
     "id": "gre-692",
     "word": "Allegory",
-    "definitions": ["a story, poem, or picture that can be interpreted to reveal a hidden meaning"],
+    "definitions": [
+      "a story, poem, or picture that can be interpreted to reveal a hidden meaning"
+    ],
     "examples": ["The novel is an allegory for the dangers of totalitarism."],
     "freq": 3.07
   },
@@ -1234,21 +1436,27 @@
     "id": "gre-638",
     "word": "Antiquated",
     "definitions": ["old-fashioned and outdated"],
-    "examples": ["The company's antiquated computer system needs to be replaced."],
+    "examples": [
+      "The company's antiquated computer system needs to be replaced."
+    ],
     "freq": 3.06
   },
   {
     "id": "gre-52",
     "word": "compendium",
     "definitions": ["a publication containing a variety or works"],
-    "examples": ["This book is a compendium of all the known facts about the solar system."],
+    "examples": [
+      "This book is a compendium of all the known facts about the solar system."
+    ],
     "freq": 3.05
   },
   {
     "id": "gre-64",
     "word": "convoluted",
     "definitions": ["extremely complex and difficult to follow"],
-    "examples": ["The plot of the movie was so convoluted that I couldn't follow it."],
+    "examples": [
+      "The plot of the movie was so convoluted that I couldn't follow it."
+    ],
     "freq": 3.05
   },
   {
@@ -1271,13 +1479,17 @@
     "id": "gre-657",
     "word": "Intrepid",
     "definitions": ["fearless adventurous"],
-    "examples": ["The intrepid explorer set out to find the lost city in the jungle."],
+    "examples": [
+      "The intrepid explorer set out to find the lost city in the jungle."
+    ],
     "freq": 3.04
   },
   {
     "id": "gre-104",
     "word": "disseminate",
-    "definitions": ["spread or disperse(something, especially information) widely"],
+    "definitions": [
+      "spread or disperse(something, especially information) widely"
+    ],
     "examples": ["The information was disseminated through social media."],
     "freq": 3.03
   },
@@ -1287,7 +1499,9 @@
     "definitions": [
       "the shape or manner in which things come together and a connection is made; an event that occurs at a critical time"
     ],
-    "examples": ["At this juncture, it is difficult to say what the outcome will be."],
+    "examples": [
+      "At this juncture, it is difficult to say what the outcome will be."
+    ],
     "freq": 3.03
   },
   {
@@ -1309,7 +1523,9 @@
   {
     "id": "gre-133",
     "word": "eulogy",
-    "definitions": ["a formal expression of praise for someone who has died recently"],
+    "definitions": [
+      "a formal expression of praise for someone who has died recently"
+    ],
     "examples": ["He delivered a moving eulogy at the funeral."],
     "freq": 3.02
   },
@@ -1324,41 +1540,53 @@
     "id": "gre-351",
     "word": "Fanatical",
     "definitions": ["filled with excessive and single-minded zeal"],
-    "examples": ["He was fanatical about his hobby, spending all his free time on it."],
+    "examples": [
+      "He was fanatical about his hobby, spending all his free time on it."
+    ],
     "freq": 3.02
   },
   {
     "id": "gre-622",
     "word": "Panned",
     "definitions": ["criticise harshly or severely"],
-    "examples": ["The movie was panned by critics for its poor acting and clichéd plot."],
+    "examples": [
+      "The movie was panned by critics for its poor acting and clichéd plot."
+    ],
     "freq": 3.02
   },
   {
     "id": "gre-410",
     "word": "Bovine",
     "definitions": ["cowlike"],
-    "examples": ["He had a bovine expression, showing no sign of emotion or interest."],
+    "examples": [
+      "He had a bovine expression, showing no sign of emotion or interest."
+    ],
     "freq": 3.01
   },
   {
     "id": "gre-501",
     "word": "Rabble",
     "definitions": ["a disorderly crowd of people"],
-    "examples": ["The rabble filled the streets, shouting and throwing stones."],
+    "examples": [
+      "The rabble filled the streets, shouting and throwing stones."
+    ],
     "freq": 3.01
   },
   {
     "id": "gre-605",
     "word": "Abridged",
     "definitions": ["shortened by condensing or rewriting"],
-    "examples": ["He read an abridged version of the novel for his book report."],
+    "examples": [
+      "He read an abridged version of the novel for his book report."
+    ],
     "freq": 3.01
   },
   {
     "id": "gre-654",
     "word": "Berserk",
-    "definitions": ["out of control with anger or excitement; wild or frenzied"],
+    "definitions": [
+      "out of control with anger or excitement; wild or frenzied"
+    ],
     "examples": ["The dog went berserk when it saw a cat in the yard."],
     "freq": 3.01
   },
@@ -1366,7 +1594,9 @@
     "id": "gre-697",
     "word": "Flagrant",
     "definitions": ["conspicuously or obviously offensive"],
-    "examples": ["The referee missed a flagrant foul that should have resulted in a penalty."],
+    "examples": [
+      "The referee missed a flagrant foul that should have resulted in a penalty."
+    ],
     "freq": 3.01
   }
 ]

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'preact/hooks';
-import { prayerService, PrayerTimes } from '../services/prayerService.js';
-import { storage } from '../core/storage.js';
-import { Language } from '../types/types.js';
+import { useState, useEffect } from "preact/hooks";
+import { prayerService, PrayerTimes } from "../services/prayerService.js";
+import { storage } from "../core/storage.js";
+import { Language } from "../types/types.js";
 
 interface PrayerViewProps {
   lang: Language;
@@ -9,34 +9,107 @@ interface PrayerViewProps {
 }
 
 const TURKEY_CITIES = [
-  'Adana', 'Adiyaman', 'Afyonkarahisar', 'Agri', 'Aksaray', 'Amasya', 'Ankara', 'Antalya', 'Ardahan', 'Artvin',
-  'Aydin', 'Balikesir', 'Bartin', 'Batman', 'Bayburt', 'Bilecik', 'Bingol', 'Bitlis', 'Bolu', 'Burdur',
-  'Bursa', 'Canakkale', 'Cankiri', 'Corum', 'Denizli', 'Diyarbakir', 'Duzce', 'Edirne', 'Elazig', 'Erzincan',
-  'Erzurum', 'Eskisehir', 'Gaziantep', 'Giresun', 'Gumushane', 'Hakkari', 'Hatay', 'Igdir', 'Isparta', 'Istanbul',
-  'Izmir', 'Kahramanmaras', 'Karabuk', 'Karaman', 'Kars', 'Kastamonu', 'Kayseri', 'Kilis', 'Kirikkale', 'Kirklareli',
-  'Kirsehir', 'Kocaeli', 'Konya', 'Kutahya', 'Malatya', 'Manisa', 'Mardin', 'Mersin', 'Mugla', 'Mus',
-  'Nevsehir', 'Nigde', 'Ordu', 'Osmaniye', 'Rize', 'Sakarya', 'Samsun', 'Sanliurfa', 'Siirt', 'Sinop',
-  'Sivas', 'Sirnak', 'Tekirdag', 'Tokat', 'Trabzon', 'Tunceli', 'Usak', 'Van', 'Yalova', 'Yozgat', 'Zonguldak'
+  "Adana",
+  "Adiyaman",
+  "Afyonkarahisar",
+  "Agri",
+  "Aksaray",
+  "Amasya",
+  "Ankara",
+  "Antalya",
+  "Ardahan",
+  "Artvin",
+  "Aydin",
+  "Balikesir",
+  "Bartin",
+  "Batman",
+  "Bayburt",
+  "Bilecik",
+  "Bingol",
+  "Bitlis",
+  "Bolu",
+  "Burdur",
+  "Bursa",
+  "Canakkale",
+  "Cankiri",
+  "Corum",
+  "Denizli",
+  "Diyarbakir",
+  "Duzce",
+  "Edirne",
+  "Elazig",
+  "Erzincan",
+  "Erzurum",
+  "Eskisehir",
+  "Gaziantep",
+  "Giresun",
+  "Gumushane",
+  "Hakkari",
+  "Hatay",
+  "Igdir",
+  "Isparta",
+  "Istanbul",
+  "Izmir",
+  "Kahramanmaras",
+  "Karabuk",
+  "Karaman",
+  "Kars",
+  "Kastamonu",
+  "Kayseri",
+  "Kilis",
+  "Kirikkale",
+  "Kirklareli",
+  "Kirsehir",
+  "Kocaeli",
+  "Konya",
+  "Kutahya",
+  "Malatya",
+  "Manisa",
+  "Mardin",
+  "Mersin",
+  "Mugla",
+  "Mus",
+  "Nevsehir",
+  "Nigde",
+  "Ordu",
+  "Osmaniye",
+  "Rize",
+  "Sakarya",
+  "Samsun",
+  "Sanliurfa",
+  "Siirt",
+  "Sinop",
+  "Sivas",
+  "Sirnak",
+  "Tekirdag",
+  "Tokat",
+  "Trabzon",
+  "Tunceli",
+  "Usak",
+  "Van",
+  "Yalova",
+  "Yozgat",
+  "Zonguldak",
 ];
 
 const PRAYER_NAMES: Record<string, Record<string, string>> = {
   tr: {
-    Fajr: 'İmsak',
-    Sunrise: 'Güneş',
-    Dhuhr: 'Öğle',
-    Asr: 'İkindi',
-    Maghrib: 'Akşam',
-    Isha: 'Yatsı',
-    title: 'Namaz Vakitleri',
+    Fajr: "İmsak",
+    Sunrise: "Güneş",
+    Dhuhr: "Öğle",
+    Asr: "İkindi",
+    Maghrib: "Akşam",
+    Isha: "Yatsı",
+    title: "Namaz Vakitleri",
   },
   en: {
-    Fajr: 'Fajr',
-    Sunrise: 'Sunrise',
-    Dhuhr: 'Dhuhr',
-    Asr: 'Asr',
-    Maghrib: 'Maghrib',
-    Isha: 'Isha',
-    title: 'Prayer Times',
+    Fajr: "Fajr",
+    Sunrise: "Sunrise",
+    Dhuhr: "Dhuhr",
+    Asr: "Asr",
+    Maghrib: "Maghrib",
+    Isha: "Isha",
+    title: "Prayer Times",
   },
 };
 
@@ -45,7 +118,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [city, setCity] = useState('Istanbul');
+  const [city, setCity] = useState("Istanbul");
   const [times, setTimes] = useState<PrayerTimes | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentPrayerIdx, setCurrentPrayerIdx] = useState(-1);
@@ -59,10 +132,13 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     setError(false);
     try {
       const settings = await storage.getSettings();
-      const activeCity = targetCity || settings.prayerCity || 'Istanbul';
+      const activeCity = targetCity || settings.prayerCity || "Istanbul";
       setCity(activeCity);
 
-      const prayerTimes = await prayerService.getPrayerTimes(activeCity, 'Turkey');
+      const prayerTimes = await prayerService.getPrayerTimes(
+        activeCity,
+        "Turkey",
+      );
       setTimes(prayerTimes);
       calculateHighlight(prayerTimes);
       setLoading(false);
@@ -78,7 +154,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
     const timeToMinutes = (tStr: string) => {
-      const [h, m] = tStr.split(':').map(Number);
+      const [h, m] = tStr.split(":").map(Number);
       return h * 60 + m;
     };
 
@@ -101,8 +177,10 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
   };
 
   const handleSaveCity = async (newCity: string) => {
-    if (!newCity) return;
-    await storage.setPrayerLocation(newCity, 'Turkey');
+    if (!newCity) {
+      return;
+    }
+    await storage.setPrayerLocation(newCity, "Turkey");
     setIsFormOpen(false);
     loadPrayers(newCity);
   };
@@ -111,8 +189,15 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     return (
       <div id="prayer-view" className="view-content active">
         <div className="prayer-standalone-container">
-          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)', animation: 'pulse 1.5s infinite' }}>
-            {lang === 'tr' ? 'Vakitler alınıyor...' : 'Loading prayer times...'}
+          <div
+            style={{
+              textAlign: "center",
+              padding: "4rem",
+              color: "var(--text-secondary)",
+              animation: "pulse 1.5s infinite",
+            }}
+          >
+            {lang === "tr" ? "Vakitler alınıyor..." : "Loading prayer times..."}
           </div>
         </div>
       </div>
@@ -123,8 +208,16 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     return (
       <div id="prayer-view" className="view-content active">
         <div className="prayer-standalone-container">
-          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--danger)' }}>
-            {lang === 'tr' ? 'Vakitler yüklenirken bir hata oldu.' : 'An error occurred while loading prayer times.'}
+          <div
+            style={{
+              textAlign: "center",
+              padding: "2rem",
+              color: "var(--danger)",
+            }}
+          >
+            {lang === "tr"
+              ? "Vakitler yüklenirken bir hata oldu."
+              : "An error occurred while loading prayer times."}
           </div>
         </div>
       </div>
@@ -143,34 +236,62 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
   if (compact) {
     return (
       <div className="prayer-times-widget">
-        <div className="prayer-widget-header" style={{ position: 'relative' }}>
+        <div className="prayer-widget-header" style={{ position: "relative" }}>
           <h3>{labels.title}</h3>
           <span
             className="prayer-city-tag"
             onClick={() => setIsFormOpen((prev) => !prev)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             {city}
           </span>
         </div>
 
         {isFormOpen && (
-          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '12px', border: '1px solid var(--card-border)', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.03)",
+              padding: "10px",
+              borderRadius: "12px",
+              border: "1px solid var(--card-border)",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ display: "flex", gap: "8px" }}>
               <select
-                style={{ flex: 1, background: 'var(--bg-color)', border: '1px solid var(--card-border)', color: 'var(--text-primary)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.8rem', outline: 'none' }}
+                style={{
+                  flex: 1,
+                  background: "var(--bg-color)",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-primary)",
+                  padding: "6px 10px",
+                  borderRadius: "8px",
+                  fontSize: "0.8rem",
+                  outline: "none",
+                }}
                 value={city}
                 onChange={(e) => setCity((e.target as HTMLSelectElement).value)}
               >
                 {TURKEY_CITIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
               <button
-                style={{ background: 'var(--accent-color)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+                style={{
+                  background: "var(--accent-color)",
+                  color: "white",
+                  border: "none",
+                  padding: "6px 12px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                }}
                 onClick={() => handleSaveCity(city)}
               >
-                {lang === 'tr' ? 'Ok' : 'Ok'}
+                {lang === "tr" ? "Ok" : "Ok"}
               </button>
             </div>
           </div>
@@ -178,7 +299,11 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
 
         <div className="prayer-list">
           {prayerItems.map((item, idx) => (
-            <div key={idx} className={`prayer-item ${idx === currentPrayerIdx ? 'active' : ''}`} data-time={item.time}>
+            <div
+              key={idx}
+              className={`prayer-item ${idx === currentPrayerIdx ? "active" : ""}`}
+              data-time={item.time}
+            >
               <span className="prayer-name">{item.label}</span>
               <span className="prayer-time">{item.time}</span>
             </div>
@@ -191,16 +316,62 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
   return (
     <div id="prayer-view" className="view-content active">
       <div className="prayer-standalone-container">
-        <div className="prayer-standalone-card" style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <div className="prayer-widget-header" style={{ marginBottom: '2rem', paddingBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderBottom: '1px solid var(--card-border)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignSideways: 'center', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{labels.title}</h2>
+        <div
+          className="prayer-standalone-card"
+          style={{ maxWidth: "600px", margin: "0 auto" }}
+        >
+          <div
+            className="prayer-widget-header"
+            style={{
+              marginBottom: "2rem",
+              paddingBottom: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              borderBottom: "1px solid var(--card-border)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignSideways: "center",
+                alignItems: "center",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "1.8rem",
+                  fontWeight: 700,
+                  color: "var(--text-primary)",
+                  margin: 0,
+                }}
+              >
+                {labels.title}
+              </h2>
               <div
                 id="city-display-container"
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  cursor: "pointer",
+                }}
                 onClick={() => setIsFormOpen((prev) => !prev)}
               >
-                <span className="prayer-city-tag" style={{ fontSize: '0.9rem', background: 'rgba(139, 92, 246, 0.1)', color: 'var(--accent-color)', padding: '6px 16px', borderRadius: '20px', fontWeight: 600 }}>{city}</span>
+                <span
+                  className="prayer-city-tag"
+                  style={{
+                    fontSize: "0.9rem",
+                    background: "rgba(139, 92, 246, 0.1)",
+                    color: "var(--accent-color)",
+                    padding: "6px 16px",
+                    borderRadius: "20px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {city}
+                </span>
                 <svg
                   width="16"
                   height="16"
@@ -210,7 +381,11 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  style={{ opacity: 0.5, transform: isFormOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                  style={{
+                    opacity: 0.5,
+                    transform: isFormOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s",
+                  }}
                 >
                   <path d="m18 15-6-6-6 6" />
                 </svg>
@@ -218,33 +393,66 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
             </div>
 
             {isFormOpen && (
-              <div id="city-edit-form" style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
-                <div style={{ display: 'flex', gap: '8px' }}>
+              <div
+                id="city-edit-form"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  padding: "15px",
+                  borderRadius: "12px",
+                  border: "1px solid var(--card-border)",
+                }}
+              >
+                <div style={{ display: "flex", gap: "8px" }}>
                   <select
                     id="prayer-city-select"
-                    style={{ flex: 1, background: 'var(--bg-color)', border: '1px solid var(--card-border)', color: 'var(--text-primary)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                    style={{
+                      flex: 1,
+                      background: "var(--bg-color)",
+                      border: "1px solid var(--card-border)",
+                      color: "var(--text-primary)",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      fontSize: "0.9rem",
+                      outline: "none",
+                    }}
                     value={city}
-                    onChange={(e) => setCity((e.target as HTMLSelectElement).value)}
+                    onChange={(e) =>
+                      setCity((e.target as HTMLSelectElement).value)
+                    }
                   >
                     {TURKEY_CITIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
                     ))}
                   </select>
                   <button
                     id="save-prayer-city-btn"
-                    style={{ background: 'var(--accent-color)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+                    style={{
+                      background: "var(--accent-color)",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 16px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
                     onClick={() => handleSaveCity(city)}
                   >
-                    {lang === 'tr' ? 'Kaydet' : 'Save'}
+                    {lang === "tr" ? "Kaydet" : "Save"}
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="prayer-list" style={{ display: 'grid', gap: '1rem' }}>
+          <div className="prayer-list" style={{ display: "grid", gap: "1rem" }}>
             {prayerItems.map((item, idx) => (
-              <div key={idx} className={`prayer-item ${idx === currentPrayerIdx ? 'active' : ''}`} data-time={item.time}>
+              <div
+                key={idx}
+                className={`prayer-item ${idx === currentPrayerIdx ? "active" : ""}`}
+                data-time={item.time}
+              >
                 <span className="prayer-name">{item.label}</span>
                 <span className="prayer-time">{item.time}</span>
               </div>

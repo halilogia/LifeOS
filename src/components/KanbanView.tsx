@@ -1,11 +1,11 @@
-import { useState } from 'preact/hooks';
-import { Todo, Language } from '../types/types.js';
-import { translations } from '../utils/i18n.js';
+import { useState } from "preact/hooks";
+import { Todo, Language } from "../types/types.js";
+import { translations } from "../utils/i18n.js";
 
 interface KanbanViewProps {
   todos: Todo[];
   lang: Language;
-  onMoveTaskStatus: (index: number, newStatus: Todo['status']) => void;
+  onMoveTaskStatus: (index: number, newStatus: Todo["status"]) => void;
   onMoveTaskDirection: (index: number, direction: number) => void;
 }
 
@@ -18,21 +18,21 @@ export function KanbanView({
   const t = translations[lang];
   const [dragOverCol, setDragOverCol] = useState<string | null>(null);
 
-  const columns: { status: Todo['status']; label: string }[] = [
-    { status: 'todo', label: t.kanban_todo || 'Yapılacak' },
-    { status: 'in-progress', label: t.kanban_in_progress || 'Yapılıyor' },
-    { status: 'done', label: t.kanban_done || 'Bitti' },
+  const columns: { status: Todo["status"]; label: string }[] = [
+    { status: "todo", label: t.kanban_todo || "Yapılacak" },
+    { status: "in-progress", label: t.kanban_in_progress || "Yapılıyor" },
+    { status: "done", label: t.kanban_done || "Bitti" },
   ];
 
   const handleDragStart = (e: DragEvent, originalIndex: number) => {
-    e.dataTransfer?.setData('text/plain', originalIndex.toString());
+    e.dataTransfer?.setData("text/plain", originalIndex.toString());
     const target = e.currentTarget as HTMLElement;
-    target.classList.add('dragging');
+    target.classList.add("dragging");
   };
 
   const handleDragEnd = (e: DragEvent) => {
     const target = e.currentTarget as HTMLElement;
-    target.classList.remove('dragging');
+    target.classList.remove("dragging");
   };
 
   const handleDragOver = (e: DragEvent, colStatus: string) => {
@@ -44,10 +44,10 @@ export function KanbanView({
     setDragOverCol(null);
   };
 
-  const handleDrop = (e: DragEvent, newStatus: Todo['status']) => {
+  const handleDrop = (e: DragEvent, newStatus: Todo["status"]) => {
     e.preventDefault();
     setDragOverCol(null);
-    const indexStr = e.dataTransfer?.getData('text/plain');
+    const indexStr = e.dataTransfer?.getData("text/plain");
     if (indexStr !== undefined) {
       const originalIndex = parseInt(indexStr, 10);
       if (!isNaN(originalIndex)) {
@@ -62,12 +62,12 @@ export function KanbanView({
         {columns.map((col) => {
           const colTodos = todos
             .map((todo, idx) => ({ todo, originalIndex: idx }))
-            .filter(({ todo }) => (todo.status || 'todo') === col.status);
+            .filter(({ todo }) => (todo.status || "todo") === col.status);
 
           return (
             <div
               key={col.status}
-              className={`kanban-column ${dragOverCol === col.status ? 'drag-over' : ''}`}
+              className={`kanban-column ${dragOverCol === col.status ? "drag-over" : ""}`}
               onDragOver={(e) => handleDragOver(e, col.status)}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, col.status)}
@@ -84,15 +84,19 @@ export function KanbanView({
                   >
                     <div
                       className="kanban-item-content"
-                      style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                      }}
                     >
                       <div className="kanban-item-text">{todo.text}</div>
                     </div>
                     <div className="kanban-controls">
                       <button
                         className="move-btn move-left"
-                        title={lang === 'tr' ? 'Sola Taşı' : 'Move Left'}
-                        disabled={col.status === 'todo'}
+                        title={lang === "tr" ? "Sola Taşı" : "Move Left"}
+                        disabled={col.status === "todo"}
                         onClick={() => onMoveTaskDirection(originalIndex, -1)}
                       >
                         <svg
@@ -110,8 +114,8 @@ export function KanbanView({
                       </button>
                       <button
                         className="move-btn move-right"
-                        title={lang === 'tr' ? 'Sağa Taşı' : 'Move Right'}
-                        disabled={col.status === 'done'}
+                        title={lang === "tr" ? "Sağa Taşı" : "Move Right"}
+                        disabled={col.status === "done"}
                         onClick={() => onMoveTaskDirection(originalIndex, 1)}
                       >
                         <svg

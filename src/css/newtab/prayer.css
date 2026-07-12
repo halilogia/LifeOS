@@ -1,107 +1,107 @@
 /* Prayer View Styles */
 .prayer-times-widget {
-    background: var(--card-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
-    padding: 1.5rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .prayer-widget-header {
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--card-border);
-    padding-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .prayer-widget-header h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .prayer-city-tag {
-    font-size: 0.75rem;
-    color: var(--accent-color);
-    background: rgba(139, 92, 246, 0.1);
-    padding: 4px 10px;
-    border-radius: 100px;
-    font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  background: rgba(139, 92, 246, 0.1);
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-weight: 600;
 }
 
 .prayer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .prayer-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .prayer-item:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
 }
 
 .prayer-item.active {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: var(--accent-color);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
 }
 
 .prayer-item.active .prayer-name {
-    color: var(--accent-light);
-    font-weight: 700;
+  color: var(--accent-light);
+  font-weight: 700;
 }
 
 .prayer-item.active .prayer-time {
-    color: var(--text-primary);
-    font-weight: 700;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .prayer-name {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .prayer-time {
-    font-size: 1rem;
-    color: var(--text-primary);
-    font-family: inherit;
-    font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
 }
 
 .prayer-standalone-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  width: 100%;
 }
 
 .prayer-standalone-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--card-border);
-    border-radius: 32px;
-    padding: 3rem;
-    width: 100%;
-    max-width: 600px;
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
-    animation: scaleUpModal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: 32px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+  animation: scaleUpModal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

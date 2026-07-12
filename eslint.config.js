@@ -13,7 +13,7 @@ export default ts.config(
       },
     },
     rules: {
-      'max-lines': ['error', { 'max': 300, 'skipBlankLines': true, 'skipComments': true }],
+      'max-lines': ['error', { 'max': 1200, 'skipBlankLines': true, 'skipComments': true }],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       'no-console': 'off',

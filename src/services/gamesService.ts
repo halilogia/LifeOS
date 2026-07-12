@@ -114,7 +114,8 @@ export const gamesService = {
     }
 
     try {
-      const url = "https://raw.githubusercontent.com/josephmate/EpicFreeGamesList/master/epic_free_games.json";
+      const url =
+        "https://raw.githubusercontent.com/josephmate/EpicFreeGamesList/master/epic_free_games.json";
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to load Epic history: ${response.statusText}`);
@@ -136,7 +137,10 @@ export const gamesService = {
       }
       return [];
     } catch (error) {
-      console.error("gamesService: Failed to fetch historical giveaways:", error);
+      console.error(
+        "gamesService: Failed to fetch historical giveaways:",
+        error,
+      );
       const cached = await this.getHistoryCache();
       if (cached && cached.data.length > 0) {
         console.log("gamesService: Using expired history cache as fallback");
@@ -152,7 +156,9 @@ export const gamesService = {
   loadExclusionSettings(): Promise<ExclusionSettings> {
     return new Promise((resolve) => {
       chrome.storage.local.get(["fg_exclusions"], (res) => {
-        resolve((res.fg_exclusions as ExclusionSettings) || { ...defaultExclusions });
+        resolve(
+          (res.fg_exclusions as ExclusionSettings) || { ...defaultExclusions },
+        );
       });
     });
   },
@@ -201,5 +207,5 @@ export const gamesService = {
       };
       chrome.storage.local.set({ [HISTORY_CACHE_KEY]: cacheVal }, resolve);
     });
-  }
+  },
 };

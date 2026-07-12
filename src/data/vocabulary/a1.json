@@ -151,7 +151,9 @@
     "id": "a1-17",
     "word": "on",
     "class": "preposition",
-    "definitions": ["in or into a position covering, touching or forming part of a surface"],
+    "definitions": [
+      "in or into a position covering, touching or forming part of a surface"
+    ],
     "examples": ["a picture on a wall"],
     "freq": 6.91
   },
@@ -195,7 +197,9 @@
     "id": "a1-22",
     "word": "be",
     "class": "auxiliary verb",
-    "definitions": ["used with a present participle to form progressive tenses"],
+    "definitions": [
+      "used with a present participle to form progressive tenses"
+    ],
     "examples": ["I am studying Chinese."],
     "freq": 6.79
   },
@@ -203,7 +207,9 @@
     "id": "a1-23",
     "word": "as",
     "class": "preposition",
-    "definitions": ["used to describe somebody/something appearing to be somebody/something else"],
+    "definitions": [
+      "used to describe somebody/something appearing to be somebody/something else"
+    ],
     "examples": ["They were all dressed as clowns."],
     "freq": 6.77
   },
@@ -219,7 +225,9 @@
     "id": "a1-25",
     "word": "at",
     "class": "preposition",
-    "definitions": ["used to say where something/somebody is or where something happens"],
+    "definitions": [
+      "used to say where something/somebody is or where something happens"
+    ],
     "examples": ["at the corner of the street"],
     "freq": 6.7
   },
@@ -255,7 +263,9 @@
     "id": "a1-29",
     "word": "but",
     "class": "conjunction",
-    "definitions": ["used to introduce a word or phrase that contrasts with what was said before"],
+    "definitions": [
+      "used to introduce a word or phrase that contrasts with what was said before"
+    ],
     "examples": ["I got it wrong. It wasn't the red one but the blue one."],
     "freq": 6.63
   },
@@ -303,7 +313,9 @@
     "id": "a1-35",
     "word": "your",
     "class": "determiner",
-    "definitions": ["of or belonging to the person or people being spoken or written to"],
+    "definitions": [
+      "of or belonging to the person or people being spoken or written to"
+    ],
     "examples": ["I like your dress."],
     "freq": 6.53
   },
@@ -461,7 +473,9 @@
     "id": "a1-53",
     "word": "about",
     "class": "preposition",
-    "definitions": ["on the subject of somebody/something; in connection with somebody/something"],
+    "definitions": [
+      "on the subject of somebody/something; in connection with somebody/something"
+    ],
     "examples": ["a book about flowers"],
     "freq": 6.4
   },
@@ -501,7 +515,9 @@
     "id": "a1-58",
     "word": "what",
     "class": "determiner",
-    "definitions": ["used in questions to ask for particular information about somebody/something"],
+    "definitions": [
+      "used in questions to ask for particular information about somebody/something"
+    ],
     "examples": ["What is your name?"],
     "freq": 6.38
   },
@@ -509,7 +525,9 @@
     "id": "a1-59",
     "word": "what",
     "class": "pronoun",
-    "definitions": ["used in questions to ask for particular information about somebody/something"],
+    "definitions": [
+      "used in questions to ask for particular information about somebody/something"
+    ],
     "examples": ["What is your name?"],
     "freq": 6.38
   },
@@ -579,7 +597,9 @@
     "id": "a1-67",
     "word": "do",
     "class": "auxiliary verb",
-    "definitions": ["used before a full verb to form negative sentences and questions"],
+    "definitions": [
+      "used before a full verb to form negative sentences and questions"
+    ],
     "examples": ["I don't like fish."],
     "freq": 6.35
   },
@@ -705,7 +725,9 @@
     "id": "a1-81",
     "word": "new",
     "class": "adjective",
-    "definitions": ["not existing before; recently made, invented, introduced, etc."],
+    "definitions": [
+      "not existing before; recently made, invented, introduced, etc."
+    ],
     "examples": ["Have you read her new novel?"],
     "freq": 6.25
   },
@@ -750,7 +772,9 @@
     "word": "also",
     "class": "adverb",
     "definitions": ["in addition; too"],
-    "examples": ["She's fluent in French and German. She also speaks a little Italian."],
+    "examples": [
+      "She's fluent in French and German. She also speaks a little Italian."
+    ],
     "freq": 6.19
   },
   {
@@ -795,7 +819,9 @@
     "id": "a1-91",
     "word": "its",
     "class": "determiner",
-    "definitions": ["belonging to or connected with a thing, an animal or a baby"],
+    "definitions": [
+      "belonging to or connected with a thing, an animal or a baby"
+    ],
     "examples": ["Turn the box on its side."],
     "freq": 6.14
   },
@@ -835,7 +861,9 @@
     "id": "a1-96",
     "word": "only",
     "class": "adjective",
-    "definitions": ["used to say that no other or others of the same group exist or are there"],
+    "definitions": [
+      "used to say that no other or others of the same group exist or are there"
+    ],
     "examples": ["She's their only daughter."],
     "freq": 6.12
   },
@@ -867,7 +895,9 @@
     "id": "a1-100",
     "word": "first",
     "class": "determiner",
-    "definitions": ["happening or coming before all other similar things or people; 1st"],
+    "definitions": [
+      "happening or coming before all other similar things or people; 1st"
+    ],
     "examples": ["her first husband"],
     "freq": 6.11
   },
@@ -875,7 +905,9 @@
     "id": "a1-101",
     "word": "first",
     "class": "ordinal number",
-    "definitions": ["happening or coming before all other similar things or people; 1st"],
+    "definitions": [
+      "happening or coming before all other similar things or people; 1st"
+    ],
     "examples": ["her first husband"],
     "freq": 6.11
   },
@@ -920,7 +952,9 @@
     "word": "see",
     "class": "verb",
     "definitions": ["to become aware of somebody/something by using your eyes"],
-    "examples": ["see somebody/something, She looked for him but couldn't see him in the crowd."],
+    "examples": [
+      "see somebody/something, She looked for him but couldn't see him in the crowd."
+    ],
     "freq": 6.1
   },
   {
@@ -1056,7 +1090,9 @@
     "word": "go",
     "class": "verb",
     "definitions": ["to move or travel from one place to another"],
-    "examples": ["+ adv./prep., She went into her room and shut the door behind her."],
+    "examples": [
+      "+ adv./prep., She went into her room and shut the door behind her."
+    ],
     "freq": 6.03
   },
   {
@@ -1255,7 +1291,9 @@
     "id": "a1-144",
     "word": "work",
     "class": "noun",
-    "definitions": ["the job that a person does especially in order to earn money"],
+    "definitions": [
+      "the job that a person does especially in order to earn money"
+    ],
     "examples": ["He started work as a security guard."],
     "freq": 5.96
   },
@@ -1309,7 +1347,9 @@
     "id": "a1-150",
     "word": "off",
     "class": "adverb",
-    "definitions": ["used to say that something has been removed or become separated"],
+    "definitions": [
+      "used to say that something has been removed or become separated"
+    ],
     "examples": ["He's had his beard shaved off."],
     "freq": 5.93
   },
@@ -1317,7 +1357,9 @@
     "id": "a1-151",
     "word": "off",
     "class": "preposition",
-    "definitions": ["down or away from a place or at a distance in space or time"],
+    "definitions": [
+      "down or away from a place or at a distance in space or time"
+    ],
     "examples": ["I fell off the ladder."],
     "freq": 5.93
   },
@@ -1325,7 +1367,9 @@
     "id": "a1-152",
     "word": "why",
     "class": "adverb",
-    "definitions": ["used in questions to ask the reason for or purpose of something"],
+    "definitions": [
+      "used in questions to ask the reason for or purpose of something"
+    ],
     "examples": ["Why were you late?"],
     "freq": 5.93
   },
@@ -1333,7 +1377,9 @@
     "id": "a1-153",
     "word": "still",
     "class": "adverb",
-    "definitions": ["continuing until a particular point in time and not finishing"],
+    "definitions": [
+      "continuing until a particular point in time and not finishing"
+    ],
     "examples": ["I am very happy that you all are still alive and well."],
     "freq": 5.92
   },
@@ -1395,7 +1441,9 @@
     "id": "a1-160",
     "word": "world",
     "class": "noun",
-    "definitions": ["the earth, with all its countries, peoples and natural features"],
+    "definitions": [
+      "the earth, with all its countries, peoples and natural features"
+    ],
     "examples": ["a map of the world"],
     "freq": 5.89
   },
@@ -1443,7 +1491,9 @@
     "id": "a1-166",
     "word": "last",
     "class": "determiner",
-    "definitions": ["happening or coming after all other similar things or people"],
+    "definitions": [
+      "happening or coming after all other similar things or people"
+    ],
     "examples": ["We caught the last bus home."],
     "freq": 5.86
   },
@@ -1469,7 +1519,9 @@
     "id": "a1-169",
     "word": "love",
     "class": "verb",
-    "definitions": ["to have very strong feelings of liking and caring for somebody"],
+    "definitions": [
+      "to have very strong feelings of liking and caring for somebody"
+    ],
     "examples": ["I love you."],
     "freq": 5.82
   },
@@ -1493,7 +1545,9 @@
     "id": "a1-172",
     "word": "home",
     "class": "noun",
-    "definitions": ["the house or flat that you live in, especially with your family"],
+    "definitions": [
+      "the house or flat that you live in, especially with your family"
+    ],
     "examples": ["Old people prefer to stay in their own homes."],
     "freq": 5.81
   },
@@ -1545,7 +1599,9 @@
     "id": "a1-178",
     "word": "same",
     "class": "adjective",
-    "definitions": ["exactly the one or ones referred to or mentioned; not different"],
+    "definitions": [
+      "exactly the one or ones referred to or mentioned; not different"
+    ],
     "examples": ["We have lived in the same house for twenty years."],
     "freq": 5.8
   },
@@ -1569,7 +1625,9 @@
     "id": "a1-181",
     "word": "both",
     "class": "determiner",
-    "definitions": ["used with plural nouns to mean ‘the two’ or ‘the one as well as the other’"],
+    "definitions": [
+      "used with plural nouns to mean ‘the two’ or ‘the one as well as the other’"
+    ],
     "examples": ["Both women were French."],
     "freq": 5.79
   },
@@ -1577,7 +1635,9 @@
     "id": "a1-182",
     "word": "both",
     "class": "pronoun",
-    "definitions": ["used with plural nouns to mean ‘the two’ or ‘the one as well as the other’"],
+    "definitions": [
+      "used with plural nouns to mean ‘the two’ or ‘the one as well as the other’"
+    ],
     "examples": ["Both women were French."],
     "freq": 5.79
   },
@@ -1627,7 +1687,9 @@
     "id": "a1-188",
     "word": "around",
     "class": "preposition",
-    "definitions": ["surrounding somebody/something; on each side of something"],
+    "definitions": [
+      "surrounding somebody/something; on each side of something"
+    ],
     "examples": ["The house is built around a central courtyard."],
     "freq": 5.77
   },
@@ -1635,7 +1697,9 @@
     "id": "a1-189",
     "word": "between",
     "class": "preposition",
-    "definitions": ["in or into the space separating two or more points, objects, people, etc."],
+    "definitions": [
+      "in or into the space separating two or more points, objects, people, etc."
+    ],
     "examples": ["Q comes between P and R in the English alphabet."],
     "freq": 5.77
   },
@@ -1651,7 +1715,9 @@
     "id": "a1-191",
     "word": "better",
     "class": "adjective",
-    "definitions": ["of a higher standard or less poor quality; not as bad as something else"],
+    "definitions": [
+      "of a higher standard or less poor quality; not as bad as something else"
+    ],
     "examples": ["We're hoping for better weather tomorrow."],
     "freq": 5.76
   },
@@ -1701,7 +1767,9 @@
     "id": "a1-197",
     "word": "little",
     "class": "determiner",
-    "definitions": ["used with uncountable nouns to mean ‘a small amount’, ‘some’"],
+    "definitions": [
+      "used with uncountable nouns to mean ‘a small amount’, ‘some’"
+    ],
     "examples": ["a little milk/sugar/tea"],
     "freq": 5.75
   },
@@ -1709,7 +1777,9 @@
     "id": "a1-198",
     "word": "little",
     "class": "pronoun",
-    "definitions": ["used with uncountable nouns to mean ‘a small amount’, ‘some’"],
+    "definitions": [
+      "used with uncountable nouns to mean ‘a small amount’, ‘some’"
+    ],
     "examples": ["a little milk/sugar/tea"],
     "freq": 5.75
   },
@@ -1718,7 +1788,9 @@
     "word": "old",
     "class": "adjective",
     "definitions": ["of a particular age"],
-    "examples": ["be… years, months, etc. old, The baby was only a few hours old."],
+    "examples": [
+      "be… years, months, etc. old, The baby was only a few hours old."
+    ],
     "freq": 5.75
   },
   {
@@ -1741,7 +1813,9 @@
     "id": "a1-202",
     "word": "own",
     "class": "adjective",
-    "definitions": ["used to emphasize that something belongs to or is connected with somebody"],
+    "definitions": [
+      "used to emphasize that something belongs to or is connected with somebody"
+    ],
     "examples": ["It was her own idea."],
     "freq": 5.74
   },
@@ -1749,7 +1823,9 @@
     "id": "a1-203",
     "word": "own",
     "class": "pronoun",
-    "definitions": ["used to emphasize that something belongs to or is connected with somebody"],
+    "definitions": [
+      "used to emphasize that something belongs to or is connected with somebody"
+    ],
     "examples": ["It was her own idea."],
     "freq": 5.74
   },
@@ -1804,7 +1880,9 @@
     "definitions": [
       "to hand something to somebody so that they can look at it, use it or keep it for a time"
     ],
-    "examples": ["give something to somebody, Give the letter to your mother when you've read it."],
+    "examples": [
+      "give something to somebody, Give the letter to your mother when you've read it."
+    ],
     "freq": 5.71
   },
   {
@@ -1843,7 +1921,9 @@
     "id": "a1-214",
     "word": "next",
     "class": "adjective",
-    "definitions": ["coming straight after somebody/something in time, order or space"],
+    "definitions": [
+      "coming straight after somebody/something in time, order or space"
+    ],
     "examples": ["The next train to Baltimore is at ten."],
     "freq": 5.7
   },
@@ -1905,7 +1985,9 @@
     "id": "a1-221",
     "word": "end",
     "class": "noun",
-    "definitions": ["the final part of a period of time, an event, an activity or a story"],
+    "definitions": [
+      "the final part of a period of time, an event, an activity or a story"
+    ],
     "examples": ["It's the end of an era."],
     "freq": 5.68
   },
@@ -1913,7 +1995,9 @@
     "id": "a1-222",
     "word": "end",
     "class": "verb",
-    "definitions": ["to finish; to reach a point and go no further; to make something finish"],
+    "definitions": [
+      "to finish; to reach a point and go no further; to make something finish"
+    ],
     "examples": ["At last the war ended."],
     "freq": 5.68
   },
@@ -1940,7 +2024,9 @@
     "word": "show",
     "class": "verb",
     "definitions": ["to make something clear; to prove something"],
-    "examples": ["show (that)…, The figures clearly show that her claims are false."],
+    "examples": [
+      "show (that)…, The figures clearly show that her claims are false."
+    ],
     "freq": 5.68
   },
   {
@@ -1999,7 +2085,9 @@
     "id": "a1-232",
     "word": "family",
     "class": "noun",
-    "definitions": ["a group consisting of one or two parents and their children"],
+    "definitions": [
+      "a group consisting of one or two parents and their children"
+    ],
     "examples": ["I introduced Neil to the other members of my family."],
     "freq": 5.66
   },
@@ -2007,7 +2095,9 @@
     "id": "a1-233",
     "word": "keep",
     "class": "verb",
-    "definitions": ["to continue to have something and not give it back or throw it away"],
+    "definitions": [
+      "to continue to have something and not give it back or throw it away"
+    ],
     "examples": ["He kept all her letters."],
     "freq": 5.66
   },
@@ -2033,7 +2123,9 @@
     "id": "a1-236",
     "word": "money",
     "class": "noun",
-    "definitions": ["what you earn by working or selling things, and use to buy things"],
+    "definitions": [
+      "what you earn by working or selling things, and use to buy things"
+    ],
     "examples": ["to borrow/save/spend/earn money"],
     "freq": 5.64
   },
@@ -2059,8 +2151,12 @@
     "id": "a1-239",
     "word": "second",
     "class": "noun",
-    "definitions": ["a unit for measuring time. There are 60 seconds in one minute."],
-    "examples": ["in… seconds, She can run 100 metres in just over 11 seconds."],
+    "definitions": [
+      "a unit for measuring time. There are 60 seconds in one minute."
+    ],
+    "examples": [
+      "in… seconds, She can run 100 metres in just over 11 seconds."
+    ],
     "freq": 5.63
   },
   {
@@ -2085,7 +2181,9 @@
     "id": "a1-242",
     "word": "away",
     "class": "adverb",
-    "definitions": ["to or at a distance from somebody/something in space or time"],
+    "definitions": [
+      "to or at a distance from somebody/something in space or time"
+    ],
     "examples": ["The beach is a mile away."],
     "freq": 5.62
   },
@@ -2093,8 +2191,12 @@
     "id": "a1-243",
     "word": "left",
     "class": "adjective",
-    "definitions": ["on the side of your body that is towards the west when you are facing north"],
-    "examples": ["Fewer people write with their left hand than with their right."],
+    "definitions": [
+      "on the side of your body that is towards the west when you are facing north"
+    ],
+    "examples": [
+      "Fewer people write with their left hand than with their right."
+    ],
     "freq": 5.62
   },
   {
@@ -2157,7 +2259,9 @@
     "id": "a1-251",
     "word": "name",
     "class": "noun",
-    "definitions": ["a word or words that a particular person, animal, place or thing is known by"],
+    "definitions": [
+      "a word or words that a particular person, animal, place or thing is known by"
+    ],
     "examples": ["What's your name?"],
     "freq": 5.61
   },
@@ -2231,7 +2335,9 @@
     "id": "a1-259",
     "word": "few",
     "class": "adjective",
-    "definitions": ["used with plural nouns and a plural verb to mean ‘a small number’, ‘some’"],
+    "definitions": [
+      "used with plural nouns and a plural verb to mean ‘a small number’, ‘some’"
+    ],
     "examples": ["We've had a few replies."],
     "freq": 5.6
   },
@@ -2239,7 +2345,9 @@
     "id": "a1-260",
     "word": "few",
     "class": "determiner",
-    "definitions": ["used with plural nouns and a plural verb to mean ‘a small number’, ‘some’"],
+    "definitions": [
+      "used with plural nouns and a plural verb to mean ‘a small number’, ‘some’"
+    ],
     "examples": ["We've had a few replies."],
     "freq": 5.6
   },
@@ -2265,7 +2373,9 @@
     "id": "a1-263",
     "word": "real",
     "class": "adjective",
-    "definitions": ["actually existing or happening and not imagined or pretended"],
+    "definitions": [
+      "actually existing or happening and not imagined or pretended"
+    ],
     "examples": ["a real danger/risk/threat/concern"],
     "freq": 5.6
   },
@@ -2273,7 +2383,9 @@
     "id": "a1-264",
     "word": "different",
     "class": "adjective",
-    "definitions": ["not the same as somebody/something; not like somebody/something else"],
+    "definitions": [
+      "not the same as somebody/something; not like somebody/something else"
+    ],
     "examples": [
       "different from somebody/something, American English is significantly different from British English."
     ],
@@ -2286,7 +2398,9 @@
     "definitions": [
       "used to introduce a statement that contrasts with something that has just been said"
     ],
-    "examples": ["He was feeling bad. He went to work, however, and tried to concentrate."],
+    "examples": [
+      "He was feeling bad. He went to work, however, and tried to concentrate."
+    ],
     "freq": 5.58
   },
   {
@@ -2296,7 +2410,9 @@
     "definitions": [
       "a number of people or things that are together in the same place or that are connected in some way"
     ],
-    "examples": ["group of somebody/something, a group of people/students/friends"],
+    "examples": [
+      "group of somebody/something, a group of people/students/friends"
+    ],
     "freq": 5.57
   },
   {
@@ -2374,7 +2490,9 @@
     "word": "change",
     "class": "noun",
     "definitions": ["the act or result of something becoming different"],
-    "examples": ["change in something, We're hoping for a change in the weather."],
+    "examples": [
+      "change in something, We're hoping for a change in the weather."
+    ],
     "freq": 5.54
   },
   {
@@ -2382,7 +2500,9 @@
     "word": "change",
     "class": "verb",
     "definitions": ["to become different"],
-    "examples": ["Rick hasn't changed. He looks exactly the same as he did at school."],
+    "examples": [
+      "Rick hasn't changed. He looks exactly the same as he did at school."
+    ],
     "freq": 5.54
   },
   {
@@ -2423,7 +2543,9 @@
     "id": "a1-281",
     "word": "full",
     "class": "adjective",
-    "definitions": ["containing or holding as much or as many as possible; having no empty space"],
+    "definitions": [
+      "containing or holding as much or as many as possible; having no empty space"
+    ],
     "examples": ["a full bottle of wine"],
     "freq": 5.54
   },
@@ -2439,7 +2561,9 @@
     "id": "a1-283",
     "word": "point",
     "class": "noun",
-    "definitions": ["a thing that somebody says or writes giving their opinion or stating a fact"],
+    "definitions": [
+      "a thing that somebody says or writes giving their opinion or stating a fact"
+    ],
     "examples": ["She made several interesting points in the article."],
     "freq": 5.54
   },
@@ -2447,7 +2571,9 @@
     "id": "a1-284",
     "word": "read",
     "class": "verb",
-    "definitions": ["to look at and understand the meaning of written or printed words or symbols"],
+    "definitions": [
+      "to look at and understand the meaning of written or printed words or symbols"
+    ],
     "examples": ["She's still learning to read."],
     "freq": 5.54
   },
@@ -2487,7 +2613,9 @@
     "id": "a1-289",
     "word": "mean",
     "class": "verb",
-    "definitions": ["to have something as a meaning in the same or another language"],
+    "definitions": [
+      "to have something as a meaning in the same or another language"
+    ],
     "examples": ["mean something, What does this sentence mean?"],
     "freq": 5.53
   },
@@ -2504,7 +2632,9 @@
     "word": "tell",
     "class": "verb",
     "definitions": ["to give information to somebody by speaking or writing"],
-    "examples": ["tell something to somebody, He told the news to everybody he saw."],
+    "examples": [
+      "tell something to somebody, He told the news to everybody he saw."
+    ],
     "freq": 5.53
   },
   {
@@ -2521,7 +2651,9 @@
     "id": "a1-293",
     "word": "stop",
     "class": "noun",
-    "definitions": ["a place where a bus or train stops regularly for passengers to get on or off"],
+    "definitions": [
+      "a place where a bus or train stops regularly for passengers to get on or off"
+    ],
     "examples": ["I get off at the next stop."],
     "freq": 5.52
   },
@@ -2529,7 +2661,9 @@
     "id": "a1-294",
     "word": "stop",
     "class": "verb",
-    "definitions": ["to no longer move; to make somebody/something no longer move"],
+    "definitions": [
+      "to no longer move; to make somebody/something no longer move"
+    ],
     "examples": ["The car stopped at the traffic lights."],
     "freq": 5.52
   },
@@ -2568,7 +2702,9 @@
     "definitions": [
       "to give somebody/something a particular name; to use a particular name or title when you are talking to somebody"
     ],
-    "examples": ["call somebody/something + noun, They decided to call the baby Mark."],
+    "examples": [
+      "call somebody/something + noun, They decided to call the baby Mark."
+    ],
     "freq": 5.51
   },
   {
@@ -2633,7 +2769,9 @@
     "id": "a1-306",
     "word": "yes",
     "class": "exclamation",
-    "definitions": ["used to answer a question and say that something is correct or true"],
+    "definitions": [
+      "used to answer a question and say that something is correct or true"
+    ],
     "examples": ["‘Is this your car?’ ‘Yes, it is.’"],
     "freq": 5.5
   },
@@ -2641,7 +2779,9 @@
     "id": "a1-307",
     "word": "later",
     "class": "adverb",
-    "definitions": ["at a time in the future; after the time you are talking about"],
+    "definitions": [
+      "at a time in the future; after the time you are talking about"
+    ],
     "examples": ["See you later."],
     "freq": 5.49
   },
@@ -2667,7 +2807,9 @@
     "id": "a1-310",
     "word": "order",
     "class": "verb",
-    "definitions": ["to ask for something to eat or drink in a restaurant, bar, etc."],
+    "definitions": [
+      "to ask for something to eat or drink in a restaurant, bar, etc."
+    ],
     "examples": ["order (something), I ordered a coffee and a sandwich."],
     "freq": 5.49
   },
@@ -2693,7 +2835,9 @@
     "id": "a1-313",
     "word": "country",
     "class": "noun",
-    "definitions": ["an area of land that has or used to have its own government and laws"],
+    "definitions": [
+      "an area of land that has or used to have its own government and laws"
+    ],
     "examples": ["European countries"],
     "freq": 5.48
   },
@@ -2701,7 +2845,9 @@
     "id": "a1-314",
     "word": "open",
     "class": "adjective",
-    "definitions": ["allowing things or people to go through; not closed or blocked"],
+    "definitions": [
+      "allowing things or people to go through; not closed or blocked"
+    ],
     "examples": ["A wasp flew in the open window."],
     "freq": 5.48
   },
@@ -2720,7 +2866,9 @@
     "word": "thank",
     "class": "verb",
     "definitions": ["to tell somebody that you are grateful for something"],
-    "examples": ["thank somebody for something, I must write and thank Mary for the present."],
+    "examples": [
+      "thank somebody for something, I must write and thank Mary for the present."
+    ],
     "freq": 5.48
   },
   {
@@ -2735,7 +2883,9 @@
     "id": "a1-318",
     "word": "area",
     "class": "noun",
-    "definitions": ["part of a place, town, etc., or a region of a country or the world"],
+    "definitions": [
+      "part of a place, town, etc., or a region of a country or the world"
+    ],
     "examples": ["to improve access to services in rural areas"],
     "freq": 5.46
   },
@@ -2743,7 +2893,9 @@
     "id": "a1-319",
     "word": "black",
     "class": "adjective",
-    "definitions": ["having the very darkest colour, like coal or the sky at night"],
+    "definitions": [
+      "having the very darkest colour, like coal or the sky at night"
+    ],
     "examples": ["a shiny black car"],
     "freq": 5.46
   },
@@ -2777,7 +2929,9 @@
     "id": "a1-323",
     "word": "face",
     "class": "noun",
-    "definitions": ["the front part of the head, where the eyes, nose and mouth are"],
+    "definitions": [
+      "the front part of the head, where the eyes, nose and mouth are"
+    ],
     "examples": ["a pretty/pale/round face"],
     "freq": 5.45
   },
@@ -2839,7 +2993,9 @@
     "id": "a1-330",
     "word": "hope",
     "class": "verb",
-    "definitions": ["to want something to happen and think that it is possible"],
+    "definitions": [
+      "to want something to happen and think that it is possible"
+    ],
     "examples": ["All we can do now is wait and hope."],
     "freq": 5.44
   },
@@ -2847,7 +3003,9 @@
     "id": "a1-331",
     "word": "important",
     "class": "adjective",
-    "definitions": ["having a great effect on people or things; of great value"],
+    "definitions": [
+      "having a great effect on people or things; of great value"
+    ],
     "examples": ["an important issue/question/point/factor"],
     "freq": 5.44
   },
@@ -2855,7 +3013,9 @@
     "id": "a1-332",
     "word": "news",
     "class": "noun",
-    "definitions": ["new information about something that has happened recently"],
+    "definitions": [
+      "new information about something that has happened recently"
+    ],
     "examples": ["What's the latest news?"],
     "freq": 5.44
   },
@@ -2881,7 +3041,9 @@
     "id": "a1-335",
     "word": "early",
     "class": "adverb",
-    "definitions": ["near the beginning of a period of time, an event, a piece of work, etc."],
+    "definitions": [
+      "near the beginning of a period of time, an event, a piece of work, etc."
+    ],
     "examples": ["We arrived early the next day."],
     "freq": 5.43
   },
@@ -2917,7 +3079,9 @@
     "id": "a1-339",
     "word": "post",
     "class": "noun",
-    "definitions": ["the official system used for sending and delivering letters, packages, etc."],
+    "definitions": [
+      "the official system used for sending and delivering letters, packages, etc."
+    ],
     "examples": ["by post, I'll send the original to you by post."],
     "freq": 5.43
   },
@@ -2926,14 +3090,18 @@
     "word": "post",
     "class": "verb",
     "definitions": ["to send a letter, etc. to somebody by post"],
-    "examples": ["post something, The cost of posting a letter has gone up again."],
+    "examples": [
+      "post something, The cost of posting a letter has gone up again."
+    ],
     "freq": 5.43
   },
   {
     "id": "a1-341",
     "word": "thanks",
     "class": "exclamation",
-    "definitions": ["used to show that you are grateful to somebody for something they have done"],
+    "definitions": [
+      "used to show that you are grateful to somebody for something they have done"
+    ],
     "examples": ["‘How are you?’ ‘Fine, thanks (= thanks for asking).’"],
     "freq": 5.43
   },
@@ -2941,7 +3109,9 @@
     "id": "a1-342",
     "word": "thanks",
     "class": "noun",
-    "definitions": ["words or actions that show that you are grateful to somebody for something"],
+    "definitions": [
+      "words or actions that show that you are grateful to somebody for something"
+    ],
     "examples": [
       "thanks to somebody for something, How can I ever express my thanks to you for all you've done?"
     ],
@@ -2961,7 +3131,9 @@
     "id": "a1-344",
     "word": "young",
     "class": "adjective",
-    "definitions": ["having lived or existed for only a short time; not fully developed"],
+    "definitions": [
+      "having lived or existed for only a short time; not fully developed"
+    ],
     "examples": ["Young babies need to be wrapped up warmly."],
     "freq": 5.43
   },
@@ -2989,8 +3161,12 @@
     "id": "a1-347",
     "word": "fact",
     "class": "noun",
-    "definitions": ["a thing that is known to be true, especially when it can be proved"],
-    "examples": ["fact about something, First, some basic facts about healthy eating."],
+    "definitions": [
+      "a thing that is known to be true, especially when it can be proved"
+    ],
+    "examples": [
+      "fact about something, First, some basic facts about healthy eating."
+    ],
     "freq": 5.41
   },
   {
@@ -3005,7 +3181,9 @@
     "id": "a1-349",
     "word": "half",
     "class": "noun",
-    "definitions": ["either of two equal parts into which something is or can be divided"],
+    "definitions": [
+      "either of two equal parts into which something is or can be divided"
+    ],
     "examples": ["two and a half kilos (= 2½)"],
     "freq": 5.41
   },
@@ -3021,7 +3199,9 @@
     "id": "a1-351",
     "word": "hand",
     "class": "noun",
-    "definitions": ["the part of the body at the end of the arm, including the fingers and thumb"],
+    "definitions": [
+      "the part of the body at the end of the arm, including the fingers and thumb"
+    ],
     "examples": ["Ian placed a hand on her shoulder."],
     "freq": 5.41
   },
@@ -3038,7 +3218,9 @@
     "word": "become",
     "class": "verb",
     "definitions": ["to start to be something"],
-    "examples": ["+ adj., It soon became apparent that no one was going to come."],
+    "examples": [
+      "+ adj., It soon became apparent that no one was going to come."
+    ],
     "freq": 5.4
   },
   {
@@ -3061,8 +3243,12 @@
     "id": "a1-356",
     "word": "office",
     "class": "noun",
-    "definitions": ["a room, set of rooms or building where people work, usually sitting at desks"],
-    "examples": ["The company is moving to new offices on the other side of town."],
+    "definitions": [
+      "a room, set of rooms or building where people work, usually sitting at desks"
+    ],
+    "examples": [
+      "The company is moving to new offices on the other side of town."
+    ],
     "freq": 5.4
   },
   {
@@ -3111,8 +3297,12 @@
     "id": "a1-362",
     "word": "true",
     "class": "adjective",
-    "definitions": ["connected with facts rather than things that have been invented or guessed"],
-    "examples": ["Indicate whether the following statements are true or false."],
+    "definitions": [
+      "connected with facts rather than things that have been invented or guessed"
+    ],
+    "examples": [
+      "Indicate whether the following statements are true or false."
+    ],
     "freq": 5.4
   },
   {
@@ -3120,7 +3310,9 @@
     "word": "history",
     "class": "noun",
     "definitions": ["all the events that happened in the past"],
-    "examples": ["in history, The battle was a turning point in human history."],
+    "examples": [
+      "in history, The battle was a turning point in human history."
+    ],
     "freq": 5.39
   },
   {
@@ -3155,7 +3347,9 @@
     "id": "a1-367",
     "word": "win",
     "class": "verb",
-    "definitions": ["to be the most successful in a competition, race, battle, etc."],
+    "definitions": [
+      "to be the most successful in a competition, race, battle, etc."
+    ],
     "examples": ["Which team won?"],
     "freq": 5.39
   },
@@ -3216,14 +3410,18 @@
     "definitions": [
       "to have or keep an image in your memory of an event, a person, a place, etc. from the past"
     ],
-    "examples": ["remember somebody/something, This is Carla. Do you remember her?"],
+    "examples": [
+      "remember somebody/something, This is Carla. Do you remember her?"
+    ],
     "freq": 5.38
   },
   {
     "id": "a1-375",
     "word": "air",
     "class": "noun",
-    "definitions": ["the mixture of gases that surrounds the earth and that we breathe"],
+    "definitions": [
+      "the mixture of gases that surrounds the earth and that we breathe"
+    ],
     "examples": ["Let's go out for some fresh air."],
     "freq": 5.37
   },
@@ -3249,7 +3447,9 @@
     "id": "a1-378",
     "word": "probably",
     "class": "adverb",
-    "definitions": ["used to say that something is likely to happen or to be true"],
+    "definitions": [
+      "used to say that something is likely to happen or to be true"
+    ],
     "examples": ["You're probably right."],
     "freq": 5.37
   },
@@ -3311,7 +3511,9 @@
     "id": "a1-385",
     "word": "past",
     "class": "noun",
-    "definitions": ["the time that has gone by; things that happened in an earlier time"],
+    "definitions": [
+      "the time that has gone by; things that happened in an earlier time"
+    ],
     "examples": ["in the past, I used to go there often in the past."],
     "freq": 5.36
   },
@@ -3391,7 +3593,9 @@
     "id": "a1-394",
     "word": "late",
     "class": "adjective",
-    "definitions": ["arriving, happening or done after the expected, arranged or usual time"],
+    "definitions": [
+      "arriving, happening or done after the expected, arranged or usual time"
+    ],
     "examples": ["I'm sorry I'm late."],
     "freq": 5.34
   },
@@ -3459,8 +3663,12 @@
     "id": "a1-402",
     "word": "watch",
     "class": "verb",
-    "definitions": ["to look at somebody/something for a time, paying attention to what happens"],
-    "examples": ["watch somebody/something, I was in the living room, watching TV."],
+    "definitions": [
+      "to look at somebody/something for a time, paying attention to what happens"
+    ],
+    "examples": [
+      "watch somebody/something, I was in the living room, watching TV."
+    ],
     "freq": 5.34
   },
   {
@@ -3485,7 +3693,9 @@
     "id": "a1-405",
     "word": "light",
     "class": "noun",
-    "definitions": ["the energy from the sun, a lamp, etc. that makes it possible to see things"],
+    "definitions": [
+      "the energy from the sun, a lamp, etc. that makes it possible to see things"
+    ],
     "examples": ["bright/dim light"],
     "freq": 5.33
   },
@@ -3541,7 +3751,9 @@
     "id": "a1-411",
     "word": "age",
     "class": "noun",
-    "definitions": ["the number of years that a person has lived or a thing has existed"],
+    "definitions": [
+      "the number of years that a person has lived or a thing has existed"
+    ],
     "examples": ["You're the same age as my brother."],
     "freq": 5.32
   },
@@ -3593,7 +3805,9 @@
     "id": "a1-417",
     "word": "soon",
     "class": "adverb",
-    "definitions": ["in a short time from now; a short time after something else has happened"],
+    "definitions": [
+      "in a short time from now; a short time after something else has happened"
+    ],
     "examples": ["She sold the house soon after her husband died."],
     "freq": 5.32
   },
@@ -3627,8 +3841,12 @@
     "id": "a1-421",
     "word": "check",
     "class": "verb",
-    "definitions": ["to examine something to see if it is correct, safe or acceptable"],
-    "examples": ["check something, She gave me the minutes of the meeting to read and check."],
+    "definitions": [
+      "to examine something to see if it is correct, safe or acceptable"
+    ],
+    "examples": [
+      "check something, She gave me the minutes of the meeting to read and check."
+    ],
     "freq": 5.31
   },
   {
@@ -3636,14 +3854,18 @@
     "word": "form",
     "class": "noun",
     "definitions": ["a type or variety of something"],
-    "examples": ["all the millions of different life forms on the planet today"],
+    "examples": [
+      "all the millions of different life forms on the planet today"
+    ],
     "freq": 5.31
   },
   {
     "id": "a1-423",
     "word": "form",
     "class": "verb",
-    "definitions": ["to produce something in a particular way or make it have a particular shape"],
+    "definitions": [
+      "to produce something in a particular way or make it have a particular shape"
+    ],
     "examples": ["form something, Bend the wire so that it forms a ‘V’."],
     "freq": 5.31
   },
@@ -3679,7 +3901,9 @@
     "id": "a1-427",
     "word": "fun",
     "class": "noun",
-    "definitions": ["the feeling of enjoying yourself; activities that you enjoy"],
+    "definitions": [
+      "the feeling of enjoying yourself; activities that you enjoy"
+    ],
     "examples": ["We had a lot of fun at Sarah's party."],
     "freq": 5.3
   },
@@ -3715,7 +3939,9 @@
     "id": "a1-431",
     "word": "behind",
     "class": "adverb",
-    "definitions": ["at or towards the back of somebody/something; further back"],
+    "definitions": [
+      "at or towards the back of somebody/something; further back"
+    ],
     "examples": ["She rode off down the road with the dog running behind."],
     "freq": 5.29
   },
@@ -3723,7 +3949,9 @@
     "id": "a1-432",
     "word": "behind",
     "class": "preposition",
-    "definitions": ["at or towards the back of somebody/something, and often hidden by it or them"],
+    "definitions": [
+      "at or towards the back of somebody/something, and often hidden by it or them"
+    ],
     "examples": ["Who's the girl standing behind Jan?"],
     "freq": 5.29
   },
@@ -3731,7 +3959,9 @@
     "id": "a1-433",
     "word": "building",
     "class": "noun",
-    "definitions": ["a structure such as a house or school that has a roof and walls"],
+    "definitions": [
+      "a structure such as a house or school that has a roof and walls"
+    ],
     "examples": ["a tall/high-rise/ten-storey building"],
     "freq": 5.29
   },
@@ -3739,7 +3969,9 @@
     "id": "a1-434",
     "word": "easy",
     "class": "adjective",
-    "definitions": ["not difficult; done or obtained without a lot of effort or problems"],
+    "definitions": [
+      "not difficult; done or obtained without a lot of effort or problems"
+    ],
     "examples": ["an easy way to make bread"],
     "freq": 5.29
   },
@@ -3789,7 +4021,9 @@
     "id": "a1-440",
     "word": "plan",
     "class": "verb",
-    "definitions": ["to make detailed arrangements for something you want to do in the future"],
+    "definitions": [
+      "to make detailed arrangements for something you want to do in the future"
+    ],
     "examples": ["plan something, to plan a trip"],
     "freq": 5.29
   },
@@ -3885,7 +4119,9 @@
     "id": "a1-451",
     "word": "ready",
     "class": "adjective",
-    "definitions": ["fully prepared for what you are going to do and able to start it immediately"],
+    "definitions": [
+      "fully prepared for what you are going to do and able to start it immediately"
+    ],
     "examples": ["Just a minute—I'm almost ready."],
     "freq": 5.28
   },
@@ -3912,7 +4148,9 @@
     "definitions": [
       "a public road in a city or town that has houses and buildings on one side or both sides"
     ],
-    "examples": ["along/down/up the street, I was just walking along the street when it happened."],
+    "examples": [
+      "along/down/up the street, I was just walking along the street when it happened."
+    ],
     "freq": 5.28
   },
   {
@@ -3920,7 +4158,9 @@
     "word": "bring",
     "class": "verb",
     "definitions": ["to come to a place with somebody/something"],
-    "examples": ["bring somebody/something (with you), Don't forget to bring your books with you."],
+    "examples": [
+      "bring somebody/something (with you), Don't forget to bring your books with you."
+    ],
     "freq": 5.27
   },
   {
@@ -3947,7 +4187,9 @@
     "id": "a1-458",
     "word": "meet",
     "class": "verb",
-    "definitions": ["to be in the same place as somebody by chance and talk to them"],
+    "definitions": [
+      "to be in the same place as somebody by chance and talk to them"
+    ],
     "examples": ["Maybe we'll meet again some time."],
     "freq": 5.27
   },
@@ -4009,7 +4251,9 @@
     "id": "a1-465",
     "word": "study",
     "class": "verb",
-    "definitions": ["to spend time learning about a subject by reading, going to college, etc."],
+    "definitions": [
+      "to spend time learning about a subject by reading, going to college, etc."
+    ],
     "examples": ["He sat up very late that night, studying."],
     "freq": 5.26
   },
@@ -4017,7 +4261,9 @@
     "id": "a1-466",
     "word": "word",
     "class": "noun",
-    "definitions": ["a single unit of language that means something and can be spoken or written"],
+    "definitions": [
+      "a single unit of language that means something and can be spoken or written"
+    ],
     "examples": ["Do not write more than 200 words."],
     "freq": 5.26
   },
@@ -4044,7 +4290,9 @@
     "definitions": [
       "the process of doing something in order to make something happen or to deal with a situation"
     ],
-    "examples": ["The time has come for action if these beautiful animals are to survive."],
+    "examples": [
+      "The time has come for action if these beautiful animals are to survive."
+    ],
     "freq": 5.25
   },
   {
@@ -4061,7 +4309,9 @@
     "id": "a1-471",
     "word": "outside",
     "class": "adverb",
-    "definitions": ["not in a room, building or container but on or to the outside of it"],
+    "definitions": [
+      "not in a room, building or container but on or to the outside of it"
+    ],
     "examples": ["I'm seeing a patient—please wait outside."],
     "freq": 5.25
   },
@@ -4069,7 +4319,9 @@
     "id": "a1-472",
     "word": "cost",
     "class": "noun",
-    "definitions": ["the amount of money that you need in order to buy, make or do something"],
+    "definitions": [
+      "the amount of money that you need in order to buy, make or do something"
+    ],
     "examples": ["cost of something, the high/low cost of housing"],
     "freq": 5.24
   },
@@ -4168,14 +4420,18 @@
     "definitions": [
       "the area outside the earth’s atmosphere where all the other planets and stars are"
     ],
-    "examples": ["in space, Valentina Tereshkova was the first woman in space."],
+    "examples": [
+      "in space, Valentina Tereshkova was the first woman in space."
+    ],
     "freq": 5.23
   },
   {
     "id": "a1-484",
     "word": "summer",
     "class": "noun",
-    "definitions": ["the warmest season of the year, coming between spring and autumn"],
+    "definitions": [
+      "the warmest season of the year, coming between spring and autumn"
+    ],
     "examples": ["in the summer, We're going away in the summer."],
     "freq": 5.23
   },
@@ -4191,7 +4447,9 @@
     "id": "a1-486",
     "word": "beautiful",
     "class": "adjective",
-    "definitions": ["having beauty; giving pleasure to the senses or to the mind"],
+    "definitions": [
+      "having beauty; giving pleasure to the senses or to the mind"
+    ],
     "examples": ["a beautiful woman/girl"],
     "freq": 5.22
   },
@@ -4245,8 +4503,12 @@
     "id": "a1-492",
     "word": "include",
     "class": "verb",
-    "definitions": ["if one thing includes another, it has the second thing as one of its parts"],
-    "examples": ["include something, The tour included a visit to the Science Museum."],
+    "definitions": [
+      "if one thing includes another, it has the second thing as one of its parts"
+    ],
+    "examples": [
+      "include something, The tour included a visit to the Science Museum."
+    ],
     "freq": 5.21
   },
   {
@@ -4285,7 +4547,9 @@
     "id": "a1-497",
     "word": "above",
     "class": "preposition",
-    "definitions": ["at or to a higher place or position than something/somebody"],
+    "definitions": [
+      "at or to a higher place or position than something/somebody"
+    ],
     "examples": ["The water came above our knees."],
     "freq": 5.2
   },
@@ -4303,7 +4567,9 @@
     "id": "a1-499",
     "word": "common",
     "class": "adjective",
-    "definitions": ["happening often; existing in large numbers or in many places"],
+    "definitions": [
+      "happening often; existing in large numbers or in many places"
+    ],
     "examples": ["a common problem/occurrence/practice"],
     "freq": 5.2
   },
@@ -4339,7 +4605,9 @@
     "id": "a1-503",
     "word": "share",
     "class": "verb",
-    "definitions": ["to have, use or experience something at the same time as somebody else"],
+    "definitions": [
+      "to have, use or experience something at the same time as somebody else"
+    ],
     "examples": ["There isn't an empty table. Would you mind sharing?"],
     "freq": 5.2
   },
@@ -4371,7 +4639,9 @@
     "id": "a1-507",
     "word": "online",
     "class": "adjective",
-    "definitions": ["available on or done using the internet or other computer network"],
+    "definitions": [
+      "available on or done using the internet or other computer network"
+    ],
     "examples": ["Online shopping is both cheap and convenient."],
     "freq": 5.19
   },
@@ -4379,7 +4649,9 @@
     "id": "a1-508",
     "word": "online",
     "class": "adverb",
-    "definitions": ["onto the internet; using the internet or other computer network"],
+    "definitions": [
+      "onto the internet; using the internet or other computer network"
+    ],
     "examples": ["Many children would rather go online than watch television."],
     "freq": 5.19
   },
@@ -4395,8 +4667,12 @@
     "id": "a1-510",
     "word": "return",
     "class": "noun",
-    "definitions": ["the action of arriving in or coming back to a place that you were in before"],
-    "examples": ["return of somebody to…, A week had passed since their return to Geneva."],
+    "definitions": [
+      "the action of arriving in or coming back to a place that you were in before"
+    ],
+    "examples": [
+      "return of somebody to…, A week had passed since their return to Geneva."
+    ],
     "freq": 5.19
   },
   {
@@ -4414,7 +4690,9 @@
     "definitions": [
       "a large ball of burning gas in space that we see as a point of light in the sky at night"
     ],
-    "examples": ["There was a big moon and hundreds of stars were shining overhead."],
+    "examples": [
+      "There was a big moon and hundreds of stars were shining overhead."
+    ],
     "freq": 5.19
   },
   {
@@ -4434,14 +4712,18 @@
     "definitions": [
       "to find out how much somebody knows, or what they can do by asking them questions or giving them activities to perform"
     ],
-    "examples": ["test somebody, Students will be tested at the end of each module."],
+    "examples": [
+      "test somebody, Students will be tested at the end of each module."
+    ],
     "freq": 5.19
   },
   {
     "id": "a1-515",
     "word": "break",
     "class": "noun",
-    "definitions": ["a short period of time when you stop what you are doing and rest, eat, etc."],
+    "definitions": [
+      "a short period of time when you stop what you are doing and rest, eat, etc."
+    ],
     "examples": ["She was on her lunch break."],
     "freq": 5.18
   },
@@ -4467,7 +4749,9 @@
     "id": "a1-518",
     "word": "hour",
     "class": "noun",
-    "definitions": ["60 minutes; one of the 24 parts that a day is divided into"],
+    "definitions": [
+      "60 minutes; one of the 24 parts that a day is divided into"
+    ],
     "examples": ["I spent an hour on the phone."],
     "freq": 5.18
   },
@@ -4475,7 +4759,9 @@
     "id": "a1-519",
     "word": "member",
     "class": "noun",
-    "definitions": ["a person, an animal or a plant that belongs to a particular group"],
+    "definitions": [
+      "a person, an animal or a plant that belongs to a particular group"
+    ],
     "examples": ["member of something, a member of the family/community"],
     "freq": 5.18
   },
@@ -4499,7 +4785,9 @@
     "id": "a1-522",
     "word": "result",
     "class": "noun",
-    "definitions": ["a thing that is caused or produced because of something else"],
+    "definitions": [
+      "a thing that is caused or produced because of something else"
+    ],
     "examples": ["And did your intervention produce the desired result?"],
     "freq": 5.18
   },
@@ -4507,8 +4795,12 @@
     "id": "a1-523",
     "word": "sorry",
     "class": "adjective",
-    "definitions": ["feeling sad and ashamed about something that has been done"],
-    "examples": ["sorry about something, We're very sorry about the damage to your car."],
+    "definitions": [
+      "feeling sad and ashamed about something that has been done"
+    ],
+    "examples": [
+      "sorry about something, We're very sorry about the damage to your car."
+    ],
     "freq": 5.18
   },
   {
@@ -4523,7 +4815,9 @@
     "id": "a1-525",
     "word": "answer",
     "class": "noun",
-    "definitions": ["something that you say, write or do to react to a question or situation"],
+    "definitions": [
+      "something that you say, write or do to react to a question or situation"
+    ],
     "examples": ["I rang the bell, but there was no answer."],
     "freq": 5.17
   },
@@ -4531,7 +4825,9 @@
     "id": "a1-526",
     "word": "answer",
     "class": "verb",
-    "definitions": ["to say, write or do something as a reaction to a question or situation"],
+    "definitions": [
+      "to say, write or do something as a reaction to a question or situation"
+    ],
     "examples": ["I repeated the question, but she didn't answer."],
     "freq": 5.17
   },
@@ -4550,7 +4846,9 @@
     "definitions": [
       "the general arrangement of the different parts of something that is made, such as a building, book, machine, etc."
     ],
-    "examples": ["The basic design of the car is very similar to that of earlier models."],
+    "examples": [
+      "The basic design of the car is very similar to that of earlier models."
+    ],
     "freq": 5.17
   },
   {
@@ -4628,7 +4926,9 @@
     "definitions": [
       "an organization that provides various financial services, for example keeping or lending money"
     ],
-    "examples": ["I don't have much money in the bank at the end of the month."],
+    "examples": [
+      "I don't have much money in the bank at the end of the month."
+    ],
     "freq": 5.16
   },
   {
@@ -4699,7 +4999,9 @@
     "id": "a1-544",
     "word": "bill",
     "class": "noun",
-    "definitions": ["a document that shows how much you owe somebody for goods or services"],
+    "definitions": [
+      "a document that shows how much you owe somebody for goods or services"
+    ],
     "examples": ["the phone/electricity/gas bill"],
     "freq": 5.15
   },
@@ -4715,7 +5017,9 @@
     "id": "a1-546",
     "word": "meeting",
     "class": "noun",
-    "definitions": ["an occasion when people come together to discuss or decide something"],
+    "definitions": [
+      "an occasion when people come together to discuss or decide something"
+    ],
     "examples": ["A hundred people attended the public meeting."],
     "freq": 5.15
   },
@@ -4803,7 +5107,9 @@
     "id": "a1-557",
     "word": "blue",
     "class": "adjective",
-    "definitions": ["having the colour of a clear sky or the sea on a clear day"],
+    "definitions": [
+      "having the colour of a clear sky or the sea on a clear day"
+    ],
     "examples": ["piercing blue eyes"],
     "freq": 5.13
   },
@@ -4819,7 +5125,9 @@
     "id": "a1-559",
     "word": "drive",
     "class": "verb",
-    "definitions": ["to operate a vehicle so that it goes in a particular direction"],
+    "definitions": [
+      "to operate a vehicle so that it goes in a particular direction"
+    ],
     "examples": ["Can you drive?"],
     "freq": 5.13
   },
@@ -4859,15 +5167,21 @@
     "id": "a1-564",
     "word": "feeling",
     "class": "noun",
-    "definitions": ["something that you feel through the mind or through the senses"],
-    "examples": ["a feeling of something, a feeling of guilt/helplessness/anger/sadness"],
+    "definitions": [
+      "something that you feel through the mind or through the senses"
+    ],
+    "examples": [
+      "a feeling of something, a feeling of guilt/helplessness/anger/sadness"
+    ],
     "freq": 5.13
   },
   {
     "id": "a1-565",
     "word": "green",
     "class": "adjective",
-    "definitions": ["having the colour of grass or the leaves of most plants and trees"],
+    "definitions": [
+      "having the colour of grass or the leaves of most plants and trees"
+    ],
     "examples": ["green grass/leaves/vegetables"],
     "freq": 5.13
   },
@@ -4875,7 +5189,9 @@
     "id": "a1-566",
     "word": "green",
     "class": "noun",
-    "definitions": ["the colour of grass and the leaves of most plants and trees"],
+    "definitions": [
+      "the colour of grass and the leaves of most plants and trees"
+    ],
     "examples": ["light/pale green"],
     "freq": 5.13
   },
@@ -4883,7 +5199,9 @@
     "id": "a1-567",
     "word": "match",
     "class": "noun",
-    "definitions": ["a sports event where people or teams compete against each other"],
+    "definitions": [
+      "a sports event where people or teams compete against each other"
+    ],
     "examples": ["(British English), a football match"],
     "freq": 5.13
   },
@@ -4901,15 +5219,21 @@
     "id": "a1-569",
     "word": "model",
     "class": "noun",
-    "definitions": ["a copy of something, usually smaller than the original object"],
-    "examples": ["a working model (= one in which the parts move) of a fire engine"],
+    "definitions": [
+      "a copy of something, usually smaller than the original object"
+    ],
+    "examples": [
+      "a working model (= one in which the parts move) of a fire engine"
+    ],
     "freq": 5.13
   },
   {
     "id": "a1-570",
     "word": "picture",
     "class": "noun",
-    "definitions": ["a painting or drawing, etc. that shows a scene, a person or thing"],
+    "definitions": [
+      "a painting or drawing, etc. that shows a scene, a person or thing"
+    ],
     "examples": ["He likes books with lots of pictures in them."],
     "freq": 5.13
   },
@@ -4945,7 +5269,9 @@
     "id": "a1-574",
     "word": "page",
     "class": "noun",
-    "definitions": ["one side or both sides of a sheet of paper in a book, magazine, etc."],
+    "definitions": [
+      "one side or both sides of a sheet of paper in a book, magazine, etc."
+    ],
     "examples": ["Turn to page 64."],
     "freq": 5.12
   },
@@ -5015,7 +5341,9 @@
     "id": "a1-582",
     "word": "October",
     "class": "noun",
-    "definitions": ["the 10th month of the year, between September and November"],
+    "definitions": [
+      "the 10th month of the year, between September and November"
+    ],
     "examples": ["She was born in October."],
     "freq": 5.11
   },
@@ -5041,7 +5369,9 @@
     "id": "a1-585",
     "word": "amazing",
     "class": "adjective",
-    "definitions": ["very surprising, especially in a way that you like or admire"],
+    "definitions": [
+      "very surprising, especially in a way that you like or admire"
+    ],
     "examples": ["an amazing feat/story/experience"],
     "freq": 5.1
   },
@@ -5129,7 +5459,9 @@
     "id": "a1-595",
     "word": "born",
     "class": "verb",
-    "definitions": ["to come out of your mother’s body at the beginning of your life"],
+    "definitions": [
+      "to come out of your mother’s body at the beginning of your life"
+    ],
     "examples": ["I was born in 1976."],
     "freq": 5.09
   },
@@ -5138,7 +5470,9 @@
     "word": "enjoy",
     "class": "verb",
     "definitions": ["to get pleasure from something"],
-    "examples": ["enjoy something, We thoroughly enjoyed our time in New York."],
+    "examples": [
+      "enjoy something, We thoroughly enjoyed our time in New York."
+    ],
     "freq": 5.09
   },
   {
@@ -5153,7 +5487,9 @@
     "id": "a1-598",
     "word": "poor",
     "class": "adjective",
-    "definitions": ["having very little money; not having enough money for basic needs"],
+    "definitions": [
+      "having very little money; not having enough money for basic needs"
+    ],
     "examples": ["They were too poor to buy shoes for the kids."],
     "freq": 5.09
   },
@@ -5323,8 +5659,12 @@
     "id": "a1-617",
     "word": "writing",
     "class": "noun",
-    "definitions": ["the activity of writing, in contrast to reading, speaking, etc."],
-    "examples": ["Our son’s having problems with his reading and writing (= at school)"],
+    "definitions": [
+      "the activity of writing, in contrast to reading, speaking, etc."
+    ],
+    "examples": [
+      "Our son’s having problems with his reading and writing (= at school)"
+    ],
     "freq": 5.07
   },
   {
@@ -5382,7 +5722,9 @@
     "definitions": [
       "the fact that you have achieved something that you want and have been trying to do or get"
     ],
-    "examples": ["The company has achieved considerable success in this market."],
+    "examples": [
+      "The company has achieved considerable success in this market."
+    ],
     "freq": 5.06
   },
   {
@@ -5397,7 +5739,9 @@
     "id": "a1-625",
     "word": "below",
     "class": "preposition",
-    "definitions": ["at or to a lower level or position than somebody/something"],
+    "definitions": [
+      "at or to a lower level or position than somebody/something"
+    ],
     "examples": ["He dived below the surface of the water."],
     "freq": 5.05
   },
@@ -5405,7 +5749,9 @@
     "id": "a1-626",
     "word": "sleep",
     "class": "verb",
-    "definitions": ["to rest with your eyes closed and your mind and body not active"],
+    "definitions": [
+      "to rest with your eyes closed and your mind and body not active"
+    ],
     "examples": ["Let her sleep—it'll do her good."],
     "freq": 5.05
   },
@@ -5413,7 +5759,9 @@
     "id": "a1-627",
     "word": "table",
     "class": "noun",
-    "definitions": ["a piece of furniture that consists of a flat top supported by legs"],
+    "definitions": [
+      "a piece of furniture that consists of a flat top supported by legs"
+    ],
     "examples": ["at a/the table, We sat at a round table in the corner."],
     "freq": 5.05
   },
@@ -5429,7 +5777,9 @@
     "id": "a1-629",
     "word": "ball",
     "class": "noun",
-    "definitions": ["a round object used for throwing, hitting or kicking in games and sports"],
+    "definitions": [
+      "a round object used for throwing, hitting or kicking in games and sports"
+    ],
     "examples": ["a golf/tennis/bowling/soccer ball"],
     "freq": 5.04
   },
@@ -5440,15 +5790,21 @@
     "definitions": [
       "a container made of wood, thick card, metal, etc. with a flat stiff base and sides and often a lid (= cover), used especially for holding solid things"
     ],
-    "examples": ["in a box, Everything we owned was neatly packed in cardboard boxes."],
+    "examples": [
+      "in a box, Everything we owned was neatly packed in cardboard boxes."
+    ],
     "freq": 5.04
   },
   {
     "id": "a1-631",
     "word": "build",
     "class": "verb",
-    "definitions": ["to make something, especially a building, by putting parts together"],
-    "examples": ["build (something), They have permission to build 200 new homes."],
+    "definitions": [
+      "to make something, especially a building, by putting parts together"
+    ],
+    "examples": [
+      "build (something), They have permission to build 200 new homes."
+    ],
     "freq": 5.04
   },
   {
@@ -5463,7 +5819,9 @@
     "id": "a1-633",
     "word": "dark",
     "class": "adjective",
-    "definitions": ["with no or very little light, especially because it is night"],
+    "definitions": [
+      "with no or very little light, especially because it is night"
+    ],
     "examples": ["a dark room/street/forest/night"],
     "freq": 5.04
   },
@@ -5482,7 +5840,9 @@
     "definitions": [
       "an amount of something that has been cut or separated from the rest of it; a standard amount of something"
     ],
-    "examples": ["piece of something, She wrote something on a small piece of paper."],
+    "examples": [
+      "piece of something, She wrote something on a small piece of paper."
+    ],
     "freq": 5.04
   },
   {
@@ -5543,7 +5903,9 @@
     "id": "a1-642",
     "word": "river",
     "class": "noun",
-    "definitions": ["a natural flow of water that continues in a long line across land to the sea"],
+    "definitions": [
+      "a natural flow of water that continues in a long line across land to the sea"
+    ],
     "examples": ["Eventually we came to the mouth of the River Thames."],
     "freq": 5.03
   },
@@ -5551,8 +5913,12 @@
     "id": "a1-643",
     "word": "speak",
     "class": "verb",
-    "definitions": ["to talk to somebody about something; to have a conversation with somebody"],
-    "examples": ["speak to somebody, The President refused to speak to reporters."],
+    "definitions": [
+      "to talk to somebody about something; to have a conversation with somebody"
+    ],
+    "examples": [
+      "speak to somebody, The President refused to speak to reporters."
+    ],
     "freq": 5.03
   },
   {
@@ -5575,7 +5941,9 @@
     "id": "a1-646",
     "word": "write",
     "class": "verb",
-    "definitions": ["to make letters or numbers on a surface, especially using a pen or a pencil"],
+    "definitions": [
+      "to make letters or numbers on a surface, especially using a pen or a pencil"
+    ],
     "examples": [
       "In some countries children don't start learning to read and write until they are six."
     ],
@@ -5685,7 +6053,9 @@
     "id": "a1-659",
     "word": "capital",
     "class": "adjective",
-    "definitions": ["having the form and size used at the beginning of a sentence or a name"],
+    "definitions": [
+      "having the form and size used at the beginning of a sentence or a name"
+    ],
     "examples": ["English is written with a capital ‘E’."],
     "freq": 5.01
   },
@@ -5751,7 +6121,9 @@
     "id": "a1-666",
     "word": "beginning",
     "class": "noun",
-    "definitions": ["the time when something starts; the first part of an event, a story, etc."],
+    "definitions": [
+      "the time when something starts; the first part of an event, a story, etc."
+    ],
     "examples": ["A story has to have a beginning, middle, and end."],
     "freq": 5
   },
@@ -5820,7 +6192,9 @@
     "word": "section",
     "class": "noun",
     "definitions": ["any of the parts into which something is divided"],
-    "examples": ["section of something, That section of the road is still closed."],
+    "examples": [
+      "section of something, That section of the road is still closed."
+    ],
     "freq": 5
   },
   {
@@ -5835,7 +6209,9 @@
     "id": "a1-676",
     "word": "travel",
     "class": "verb",
-    "definitions": ["to go from one place to another, especially over a long distance"],
+    "definitions": [
+      "to go from one place to another, especially over a long distance"
+    ],
     "examples": ["I go to bed early if I'm travelling the next day."],
     "freq": 5
   },
@@ -5859,7 +6235,9 @@
     "id": "a1-679",
     "word": "welcome",
     "class": "exclamation",
-    "definitions": ["used as a greeting to tell somebody that you are pleased that they are there"],
+    "definitions": [
+      "used as a greeting to tell somebody that you are pleased that they are there"
+    ],
     "examples": ["Welcome home!"],
     "freq": 4.99
   },
@@ -5867,7 +6245,9 @@
     "id": "a1-680",
     "word": "welcome",
     "class": "verb",
-    "definitions": ["to say hello to somebody in a friendly way when they arrive somewhere"],
+    "definitions": [
+      "to say hello to somebody in a friendly way when they arrive somewhere"
+    ],
     "examples": ["welcome somebody, They were at the door to welcome us."],
     "freq": 4.99
   },
@@ -5883,7 +6263,9 @@
     "id": "a1-682",
     "word": "minute",
     "class": "noun",
-    "definitions": ["each of the 60 parts of an hour, that are equal to 60 seconds"],
+    "definitions": [
+      "each of the 60 parts of an hour, that are equal to 60 seconds"
+    ],
     "examples": ["minutes to…, It's four minutes to six."],
     "freq": 4.98
   },
@@ -5907,7 +6289,9 @@
     "id": "a1-685",
     "word": "agree",
     "class": "verb",
-    "definitions": ["to have the same opinion as somebody; to say that you have the same opinion"],
+    "definitions": [
+      "to have the same opinion as somebody; to say that you have the same opinion"
+    ],
     "examples": ["When he said that, I had to agree."],
     "freq": 4.97
   },
@@ -5959,7 +6343,9 @@
     "id": "a1-691",
     "word": "statement",
     "class": "noun",
-    "definitions": ["something that you say or write that gives information or an opinion"],
+    "definitions": [
+      "something that you say or write that gives information or an opinion"
+    ],
     "examples": ["Are the following statements true or false?"],
     "freq": 4.97
   },
@@ -5985,8 +6371,12 @@
     "id": "a1-694",
     "word": "subject",
     "class": "noun",
-    "definitions": ["a thing or person that is being discussed, described or dealt with"],
-    "examples": ["subject of something, Walker's work has been the subject of much debate."],
+    "definitions": [
+      "a thing or person that is being discussed, described or dealt with"
+    ],
+    "examples": [
+      "subject of something, Walker's work has been the subject of much debate."
+    ],
     "freq": 4.96
   },
   {
@@ -6057,7 +6447,9 @@
     "id": "a1-702",
     "word": "product",
     "class": "noun",
-    "definitions": ["a thing that is grown, produced or created, usually for sale"],
+    "definitions": [
+      "a thing that is grown, produced or created, usually for sale"
+    ],
     "examples": ["food/agricultural/software products"],
     "freq": 4.95
   },
@@ -6065,7 +6457,9 @@
     "id": "a1-703",
     "word": "sister",
     "class": "noun",
-    "definitions": ["a girl or woman who has the same mother and father as another person"],
+    "definitions": [
+      "a girl or woman who has the same mother and father as another person"
+    ],
     "examples": ["She's my sister."],
     "freq": 4.95
   },
@@ -6081,7 +6475,9 @@
     "id": "a1-705",
     "word": "opinion",
     "class": "noun",
-    "definitions": ["your feelings or thoughts about somebody/something, rather than a fact"],
+    "definitions": [
+      "your feelings or thoughts about somebody/something, rather than a fact"
+    ],
     "examples": ["He has very strong political opinions."],
     "freq": 4.94
   },
@@ -6092,7 +6488,9 @@
     "definitions": [
       "a statement of what may, must or must not be done in a particular situation or when playing a game"
     ],
-    "examples": ["She laid down strict rules for her tenants, including prompt payment of rent."],
+    "examples": [
+      "She laid down strict rules for her tenants, including prompt payment of rent."
+    ],
     "freq": 4.94
   },
   {
@@ -6135,7 +6533,9 @@
     "id": "a1-711",
     "word": "beach",
     "class": "noun",
-    "definitions": ["an area of sand or small stones (called shingle), next to the sea or a lake"],
+    "definitions": [
+      "an area of sand or small stones (called shingle), next to the sea or a lake"
+    ],
     "examples": ["on the beach, tourists sunbathing on the beach"],
     "freq": 4.92
   },
@@ -6143,16 +6543,24 @@
     "id": "a1-712",
     "word": "imagine",
     "class": "verb",
-    "definitions": ["to form a picture in your mind of what something might be like"],
-    "examples": ["imagine something, The house was just as she had imagined it."],
+    "definitions": [
+      "to form a picture in your mind of what something might be like"
+    ],
+    "examples": [
+      "imagine something, The house was just as she had imagined it."
+    ],
     "freq": 4.92
   },
   {
     "id": "a1-713",
     "word": "spring",
     "class": "noun",
-    "definitions": ["the season between winter and summer when plants begin to grow"],
-    "examples": ["The following spring, the three artists travelled to California."],
+    "definitions": [
+      "the season between winter and summer when plants begin to grow"
+    ],
+    "examples": [
+      "The following spring, the three artists travelled to California."
+    ],
     "freq": 4.92
   },
   {
@@ -6169,7 +6577,9 @@
     "id": "a1-715",
     "word": "wear",
     "class": "verb",
-    "definitions": ["to have something on your body as a piece of clothing, a decoration, etc."],
+    "definitions": [
+      "to have something on your body as a piece of clothing, a decoration, etc."
+    ],
     "examples": ["He was wearing a new suit."],
     "freq": 4.92
   },
@@ -6177,7 +6587,9 @@
     "id": "a1-716",
     "word": "address",
     "class": "noun",
-    "definitions": ["details of where somebody lives or works and where letters, etc. can be sent"],
+    "definitions": [
+      "details of where somebody lives or works and where letters, etc. can be sent"
+    ],
     "examples": ["What's your name and address?"],
     "freq": 4.91
   },
@@ -6185,7 +6597,9 @@
     "id": "a1-717",
     "word": "choose",
     "class": "verb",
-    "definitions": ["to decide which thing or person you want out of the ones that are available"],
+    "definitions": [
+      "to decide which thing or person you want out of the ones that are available"
+    ],
     "examples": ["You choose—I can't decide."],
     "freq": 4.91
   },
@@ -6193,7 +6607,9 @@
     "id": "a1-718",
     "word": "finish",
     "class": "verb",
-    "definitions": ["to stop doing something or making something because it is complete"],
+    "definitions": [
+      "to stop doing something or making something because it is complete"
+    ],
     "examples": ["finish (something), Haven't you finished your homework yet?"],
     "freq": 4.91
   },
@@ -6210,7 +6626,9 @@
     "word": "yesterday",
     "class": "adverb",
     "definitions": ["on the day before today"],
-    "examples": ["A company spokeswoman said yesterday that no final decision had been made yet."],
+    "examples": [
+      "A company spokeswoman said yesterday that no final decision had been made yet."
+    ],
     "freq": 4.91
   },
   {
@@ -6235,7 +6653,9 @@
     "id": "a1-723",
     "word": "drink",
     "class": "noun",
-    "definitions": ["a liquid for drinking; an amount of a liquid that you drink"],
+    "definitions": [
+      "a liquid for drinking; an amount of a liquid that you drink"
+    ],
     "examples": ["Can I have a drink?"],
     "freq": 4.9
   },
@@ -6243,7 +6663,9 @@
     "id": "a1-724",
     "word": "drink",
     "class": "verb",
-    "definitions": ["to take liquid into your mouth and then down your throat into your stomach"],
+    "definitions": [
+      "to take liquid into your mouth and then down your throat into your stomach"
+    ],
     "examples": ["drink something, I don't drink coffee."],
     "freq": 4.9
   },
@@ -6309,7 +6731,9 @@
     "id": "a1-731",
     "word": "explain",
     "class": "verb",
-    "definitions": ["to tell somebody about something in a way that makes it easy to understand"],
+    "definitions": [
+      "to tell somebody about something in a way that makes it easy to understand"
+    ],
     "examples": [
       "explain (something), He was trying to explain the difference between hip hop and rap."
     ],
@@ -6329,7 +6753,9 @@
     "id": "a1-733",
     "word": "winter",
     "class": "noun",
-    "definitions": ["the coldest season of the year, between autumn and spring"],
+    "definitions": [
+      "the coldest season of the year, between autumn and spring"
+    ],
     "examples": ["a cold/mild/harsh winter"],
     "freq": 4.89
   },
@@ -6347,7 +6773,9 @@
     "id": "a1-735",
     "word": "shop",
     "class": "noun",
-    "definitions": ["a building or part of a building where you can buy goods or services"],
+    "definitions": [
+      "a building or part of a building where you can buy goods or services"
+    ],
     "examples": ["to open/close/run a shop"],
     "freq": 4.88
   },
@@ -6399,7 +6827,9 @@
     "id": "a1-741",
     "word": "meaning",
     "class": "noun",
-    "definitions": ["the thing or idea that a sound, word, sign, etc. represents"],
+    "definitions": [
+      "the thing or idea that a sound, word, sign, etc. represents"
+    ],
     "examples": ["What's the meaning of this word?"],
     "freq": 4.87
   },
@@ -6451,7 +6881,9 @@
     "id": "a1-747",
     "word": "evening",
     "class": "noun",
-    "definitions": ["the part of the day between the afternoon and the time you go to bed"],
+    "definitions": [
+      "the part of the day between the afternoon and the time you go to bed"
+    ],
     "examples": ["Remember to call me this evening."],
     "freq": 4.86
   },
@@ -6480,7 +6912,9 @@
     "definitions": [
       "to talk to somebody and ask them questions at a formal meeting to find out if they are suitable for a job, course of study, etc."
     ],
-    "examples": ["interview somebody, The university interviews all potential candidates."],
+    "examples": [
+      "interview somebody, The university interviews all potential candidates."
+    ],
     "freq": 4.86
   },
   {
@@ -6515,7 +6949,9 @@
     "id": "a1-754",
     "word": "ride",
     "class": "verb",
-    "definitions": ["to sit on an animal, especially a horse, and control it as it moves"],
+    "definitions": [
+      "to sit on an animal, especially a horse, and control it as it moves"
+    ],
     "examples": ["I learnt to ride as a child."],
     "freq": 4.85
   },
@@ -6523,7 +6959,9 @@
     "id": "a1-755",
     "word": "slow",
     "class": "adjective",
-    "definitions": ["not moving, acting or done quickly; taking a long time; not fast"],
+    "definitions": [
+      "not moving, acting or done quickly; taking a long time; not fast"
+    ],
     "examples": ["a slow pace/speed"],
     "freq": 4.85
   },
@@ -6567,7 +7005,9 @@
     "id": "a1-760",
     "word": "begin",
     "class": "verb",
-    "definitions": ["to start doing something; to do the first part of something"],
+    "definitions": [
+      "to start doing something; to do the first part of something"
+    ],
     "examples": ["Shall I begin?"],
     "freq": 4.84
   },
@@ -6612,7 +7052,9 @@
     "word": "sad",
     "class": "adjective",
     "definitions": ["unhappy or showing unhappiness"],
-    "examples": ["sad to do something, We are very sad to hear that you are leaving."],
+    "examples": [
+      "sad to do something, We are very sad to hear that you are leaving."
+    ],
     "freq": 4.84
   },
   {
@@ -6673,7 +7115,9 @@
     "id": "a1-772",
     "word": "animal",
     "class": "noun",
-    "definitions": ["a creature that is not a bird, a fish, a reptile, an insect or a human"],
+    "definitions": [
+      "a creature that is not a bird, a fish, a reptile, an insect or a human"
+    ],
     "examples": ["the animals and birds of South America"],
     "freq": 4.81
   },
@@ -6691,7 +7135,9 @@
     "id": "a1-774",
     "word": "adult",
     "class": "noun",
-    "definitions": ["a fully grown person who is legally responsible for their actions"],
+    "definitions": [
+      "a fully grown person who is legally responsible for their actions"
+    ],
     "examples": ["Children must be accompanied by an adult."],
     "freq": 4.8
   },
@@ -6699,7 +7145,9 @@
     "id": "a1-775",
     "word": "artist",
     "class": "noun",
-    "definitions": ["a person who creates works of art, especially paintings or drawings"],
+    "definitions": [
+      "a person who creates works of art, especially paintings or drawings"
+    ],
     "examples": ["an exhibition of work by contemporary British artists"],
     "freq": 4.8
   },
@@ -6771,7 +7219,9 @@
     "id": "a1-783",
     "word": "dangerous",
     "class": "adjective",
-    "definitions": ["likely to injure or harm somebody, or to damage or destroy something"],
+    "definitions": [
+      "likely to injure or harm somebody, or to damage or destroy something"
+    ],
     "examples": ["The situation is extremely dangerous."],
     "freq": 4.79
   },
@@ -6779,7 +7229,9 @@
     "id": "a1-784",
     "word": "improve",
     "class": "verb",
-    "definitions": ["to become better than before; to make something/somebody better than before"],
+    "definitions": [
+      "to become better than before; to make something/somebody better than before"
+    ],
     "examples": ["Overall the situation has improved dramatically."],
     "freq": 4.79
   },
@@ -6976,7 +7428,9 @@
     "word": "excited",
     "class": "adjective",
     "definitions": ["feeling or showing happiness and enthusiasm"],
-    "examples": ["Staff got excited when they heard they were getting a bonus."],
+    "examples": [
+      "Staff got excited when they heard they were getting a bonus."
+    ],
     "freq": 4.74
   },
   {
@@ -7069,7 +7523,9 @@
     "id": "a1-815",
     "word": "clothes",
     "class": "noun",
-    "definitions": ["the things that you wear, such as trousers, dresses and jackets"],
+    "definitions": [
+      "the things that you wear, such as trousers, dresses and jackets"
+    ],
     "examples": ["I bought some new clothes for the trip."],
     "freq": 4.72
   },
@@ -7087,7 +7543,9 @@
     "id": "a1-817",
     "word": "flat",
     "class": "noun",
-    "definitions": ["a set of rooms for living in, usually on one floor of a building"],
+    "definitions": [
+      "a set of rooms for living in, usually on one floor of a building"
+    ],
     "examples": ["They're renting a furnished flat on the third floor."],
     "freq": 4.72
   },
@@ -7115,7 +7573,9 @@
     "id": "a1-820",
     "word": "pair",
     "class": "noun",
-    "definitions": ["two things of the same type, especially when they are used or worn together"],
+    "definitions": [
+      "two things of the same type, especially when they are used or worn together"
+    ],
     "examples": ["a pair of shoes/boots"],
     "freq": 4.72
   },
@@ -7174,7 +7634,9 @@
     "word": "hundred",
     "class": "number",
     "definitions": ["100"],
-    "examples": ["One hundred (of the children) have already been placed with foster families."],
+    "examples": [
+      "One hundred (of the children) have already been placed with foster families."
+    ],
     "freq": 4.71
   },
   {
@@ -7207,7 +7669,9 @@
     "id": "a1-831",
     "word": "terrible",
     "class": "adjective",
-    "definitions": ["very unpleasant; making you feel very unhappy, upset or frightened"],
+    "definitions": [
+      "very unpleasant; making you feel very unhappy, upset or frightened"
+    ],
     "examples": ["a terrible experience"],
     "freq": 4.71
   },
@@ -7215,7 +7679,9 @@
     "id": "a1-832",
     "word": "tired",
     "class": "adjective",
-    "definitions": ["feeling that you would like to sleep or rest; needing rest"],
+    "definitions": [
+      "feeling that you would like to sleep or rest; needing rest"
+    ],
     "examples": ["to be/look/feel tired"],
     "freq": 4.71
   },
@@ -7233,7 +7699,9 @@
     "id": "a1-834",
     "word": "afraid",
     "class": "adjective",
-    "definitions": ["feeling fear; frightened because you think that you might be hurt or suffer"],
+    "definitions": [
+      "feeling fear; frightened because you think that you might be hurt or suffer"
+    ],
     "examples": ["Don't be afraid."],
     "freq": 4.7
   },
@@ -7269,7 +7737,9 @@
     "id": "a1-838",
     "word": "writer",
     "class": "noun",
-    "definitions": ["a person whose job is writing books, stories, articles, etc."],
+    "definitions": [
+      "a person whose job is writing books, stories, articles, etc."
+    ],
     "examples": ["Who's your favourite writer?"],
     "freq": 4.69
   },
@@ -7296,7 +7766,9 @@
     "definitions": [
       "a way of sending messages and data to other people by means of computers connected together in a network"
     ],
-    "examples": ["I will be on vacation for a week in November, with no access to email."],
+    "examples": [
+      "I will be on vacation for a week in November, with no access to email."
+    ],
     "freq": 4.68
   },
   {
@@ -7311,7 +7783,9 @@
     "id": "a1-843",
     "word": "exercise",
     "class": "noun",
-    "definitions": ["physical or mental activity that you do to stay healthy or become stronger"],
+    "definitions": [
+      "physical or mental activity that you do to stay healthy or become stronger"
+    ],
     "examples": ["Swimming is good exercise."],
     "freq": 4.68
   },
@@ -7329,7 +7803,9 @@
     "id": "a1-845",
     "word": "girlfriend",
     "class": "noun",
-    "definitions": ["a girl or a woman that somebody is having a romantic relationship with"],
+    "definitions": [
+      "a girl or a woman that somebody is having a romantic relationship with"
+    ],
     "examples": ["He’s got a new girlfriend."],
     "freq": 4.68
   },
@@ -7338,14 +7814,18 @@
     "word": "restaurant",
     "class": "noun",
     "definitions": ["a place where you can buy and eat a meal"],
-    "examples": ["We're going to try this Italian restaurant that just opened."],
+    "examples": [
+      "We're going to try this Italian restaurant that just opened."
+    ],
     "freq": 4.68
   },
   {
     "id": "a1-847",
     "word": "shopping",
     "class": "noun",
-    "definitions": ["the activity of going to shops and buying things or ordering them online"],
+    "definitions": [
+      "the activity of going to shops and buying things or ordering them online"
+    ],
     "examples": ["to go shopping"],
     "freq": 4.68
   },
@@ -7373,7 +7853,9 @@
     "id": "a1-850",
     "word": "pool",
     "class": "noun",
-    "definitions": ["an area of water that has been created for people to swim in"],
+    "definitions": [
+      "an area of water that has been created for people to swim in"
+    ],
     "examples": ["an indoor/outdoor pool"],
     "freq": 4.67
   },
@@ -7404,7 +7886,9 @@
     "definitions": [
       "to talk about something with somebody, especially in order to decide something"
     ],
-    "examples": ["discuss something with somebody, Have you discussed the problem with anyone?"],
+    "examples": [
+      "discuss something with somebody, Have you discussed the problem with anyone?"
+    ],
     "freq": 4.66
   },
   {
@@ -7419,7 +7903,9 @@
     "id": "a1-855",
     "word": "laugh",
     "class": "noun",
-    "definitions": ["the sound you make when you think that something is funny or silly"],
+    "definitions": [
+      "the sound you make when you think that something is funny or silly"
+    ],
     "examples": ["to give a laugh"],
     "freq": 4.66
   },
@@ -7437,7 +7923,9 @@
     "id": "a1-857",
     "word": "leg",
     "class": "noun",
-    "definitions": ["one of the long parts that connect the feet to the rest of the body"],
+    "definitions": [
+      "one of the long parts that connect the feet to the rest of the body"
+    ],
     "examples": ["Sit on the floor, stretching your legs out in front of you."],
     "freq": 4.66
   },
@@ -7484,14 +7972,18 @@
     "definitions": [
       "a person who performs on the stage, on television or in films, especially as a profession"
     ],
-    "examples": ["Both lead actors (= the ones who play the main parts) are outstanding."],
+    "examples": [
+      "Both lead actors (= the ones who play the main parts) are outstanding."
+    ],
     "freq": 4.65
   },
   {
     "id": "a1-863",
     "word": "apartment",
     "class": "noun",
-    "definitions": ["a set of rooms for living in, usually on one floor of a building"],
+    "definitions": [
+      "a set of rooms for living in, usually on one floor of a building"
+    ],
     "examples": ["an apartment building"],
     "freq": 4.65
   },
@@ -7499,7 +7991,9 @@
     "id": "a1-864",
     "word": "cook",
     "class": "verb",
-    "definitions": ["to prepare food by heating it, for example by boiling, baking or frying it"],
+    "definitions": [
+      "to prepare food by heating it, for example by boiling, baking or frying it"
+    ],
     "examples": ["Where did you learn to cook?"],
     "freq": 4.65
   },
@@ -7541,7 +8035,9 @@
     "id": "a1-869",
     "word": "fill",
     "class": "verb",
-    "definitions": ["to make something full of something; to become full of something"],
+    "definitions": [
+      "to make something full of something; to become full of something"
+    ],
     "examples": ["fill something, Please fill this glass for me."],
     "freq": 4.64
   },
@@ -7666,7 +8162,9 @@
     "definitions": [
       "on the other side of a particular area from somebody/something, and usually facing them"
     ],
-    "examples": ["I sat opposite him during the meal (= on the other side of the table)."],
+    "examples": [
+      "I sat opposite him during the meal (= on the other side of the table)."
+    ],
     "freq": 4.62
   },
   {
@@ -7755,7 +8253,9 @@
     "id": "a1-892",
     "word": "boyfriend",
     "class": "noun",
-    "definitions": ["a man or boy that somebody has a romantic or sexual relationship with"],
+    "definitions": [
+      "a man or boy that somebody has a romantic or sexual relationship with"
+    ],
     "examples": ["She's got a new boyfriend."],
     "freq": 4.59
   },
@@ -7763,7 +8263,9 @@
     "id": "a1-893",
     "word": "dollar",
     "class": "noun",
-    "definitions": ["the unit of money in the US, Canada, Australia and several other countries"],
+    "definitions": [
+      "the unit of money in the US, Canada, Australia and several other countries"
+    ],
     "examples": ["You will be paid in American dollars."],
     "freq": 4.59
   },
@@ -7771,7 +8273,9 @@
     "id": "a1-894",
     "word": "mile",
     "class": "noun",
-    "definitions": ["a unit for measuring distance equal to 1 609 metres or 1 760 yards"],
+    "definitions": [
+      "a unit for measuring distance equal to 1 609 metres or 1 760 yards"
+    ],
     "examples": ["a 20-mile drive to work"],
     "freq": 4.59
   },
@@ -7817,7 +8321,9 @@
     "id": "a1-899",
     "word": "detail",
     "class": "noun",
-    "definitions": ["a small individual fact or item; a less important fact or item"],
+    "definitions": [
+      "a small individual fact or item; a less important fact or item"
+    ],
     "examples": ["an expedition planned down to the last detail"],
     "freq": 4.57
   },
@@ -7841,7 +8347,9 @@
     "id": "a1-902",
     "word": "favourite",
     "class": "noun",
-    "definitions": ["a person or thing that you like more than the others of the same type"],
+    "definitions": [
+      "a person or thing that you like more than the others of the same type"
+    ],
     "examples": ["Which one's your favourite?"],
     "freq": 4.57
   },
@@ -7870,14 +8378,18 @@
     "definitions": [
       "to like one thing or person better than another; to choose one thing rather than something else because you like it better"
     ],
-    "examples": ["prefer something, ‘Coffee or tea?’ ‘I'd prefer tea, thanks.’"],
+    "examples": [
+      "prefer something, ‘Coffee or tea?’ ‘I'd prefer tea, thanks.’"
+    ],
     "freq": 4.57
   },
   {
     "id": "a1-906",
     "word": "programme",
     "class": "noun",
-    "definitions": ["something that people watch on television or listen to on the radio"],
+    "definitions": [
+      "something that people watch on television or listen to on the radio"
+    ],
     "examples": ["a news programme"],
     "freq": 4.57
   },
@@ -7888,7 +8400,9 @@
     "definitions": [
       "an informal shirt, usually with short sleeves (= arms) no collar or buttons, or just a few buttons at the top"
     ],
-    "examples": ["He was wearing a faded pair of blue jeans and an old T-shirt."],
+    "examples": [
+      "He was wearing a faded pair of blue jeans and an old T-shirt."
+    ],
     "freq": 4.57
   },
   {
@@ -7896,7 +8410,9 @@
     "word": "describe",
     "class": "verb",
     "definitions": ["to say what somebody/something is like"],
-    "examples": ["describe somebody/something, The next section describes our findings in detail."],
+    "examples": [
+      "describe somebody/something, The next section describes our findings in detail."
+    ],
     "freq": 4.56
   },
   {
@@ -7927,7 +8443,9 @@
     "id": "a1-912",
     "word": "prepare",
     "class": "verb",
-    "definitions": ["to make something or somebody ready to be used or to do something"],
+    "definitions": [
+      "to make something or somebody ready to be used or to do something"
+    ],
     "examples": ["prepare something/somebody, to prepare a report"],
     "freq": 4.55
   },
@@ -7945,7 +8463,9 @@
     "id": "a1-914",
     "word": "bathroom",
     "class": "noun",
-    "definitions": ["a room in which there is a bath, a washbasin and often a toilet"],
+    "definitions": [
+      "a room in which there is a bath, a washbasin and often a toilet"
+    ],
     "examples": ["Go and wash your hands in the bathroom."],
     "freq": 4.54
   },
@@ -7961,7 +8481,9 @@
     "id": "a1-916",
     "word": "sing",
     "class": "verb",
-    "definitions": ["to make musical sounds with your voice in the form of a song or tune"],
+    "definitions": [
+      "to make musical sounds with your voice in the form of a song or tune"
+    ],
     "examples": ["I just can't sing in tune!"],
     "freq": 4.54
   },
@@ -8008,7 +8530,9 @@
     "word": "paint",
     "class": "verb",
     "definitions": ["to cover a surface or object with paint"],
-    "examples": ["paint something with something, Paint the shed with weather-resistant paint."],
+    "examples": [
+      "paint something with something, Paint the shed with weather-resistant paint."
+    ],
     "freq": 4.52
   },
   {
@@ -8023,7 +8547,9 @@
     "id": "a1-923",
     "word": "pink",
     "class": "noun",
-    "definitions": ["the colour that is produced when you mix red and white together"],
+    "definitions": [
+      "the colour that is produced when you mix red and white together"
+    ],
     "examples": ["She was dressed in pink."],
     "freq": 4.52
   },
@@ -8031,7 +8557,9 @@
     "id": "a1-924",
     "word": "singer",
     "class": "noun",
-    "definitions": ["a person who sings, or whose job is singing, especially in public"],
+    "definitions": [
+      "a person who sings, or whose job is singing, especially in public"
+    ],
     "examples": ["She's a wonderful singer."],
     "freq": 4.52
   },
@@ -8116,7 +8644,9 @@
     "word": "repeat",
     "class": "verb",
     "definitions": ["to say or write something again or more than once"],
-    "examples": ["repeat something, to repeat a question/a claim/an assertion/a warning"],
+    "examples": [
+      "repeat something, to repeat a question/a claim/an assertion/a warning"
+    ],
     "freq": 4.49
   },
   {
@@ -8157,7 +8687,9 @@
     "id": "a1-938",
     "word": "meal",
     "class": "noun",
-    "definitions": ["an occasion when people eat food, especially breakfast, lunch or dinner"],
+    "definitions": [
+      "an occasion when people eat food, especially breakfast, lunch or dinner"
+    ],
     "examples": ["Try not to eat between meals."],
     "freq": 4.48
   },
@@ -8166,7 +8698,9 @@
     "word": "chart",
     "class": "noun",
     "definitions": ["a diagram, lists of figures, etc. that shows information"],
-    "examples": ["Some shares have lost two-thirds of their value since being issued (see chart)."],
+    "examples": [
+      "Some shares have lost two-thirds of their value since being issued (see chart)."
+    ],
     "freq": 4.47
   },
   {
@@ -8209,7 +8743,9 @@
     "id": "a1-944",
     "word": "wash",
     "class": "verb",
-    "definitions": ["to make something/somebody clean using water and usually soap"],
+    "definitions": [
+      "to make something/somebody clean using water and usually soap"
+    ],
     "examples": ["wash something/somebody, These jeans need washing."],
     "freq": 4.46
   },
@@ -8230,7 +8766,9 @@
     "definitions": [
       "to examine people or things to see how they are similar and how they are different"
     ],
-    "examples": ["compare A and B, It is interesting to compare their situation and ours."],
+    "examples": [
+      "compare A and B, It is interesting to compare their situation and ours."
+    ],
     "freq": 4.45
   },
   {
@@ -8253,7 +8791,9 @@
     "id": "a1-949",
     "word": "uncle",
     "class": "noun",
-    "definitions": ["the brother of your mother or father; the husband of your aunt or uncle"],
+    "definitions": [
+      "the brother of your mother or father; the husband of your aunt or uncle"
+    ],
     "examples": ["Uncle Ian"],
     "freq": 4.45
   },
@@ -8299,7 +8839,9 @@
     "id": "a1-954",
     "word": "ear",
     "class": "noun",
-    "definitions": ["either of the organs on the sides of the head that you hear with"],
+    "definitions": [
+      "either of the organs on the sides of the head that you hear with"
+    ],
     "examples": ["the left/right ear"],
     "freq": 4.43
   },
@@ -8325,7 +8867,9 @@
     "id": "a1-957",
     "word": "worker",
     "class": "noun",
-    "definitions": ["a person who works, especially one who does a particular kind of work"],
+    "definitions": [
+      "a person who works, especially one who does a particular kind of work"
+    ],
     "examples": ["farm/factory/office workers"],
     "freq": 4.43
   },
@@ -8405,7 +8949,9 @@
     "id": "a1-966",
     "word": "vacation",
     "class": "noun",
-    "definitions": ["a period of time spent travelling or resting away from home"],
+    "definitions": [
+      "a period of time spent travelling or resting away from home"
+    ],
     "examples": ["on vacation, They're on vacation in Hawaii right now."],
     "freq": 4.4
   },
@@ -8457,7 +9003,9 @@
     "id": "a1-972",
     "word": "routine",
     "class": "noun",
-    "definitions": ["the normal order and way in which you regularly do things"],
+    "definitions": [
+      "the normal order and way in which you regularly do things"
+    ],
     "examples": ["to settle/get/fall into a routine"],
     "freq": 4.37
   },
@@ -8465,7 +9013,9 @@
     "id": "a1-973",
     "word": "spell",
     "class": "verb",
-    "definitions": ["to say or write the letters of a word in the correct order"],
+    "definitions": [
+      "to say or write the letters of a word in the correct order"
+    ],
     "examples": ["How do you spell your surname?"],
     "freq": 4.37
   },
@@ -8493,7 +9043,9 @@
     "id": "a1-976",
     "word": "juice",
     "class": "noun",
-    "definitions": ["the liquid that comes from fruit or vegetables; a drink made from this"],
+    "definitions": [
+      "the liquid that comes from fruit or vegetables; a drink made from this"
+    ],
     "examples": ["a glass of fruit juice"],
     "freq": 4.36
   },
@@ -8527,7 +9079,9 @@
     "id": "a1-980",
     "word": "reader",
     "class": "noun",
-    "definitions": ["a person who reads, especially one who reads a lot or in a particular way"],
+    "definitions": [
+      "a person who reads, especially one who reads a lot or in a particular way"
+    ],
     "examples": ["an avid reader of science fiction"],
     "freq": 4.34
   },
@@ -8607,7 +9161,9 @@
     "id": "a1-989",
     "word": "goodbye",
     "class": "exclamation",
-    "definitions": ["used when you are leaving somebody or when somebody else is leaving"],
+    "definitions": [
+      "used when you are leaving somebody or when somebody else is leaving"
+    ],
     "examples": ["Goodbye! It was great to meet you."],
     "freq": 4.3
   },
@@ -8615,7 +9171,9 @@
     "id": "a1-990",
     "word": "goodbye",
     "class": "noun",
-    "definitions": ["used when you are leaving somebody or when somebody else is leaving"],
+    "definitions": [
+      "used when you are leaving somebody or when somebody else is leaving"
+    ],
     "examples": ["Goodbye! It was great to meet you."],
     "freq": 4.3
   },
@@ -8623,7 +9181,9 @@
     "id": "a1-991",
     "word": "phrase",
     "class": "noun",
-    "definitions": ["a group of words that have a particular meaning when used together"],
+    "definitions": [
+      "a group of words that have a particular meaning when used together"
+    ],
     "examples": ["a memorable/catchy phrase"],
     "freq": 4.3
   },
@@ -8631,7 +9191,9 @@
     "id": "a1-992",
     "word": "dialogue",
     "class": "noun",
-    "definitions": ["a conversation in a book, play or film or in language teaching materials"],
+    "definitions": [
+      "a conversation in a book, play or film or in language teaching materials"
+    ],
     "examples": ["Learners are asked to listen to three short dialogues."],
     "freq": 4.29
   },
@@ -8753,7 +9315,9 @@
     "id": "a1-1005",
     "word": "dish",
     "class": "noun",
-    "definitions": ["a flat shallow container for cooking food in or serving it from"],
+    "definitions": [
+      "a flat shallow container for cooking food in or serving it from"
+    ],
     "examples": ["a baking/serving dish"],
     "freq": 4.21
   },
@@ -8799,7 +9363,9 @@
     "id": "a1-1010",
     "word": "tourist",
     "class": "noun",
-    "definitions": ["a person who is travelling or visiting a place for pleasure"],
+    "definitions": [
+      "a person who is travelling or visiting a place for pleasure"
+    ],
     "examples": ["busloads of foreign tourists"],
     "freq": 4.2
   },
@@ -8845,7 +9411,9 @@
     "id": "a1-1015",
     "word": "aunt",
     "class": "noun",
-    "definitions": ["the sister of your father or mother; the wife of your uncle or aunt"],
+    "definitions": [
+      "the sister of your father or mother; the wife of your uncle or aunt"
+    ],
     "examples": ["Aunt Alice"],
     "freq": 4.16
   },
@@ -8933,7 +9501,9 @@
     "id": "a1-1025",
     "word": "homework",
     "class": "noun",
-    "definitions": ["work that is given by teachers for students to do at home"],
+    "definitions": [
+      "work that is given by teachers for students to do at home"
+    ],
     "examples": ["I always do my homework on the bus."],
     "freq": 4.13
   },
@@ -8972,14 +9542,18 @@
     "definitions": [
       "a place where you can buy drinks and simple meals. Alcohol is not usually served in British or American cafes."
     ],
-    "examples": ["There are small shops and pavement cafes around every corner."],
+    "examples": [
+      "There are small shops and pavement cafes around every corner."
+    ],
     "freq": 4.09
   },
   {
     "id": "a1-1030",
     "word": "euro",
     "class": "noun",
-    "definitions": ["the unit of money of some countries of the European Union"],
+    "definitions": [
+      "the unit of money of some countries of the European Union"
+    ],
     "examples": ["I paid five euros for it."],
     "freq": 4.09
   },
@@ -9013,7 +9587,9 @@
     "id": "a1-1034",
     "word": "tooth",
     "class": "noun",
-    "definitions": ["any of the hard white structures in the mouth used for biting food"],
+    "definitions": [
+      "any of the hard white structures in the mouth used for biting food"
+    ],
     "examples": ["I've just had a tooth out at the dentist's."],
     "freq": 4.08
   },
@@ -9039,7 +9615,9 @@
     "id": "a1-1037",
     "word": "o'clock",
     "class": "adverb",
-    "definitions": ["used with the numbers 1 to 12 when telling the time, to mean an exact hour"],
+    "definitions": [
+      "used with the numbers 1 to 12 when telling the time, to mean an exact hour"
+    ],
     "examples": ["He left between five and six o'clock."],
     "freq": 4.04
   },
@@ -9123,7 +9701,9 @@
     "id": "a1-1046",
     "word": "skirt",
     "class": "noun",
-    "definitions": ["a piece of clothing that hangs from the middle part of the body"],
+    "definitions": [
+      "a piece of clothing that hangs from the middle part of the body"
+    ],
     "examples": ["a short/long/pleated/denim skirt"],
     "freq": 3.96
   },
@@ -9149,7 +9729,9 @@
     "id": "a1-1049",
     "word": "hobby",
     "class": "noun",
-    "definitions": ["an activity that you do for pleasure when you are not working"],
+    "definitions": [
+      "an activity that you do for pleasure when you are not working"
+    ],
     "examples": ["Do you have any hobbies?"],
     "freq": 3.94
   },
@@ -9336,7 +9918,9 @@
     "word": "neighbour",
     "class": "noun",
     "definitions": ["a person who lives next to you or near you"],
-    "examples": ["We've had a lot of support from all our friends and neighbours."],
+    "examples": [
+      "We've had a lot of support from all our friends and neighbours."
+    ],
     "freq": 3.69
   },
   {
@@ -9351,7 +9935,9 @@
     "id": "a1-1072",
     "word": "waiter",
     "class": "noun",
-    "definitions": ["a man whose job is to serve customers at their tables in a restaurant, etc."],
+    "definitions": [
+      "a man whose job is to serve customers at their tables in a restaurant, etc."
+    ],
     "examples": ["I'll ask the waiter for the bill."],
     "freq": 3.61
   },
@@ -9367,7 +9953,9 @@
     "id": "a1-1074",
     "word": "practise",
     "class": "verb",
-    "definitions": ["to do an activity or train regularly so that you can improve your skill"],
+    "definitions": [
+      "to do an activity or train regularly so that you can improve your skill"
+    ],
     "examples": ["You need to practise every day."],
     "freq": 3.52
   },

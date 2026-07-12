@@ -3,7 +3,9 @@
     "id": "c1-1",
     "word": "just",
     "class": "adjective",
-    "definitions": ["that most people consider to be morally fair and reasonable"],
+    "definitions": [
+      "that most people consider to be morally fair and reasonable"
+    ],
     "examples": ["a just decision/law/society"],
     "freq": 6.43
   },
@@ -24,14 +26,18 @@
     "definitions": [
       "the right to influence something by giving your opinion before a decision is made"
     ],
-    "examples": ["say (in something), We had no say in the decision to sell the company."],
+    "examples": [
+      "say (in something), We had no say in the decision to sell the company."
+    ],
     "freq": 5.89
   },
   {
     "id": "c1-4",
     "word": "long-time",
     "class": "adjective",
-    "definitions": ["having been the particular thing mentioned for a long time"],
+    "definitions": [
+      "having been the particular thing mentioned for a long time"
+    ],
     "examples": ["his long-time colleague"],
     "freq": 5.69
   },
@@ -56,14 +62,18 @@
     "word": "set-up",
     "class": "noun",
     "definitions": ["a way of organizing something; a system"],
-    "examples": ["I've only been here a couple of weeks and I don't really know the set-up."],
+    "examples": [
+      "I've only been here a couple of weeks and I don't really know the set-up."
+    ],
     "freq": 5.53
   },
   {
     "id": "c1-8",
     "word": "line-up",
     "class": "noun",
-    "definitions": ["the people who are going to take part in a particular event"],
+    "definitions": [
+      "the people who are going to take part in a particular event"
+    ],
     "examples": ["an impressive line-up of speakers"],
     "freq": 5.44
   },
@@ -89,7 +99,9 @@
     "id": "c1-11",
     "word": "fine",
     "class": "noun",
-    "definitions": ["a sum of money that must be paid as punishment for breaking a law or rule"],
+    "definitions": [
+      "a sum of money that must be paid as punishment for breaking a law or rule"
+    ],
     "examples": ["I got a parking fine for parking on double yellow lines."],
     "freq": 5.23
   },
@@ -113,7 +125,9 @@
     "id": "c1-14",
     "word": "sound",
     "class": "adjective",
-    "definitions": ["sensible; that you can rely on and that will probably give good results"],
+    "definitions": [
+      "sensible; that you can rely on and that will probably give good results"
+    ],
     "examples": ["He's a person of very sound judgement."],
     "freq": 5.15
   },
@@ -142,7 +156,9 @@
     "definitions": [
       "to move gently backwards and forwards or from side to side; to make somebody/something move in this way"
     ],
-    "examples": ["(+ adv./prep.), The boat rocked from side to side in the waves."],
+    "examples": [
+      "(+ adv./prep.), The boat rocked from side to side in the waves."
+    ],
     "freq": 5.03
   },
   {
@@ -185,7 +201,9 @@
     "id": "c1-22",
     "word": "driving",
     "class": "adjective",
-    "definitions": ["strong and powerful; having a strong influence in making something happen"],
+    "definitions": [
+      "strong and powerful; having a strong influence in making something happen"
+    ],
     "examples": [
       "Who was the driving force (= the person with the strongest influence) in the band?"
     ],
@@ -195,7 +213,9 @@
     "id": "c1-23",
     "word": "pop",
     "class": "verb",
-    "definitions": ["to make a short explosive sound; to cause something to make this sound"],
+    "definitions": [
+      "to make a short explosive sound; to cause something to make this sound"
+    ],
     "examples": ["the sound of corks popping"],
     "freq": 4.87
   },
@@ -231,7 +251,9 @@
     "id": "c1-27",
     "word": "high-profile",
     "class": "adjective",
-    "definitions": ["receiving or involving a lot of attention and discussion in the media"],
+    "definitions": [
+      "receiving or involving a lot of attention and discussion in the media"
+    ],
     "examples": ["a high-profile campaign"],
     "freq": 4.77
   },
@@ -249,7 +271,9 @@
     "id": "c1-29",
     "word": "arm",
     "class": "verb",
-    "definitions": ["to provide weapons for yourself/somebody in order to fight a battle or a war"],
+    "definitions": [
+      "to provide weapons for yourself/somebody in order to fight a battle or a war"
+    ],
     "examples": ["The country was arming against the enemy."],
     "freq": 4.73
   },
@@ -277,7 +301,9 @@
     "id": "c1-32",
     "word": "large-scale",
     "class": "adjective",
-    "definitions": ["involving many people or things, especially over a wide area"],
+    "definitions": [
+      "involving many people or things, especially over a wide area"
+    ],
     "examples": [
       "Large areas of the forest will be cleared for ranching as part of a large-scale development plan."
     ],
@@ -288,15 +314,21 @@
     "word": "vice",
     "class": "noun",
     "definitions": ["criminal activities that involve sex or drugs"],
-    "examples": ["At the door were two plain-clothes detectives from the vice squad."],
+    "examples": [
+      "At the door were two plain-clothes detectives from the vice squad."
+    ],
     "freq": 4.71
   },
   {
     "id": "c1-34",
     "word": "attorney",
     "class": "noun",
-    "definitions": ["a lawyer, especially one who can act for somebody in court"],
-    "examples": ["The prosecuting attorney began with a short opening statement."],
+    "definitions": [
+      "a lawyer, especially one who can act for somebody in court"
+    ],
+    "examples": [
+      "The prosecuting attorney began with a short opening statement."
+    ],
     "freq": 4.69
   },
   {
@@ -319,7 +351,9 @@
     "id": "c1-37",
     "word": "squad",
     "class": "noun",
-    "definitions": ["a section of a police force that deals with a particular type of crime"],
+    "definitions": [
+      "a section of a police force that deals with a particular type of crime"
+    ],
     "examples": ["the drugs/fraud/bomb/riot squad"],
     "freq": 4.67
   },
@@ -365,7 +399,9 @@
     "id": "c1-42",
     "word": "ministry",
     "class": "noun",
-    "definitions": ["a government department that has a particular area of responsibility"],
+    "definitions": [
+      "a government department that has a particular area of responsibility"
+    ],
     "examples": ["The Ministry of Defence has issued the following statement."],
     "freq": 4.63
   },
@@ -419,7 +455,9 @@
     "id": "c1-48",
     "word": "cutting",
     "class": "noun",
-    "definitions": ["an article or a story that you cut from a newspaper or magazine and keep"],
+    "definitions": [
+      "an article or a story that you cut from a newspaper or magazine and keep"
+    ],
     "examples": ["newspaper/press cuttings"],
     "freq": 4.61
   },
@@ -435,7 +473,9 @@
     "id": "c1-50",
     "word": "solo",
     "class": "noun",
-    "definitions": ["a piece of music, dance or entertainment performed by only one person"],
+    "definitions": [
+      "a piece of music, dance or entertainment performed by only one person"
+    ],
     "examples": ["The song features an extended guitar solo."],
     "freq": 4.61
   },
@@ -451,7 +491,9 @@
     "id": "c1-52",
     "word": "offering",
     "class": "noun",
-    "definitions": ["something that is produced for other people to use, watch, enjoy, etc."],
+    "definitions": [
+      "something that is produced for other people to use, watch, enjoy, etc."
+    ],
     "examples": ["the latest offering from the Canadian-born writer"],
     "freq": 4.6
   },
@@ -469,7 +511,9 @@
     "id": "c1-54",
     "word": "dedicated",
     "class": "adjective",
-    "definitions": ["working hard at something because it is very important to you"],
+    "definitions": [
+      "working hard at something because it is very important to you"
+    ],
     "examples": ["a dedicated teacher"],
     "freq": 4.58
   },
@@ -511,7 +555,9 @@
     "id": "c1-59",
     "word": "combat",
     "class": "verb",
-    "definitions": ["to stop something unpleasant or harmful from happening or from getting worse"],
+    "definitions": [
+      "to stop something unpleasant or harmful from happening or from getting worse"
+    ],
     "examples": ["measures to combat crime/inflation/unemployment/disease"],
     "freq": 4.56
   },
@@ -529,8 +575,12 @@
     "id": "c1-61",
     "word": "counter",
     "class": "verb",
-    "definitions": ["to reply to somebody by trying to prove that what they said is not true"],
-    "examples": ["counter somebody/something, Such arguments are not easily countered."],
+    "definitions": [
+      "to reply to somebody by trying to prove that what they said is not true"
+    ],
+    "examples": [
+      "counter somebody/something, Such arguments are not easily countered."
+    ],
     "freq": 4.56
   },
   {
@@ -567,7 +617,9 @@
     "id": "c1-65",
     "word": "latter",
     "class": "adjective",
-    "definitions": ["used to refer to the second of two things or people mentioned"],
+    "definitions": [
+      "used to refer to the second of two things or people mentioned"
+    ],
     "examples": ["He chose the latter option."],
     "freq": 4.56
   },
@@ -593,7 +645,9 @@
     "id": "c1-68",
     "word": "personnel",
     "class": "noun",
-    "definitions": ["the people who work for an organization or one of the armed forces"],
+    "definitions": [
+      "the people who work for an organization or one of the armed forces"
+    ],
     "examples": ["There is a severe shortage of skilled personnel."],
     "freq": 4.56
   },
@@ -646,7 +700,9 @@
     "definitions": [
       "the act of keeping something in good condition by checking or repairing it regularly"
     ],
-    "examples": ["The school pays for heating and the maintenance of the buildings."],
+    "examples": [
+      "The school pays for heating and the maintenance of the buildings."
+    ],
     "freq": 4.55
   },
   {
@@ -671,7 +727,9 @@
     "id": "c1-77",
     "word": "marine",
     "class": "adjective",
-    "definitions": ["connected with the sea and the creatures and plants that live there"],
+    "definitions": [
+      "connected with the sea and the creatures and plants that live there"
+    ],
     "examples": ["marine life"],
     "freq": 4.53
   },
@@ -679,7 +737,9 @@
     "id": "c1-78",
     "word": "peak",
     "class": "noun",
-    "definitions": ["the point when somebody/something is best, most successful, strongest, etc."],
+    "definitions": [
+      "the point when somebody/something is best, most successful, strongest, etc."
+    ],
     "examples": ["Traffic reaches its peak between 8 and 9 in the morning."],
     "freq": 4.53
   },
@@ -697,7 +757,9 @@
     "id": "c1-80",
     "word": "reform",
     "class": "verb",
-    "definitions": ["to improve a system, an organization, a law, etc. by making changes to it"],
+    "definitions": [
+      "to improve a system, an organization, a law, etc. by making changes to it"
+    ],
     "examples": ["proposals to reform the social security system"],
     "freq": 4.53
   },
@@ -705,7 +767,9 @@
     "id": "c1-81",
     "word": "debut",
     "class": "noun",
-    "definitions": ["the first public appearance of a performer or sports player"],
+    "definitions": [
+      "the first public appearance of a performer or sports player"
+    ],
     "examples": ["He will make his debut for the first team this week."],
     "freq": 4.52
   },
@@ -713,8 +777,12 @@
     "id": "c1-82",
     "word": "license",
     "class": "verb",
-    "definitions": ["to give somebody official permission to do, own, or use something"],
-    "examples": ["license something, The new drug has not yet been licensed in the US."],
+    "definitions": [
+      "to give somebody official permission to do, own, or use something"
+    ],
+    "examples": [
+      "license something, The new drug has not yet been licensed in the US."
+    ],
     "freq": 4.52
   },
   {
@@ -747,8 +815,12 @@
     "id": "c1-86",
     "word": "clinical",
     "class": "adjective",
-    "definitions": ["relating to the examination and treatment of patients and their illnesses"],
-    "examples": ["clinical research (= done on patients, not just considering theory)"],
+    "definitions": [
+      "relating to the examination and treatment of patients and their illnesses"
+    ],
+    "examples": [
+      "clinical research (= done on patients, not just considering theory)"
+    ],
     "freq": 4.51
   },
   {
@@ -765,7 +837,9 @@
     "id": "c1-88",
     "word": "settlement",
     "class": "noun",
-    "definitions": ["an official agreement that ends an argument between two people or groups"],
+    "definitions": [
+      "an official agreement that ends an argument between two people or groups"
+    ],
     "examples": ["to negotiate a peace settlement"],
     "freq": 4.49
   },
@@ -801,7 +875,9 @@
     "id": "c1-92",
     "word": "regardless",
     "class": "adverb",
-    "definitions": ["paying no attention, even if the situation is bad or there are difficulties"],
+    "definitions": [
+      "paying no attention, even if the situation is bad or there are difficulties"
+    ],
     "examples": ["The weather was terrible but we carried on regardless."],
     "freq": 4.48
   },
@@ -809,7 +885,9 @@
     "id": "c1-93",
     "word": "chamber",
     "class": "noun",
-    "definitions": ["a hall in a public building that is used for formal meetings"],
+    "definitions": [
+      "a hall in a public building that is used for formal meetings"
+    ],
     "examples": ["The members left the council chamber."],
     "freq": 4.47
   },
@@ -875,7 +953,9 @@
     "id": "c1-100",
     "word": "administrative",
     "class": "adjective",
-    "definitions": ["connected with organizing the work of a business or an institution"],
+    "definitions": [
+      "connected with organizing the work of a business or an institution"
+    ],
     "examples": ["an administrative job/assistant/error"],
     "freq": 4.45
   },
@@ -911,7 +991,9 @@
     "id": "c1-104",
     "word": "formula",
     "class": "noun",
-    "definitions": ["a series of letters, numbers or symbols that represent a rule or law"],
+    "definitions": [
+      "a series of letters, numbers or symbols that represent a rule or law"
+    ],
     "examples": ["This formula is used to calculate the area of a circle."],
     "freq": 4.45
   },
@@ -919,7 +1001,9 @@
     "id": "c1-105",
     "word": "gross",
     "class": "adjective",
-    "definitions": ["being the total amount of something before anything is taken away"],
+    "definitions": [
+      "being the total amount of something before anything is taken away"
+    ],
     "examples": ["gross weight (= including the container or wrapping)"],
     "freq": 4.45
   },
@@ -927,7 +1011,9 @@
     "id": "c1-106",
     "word": "respectively",
     "class": "adverb",
-    "definitions": ["in the same order as the people or things already mentioned"],
+    "definitions": [
+      "in the same order as the people or things already mentioned"
+    ],
     "examples": ["Julie and Mark, aged 17 and 19 respectively"],
     "freq": 4.45
   },
@@ -935,7 +1021,9 @@
     "id": "c1-107",
     "word": "trail",
     "class": "noun",
-    "definitions": ["a long line or series of marks that is left by somebody/something"],
+    "definitions": [
+      "a long line or series of marks that is left by somebody/something"
+    ],
     "examples": ["a trail of blood"],
     "freq": 4.45
   },
@@ -946,7 +1034,9 @@
     "definitions": [
       "to pull something behind somebody/something, usually along the ground; to be pulled along in this way"
     ],
-    "examples": ["trail something, A jeep trailing a cloud of dust was speeding in my direction."],
+    "examples": [
+      "trail something, A jeep trailing a cloud of dust was speeding in my direction."
+    ],
     "freq": 4.45
   },
   {
@@ -961,7 +1051,9 @@
     "id": "c1-110",
     "word": "assault",
     "class": "verb",
-    "definitions": ["to attack somebody violently, especially when this is a crime"],
+    "definitions": [
+      "to attack somebody violently, especially when this is a crime"
+    ],
     "examples": ["He has been charged with assaulting a police officer."],
     "freq": 4.44
   },
@@ -979,7 +1071,9 @@
     "id": "c1-112",
     "word": "thread",
     "class": "noun",
-    "definitions": ["a thin string of cotton, wool, silk, etc. used for sewing or making cloth"],
+    "definitions": [
+      "a thin string of cotton, wool, silk, etc. used for sewing or making cloth"
+    ],
     "examples": ["a needle and thread"],
     "freq": 4.44
   },
@@ -1043,7 +1137,9 @@
     "id": "c1-119",
     "word": "suck",
     "class": "verb",
-    "definitions": ["to take liquid, air, etc. into your mouth by using the muscles of your lips"],
+    "definitions": [
+      "to take liquid, air, etc. into your mouth by using the muscles of your lips"
+    ],
     "examples": ["to suck the juice from an orange"],
     "freq": 4.42
   },
@@ -1153,7 +1249,9 @@
     "id": "c1-131",
     "word": "idiot",
     "class": "noun",
-    "definitions": ["a rude way to refer to somebody who you think is very stupid"],
+    "definitions": [
+      "a rude way to refer to somebody who you think is very stupid"
+    ],
     "examples": ["When I lost my passport, I felt such an idiot."],
     "freq": 4.39
   },
@@ -1171,7 +1269,9 @@
     "id": "c1-133",
     "word": "bishop",
     "class": "noun",
-    "definitions": ["a senior priest in charge of the work of the Church in a city or district"],
+    "definitions": [
+      "a senior priest in charge of the work of the Church in a city or district"
+    ],
     "examples": ["the Bishop of Oxford"],
     "freq": 4.38
   },
@@ -1180,14 +1280,18 @@
     "word": "defensive",
     "class": "adjective",
     "definitions": ["protecting somebody/something against attack"],
-    "examples": ["As a defensive measure he built a series of coastal forts and watchtowers."],
+    "examples": [
+      "As a defensive measure he built a series of coastal forts and watchtowers."
+    ],
     "freq": 4.38
   },
   {
     "id": "c1-135",
     "word": "efficiency",
     "class": "noun",
-    "definitions": ["the quality of doing something well with no waste of time or money"],
+    "definitions": [
+      "the quality of doing something well with no waste of time or money"
+    ],
     "examples": ["improvements in efficiency at the factory"],
     "freq": 4.38
   },
@@ -1196,7 +1300,9 @@
     "word": "enterprise",
     "class": "noun",
     "definitions": ["a company or business"],
-    "examples": ["He is in charge of an enterprise with a turnover of $26 billion."],
+    "examples": [
+      "He is in charge of an enterprise with a turnover of $26 billion."
+    ],
     "freq": 4.38
   },
   {
@@ -1223,7 +1329,9 @@
     "id": "c1-139",
     "word": "spin",
     "class": "verb",
-    "definitions": ["to turn round and round quickly; to make something do this"],
+    "definitions": [
+      "to turn round and round quickly; to make something do this"
+    ],
     "examples": ["(+ adv./prep.), The plane was spinning out of control."],
     "freq": 4.38
   },
@@ -1234,7 +1342,9 @@
     "definitions": [
       "during the time that something is happening; at the same time as something else is happening"
     ],
-    "examples": ["In the UK it is illegal to drive whilst holding a mobile phone."],
+    "examples": [
+      "In the UK it is illegal to drive whilst holding a mobile phone."
+    ],
     "freq": 4.38
   },
   {
@@ -1244,7 +1354,9 @@
     "definitions": [
       "trade, especially between countries; the buying and selling of goods and services"
     ],
-    "examples": ["Leaders of industry and commerce met at the summit in Paris."],
+    "examples": [
+      "Leaders of industry and commerce met at the summit in Paris."
+    ],
     "freq": 4.37
   },
   {
@@ -1272,14 +1384,18 @@
     "definitions": [
       "to fasten or hang something on something else using a hook; to be fastened or hanging in this way"
     ],
-    "examples": ["hook something + adv./prep., We hooked the trailer to the back of the car."],
+    "examples": [
+      "hook something + adv./prep., We hooked the trailer to the back of the car."
+    ],
     "freq": 4.37
   },
   {
     "id": "c1-145",
     "word": "legacy",
     "class": "noun",
-    "definitions": ["money or property that is given to you by somebody when they die"],
+    "definitions": [
+      "money or property that is given to you by somebody when they die"
+    ],
     "examples": ["They each received a legacy of $5 000."],
     "freq": 4.37
   },
@@ -1287,7 +1403,9 @@
     "id": "c1-146",
     "word": "log",
     "class": "noun",
-    "definitions": ["a thick piece of wood that is cut from or has fallen from a tree"],
+    "definitions": [
+      "a thick piece of wood that is cut from or has fallen from a tree"
+    ],
     "examples": ["logs for the fire"],
     "freq": 4.37
   },
@@ -1295,7 +1413,9 @@
     "id": "c1-147",
     "word": "log",
     "class": "verb",
-    "definitions": ["to put information in an official record or write a record of events"],
+    "definitions": [
+      "to put information in an official record or write a record of events"
+    ],
     "examples": ["The police log all phone calls."],
     "freq": 4.37
   },
@@ -1342,14 +1462,18 @@
     "definitions": [
       "to change something completely so that it is the opposite of what it was before"
     ],
-    "examples": ["Falling birth rates may reverse the trend towards early retirement."],
+    "examples": [
+      "Falling birth rates may reverse the trend towards early retirement."
+    ],
     "freq": 4.37
   },
   {
     "id": "c1-153",
     "word": "sin",
     "class": "noun",
-    "definitions": ["an offence against God or against a religious or moral law"],
+    "definitions": [
+      "an offence against God or against a religious or moral law"
+    ],
     "examples": ["to commit a sin"],
     "freq": 4.37
   },
@@ -1365,8 +1489,12 @@
     "id": "c1-155",
     "word": "sword",
     "class": "noun",
-    "definitions": ["a weapon with a long metal blade (= sharp cutting part) and a handle"],
-    "examples": ["to draw/sheathe a sword (= to take it out of/put it into its cover)"],
+    "definitions": [
+      "a weapon with a long metal blade (= sharp cutting part) and a handle"
+    ],
+    "examples": [
+      "to draw/sheathe a sword (= to take it out of/put it into its cover)"
+    ],
     "freq": 4.37
   },
   {
@@ -1383,7 +1511,9 @@
     "id": "c1-157",
     "word": "consent",
     "class": "noun",
-    "definitions": ["permission to do something, especially given by somebody in authority"],
+    "definitions": [
+      "permission to do something, especially given by somebody in authority"
+    ],
     "examples": ["The written consent of a parent is required."],
     "freq": 4.36
   },
@@ -1391,8 +1521,12 @@
     "id": "c1-158",
     "word": "consent",
     "class": "verb",
-    "definitions": ["to agree to something or give your permission for something"],
-    "examples": ["When she told them what she intended, they readily consented."],
+    "definitions": [
+      "to agree to something or give your permission for something"
+    ],
+    "examples": [
+      "When she told them what she intended, they readily consented."
+    ],
     "freq": 4.36
   },
   {
@@ -1409,7 +1543,9 @@
     "id": "c1-160",
     "word": "glory",
     "class": "noun",
-    "definitions": ["great success that brings somebody praise and honour and makes them famous"],
+    "definitions": [
+      "great success that brings somebody praise and honour and makes them famous"
+    ],
     "examples": ["Olympic glory in the 100 metres"],
     "freq": 4.36
   },
@@ -1436,7 +1572,9 @@
     "word": "residence",
     "class": "noun",
     "definitions": ["a house, especially a large or impressive one"],
-    "examples": ["a desirable family residence for sale (= for example, in an advertisement)"],
+    "examples": [
+      "a desirable family residence for sale (= for example, in an advertisement)"
+    ],
     "freq": 4.36
   },
   {
@@ -1451,7 +1589,9 @@
     "id": "c1-165",
     "word": "strip",
     "class": "verb",
-    "definitions": ["to take off all or most of your clothes or another person’s clothes"],
+    "definitions": [
+      "to take off all or most of your clothes or another person’s clothes"
+    ],
     "examples": ["I stripped and washed myself all over."],
     "freq": 4.36
   },
@@ -1469,7 +1609,9 @@
     "id": "c1-167",
     "word": "corruption",
     "class": "noun",
-    "definitions": ["dishonest or illegal behaviour, especially of people in authority"],
+    "definitions": [
+      "dishonest or illegal behaviour, especially of people in authority"
+    ],
     "examples": ["allegations of bribery and corruption"],
     "freq": 4.35
   },
@@ -1478,7 +1620,9 @@
     "word": "exit",
     "class": "verb",
     "definitions": ["to go out; to leave a building, stage, vehicle, etc."],
-    "examples": ["(+ adv./prep.), The bullet entered her back and exited through her chest."],
+    "examples": [
+      "(+ adv./prep.), The bullet entered her back and exited through her chest."
+    ],
     "freq": 4.35
   },
   {
@@ -1495,8 +1639,12 @@
     "id": "c1-170",
     "word": "removal",
     "class": "noun",
-    "definitions": ["the act of taking somebody/something away from a particular place"],
-    "examples": ["Clearance of the site required the removal of a number of trees."],
+    "definitions": [
+      "the act of taking somebody/something away from a particular place"
+    ],
+    "examples": [
+      "Clearance of the site required the removal of a number of trees."
+    ],
     "freq": 4.35
   },
   {
@@ -1632,7 +1780,9 @@
     "definitions": [
       "to warn somebody about a dangerous situation or one that requires immediate action"
     ],
-    "examples": ["alert somebody, Neighbours quickly alerted the emergency services."],
+    "examples": [
+      "alert somebody, Neighbours quickly alerted the emergency services."
+    ],
     "freq": 4.33
   },
   {
@@ -1687,7 +1837,9 @@
     "id": "c1-190",
     "word": "density",
     "class": "noun",
-    "definitions": ["the quality of being dense; the degree to which something is dense"],
+    "definitions": [
+      "the quality of being dense; the degree to which something is dense"
+    ],
     "examples": ["The population density in this city is very high."],
     "freq": 4.33
   },
@@ -1704,7 +1856,9 @@
     "word": "foster",
     "class": "verb",
     "definitions": ["to encourage something to develop"],
-    "examples": ["The club's aim is to foster better relations within the community."],
+    "examples": [
+      "The club's aim is to foster better relations within the community."
+    ],
     "freq": 4.33
   },
   {
@@ -1729,7 +1883,9 @@
     "id": "c1-195",
     "word": "premium",
     "class": "noun",
-    "definitions": ["an amount of money that you pay once or regularly for an insurance policy"],
+    "definitions": [
+      "an amount of money that you pay once or regularly for an insurance policy"
+    ],
     "examples": ["a monthly premium of £6.25"],
     "freq": 4.33
   },
@@ -1783,7 +1939,9 @@
     "id": "c1-201",
     "word": "blast",
     "class": "noun",
-    "definitions": ["an explosion or a powerful movement of air caused by an explosion"],
+    "definitions": [
+      "an explosion or a powerful movement of air caused by an explosion"
+    ],
     "examples": ["a bomb blast"],
     "freq": 4.32
   },
@@ -1791,7 +1949,9 @@
     "id": "c1-202",
     "word": "blast",
     "class": "verb",
-    "definitions": ["to violently destroy or break something into pieces, using explosives"],
+    "definitions": [
+      "to violently destroy or break something into pieces, using explosives"
+    ],
     "examples": ["They blasted a huge crater in the runway."],
     "freq": 4.32
   },
@@ -1807,7 +1967,9 @@
     "id": "c1-204",
     "word": "faculty",
     "class": "noun",
-    "definitions": ["a department or group of related departments in a college or university"],
+    "definitions": [
+      "a department or group of related departments in a college or university"
+    ],
     "examples": ["the Faculty of Law"],
     "freq": 4.32
   },
@@ -1849,15 +2011,21 @@
     "id": "c1-209",
     "word": "punch",
     "class": "verb",
-    "definitions": ["to hit somebody/something hard with your fist (= closed hand)"],
-    "examples": ["punch somebody/something, He was kicked and punched as he lay on the ground."],
+    "definitions": [
+      "to hit somebody/something hard with your fist (= closed hand)"
+    ],
+    "examples": [
+      "punch somebody/something, He was kicked and punched as he lay on the ground."
+    ],
     "freq": 4.32
   },
   {
     "id": "c1-210",
     "word": "trailer",
     "class": "noun",
-    "definitions": ["a truck, or a container with wheels, that is pulled by another vehicle"],
+    "definitions": [
+      "a truck, or a container with wheels, that is pulled by another vehicle"
+    ],
     "examples": ["a car towing a trailer with a boat on it"],
     "freq": 4.32
   },
@@ -1865,7 +2033,9 @@
     "id": "c1-211",
     "word": "versus",
     "class": "preposition",
-    "definitions": ["used to show that two teams or sides are against each other"],
+    "definitions": [
+      "used to show that two teams or sides are against each other"
+    ],
     "examples": ["It is France versus Brazil in the final."],
     "freq": 4.32
   },
@@ -1876,7 +2046,9 @@
     "definitions": [
       "the practice of treating somebody or a particular group in society less fairly than others"
     ],
-    "examples": ["age/racial/gender/sex discrimination (= because of somebody’s age, race or sex)"],
+    "examples": [
+      "age/racial/gender/sex discrimination (= because of somebody’s age, race or sex)"
+    ],
     "freq": 4.31
   },
   {
@@ -1921,8 +2093,12 @@
     "id": "c1-217",
     "word": "grave",
     "class": "adjective",
-    "definitions": ["very serious and important; giving you a reason to feel worried"],
-    "examples": ["The police have expressed grave concern about the missing child's safety."],
+    "definitions": [
+      "very serious and important; giving you a reason to feel worried"
+    ],
+    "examples": [
+      "The police have expressed grave concern about the missing child's safety."
+    ],
     "freq": 4.31
   },
   {
@@ -1967,7 +2143,9 @@
     "id": "c1-222",
     "word": "terminal",
     "class": "adjective",
-    "definitions": ["that cannot be cured and will lead to death, often slowly"],
+    "definitions": [
+      "that cannot be cured and will lead to death, often slowly"
+    ],
     "examples": ["He has terminal lung cancer."],
     "freq": 4.31
   },
@@ -1983,7 +2161,9 @@
     "id": "c1-224",
     "word": "bat",
     "class": "verb",
-    "definitions": ["to hit a ball with a bat, especially in a game of baseball or cricket"],
+    "definitions": [
+      "to hit a ball with a bat, especially in a game of baseball or cricket"
+    ],
     "examples": ["He bats very well."],
     "freq": 4.3
   },
@@ -2004,7 +2184,9 @@
     "definitions": [
       "to move your head or the top half of your body forwards and downwards as a sign of respect or to say hello or goodbye"
     ],
-    "examples": ["bow (to/before somebody/something), He bowed low to the assembled crowd."],
+    "examples": [
+      "bow (to/before somebody/something), He bowed low to the assembled crowd."
+    ],
     "freq": 4.3
   },
   {
@@ -2021,7 +2203,9 @@
     "id": "c1-228",
     "word": "craft",
     "class": "verb",
-    "definitions": ["to make something using special skills, especially with your hands"],
+    "definitions": [
+      "to make something using special skills, especially with your hands"
+    ],
     "examples": [
       "be crafted (from something), All the furniture is crafted from natural materials."
     ],
@@ -2039,7 +2223,9 @@
     "id": "c1-230",
     "word": "hardware",
     "class": "noun",
-    "definitions": ["the machines and electronic parts in a computer or other electronic system"],
+    "definitions": [
+      "the machines and electronic parts in a computer or other electronic system"
+    ],
     "examples": ["We supply computer hardware to businesses."],
     "freq": 4.3
   },
@@ -2057,7 +2243,9 @@
     "id": "c1-232",
     "word": "involvement",
     "class": "noun",
-    "definitions": ["the act of taking part in something or dealing with somebody"],
+    "definitions": [
+      "the act of taking part in something or dealing with somebody"
+    ],
     "examples": ["involvement in something, US involvement in European wars"],
     "freq": 4.3
   },
@@ -2097,8 +2285,12 @@
     "id": "c1-236",
     "word": "seal",
     "class": "verb",
-    "definitions": ["to close an envelope, etc. by sticking the edges of the opening together"],
-    "examples": ["Make sure you've signed the cheque before sealing the envelope."],
+    "definitions": [
+      "to close an envelope, etc. by sticking the edges of the opening together"
+    ],
+    "examples": [
+      "Make sure you've signed the cheque before sealing the envelope."
+    ],
     "freq": 4.3
   },
   {
@@ -2115,7 +2307,9 @@
     "id": "c1-238",
     "word": "stem",
     "class": "verb",
-    "definitions": ["to stop something that is flowing from spreading or increasing"],
+    "definitions": [
+      "to stop something that is flowing from spreading or increasing"
+    ],
     "examples": ["The cut was bandaged to stem the bleeding."],
     "freq": 4.3
   },
@@ -2123,7 +2317,9 @@
     "id": "c1-239",
     "word": "summit",
     "class": "noun",
-    "definitions": ["the highest point of something, especially the top of a mountain"],
+    "definitions": [
+      "the highest point of something, especially the top of a mountain"
+    ],
     "examples": ["We reached the summit at noon."],
     "freq": 4.3
   },
@@ -2131,7 +2327,9 @@
     "id": "c1-240",
     "word": "alien",
     "class": "adjective",
-    "definitions": ["strange and frightening; different from what you are used to"],
+    "definitions": [
+      "strange and frightening; different from what you are used to"
+    ],
     "examples": ["an alien environment"],
     "freq": 4.29
   },
@@ -2139,7 +2337,9 @@
     "id": "c1-241",
     "word": "beast",
     "class": "noun",
-    "definitions": ["an animal, especially one that is large or dangerous, or one that is unusual"],
+    "definitions": [
+      "an animal, especially one that is large or dangerous, or one that is unusual"
+    ],
     "examples": ["wild/savage/ferocious beasts"],
     "freq": 4.29
   },
@@ -2169,7 +2369,9 @@
     "id": "c1-244",
     "word": "execution",
     "class": "noun",
-    "definitions": ["the act of killing somebody, especially as a legal punishment"],
+    "definitions": [
+      "the act of killing somebody, especially as a legal punishment"
+    ],
     "examples": ["He faced execution by hanging for murder."],
     "freq": 4.29
   },
@@ -2197,7 +2399,9 @@
     "id": "c1-247",
     "word": "loop",
     "class": "noun",
-    "definitions": ["a shape like a curve or circle made by a line curving right round"],
+    "definitions": [
+      "a shape like a curve or circle made by a line curving right round"
+    ],
     "examples": ["The road went in a huge loop around the lake."],
     "freq": 4.29
   },
@@ -2275,7 +2479,9 @@
     "id": "c1-255",
     "word": "bass",
     "class": "noun",
-    "definitions": ["the lowest tone or part in music, for instruments or voices"],
+    "definitions": [
+      "the lowest tone or part in music, for instruments or voices"
+    ],
     "examples": ["He always plays his stereo with the bass turned right up."],
     "freq": 4.28
   },
@@ -2286,7 +2492,9 @@
     "definitions": [
       "the act of working with another person or group of people to create or produce something"
     ],
-    "examples": ["It was a collaboration that produced extremely useful results."],
+    "examples": [
+      "It was a collaboration that produced extremely useful results."
+    ],
     "freq": 4.28
   },
   {
@@ -2358,7 +2566,9 @@
     "word": "odds",
     "class": "noun",
     "definitions": ["the degree to which something is likely to happen"],
-    "examples": ["The odds are very much in our favour (= we are likely to succeed)."],
+    "examples": [
+      "The odds are very much in our favour (= we are likely to succeed)."
+    ],
     "freq": 4.28
   },
   {
@@ -2373,7 +2583,9 @@
     "id": "c1-266",
     "word": "pump",
     "class": "noun",
-    "definitions": ["a machine that is used to force liquid, gas or air into or out of something"],
+    "definitions": [
+      "a machine that is used to force liquid, gas or air into or out of something"
+    ],
     "examples": ["(British English), a petrol pump"],
     "freq": 4.28
   },
@@ -2396,7 +2608,9 @@
     "definitions": [
       "something that you do in order to make somebody suffer because they have made you suffer"
     ],
-    "examples": ["revenge for something, She is seeking revenge for the murder of her husband."],
+    "examples": [
+      "revenge for something, She is seeking revenge for the murder of her husband."
+    ],
     "freq": 4.28
   },
   {
@@ -2451,7 +2665,9 @@
     "id": "c1-274",
     "word": "dispute",
     "class": "verb",
-    "definitions": ["to question whether something is true or legally or officially acceptable"],
+    "definitions": [
+      "to question whether something is true or legally or officially acceptable"
+    ],
     "examples": ["dispute something, These figures have been disputed."],
     "freq": 4.27
   },
@@ -2467,7 +2683,9 @@
     "id": "c1-276",
     "word": "moderate",
     "class": "adjective",
-    "definitions": ["that is neither very good, large, hot, etc. nor very bad, small, cold, etc."],
+    "definitions": [
+      "that is neither very good, large, hot, etc. nor very bad, small, cold, etc."
+    ],
     "examples": ["students of moderate ability"],
     "freq": 4.27
   },
@@ -2483,8 +2701,12 @@
     "id": "c1-278",
     "word": "quest",
     "class": "noun",
-    "definitions": ["a long search for something, especially for some quality such as happiness"],
-    "examples": ["quest for something, the quest for happiness/knowledge/truth"],
+    "definitions": [
+      "a long search for something, especially for some quality such as happiness"
+    ],
+    "examples": [
+      "quest for something, the quest for happiness/knowledge/truth"
+    ],
     "freq": 4.27
   },
   {
@@ -2521,7 +2743,9 @@
     "id": "c1-282",
     "word": "acquisition",
     "class": "noun",
-    "definitions": ["the act of getting something, especially knowledge, a skill, etc."],
+    "definitions": [
+      "the act of getting something, especially knowledge, a skill, etc."
+    ],
     "examples": ["theories of child language acquisition"],
     "freq": 4.26
   },
@@ -2529,7 +2753,9 @@
     "id": "c1-283",
     "word": "equality",
     "class": "noun",
-    "definitions": ["the fact of being equal in rights, status, advantages, etc."],
+    "definitions": [
+      "the fact of being equal in rights, status, advantages, etc."
+    ],
     "examples": ["racial/social/gender equality"],
     "freq": 4.26
   },
@@ -2538,7 +2764,9 @@
     "word": "intervention",
     "class": "noun",
     "definitions": ["action taken to improve or help a situation"],
-    "examples": ["calls for government intervention to save the steel industry"],
+    "examples": [
+      "calls for government intervention to save the steel industry"
+    ],
     "freq": 4.26
   },
   {
@@ -2558,7 +2786,9 @@
     "definitions": [
       "the ideas and opinions that are thought to be normal because they are shared by most people; the people whose ideas and opinions are most accepted"
     ],
-    "examples": ["His radical views place him outside the mainstream of American politics."],
+    "examples": [
+      "His radical views place him outside the mainstream of American politics."
+    ],
     "freq": 4.26
   },
   {
@@ -2583,7 +2813,9 @@
     "id": "c1-289",
     "word": "rip",
     "class": "verb",
-    "definitions": ["to tear something or to become torn, often suddenly or violently"],
+    "definitions": [
+      "to tear something or to become torn, often suddenly or violently"
+    ],
     "examples": ["rip (something), I ripped my jeans on the fence."],
     "freq": 4.26
   },
@@ -2592,7 +2824,9 @@
     "word": "scope",
     "class": "noun",
     "definitions": ["the opportunity or ability to do or achieve something"],
-    "examples": ["scope for something, There's still plenty of scope for improvement."],
+    "examples": [
+      "scope for something, There's still plenty of scope for improvement."
+    ],
     "freq": 4.26
   },
   {
@@ -2612,15 +2846,21 @@
     "definitions": [
       "a band of coloured lights in order of their wavelengths, as seen in a rainbow and into which light may be separated"
     ],
-    "examples": ["A spectrum is formed by a ray of light passing through a prism."],
+    "examples": [
+      "A spectrum is formed by a ray of light passing through a prism."
+    ],
     "freq": 4.26
   },
   {
     "id": "c1-293",
     "word": "venture",
     "class": "noun",
-    "definitions": ["a business project or activity, especially one that involves taking risks"],
-    "examples": ["A disastrous business venture lost him thousands of dollars."],
+    "definitions": [
+      "a business project or activity, especially one that involves taking risks"
+    ],
+    "examples": [
+      "A disastrous business venture lost him thousands of dollars."
+    ],
     "freq": 4.26
   },
   {
@@ -2678,7 +2918,9 @@
     "definitions": [
       "an act, a statement or a gift that is intended to show your love or respect, especially for a dead person"
     ],
-    "examples": ["At her funeral her oldest friend paid tribute to her life and work."],
+    "examples": [
+      "At her funeral her oldest friend paid tribute to her life and work."
+    ],
     "freq": 4.25
   },
   {
@@ -2701,7 +2943,9 @@
     "id": "c1-302",
     "word": "beneath",
     "class": "preposition",
-    "definitions": ["in or to a lower position than somebody/something; under somebody/something"],
+    "definitions": [
+      "in or to a lower position than somebody/something; under somebody/something"
+    ],
     "examples": ["They found the body buried beneath a pile of leaves."],
     "freq": 4.24
   },
@@ -2712,7 +2956,9 @@
     "definitions": [
       "the act or process of changing something from one form, use or system to another"
     ],
-    "examples": ["Their main business is the conversion of farm buildings into family homes."],
+    "examples": [
+      "Their main business is the conversion of farm buildings into family homes."
+    ],
     "freq": 4.24
   },
   {
@@ -2722,7 +2968,9 @@
     "definitions": [
       "if a person or an organization holds the copyright on a piece of writing, music, etc., they are the only people who have the legal right to publish, broadcast, perform it, etc., and other people must ask their permission to use it or any part of it"
     ],
-    "examples": ["Copyright expires seventy years after the death of the author."],
+    "examples": [
+      "Copyright expires seventy years after the death of the author."
+    ],
     "freq": 4.24
   },
   {
@@ -2746,7 +2994,9 @@
     "word": "exclusively",
     "class": "adverb",
     "definitions": ["for only one particular person, group or use"],
-    "examples": ["The resort caters almost exclusively for a high-society public."],
+    "examples": [
+      "The resort caters almost exclusively for a high-society public."
+    ],
     "freq": 4.24
   },
   {
@@ -2807,7 +3057,9 @@
     "id": "c1-314",
     "word": "spy",
     "class": "verb",
-    "definitions": ["to collect secret information about another country, organization or person"],
+    "definitions": [
+      "to collect secret information about another country, organization or person"
+    ],
     "examples": ["He spied for his government for more than ten years."],
     "freq": 4.24
   },
@@ -2836,7 +3088,9 @@
     "definitions": [
       "the act of making a machine, computer system, etc. more powerful and efficient; the more powerful and efficient machine, computer system, etc."
     ],
-    "examples": ["instructions for installing an upgrade to the existing system"],
+    "examples": [
+      "instructions for installing an upgrade to the existing system"
+    ],
     "freq": 4.24
   },
   {
@@ -2865,8 +3119,12 @@
     "id": "c1-320",
     "word": "warrant",
     "class": "verb",
-    "definitions": ["to make something necessary or appropriate in a particular situation"],
-    "examples": ["warrant something, Further investigation is clearly warranted."],
+    "definitions": [
+      "to make something necessary or appropriate in a particular situation"
+    ],
+    "examples": [
+      "warrant something, Further investigation is clearly warranted."
+    ],
     "freq": 4.24
   },
   {
@@ -2883,7 +3141,9 @@
     "id": "c1-322",
     "word": "burden",
     "class": "noun",
-    "definitions": ["a duty, responsibility, etc. that causes worry, difficulty or hard work"],
+    "definitions": [
+      "a duty, responsibility, etc. that causes worry, difficulty or hard work"
+    ],
     "examples": ["to bear/carry/ease/reduce/share the burden"],
     "freq": 4.23
   },
@@ -2901,7 +3161,9 @@
     "id": "c1-324",
     "word": "civilian",
     "class": "adjective",
-    "definitions": ["connected with people who are not members of the armed forces or the police"],
+    "definitions": [
+      "connected with people who are not members of the armed forces or the police"
+    ],
     "examples": ["He left the army and returned to civilian life."],
     "freq": 4.23
   },
@@ -2909,7 +3171,9 @@
     "id": "c1-325",
     "word": "civilian",
     "class": "noun",
-    "definitions": ["a person who is not a member of the armed forces or the police"],
+    "definitions": [
+      "a person who is not a member of the armed forces or the police"
+    ],
     "examples": ["Two soldiers and one civilian were killed in the explosion."],
     "freq": 4.23
   },
@@ -2917,7 +3181,9 @@
     "id": "c1-326",
     "word": "coalition",
     "class": "noun",
-    "definitions": ["a government formed by two or more political parties working together"],
+    "definitions": [
+      "a government formed by two or more political parties working together"
+    ],
     "examples": ["The two parties have formed a coalition."],
     "freq": 4.23
   },
@@ -3027,7 +3293,9 @@
     "id": "c1-338",
     "word": "integrity",
     "class": "noun",
-    "definitions": ["the quality of being honest and having strong moral principles"],
+    "definitions": [
+      "the quality of being honest and having strong moral principles"
+    ],
     "examples": ["personal/professional/artistic integrity"],
     "freq": 4.22
   },
@@ -3051,7 +3319,9 @@
     "id": "c1-341",
     "word": "productive",
     "class": "adjective",
-    "definitions": ["making goods or growing crops, especially in large quantities"],
+    "definitions": [
+      "making goods or growing crops, especially in large quantities"
+    ],
     "examples": ["highly productive farming land"],
     "freq": 4.22
   },
@@ -3098,7 +3368,9 @@
     "definitions": [
       "a person who supports or speaks in favour of somebody or of a public plan or action"
     ],
-    "examples": ["advocate for something/somebody, an advocate for hospital workers"],
+    "examples": [
+      "advocate for something/somebody, an advocate for hospital workers"
+    ],
     "freq": 4.21
   },
   {
@@ -3106,7 +3378,9 @@
     "word": "advocate",
     "class": "verb",
     "definitions": ["to support something publicly"],
-    "examples": ["advocate something, The group does not advocate the use of violence."],
+    "examples": [
+      "advocate something, The group does not advocate the use of violence."
+    ],
     "freq": 4.21
   },
   {
@@ -3129,7 +3403,9 @@
     "id": "c1-350",
     "word": "excess",
     "class": "adjective",
-    "definitions": ["in addition to an amount that is necessary, usual or legal"],
+    "definitions": [
+      "in addition to an amount that is necessary, usual or legal"
+    ],
     "examples": ["Excess food is stored as fat."],
     "freq": 4.21
   },
@@ -3155,7 +3431,9 @@
     "id": "c1-353",
     "word": "nonsense",
     "class": "noun",
-    "definitions": ["ideas, statements or beliefs that you think are silly or not true"],
+    "definitions": [
+      "ideas, statements or beliefs that you think are silly or not true"
+    ],
     "examples": ["Reports that he has resigned are nonsense."],
     "freq": 4.21
   },
@@ -3163,7 +3441,9 @@
     "id": "c1-354",
     "word": "operational",
     "class": "adjective",
-    "definitions": ["connected with the way in which a business, machine, system, etc. works"],
+    "definitions": [
+      "connected with the way in which a business, machine, system, etc. works"
+    ],
     "examples": ["operational activities/costs/difficulties"],
     "freq": 4.21
   },
@@ -3171,7 +3451,9 @@
     "id": "c1-355",
     "word": "skip",
     "class": "verb",
-    "definitions": ["to move forwards lightly and quickly making a little jump with each step"],
+    "definitions": [
+      "to move forwards lightly and quickly making a little jump with each step"
+    ],
     "examples": ["She skipped happily along beside me."],
     "freq": 4.21
   },
@@ -3187,7 +3469,9 @@
     "id": "c1-357",
     "word": "snap",
     "class": "verb",
-    "definitions": ["to break something suddenly with a sharp noise; to be broken in this way"],
+    "definitions": [
+      "to break something suddenly with a sharp noise; to be broken in this way"
+    ],
     "examples": ["snap something, The wind had snapped the tree in two."],
     "freq": 4.21
   },
@@ -3215,7 +3499,9 @@
     "id": "c1-360",
     "word": "veteran",
     "class": "noun",
-    "definitions": ["a person who has a lot of experience in a particular area or activity"],
+    "definitions": [
+      "a person who has a lot of experience in a particular area or activity"
+    ],
     "examples": ["the veteran American actor, Clint Eastwood"],
     "freq": 4.21
   },
@@ -3259,7 +3545,9 @@
     "id": "c1-365",
     "word": "flesh",
     "class": "noun",
-    "definitions": ["the soft substance between the skin and bones of animal or human bodies"],
+    "definitions": [
+      "the soft substance between the skin and bones of animal or human bodies"
+    ],
     "examples": ["The trap had cut deeply into the rabbit's flesh."],
     "freq": 4.2
   },
@@ -3287,7 +3575,9 @@
     "id": "c1-368",
     "word": "privilege",
     "class": "noun",
-    "definitions": ["a special right or advantage that a particular person or group of people has"],
+    "definitions": [
+      "a special right or advantage that a particular person or group of people has"
+    ],
     "examples": ["Education should be a universal right and not a privilege."],
     "freq": 4.2
   },
@@ -3321,7 +3611,9 @@
     "id": "c1-372",
     "word": "transit",
     "class": "noun",
-    "definitions": ["the process of being moved or carried from one place to another"],
+    "definitions": [
+      "the process of being moved or carried from one place to another"
+    ],
     "examples": ["The cost includes transit."],
     "freq": 4.2
   },
@@ -3332,7 +3624,9 @@
     "definitions": [
       "the flat part of a knife, tool or machine, which has a sharp edge or edges for cutting"
     ],
-    "examples": ["The machine comes with a plastic guard over the blade to protect the operator."],
+    "examples": [
+      "The machine comes with a plastic guard over the blade to protect the operator."
+    ],
     "freq": 4.19
   },
   {
@@ -3347,7 +3641,9 @@
     "id": "c1-375",
     "word": "cargo",
     "class": "noun",
-    "definitions": ["the goods carried in a ship, an aircraft or a motor vehicle"],
+    "definitions": [
+      "the goods carried in a ship, an aircraft or a motor vehicle"
+    ],
     "examples": ["The tanker began to spill its cargo of oil."],
     "freq": 4.19
   },
@@ -3373,7 +3669,9 @@
     "id": "c1-378",
     "word": "congressional",
     "class": "adjective",
-    "definitions": ["related to or belonging to a congress or the Congress in the US"],
+    "definitions": [
+      "related to or belonging to a congress or the Congress in the US"
+    ],
     "examples": ["a congressional committee/bill"],
     "freq": 4.19
   },
@@ -3389,7 +3687,9 @@
     "id": "c1-380",
     "word": "raid",
     "class": "noun",
-    "definitions": ["a short surprise attack on an enemy by soldiers, ships or aircraft"],
+    "definitions": [
+      "a short surprise attack on an enemy by soldiers, ships or aircraft"
+    ],
     "examples": ["to conduct/launch a raid"],
     "freq": 4.19
   },
@@ -3420,7 +3720,9 @@
     "definitions": [
       "belonging or relating separately to each of the people or things already mentioned"
     ],
-    "examples": ["They are each recognized specialists in their respective fields."],
+    "examples": [
+      "They are each recognized specialists in their respective fields."
+    ],
     "freq": 4.19
   },
   {
@@ -3474,7 +3776,9 @@
     "definitions": [
       "the act or process of putting people or things into a group or class (= of classifying them)"
     ],
-    "examples": ["a style of music that defies classification (= is like no other)"],
+    "examples": [
+      "a style of music that defies classification (= is like no other)"
+    ],
     "freq": 4.18
   },
   {
@@ -3505,7 +3809,9 @@
     "id": "c1-393",
     "word": "grid",
     "class": "noun",
-    "definitions": ["a pattern of straight lines, usually crossing each other to form squares"],
+    "definitions": [
+      "a pattern of straight lines, usually crossing each other to form squares"
+    ],
     "examples": ["New York’s grid of streets"],
     "freq": 4.18
   },
@@ -3516,7 +3822,9 @@
     "definitions": [
       "the process of showing, proving or recognizing who or what somebody/something is"
     ],
-    "examples": ["The identification of the crash victims was a long and difficult task."],
+    "examples": [
+      "The identification of the crash victims was a long and difficult task."
+    ],
     "freq": 4.18
   },
   {
@@ -3526,14 +3834,18 @@
     "definitions": [
       "the top part of your legs that forms a flat surface when you are sitting down"
     ],
-    "examples": ["on somebody's lap, There's only one seat so you'll have to sit on my lap."],
+    "examples": [
+      "on somebody's lap, There's only one seat so you'll have to sit on my lap."
+    ],
     "freq": 4.18
   },
   {
     "id": "c1-396",
     "word": "liver",
     "class": "noun",
-    "definitions": ["a large organ in the body that cleans the blood and produces bile"],
+    "definitions": [
+      "a large organ in the body that cleans the blood and produces bile"
+    ],
     "examples": ["liver disease"],
     "freq": 4.18
   },
@@ -3552,7 +3864,9 @@
     "definitions": [
       "an official right to be the only person to make, use or sell a product or an invention; a document that proves this"
     ],
-    "examples": ["patent on something, to apply for/obtain/take out a patent on an invention"],
+    "examples": [
+      "patent on something, to apply for/obtain/take out a patent on an invention"
+    ],
     "freq": 4.18
   },
   {
@@ -3569,7 +3883,9 @@
     "id": "c1-400",
     "word": "rifle",
     "class": "noun",
-    "definitions": ["a gun with a long barrel which you hold to your shoulder to fire"],
+    "definitions": [
+      "a gun with a long barrel which you hold to your shoulder to fire"
+    ],
     "examples": ["a hunting rifle"],
     "freq": 4.18
   },
@@ -3577,7 +3893,9 @@
     "id": "c1-401",
     "word": "structural",
     "class": "adjective",
-    "definitions": ["connected with the way in which something is built or organized"],
+    "definitions": [
+      "connected with the way in which something is built or organized"
+    ],
     "examples": ["Storms have caused structural damage to hundreds of homes."],
     "freq": 4.18
   },
@@ -3596,7 +3914,9 @@
     "definitions": [
       "writing that is arranged in lines, often with a regular rhythm or pattern of rhyme"
     ],
-    "examples": ["in verse, Most of the play is written in verse, but some of it is in prose."],
+    "examples": [
+      "in verse, Most of the play is written in verse, but some of it is in prose."
+    ],
     "freq": 4.18
   },
   {
@@ -3619,7 +3939,9 @@
     "id": "c1-406",
     "word": "attendance",
     "class": "noun",
-    "definitions": ["the act of being present at a place, for example at school"],
+    "definitions": [
+      "the act of being present at a place, for example at school"
+    ],
     "examples": ["Attendance at these lectures is not compulsory."],
     "freq": 4.17
   },
@@ -3653,7 +3975,9 @@
     "id": "c1-410",
     "word": "colonial",
     "class": "adjective",
-    "definitions": ["connected with or belonging to a country that controls another country"],
+    "definitions": [
+      "connected with or belonging to a country that controls another country"
+    ],
     "examples": ["a colonial power"],
     "freq": 4.17
   },
@@ -3661,7 +3985,9 @@
     "id": "c1-411",
     "word": "compliance",
     "class": "noun",
-    "definitions": ["the practice of obeying rules or requests made by people in authority"],
+    "definitions": [
+      "the practice of obeying rules or requests made by people in authority"
+    ],
     "examples": [
       "compliance (with something), procedures that must be followed to ensure full compliance with the law"
     ],
@@ -3680,14 +4006,18 @@
     "word": "contrary",
     "class": "noun",
     "definitions": ["the opposite fact, event or situation"],
-    "examples": ["In the end the contrary was proved true: he was innocent and she was guilty."],
+    "examples": [
+      "In the end the contrary was proved true: he was innocent and she was guilty."
+    ],
     "freq": 4.17
   },
   {
     "id": "c1-414",
     "word": "crush",
     "class": "verb",
-    "definitions": ["to press something so hard that it is damaged or injured, or loses its shape"],
+    "definitions": [
+      "to press something so hard that it is damaged or injured, or loses its shape"
+    ],
     "examples": ["The car was completely crushed under the truck."],
     "freq": 4.17
   },
@@ -3705,7 +4035,9 @@
     "id": "c1-416",
     "word": "loyalty",
     "class": "noun",
-    "definitions": ["the quality of being constant in your support of somebody/something"],
+    "definitions": [
+      "the quality of being constant in your support of somebody/something"
+    ],
     "examples": ["Can I count on your loyalty?"],
     "freq": 4.17
   },
@@ -3713,7 +4045,9 @@
     "id": "c1-417",
     "word": "magnetic",
     "class": "adjective",
-    "definitions": ["behaving like a magnet; that can be attracted by a magnet"],
+    "definitions": [
+      "behaving like a magnet; that can be attracted by a magnet"
+    ],
     "examples": ["magnetic materials"],
     "freq": 4.17
   },
@@ -3788,7 +4122,9 @@
     "definitions": [
       "the act of carefully watching a person suspected of a crime or a place where a crime may be committed"
     ],
-    "examples": ["The police are keeping the suspects under constant surveillance."],
+    "examples": [
+      "The police are keeping the suspects under constant surveillance."
+    ],
     "freq": 4.17
   },
   {
@@ -3796,7 +4132,9 @@
     "word": "testimony",
     "class": "noun",
     "definitions": ["a thing that shows that something else exists or is true"],
-    "examples": ["This increase in exports bears testimony to the successes of industry."],
+    "examples": [
+      "This increase in exports bears testimony to the successes of industry."
+    ],
     "freq": 4.17
   },
   {
@@ -3813,15 +4151,21 @@
     "id": "c1-428",
     "word": "underlying",
     "class": "adjective",
-    "definitions": ["important in a situation but not always easily noticed or stated clearly"],
-    "examples": ["The underlying assumption is that the amount of money available is limited."],
+    "definitions": [
+      "important in a situation but not always easily noticed or stated clearly"
+    ],
+    "examples": [
+      "The underlying assumption is that the amount of money available is limited."
+    ],
     "freq": 4.17
   },
   {
     "id": "c1-429",
     "word": "acceptance",
     "class": "noun",
-    "definitions": ["the act of accepting a gift, an invitation, an offer, etc."],
+    "definitions": [
+      "the act of accepting a gift, an invitation, an offer, etc."
+    ],
     "examples": ["Please confirm your acceptance of this offer in writing."],
     "freq": 4.16
   },
@@ -3839,7 +4183,9 @@
     "id": "c1-431",
     "word": "casino",
     "class": "noun",
-    "definitions": ["a public building or room where people play gambling games for money"],
+    "definitions": [
+      "a public building or room where people play gambling games for money"
+    ],
     "examples": ["a new hotel and casino in Las Vegas"],
     "freq": 4.16
   },
@@ -3857,7 +4203,9 @@
     "id": "c1-433",
     "word": "legislature",
     "class": "noun",
-    "definitions": ["a group of people who have the power to make and change laws"],
+    "definitions": [
+      "a group of people who have the power to make and change laws"
+    ],
     "examples": ["a democratically elected legislature"],
     "freq": 4.16
   },
@@ -3891,7 +4239,9 @@
     "id": "c1-437",
     "word": "warrior",
     "class": "noun",
-    "definitions": ["(especially in the past) a person who fights in a battle or war"],
+    "definitions": [
+      "(especially in the past) a person who fights in a battle or war"
+    ],
     "examples": ["a warrior nation (= whose people are skilled in fighting)"],
     "freq": 4.16
   },
@@ -3899,7 +4249,9 @@
     "id": "c1-438",
     "word": "yield",
     "class": "noun",
-    "definitions": ["the total amount of crops, profits, etc. that are produced"],
+    "definitions": [
+      "the total amount of crops, profits, etc. that are produced"
+    ],
     "examples": ["a high crop yield"],
     "freq": 4.16
   },
@@ -3907,7 +4259,9 @@
     "id": "c1-439",
     "word": "yield",
     "class": "verb",
-    "definitions": ["the total amount of crops, profits, etc. that are produced"],
+    "definitions": [
+      "the total amount of crops, profits, etc. that are produced"
+    ],
     "examples": ["a high crop yield"],
     "freq": 4.16
   },
@@ -3935,7 +4289,9 @@
     "id": "c1-442",
     "word": "cattle",
     "class": "noun",
-    "definitions": ["cows and bulls that are kept as farm animals for their milk or meat"],
+    "definitions": [
+      "cows and bulls that are kept as farm animals for their milk or meat"
+    ],
     "examples": ["a herd of cattle"],
     "freq": 4.15
   },
@@ -3946,7 +4302,9 @@
     "definitions": [
       "an agreement made between two people or groups in which each side gives up some of the things they want so that both sides are happy at the end"
     ],
-    "examples": ["After lengthy talks the two sides finally reached a compromise."],
+    "examples": [
+      "After lengthy talks the two sides finally reached a compromise."
+    ],
     "freq": 4.15
   },
   {
@@ -3963,7 +4321,9 @@
     "id": "c1-445",
     "word": "lesbian",
     "class": "adjective",
-    "definitions": ["sexually attracted to other women; connected with lesbians"],
+    "definitions": [
+      "sexually attracted to other women; connected with lesbians"
+    ],
     "examples": ["the lesbian and gay community"],
     "freq": 4.15
   },
@@ -3971,7 +4331,9 @@
     "id": "c1-446",
     "word": "portfolio",
     "class": "noun",
-    "definitions": ["a thin flat case used for carrying documents, drawings, etc."],
+    "definitions": [
+      "a thin flat case used for carrying documents, drawings, etc."
+    ],
     "examples": ["I left my portfolio on the train."],
     "freq": 4.15
   },
@@ -4051,7 +4413,9 @@
     "id": "c1-454",
     "word": "violation",
     "class": "noun",
-    "definitions": ["the act of going against or refusing to obey a law, an agreement, etc."],
+    "definitions": [
+      "the act of going against or refusing to obey a law, an agreement, etc."
+    ],
     "examples": ["They were in open violation of the treaty."],
     "freq": 4.15
   },
@@ -4279,8 +4643,12 @@
     "id": "c1-479",
     "word": "applicable",
     "class": "adjective",
-    "definitions": ["that can be said to be true in the case of somebody/something"],
-    "examples": ["Give details of children where applicable (= if you have any)."],
+    "definitions": [
+      "that can be said to be true in the case of somebody/something"
+    ],
+    "examples": [
+      "Give details of children where applicable (= if you have any)."
+    ],
     "freq": 4.13
   },
   {
@@ -4314,14 +4682,18 @@
     "word": "breach",
     "class": "verb",
     "definitions": ["to not keep to an agreement or not keep a promise"],
-    "examples": ["The government is accused of breaching the terms of the treaty."],
+    "examples": [
+      "The government is accused of breaching the terms of the treaty."
+    ],
     "freq": 4.13
   },
   {
     "id": "c1-484",
     "word": "companion",
     "class": "noun",
-    "definitions": ["a person or an animal that travels with you or spends a lot of time with you"],
+    "definitions": [
+      "a person or an animal that travels with you or spends a lot of time with you"
+    ],
     "examples": ["travelling companions"],
     "freq": 4.13
   },
@@ -4339,8 +4711,12 @@
     "id": "c1-486",
     "word": "corresponding",
     "class": "adjective",
-    "definitions": ["matching or connected with something that you have just mentioned"],
-    "examples": ["A change in the money supply brings a corresponding change in expenditure."],
+    "definitions": [
+      "matching or connected with something that you have just mentioned"
+    ],
+    "examples": [
+      "A change in the money supply brings a corresponding change in expenditure."
+    ],
     "freq": 4.13
   },
   {
@@ -4365,7 +4741,9 @@
     "id": "c1-489",
     "word": "engaging",
     "class": "adjective",
-    "definitions": ["interesting or pleasant in a way that attracts your attention"],
+    "definitions": [
+      "interesting or pleasant in a way that attracts your attention"
+    ],
     "examples": ["an engaging smile"],
     "freq": 4.13
   },
@@ -4376,14 +4754,18 @@
     "definitions": [
       "the unhappy feelings caused by knowing or thinking that you have done something wrong"
     ],
-    "examples": ["She had feelings of guilt about leaving her children and going to work."],
+    "examples": [
+      "She had feelings of guilt about leaving her children and going to work."
+    ],
     "freq": 4.13
   },
   {
     "id": "c1-491",
     "word": "lesser",
     "class": "adjective",
-    "definitions": ["not as great in size, amount or importance as something/somebody else"],
+    "definitions": [
+      "not as great in size, amount or importance as something/somebody else"
+    ],
     "examples": ["people of lesser importance"],
     "freq": 4.13
   },
@@ -4435,7 +4817,9 @@
     "id": "c1-497",
     "word": "retreat",
     "class": "noun",
-    "definitions": ["a movement away from a place or an enemy because of danger or defeat"],
+    "definitions": [
+      "a movement away from a place or an enemy because of danger or defeat"
+    ],
     "examples": ["Napoleon’s retreat from Moscow"],
     "freq": 4.13
   },
@@ -4446,14 +4830,18 @@
     "definitions": [
       "to move away from a place or an enemy because you are in danger or because you have been defeated"
     ],
-    "examples": ["The army was forced to retreat after suffering heavy losses."],
+    "examples": [
+      "The army was forced to retreat after suffering heavy losses."
+    ],
     "freq": 4.13
   },
   {
     "id": "c1-499",
     "word": "separation",
     "class": "noun",
-    "definitions": ["the act of separating people or things; the state of being separate"],
+    "definitions": [
+      "the act of separating people or things; the state of being separate"
+    ],
     "examples": [
       "separation from somebody/something, the state’s eventual separation from the federation"
     ],
@@ -4507,7 +4895,9 @@
     "id": "c1-505",
     "word": "entity",
     "class": "noun",
-    "definitions": ["something that exists separately from other things and has its own identity"],
+    "definitions": [
+      "something that exists separately from other things and has its own identity"
+    ],
     "examples": [
       "The unit has become part of a larger department and no longer exists as a separate entity."
     ],
@@ -4550,7 +4940,9 @@
     "word": "linear",
     "class": "adjective",
     "definitions": ["of or in lines"],
-    "examples": ["In his art he broke the laws of scientific linear perspective."],
+    "examples": [
+      "In his art he broke the laws of scientific linear perspective."
+    ],
     "freq": 4.12
   },
   {
@@ -4595,15 +4987,21 @@
     "id": "c1-514",
     "word": "variable",
     "class": "noun",
-    "definitions": ["a situation, number or quantity that can vary or be varied"],
-    "examples": ["With so many variables, it is difficult to calculate the cost."],
+    "definitions": [
+      "a situation, number or quantity that can vary or be varied"
+    ],
+    "examples": [
+      "With so many variables, it is difficult to calculate the cost."
+    ],
     "freq": 4.12
   },
   {
     "id": "c1-515",
     "word": "closure",
     "class": "noun",
-    "definitions": ["the situation when a factory, school, hospital, etc. shuts permanently"],
+    "definitions": [
+      "the situation when a factory, school, hospital, etc. shuts permanently"
+    ],
     "examples": ["factory closures"],
     "freq": 4.11
   },
@@ -4619,7 +5017,9 @@
     "id": "c1-517",
     "word": "diplomatic",
     "class": "adjective",
-    "definitions": ["connected with managing relations between countries (= diplomacy)"],
+    "definitions": [
+      "connected with managing relations between countries (= diplomacy)"
+    ],
     "examples": ["a diplomatic crisis"],
     "freq": 4.11
   },
@@ -4635,7 +5035,9 @@
     "id": "c1-519",
     "word": "generic",
     "class": "adjective",
-    "definitions": ["shared by, including or typical of a whole group of things; not specific"],
+    "definitions": [
+      "shared by, including or typical of a whole group of things; not specific"
+    ],
     "examples": ["‘Vine fruit’ is the generic term for currants and raisins."],
     "freq": 4.11
   },
@@ -4643,7 +5045,9 @@
     "id": "c1-520",
     "word": "grip",
     "class": "noun",
-    "definitions": ["an act of holding somebody/something tightly; a particular way of doing this"],
+    "definitions": [
+      "an act of holding somebody/something tightly; a particular way of doing this"
+    ],
     "examples": ["Keep a tight grip on the rope."],
     "freq": 4.11
   },
@@ -4652,7 +5056,9 @@
     "word": "grip",
     "class": "verb",
     "definitions": ["to hold something tightly"],
-    "examples": ["grip something, ‘Please don't go,’ he said, gripping her arm."],
+    "examples": [
+      "grip something, ‘Please don't go,’ he said, gripping her arm."
+    ],
     "freq": 4.11
   },
   {
@@ -4675,7 +5081,9 @@
     "id": "c1-524",
     "word": "humble",
     "class": "adjective",
-    "definitions": ["showing you do not think that you are as important as other people"],
+    "definitions": [
+      "showing you do not think that you are as important as other people"
+    ],
     "examples": ["Be humble enough to learn from your mistakes."],
     "freq": 4.11
   },
@@ -4699,7 +5107,9 @@
     "id": "c1-527",
     "word": "parish",
     "class": "noun",
-    "definitions": ["an area that has its own church and that a priest is responsible for"],
+    "definitions": [
+      "an area that has its own church and that a priest is responsible for"
+    ],
     "examples": ["a parish church/priest"],
     "freq": 4.11
   },
@@ -4845,7 +5255,9 @@
     "id": "c1-543",
     "word": "cult",
     "class": "noun",
-    "definitions": ["a way of life, an attitude, an idea, etc. that has become very popular"],
+    "definitions": [
+      "a way of life, an attitude, an idea, etc. that has become very popular"
+    ],
     "examples": ["the cult of physical fitness"],
     "freq": 4.09
   },
@@ -4891,7 +5303,9 @@
     "id": "c1-548",
     "word": "leak",
     "class": "noun",
-    "definitions": ["a small hole that lets liquid or gas flow in or out of something by accident"],
+    "definitions": [
+      "a small hole that lets liquid or gas flow in or out of something by accident"
+    ],
     "examples": ["a leak in the roof"],
     "freq": 4.09
   },
@@ -4899,7 +5313,9 @@
     "id": "c1-549",
     "word": "leak",
     "class": "verb",
-    "definitions": ["to allow liquid or gas to get in or out through a small hole"],
+    "definitions": [
+      "to allow liquid or gas to get in or out through a small hole"
+    ],
     "examples": ["a leaking pipe"],
     "freq": 4.09
   },
@@ -4910,14 +5326,18 @@
     "definitions": [
       "a situation in which a group of people behave in a violent way in a public place, often as a protest"
     ],
-    "examples": ["One prison guard was killed when a riot broke out in the jail."],
+    "examples": [
+      "One prison guard was killed when a riot broke out in the jail."
+    ],
     "freq": 4.09
   },
   {
     "id": "c1-551",
     "word": "slot",
     "class": "noun",
-    "definitions": ["a long, narrow opening, into which you put or fit something"],
+    "definitions": [
+      "a long, narrow opening, into which you put or fit something"
+    ],
     "examples": ["to put some coins in the slot"],
     "freq": 4.09
   },
@@ -4925,7 +5345,9 @@
     "id": "c1-552",
     "word": "smash",
     "class": "verb",
-    "definitions": ["to break something, or to be broken, violently and noisily into many pieces"],
+    "definitions": [
+      "to break something, or to be broken, violently and noisily into many pieces"
+    ],
     "examples": ["Several windows had been smashed."],
     "freq": 4.09
   },
@@ -4946,7 +5368,9 @@
     "definitions": [
       "feeling that somebody has done something wrong, illegal or dishonest, without having any proof"
     ],
-    "examples": ["They became suspicious of his behaviour and contacted the police."],
+    "examples": [
+      "They became suspicious of his behaviour and contacted the police."
+    ],
     "freq": 4.09
   },
   {
@@ -4989,8 +5413,12 @@
     "id": "c1-559",
     "word": "comparable",
     "class": "adjective",
-    "definitions": ["similar to somebody/something else and able to be compared"],
-    "examples": ["A comparable house in the south of the city would cost twice as much."],
+    "definitions": [
+      "similar to somebody/something else and able to be compared"
+    ],
+    "examples": [
+      "A comparable house in the south of the city would cost twice as much."
+    ],
     "freq": 4.08
   },
   {
@@ -5017,7 +5445,9 @@
     "id": "c1-562",
     "word": "duo",
     "class": "noun",
-    "definitions": ["two people who perform together or are often seen or thought of together"],
+    "definitions": [
+      "two people who perform together or are often seen or thought of together"
+    ],
     "examples": ["the comedy duo Laurel and Hardy"],
     "freq": 4.08
   },
@@ -5025,7 +5455,9 @@
     "id": "c1-563",
     "word": "frustrated",
     "class": "adjective",
-    "definitions": ["feeling annoyed and impatient because you cannot do or achieve what you want"],
+    "definitions": [
+      "feeling annoyed and impatient because you cannot do or achieve what you want"
+    ],
     "examples": ["It's very easy to get frustrated in this job."],
     "freq": 4.08
   },
@@ -5043,7 +5475,9 @@
     "id": "c1-565",
     "word": "glorious",
     "class": "adjective",
-    "definitions": ["deserving or bringing great success and making somebody/something famous"],
+    "definitions": [
+      "deserving or bringing great success and making somebody/something famous"
+    ],
     "examples": ["We congratulate you on this glorious victory."],
     "freq": 4.08
   },
@@ -5079,7 +5513,9 @@
     "id": "c1-569",
     "word": "merit",
     "class": "noun",
-    "definitions": ["the quality of being good and of deserving praise or reward"],
+    "definitions": [
+      "the quality of being good and of deserving praise or reward"
+    ],
     "examples": ["a work of outstanding artistic merit"],
     "freq": 4.08
   },
@@ -5117,7 +5553,9 @@
     "id": "c1-573",
     "word": "rebel",
     "class": "noun",
-    "definitions": ["a person who fights against the government of their country"],
+    "definitions": [
+      "a person who fights against the government of their country"
+    ],
     "examples": ["rebel forces"],
     "freq": 4.08
   },
@@ -5125,7 +5563,9 @@
     "id": "c1-574",
     "word": "rotation",
     "class": "noun",
-    "definitions": ["the action of an object moving in a circle around a central fixed point"],
+    "definitions": [
+      "the action of an object moving in a circle around a central fixed point"
+    ],
     "examples": ["the daily rotation of the earth on its axis"],
     "freq": 4.08
   },
@@ -5159,7 +5599,9 @@
     "id": "c1-578",
     "word": "widow",
     "class": "noun",
-    "definitions": ["a woman whose husband or wife has died and who has not married again"],
+    "definitions": [
+      "a woman whose husband or wife has died and who has not married again"
+    ],
     "examples": ["She gets a widow’s pension."],
     "freq": 4.08
   },
@@ -5170,7 +5612,9 @@
     "definitions": [
       "a person whose job is to manage and organize the public or business affairs of a company or an institution, or a person who works in an office dealing with records, accounts, etc."
     ],
-    "examples": ["Such organizational decisions are made by the hospital administrators."],
+    "examples": [
+      "Such organizational decisions are made by the hospital administrators."
+    ],
     "freq": 4.07
   },
   {
@@ -5206,7 +5650,9 @@
     "definitions": [
       "something that you say or do in an indirect way in order to show somebody what you are thinking"
     ],
-    "examples": ["He gave a broad hint (= one that was obvious) that he was thinking of retiring."],
+    "examples": [
+      "He gave a broad hint (= one that was obvious) that he was thinking of retiring."
+    ],
     "freq": 4.07
   },
   {
@@ -5247,7 +5693,9 @@
     "id": "c1-588",
     "word": "nationwide",
     "class": "adjective",
-    "definitions": ["happening or existing in all parts of a particular country"],
+    "definitions": [
+      "happening or existing in all parts of a particular country"
+    ],
     "examples": ["a nationwide campaign"],
     "freq": 4.07
   },
@@ -5275,7 +5723,9 @@
     "id": "c1-591",
     "word": "notable",
     "class": "adjective",
-    "definitions": ["deserving to be noticed or to receive attention; important"],
+    "definitions": [
+      "deserving to be noticed or to receive attention; important"
+    ],
     "examples": ["a notable success/achievement/example"],
     "freq": 4.07
   },
@@ -5293,7 +5743,9 @@
     "id": "c1-593",
     "word": "outlook",
     "class": "noun",
-    "definitions": ["the attitude to life and the world of a particular person, group or culture"],
+    "definitions": [
+      "the attitude to life and the world of a particular person, group or culture"
+    ],
     "examples": ["Travel broadens your outlook."],
     "freq": 4.07
   },
@@ -5301,7 +5753,9 @@
     "id": "c1-594",
     "word": "reign",
     "class": "noun",
-    "definitions": ["the period during which a king, queen, emperor, etc. rules"],
+    "definitions": [
+      "the period during which a king, queen, emperor, etc. rules"
+    ],
     "examples": ["By the end of his reign, the vast empire was in decline."],
     "freq": 4.07
   },
@@ -5310,14 +5764,18 @@
     "word": "reign",
     "class": "verb",
     "definitions": ["to rule as king, queen, emperor, etc."],
-    "examples": ["It was the first visit by a British reigning monarch to Russia."],
+    "examples": [
+      "It was the first visit by a British reigning monarch to Russia."
+    ],
     "freq": 4.07
   },
   {
     "id": "c1-596",
     "word": "span",
     "class": "noun",
-    "definitions": ["the length of time that something lasts or is able to continue"],
+    "definitions": [
+      "the length of time that something lasts or is able to continue"
+    ],
     "examples": ["I worked with him over a span of six years."],
     "freq": 4.07
   },
@@ -5325,7 +5783,9 @@
     "id": "c1-597",
     "word": "span",
     "class": "verb",
-    "definitions": ["to last all through a period of time or to cover the whole of it"],
+    "definitions": [
+      "to last all through a period of time or to cover the whole of it"
+    ],
     "examples": ["His acting career spanned 55 years."],
     "freq": 4.07
   },
@@ -5333,7 +5793,9 @@
     "id": "c1-598",
     "word": "specialized",
     "class": "adjective",
-    "definitions": ["designed or developed for a particular purpose or area of knowledge"],
+    "definitions": [
+      "designed or developed for a particular purpose or area of knowledge"
+    ],
     "examples": ["specialized equipment"],
     "freq": 4.07
   },
@@ -5359,7 +5821,9 @@
     "id": "c1-601",
     "word": "allegedly",
     "class": "adverb",
-    "definitions": ["expressed as though something is a fact but without giving any proof"],
+    "definitions": [
+      "expressed as though something is a fact but without giving any proof"
+    ],
     "examples": ["crimes allegedly committed during the war"],
     "freq": 4.06
   },
@@ -5423,7 +5887,9 @@
     "id": "c1-608",
     "word": "elaborate",
     "class": "adjective",
-    "definitions": ["very complicated and detailed; carefully prepared and organized"],
+    "definitions": [
+      "very complicated and detailed; carefully prepared and organized"
+    ],
     "examples": ["elaborate designs"],
     "freq": 4.06
   },
@@ -5431,7 +5897,9 @@
     "id": "c1-609",
     "word": "halfway",
     "class": "adverb",
-    "definitions": ["at an equal distance between two points; in the middle of a period of time"],
+    "definitions": [
+      "at an equal distance between two points; in the middle of a period of time"
+    ],
     "examples": ["It's about halfway between London and Bristol."],
     "freq": 4.06
   },
@@ -5465,7 +5933,9 @@
     "id": "c1-613",
     "word": "presumably",
     "class": "adverb",
-    "definitions": ["used to say that you think that something is probably true"],
+    "definitions": [
+      "used to say that you think that something is probably true"
+    ],
     "examples": ["Presumably this is where the accident happened."],
     "freq": 4.06
   },
@@ -5484,7 +5954,9 @@
     "definitions": [
       "the process of trying to prove in court that somebody is guilty of a crime (= of prosecuting them); the process of being officially charged with a crime in court"
     ],
-    "examples": ["Prosecution for a first minor offence rarely leads to imprisonment."],
+    "examples": [
+      "Prosecution for a first minor offence rarely leads to imprisonment."
+    ],
     "freq": 4.06
   },
   {
@@ -5537,8 +6009,12 @@
     "id": "c1-621",
     "word": "dip",
     "class": "verb",
-    "definitions": ["to put something quickly into a liquid and take it out again"],
-    "examples": ["dip something (into something), He dipped the brush into the paint."],
+    "definitions": [
+      "to put something quickly into a liquid and take it out again"
+    ],
+    "examples": [
+      "dip something (into something), He dipped the brush into the paint."
+    ],
     "freq": 4.05
   },
   {
@@ -5564,7 +6040,9 @@
     "word": "exceptional",
     "class": "adjective",
     "definitions": ["unusually good"],
-    "examples": ["At the age of five he showed exceptional talent as a musician."],
+    "examples": [
+      "At the age of five he showed exceptional talent as a musician."
+    ],
     "freq": 4.05
   },
   {
@@ -5587,7 +6065,9 @@
     "id": "c1-627",
     "word": "medieval",
     "class": "adjective",
-    "definitions": ["connected with the Middle Ages (about AD 1000 to AD 1450)"],
+    "definitions": [
+      "connected with the Middle Ages (about AD 1000 to AD 1450)"
+    ],
     "examples": ["medieval architecture/castles/manuscripts"],
     "freq": 4.05
   },
@@ -5595,7 +6075,9 @@
     "id": "c1-628",
     "word": "mobility",
     "class": "noun",
-    "definitions": ["the ability to move easily from one place, social class or job to another"],
+    "definitions": [
+      "the ability to move easily from one place, social class or job to another"
+    ],
     "examples": ["social/geographical/career mobility"],
     "freq": 4.05
   },
@@ -5603,7 +6085,9 @@
     "id": "c1-629",
     "word": "orientation",
     "class": "noun",
-    "definitions": ["a person’s basic beliefs or feelings about a particular subject"],
+    "definitions": [
+      "a person’s basic beliefs or feelings about a particular subject"
+    ],
     "examples": ["religious/political orientation"],
     "freq": 4.05
   },
@@ -5667,7 +6151,9 @@
     "id": "c1-636",
     "word": "withdrawal",
     "class": "noun",
-    "definitions": ["the act of taking an amount of money out of your bank account"],
+    "definitions": [
+      "the act of taking an amount of money out of your bank account"
+    ],
     "examples": ["You can make withdrawals of up to $250 a day."],
     "freq": 4.05
   },
@@ -5685,7 +6171,9 @@
     "id": "c1-638",
     "word": "authentic",
     "class": "adjective",
-    "definitions": ["known to be real and what somebody claims it is and not a copy"],
+    "definitions": [
+      "known to be real and what somebody claims it is and not a copy"
+    ],
     "examples": ["I don't know if the painting is authentic."],
     "freq": 4.04
   },
@@ -5693,7 +6181,9 @@
     "id": "c1-639",
     "word": "comply",
     "class": "verb",
-    "definitions": ["to obey a rule, an order, etc.; to meet particular standards"],
+    "definitions": [
+      "to obey a rule, an order, etc.; to meet particular standards"
+    ],
     "examples": ["They refused to comply with the UN resolution."],
     "freq": 4.04
   },
@@ -5746,7 +6236,9 @@
     "word": "meantime",
     "class": "noun",
     "definitions": ["for a short period of time but not permanently"],
-    "examples": ["I'm changing my email address but for the meantime you can use the old one."],
+    "examples": [
+      "I'm changing my email address but for the meantime you can use the old one."
+    ],
     "freq": 4.04
   },
   {
@@ -5754,7 +6246,9 @@
     "word": "nonetheless",
     "class": "adverb",
     "definitions": ["despite this fact"],
-    "examples": ["The book is too long but, nonetheless, informative and entertaining."],
+    "examples": [
+      "The book is too long but, nonetheless, informative and entertaining."
+    ],
     "freq": 4.04
   },
   {
@@ -5771,7 +6265,9 @@
     "id": "c1-648",
     "word": "sketch",
     "class": "noun",
-    "definitions": ["a simple picture that is drawn quickly and does not have many details"],
+    "definitions": [
+      "a simple picture that is drawn quickly and does not have many details"
+    ],
     "examples": ["The artist is making sketches for his next painting."],
     "freq": 4.04
   },
@@ -5779,8 +6275,12 @@
     "id": "c1-649",
     "word": "cease",
     "class": "verb",
-    "definitions": ["to stop happening or existing; to stop something from happening or existing"],
-    "examples": ["Welfare payments cease as soon as an individual starts a job."],
+    "definitions": [
+      "to stop happening or existing; to stop something from happening or existing"
+    ],
+    "examples": [
+      "Welfare payments cease as soon as an individual starts a job."
+    ],
     "freq": 4.03
   },
   {
@@ -5797,7 +6297,9 @@
     "id": "c1-651",
     "word": "essence",
     "class": "noun",
-    "definitions": ["the most important quality or feature of something, that makes it what it is"],
+    "definitions": [
+      "the most important quality or feature of something, that makes it what it is"
+    ],
     "examples": ["His paintings capture the essence of France."],
     "freq": 4.03
   },
@@ -5815,7 +6317,9 @@
     "id": "c1-653",
     "word": "harvest",
     "class": "verb",
-    "definitions": ["to cut and gather a crop; to catch a number of animals or fish to eat"],
+    "definitions": [
+      "to cut and gather a crop; to catch a number of animals or fish to eat"
+    ],
     "examples": ["The nuts are ready to harvest in September."],
     "freq": 4.03
   },
@@ -5889,7 +6393,9 @@
     "id": "c1-661",
     "word": "sentiment",
     "class": "noun",
-    "definitions": ["a feeling or an opinion, especially one based on emotions"],
+    "definitions": [
+      "a feeling or an opinion, especially one based on emotions"
+    ],
     "examples": ["the spread of nationalist sentiments"],
     "freq": 4.03
   },
@@ -5897,7 +6403,9 @@
     "id": "c1-662",
     "word": "supplement",
     "class": "noun",
-    "definitions": ["a thing that is added to something else to improve or complete it"],
+    "definitions": [
+      "a thing that is added to something else to improve or complete it"
+    ],
     "examples": [
       "vitamin/dietary supplements (= vitamins and other foods eaten in addition to what you usually eat)"
     ],
@@ -5910,14 +6418,18 @@
     "definitions": [
       "to add something to something in order to improve it or make it more complete"
     ],
-    "examples": ["supplement something with something, a diet supplemented with vitamin pills"],
+    "examples": [
+      "supplement something with something, a diet supplemented with vitamin pills"
+    ],
     "freq": 4.03
   },
   {
     "id": "c1-664",
     "word": "thereby",
     "class": "adverb",
-    "definitions": ["used to introduce the result of the action or situation mentioned"],
+    "definitions": [
+      "used to introduce the result of the action or situation mentioned"
+    ],
     "examples": [
       "Regular exercise strengthens the heart, thereby reducing the risk of heart attack."
     ],
@@ -5973,7 +6485,9 @@
     "id": "c1-670",
     "word": "aesthetic",
     "class": "adjective",
-    "definitions": ["connected with beauty and art and the understanding of beautiful things"],
+    "definitions": [
+      "connected with beauty and art and the understanding of beautiful things"
+    ],
     "examples": ["the aesthetic appeal of the songs"],
     "freq": 4.02
   },
@@ -6012,7 +6526,9 @@
     "definitions": [
       "the state of being formed of many parts; the state of being difficult to understand"
     ],
-    "examples": ["the increasing complexity of modern telecommunication systems"],
+    "examples": [
+      "the increasing complexity of modern telecommunication systems"
+    ],
     "freq": 4.02
   },
   {
@@ -6037,7 +6553,9 @@
     "id": "c1-677",
     "word": "dimension",
     "class": "noun",
-    "definitions": ["a measurement in space, for example how high, wide or long something is"],
+    "definitions": [
+      "a measurement in space, for example how high, wide or long something is"
+    ],
     "examples": ["We measured the dimensions of the kitchen."],
     "freq": 4.02
   },
@@ -6073,7 +6591,9 @@
     "id": "c1-681",
     "word": "flexibility",
     "class": "noun",
-    "definitions": ["the ability to change to suit new conditions or situations"],
+    "definitions": [
+      "the ability to change to suit new conditions or situations"
+    ],
     "examples": [
       "The new system offers a much greater degree of flexibility in the way work is organized."
     ],
@@ -6083,15 +6603,21 @@
     "id": "c1-682",
     "word": "gut",
     "class": "noun",
-    "definitions": ["the tube in the body through which food passes when it leaves the stomach"],
-    "examples": ["It can take up to 72 hours for food to pass through the gut."],
+    "definitions": [
+      "the tube in the body through which food passes when it leaves the stomach"
+    ],
+    "examples": [
+      "It can take up to 72 hours for food to pass through the gut."
+    ],
     "freq": 4.02
   },
   {
     "id": "c1-683",
     "word": "ideology",
     "class": "noun",
-    "definitions": ["a set of ideas that an economic or political system is based on"],
+    "definitions": [
+      "a set of ideas that an economic or political system is based on"
+    ],
     "examples": ["Marxist/capitalist ideology"],
     "freq": 4.02
   },
@@ -6099,7 +6625,9 @@
     "id": "c1-684",
     "word": "inclusion",
     "class": "noun",
-    "definitions": ["the fact of including somebody/something; the fact of being included"],
+    "definitions": [
+      "the fact of including somebody/something; the fact of being included"
+    ],
     "examples": ["His inclusion in the team is in doubt."],
     "freq": 4.02
   },
@@ -6107,7 +6635,9 @@
     "id": "c1-685",
     "word": "isolation",
     "class": "noun",
-    "definitions": ["the act of separating somebody/something; the state of being separate"],
+    "definitions": [
+      "the act of separating somebody/something; the state of being separate"
+    ],
     "examples": ["geographical isolation"],
     "freq": 4.02
   },
@@ -6135,7 +6665,9 @@
     "id": "c1-688",
     "word": "resignation",
     "class": "noun",
-    "definitions": ["the act of giving up your job or position; the occasion when you do this"],
+    "definitions": [
+      "the act of giving up your job or position; the occasion when you do this"
+    ],
     "examples": ["a letter of resignation"],
     "freq": 4.02
   },
@@ -6153,7 +6685,9 @@
     "id": "c1-690",
     "word": "slam",
     "class": "verb",
-    "definitions": ["to shut, or to make something shut, with a lot of force, making a loud noise"],
+    "definitions": [
+      "to shut, or to make something shut, with a lot of force, making a loud noise"
+    ],
     "examples": ["I heard the door slam behind him."],
     "freq": 4.02
   },
@@ -6235,7 +6769,9 @@
     "id": "c1-699",
     "word": "notably",
     "class": "adverb",
-    "definitions": ["used for giving a good or the most important example of something"],
+    "definitions": [
+      "used for giving a good or the most important example of something"
+    ],
     "examples": ["The house had many drawbacks, most notably its price."],
     "freq": 4.01
   },
@@ -6261,7 +6797,9 @@
     "id": "c1-702",
     "word": "preservation",
     "class": "noun",
-    "definitions": ["the act of keeping something in its original state or in good condition"],
+    "definitions": [
+      "the act of keeping something in its original state or in good condition"
+    ],
     "examples": ["building/environmental/food preservation"],
     "freq": 4.01
   },
@@ -6279,8 +6817,12 @@
     "id": "c1-704",
     "word": "sheer",
     "class": "adjective",
-    "definitions": ["used to emphasize the size, degree or amount of something"],
-    "examples": ["The area is under threat from the sheer number of tourists using it."],
+    "definitions": [
+      "used to emphasize the size, degree or amount of something"
+    ],
+    "examples": [
+      "The area is under threat from the sheer number of tourists using it."
+    ],
     "freq": 4.01
   },
   {
@@ -6305,7 +6847,9 @@
     "id": "c1-707",
     "word": "timber",
     "class": "noun",
-    "definitions": ["trees that are grown to be used in building or for making things"],
+    "definitions": [
+      "trees that are grown to be used in building or for making things"
+    ],
     "examples": ["the timber industry"],
     "freq": 4.01
   },
@@ -6334,7 +6878,9 @@
     "definitions": [
       "to rub something against a surface, in order to remove dirt or liquid from it; to rub a surface with a cloth, etc. in order to clean it"
     ],
-    "examples": ["wipe something (on something), Please wipe your feet on the mat."],
+    "examples": [
+      "wipe something (on something), Please wipe your feet on the mat."
+    ],
     "freq": 4.01
   },
   {
@@ -6357,7 +6903,9 @@
     "id": "c1-713",
     "word": "coup",
     "class": "noun",
-    "definitions": ["a sudden change of government that is illegal and often violent"],
+    "definitions": [
+      "a sudden change of government that is illegal and often violent"
+    ],
     "examples": ["He seized power in a military coup in 2008."],
     "freq": 4
   },
@@ -6365,7 +6913,9 @@
     "id": "c1-714",
     "word": "crude",
     "class": "adjective",
-    "definitions": ["in its natural state, before it has been processed or refined"],
+    "definitions": [
+      "in its natural state, before it has been processed or refined"
+    ],
     "examples": ["crude oil/metal"],
     "freq": 4
   },
@@ -6384,7 +6934,9 @@
     "word": "disposal",
     "class": "noun",
     "definitions": ["the act of getting rid of something"],
-    "examples": ["The council is responsible for waste disposal and street cleaning."],
+    "examples": [
+      "The council is responsible for waste disposal and street cleaning."
+    ],
     "freq": 4
   },
   {
@@ -6450,7 +7002,9 @@
     "word": "pledge",
     "class": "verb",
     "definitions": ["to formally promise to give or do something"],
-    "examples": ["pledge something, Japan has pledged $100 million in humanitarian aid."],
+    "examples": [
+      "pledge something, Japan has pledged $100 million in humanitarian aid."
+    ],
     "freq": 4
   },
   {
@@ -6460,7 +7014,9 @@
     "definitions": [
       "an official piece of paper on which a doctor writes the type of medicine you should have, and which enables you to get it from a chemist's"
     ],
-    "examples": ["prescription for something, The doctor gave me a prescription for antibiotics."],
+    "examples": [
+      "prescription for something, The doctor gave me a prescription for antibiotics."
+    ],
     "freq": 4
   },
   {
@@ -6477,8 +7033,12 @@
     "id": "c1-726",
     "word": "cluster",
     "class": "noun",
-    "definitions": ["a group of things of the same type that grow or appear close together"],
-    "examples": ["The telescope is focused on a dense cluster of stars at the edge of the galaxy."],
+    "definitions": [
+      "a group of things of the same type that grow or appear close together"
+    ],
+    "examples": [
+      "The telescope is focused on a dense cluster of stars at the edge of the galaxy."
+    ],
     "freq": 3.99
   },
   {
@@ -6508,14 +7068,18 @@
     "word": "facilitate",
     "class": "verb",
     "definitions": ["to make an action or a process possible or easier"],
-    "examples": ["The new trade agreement should facilitate more rapid economic growth."],
+    "examples": [
+      "The new trade agreement should facilitate more rapid economic growth."
+    ],
     "freq": 3.99
   },
   {
     "id": "c1-730",
     "word": "feat",
     "class": "noun",
-    "definitions": ["an action or a piece of work that needs skill, strength or courage"],
+    "definitions": [
+      "an action or a piece of work that needs skill, strength or courage"
+    ],
     "examples": ["The tunnel is a remarkable feat of engineering."],
     "freq": 3.99
   },
@@ -6539,7 +7103,9 @@
     "id": "c1-733",
     "word": "injection",
     "class": "noun",
-    "definitions": ["an act of injecting somebody with a drug or other substance"],
+    "definitions": [
+      "an act of injecting somebody with a drug or other substance"
+    ],
     "examples": ["to give somebody an injection"],
     "freq": 3.99
   },
@@ -6557,7 +7123,9 @@
     "id": "c1-735",
     "word": "insult",
     "class": "noun",
-    "definitions": ["a remark or an action that is said or done in order to offend somebody"],
+    "definitions": [
+      "a remark or an action that is said or done in order to offend somebody"
+    ],
     "examples": ["The crowd were shouting insults at the police."],
     "freq": 3.99
   },
@@ -6585,7 +7153,9 @@
     "id": "c1-738",
     "word": "outbreak",
     "class": "noun",
-    "definitions": ["the sudden start of something unpleasant, especially violence or a disease"],
+    "definitions": [
+      "the sudden start of something unpleasant, especially violence or a disease"
+    ],
     "examples": ["the outbreak of war"],
     "freq": 3.99
   },
@@ -6604,7 +7174,9 @@
     "definitions": [
       "to ask questions in order to find out secret or hidden information about somebody/something"
     ],
-    "examples": ["probe (into something), He didn't like the media probing into his past."],
+    "examples": [
+      "probe (into something), He didn't like the media probing into his past."
+    ],
     "freq": 3.99
   },
   {
@@ -6621,7 +7193,9 @@
     "id": "c1-742",
     "word": "spark",
     "class": "verb",
-    "definitions": ["to cause something to start or develop, especially suddenly"],
+    "definitions": [
+      "to cause something to start or develop, especially suddenly"
+    ],
     "examples": [
       "spark something, The proposal would spark a storm of protest around the country."
     ],
@@ -6667,7 +7241,9 @@
     "id": "c1-747",
     "word": "compelling",
     "class": "adjective",
-    "definitions": ["that makes you pay attention to it because it is so interesting and exciting"],
+    "definitions": [
+      "that makes you pay attention to it because it is so interesting and exciting"
+    ],
     "examples": ["Her latest book makes compelling reading."],
     "freq": 3.98
   },
@@ -6712,14 +7288,18 @@
     "word": "intact",
     "class": "adjective",
     "definitions": ["complete and not damaged"],
-    "examples": ["Most of the house remains intact even after two hundred years."],
+    "examples": [
+      "Most of the house remains intact even after two hundred years."
+    ],
     "freq": 3.98
   },
   {
     "id": "c1-753",
     "word": "intake",
     "class": "noun",
-    "definitions": ["the amount of food, drink, etc. that you take into your body"],
+    "definitions": [
+      "the amount of food, drink, etc. that you take into your body"
+    ],
     "examples": ["high fluid intake"],
     "freq": 3.98
   },
@@ -6745,7 +7325,9 @@
     "id": "c1-756",
     "word": "pond",
     "class": "noun",
-    "definitions": ["a small area of still water, especially one that is artificial"],
+    "definitions": [
+      "a small area of still water, especially one that is artificial"
+    ],
     "examples": ["a fish pond"],
     "freq": 3.98
   },
@@ -6753,7 +7335,9 @@
     "id": "c1-757",
     "word": "prey",
     "class": "noun",
-    "definitions": ["an animal, a bird, etc. that is hunted, killed and eaten by another"],
+    "definitions": [
+      "an animal, a bird, etc. that is hunted, killed and eaten by another"
+    ],
     "examples": ["The lion will often stalk its prey for hours."],
     "freq": 3.98
   },
@@ -6761,7 +7345,9 @@
     "id": "c1-758",
     "word": "referendum",
     "class": "noun",
-    "definitions": ["an occasion when all the people of a country can vote on an important issue"],
+    "definitions": [
+      "an occasion when all the people of a country can vote on an important issue"
+    ],
     "examples": [
       "referendum on something, Switzerland decided to hold a referendum on joining the EU."
     ],
@@ -6853,7 +7439,9 @@
     "id": "c1-768",
     "word": "grasp",
     "class": "noun",
-    "definitions": ["a strong hold of somebody/something or control over somebody/something"],
+    "definitions": [
+      "a strong hold of somebody/something or control over somebody/something"
+    ],
     "examples": ["I grabbed him, but he slipped from my grasp."],
     "freq": 3.97
   },
@@ -6880,14 +7468,18 @@
     "definitions": [
       "the authority to do something, given to a government or other organization by the people who vote for it in an election"
     ],
-    "examples": ["It is undemocratic to govern an area without an electoral mandate."],
+    "examples": [
+      "It is undemocratic to govern an area without an electoral mandate."
+    ],
     "freq": 3.97
   },
   {
     "id": "c1-772",
     "word": "merger",
     "class": "noun",
-    "definitions": ["the act of joining two or more organizations or businesses into one"],
+    "definitions": [
+      "the act of joining two or more organizations or businesses into one"
+    ],
     "examples": ["If the merger goes through, thousands of jobs will be lost."],
     "freq": 3.97
   },
@@ -6895,7 +7487,9 @@
     "id": "c1-773",
     "word": "scattered",
     "class": "adjective",
-    "definitions": ["spread far apart over a wide area or over a long period of time"],
+    "definitions": [
+      "spread far apart over a wide area or over a long period of time"
+    ],
     "examples": ["a few scattered settlements"],
     "freq": 3.97
   },
@@ -6903,7 +7497,9 @@
     "id": "c1-774",
     "word": "sexuality",
     "class": "noun",
-    "definitions": ["the feelings and activities connected with a person’s sexual desires"],
+    "definitions": [
+      "the feelings and activities connected with a person’s sexual desires"
+    ],
     "examples": ["He was confused about his sexuality."],
     "freq": 3.97
   },
@@ -6911,7 +7507,9 @@
     "id": "c1-775",
     "word": "slap",
     "class": "verb",
-    "definitions": ["to hit somebody/something with the flat part of your hand"],
+    "definitions": [
+      "to hit somebody/something with the flat part of your hand"
+    ],
     "examples": ["She slapped his face hard."],
     "freq": 3.97
   },
@@ -6919,7 +7517,9 @@
     "id": "c1-776",
     "word": "succession",
     "class": "noun",
-    "definitions": ["a number of people or things that follow each other in time or order"],
+    "definitions": [
+      "a number of people or things that follow each other in time or order"
+    ],
     "examples": ["a succession of visitors"],
     "freq": 3.97
   },
@@ -6937,7 +7537,9 @@
     "id": "c1-778",
     "word": "tactical",
     "class": "adjective",
-    "definitions": ["connected with the particular method you use to achieve something"],
+    "definitions": [
+      "connected with the particular method you use to achieve something"
+    ],
     "examples": ["tactical planning"],
     "freq": 3.97
   },
@@ -6946,7 +7548,9 @@
     "word": "thereafter",
     "class": "adverb",
     "definitions": ["after the time or event mentioned"],
-    "examples": ["She married at 17 and gave birth to her first child shortly thereafter."],
+    "examples": [
+      "She married at 17 and gave birth to her first child shortly thereafter."
+    ],
     "freq": 3.97
   },
   {
@@ -6989,8 +7593,12 @@
     "id": "c1-784",
     "word": "conscience",
     "class": "noun",
-    "definitions": ["the part of your mind that tells you whether your actions are right or wrong"],
-    "examples": ["to have a clear/guilty conscience (= to feel that you have done right/wrong)"],
+    "definitions": [
+      "the part of your mind that tells you whether your actions are right or wrong"
+    ],
+    "examples": [
+      "to have a clear/guilty conscience (= to feel that you have done right/wrong)"
+    ],
     "freq": 3.96
   },
   {
@@ -7018,7 +7626,9 @@
     "definitions": [
       "the state of being kept in a place, especially a prison, and prevented from leaving"
     ],
-    "examples": ["They were sentenced to 12 months' detention in a young offender institution."],
+    "examples": [
+      "They were sentenced to 12 months' detention in a young offender institution."
+    ],
     "freq": 3.96
   },
   {
@@ -7026,14 +7636,18 @@
     "word": "enforce",
     "class": "verb",
     "definitions": ["to make sure that people obey a particular law or rule"],
-    "examples": ["enforce something, It's the job of the police to enforce the law."],
+    "examples": [
+      "enforce something, It's the job of the police to enforce the law."
+    ],
     "freq": 3.96
   },
   {
     "id": "c1-789",
     "word": "explicit",
     "class": "adjective",
-    "definitions": ["clear and easy to understand, so that you have no doubt what is meant"],
+    "definitions": [
+      "clear and easy to understand, so that you have no doubt what is meant"
+    ],
     "examples": ["He gave me very explicit directions on how to get there."],
     "freq": 3.96
   },
@@ -7041,7 +7655,9 @@
     "id": "c1-790",
     "word": "explicitly",
     "class": "adverb",
-    "definitions": ["clearly or directly, so that the meaning is easy to understand"],
+    "definitions": [
+      "clearly or directly, so that the meaning is easy to understand"
+    ],
     "examples": ["The report states explicitly that the system was to blame."],
     "freq": 3.96
   },
@@ -7057,7 +7673,9 @@
     "id": "c1-792",
     "word": "nominee",
     "class": "noun",
-    "definitions": ["a person who has been formally suggested for a job, a prize, etc."],
+    "definitions": [
+      "a person who has been formally suggested for a job, a prize, etc."
+    ],
     "examples": ["He was chosen as the party's presidential nominee."],
     "freq": 3.96
   },
@@ -7133,7 +7751,9 @@
     "id": "c1-800",
     "word": "supposedly",
     "class": "adverb",
-    "definitions": ["according to what is generally thought or believed but not known for certain"],
+    "definitions": [
+      "according to what is generally thought or believed but not known for certain"
+    ],
     "examples": ["The novel is supposedly based on a true story."],
     "freq": 3.96
   },
@@ -7157,7 +7777,9 @@
     "id": "c1-803",
     "word": "wit",
     "class": "noun",
-    "definitions": ["the ability to say or write things that are both clever and humorous"],
+    "definitions": [
+      "the ability to say or write things that are both clever and humorous"
+    ],
     "examples": ["to have a quick/sharp/dry/ready wit"],
     "freq": 3.96
   },
@@ -7202,14 +7824,18 @@
     "word": "blend",
     "class": "verb",
     "definitions": ["to mix two or more substances together"],
-    "examples": ["blend A with B, Blend the flour with the milk to make a smooth paste."],
+    "examples": [
+      "blend A with B, Blend the flour with the milk to make a smooth paste."
+    ],
     "freq": 3.95
   },
   {
     "id": "c1-809",
     "word": "collision",
     "class": "noun",
-    "definitions": ["an accident in which two vehicles or people crash into each other"],
+    "definitions": [
+      "an accident in which two vehicles or people crash into each other"
+    ],
     "examples": ["collision between A and B, a collision between two trains"],
     "freq": 3.95
   },
@@ -7227,7 +7853,9 @@
     "id": "c1-811",
     "word": "correction",
     "class": "noun",
-    "definitions": ["a change that makes something more accurate than it was before"],
+    "definitions": [
+      "a change that makes something more accurate than it was before"
+    ],
     "examples": ["I've made a few small corrections to your report."],
     "freq": 3.95
   },
@@ -7235,8 +7863,12 @@
     "id": "c1-812",
     "word": "distress",
     "class": "noun",
-    "definitions": ["a feeling of great worry or unhappiness; great mental pain"],
-    "examples": ["The newspaper article caused the actor considerable distress."],
+    "definitions": [
+      "a feeling of great worry or unhappiness; great mental pain"
+    ],
+    "examples": [
+      "The newspaper article caused the actor considerable distress."
+    ],
     "freq": 3.95
   },
   {
@@ -7244,7 +7876,9 @@
     "word": "distress",
     "class": "verb",
     "definitions": ["to make somebody feel very worried or unhappy"],
-    "examples": ["distress somebody, It was clear that the letter had deeply distressed her."],
+    "examples": [
+      "distress somebody, It was clear that the letter had deeply distressed her."
+    ],
     "freq": 3.95
   },
   {
@@ -7307,7 +7941,9 @@
     "id": "c1-820",
     "word": "plea",
     "class": "noun",
-    "definitions": ["a serious emotional request, especially for something needing action now"],
+    "definitions": [
+      "a serious emotional request, especially for something needing action now"
+    ],
     "examples": ["plea for something, She made an impassioned plea for help."],
     "freq": 3.95
   },
@@ -7368,7 +8004,9 @@
     "word": "supervisor",
     "class": "noun",
     "definitions": ["a person who supervises somebody/something"],
-    "examples": ["I have a meeting with my supervisor about my research topic."],
+    "examples": [
+      "I have a meeting with my supervisor about my research topic."
+    ],
     "freq": 3.95
   },
   {
@@ -7484,7 +8122,9 @@
     "definitions": [
       "the work or activity involved in being in charge of somebody/something and making sure that everything is done correctly, safely, etc."
     ],
-    "examples": ["Very young children should not be left to play without supervision."],
+    "examples": [
+      "Very young children should not be left to play without supervision."
+    ],
     "freq": 3.94
   },
   {
@@ -7510,7 +8150,9 @@
     "word": "trio",
     "class": "noun",
     "definitions": ["a group of three people or things"],
-    "examples": ["A trio of English runners featured in the women’s 1 500 metres."],
+    "examples": [
+      "A trio of English runners featured in the women’s 1 500 metres."
+    ],
     "freq": 3.94
   },
   {
@@ -7535,7 +8177,9 @@
     "id": "c1-846",
     "word": "battlefield",
     "class": "noun",
-    "definitions": ["a place where a battle is being fought or has been fought"],
+    "definitions": [
+      "a place where a battle is being fought or has been fought"
+    ],
     "examples": ["heavy casualties on the battlefield"],
     "freq": 3.93
   },
@@ -7543,7 +8187,9 @@
     "id": "c1-847",
     "word": "costly",
     "class": "adjective",
-    "definitions": ["costing a lot of money, especially more than you want to pay"],
+    "definitions": [
+      "costing a lot of money, especially more than you want to pay"
+    ],
     "examples": ["Buying new furniture may prove too costly."],
     "freq": 3.93
   },
@@ -7591,7 +8237,9 @@
     "id": "c1-852",
     "word": "halt",
     "class": "noun",
-    "definitions": ["an act of stopping the movement or progress of somebody/something"],
+    "definitions": [
+      "an act of stopping the movement or progress of somebody/something"
+    ],
     "examples": ["Work came to a halt when the machine broke down."],
     "freq": 3.93
   },
@@ -7636,7 +8284,9 @@
     "word": "readily",
     "class": "adverb",
     "definitions": ["quickly and without difficulty"],
-    "examples": ["All ingredients are readily available from your local store."],
+    "examples": [
+      "All ingredients are readily available from your local store."
+    ],
     "freq": 3.93
   },
   {
@@ -7661,7 +8311,9 @@
     "id": "c1-860",
     "word": "sustain",
     "class": "verb",
-    "definitions": ["to provide enough of what somebody/something needs in order to live or exist"],
+    "definitions": [
+      "to provide enough of what somebody/something needs in order to live or exist"
+    ],
     "examples": ["Which planets can sustain life?"],
     "freq": 3.93
   },
@@ -7712,7 +8364,9 @@
     "definitions": [
       "pieces of wood, metal, building materials, etc. that are left after something has been destroyed"
     ],
-    "examples": ["Emergency teams are still clearing the debris from the plane crash."],
+    "examples": [
+      "Emergency teams are still clearing the debris from the plane crash."
+    ],
     "freq": 3.92
   },
   {
@@ -7752,14 +8406,18 @@
     "definitions": [
       "to describe somebody/something as being very good or special, especially in newspapers, etc."
     ],
-    "examples": ["be hailed (as) something, The conference was hailed as a great success."],
+    "examples": [
+      "be hailed (as) something, The conference was hailed as a great success."
+    ],
     "freq": 3.92
   },
   {
     "id": "c1-870",
     "word": "indicator",
     "class": "noun",
-    "definitions": ["a sign that shows you what something is like or how a situation is changing"],
+    "definitions": [
+      "a sign that shows you what something is like or how a situation is changing"
+    ],
     "examples": ["The economic indicators are better than expected."],
     "freq": 3.92
   },
@@ -7770,14 +8428,18 @@
     "definitions": [
       "the unfair difference between groups of people in society, when some have more wealth, status or opportunities than others"
     ],
-    "examples": ["We need to tackle inequality of opportunity wherever we find it."],
+    "examples": [
+      "We need to tackle inequality of opportunity wherever we find it."
+    ],
     "freq": 3.92
   },
   {
     "id": "c1-872",
     "word": "manuscript",
     "class": "noun",
-    "definitions": ["a copy of a book, piece of music, etc. before it has been printed"],
+    "definitions": [
+      "a copy of a book, piece of music, etc. before it has been printed"
+    ],
     "examples": ["an unpublished/original manuscript"],
     "freq": 3.92
   },
@@ -7785,7 +8447,9 @@
     "id": "c1-873",
     "word": "reliability",
     "class": "noun",
-    "definitions": ["the quality of being able to be trusted to do what somebody wants or needs"],
+    "definitions": [
+      "the quality of being able to be trusted to do what somebody wants or needs"
+    ],
     "examples": ["The incident cast doubt on her motives and reliability."],
     "freq": 3.92
   },
@@ -7831,7 +8495,9 @@
     "id": "c1-878",
     "word": "continually",
     "class": "adverb",
-    "definitions": ["in a way that is repeated many times so that it is annoying"],
+    "definitions": [
+      "in a way that is repeated many times so that it is annoying"
+    ],
     "examples": ["They argue continually about money."],
     "freq": 3.91
   },
@@ -7849,7 +8515,9 @@
     "id": "c1-880",
     "word": "damaging",
     "class": "adjective",
-    "definitions": ["causing damage; having a bad effect on somebody/something"],
+    "definitions": [
+      "causing damage; having a bad effect on somebody/something"
+    ],
     "examples": ["damaging consequences/effects"],
     "freq": 3.91
   },
@@ -7913,7 +8581,9 @@
     "id": "c1-887",
     "word": "likelihood",
     "class": "noun",
-    "definitions": ["the chance of something happening; how likely something is to happen"],
+    "definitions": [
+      "the chance of something happening; how likely something is to happen"
+    ],
     "examples": ["There is very little likelihood of that happening."],
     "freq": 3.91
   },
@@ -7921,7 +8591,9 @@
     "id": "c1-888",
     "word": "massacre",
     "class": "noun",
-    "definitions": ["the killing of a large number of people especially in a cruel way"],
+    "definitions": [
+      "the killing of a large number of people especially in a cruel way"
+    ],
     "examples": ["the bloody massacre of innocent civilians"],
     "freq": 3.91
   },
@@ -7949,7 +8621,9 @@
     "id": "c1-891",
     "word": "prosperity",
     "class": "noun",
-    "definitions": ["the state of being successful, especially in making money"],
+    "definitions": [
+      "the state of being successful, especially in making money"
+    ],
     "examples": ["Our future prosperity depends on economic growth."],
     "freq": 3.91
   },
@@ -7992,7 +8666,9 @@
     "word": "toss",
     "class": "verb",
     "definitions": ["to throw something lightly or carelessly"],
-    "examples": ["toss something + adv./prep., I tossed the book aside and got up."],
+    "examples": [
+      "toss something + adv./prep., I tossed the book aside and got up."
+    ],
     "freq": 3.91
   },
   {
@@ -8018,7 +8694,9 @@
     "definitions": [
       "responsible for your decisions or actions and expected to explain them when you are asked"
     ],
-    "examples": ["The state spends taxpayers’ money and should be held accountable."],
+    "examples": [
+      "The state spends taxpayers’ money and should be held accountable."
+    ],
     "freq": 3.9
   },
   {
@@ -8040,7 +8718,9 @@
     "definitions": [
       "feelings of anger and hate that may result in threatening or violent behaviour"
     ],
-    "examples": ["The research shows that computer games may cause aggression."],
+    "examples": [
+      "The research shows that computer games may cause aggression."
+    ],
     "freq": 3.9
   },
   {
@@ -8083,7 +8763,9 @@
     "id": "c1-906",
     "word": "discretion",
     "class": "noun",
-    "definitions": ["the freedom or power to decide what should be done in a particular situation"],
+    "definitions": [
+      "the freedom or power to decide what should be done in a particular situation"
+    ],
     "examples": ["I'll leave it up to you to use your discretion."],
     "freq": 3.9
   },
@@ -8137,8 +8819,12 @@
     "id": "c1-912",
     "word": "opt",
     "class": "verb",
-    "definitions": ["to choose to take or not to take a particular course of action"],
-    "examples": ["opt for/against something, After graduating she opted for a career in music."],
+    "definitions": [
+      "to choose to take or not to take a particular course of action"
+    ],
+    "examples": [
+      "opt for/against something, After graduating she opted for a career in music."
+    ],
     "freq": 3.9
   },
   {
@@ -8148,7 +8834,9 @@
     "definitions": [
       "determined to do something despite difficulties, especially when other people are against you and think that you are being annoying or unreasonable"
     ],
-    "examples": ["How do you deal with persistent salesmen who won't take no for an answer?"],
+    "examples": [
+      "How do you deal with persistent salesmen who won't take no for an answer?"
+    ],
     "freq": 3.9
   },
   {
@@ -8199,7 +8887,9 @@
     "id": "c1-919",
     "word": "adverse",
     "class": "adjective",
-    "definitions": ["negative and unpleasant; not likely to produce a good result"],
+    "definitions": [
+      "negative and unpleasant; not likely to produce a good result"
+    ],
     "examples": ["adverse change/circumstances/weather conditions"],
     "freq": 3.89
   },
@@ -8207,7 +8897,9 @@
     "id": "c1-920",
     "word": "biography",
     "class": "noun",
-    "definitions": ["the story of a person’s life written by somebody else; this type of writing"],
+    "definitions": [
+      "the story of a person’s life written by somebody else; this type of writing"
+    ],
     "examples": ["Boswell’s biography of Johnson"],
     "freq": 3.89
   },
@@ -8236,7 +8928,9 @@
     "word": "destructive",
     "class": "adjective",
     "definitions": ["causing destruction or damage"],
-    "examples": ["The war demonstrated the destructive power of modern weapons."],
+    "examples": [
+      "The war demonstrated the destructive power of modern weapons."
+    ],
     "freq": 3.89
   },
   {
@@ -8253,8 +8947,12 @@
     "id": "c1-925",
     "word": "landlord",
     "class": "noun",
-    "definitions": ["a person or company from whom you rent a room, a house, an office, etc."],
-    "examples": ["a buy-to-let landlord (= who buys houses and flats in order to rent them out)"],
+    "definitions": [
+      "a person or company from whom you rent a room, a house, an office, etc."
+    ],
+    "examples": [
+      "a buy-to-let landlord (= who buys houses and flats in order to rent them out)"
+    ],
     "freq": 3.89
   },
   {
@@ -8264,7 +8962,9 @@
     "definitions": [
       "something, such as a large building, that you can see clearly from a distance and that will help you to know where you are"
     ],
-    "examples": ["The Empire State Building is a familiar landmark on the New York skyline."],
+    "examples": [
+      "The Empire State Building is a familiar landmark on the New York skyline."
+    ],
     "freq": 3.89
   },
   {
@@ -8280,7 +8980,9 @@
     "word": "midst",
     "class": "noun",
     "definitions": ["the middle part of something"],
-    "examples": ["in the midst of something, Such beauty was unexpected in the midst of the city."],
+    "examples": [
+      "in the midst of something, Such beauty was unexpected in the midst of the city."
+    ],
     "freq": 3.89
   },
   {
@@ -8325,7 +9027,9 @@
     "id": "c1-933",
     "word": "adjustment",
     "class": "noun",
-    "definitions": ["a small change made to something in order to correct or improve it"],
+    "definitions": [
+      "a small change made to something in order to correct or improve it"
+    ],
     "examples": ["I've made a few adjustments to the design."],
     "freq": 3.88
   },
@@ -8336,7 +9040,9 @@
     "definitions": [
       "a statement that a person makes, admitting that they are guilty of a crime; the act of making such a statement"
     ],
-    "examples": ["After hours of questioning by police, she made a full confession."],
+    "examples": [
+      "After hours of questioning by police, she made a full confession."
+    ],
     "freq": 3.88
   },
   {
@@ -8364,7 +9070,9 @@
     "definitions": [
       "to get involved in and try to influence a situation that should not really involve you, in a way that annoys other people"
     ],
-    "examples": ["I wish my mother would stop interfering and let me make my own decisions."],
+    "examples": [
+      "I wish my mother would stop interfering and let me make my own decisions."
+    ],
     "freq": 3.88
   },
   {
@@ -8374,7 +9082,9 @@
     "definitions": [
       "a group of people who are not professional soldiers but who have had military training and can act as an army"
     ],
-    "examples": ["He said he would call out the state militia if the rebels did not surrender."],
+    "examples": [
+      "He said he would call out the state militia if the rebels did not surrender."
+    ],
     "freq": 3.88
   },
   {
@@ -8401,7 +9111,9 @@
     "id": "c1-941",
     "word": "undoubtedly",
     "class": "adverb",
-    "definitions": ["used to emphasize that something exists or is definitely true"],
+    "definitions": [
+      "used to emphasize that something exists or is definitely true"
+    ],
     "examples": ["There is undoubtedly a great deal of truth in what he says."],
     "freq": 3.88
   },
@@ -8494,7 +9206,9 @@
     "word": "abundance",
     "class": "noun",
     "definitions": ["a large quantity that is more than enough"],
-    "examples": ["The brochure promised beautiful walks with an abundance of wildlife."],
+    "examples": [
+      "The brochure promised beautiful walks with an abundance of wildlife."
+    ],
     "freq": 3.86
   },
   {
@@ -8522,14 +9236,18 @@
     "definitions": [
       "involving doing something together or working together with others towards a shared aim"
     ],
-    "examples": ["Cooperative activity is essential to effective community work."],
+    "examples": [
+      "Cooperative activity is essential to effective community work."
+    ],
     "freq": 3.86
   },
   {
     "id": "c1-956",
     "word": "correlation",
     "class": "noun",
-    "definitions": ["a connection between two things in which one thing changes as the other does"],
+    "definitions": [
+      "a connection between two things in which one thing changes as the other does"
+    ],
     "examples": [
       "correlation between A and B, There is a direct correlation between exposure to sun and skin cancer."
     ],
@@ -8549,7 +9267,9 @@
     "id": "c1-958",
     "word": "fade",
     "class": "verb",
-    "definitions": ["to become or to make something become paler or less bright"],
+    "definitions": [
+      "to become or to make something become paler or less bright"
+    ],
     "examples": ["The curtains had faded in the sun."],
     "freq": 3.86
   },
@@ -8568,7 +9288,9 @@
     "definitions": [
       "a natural quality that makes people and animals tend to behave in a particular way using the knowledge and abilities that they were born with rather than thought or training"
     ],
-    "examples": ["She did not seem to have any of the usual maternal instincts."],
+    "examples": [
+      "She did not seem to have any of the usual maternal instincts."
+    ],
     "freq": 3.86
   },
   {
@@ -8593,7 +9315,9 @@
     "id": "c1-963",
     "word": "morality",
     "class": "noun",
-    "definitions": ["principles relating to right and wrong or good and bad behaviour"],
+    "definitions": [
+      "principles relating to right and wrong or good and bad behaviour"
+    ],
     "examples": ["matters of public/private morality"],
     "freq": 3.86
   },
@@ -8601,7 +9325,9 @@
     "id": "c1-964",
     "word": "prestigious",
     "class": "adjective",
-    "definitions": ["respected and admired as very important or of very high quality"],
+    "definitions": [
+      "respected and admired as very important or of very high quality"
+    ],
     "examples": ["a prestigious award"],
     "freq": 3.86
   },
@@ -8650,7 +9376,9 @@
     "definitions": [
       "not seeming to be based on a reason, system or plan and sometimes seeming unfair"
     ],
-    "examples": ["The choice of players for the team seemed completely arbitrary."],
+    "examples": [
+      "The choice of players for the team seemed completely arbitrary."
+    ],
     "freq": 3.85
   },
   {
@@ -8702,7 +9430,9 @@
     "definitions": [
       "behaviour that controls or influences somebody/something, often in a dishonest way so that they do not realize it"
     ],
-    "examples": ["Advertising like this is a cynical manipulation of the elderly."],
+    "examples": [
+      "Advertising like this is a cynical manipulation of the elderly."
+    ],
     "freq": 3.85
   },
   {
@@ -8717,7 +9447,9 @@
     "id": "c1-977",
     "word": "proposition",
     "class": "noun",
-    "definitions": ["an idea or a plan of action that is suggested, especially in business"],
+    "definitions": [
+      "an idea or a plan of action that is suggested, especially in business"
+    ],
     "examples": ["I'd like to put a business proposition to you."],
     "freq": 3.85
   },
@@ -8734,14 +9466,18 @@
     "word": "timely",
     "class": "adjective",
     "definitions": ["happening at exactly the right time"],
-    "examples": ["A nasty incident was prevented by the timely arrival of the police."],
+    "examples": [
+      "A nasty incident was prevented by the timely arrival of the police."
+    ],
     "freq": 3.85
   },
   {
     "id": "c1-980",
     "word": "undergraduate",
     "class": "noun",
-    "definitions": ["a university or college student who is studying for their first degree"],
+    "definitions": [
+      "a university or college student who is studying for their first degree"
+    ],
     "examples": ["a first-year undergraduate"],
     "freq": 3.85
   },
@@ -8752,7 +9488,9 @@
     "definitions": [
       "to shout loudly, for example because you are angry, excited, frightened or in pain"
     ],
-    "examples": ["yell (at somebody/something), He yelled at the other driver."],
+    "examples": [
+      "yell (at somebody/something), He yelled at the other driver."
+    ],
     "freq": 3.85
   },
   {
@@ -8804,7 +9542,9 @@
     "definitions": [
       "the complete control of trade in particular goods or the supply of a particular service; a type of goods or a service that is controlled in this way"
     ],
-    "examples": ["In the past central government had a monopoly on television broadcasting."],
+    "examples": [
+      "In the past central government had a monopoly on television broadcasting."
+    ],
     "freq": 3.84
   },
   {
@@ -8830,7 +9570,9 @@
     "definitions": [
       "the act of combining separate ideas, beliefs, styles, etc.; a mixture or combination of ideas, beliefs, styles, etc."
     ],
-    "examples": ["synthesis of A with B, the synthesis of art with everyday life"],
+    "examples": [
+      "synthesis of A with B, the synthesis of art with everyday life"
+    ],
     "freq": 3.84
   },
   {
@@ -8840,15 +9582,21 @@
     "definitions": [
       "to make a statement that something happened or that something is true, especially as a witness in court"
     ],
-    "examples": ["testify against somebody/something, She refused to testify against her husband."],
+    "examples": [
+      "testify against somebody/something, She refused to testify against her husband."
+    ],
     "freq": 3.84
   },
   {
     "id": "c1-991",
     "word": "tolerate",
     "class": "verb",
-    "definitions": ["to allow somebody to do something that you do not agree with or like"],
-    "examples": ["tolerate something, Their relationship was tolerated but not encouraged."],
+    "definitions": [
+      "to allow somebody to do something that you do not agree with or like"
+    ],
+    "examples": [
+      "tolerate something, Their relationship was tolerated but not encouraged."
+    ],
     "freq": 3.84
   },
   {
@@ -8858,14 +9606,18 @@
     "definitions": [
       "the act of making something such as a device or chemical process start working"
     ],
-    "examples": ["The activation of several target genes results in two major effects."],
+    "examples": [
+      "The activation of several target genes results in two major effects."
+    ],
     "freq": 3.83
   },
   {
     "id": "c1-993",
     "word": "breakthrough",
     "class": "noun",
-    "definitions": ["an important development that may lead to an agreement or achievement"],
+    "definitions": [
+      "an important development that may lead to an agreement or achievement"
+    ],
     "examples": ["to make/achieve a breakthrough"],
     "freq": 3.83
   },
@@ -8873,7 +9625,9 @@
     "id": "c1-994",
     "word": "critique",
     "class": "noun",
-    "definitions": ["a piece of written criticism of a set of ideas, a work of art, etc."],
+    "definitions": [
+      "a piece of written criticism of a set of ideas, a work of art, etc."
+    ],
     "examples": ["She wrote a feminist critique of Freud's theories."],
     "freq": 3.83
   },
@@ -8881,8 +9635,12 @@
     "id": "c1-995",
     "word": "discourse",
     "class": "noun",
-    "definitions": ["a long and serious treatment or discussion of a subject in speech or writing"],
-    "examples": ["discourse on something, a discourse on issues of gender and sexuality"],
+    "definitions": [
+      "a long and serious treatment or discussion of a subject in speech or writing"
+    ],
+    "examples": [
+      "discourse on something, a discourse on issues of gender and sexuality"
+    ],
     "freq": 3.83
   },
   {
@@ -8899,7 +9657,9 @@
     "id": "c1-997",
     "word": "imagery",
     "class": "noun",
-    "definitions": ["language that produces pictures in the minds of people reading or listening"],
+    "definitions": [
+      "language that produces pictures in the minds of people reading or listening"
+    ],
     "examples": ["poetic imagery"],
     "freq": 3.83
   },
@@ -8963,7 +9723,9 @@
     "id": "c1-1004",
     "word": "refusal",
     "class": "noun",
-    "definitions": ["an act of saying or showing that you will not do, give or accept something"],
+    "definitions": [
+      "an act of saying or showing that you will not do, give or accept something"
+    ],
     "examples": ["the refusal of a request/an invitation/an offer"],
     "freq": 3.83
   },
@@ -9046,14 +9808,18 @@
     "definitions": [
       "to experience and deal with something that is painful or unpleasant without giving up"
     ],
-    "examples": ["endure something, They had to endure a long wait before the case came to trial."],
+    "examples": [
+      "endure something, They had to endure a long wait before the case came to trial."
+    ],
     "freq": 3.82
   },
   {
     "id": "c1-1014",
     "word": "evolutionary",
     "class": "adjective",
-    "definitions": ["connected with evolution; connected with slow steady development and change"],
+    "definitions": [
+      "connected with evolution; connected with slow steady development and change"
+    ],
     "examples": ["evolutionary theory"],
     "freq": 3.82
   },
@@ -9079,7 +9845,9 @@
     "id": "c1-1017",
     "word": "methodology",
     "class": "noun",
-    "definitions": ["a set of methods and principles used to perform a particular activity"],
+    "definitions": [
+      "a set of methods and principles used to perform a particular activity"
+    ],
     "examples": ["recent changes in the methodology of language teaching"],
     "freq": 3.82
   },
@@ -9088,7 +9856,9 @@
     "word": "predecessor",
     "class": "noun",
     "definitions": ["a person who did a job before somebody else"],
-    "examples": ["The new president reversed many of the policies of his predecessor."],
+    "examples": [
+      "The new president reversed many of the policies of his predecessor."
+    ],
     "freq": 3.82
   },
   {
@@ -9105,7 +9875,9 @@
     "id": "c1-1020",
     "word": "remedy",
     "class": "noun",
-    "definitions": ["a way of dealing with or improving an unpleasant or difficult situation"],
+    "definitions": [
+      "a way of dealing with or improving an unpleasant or difficult situation"
+    ],
     "examples": [
       "When the reservoir becomes blocked, the only remedy lies in cleaning the entire system."
     ],
@@ -9115,7 +9887,9 @@
     "id": "c1-1021",
     "word": "stimulus",
     "class": "noun",
-    "definitions": ["something that helps somebody/something to develop better or more quickly"],
+    "definitions": [
+      "something that helps somebody/something to develop better or more quickly"
+    ],
     "examples": [
       "stimulus for something, Books provide children with ideas and a stimulus for play."
     ],
@@ -9192,7 +9966,9 @@
     "definitions": [
       "a sight of somebody/something for a very short time, when you do not see the person or thing completely"
     ],
-    "examples": ["glimpse (of somebody/something), He caught a glimpse of her in the crowd."],
+    "examples": [
+      "glimpse (of somebody/something), He caught a glimpse of her in the crowd."
+    ],
     "freq": 3.81
   },
   {
@@ -9219,7 +9995,9 @@
     "id": "c1-1032",
     "word": "memo",
     "class": "noun",
-    "definitions": ["an official note from one person to another in the same organization"],
+    "definitions": [
+      "an official note from one person to another in the same organization"
+    ],
     "examples": ["to write/send a memo"],
     "freq": 3.81
   },
@@ -9238,14 +10016,18 @@
     "word": "confront",
     "class": "verb",
     "definitions": ["to appear and need to be dealt with by somebody"],
-    "examples": ["What is to be done about the economic problems confronting the country?"],
+    "examples": [
+      "What is to be done about the economic problems confronting the country?"
+    ],
     "freq": 3.8
   },
   {
     "id": "c1-1035",
     "word": "decisive",
     "class": "adjective",
-    "definitions": ["very important for the final result of a particular situation"],
+    "definitions": [
+      "very important for the final result of a particular situation"
+    ],
     "examples": ["a decisive factor/victory/battle"],
     "freq": 3.8
   },
@@ -9273,7 +10055,9 @@
     "id": "c1-1038",
     "word": "minimize",
     "class": "verb",
-    "definitions": ["to reduce something, especially something bad, to the lowest possible level"],
+    "definitions": [
+      "to reduce something, especially something bad, to the lowest possible level"
+    ],
     "examples": ["Good hygiene helps to minimize the risk of infection."],
     "freq": 3.8
   },
@@ -9289,8 +10073,12 @@
     "id": "c1-1040",
     "word": "seize",
     "class": "verb",
-    "definitions": ["to take somebody/something in your hand suddenly and using force"],
-    "examples": ["seize something from somebody, She tried to seize the gun from him."],
+    "definitions": [
+      "to take somebody/something in your hand suddenly and using force"
+    ],
+    "examples": [
+      "seize something from somebody, She tried to seize the gun from him."
+    ],
     "freq": 3.8
   },
   {
@@ -9300,7 +10088,9 @@
     "definitions": [
       "used to show that you are pleased that something good has happened or that something bad has been avoided"
     ],
-    "examples": ["There was a fire in the building, but thankfully no one was hurt."],
+    "examples": [
+      "There was a fire in the building, but thankfully no one was hurt."
+    ],
     "freq": 3.8
   },
   {
@@ -9318,14 +10108,18 @@
     "definitions": [
       "being careful about what you say or do, especially to avoid danger or mistakes; not taking any risks"
     ],
-    "examples": ["The government has been cautious in its response to the report."],
+    "examples": [
+      "The government has been cautious in its response to the report."
+    ],
     "freq": 3.79
   },
   {
     "id": "c1-1044",
     "word": "cooperate",
     "class": "verb",
-    "definitions": ["to work together with somebody else in order to achieve something"],
+    "definitions": [
+      "to work together with somebody else in order to achieve something"
+    ],
     "examples": ["The two groups agreed to cooperate with each other."],
     "freq": 3.79
   },
@@ -9354,7 +10148,9 @@
     "word": "hopeful",
     "class": "adjective",
     "definitions": ["believing that something you want will happen"],
-    "examples": ["hopeful (that…), I feel hopeful that we'll find a suitable house very soon."],
+    "examples": [
+      "hopeful (that…), I feel hopeful that we'll find a suitable house very soon."
+    ],
     "freq": 3.79
   },
   {
@@ -9399,7 +10195,9 @@
     "id": "c1-1052",
     "word": "reproduction",
     "class": "noun",
-    "definitions": ["the act or process of producing babies, young animals or plants"],
+    "definitions": [
+      "the act or process of producing babies, young animals or plants"
+    ],
     "examples": ["sexual reproduction"],
     "freq": 3.79
   },
@@ -9408,7 +10206,9 @@
     "word": "alignment",
     "class": "noun",
     "definitions": ["arrangement in a straight line"],
-    "examples": ["the alignment of the sun, moon and earth at a particular time"],
+    "examples": [
+      "the alignment of the sun, moon and earth at a particular time"
+    ],
     "freq": 3.78
   },
   {
@@ -9495,7 +10295,9 @@
     "id": "c1-1062",
     "word": "render",
     "class": "verb",
-    "definitions": ["to cause somebody/something to be in a particular state or condition"],
+    "definitions": [
+      "to cause somebody/something to be in a particular state or condition"
+    ],
     "examples": ["to render something harmless/useless/ineffective"],
     "freq": 3.78
   },
@@ -9534,14 +10336,18 @@
     "word": "attribute",
     "class": "noun",
     "definitions": ["a quality or feature of somebody/something"],
-    "examples": ["Patience is one of the most important attributes in a teacher."],
+    "examples": [
+      "Patience is one of the most important attributes in a teacher."
+    ],
     "freq": 3.77
   },
   {
     "id": "c1-1067",
     "word": "attribute",
     "class": "verb",
-    "definitions": ["to say or believe that something is the result of a particular thing"],
+    "definitions": [
+      "to say or believe that something is the result of a particular thing"
+    ],
     "examples": ["She attributes her success to hard work and a little luck."],
     "freq": 3.77
   },
@@ -9549,7 +10355,9 @@
     "id": "c1-1068",
     "word": "complement",
     "class": "verb",
-    "definitions": ["to add to something in a way that improves it or makes it more attractive"],
+    "definitions": [
+      "to add to something in a way that improves it or makes it more attractive"
+    ],
     "examples": ["The excellent menu is complemented by a good wine list."],
     "freq": 3.77
   },
@@ -9557,7 +10365,9 @@
     "id": "c1-1069",
     "word": "conquer",
     "class": "verb",
-    "definitions": ["to take control of a country or city and its people by force"],
+    "definitions": [
+      "to take control of a country or city and its people by force"
+    ],
     "examples": ["The Normans conquered England in 1066."],
     "freq": 3.77
   },
@@ -9583,7 +10393,9 @@
     "id": "c1-1072",
     "word": "embarrassment",
     "class": "noun",
-    "definitions": ["shy, uncomfortable or guilty feelings; a feeling of being embarrassed"],
+    "definitions": [
+      "shy, uncomfortable or guilty feelings; a feeling of being embarrassed"
+    ],
     "examples": ["I nearly died of embarrassment when he said that."],
     "freq": 3.77
   },
@@ -9591,7 +10403,9 @@
     "id": "c1-1073",
     "word": "fairness",
     "class": "noun",
-    "definitions": ["the quality of treating people equally or in a way that is reasonable"],
+    "definitions": [
+      "the quality of treating people equally or in a way that is reasonable"
+    ],
     "examples": ["The fairness of the judicial system is being questioned."],
     "freq": 3.77
   },
@@ -9610,14 +10424,18 @@
     "definitions": [
       "a person who knows a lot about a group or an organization, because they are part of it"
     ],
-    "examples": ["The situation was described by one insider as ‘absolute chaos’."],
+    "examples": [
+      "The situation was described by one insider as ‘absolute chaos’."
+    ],
     "freq": 3.77
   },
   {
     "id": "c1-1076",
     "word": "insufficient",
     "class": "adjective",
-    "definitions": ["not large, strong or important enough for a particular purpose"],
+    "definitions": [
+      "not large, strong or important enough for a particular purpose"
+    ],
     "examples": ["insufficient time"],
     "freq": 3.77
   },
@@ -9697,7 +10515,9 @@
     "id": "c1-1085",
     "word": "calculation",
     "class": "noun",
-    "definitions": ["the act or process of using numbers to find out an amount"],
+    "definitions": [
+      "the act or process of using numbers to find out an amount"
+    ],
     "examples": ["Cathy did a rough calculation."],
     "freq": 3.76
   },
@@ -9718,7 +10538,9 @@
     "definitions": [
       "to tie somebody/something with rope, string, etc. so that they/it cannot move or are held together strongly"
     ],
-    "examples": ["bind somebody/something to something, She was bound to a chair."],
+    "examples": [
+      "bind somebody/something to something, She was bound to a chair."
+    ],
     "freq": 3.75
   },
   {
@@ -9728,14 +10550,18 @@
     "definitions": [
       "an understanding or a belief of what something/somebody is or what something/somebody should be"
     ],
-    "examples": ["conception of something, Marx’s conception of social justice"],
+    "examples": [
+      "conception of something, Marx’s conception of social justice"
+    ],
     "freq": 3.75
   },
   {
     "id": "c1-1089",
     "word": "deed",
     "class": "noun",
-    "definitions": ["a thing that somebody does that is usually very good or very bad"],
+    "definitions": [
+      "a thing that somebody does that is usually very good or very bad"
+    ],
     "examples": ["It's a stirring tale of heroic deeds."],
     "freq": 3.75
   },
@@ -9743,8 +10569,12 @@
     "id": "c1-1090",
     "word": "endorsement",
     "class": "noun",
-    "definitions": ["a public statement or action showing that you support somebody/something"],
-    "examples": ["The election victory is a clear endorsement of their policies."],
+    "definitions": [
+      "a public statement or action showing that you support somebody/something"
+    ],
+    "examples": [
+      "The election victory is a clear endorsement of their policies."
+    ],
     "freq": 3.75
   },
   {
@@ -9785,7 +10615,9 @@
     "id": "c1-1095",
     "word": "merge",
     "class": "verb",
-    "definitions": ["to combine or make two or more things combine to form a single thing"],
+    "definitions": [
+      "to combine or make two or more things combine to form a single thing"
+    ],
     "examples": ["The banks are set to merge next year."],
     "freq": 3.75
   },
@@ -9803,7 +10635,9 @@
     "id": "c1-1097",
     "word": "specification",
     "class": "noun",
-    "definitions": ["a detailed description of how something is, or should be, designed or made"],
+    "definitions": [
+      "a detailed description of how something is, or should be, designed or made"
+    ],
     "examples": ["the technical specifications of the new model (= of car)"],
     "freq": 3.75
   },
@@ -9812,14 +10646,18 @@
     "word": "utilize",
     "class": "verb",
     "definitions": ["to use something, especially for a practical purpose"],
-    "examples": ["The Romans were the first to utilize concrete as a building material."],
+    "examples": [
+      "The Romans were the first to utilize concrete as a building material."
+    ],
     "freq": 3.75
   },
   {
     "id": "c1-1099",
     "word": "violate",
     "class": "verb",
-    "definitions": ["to go against or refuse to obey a law, an agreement, etc."],
+    "definitions": [
+      "to go against or refuse to obey a law, an agreement, etc."
+    ],
     "examples": ["to violate international law"],
     "freq": 3.75
   },
@@ -9857,7 +10695,9 @@
     "id": "c1-1103",
     "word": "expenditure",
     "class": "noun",
-    "definitions": ["the act of spending or using money; an amount of money spent"],
+    "definitions": [
+      "the act of spending or using money; an amount of money spent"
+    ],
     "examples": ["a reduction in public/government/military expenditure"],
     "freq": 3.74
   },
@@ -9950,14 +10790,18 @@
     "word": "notify",
     "class": "verb",
     "definitions": ["to formally or officially tell somebody about something"],
-    "examples": ["notify somebody, Competition winners will be notified by post."],
+    "examples": [
+      "notify somebody, Competition winners will be notified by post."
+    ],
     "freq": 3.73
   },
   {
     "id": "c1-1114",
     "word": "patron",
     "class": "noun",
-    "definitions": ["a person who gives money and support to artists and writers"],
+    "definitions": [
+      "a person who gives money and support to artists and writers"
+    ],
     "examples": ["Frederick the Great was the patron of many artists."],
     "freq": 3.73
   },
@@ -9965,7 +10809,9 @@
     "id": "c1-1115",
     "word": "regain",
     "class": "verb",
-    "definitions": ["to get back something you no longer have, especially an ability or a quality"],
+    "definitions": [
+      "to get back something you no longer have, especially an ability or a quality"
+    ],
     "examples": ["I struggled to regain some dignity."],
     "freq": 3.73
   },
@@ -9973,7 +10819,9 @@
     "id": "c1-1116",
     "word": "renew",
     "class": "verb",
-    "definitions": ["to begin something again after it stopped or was interrupted"],
+    "definitions": [
+      "to begin something again after it stopped or was interrupted"
+    ],
     "examples": ["The army renewed its assault on the capital."],
     "freq": 3.73
   },
@@ -9999,7 +10847,9 @@
     "id": "c1-1119",
     "word": "thrive",
     "class": "verb",
-    "definitions": ["to become, and continue to be, successful, strong, healthy, etc."],
+    "definitions": [
+      "to become, and continue to be, successful, strong, healthy, etc."
+    ],
     "examples": ["New businesses thrive in this area."],
     "freq": 3.73
   },
@@ -10049,7 +10899,9 @@
     "id": "c1-1124",
     "word": "dismissal",
     "class": "noun",
-    "definitions": ["the act of dismissing somebody from their job; an example of this"],
+    "definitions": [
+      "the act of dismissing somebody from their job; an example of this"
+    ],
     "examples": ["He still hopes to win his claim against unfair dismissal."],
     "freq": 3.72
   },
@@ -10089,15 +10941,21 @@
     "id": "c1-1129",
     "word": "specimen",
     "class": "noun",
-    "definitions": ["a small amount of something that shows what the rest of it is like"],
-    "examples": ["Astronauts have brought back specimens of rock from the moon."],
+    "definitions": [
+      "a small amount of something that shows what the rest of it is like"
+    ],
+    "examples": [
+      "Astronauts have brought back specimens of rock from the moon."
+    ],
     "freq": 3.72
   },
   {
     "id": "c1-1130",
     "word": "steer",
     "class": "verb",
-    "definitions": ["to control the direction in which a boat, car, etc. moves"],
+    "definitions": [
+      "to control the direction in which a boat, car, etc. moves"
+    ],
     "examples": ["He steered the boat into the harbour."],
     "freq": 3.72
   },
@@ -10130,14 +10988,18 @@
     "definitions": [
       "a situation in which it is difficult for something to continue in the normal way; the act of stopping something from continuing in the normal way"
     ],
-    "examples": ["We aim to help you move house with minimum disruption to yourself."],
+    "examples": [
+      "We aim to help you move house with minimum disruption to yourself."
+    ],
     "freq": 3.71
   },
   {
     "id": "c1-1134",
     "word": "magistrate",
     "class": "noun",
-    "definitions": ["an official who acts as a judge in the lowest courts of law"],
+    "definitions": [
+      "an official who acts as a judge in the lowest courts of law"
+    ],
     "examples": ["to come up before the magistrates"],
     "freq": 3.71
   },
@@ -10169,8 +11031,12 @@
     "id": "c1-1138",
     "word": "appoint",
     "class": "verb",
-    "definitions": ["to choose somebody for a job or position of responsibility"],
-    "examples": ["appoint somebody, They have appointed a new head teacher at my son's school."],
+    "definitions": [
+      "to choose somebody for a job or position of responsibility"
+    ],
+    "examples": [
+      "appoint somebody, They have appointed a new head teacher at my son's school."
+    ],
     "freq": 3.7
   },
   {
@@ -10180,7 +11046,9 @@
     "definitions": [
       "a person or thing that has the same position or function as somebody/something else in a different place or situation"
     ],
-    "examples": ["The Foreign Minister held talks with his Chinese counterpart."],
+    "examples": [
+      "The Foreign Minister held talks with his Chinese counterpart."
+    ],
     "freq": 3.7
   },
   {
@@ -10225,15 +11093,21 @@
     "id": "c1-1144",
     "word": "indictment",
     "class": "noun",
-    "definitions": ["a sign that a system, society, etc. is very bad or very wrong"],
-    "examples": ["The poverty in our cities is a damning indictment of modern society."],
+    "definitions": [
+      "a sign that a system, society, etc. is very bad or very wrong"
+    ],
+    "examples": [
+      "The poverty in our cities is a damning indictment of modern society."
+    ],
     "freq": 3.7
   },
   {
     "id": "c1-1145",
     "word": "limb",
     "class": "noun",
-    "definitions": ["an arm or a leg; a similar part of an animal, such as a wing"],
+    "definitions": [
+      "an arm or a leg; a similar part of an animal, such as a wing"
+    ],
     "examples": ["an artificial limb"],
     "freq": 3.7
   },
@@ -10257,7 +11131,9 @@
     "id": "c1-1148",
     "word": "vulnerability",
     "class": "noun",
-    "definitions": ["the fact of being weak and easily hurt physically or emotionally"],
+    "definitions": [
+      "the fact of being weak and easily hurt physically or emotionally"
+    ],
     "examples": ["the vulnerability of newborn babies to disease"],
     "freq": 3.7
   },
@@ -10265,7 +11141,9 @@
     "id": "c1-1149",
     "word": "accomplishment",
     "class": "noun",
-    "definitions": ["an impressive thing that is done or achieved after a lot of work"],
+    "definitions": [
+      "an impressive thing that is done or achieved after a lot of work"
+    ],
     "examples": ["It was one of the President's greatest accomplishments."],
     "freq": 3.69
   },
@@ -10273,7 +11151,9 @@
     "id": "c1-1150",
     "word": "aide",
     "class": "noun",
-    "definitions": ["a person who helps another person, especially a politician, in their job"],
+    "definitions": [
+      "a person who helps another person, especially a politician, in their job"
+    ],
     "examples": ["White House aides"],
     "freq": 3.69
   },
@@ -10291,7 +11171,9 @@
     "id": "c1-1152",
     "word": "constituency",
     "class": "noun",
-    "definitions": ["a district that elects its own representative to parliament"],
+    "definitions": [
+      "a district that elects its own representative to parliament"
+    ],
     "examples": ["Unemployment is high in her constituency."],
     "freq": 3.69
   },
@@ -10325,7 +11207,9 @@
     "id": "c1-1156",
     "word": "intriguing",
     "class": "adjective",
-    "definitions": ["very interesting because of being unusual or not having an obvious answer"],
+    "definitions": [
+      "very interesting because of being unusual or not having an obvious answer"
+    ],
     "examples": ["These discoveries raise intriguing questions."],
     "freq": 3.69
   },
@@ -10336,7 +11220,9 @@
     "definitions": [
       "to control or influence somebody/something, often in a dishonest way so that they do not realize it"
     ],
-    "examples": ["manipulate somebody/something, She uses her charm to manipulate people."],
+    "examples": [
+      "manipulate somebody/something, She uses her charm to manipulate people."
+    ],
     "freq": 3.69
   },
   {
@@ -10415,8 +11301,12 @@
     "id": "c1-1165",
     "word": "manifest",
     "class": "verb",
-    "definitions": ["to show something clearly, especially a feeling, an attitude or a quality"],
-    "examples": ["Social tensions were manifested in the recent political crisis."],
+    "definitions": [
+      "to show something clearly, especially a feeling, an attitude or a quality"
+    ],
+    "examples": [
+      "Social tensions were manifested in the recent political crisis."
+    ],
     "freq": 3.68
   },
   {
@@ -10452,7 +11342,9 @@
     "definitions": [
       "a person or an organization that has control of money or property that has been put into a trust for somebody"
     ],
-    "examples": ["The bank will act as trustees for the estate until the child is 18."],
+    "examples": [
+      "The bank will act as trustees for the estate until the child is 18."
+    ],
     "freq": 3.68
   },
   {
@@ -10516,7 +11408,9 @@
     "word": "reside",
     "class": "verb",
     "definitions": ["to live in a particular place"],
-    "examples": ["He returned to Britain in 1939, having resided abroad for many years."],
+    "examples": [
+      "He returned to Britain in 1939, having resided abroad for many years."
+    ],
     "freq": 3.67
   },
   {
@@ -10531,7 +11425,9 @@
     "id": "c1-1178",
     "word": "accelerate",
     "class": "verb",
-    "definitions": ["to happen faster or earlier; to make something happen faster or earlier"],
+    "definitions": [
+      "to happen faster or earlier; to make something happen faster or earlier"
+    ],
     "examples": ["Inflation continues to accelerate."],
     "freq": 3.66
   },
@@ -10552,14 +11448,18 @@
     "definitions": [
       "a political leader who has complete power over a country, especially one who has gained it using military force"
     ],
-    "examples": ["The country suffered at the hands of a series of military dictators."],
+    "examples": [
+      "The country suffered at the hands of a series of military dictators."
+    ],
     "freq": 3.66
   },
   {
     "id": "c1-1181",
     "word": "optimism",
     "class": "noun",
-    "definitions": ["a feeling that good things will happen and that something will be successful"],
+    "definitions": [
+      "a feeling that good things will happen and that something will be successful"
+    ],
     "examples": ["a mood of cautious optimism"],
     "freq": 3.66
   },
@@ -10597,15 +11497,21 @@
     "id": "c1-1185",
     "word": "intervene",
     "class": "verb",
-    "definitions": ["to become involved in a situation in order to improve or help it"],
-    "examples": ["She might have been killed if the neighbours hadn't intervened."],
+    "definitions": [
+      "to become involved in a situation in order to improve or help it"
+    ],
+    "examples": [
+      "She might have been killed if the neighbours hadn't intervened."
+    ],
     "freq": 3.65
   },
   {
     "id": "c1-1186",
     "word": "slash",
     "class": "verb",
-    "definitions": ["to make a long cut with a sharp object, especially in a violent way"],
+    "definitions": [
+      "to make a long cut with a sharp object, especially in a violent way"
+    ],
     "examples": ["slash something, Someone had slashed the tyres on my car."],
     "freq": 3.65
   },
@@ -10633,7 +11539,9 @@
     "id": "c1-1189",
     "word": "assemble",
     "class": "verb",
-    "definitions": ["to come together as a group; to bring people or things together as a group"],
+    "definitions": [
+      "to come together as a group; to bring people or things together as a group"
+    ],
     "examples": ["All the students were asked to assemble in the main hall."],
     "freq": 3.64
   },
@@ -10641,7 +11549,9 @@
     "id": "c1-1190",
     "word": "chunk",
     "class": "noun",
-    "definitions": ["a thick, solid piece that has been cut or broken off something"],
+    "definitions": [
+      "a thick, solid piece that has been cut or broken off something"
+    ],
     "examples": ["a chunk of cheese/masonry"],
     "freq": 3.64
   },
@@ -10652,7 +11562,9 @@
     "definitions": [
       "the state of not having, or not having enough of, something that is essential"
     ],
-    "examples": ["deficiency (in something), Vitamin deficiency in the diet can cause illness."],
+    "examples": [
+      "deficiency (in something), Vitamin deficiency in the diet can cause illness."
+    ],
     "freq": 3.64
   },
   {
@@ -10687,8 +11599,12 @@
     "id": "c1-1195",
     "word": "restraint",
     "class": "noun",
-    "definitions": ["a rule, a fact, an idea, etc. that limits or controls what people can do"],
-    "examples": ["The government has imposed export restraints on some products."],
+    "definitions": [
+      "a rule, a fact, an idea, etc. that limits or controls what people can do"
+    ],
+    "examples": [
+      "The government has imposed export restraints on some products."
+    ],
     "freq": 3.64
   },
   {
@@ -10698,15 +11614,21 @@
     "definitions": [
       "to arrange something in the correct position, or to be in the correct position, in relation to something else, especially in a straight line"
     ],
-    "examples": ["Make sure the shelf is aligned with the top of the cupboard."],
+    "examples": [
+      "Make sure the shelf is aligned with the top of the cupboard."
+    ],
     "freq": 3.63
   },
   {
     "id": "c1-1197",
     "word": "assertion",
     "class": "noun",
-    "definitions": ["a statement saying that you strongly believe something to be true"],
-    "examples": ["He was correct in his assertion that the minister had been lying."],
+    "definitions": [
+      "a statement saying that you strongly believe something to be true"
+    ],
+    "examples": [
+      "He was correct in his assertion that the minister had been lying."
+    ],
     "freq": 3.63
   },
   {
@@ -10721,7 +11643,9 @@
     "id": "c1-1199",
     "word": "endorse",
     "class": "verb",
-    "definitions": ["to say publicly that you support a person, statement or course of action"],
+    "definitions": [
+      "to say publicly that you support a person, statement or course of action"
+    ],
     "examples": ["I wholeheartedly endorse his remarks."],
     "freq": 3.63
   },
@@ -10732,7 +11656,9 @@
     "definitions": [
       "to look closely at something/somebody, especially to check that everything is as it should be"
     ],
-    "examples": ["inspect something/somebody, The teacher walked around inspecting their work."],
+    "examples": [
+      "inspect something/somebody, The teacher walked around inspecting their work."
+    ],
     "freq": 3.63
   },
   {
@@ -10747,8 +11673,12 @@
     "id": "c1-1202",
     "word": "plead",
     "class": "verb",
-    "definitions": ["to ask somebody for something in a very strong and serious way"],
-    "examples": ["plead (with somebody) (to do something), She pleaded with him not to go."],
+    "definitions": [
+      "to ask somebody for something in a very strong and serious way"
+    ],
+    "examples": [
+      "plead (with somebody) (to do something), She pleaded with him not to go."
+    ],
     "freq": 3.63
   },
   {
@@ -10765,7 +11695,9 @@
     "id": "c1-1204",
     "word": "practitioner",
     "class": "noun",
-    "definitions": ["a person who works in a profession, especially medicine or law"],
+    "definitions": [
+      "a person who works in a profession, especially medicine or law"
+    ],
     "examples": ["dental practitioners"],
     "freq": 3.63
   },
@@ -10800,7 +11732,9 @@
     "word": "assert",
     "class": "verb",
     "definitions": ["to state clearly and definitely that something is true"],
-    "examples": ["assert that…, She continued to assert that she was innocent."],
+    "examples": [
+      "assert that…, She continued to assert that she was innocent."
+    ],
     "freq": 3.62
   },
   {
@@ -10817,7 +11751,9 @@
     "id": "c1-1210",
     "word": "empirical",
     "class": "adjective",
-    "definitions": ["based on experiments or experience rather than ideas or theories"],
+    "definitions": [
+      "based on experiments or experience rather than ideas or theories"
+    ],
     "examples": ["empirical evidence/knowledge/research"],
     "freq": 3.62
   },
@@ -10855,7 +11791,9 @@
     "id": "c1-1214",
     "word": "presume",
     "class": "verb",
-    "definitions": ["to suppose that something is true, although you do not have actual proof"],
+    "definitions": [
+      "to suppose that something is true, although you do not have actual proof"
+    ],
     "examples": ["They are very expensive, I presume?"],
     "freq": 3.62
   },
@@ -10873,7 +11811,9 @@
     "id": "c1-1216",
     "word": "casualty",
     "class": "noun",
-    "definitions": ["a person who is killed or injured in war or in an accident"],
+    "definitions": [
+      "a person who is killed or injured in war or in an accident"
+    ],
     "examples": ["Our primary objective is reducing road casualties."],
     "freq": 3.61
   },
@@ -10892,7 +11832,9 @@
     "definitions": [
       "to put something in liquid for a time so that it becomes completely wet; to become completely wet in this way"
     ],
-    "examples": ["soak something (in something), I usually soak the beans overnight."],
+    "examples": [
+      "soak something (in something), I usually soak the beans overnight."
+    ],
     "freq": 3.61
   },
   {
@@ -10919,8 +11861,12 @@
     "id": "c1-1221",
     "word": "attain",
     "class": "verb",
-    "definitions": ["to succeed in getting something, usually after a lot of effort"],
-    "examples": ["Most of our students attained five ‘A’ grades in their exams."],
+    "definitions": [
+      "to succeed in getting something, usually after a lot of effort"
+    ],
+    "examples": [
+      "Most of our students attained five ‘A’ grades in their exams."
+    ],
     "freq": 3.6
   },
   {
@@ -10940,7 +11886,9 @@
     "word": "contender",
     "class": "noun",
     "definitions": ["a person or team with a chance of winning a competition"],
-    "examples": ["contender (for something), a contender for a gold medal in the Olympics"],
+    "examples": [
+      "contender (for something), a contender for a gold medal in the Olympics"
+    ],
     "freq": 3.6
   },
   {
@@ -10975,7 +11923,9 @@
     "id": "c1-1227",
     "word": "congratulate",
     "class": "verb",
-    "definitions": ["to tell somebody that you are pleased about their success or achievements"],
+    "definitions": [
+      "to tell somebody that you are pleased about their success or achievements"
+    ],
     "examples": ["I congratulated them all on their results."],
     "freq": 3.59
   },
@@ -10993,7 +11943,9 @@
     "id": "c1-1229",
     "word": "disrupt",
     "class": "verb",
-    "definitions": ["to make it difficult for something to continue in the normal way"],
+    "definitions": [
+      "to make it difficult for something to continue in the normal way"
+    ],
     "examples": ["Demonstrators succeeded in disrupting the meeting."],
     "freq": 3.59
   },
@@ -11017,8 +11969,12 @@
     "id": "c1-1232",
     "word": "adolescent",
     "class": "noun",
-    "definitions": ["a young person who is developing from a child into an adult"],
-    "examples": ["adolescents between the ages of 13 and 18 and the problems they face"],
+    "definitions": [
+      "a young person who is developing from a child into an adult"
+    ],
+    "examples": [
+      "adolescents between the ages of 13 and 18 and the problems they face"
+    ],
     "freq": 3.58
   },
   {
@@ -11033,7 +11989,9 @@
     "id": "c1-1234",
     "word": "columnist",
     "class": "noun",
-    "definitions": ["a journalist who writes regular articles for a newspaper or magazine"],
+    "definitions": [
+      "a journalist who writes regular articles for a newspaper or magazine"
+    ],
     "examples": ["a newspaper columnist"],
     "freq": 3.58
   },
@@ -11049,7 +12007,9 @@
     "id": "c1-1236",
     "word": "dictate",
     "class": "verb",
-    "definitions": ["to tell somebody what to do, especially in an annoying way"],
+    "definitions": [
+      "to tell somebody what to do, especially in an annoying way"
+    ],
     "examples": [
       "dictate something (to somebody), They are in no position to dictate terms (= tell other people what to do)."
     ],
@@ -11059,8 +12019,12 @@
     "id": "c1-1237",
     "word": "rotate",
     "class": "verb",
-    "definitions": ["to move or turn around a central fixed point; to make something do this"],
-    "examples": ["Stay well away from the helicopter when its blades start to rotate."],
+    "definitions": [
+      "to move or turn around a central fixed point; to make something do this"
+    ],
+    "examples": [
+      "Stay well away from the helicopter when its blades start to rotate."
+    ],
     "freq": 3.58
   },
   {
@@ -11068,7 +12032,9 @@
     "word": "adhere",
     "class": "verb",
     "definitions": ["to stick to something"],
-    "examples": ["Once in the bloodstream, the bacteria adhere to the surface of the red cells."],
+    "examples": [
+      "Once in the bloodstream, the bacteria adhere to the surface of the red cells."
+    ],
     "freq": 3.57
   },
   {
@@ -11078,7 +12044,9 @@
     "definitions": [
       "something that you allow or do, or allow somebody to have, in order to end an argument or to make a situation less difficult"
     ],
-    "examples": ["The firm will be forced to make concessions if it wants to avoid a strike."],
+    "examples": [
+      "The firm will be forced to make concessions if it wants to avoid a strike."
+    ],
     "freq": 3.57
   },
   {
@@ -11097,7 +12065,9 @@
     "id": "c1-1241",
     "word": "parameter",
     "class": "noun",
-    "definitions": ["something that decides or limits the way in which something can be done"],
+    "definitions": [
+      "something that decides or limits the way in which something can be done"
+    ],
     "examples": ["to set/define the parameters"],
     "freq": 3.57
   },
@@ -11106,14 +12076,18 @@
     "word": "contend",
     "class": "verb",
     "definitions": ["to say that something is true, especially in an argument"],
-    "examples": ["I would contend that the minister's thinking is flawed on this point."],
+    "examples": [
+      "I would contend that the minister's thinking is flawed on this point."
+    ],
     "freq": 3.56
   },
   {
     "id": "c1-1243",
     "word": "convict",
     "class": "verb",
-    "definitions": ["to decide and state officially in court that somebody is guilty of a crime"],
+    "definitions": [
+      "to decide and state officially in court that somebody is guilty of a crime"
+    ],
     "examples": ["be convicted (of something), He was convicted of fraud."],
     "freq": 3.56
   },
@@ -11187,7 +12161,9 @@
     "id": "c1-1251",
     "word": "outsider",
     "class": "noun",
-    "definitions": ["a person who is not accepted as a member of a society, group, etc."],
+    "definitions": [
+      "a person who is not accepted as a member of a society, group, etc."
+    ],
     "examples": ["Here she felt she would always be an outsider."],
     "freq": 3.55
   },
@@ -11195,7 +12171,9 @@
     "id": "c1-1252",
     "word": "prevail",
     "class": "verb",
-    "definitions": ["to exist or be very common at a particular time or in a particular place"],
+    "definitions": [
+      "to exist or be very common at a particular time or in a particular place"
+    ],
     "examples": [
       "prevail in something, We were horrified at the conditions prevailing in local prisons."
     ],
@@ -11215,7 +12193,9 @@
     "id": "c1-1254",
     "word": "articulate",
     "class": "verb",
-    "definitions": ["to express or explain your thoughts or feelings clearly in words"],
+    "definitions": [
+      "to express or explain your thoughts or feelings clearly in words"
+    ],
     "examples": ["She struggled to articulate her thoughts."],
     "freq": 3.54
   },
@@ -11246,7 +12226,9 @@
     "definitions": [
       "to allow yourself to have or do something that you like, especially something that is considered bad for you"
     ],
-    "examples": ["indulge in something, They went into town to indulge in some serious shopping."],
+    "examples": [
+      "indulge in something, They went into town to indulge in some serious shopping."
+    ],
     "freq": 3.54
   },
   {
@@ -11271,8 +12253,12 @@
     "id": "c1-1260",
     "word": "dispose",
     "class": "verb",
-    "definitions": ["to arrange things or people in a particular way or position"],
-    "examples": ["The visitors disposed themselves in a circle round the statue."],
+    "definitions": [
+      "to arrange things or people in a particular way or position"
+    ],
+    "examples": [
+      "The visitors disposed themselves in a circle round the statue."
+    ],
     "freq": 3.53
   },
   {
@@ -11296,7 +12282,9 @@
     "word": "flourish",
     "class": "verb",
     "definitions": ["to develop quickly and become successful or common"],
-    "examples": ["Few businesses are flourishing in the present economic climate."],
+    "examples": [
+      "Few businesses are flourishing in the present economic climate."
+    ],
     "freq": 3.53
   },
   {
@@ -11323,7 +12311,9 @@
     "id": "c1-1266",
     "word": "quota",
     "class": "noun",
-    "definitions": ["a limited number or amount of people or things that is officially allowed"],
+    "definitions": [
+      "a limited number or amount of people or things that is officially allowed"
+    ],
     "examples": ["to introduce a strict import quota on grain"],
     "freq": 3.53
   },
@@ -11331,7 +12321,9 @@
     "id": "c1-1267",
     "word": "residue",
     "class": "noun",
-    "definitions": ["a small amount of something that remains at the end of a process"],
+    "definitions": [
+      "a small amount of something that remains at the end of a process"
+    ],
     "examples": ["pesticide residues in fruit and vegetables"],
     "freq": 3.53
   },
@@ -11342,7 +12334,9 @@
     "definitions": [
       "to make cloth, a carpet, a basket, etc. by crossing threads or narrow pieces of material across, over and under each other by hand or on a machine called a loom"
     ],
-    "examples": ["weave A from B, The baskets are woven from strips of willow."],
+    "examples": [
+      "weave A from B, The baskets are woven from strips of willow."
+    ],
     "freq": 3.53
   },
   {
@@ -11390,15 +12384,21 @@
     "definitions": [
       "to talk in a way that shows you are too proud of something that you have or can do"
     ],
-    "examples": ["I don't want to boast, but I can actually speak six languages."],
+    "examples": [
+      "I don't want to boast, but I can actually speak six languages."
+    ],
     "freq": 3.51
   },
   {
     "id": "c1-1274",
     "word": "collaborate",
     "class": "verb",
-    "definitions": ["to work together with somebody in order to produce or achieve something"],
-    "examples": ["Researchers around the world are collaborating to develop a new vaccine."],
+    "definitions": [
+      "to work together with somebody in order to produce or achieve something"
+    ],
+    "examples": [
+      "Researchers around the world are collaborating to develop a new vaccine."
+    ],
     "freq": 3.51
   },
   {
@@ -11471,7 +12471,9 @@
     "id": "c1-1282",
     "word": "provoke",
     "class": "verb",
-    "definitions": ["to cause a particular reaction or have a particular effect"],
+    "definitions": [
+      "to cause a particular reaction or have a particular effect"
+    ],
     "examples": ["The announcement provoked a storm of protest."],
     "freq": 3.5
   },
@@ -11503,8 +12505,12 @@
     "id": "c1-1286",
     "word": "plunge",
     "class": "verb",
-    "definitions": ["to move or make somebody/something move suddenly forwards and/or downwards"],
-    "examples": ["+ adv./prep., She lost her balance and plunged 100 feet to her death."],
+    "definitions": [
+      "to move or make somebody/something move suddenly forwards and/or downwards"
+    ],
+    "examples": [
+      "+ adv./prep., She lost her balance and plunged 100 feet to her death."
+    ],
     "freq": 3.49
   },
   {
@@ -11529,7 +12535,9 @@
     "id": "c1-1289",
     "word": "accumulate",
     "class": "verb",
-    "definitions": ["to gradually get more and more of something over a period of time"],
+    "definitions": [
+      "to gradually get more and more of something over a period of time"
+    ],
     "examples": ["I seem to have accumulated a lot of books."],
     "freq": 3.48
   },
@@ -11568,14 +12576,18 @@
     "definitions": [
       "to arrange for an event, etc. to take place at a later time or date than originally planned"
     ],
-    "examples": ["postpone something, The game has already been postponed three times."],
+    "examples": [
+      "postpone something, The game has already been postponed three times."
+    ],
     "freq": 3.48
   },
   {
     "id": "c1-1294",
     "word": "aspire",
     "class": "verb",
-    "definitions": ["to have a strong desire to achieve or to become something"],
+    "definitions": [
+      "to have a strong desire to achieve or to become something"
+    ],
     "examples": ["aspire (to something), She aspired to a scientific career."],
     "freq": 3.47
   },
@@ -11595,7 +12607,9 @@
     "id": "c1-1296",
     "word": "thought-provoking",
     "class": "adjective",
-    "definitions": ["making people think seriously about a particular subject or issue"],
+    "definitions": [
+      "making people think seriously about a particular subject or issue"
+    ],
     "examples": ["a brilliant and thought-provoking play"],
     "freq": 3.47
   },
@@ -11653,7 +12667,9 @@
     "id": "c1-1302",
     "word": "contradiction",
     "class": "noun",
-    "definitions": ["a lack of agreement between facts, opinions, actions, etc."],
+    "definitions": [
+      "a lack of agreement between facts, opinions, actions, etc."
+    ],
     "examples": [
       "contradiction (between A and B), There is a contradiction between the two sets of figures."
     ],
@@ -11671,8 +12687,12 @@
     "id": "c1-1304",
     "word": "endeavour",
     "class": "noun",
-    "definitions": ["an attempt to do something, especially something new or difficult"],
-    "examples": ["There have been great advances in the field of scientific endeavour."],
+    "definitions": [
+      "an attempt to do something, especially something new or difficult"
+    ],
+    "examples": [
+      "There have been great advances in the field of scientific endeavour."
+    ],
     "freq": 3.45
   },
   {
@@ -11694,7 +12714,9 @@
     "definitions": [
       "to create particular conditions that exist in real life using computers, models, etc., usually for study or training purposes"
     ],
-    "examples": ["Computer software can be used to simulate conditions on the seabed."],
+    "examples": [
+      "Computer software can be used to simulate conditions on the seabed."
+    ],
     "freq": 3.44
   },
   {
@@ -11702,7 +12724,9 @@
     "word": "enact",
     "class": "verb",
     "definitions": ["to pass a law"],
-    "examples": ["(be) enacted (by somebody/something), legislation enacted by parliament"],
+    "examples": [
+      "(be) enacted (by somebody/something), legislation enacted by parliament"
+    ],
     "freq": 3.43
   },
   {
@@ -11732,7 +12756,9 @@
     "word": "betray",
     "class": "verb",
     "definitions": ["to give information about somebody/something to an enemy"],
-    "examples": ["betray somebody/something, He was offered money to betray his colleagues."],
+    "examples": [
+      "betray somebody/something, He was offered money to betray his colleagues."
+    ],
     "freq": 3.42
   },
   {
@@ -11758,7 +12784,9 @@
     "word": "divert",
     "class": "verb",
     "definitions": ["to make somebody/something change direction"],
-    "examples": ["be diverted, The course of the stream has now been diverted."],
+    "examples": [
+      "be diverted, The course of the stream has now been diverted."
+    ],
     "freq": 3.42
   },
   {
@@ -11796,7 +12824,9 @@
     "definitions": [
       "to think about whether you should do something, or how you should do something"
     ],
-    "examples": ["contemplate something, You're too young to be contemplating retirement."],
+    "examples": [
+      "contemplate something, You're too young to be contemplating retirement."
+    ],
     "freq": 3.41
   },
   {
@@ -11813,15 +12843,21 @@
     "id": "c1-1319",
     "word": "diagnose",
     "class": "verb",
-    "definitions": ["to say exactly what an illness or the cause of a problem is"],
-    "examples": ["diagnose something, The test is used to diagnose a variety of diseases."],
+    "definitions": [
+      "to say exactly what an illness or the cause of a problem is"
+    ],
+    "examples": [
+      "diagnose something, The test is used to diagnose a variety of diseases."
+    ],
     "freq": 3.41
   },
   {
     "id": "c1-1320",
     "word": "substitution",
     "class": "noun",
-    "definitions": ["an act of using one person or thing in the place of another"],
+    "definitions": [
+      "an act of using one person or thing in the place of another"
+    ],
     "examples": ["Two substitutions were made during the game."],
     "freq": 3.41
   },
@@ -11839,7 +12875,9 @@
     "id": "c1-1322",
     "word": "embark",
     "class": "verb",
-    "definitions": ["to get onto a ship or plane; to put somebody/something onto a ship or plane"],
+    "definitions": [
+      "to get onto a ship or plane; to put somebody/something onto a ship or plane"
+    ],
     "examples": ["We stood on the pier and watched as they embarked."],
     "freq": 3.4
   },
@@ -11850,14 +12888,18 @@
     "definitions": [
       "to tell somebody to take a particular medicine or have a particular treatment; to write a prescription for a particular medicine, etc."
     ],
-    "examples": ["prescribe something, Valium is usually prescribed to treat anxiety."],
+    "examples": [
+      "prescribe something, Valium is usually prescribed to treat anxiety."
+    ],
     "freq": 3.39
   },
   {
     "id": "c1-1324",
     "word": "soar",
     "class": "verb",
-    "definitions": ["if the value, amount or level of something soars, it rises very quickly"],
+    "definitions": [
+      "if the value, amount or level of something soars, it rises very quickly"
+    ],
     "examples": ["soaring costs/prices/temperatures"],
     "freq": 3.39
   },
@@ -11865,7 +12907,9 @@
     "id": "c1-1325",
     "word": "vanish",
     "class": "verb",
-    "definitions": ["to disappear suddenly and/or in a way that you cannot explain"],
+    "definitions": [
+      "to disappear suddenly and/or in a way that you cannot explain"
+    ],
     "examples": ["He turned around and vanished into the house."],
     "freq": 3.39
   },
@@ -11873,7 +12917,9 @@
     "id": "c1-1326",
     "word": "authorize",
     "class": "verb",
-    "definitions": ["to give official permission for something, or for somebody to do something"],
+    "definitions": [
+      "to give official permission for something, or for somebody to do something"
+    ],
     "examples": ["authorize something, I can authorize payments up to £5 000."],
     "freq": 3.38
   },
@@ -11884,7 +12930,9 @@
     "definitions": [
       "to produce a book, list, report, etc. by bringing together different items, articles, songs, etc.; to collect information in order to produce a book, list, etc."
     ],
-    "examples": ["We are trying to compile a list of suitable people for the job."],
+    "examples": [
+      "We are trying to compile a list of suitable people for the job."
+    ],
     "freq": 3.38
   },
   {
@@ -11931,7 +12979,9 @@
     "id": "c1-1332",
     "word": "conserve",
     "class": "verb",
-    "definitions": ["to protect something and prevent it from being changed or destroyed"],
+    "definitions": [
+      "to protect something and prevent it from being changed or destroyed"
+    ],
     "examples": ["new laws to conserve wildlife in the area"],
     "freq": 3.37
   },
@@ -11952,14 +13002,18 @@
     "word": "discard",
     "class": "verb",
     "definitions": ["to get rid of something that you no longer want or need"],
-    "examples": ["discard somebody/something, The room was littered with discarded newspapers."],
+    "examples": [
+      "discard somebody/something, The room was littered with discarded newspapers."
+    ],
     "freq": 3.37
   },
   {
     "id": "c1-1335",
     "word": "originate",
     "class": "verb",
-    "definitions": ["to happen or appear for the first time in a particular place or situation"],
+    "definitions": [
+      "to happen or appear for the first time in a particular place or situation"
+    ],
     "examples": ["The disease is thought to have originated in the tropics."],
     "freq": 3.37
   },
@@ -11985,7 +13039,9 @@
     "id": "c1-1338",
     "word": "infect",
     "class": "verb",
-    "definitions": ["to make a disease or an illness spread to a person, an animal or a plant"],
+    "definitions": [
+      "to make a disease or an illness spread to a person, an animal or a plant"
+    ],
     "examples": [
       "infect somebody/something (with something), It is not possible to infect another person through kissing."
     ],
@@ -11998,7 +13054,9 @@
     "definitions": [
       "the act of putting something inside something else; a thing that is put inside something else"
     ],
-    "examples": ["An examination is carried out before the insertion of the tube."],
+    "examples": [
+      "An examination is carried out before the insertion of the tube."
+    ],
     "freq": 3.36
   },
   {
@@ -12016,7 +13074,9 @@
     "word": "deem",
     "class": "verb",
     "definitions": ["to have a particular opinion about somebody/something"],
-    "examples": ["deem somebody/something + noun, The evening was deemed a great success."],
+    "examples": [
+      "deem somebody/something + noun, The evening was deemed a great success."
+    ],
     "freq": 3.34
   },
   {
@@ -12036,7 +13096,9 @@
     "definitions": [
       "to prevent something from happening or make it happen more slowly or less frequently than normal"
     ],
-    "examples": ["A lack of oxygen may inhibit brain development in the unborn child."],
+    "examples": [
+      "A lack of oxygen may inhibit brain development in the unborn child."
+    ],
     "freq": 3.34
   },
   {
@@ -12053,7 +13115,9 @@
     "id": "c1-1345",
     "word": "invoke",
     "class": "verb",
-    "definitions": ["to mention or use a law, rule, etc. as a reason for doing something"],
+    "definitions": [
+      "to mention or use a law, rule, etc. as a reason for doing something"
+    ],
     "examples": ["It is unlikely that libel laws will be invoked."],
     "freq": 3.33
   },
@@ -12072,7 +13136,9 @@
     "definitions": [
       "a person who has been trained to advise people with problems, especially personal problems"
     ],
-    "examples": ["I went to see a debt counsellor and she agreed to come to the bank with me."],
+    "examples": [
+      "I went to see a debt counsellor and she agreed to come to the bank with me."
+    ],
     "freq": 3.32
   },
   {
@@ -12089,7 +13155,9 @@
     "id": "c1-1349",
     "word": "allocate",
     "class": "verb",
-    "definitions": ["to give something officially to somebody/something for a particular purpose"],
+    "definitions": [
+      "to give something officially to somebody/something for a particular purpose"
+    ],
     "examples": [
       "allocate something (for something), A large sum has been allocated for buying new books for the library."
     ],
@@ -12099,15 +13167,21 @@
     "id": "c1-1350",
     "word": "complication",
     "class": "noun",
-    "definitions": ["a thing that makes a situation more complicated or difficult"],
-    "examples": ["The bad weather added a further complication to our journey."],
+    "definitions": [
+      "a thing that makes a situation more complicated or difficult"
+    ],
+    "examples": [
+      "The bad weather added a further complication to our journey."
+    ],
     "freq": 3.31
   },
   {
     "id": "c1-1351",
     "word": "instruct",
     "class": "verb",
-    "definitions": ["to tell somebody to do something, especially in a formal or official way"],
+    "definitions": [
+      "to tell somebody to do something, especially in a formal or official way"
+    ],
     "examples": [
       "instruct somebody to do something, The letter instructed him to report to headquarters immediately."
     ],
@@ -12133,7 +13207,9 @@
     "id": "c1-1354",
     "word": "enrich",
     "class": "verb",
-    "definitions": ["to improve the quality of something, often by adding something to it"],
+    "definitions": [
+      "to improve the quality of something, often by adding something to it"
+    ],
     "examples": ["The study of science has enriched all our lives."],
     "freq": 3.3
   },
@@ -12144,14 +13220,18 @@
     "definitions": [
       "if you incur something unpleasant, you are in a situation in which you have to deal with it"
     ],
-    "examples": ["She had incurred the wrath of her father by marrying without his consent."],
+    "examples": [
+      "She had incurred the wrath of her father by marrying without his consent."
+    ],
     "freq": 3.3
   },
   {
     "id": "c1-1356",
     "word": "reassure",
     "class": "verb",
-    "definitions": ["to say or do something that makes somebody less frightened or worried"],
+    "definitions": [
+      "to say or do something that makes somebody less frightened or worried"
+    ],
     "examples": [
       "reassure somebody (about something), They tried to reassure her, but she still felt anxious."
     ],
@@ -12171,7 +13251,9 @@
     "id": "c1-1358",
     "word": "compel",
     "class": "verb",
-    "definitions": ["to force somebody to do something; to make something necessary"],
+    "definitions": [
+      "to force somebody to do something; to make something necessary"
+    ],
     "examples": [
       "compel somebody to do something, The law can compel fathers to make regular payments for their children."
     ],
@@ -12181,7 +13263,9 @@
     "id": "c1-1359",
     "word": "constraint",
     "class": "noun",
-    "definitions": ["a thing that limits something, or limits your freedom to do something"],
+    "definitions": [
+      "a thing that limits something, or limits your freedom to do something"
+    ],
     "examples": ["constraints of time/money/space"],
     "freq": 3.28
   },
@@ -12208,15 +13292,21 @@
     "definitions": [
       "the act of selling a business or an industry so that it is no longer owned by the government"
     ],
-    "examples": ["There were fears that privatization would lead to job losses."],
+    "examples": [
+      "There were fears that privatization would lead to job losses."
+    ],
     "freq": 3.27
   },
   {
     "id": "c1-1363",
     "word": "proclaim",
     "class": "verb",
-    "definitions": ["to publicly and officially tell people about something important"],
-    "examples": ["proclaim something, The president proclaimed a state of emergency."],
+    "definitions": [
+      "to publicly and officially tell people about something important"
+    ],
+    "examples": [
+      "proclaim something, The president proclaimed a state of emergency."
+    ],
     "freq": 3.27
   },
   {
@@ -12264,7 +13354,9 @@
     "definitions": [
       "to create or prepare something carefully, giving particular attention to the details"
     ],
-    "examples": ["formulate something, to formulate a policy/theory/plan/proposal"],
+    "examples": [
+      "formulate something, to formulate a policy/theory/plan/proposal"
+    ],
     "freq": 3.23
   },
   {
@@ -12326,7 +13418,9 @@
     "definitions": [
       "to remove a cover or curtain from a painting, statue, etc. so that it can be seen in public for the first time"
     ],
-    "examples": ["The Queen unveiled a plaque to mark the official opening of the hospital."],
+    "examples": [
+      "The Queen unveiled a plaque to mark the official opening of the hospital."
+    ],
     "freq": 3.2
   },
   {
@@ -12336,7 +13430,9 @@
     "definitions": [
       "to discuss something with somebody, in order to exchange opinions or get advice"
     ],
-    "examples": ["He wanted to confer with his colleagues before reaching a decision."],
+    "examples": [
+      "He wanted to confer with his colleagues before reaching a decision."
+    ],
     "freq": 3.19
   },
   {
@@ -12352,7 +13448,9 @@
     "word": "devise",
     "class": "verb",
     "definitions": ["to invent something new or a new way of doing something"],
-    "examples": ["A new system has been devised to control traffic in the city."],
+    "examples": [
+      "A new system has been devised to control traffic in the city."
+    ],
     "freq": 3.19
   },
   {
@@ -12370,7 +13468,9 @@
     "word": "allege",
     "class": "verb",
     "definitions": ["to state something as a fact but without giving proof"],
-    "examples": ["allege (that)…, The prosecution alleges (that) she was driving carelessly."],
+    "examples": [
+      "allege (that)…, The prosecution alleges (that) she was driving carelessly."
+    ],
     "freq": 3.18
   },
   {
@@ -12380,7 +13480,9 @@
     "definitions": [
       "to work together in order to achieve a particular aim; to organize a group of people to do this"
     ],
-    "examples": ["The unions mobilized thousands of workers in a protest against the cuts."],
+    "examples": [
+      "The unions mobilized thousands of workers in a protest against the cuts."
+    ],
     "freq": 3.18
   },
   {
@@ -12398,7 +13500,9 @@
     "word": "embody",
     "class": "verb",
     "definitions": ["to express or represent an idea or a quality"],
-    "examples": ["embody something, a politician who embodied the hopes of black youth"],
+    "examples": [
+      "embody something, a politician who embodied the hopes of black youth"
+    ],
     "freq": 3.17
   },
   {
@@ -12416,7 +13520,9 @@
     "word": "deteriorate",
     "class": "verb",
     "definitions": ["to become worse"],
-    "examples": ["Her health deteriorated rapidly, and she died shortly afterwards."],
+    "examples": [
+      "Her health deteriorated rapidly, and she died shortly afterwards."
+    ],
     "freq": 3.15
   },
   {
@@ -12433,8 +13539,12 @@
     "id": "c1-1386",
     "word": "oblige",
     "class": "verb",
-    "definitions": ["to force somebody to do something, by law, because it is a duty, etc."],
-    "examples": ["Parents are obliged by law to send their children to school."],
+    "definitions": [
+      "to force somebody to do something, by law, because it is a duty, etc."
+    ],
+    "examples": [
+      "Parents are obliged by law to send their children to school."
+    ],
     "freq": 3.1
   },
   {
@@ -12548,7 +13658,9 @@
     "definitions": [
       "to completely fill your mind so that you cannot think of anything else, in a way that is not reasonable or normal"
     ],
-    "examples": ["be obsessed by somebody/something, He's obsessed by computers."],
+    "examples": [
+      "be obsessed by somebody/something, He's obsessed by computers."
+    ],
     "freq": 2.9
   },
   {
@@ -12563,8 +13675,12 @@
     "id": "c1-1400",
     "word": "imprison",
     "class": "verb",
-    "definitions": ["to put somebody in a prison or another place from which they cannot escape"],
-    "examples": ["be imprisoned (for something), They were imprisoned for possession of drugs."],
+    "definitions": [
+      "to put somebody in a prison or another place from which they cannot escape"
+    ],
+    "examples": [
+      "be imprisoned (for something), They were imprisoned for possession of drugs."
+    ],
     "freq": 2.87
   },
   {
