@@ -1,12 +1,11 @@
-import { useState } from 'preact/hooks';
-import { Todo, Language } from '../types/types.js';
-import { translations } from '../utils/i18n.js';
+import { Todo, Language } from "../types/types.js";
+import { translations } from "../utils/i18n.js";
 
 interface ListViewProps {
   todos: Todo[];
-  activeTab: 'focus' | 'routines';
+  activeTab: "focus" | "routines";
   lang: Language;
-  onTabChange: (tab: 'focus' | 'routines') => void;
+  onTabChange: (tab: "focus" | "routines") => void;
   onToggleTodo: (index: number) => void;
   onDeleteTodo: (index: number) => void;
 }
@@ -22,30 +21,31 @@ export function ListView({
   const t = translations[lang];
 
   // Filter tasks based on repeating / non-repeating
-  const filteredTodos = todos.map((todo, idx) => ({ todo, originalIndex: idx })).filter(({ todo }) => {
-    if (activeTab === 'focus') {
-      return todo.repeat === 'none';
-    } else {
-      return todo.repeat !== 'none';
-    }
-  });
+  const filteredTodos = todos
+    .map((todo, idx) => ({ todo, originalIndex: idx }))
+    .filter(({ todo }) => {
+      if (activeTab === "focus") {
+        return todo.repeat === "none";
+      } else {
+        return todo.repeat !== "none";
+      }
+    });
 
   return (
     <div id="list-view" className="view-content active">
-
       <div className="todo-card">
         <h1 className="greeting">{t.greeting}</h1>
 
         <div className="todo-tabs">
           <button
-            className={`todo-tab-btn ${activeTab === 'focus' ? 'active' : ''}`}
-            onClick={() => onTabChange('focus')}
+            className={`todo-tab-btn ${activeTab === "focus" ? "active" : ""}`}
+            onClick={() => onTabChange("focus")}
           >
             {t.section_tasks}
           </button>
           <button
-            className={`todo-tab-btn ${activeTab === 'routines' ? 'active' : ''}`}
-            onClick={() => onTabChange('routines')}
+            className={`todo-tab-btn ${activeTab === "routines" ? "active" : ""}`}
+            onClick={() => onTabChange("routines")}
           >
             {t.section_recurring}
           </button>
@@ -54,17 +54,20 @@ export function ListView({
         <div className="sections-grid single-column">
           <div
             id="tasks-section"
-            className={`tasks-container ${activeTab === 'focus' ? 'active' : ''}`}
+            className={`tasks-container ${activeTab === "focus" ? "active" : ""}`}
           >
             <h2 className="section-title">{t.section_tasks}</h2>
             <ul id="todo-list" className="todo-list">
-              {activeTab === 'focus' &&
+              {activeTab === "focus" &&
                 filteredTodos.map(({ todo, originalIndex }) => (
                   <li
                     key={originalIndex}
-                    className={`todo-item ${todo.completed ? 'completed' : ''}`}
+                    className={`todo-item ${todo.completed ? "completed" : ""}`}
                   >
-                    <div className="checkbox" onClick={() => onToggleTodo(originalIndex)}>
+                    <div
+                      className="checkbox"
+                      onClick={() => onToggleTodo(originalIndex)}
+                    >
                       <svg
                         width="12"
                         height="12"
@@ -82,9 +85,9 @@ export function ListView({
                       className="todo-content"
                       style={{
                         flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "4px",
                       }}
                       onClick={() => onToggleTodo(originalIndex)}
                     >
@@ -118,20 +121,23 @@ export function ListView({
 
           <div
             id="recurring-section"
-            className={`tasks-container ${activeTab === 'routines' ? 'active' : ''}`}
+            className={`tasks-container ${activeTab === "routines" ? "active" : ""}`}
           >
             <h2 className="section-title">{t.section_recurring}</h2>
             <ul id="recurring-list" className="todo-list">
-              {activeTab === 'routines' &&
+              {activeTab === "routines" &&
                 filteredTodos.map(({ todo, originalIndex }) => {
                   const key = `repeat_${todo.repeat}` as keyof typeof t;
                   const repeatLabel = t[key] || todo.repeat;
                   return (
                     <li
                       key={originalIndex}
-                      className={`todo-item ${todo.completed ? 'completed' : ''}`}
+                      className={`todo-item ${todo.completed ? "completed" : ""}`}
                     >
-                      <div className="checkbox" onClick={() => onToggleTodo(originalIndex)}>
+                      <div
+                        className="checkbox"
+                        onClick={() => onToggleTodo(originalIndex)}
+                      >
                         <svg
                           width="12"
                           height="12"
@@ -149,14 +155,20 @@ export function ListView({
                         className="todo-content"
                         style={{
                           flex: 1,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '4px',
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "4px",
                         }}
                         onClick={() => onToggleTodo(originalIndex)}
                       >
                         <span className="todo-text">{todo.text}</span>
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "6px",
+                            alignItems: "center",
+                          }}
+                        >
                           <span className="repeat-badge">{repeatLabel}</span>
                         </div>
                       </div>
@@ -188,7 +200,9 @@ export function ListView({
           </div>
         </div>
 
-        <div className={`empty-state ${filteredTodos.length === 0 ? 'active' : ''}`}>
+        <div
+          className={`empty-state ${filteredTodos.length === 0 ? "active" : ""}`}
+        >
           <p>{t.empty_state}</p>
         </div>
       </div>

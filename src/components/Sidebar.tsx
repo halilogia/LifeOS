@@ -1,13 +1,13 @@
-import { Language } from '../types/types.js';
-import { translations } from '../utils/i18n.js';
+import { Language } from "../types/types.js";
+import { translations } from "../utils/i18n.js";
 
 interface SidebarProps {
   lang: Language;
   activeView: string;
-  activeTab: 'focus' | 'routines';
+  activeTab: "focus" | "routines";
   sidebarOpen: boolean;
   onViewChange: (view: any) => void;
-  onTabChange: (tab: 'focus' | 'routines') => void;
+  onTabChange: (tab: "focus" | "routines") => void;
   onSidebarToggle: () => void;
   onSettingsOpen: () => void;
 }
@@ -15,7 +15,7 @@ interface SidebarProps {
 export function Sidebar({
   lang,
   activeView,
-  activeTab,
+  activeTab: _activeTab,
   sidebarOpen,
   onViewChange,
   onTabChange,
@@ -47,15 +47,15 @@ export function Sidebar({
         </svg>
       </button>
 
-      <aside id="sidebar" className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <aside id="sidebar" className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <h2 className="logo">Life OS</h2>
         </div>
         <nav className="sidebar-nav">
           <button
             id="view-free-games-btn"
-            className={`sidebar-btn ${activeView === 'free-games' ? 'active' : ''}`}
-            onClick={() => onViewChange('free-games')}
+            className={`sidebar-btn ${activeView === "free-games" ? "active" : ""}`}
+            onClick={() => onViewChange("free-games")}
           >
             <svg
               width="20"
@@ -75,10 +75,10 @@ export function Sidebar({
 
           <button
             id="view-list-btn"
-            className={`sidebar-btn ${activeView === 'list' ? 'active' : ''}`}
+            className={`sidebar-btn ${activeView === "list" ? "active" : ""}`}
             onClick={() => {
-              onViewChange('list');
-              onTabChange('focus');
+              onViewChange("list");
+              onTabChange("focus");
             }}
           >
             <svg
@@ -103,8 +103,8 @@ export function Sidebar({
 
           <button
             id="view-willpower-btn"
-            className={`sidebar-btn ${activeView === 'willpower' ? 'active' : ''}`}
-            onClick={() => onViewChange('willpower')}
+            className={`sidebar-btn ${activeView === "willpower" ? "active" : ""}`}
+            onClick={() => onViewChange("willpower")}
           >
             <svg
               width="20"
@@ -123,8 +123,8 @@ export function Sidebar({
 
           <button
             id="view-pomodoro-btn"
-            className={`sidebar-btn ${activeView === 'pomodoro' ? 'active' : ''}`}
-            onClick={() => onViewChange('pomodoro')}
+            className={`sidebar-btn ${activeView === "pomodoro" ? "active" : ""}`}
+            onClick={() => onViewChange("pomodoro")}
           >
             <svg
               width="20"
@@ -145,8 +145,8 @@ export function Sidebar({
 
           <button
             id="view-kanban-btn"
-            className={`sidebar-btn ${activeView === 'kanban' ? 'active' : ''}`}
-            onClick={() => onViewChange('kanban')}
+            className={`sidebar-btn ${activeView === "kanban" ? "active" : ""}`}
+            onClick={() => onViewChange("kanban")}
           >
             <svg
               width="20"
@@ -167,8 +167,8 @@ export function Sidebar({
 
           <button
             id="view-hifiz-btn"
-            className={`sidebar-btn ${activeView === 'hifiz' ? 'active' : ''}`}
-            onClick={() => onViewChange('hifiz')}
+            className={`sidebar-btn ${activeView === "hifiz" ? "active" : ""}`}
+            onClick={() => onViewChange("hifiz")}
           >
             <svg
               width="20"
@@ -183,13 +183,13 @@ export function Sidebar({
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
             </svg>
-            <span>{lang === 'tr' ? 'Ezberlerim' : 'Memorizations'}</span>
+            <span>{lang === "tr" ? "Ezberlerim" : "Memorizations"}</span>
           </button>
 
           <button
             id="view-notes-btn"
-            className={`sidebar-btn ${activeView === 'notes' ? 'active' : ''}`}
-            onClick={() => onViewChange('notes')}
+            className={`sidebar-btn ${activeView === "notes" ? "active" : ""}`}
+            onClick={() => onViewChange("notes")}
           >
             <svg
               width="20"
@@ -212,8 +212,8 @@ export function Sidebar({
 
           <button
             id="view-srs-btn"
-            className={`sidebar-btn ${activeView === 'srs' ? 'active' : ''}`}
-            onClick={() => onViewChange('srs')}
+            className={`sidebar-btn ${activeView === "srs" ? "active" : ""}`}
+            onClick={() => onViewChange("srs")}
           >
             <svg
               width="20"
@@ -232,8 +232,8 @@ export function Sidebar({
 
           <button
             id="view-calendar-btn"
-            className={`sidebar-btn ${activeView === 'calendar' ? 'active' : ''}`}
-            onClick={() => onViewChange('calendar')}
+            className={`sidebar-btn ${activeView === "calendar" ? "active" : ""}`}
+            onClick={() => onViewChange("calendar")}
           >
             <svg
               width="20"
@@ -255,8 +255,8 @@ export function Sidebar({
 
           <button
             id="view-prayer-btn"
-            className={`sidebar-btn ${activeView === 'prayer' ? 'active' : ''}`}
-            onClick={() => onViewChange('prayer')}
+            className={`sidebar-btn ${activeView === "prayer" ? "active" : ""}`}
+            onClick={() => onViewChange("prayer")}
           >
             <svg
               width="20"
@@ -276,8 +276,8 @@ export function Sidebar({
 
           <button
             id="view-kpss-btn"
-            className={`sidebar-btn ${activeView === 'kpss' ? 'active' : ''}`}
-            onClick={() => onViewChange('kpss')}
+            className={`sidebar-btn ${activeView === "kpss" ? "active" : ""}`}
+            onClick={() => onViewChange("kpss")}
           >
             <svg
               width="20"
@@ -299,8 +299,8 @@ export function Sidebar({
 
           <button
             id="view-detox-btn"
-            className={`sidebar-btn ${activeView === 'detox' ? 'active' : ''}`}
-            onClick={() => onViewChange('detox')}
+            className={`sidebar-btn ${activeView === "detox" ? "active" : ""}`}
+            onClick={() => onViewChange("detox")}
           >
             <svg
               width="20"
@@ -320,7 +320,11 @@ export function Sidebar({
 
           <div className="sidebar-divider"></div>
 
-          <button id="settings-btn" className="sidebar-btn" onClick={onSettingsOpen}>
+          <button
+            id="settings-btn"
+            className="sidebar-btn"
+            onClick={onSettingsOpen}
+          >
             <svg
               width="20"
               height="20"

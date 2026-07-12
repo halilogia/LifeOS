@@ -28,7 +28,7 @@ export async function setRandomQuote(
 ): Promise<void> {
   const customQuotes = await storage.getCustomQuotes();
   const defaultQuoteCount = 7;
-  
+
   const poolSize = defaultQuoteCount + customQuotes.length;
   const randomIndex = Math.floor(Math.random() * poolSize);
 
@@ -42,12 +42,14 @@ export async function setRandomQuote(
       "quote_6",
       "quote_7",
     ];
-    const randomKey = quoteKeys[randomIndex] as keyof (typeof translations)["tr"];
+    const randomKey = quoteKeys[
+      randomIndex
+    ] as keyof (typeof translations)["tr"];
     quoteElement.textContent = translations[currentLang][randomKey];
   } else {
     const custom = customQuotes[randomIndex - defaultQuoteCount];
-    quoteElement.textContent = custom.author 
-      ? `"${custom.text}" - ${custom.author}` 
+    quoteElement.textContent = custom.author
+      ? `"${custom.text}" - ${custom.author}`
       : `"${custom.text}"`;
   }
 }

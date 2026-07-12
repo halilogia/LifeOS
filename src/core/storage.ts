@@ -1,4 +1,13 @@
-import { Todo, Language, HifizProgress, Note, KpssProgress, CustomQuote, KpssDailyStats, WillpowerStreak } from "../types/types.js";
+import {
+  Todo,
+  Language,
+  HifizProgress,
+  Note,
+  KpssProgress,
+  CustomQuote,
+  KpssDailyStats,
+  WillpowerStreak,
+} from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
 
 interface SettingsResult {
@@ -129,21 +138,32 @@ export const storage = {
       chrome.storage.sync.set({ kpssDailyStats }, resolve);
     });
   },
-  getSettings: (): Promise<{ lang: Language; sidebarOpen?: boolean; prayerCity?: string; prayerCountry?: string }> => {
+  getSettings: (): Promise<{
+    lang: Language;
+    sidebarOpen?: boolean;
+    prayerCity?: string;
+    prayerCountry?: string;
+  }> => {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["lang", "sidebarOpen", "prayerCity", "prayerCountry"], (result: SettingsResult) => {
-        resolve({
-          lang: (result.lang as Language) || "tr",
-          sidebarOpen: result.sidebarOpen ?? true,
-          prayerCity: result.prayerCity || "Istanbul",
-          prayerCountry: result.prayerCountry || "Turkey",
-        });
-      });
+      chrome.storage.sync.get(
+        ["lang", "sidebarOpen", "prayerCity", "prayerCountry"],
+        (result: SettingsResult) => {
+          resolve({
+            lang: (result.lang as Language) || "tr",
+            sidebarOpen: result.sidebarOpen ?? true,
+            prayerCity: result.prayerCity || "Istanbul",
+            prayerCountry: result.prayerCountry || "Turkey",
+          });
+        },
+      );
     });
   },
   setPrayerLocation: (city: string, country: string): Promise<void> => {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ prayerCity: city, prayerCountry: country }, resolve);
+      chrome.storage.sync.set(
+        { prayerCity: city, prayerCountry: country },
+        resolve,
+      );
     });
   },
   setLang: (lang: Language): Promise<void> => {
@@ -169,7 +189,8 @@ export const storage = {
         if (localData && Object.keys(localData).length > 0) {
           // Check if sync already has data to avoid overwriting existing cloud data unnecessarily
           chrome.storage.sync.get(null, async (syncData) => {
-            if (!syncData || Object.keys(syncData).length <= 1) { // <= 1 because lang might be there
+            if (!syncData || Object.keys(syncData).length <= 1) {
+              // <= 1 because lang might be there
               // Only migrate keys meant for sync storage to avoid exceeding sync quotas with large local caches (e.g. free_games_cache)
               const syncKeys = [
                 "todos",
@@ -185,7 +206,7 @@ export const storage = {
                 "sidebarOpen",
                 "prayerCity",
                 "prayerCountry",
-                "willpowerStreak"
+                "willpowerStreak",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

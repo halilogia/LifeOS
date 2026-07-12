@@ -1,6 +1,18 @@
 import { storage } from "./storage.js";
 import { state } from "./state.js";
 import { translations } from "../utils/i18n.js";
+import { z } from "zod";
+
+const todoSchema = z.object({
+  text: z.string(),
+  completed: z.boolean(),
+  repeat: z.enum(["none", "daily", "weekly", "monthly"]),
+  status: z.enum(["todo", "in-progress", "done"]),
+  category: z.string().optional().default("general"),
+  lastCompletedDate: z.string().optional().default(""),
+});
+
+const todoListSchema = z.array(todoSchema);
 
 export async function handleBackup(): Promise<void> {
   const todos = await storage.getTodos();
@@ -25,9 +37,11 @@ export async function handleRestore(
   const r = new FileReader();
   r.onload = async (ev) => {
     try {
-      const t = JSON.parse(ev.target?.result as string);
-      if (Array.isArray(t)) {
-        await storage.setTodos(t);
+      const parsed = JSON.parse(ev.target?.result as string);
+      const validation = todoListSchema.safeParse(parsed);
+
+      if (validation.success) {
+        await storage.setTodos(validation.data);
         reloadTodos();
         alert(translations[state.currentLang].alert_restore_success);
       } else {

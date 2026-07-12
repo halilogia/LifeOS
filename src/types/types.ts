@@ -62,4 +62,3 @@ export interface WillpowerStreak {
     note?: string;
   }[];
 }
-

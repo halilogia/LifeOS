@@ -1,296 +1,312 @@
 :root {
-    --bg-color: #0d0d12;
-    --card-bg: rgba(255, 255, 255, 0.05);
-    --card-border: rgba(255, 255, 255, 0.1);
-    --accent-color: #8b5cf6;
-    --accent-color-rgb: 139, 92, 246;
-    --accent-hover: #7c3aed;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --success: #10b981;
-    --danger: #ef4444;
+  --bg-color: #0d0d12;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --accent-color: #8b5cf6;
+  --accent-color-rgb: 139, 92, 246;
+  --accent-hover: #7c3aed;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --success: #10b981;
+  --danger: #ef4444;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
 body {
-    width: 340px;
-    background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%);
-    color: var(--text-primary);
-    padding: 0.5rem;
-    overflow: hidden;
+  width: 340px;
+  background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  overflow: hidden;
 }
 
 .popup-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
 }
 
 .popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    border-bottom: 1px solid var(--card-border);
-    padding-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 0.75rem;
 }
 
 .popup-header h1 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .logo-tag {
-    font-size: 0.7rem;
-    background: rgba(139, 92, 246, 0.15);
-    color: var(--accent-color);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 600;
+  font-size: 0.7rem;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-color);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
 /* Mode Tabs */
 .popup-tabs {
-    display: flex;
-    gap: 4px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--card-border);
-    padding: 4px;
-    border-radius: 12px;
-    width: 100%;
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  padding: 4px;
+  border-radius: 12px;
+  width: 100%;
 }
 
 .popup-tab-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 6px 0;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .popup-tab-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .popup-tab-btn.active {
-    color: var(--text-primary);
-    background: var(--accent-color);
-    box-shadow: 0 4px 10px rgba(var(--accent-color-rgb), 0.2);
+  color: var(--text-primary);
+  background: var(--accent-color);
+  box-shadow: 0 4px 10px rgba(var(--accent-color-rgb), 0.2);
 }
 
 /* Timer Display */
 .timer-circle-container {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .timer-svg {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
 }
 
 .timer-circle-bg {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.02);
-    stroke-width: 8;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.02);
+  stroke-width: 8;
 }
 
 .timer-circle-progress {
-    fill: none;
-    stroke: var(--accent-color);
-    stroke-width: 8;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s linear;
+  fill: none;
+  stroke: var(--accent-color);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
 }
 
 .timer-text-overlay {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .timer-time {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .timer-mode-label {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    margin-top: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-top: 4px;
 }
 
 /* Controls */
 .popup-controls {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
 }
 
 .control-btn {
-    border-radius: 50%;
-    border: 1px solid var(--card-border);
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .control-btn.play-pause {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
-    color: white;
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
 }
 
 .control-btn.play-pause:hover {
-    background: var(--accent-hover);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3);
+  background: var(--accent-hover);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3);
 }
 
 .control-btn.reset {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
 }
 
 .control-btn.reset:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
 }
 
 .control-btn svg {
-    fill: currentColor;
+  fill: currentColor;
 }
 
 /* --- Global Font Inherits & Resets --- */
-button, input, select, textarea {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    outline: none;
-    color: inherit;
+button,
+input,
+select,
+textarea {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  outline: none;
+  color: inherit;
 }
 
-button:focus, input:focus, select:focus, textarea:focus {
-    outline: none;
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
 }
 
 /* --- Detox View inside Popup --- */
 .detox-btn {
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 10px 0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
 .detox-btn.primary {
-    background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+  background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
 }
 
 .detox-btn.primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
-    background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+  background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%);
 }
 
 .detox-btn.danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .detox-btn.danger:hover {
-    background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.2);
 }
 
 /* Custom Select in Popup */
 .detox-select {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
 }
 
 .detox-select:focus {
-    border-color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 /* Text & time inputs */
-input[type="text"], input[type="time"] {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    padding: 6px 10px;
-    font-size: 0.75rem;
-    transition: all 0.3s ease;
+input[type="text"],
+input[type="time"] {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
 }
 
-input[type="text"]:focus, input[type="time"]:focus {
-    border-color: var(--accent-color);
-    background: rgba(255, 255, 255, 0.05);
+input[type="text"]:focus,
+input[type="time"]:focus {
+  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 input[type="text"]::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 /* Detox Status Badge */
 .detox-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .detox-badge.active {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
 }
 
 .detox-badge.inactive {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
 }

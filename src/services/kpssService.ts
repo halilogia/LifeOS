@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { storage } from "@/core/storage.js";
 import { KpssProgress, KpssDailyStats } from "@/types/types.js";
 
@@ -420,11 +419,11 @@ export const kpssService = {
   async updateTopicStatus(
     subject: string,
     topic: string,
-    status: 0 | 1 | 2
+    status: 0 | 1 | 2,
   ): Promise<void> {
     const progressList = await this.getKpssProgress();
     const index = progressList.findIndex(
-      (p) => p.subject === subject && p.topic === topic
+      (p) => p.subject === subject && p.topic === topic,
     );
 
     if (index !== -1) {
@@ -466,11 +465,16 @@ export const kpssService = {
   /**
    * Retrieves dynamic progress percentage for a subject.
    */
-  async getSubjectProgressPercentage(subject: string, totalTopics: number): Promise<number> {
+  async getSubjectProgressPercentage(
+    subject: string,
+    totalTopics: number,
+  ): Promise<number> {
     const progressList = await this.getKpssProgress();
     const subjectProgress = progressList.filter(
-      (p) => p.subject === subject && p.status === 2
+      (p) => p.subject === subject && p.status === 2,
     );
-    return totalTopics > 0 ? Math.round((subjectProgress.length / totalTopics) * 100) : 0;
-  }
+    return totalTopics > 0
+      ? Math.round((subjectProgress.length / totalTopics) * 100)
+      : 0;
+  },
 };

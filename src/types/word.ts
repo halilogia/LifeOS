@@ -1,9 +1,9 @@
-export type WordStatus = 'new' | 'learning' | 'learned';
-export type ReviewQuality = 'hard' | 'medium' | 'easy';
+export type WordStatus = "new" | "learning" | "learned";
+export type ReviewQuality = "hard" | "medium" | "easy";
 
 export interface WordReviewData {
   wordId: string;
-  wordType: 'vocabulary' | 'verb' | 'phrasal' | 'idiom';
+  wordType: "vocabulary" | "verb" | "phrasal" | "idiom";
   status: WordStatus;
   nextReviewDate: string;
   lastReviewDate: string;

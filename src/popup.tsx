@@ -1,24 +1,28 @@
-import { render } from 'preact';
-import { useState, useEffect, useRef } from 'preact/hooks';
-import { pomodoroManager, PomoState, AlarmItem, StopwatchState } from './core/pomodoroManager.js';
+import { render } from "preact";
+import { useState, useEffect, useRef } from "preact/hooks";
+import {
+  pomodoroManager,
+  PomoState,
+  AlarmItem,
+} from "./core/pomodoroManager.js";
 
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 55; // Smaller circle for compact view (r=55)
 
 const SUPPORTED_SITES = [
-  { id: 'x.com', label: 'Twitter / X', domains: ['x.com', 'twitter.com'] },
-  { id: 'instagram.com', label: 'Instagram', domains: ['instagram.com'] },
-  { id: 'youtube.com', label: 'YouTube', domains: ['youtube.com'] },
-  { id: 'tiktok.com', label: 'TikTok', domains: ['tiktok.com'] },
-  { id: 'facebook.com', label: 'Facebook', domains: ['facebook.com'] },
+  { id: "x.com", label: "Twitter / X", domains: ["x.com", "twitter.com"] },
+  { id: "instagram.com", label: "Instagram", domains: ["instagram.com"] },
+  { id: "youtube.com", label: "YouTube", domains: ["youtube.com"] },
+  { id: "tiktok.com", label: "TikTok", domains: ["tiktok.com"] },
+  { id: "facebook.com", label: "Facebook", domains: ["facebook.com"] },
 ];
 
 function PopupApp() {
-  const [popupTab, setPopupTab] = useState<'pomo' | 'detox'>('pomo');
+  const [popupTab, setPopupTab] = useState<"pomo" | "detox">("pomo");
 
   // --- Pomodoro Sync States ---
   const [pomoState, setPomoState] = useState<PomoState>({
-    mode: 'focus',
+    mode: "focus",
     running: false,
     timeLeft: POMO_MODE_TIMES.focus,
     totalTime: POMO_MODE_TIMES.focus,
@@ -34,7 +38,7 @@ function PopupApp() {
 
   // --- Alarms Sync States ---
   const [alarms, setAlarms] = useState<AlarmItem[]>([]);
-  const [alarmInput, setAlarmInput] = useState('');
+  const [alarmInput, setAlarmInput] = useState("");
 
   // --- Detox Sync States ---
   const [detoxEnabled, setDetoxEnabled] = useState(false);
@@ -42,7 +46,6 @@ function PopupApp() {
   const [detoxEndTime, setDetoxEndTime] = useState(0);
   const [detoxDuration, setDetoxDuration] = useState(30 * 60 * 1000); // 30m default
   const [detoxTimeLeft, setDetoxTimeLeft] = useState(0);
-  const [detoxInput, setDetoxInput] = useState('');
 
   // 1. Initial State Retrieval & Synchronization Subscriptions
   useEffect(() => {
@@ -68,9 +71,16 @@ function PopupApp() {
 
     // D. Detox Settings
     loadDetoxSettings();
-    const unsubStorage = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName === 'sync') {
-        if (changes['detox_enabled'] || changes['detox_blocked_sites'] || changes['detox_end_time']) {
+    const unsubStorage = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string,
+    ) => {
+      if (areaName === "sync") {
+        if (
+          changes["detox_enabled"] ||
+          changes["detox_blocked_sites"] ||
+          changes["detox_end_time"]
+        ) {
           loadDetoxSettings();
         }
       }
@@ -82,18 +92,24 @@ function PopupApp() {
       unsubSw();
       unsubAlarms();
       chrome.storage.onChanged.removeListener(unsubStorage);
-      if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
+      if (pomoTimerRef.current) {
+        clearInterval(pomoTimerRef.current);
+      }
     };
   }, []);
 
   const loadDetoxSettings = () => {
-    chrome.storage.sync.get(['detox_enabled', 'detox_blocked_sites', 'detox_end_time'], (res) => {
-      const isEnabled = res.detox_enabled || false;
-      const end = res.detox_end_time || 0;
-      setDetoxEnabled(isEnabled);
-      setDetoxBlockedSites(res.detox_blocked_sites || []);
-      setDetoxEndTime(end);
-    });
+    chrome.storage.sync.get(
+      ["detox_enabled", "detox_blocked_sites", "detox_end_time"],
+      (resData) => {
+        const res = resData as Record<string, any>;
+        const isEnabled = res.detox_enabled || false;
+        const end = res.detox_end_time || 0;
+        setDetoxEnabled(isEnabled);
+        setDetoxBlockedSites(res.detox_blocked_sites || []);
+        setDetoxEndTime(end);
+      },
+    );
   };
 
   // 2. Tick Pomodoro Timer Locally
@@ -106,11 +122,16 @@ function PopupApp() {
     if (pomoState.running) {
       pomoTimerRef.current = window.setInterval(() => {
         const now = Date.now();
-        const remaining = Math.max(0, Math.round((pomoState.endTime - now) / 1000));
-        
+        const remaining = Math.max(
+          0,
+          Math.round((pomoState.endTime - now) / 1000),
+        );
+
         setPomoState((prev) => {
           if (remaining === 0) {
-            if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
+            if (pomoTimerRef.current) {
+              clearInterval(pomoTimerRef.current);
+            }
             return { ...prev, running: false, timeLeft: 0 };
           }
           return { ...prev, timeLeft: remaining };
@@ -119,7 +140,9 @@ function PopupApp() {
     }
 
     return () => {
-      if (pomoTimerRef.current) clearInterval(pomoTimerRef.current);
+      if (pomoTimerRef.current) {
+        clearInterval(pomoTimerRef.current);
+      }
     };
   }, [pomoState.running, pomoState.endTime]);
 
@@ -128,15 +151,21 @@ function PopupApp() {
     let swInterval: number | null = null;
     if (swRunning) {
       swInterval = window.setInterval(() => {
-        const elapsed = Math.max(0, Math.floor((Date.now() - swStartTime) / 1000));
-        chrome.storage.local.get(['stopwatch_state'], (res) => {
-          const offset = res['stopwatch_state']?.time || 0;
+        const elapsed = Math.max(
+          0,
+          Math.floor((Date.now() - swStartTime) / 1000),
+        );
+        chrome.storage.local.get(["stopwatch_state"], (resData) => {
+          const res = resData as Record<string, any>;
+          const offset = res["stopwatch_state"]?.time || 0;
           setSwTime(offset + elapsed);
         });
       }, 1000);
     }
     return () => {
-      if (swInterval) clearInterval(swInterval);
+      if (swInterval) {
+        clearInterval(swInterval);
+      }
     };
   }, [swRunning, swStartTime]);
 
@@ -145,7 +174,10 @@ function PopupApp() {
     let detoxInterval: number | null = null;
     if (detoxEnabled && detoxEndTime !== -1) {
       const calcDetox = () => {
-        const remaining = Math.max(0, Math.round((detoxEndTime - Date.now()) / 1000));
+        const remaining = Math.max(
+          0,
+          Math.round((detoxEndTime - Date.now()) / 1000),
+        );
         setDetoxTimeLeft(remaining);
         if (remaining === 0) {
           handleDisableDetox();
@@ -157,12 +189,14 @@ function PopupApp() {
       setDetoxTimeLeft(0);
     }
     return () => {
-      if (detoxInterval) clearInterval(detoxInterval);
+      if (detoxInterval) {
+        clearInterval(detoxInterval);
+      }
     };
   }, [detoxEnabled, detoxEndTime]);
 
   // --- Pomodoro Action Handles ---
-  const handlePomoTabChange = async (mode: 'focus' | 'short' | 'long') => {
+  const handlePomoTabChange = async (mode: "focus" | "short" | "long") => {
     const totalTime = POMO_MODE_TIMES[mode];
     const newState = await pomodoroManager.resetTimer(mode, totalTime);
     setPomoState(newState);
@@ -173,13 +207,20 @@ function PopupApp() {
       const newState = await pomodoroManager.pauseTimer(pomoState.timeLeft);
       setPomoState(newState);
     } else {
-      const newState = await pomodoroManager.startTimer(pomoState.timeLeft, pomoState.mode, pomoState.totalTime);
+      const newState = await pomodoroManager.startTimer(
+        pomoState.timeLeft,
+        pomoState.mode,
+        pomoState.totalTime,
+      );
       setPomoState(newState);
     }
   };
 
   const handlePomoReset = async () => {
-    const newState = await pomodoroManager.resetTimer(pomoState.mode, pomoState.totalTime);
+    const newState = await pomodoroManager.resetTimer(
+      pomoState.mode,
+      pomoState.totalTime,
+    );
     setPomoState(newState);
   };
 
@@ -203,10 +244,12 @@ function PopupApp() {
 
   // --- Alarms Action Handles ---
   const handleAddAlarm = async () => {
-    if (!alarmInput) return;
+    if (!alarmInput) {
+      return;
+    }
     const list = await pomodoroManager.addAlarm(alarmInput);
     setAlarms(list);
-    setAlarmInput('');
+    setAlarmInput("");
   };
 
   const handleToggleAlarm = async (id: string, enabled: boolean) => {
@@ -233,33 +276,43 @@ function PopupApp() {
   };
 
   const handleEnableDetox = () => {
-    if (detoxBlockedSites.length === 0) return;
+    if (detoxBlockedSites.length === 0) {
+      return;
+    }
     const end = detoxDuration === -1 ? -1 : Date.now() + detoxDuration;
-    chrome.storage.sync.set({
-      detox_enabled: true,
-      detox_blocked_sites: detoxBlockedSites,
-      detox_end_time: end,
-    }, () => {
-      setDetoxEnabled(true);
-      setDetoxEndTime(end);
-    });
+    chrome.storage.sync.set(
+      {
+        detox_enabled: true,
+        detox_blocked_sites: detoxBlockedSites,
+        detox_end_time: end,
+      },
+      () => {
+        setDetoxEnabled(true);
+        setDetoxEndTime(end);
+      },
+    );
   };
 
   const handleDisableDetox = () => {
-    chrome.storage.sync.set({
-      detox_enabled: false,
-      detox_end_time: 0,
-    }, () => {
-      setDetoxEnabled(false);
-      setDetoxEndTime(0);
-      setDetoxTimeLeft(0);
-    });
+    chrome.storage.sync.set(
+      {
+        detox_enabled: false,
+        detox_end_time: 0,
+      },
+      () => {
+        setDetoxEnabled(false);
+        setDetoxEndTime(0);
+        setDetoxTimeLeft(0);
+      },
+    );
   };
 
   // Format Helper MM:SS
   const formatTime = (secs: number) => {
-    const m = Math.floor(secs / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
+    const m = Math.floor(secs / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (secs % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
 
@@ -267,12 +320,12 @@ function PopupApp() {
     const h = Math.floor(secs / 3600);
     const m = Math.floor((secs % 3600) / 60);
     const s = secs % 60;
-    
-    let str = '';
+
+    let str = "";
     if (h > 0) {
-      str += `${h.toString().padStart(2, '0')}:`;
+      str += `${h.toString().padStart(2, "0")}:`;
     }
-    str += `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    str += `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     return str;
   };
 
@@ -281,58 +334,117 @@ function PopupApp() {
   const strokeDashoffset = CIRCLE_CIRCUMFERENCE * (1 - percent);
 
   return (
-    <div className="popup-container" style={{ padding: '1rem', width: '330px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      
+    <div
+      className="popup-container"
+      style={{
+        padding: "1rem",
+        width: "330px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
       {/* Header with App Tab Switchers */}
       <div className="popup-tabs">
         <button
-          className={`popup-tab-btn ${popupTab === 'pomo' ? 'active' : ''}`}
-          onClick={() => setPopupTab('pomo')}
+          className={`popup-tab-btn ${popupTab === "pomo" ? "active" : ""}`}
+          onClick={() => setPopupTab("pomo")}
         >
           Pomodoro & Alarmlar
         </button>
         <button
-          className={`popup-tab-btn ${popupTab === 'detox' ? 'active' : ''}`}
-          onClick={() => setPopupTab('detox')}
+          className={`popup-tab-btn ${popupTab === "detox" ? "active" : ""}`}
+          onClick={() => setPopupTab("detox")}
         >
           Detoks
         </button>
       </div>
 
-      {popupTab === 'pomo' ? (
+      {popupTab === "pomo" ? (
         // --- POMODORO & STOPWATCH & ALARMS LAYOUT ---
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-          
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            width: "100%",
+          }}
+        >
           {/* Pomodoro Panel (Compact) */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '12px 8px' }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--card-border)",
+              borderRadius: "16px",
+              padding: "12px 8px",
+            }}
+          >
             {/* Pomo modes selector */}
-            <div style={{ display: 'flex', gap: '4px', width: '100%', padding: '0 4px' }}>
-              {(['focus', 'short', 'long'] as const).map((m) => (
+            <div
+              style={{
+                display: "flex",
+                gap: "4px",
+                width: "100%",
+                padding: "0 4px",
+              }}
+            >
+              {(["focus", "short", "long"] as const).map((m) => (
                 <button
                   key={m}
                   onClick={() => handlePomoTabChange(m)}
                   style={{
                     flex: 1,
-                    background: pomoState.mode === m ? 'var(--accent-color)' : 'transparent',
-                    border: 'none',
-                    color: pomoState.mode === m ? 'white' : 'var(--text-secondary)',
-                    borderRadius: '6px',
-                    fontSize: '0.65rem',
-                    padding: '4px 0',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    textTransform: 'uppercase',
+                    background:
+                      pomoState.mode === m
+                        ? "var(--accent-color)"
+                        : "transparent",
+                    border: "none",
+                    color:
+                      pomoState.mode === m ? "white" : "var(--text-secondary)",
+                    borderRadius: "6px",
+                    fontSize: "0.65rem",
+                    padding: "4px 0",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {m === 'focus' ? 'Focus' : m === 'short' ? 'Short' : 'Long'}
+                  {m === "focus" ? "Focus" : m === "short" ? "Short" : "Long"}
                 </button>
               ))}
             </div>
 
             {/* Timer visual circle progress overlay */}
-            <div style={{ position: 'relative', width: '120px', height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg style={{ transform: 'rotate(-90deg)', width: '100%', height: '100%' }} viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="53" fill="none" stroke="rgba(255,255,255,0.01)" stroke-width="6" />
+            <div
+              style={{
+                position: "relative",
+                width: "120px",
+                height: "120px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg
+                style={{
+                  transform: "rotate(-90deg)",
+                  width: "100%",
+                  height: "100%",
+                }}
+                viewBox="0 0 120 120"
+              >
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="53"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.01)"
+                  stroke-width="6"
+                />
                 <circle
                   cx="60"
                   cy="60"
@@ -343,37 +455,92 @@ function PopupApp() {
                   stroke-linecap="round"
                   stroke-dasharray={CIRCLE_CIRCUMFERENCE}
                   stroke-dashoffset={strokeDashoffset}
-                  style={{ transition: 'stroke-dashoffset 1s linear' }}
+                  style={{ transition: "stroke-dashoffset 1s linear" }}
                 />
               </svg>
-              <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ fontSize: '1.6rem', fontWeight: '700' }}>{formatTime(pomoState.timeLeft)}</span>
-                <span style={{ fontSize: '0.55rem', letterSpacing: '1px', opacity: 0.7, textTransform: 'uppercase' }}>{pomoState.mode}</span>
+              <div
+                style={{
+                  position: "absolute",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontSize: "1.6rem", fontWeight: "700" }}>
+                  {formatTime(pomoState.timeLeft)}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.55rem",
+                    letterSpacing: "1px",
+                    opacity: 0.7,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {pomoState.mode}
+                </span>
               </div>
             </div>
 
             {/* Controls play pause reset */}
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: "flex", gap: "8px" }}>
               <button
                 onClick={handlePomoPlayPause}
-                style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-color)', border: 'none', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  background: "var(--accent-color)",
+                  border: "none",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
               >
                 {pomoState.running ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <rect x="4" y="4" width="4" height="16" rx="1" />
                     <rect x="16" y="4" width="4" height="16" rx="1" />
                   </svg>
                 ) : (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 )}
               </button>
               <button
                 onClick={handlePomoReset}
-                style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--card-border)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid var(--card-border)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
               >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <rect x="4" y="4" width="16" height="16" rx="2" />
                 </svg>
               </button>
@@ -381,32 +548,99 @@ function PopupApp() {
           </div>
 
           {/* Synced Stopwatch Panel (Compact) */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '10px 14px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Kronometre</span>
-              <span style={{ fontSize: '1.25rem', fontWeight: '700', marginTop: '2px' }}>{formatTime(swTime)}</span>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--card-border)",
+              borderRadius: "16px",
+              padding: "10px 14px",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontSize: "0.65rem",
+                  color: "var(--text-secondary)",
+                  fontWeight: "600",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Kronometre
+              </span>
+              <span
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "700",
+                  marginTop: "2px",
+                }}
+              >
+                {formatTime(swTime)}
+              </span>
             </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: "flex", gap: "6px" }}>
               <button
                 onClick={handleSwPlayPause}
-                style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--accent-color)', border: 'none', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  background: "var(--accent-color)",
+                  border: "none",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
               >
                 {swRunning ? (
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <rect x="4" y="4" width="4" height="16" rx="1" />
                     <rect x="16" y="4" width="4" height="16" rx="1" />
                   </svg>
                 ) : (
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 )}
               </button>
               <button
                 onClick={handleSwReset}
-                style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--card-border)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid var(--card-border)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
               >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                   <polyline points="3 3 3 8 8 8" />
                 </svg>
@@ -415,21 +649,60 @@ function PopupApp() {
           </div>
 
           {/* Synced Alarms Panel (Phone-style List) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '12px' }}>
-            <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Alarmlar</span>
-            
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--card-border)",
+              borderRadius: "16px",
+              padding: "12px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.65rem",
+                color: "var(--text-secondary)",
+                fontWeight: "600",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}
+            >
+              Alarmlar
+            </span>
+
             {/* Quick entry form */}
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: "flex", gap: "6px" }}>
               <input
                 type="time"
                 className="mini-alarm-input"
-                style={{ flex: 1, height: '30px', fontSize: '0.8rem', padding: '0 8px', borderRadius: '8px', border: '1px solid var(--card-border)', background: 'rgba(255,255,255,0.02)', color: 'white' }}
+                style={{
+                  flex: 1,
+                  height: "30px",
+                  fontSize: "0.8rem",
+                  padding: "0 8px",
+                  borderRadius: "8px",
+                  border: "1px solid var(--card-border)",
+                  background: "rgba(255,255,255,0.02)",
+                  color: "white",
+                }}
                 value={alarmInput}
-                onInput={(e) => setAlarmInput((e.target as HTMLInputElement).value)}
+                onInput={(e) =>
+                  setAlarmInput((e.target as HTMLInputElement).value)
+                }
               />
               <button
                 className="mini-btn primary"
-                style={{ borderRadius: '8px', height: '30px', padding: '0 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}
+                style={{
+                  borderRadius: "8px",
+                  height: "30px",
+                  padding: "0 10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                }}
                 onClick={handleAddAlarm}
               >
                 +
@@ -437,25 +710,87 @@ function PopupApp() {
             </div>
 
             {/* Alarms scroll list */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '120px', overflowY: 'auto', paddingRight: '2px' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                maxHeight: "120px",
+                overflowY: "auto",
+                paddingRight: "2px",
+              }}
+            >
               {alarms.length === 0 ? (
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textAlign: 'center', padding: '10px 0' }}>Kurulu alarm yok</div>
+                <div
+                  style={{
+                    fontSize: "0.7rem",
+                    color: "var(--text-secondary)",
+                    textAlign: "center",
+                    padding: "10px 0",
+                  }}
+                >
+                  Kurulu alarm yok
+                </div>
               ) : (
                 alarms.map((alarm) => (
-                  <div key={alarm.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 10px', background: 'rgba(255,255,255,0.01)', border: '1px solid var(--card-border)', borderRadius: '10px', gap: '8px' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: '700', color: alarm.enabled ? 'white' : 'var(--text-secondary)' }}>{alarm.time}</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div
+                    key={alarm.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "6px 10px",
+                      background: "rgba(255,255,255,0.01)",
+                      border: "1px solid var(--card-border)",
+                      borderRadius: "10px",
+                      gap: "8px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "700",
+                        color: alarm.enabled
+                          ? "white"
+                          : "var(--text-secondary)",
+                      }}
+                    >
+                      {alarm.time}
+                    </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
                       <input
                         type="checkbox"
                         checked={alarm.enabled}
-                        onChange={(e) => handleToggleAlarm(alarm.id, (e.target as HTMLInputElement).checked)}
-                        style={{ cursor: 'pointer' }}
+                        onChange={(e) =>
+                          handleToggleAlarm(
+                            alarm.id,
+                            (e.target as HTMLInputElement).checked,
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
                       />
                       <button
                         onClick={() => handleDeleteAlarm(alarm.id)}
-                        style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: 0 }}
-                        onMouseOver={(e) => (e.currentTarget.style.color = 'var(--danger)')}
-                        onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--text-secondary)",
+                          cursor: "pointer",
+                          padding: 0,
+                        }}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.color = "var(--danger)")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.color =
+                            "var(--text-secondary)")
+                        }
                       >
                         &times;
                       </button>
@@ -465,29 +800,98 @@ function PopupApp() {
               )}
             </div>
           </div>
-
         </div>
       ) : (
         // --- DETOKS INTERFACE LAYOUT ---
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '14px' }}>
-            
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--card-border)",
+              borderRadius: "16px",
+              padding: "14px",
+            }}
+          >
             {/* Status row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Detoks Durumu</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: detoxEnabled ? '#10b981' : 'var(--text-secondary)' }}></span>
-                  <span style={{ fontSize: '1rem', fontWeight: '700', color: detoxEnabled ? '#10b981' : 'var(--text-secondary)' }}>
-                    {detoxEnabled ? 'Aktif' : 'Pasif'}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "left",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.65rem",
+                    color: "var(--text-secondary)",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  Detoks Durumu
+                </span>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    marginTop: "2px",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "6px",
+                      height: "6px",
+                      borderRadius: "50%",
+                      background: detoxEnabled
+                        ? "#10b981"
+                        : "var(--text-secondary)",
+                    }}
+                  ></span>
+                  <span
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "700",
+                      color: detoxEnabled ? "#10b981" : "var(--text-secondary)",
+                    }}
+                  >
+                    {detoxEnabled ? "Aktif" : "Pasif"}
                   </span>
                 </div>
               </div>
 
               {detoxEnabled && (
-                <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '4px 10px', borderRadius: '50px', fontSize: '0.75rem', fontWeight: '700' }}>
-                  {detoxEndTime === -1 ? 'Süresiz' : formatLongTime(detoxTimeLeft)}
+                <div
+                  style={{
+                    background: "rgba(16, 185, 129, 0.1)",
+                    color: "#10b981",
+                    padding: "4px 10px",
+                    borderRadius: "50px",
+                    fontSize: "0.75rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  {detoxEndTime === -1
+                    ? "Süresiz"
+                    : formatLongTime(detoxTimeLeft)}
                 </div>
               )}
             </div>
@@ -497,14 +901,38 @@ function PopupApp() {
                 Detoksu Sonlandır
               </button>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
                 {/* Duration select */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Süre Belirleyin</span>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    Süre Belirleyin
+                  </span>
                   <select
                     className="detox-select"
                     value={detoxDuration}
-                    onChange={(e) => setDetoxDuration(Number((e.target as HTMLSelectElement).value))}
+                    onChange={(e) =>
+                      setDetoxDuration(
+                        Number((e.target as HTMLSelectElement).value),
+                      )
+                    }
                   >
                     <option value={15 * 60 * 1000}>15 Dakika</option>
                     <option value={30 * 60 * 1000}>30 Dakika</option>
@@ -516,78 +944,151 @@ function PopupApp() {
                 </div>
 
                 {/* Popular platforms grid */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'left', fontWeight: '500' }}>Engellenecek Platformları Seçin</span>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', marginTop: '4px' }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-secondary)",
+                      textAlign: "left",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Engellenecek Platformları Seçin
+                  </span>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(5, 1fr)",
+                      gap: "8px",
+                      marginTop: "4px",
+                    }}
+                  >
                     {SUPPORTED_SITES.map((site) => {
-                      const isChecked = detoxBlockedSites.includes(site.domains[0]);
+                      const isChecked = detoxBlockedSites.includes(
+                        site.domains[0],
+                      );
                       return (
                         <button
                           key={site.id}
                           onClick={() => handleTogglePopupSite(site.domains)}
                           style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '6px',
-                            background: isChecked ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255,255,255,0.02)',
-                            border: isChecked ? '1px solid var(--accent-color)' : '1px solid var(--card-border)',
-                            borderRadius: '10px',
-                            padding: '8px 0',
-                            cursor: 'pointer',
-                            color: isChecked ? 'var(--accent-color)' : 'var(--text-secondary)',
-                            transition: 'all 0.3s ease',
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "6px",
+                            background: isChecked
+                              ? "rgba(139, 92, 246, 0.15)"
+                              : "rgba(255,255,255,0.02)",
+                            border: isChecked
+                              ? "1px solid var(--accent-color)"
+                              : "1px solid var(--card-border)",
+                            borderRadius: "10px",
+                            padding: "8px 0",
+                            cursor: "pointer",
+                            color: isChecked
+                              ? "var(--accent-color)"
+                              : "var(--text-secondary)",
+                            transition: "all 0.3s ease",
                           }}
                         >
                           {/* Platform SVG Icon */}
-                          {site.id === 'x.com' && (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                          {site.id === "x.com" && (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                             </svg>
                           )}
-                          {site.id === 'instagram.com' && (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                          {site.id === "instagram.com" && (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect
+                                x="2"
+                                y="2"
+                                width="20"
+                                height="20"
+                                rx="5"
+                                ry="5"
+                              />
                               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                             </svg>
                           )}
-                          {site.id === 'youtube.com' && (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107c.502-1.884.502-5.837.502-5.837s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          {site.id === "youtube.com" && (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107c.502-1.884.502-5.837.502-5.837s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                             </svg>
                           )}
-                          {site.id === 'tiktok.com' && (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95 1.15 2.27 1.94 3.73 2.21v3.91c-1.39-.08-2.74-.53-3.89-1.31-.79-.53-1.46-1.23-1.97-2.04v6.84c.03 2.19-.6 4.39-1.89 6.13-1.42 1.95-3.69 3.11-6.1 3.12-2.85.03-5.6-1.54-6.93-4.06-1.37-2.52-1.27-5.69.24-8.11 1.4-2.28 3.89-3.71 6.59-3.73.18-.01.35-.01.53 0v4.06c-1.12.02-2.2.53-2.92 1.4-.76.9-1.07 2.12-.85 3.28.21 1.16.94 2.15 1.98 2.66.97.48 2.1.47 3.06-.02 1-.5 1.67-1.49 1.77-2.61.03-1.25.01-2.5.02-3.75V0l-.02.02z"/>
+                          {site.id === "tiktok.com" && (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.95 1.15 2.27 1.94 3.73 2.21v3.91c-1.39-.08-2.74-.53-3.89-1.31-.79-.53-1.46-1.23-1.97-2.04v6.84c.03 2.19-.6 4.39-1.89 6.13-1.42 1.95-3.69 3.11-6.1 3.12-2.85.03-5.6-1.54-6.93-4.06-1.37-2.52-1.27-5.69.24-8.11 1.4-2.28 3.89-3.71 6.59-3.73.18-.01.35-.01.53 0v4.06c-1.12.02-2.2.53-2.92 1.4-.76.9-1.07 2.12-.85 3.28.21 1.16.94 2.15 1.98 2.66.97.48 2.1.47 3.06-.02 1-.5 1.67-1.49 1.77-2.61.03-1.25.01-2.5.02-3.75V0l-.02.02z" />
                             </svg>
                           )}
-                          {site.id === 'facebook.com' && (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                          {site.id === "facebook.com" && (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                             </svg>
                           )}
-                          <span style={{ fontSize: '0.55rem', fontWeight: '700' }}>{site.label.split(' ')[0]}</span>
+                          <span
+                            style={{ fontSize: "0.55rem", fontWeight: "700" }}
+                          >
+                            {site.label.split(" ")[0]}
+                          </span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                <button className="detox-btn primary" style={{ marginTop: '4px' }} onClick={handleEnableDetox}>
+                <button
+                  className="detox-btn primary"
+                  style={{ marginTop: "4px" }}
+                  onClick={handleEnableDetox}
+                >
                   Detoksu Başlat
                 </button>
               </div>
             )}
           </div>
-
         </div>
       )}
     </div>
   );
 }
 
-const container = document.getElementById('popup-app');
+const container = document.getElementById("popup-app");
 if (container) {
   render(<PopupApp />, container);
 }
