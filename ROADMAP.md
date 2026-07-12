@@ -28,10 +28,10 @@ Automate privacy preferences by automatically declining cookie consent dialogs.
 
 ### 4. 🌐 Universal Info Box & Inline Translator (Sayfa İçi Premium Çeviri Balonu)
 Integrate the premium text translation bubble directly into browser webpages, inspired by `Universal_Info_Box_Standalone`.
-- [ ] **Selection Listener**: Content scripts to monitor mouse selections on any webpage.
-- [ ] **Premium Glassmorphic Bubble**: A custom hover bubble (with "AI TRANSLATE" header, "✕" close button, fade-in animations, and blur styling) appearing dynamically next to the user's cursor.
-- [ ] **Translation & AI Queries**: Pipe highlighted text into Google Translate or local Ollama instances for quick definitions/translations.
-- [ ] **Configuration Settings**: Toggles in Settings to enable/disable the bubble, change font sizes, or require a hotkey trigger (e.g. holding Alt).
+- [x] **Selection Listener**: Content scripts to monitor mouse selections on any webpage.
+- [x] **Premium Glassmorphic Bubble**: A custom hover bubble (with "AI TRANSLATE" header, "✕" close button, fade-in animations, and blur styling) appearing dynamically next to the user's cursor.
+- [x] **Translation & AI Queries**: Pipe highlighted text into Google Translate or local Ollama instances for quick definitions/translations.
+- [x] **Configuration Settings**: Toggles in Settings to enable/disable the bubble, change font sizes, or require a hotkey trigger (e.g. holding Alt).
 
 ---
 
