@@ -164,6 +164,12 @@ export const translations = {
     free_games_notifications_title: "Ücretsiz Oyun Bildirimleri",
     enabled: "Açık",
     disabled: "Kapalı",
+    uib_title: "Sayfa İçi Çeviri Balonu",
+    uib_hotkey: "Kısayol Tuşu",
+    uib_hotkey_none: "Yok (Her Seçimde)",
+    uib_hotkey_alt: "Alt Tuşu",
+    uib_hotkey_ctrl: "Ctrl Tuşu",
+    uib_hotkey_shift: "Shift Tuşu",
   },
   en: {
     view_list: "List",
@@ -326,6 +332,12 @@ export const translations = {
     free_games_notifications_title: "Free Game Notifications",
     enabled: "Enabled",
     disabled: "Disabled",
+    uib_title: "Inline Translation Bubble",
+    uib_hotkey: "Trigger Hotkey",
+    uib_hotkey_none: "None (On Selection)",
+    uib_hotkey_alt: "Alt Key",
+    uib_hotkey_ctrl: "Ctrl Key",
+    uib_hotkey_shift: "Shift Key",
   },
 };
 

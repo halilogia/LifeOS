@@ -16,6 +16,8 @@ interface SettingsResult {
   prayerCity?: string;
   prayerCountry?: string;
   freeGamesNotificationsEnabled?: boolean;
+  universalInfoBoxEnabled?: boolean;
+  universalInfoBoxHotkey?: string;
 }
 
 export const storage = {
@@ -145,6 +147,8 @@ export const storage = {
     prayerCity?: string;
     prayerCountry?: string;
     freeGamesNotificationsEnabled: boolean;
+    universalInfoBoxEnabled: boolean;
+    universalInfoBoxHotkey: string;
   }> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
@@ -154,6 +158,8 @@ export const storage = {
           "prayerCity",
           "prayerCountry",
           "freeGamesNotificationsEnabled",
+          "universalInfoBoxEnabled",
+          "universalInfoBoxHotkey",
         ],
         (result: SettingsResult) => {
           resolve({
@@ -163,8 +169,18 @@ export const storage = {
             prayerCountry: result.prayerCountry || "Turkey",
             freeGamesNotificationsEnabled:
               result.freeGamesNotificationsEnabled ?? true,
+            universalInfoBoxEnabled: result.universalInfoBoxEnabled ?? true,
+            universalInfoBoxHotkey: result.universalInfoBoxHotkey || "none",
           });
         },
+      );
+    });
+  },
+  setUniversalInfoBox: (enabled: boolean, hotkey: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { universalInfoBoxEnabled: enabled, universalInfoBoxHotkey: hotkey },
+        resolve,
       );
     });
   },
@@ -226,6 +242,8 @@ export const storage = {
                 "prayerCountry",
                 "willpowerStreak",
                 "freeGamesNotificationsEnabled",
+                "universalInfoBoxEnabled",
+                "universalInfoBoxHotkey",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

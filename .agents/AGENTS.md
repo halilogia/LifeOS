@@ -66,3 +66,32 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ## 3. Architecture Philosophy
 * Keep feature code modular and decoupled. Avoid framework-heavy states; favor clean functional programming with clear types.
 * Verify TypeScript checks and compile the extension using `npm run build`. Load the output `dist/` directory into Chrome.
+
+---
+
+## 4. Quality, Security & Compile Compliance Rules
+
+### 4.1 Zero Compile & Lint Error Tolerance
+* **Strict Compiler Checks**: The project must always compile cleanly. Every change must be validated by running `npx tsc --noEmit` and `npx eslint src` to ensure zero compilation and linting errors.
+* **Prettier Formatting Compliance**: All code must conform to Prettier formatting guidelines. Run `npx prettier --write src` to clean and unify spacing, indentation, and structure.
+
+### 4.2 Security Audit Rules
+* **DOM XSS Injection Prevention**: Never write unescaped user-entered text directly using `.innerHTML` or `dangerouslySetInnerHTML`. Always route strings through `escapeHtml()` sanitization filters before inserting them into active DOM elements in content scripts or rendering blocks.
+* **Storage Schema Validation**: Validate all imported external datasets, JSON backups, or sync variables using schema validation libraries (such as Zod schemas) before writing them to Chrome storage.
+
+### 4.3 Structured Planning
+* **Planning Workflow Requirement**: Any complex task (architectural changes, multiple file edits, or security revisions) requires establishing a structured plan inside `implementation_plan.md` and waiting for user review and approval before writing code.
+
+---
+
+## 5. Clean Code & Clean Architecture Principles
+
+### 5.1 Separation of Concerns (SoC)
+* **Visual Components Boundaries**: Preact elements inside `src/components/` should focus strictly on UI layout representation and simple visual hooks. 
+* **Business Logic Relocation**: Storage management, network fetches, calculation formulas, and state providers must reside in separate helper/service classes inside `src/core/` or `src/services/`.
+
+### 5.2 Single Responsibility Principle (SRP)
+* Keep functions, files, and classes focused on a single responsibility. Do not write monolithic components that merge layout, alarms, storage sync, and custom checkers in one massive scope.
+
+### 5.3 Immutable State Management
+* Do not mutate Preact states or arrays directly (e.g. `state.push()` or `state[0] = val`). Always enforce immutable update patterns (like mapping, filtering, or spreading arrays: `[...prev, item]`) to guarantee correct reactive updates.
