@@ -378,7 +378,6 @@
       window.pageXOffset || document.documentElement.scrollLeft;
 
     const bubbleX = rect.left + rect.width / 2 + scrollLeft;
-    const bubbleY = rect.top - 12 + scrollTop;
 
     const shadow = bubbleHost.attachShadow({ mode: "open" });
 
@@ -401,6 +400,10 @@
         font-size: 13px;
         line-height: 1.5;
         animation: bubbleFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .bubble-wrapper.below {
+        transform: translate(-50%, 0);
+        animation: bubbleFadeInBelow 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       .bubble-header {
         display: flex;
@@ -446,6 +449,16 @@
           transform: translate(-50%, -100%) scale(1);
         }
       }
+      @keyframes bubbleFadeInBelow {
+        from {
+          opacity: 0;
+          transform: translate(-50%, 5%) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+      }
     `;
 
     const wrapper = document.createElement("div");
@@ -479,10 +492,28 @@
     shadow.appendChild(style);
     shadow.appendChild(wrapper);
 
+    // Render off-screen initially to measure bounds
+    bubbleHost.style.left = "-9999px";
+    bubbleHost.style.top = "-9999px";
+    document.body.appendChild(bubbleHost);
+
+    const wrapperEl = shadow.querySelector(".bubble-wrapper");
+    const wrapperHeight = wrapperEl ? wrapperEl.getBoundingClientRect().height : 60;
+
+    const needsToRenderBelow = rect.top < wrapperHeight + 20;
+
+    let bubbleY;
+    if (needsToRenderBelow) {
+      bubbleY = rect.bottom + 12 + scrollTop;
+      if (wrapperEl) {
+        wrapperEl.classList.add("below");
+      }
+    } else {
+      bubbleY = rect.top - 12 + scrollTop;
+    }
+
     bubbleHost.style.left = `${bubbleX}px`;
     bubbleHost.style.top = `${bubbleY}px`;
-
-    document.body.appendChild(bubbleHost);
   }
 
   initUniversalInfoBox();

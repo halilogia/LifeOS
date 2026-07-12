@@ -4,89 +4,63 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [2.7.3] - 2026-07-12
+### Düzeltildi
+- **Akıllı Çeviri Balonu Konumlandırması**: Çeviri balonunun ekranın üst sınırından taşarak kesilmesi hatası, pencere yüksekliği ölçülerek otomatik olarak metnin altına kaydırılacak şekilde giderildi.
+
+---
+
 ## [2.7.2] - 2026-07-12
 ### Düzeltildi
-- **Ayar Seçeneklerinin Okunamama Hatası**:
-  - Ayarlar panelinde kısayol tuşu seçimi açılır kutusundaki (`select`) seçeneklerin (`option`) beyaz üzerine beyaz çıkması nedeniyle yazının okunmaması hatası, tarayıcı/sistem koyu modlarıyla uyumlu olacak şekilde özel CSS stilleri ile düzeltildi.
-- **Karakter Sınırının Artırılması (5000 karakter)**:
-  - Uzun paragrafları veya makaleleri seçtiğinizde çeviri balonunun çalışmasını engelleyen 500 karakterlik limit, API ve URL uzunluk sınırları gözetilerek **5000 karaktere** çıkarıldı. Böylece uzun metinleri de sorunsuz şekilde çevirebilirsiniz.
-- **Tıklamayla Kapatma & Sıfırlama Mekanizması**:
-  - Çeviri balonunun web sayfasında boş bir alana tıklandığında hemen kapanması ve mouseup anında eski seçimlerin sıfırlanıp balonun tekrar açılması sorunu, `selection.isCollapsed` kontrolü eklenerek tamamen çözüldü.
+- Kısayol seçimindeki görünmeyen yazılar CSS ile düzeltildi.
+- Çeviri karakter limiti 5000 karaktere çıkarıldı.
+- Sayfaya boş yere tıklayınca balonun kapanmama sorunu çözüldü.
 
 ---
 
 ## [2.7.1] - 2026-07-12
 ### Düzeltildi
-- **Akıllı Çeviri Hedef Dili Algılama ve Değiştirme (Auto-Swap)**:
-  - Seçilen metnin dili ile hedef dilin aynı olması durumunda (örneğin İngilizce metin seçildiğinde eklenti hedefinin de İngilizce olması) kelimenin aynen geri dönmesi hatası giderildi.
-  - Artık kaynak dil ile hedef dil çakıştığında, eklenti dili otomatik olarak diğer dile (Türkçe ise İngilizce'ye, İngilizce ise Türkçe'ye) çevirerek her durumda doğru sonucu gösterir.
+- Seçilen dil ile hedef dil aynı olduğunda çevrilmeme (kendini tekrarlama) hatası giderildi.
 
 ---
 
 ## [2.7.0] - 2026-07-12
 ### Eklendi
-- **Sayfa İçi Premium Çeviri Balonu (Universal Info Box Entegrasyonu)**:
-  - PyQt6 tabanlı masaüstü uygulamanızın (`Universal_Info_Box_Standalone`) işlevselliği, tarayıcımıza bir content script modülü olarak entegre edildi.
-  - **Shadow DOM İzolasyonu**: Çeviri balonunun HTML ve CSS kodları tamamen Shadow DOM (`shadowRoot`) kullanılarak izole edildi. Bu sayede hiçbir web sitesinin stili balonumuzun görünümünü bozamaz.
-  - **Güvenli Background İletişimi**: Sitelerdeki katı güvenlik politikalarını (CSP) aşmak için kelime istekleri arkaplan servisine (`background.js`) yönlendirilerek Google Translate gtx servisi üzerinden güvenli şekilde çevrilir.
-  - **Ayarlar Drawer Desteği**: Eklenti ayarları içine balonun tamamen açılıp kapatılabileceği bir kontrol butonu ve hangi kısayol tuşu ile (Alt, Ctrl, Shift veya Hiçbiri) tetikleneceğini seçebileceğiniz bir açılır liste yerleştirildi.
+- Sayfa içi premium çeviri balonu (Universal Info Box) entegre edildi.
+- Shadow DOM izolasyonu sağlandı ve güvenlik engelleri arka plan servisiyle aşıldı.
+- Ayarlar paneline açma/kapama ve kısayol tuşu kontrolleri eklendi.
 
 ---
 
 ## [2.6.3] - 2026-07-12
 ### Eklendi
-- **Yol Haritasına Universal Info Box Entegrasyonu Eklendi (ROADMAP.md)**:
-  - Daha önce geliştirilen Python PyQt6 tabanlı masaüstü çeviri uygulamasının (`Universal_Info_Box_Standalone`) işlevsel yapısı ve premium görsel balonu, tarayıcı sayfaları içerisine entegre edilmek üzere **Universal Info Box & Inline Translator** adıyla gelecek planları yol haritasına dahil edildi.
+- Yol haritasına Universal Info Box entegrasyon planı eklendi.
 
 ---
 
 ## [2.6.2] - 2026-07-12
 ### Eklendi
-- **Yol Haritasına Çeviri Aracı Eklendi (ROADMAP.md)**:
-  - Sayfa içi seçili metinleri anlık olarak çevirebilecek, ücretsiz API'leri veya yerel Ollama modellerini destekleyen bir **Sayfa İçi Metin Çevirici (Inline Text Translator)** planı gelecek hedeflere dahil edildi.
+- Yol haritasına sayfa içi metin çevirici planı eklendi.
 
 ---
 
 ## [2.6.1] - 2026-07-12
 ### Eklendi
-- **Gelecek Planları Yol Haritası (ROADMAP.md)**:
-  - Gelecek hedefleri olan yerel yapay zeka (Ollama Asistanı), gelişmiş Manifest V3 reklam engelleyicisi ve çerez onaylarını otomatik reddeden robot planları GitHub standartlarında `ROADMAP.md` dosyasına kaydedildi.
-- **Beni Oku Güncellemesi (README.md)**:
-  - Projenin ana dokümantasyon dosyası, eklenen tüm yeni özellikler (Detoks arayüzü, ekran süre takibi, telefon tipi alarmlar, Zod/XSS güvenlik korumaları ve özel mor onay modalı) göz önünde bulundurularak kapsamlı bir şekilde güncellendi.
+- Gelecek planları yol haritası (`ROADMAP.md`) oluşturuldu ve `README.md` dokümantasyonu güncellendi.
 
 ---
 
 ## [2.6.0] - 2026-07-12
 ### Eklendi
-- **Özel Onay Penceresi (ConfirmModal.tsx ve confirm.css)**:
-  - Tarayıcının yerleşik gri ve ucuz görünümlü `confirm()` pencereleri tamamen yasaklandı.
-  - Bunun yerine, eklentinin karanlık teması ve görsel bütünlüğüyle uyumlu, şık bir glassmorphic **ConfirmModal** bileşeni geliştirildi.
-  - Onay penceresi pürüzsüz animasyonlar (açılışta ölçeklenme ve arkaplan bulanıklaşması), mor gradient butonlar ve uyarı ikonu ile zenginleştirildi.
-  - Not silme (NotesView), söz silme (NotesView), irade sıfırlama (WillpowerView), KPSS istatistik sıfırlama (KpssView) ve tüm verileri silme (App.tsx) onay pencereleri bu özel bileşene taşındı.
-- **Ücretsiz Oyun Alarm & Masaüstü Bildirim Servisi (Steam, Epic, GOG)**:
-  - GamerPower API ile entegre, saatlik çalışan bir Chrome alarm servisi (`chrome.alarms`) arka plan dosyasına (`background.js`) eklendi.
-  - Sadece **Steam, Epic Games ve GOG** platformlarında yeni bir ücretsiz oyun dağıtıldığında kullanıcıya masaüstü bildirimi gönderilir.
-  - Gönderilen bildirime tıklandığında oyunun alınacağı claim sayfası otomatik olarak yeni tarayıcı sekmesinde açılır.
-  - Daha önce bildirimi gönderilmiş oyunlar tekrar edilmesin diye yerel depolamada (`notified_giveaway_ids`) filtrelenir.
-- **Bildirim Açma/Kapatma Ayarı**:
-  - Ayarlar panelinde ücretsiz oyun bildirimlerinin açılıp kapatılabileceği bir toggle butonu oluşturuldu. Tercih bulut senkronizasyonu (`storage.sync`) ile korunmaktadır.
-- **Eklenti Marka Logosu (logo_icon)**:
-  - Bildirimlerde ve eklenti paketinde kullanılmak üzere minimalist mor neon temalı bir eklenti logosu oluşturulup projenin `icons/` dizinine eklendi.
+- Özel onay penceresi (`ConfirmModal`) yapıldı ve tarayıcı `confirm()` popupları tamamen kaldırıldı.
+- Saatlik çalışan ücretsiz oyun (Steam, Epic, GOG) bildirim servisi eklendi.
+- Bildirimleri açma/kapama ayarı eklendi.
+- Eklenti marka logosu (`icons/icon-128.png`) oluşturularak eklendi.
 
 ---
 
 ## [2.5.0] - 2026-07-11
 ### Eklendi
-- **Veri Yedekleme ve Yükleme Şema Güvenliği (Zod Entegrasyonu)**:
-  - Yedekleme/Geri yükleme mekanizması (`backup.ts`) içerisine **Zod** şema doğrulayıcı kütüphanesi entegre edildi.
-  - JSON yedek dosyaları yüklenirken artık tüm görev nesneleri tek tek model şemasına göre sıkı bir doğrulamadan geçirilir. Bu sayede zararlı kod veya hatalı yapı enjekte edilmiş sahte yedek dosyaları Chrome yerel depolama alanına (Storage) yazılmadan önce engellenir.
-- **Detoks Ekranı XSS Güvenlik Filtresi (HTML Escaper)**:
-  - Kullanıcıların kendi notlarından/sözlerinden çekilen verilerin detoks bloke ekranına basılması esnasında oluşabilecek DOM-tabanlı XSS (Cross-Site Scripting) zafiyetlerini önlemek için `content.js` içerisine güvenli bir `escapeHtml` yardımcı fonksiyonu entegre edildi.
-  - HTML etiketleri (`<`, `>`, `&`, `"`, `'`) içeren tüm metinler sayfaya basılmadan önce otomatik olarak sanitize edilir.
-- **TypeScript CSS Side-Effect Bildirimi (`css.d.ts`)**:
-  - `src/types/css.d.ts` dosyası oluşturularak side-effect CSS dosyalarının import edilmesine yönelik TypeScript derleyici uyarıları giderildi.
-
-### Düzeltildi
 - **TypeScript & ESLint Kod Temizliği**:
   - `npx tsc` derleme aşamasında hata veren takvim gün hücreleri (`never[]`), storage okuma parametre tipi eşleşmeleri (`res as Record<string, any>`) ve App.tsx'teki eksik model değişkenleri (`category`, `lastCompletedDate`) tamamen çözüldü.
   - ESLint tarafındaki 65 adet kural ihlali (tek satırlık `if` deyimlerindeki süslü parantez eksiklikleri, kullanılmayan import ve değişken tanımlamaları, gereksiz atamalar) sıfırlandı.
