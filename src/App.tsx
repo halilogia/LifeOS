@@ -72,6 +72,24 @@ export function App() {
     });
   };
 
+  // Custom alert dialog state
+  const [alertDialog, setAlertDialog] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm?: () => void;
+  }>({
+    isOpen: false,
+    message: "",
+  });
+
+  const showAlert = (message: string, onConfirm?: () => void) => {
+    setAlertDialog({
+      isOpen: true,
+      message,
+      onConfirm,
+    });
+  };
+
   // Time & Date State
   const [clockText, setClockText] = useState("00:00");
   const [dateText, setDateText] = useState("");
@@ -327,7 +345,9 @@ export function App() {
       await syncGoogleTasks(token);
     } catch (e) {
       console.error("Google sign in failed:", e);
-      alert(t.google_sync_error);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      const detailLabel = lang === "tr" ? "Detay" : "Detail";
+      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
     } finally {
       setIsSyncing(false);
     }
@@ -378,10 +398,12 @@ export function App() {
       };
       await storage.setSyncSettings(nextSettings);
       setSyncSettingsState(nextSettings);
-      alert(t.google_sync_success_backup);
+      showAlert(t.google_sync_success_backup);
     } catch (e) {
       console.error("Manual backup failed:", e);
-      alert(t.google_sync_error);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      const detailLabel = lang === "tr" ? "Detay" : "Detail";
+      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
     } finally {
       setIsSyncing(false);
     }
@@ -406,14 +428,17 @@ export function App() {
         if (restored.pomodoroHistory) await storage.setPomodoroHistory(restored.pomodoroHistory);
         if (restored.lang) await storage.setLang(restored.lang);
 
-        alert(t.google_sync_success_restore);
-        window.location.reload();
+        showAlert(t.google_sync_success_restore, () => {
+          window.location.reload();
+        });
       } else {
-        alert(t.google_sync_no_backup);
+        showAlert(t.google_sync_no_backup);
       }
     } catch (e) {
       console.error("Restore failed:", e);
-      alert(t.google_sync_error);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      const detailLabel = lang === "tr" ? "Detay" : "Detail";
+      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
     } finally {
       setIsSyncing(false);
     }
@@ -425,7 +450,9 @@ export function App() {
       await syncGoogleTasks(token);
     } catch (e) {
       console.error("Manual task sync failed:", e);
-      alert(t.google_sync_error);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      const detailLabel = lang === "tr" ? "Detay" : "Detail";
+      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
     }
   };
 
@@ -643,13 +670,15 @@ export function App() {
         if (Array.isArray(parsed)) {
           await storage.setTodos(parsed);
           setTodos(parsed);
-          alert(translations[lang].alert_restore_success);
+          showAlert(translations[lang].alert_restore_success);
         } else {
-          alert(translations[lang].alert_restore_invalid);
+          showAlert(translations[lang].alert_restore_invalid);
         }
       } catch (err) {
         console.error(err);
-        alert(translations[lang].alert_restore_error);
+        const errMsg = err instanceof Error ? err.message : String(err);
+        const detailLabel = lang === "tr" ? "Detay" : "Detail";
+        showAlert(`${translations[lang].alert_restore_error}\n\n[${detailLabel}]: ${errMsg}`);
       }
       input.value = "";
     };
@@ -1187,6 +1216,19 @@ export function App() {
         onCancel={() =>
           setConfirmDialog((prev) => ({ ...prev, isOpen: false }))
         }
+      />
+
+      <ConfirmModal
+        isOpen={alertDialog.isOpen}
+        message={alertDialog.message}
+        lang={lang}
+        onConfirm={() => {
+          if (alertDialog.onConfirm) {
+            alertDialog.onConfirm();
+          }
+          setAlertDialog({ isOpen: false, message: "" });
+        }}
+        isAlert={true}
       />
     </>
   );

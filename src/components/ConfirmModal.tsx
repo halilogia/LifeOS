@@ -5,7 +5,8 @@ interface ConfirmModalProps {
   message: string;
   lang: Language;
   onConfirm: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
+  isAlert?: boolean;
 }
 
 export function ConfirmModal({
@@ -14,16 +15,25 @@ export function ConfirmModal({
   lang,
   onConfirm,
   onCancel,
+  isAlert = false,
 }: ConfirmModalProps) {
   if (!isOpen) {
     return null;
   }
 
-  const okLabel = lang === "tr" ? "Tamam" : "Confirm";
+  const okLabel = lang === "tr" ? "Tamam" : "OK";
   const cancelLabel = lang === "tr" ? "İptal" : "Cancel";
 
+  const handleOverlayClick = () => {
+    if (isAlert) {
+      onConfirm();
+    } else if (onCancel) {
+      onCancel();
+    }
+  };
+
   return (
-    <div className="confirm-modal-overlay" onClick={onCancel}>
+    <div className="confirm-modal-overlay" onClick={handleOverlayClick}>
       <div className="confirm-modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="confirm-modal-icon-wrapper">
           <svg
@@ -41,14 +51,21 @@ export function ConfirmModal({
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
         </div>
-        <div className="confirm-modal-message">{message}</div>
+        <div
+          className="confirm-modal-message"
+          style={{ whiteSpace: "pre-wrap", textAlign: "center", width: "100%" }}
+        >
+          {message}
+        </div>
         <div className="confirm-modal-actions">
           <button className="confirm-modal-btn primary" onClick={onConfirm}>
             {okLabel}
           </button>
-          <button className="confirm-modal-btn secondary" onClick={onCancel}>
-            {cancelLabel}
-          </button>
+          {!isAlert && onCancel && (
+            <button className="confirm-modal-btn secondary" onClick={onCancel}>
+              {cancelLabel}
+            </button>
+          )}
         </div>
       </div>
     </div>

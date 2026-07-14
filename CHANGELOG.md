@@ -4,6 +4,15 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.0.0] - 2026-07-14
+### Eklendi
+- **Google Bulut Senkronizasyonu (Google Drive AppData Sync)**: Tüm Life OS verilerini ( KPSS ilerlemesi, aralıklı tekrar kartları, hıfız kayıtları, notlar, pomodoro geçmişi, irade süresi vb.) Google Drive'ın gizli uygulama klasöründe yedekleyen ve geri yükleyen OAuth2 tabanlı sistem entegre edildi.
+- **Zen Bahçesi & Odak Geçmişi (Zen Garden Sandbox)**: Tamamlanan odaklanma Pomodoro seansları için kullanıcılara Zen ögeleri (Bonsai, Koi, Pagoda vb.) hediye eden 5x5 interaktif kum bahçesi tasarlandı. Geçmiş seanslar için gelişmiş arama ve filtreleme tablosu eklendi.
+- **Google Görevler (Tasks) Entegrasyonu**: Yapılacaklar listesi "Görevler" (Tasks) olarak yeniden adlandırılarak Google Tasks API ile çift yönlü tam senkronizasyon sağlandı. Görevler "Odak" (Focus) ve "Rutinler" (Routines) şeklinde ikiye ayrıldı.
+- **Google Takvim (Calendar) Entegrasyonu**: Aylık takvim görünümünde tamamlanan yerel görevlerle yan yana Google Calendar etkinliklerinin de listelenmesi ve detaylandırılması sağlandı.
+
+---
+
 ## [2.7.3] - 2026-07-12
 ### Düzeltildi
 - **Akıllı Çeviri Balonu Konumlandırması**: Çeviri balonunun ekranın üst sınırından taşarak kesilmesi hatası, pencere yüksekliği ölçülerek otomatik olarak metnin altına kaydırılacak şekilde giderildi.
