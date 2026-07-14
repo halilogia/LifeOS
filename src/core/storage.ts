@@ -7,8 +7,17 @@ import {
   CustomQuote,
   KpssDailyStats,
   WillpowerStreak,
+  PomodoroLog,
 } from "../types/types.js";
 import { WordReviewData } from "../types/word.js";
+
+export interface GoogleSyncSettings {
+  enabled: boolean;
+  tasksEnabled: boolean;
+  calendarEnabled: boolean;
+  userEmail?: string;
+  lastSyncedBackup?: number;
+}
 
 interface SettingsResult {
   lang?: Language;
@@ -31,6 +40,36 @@ export const storage = {
   setWillpowerStreak: (willpowerStreak: WillpowerStreak): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set({ willpowerStreak }, resolve);
+    });
+  },
+  getPomodoroHistory: (): Promise<PomodoroLog[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["pomodoroHistory"], (result) => {
+        resolve((result.pomodoroHistory as PomodoroLog[]) || []);
+      });
+    });
+  },
+  setPomodoroHistory: (pomodoroHistory: PomodoroLog[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ pomodoroHistory }, resolve);
+    });
+  },
+  getSyncSettings: (): Promise<GoogleSyncSettings> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["syncSettings"], (result) => {
+        resolve(
+          (result.syncSettings as GoogleSyncSettings) || {
+            enabled: false,
+            tasksEnabled: false,
+            calendarEnabled: false,
+          },
+        );
+      });
+    });
+  },
+  setSyncSettings: (syncSettings: GoogleSyncSettings): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ syncSettings }, resolve);
     });
   },
   getTodos: (): Promise<Todo[]> => {
@@ -244,6 +283,8 @@ export const storage = {
                 "freeGamesNotificationsEnabled",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
+                "pomodoroHistory",
+                "syncSettings",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

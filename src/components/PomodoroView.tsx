@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { Language } from "../types/types.js";
+import { Language, PomodoroLog } from "../types/types.js";
 import { pomodoroManager, AlarmItem } from "../core/pomodoroManager.js";
+import { storage } from "../core/storage.js";
+import { translations } from "../utils/i18n.js";
 
 interface PomodoroViewProps {
   lang: Language;
@@ -11,6 +13,21 @@ const MODE_LABELS = { focus: "FOCUS", short: "SHORT", long: "LONG" };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
 
 export function PomodoroView({ lang }: PomodoroViewProps) {
+  const t = translations[lang];
+
+  // Tab navigation
+  const [activeTab, setActiveTab] = useState<"timer" | "zen">("timer");
+
+  // Zen Garden & History states
+  const [pomodoroHistory, setPomodoroHistory] = useState<PomodoroLog[]>([]);
+  const [showPlantModal, setShowPlantModal] = useState(false);
+  const [focusNote, setFocusNote] = useState("");
+  const [selectedElement, setSelectedElement] = useState<PomodoroLog["element"]>("bonsai");
+  const [lastCompletedDuration, setLastCompletedDuration] = useState(25 * 60);
+  const [lastCompletedStartTime, setLastCompletedStartTime] = useState("");
+  const [lastCompletedEndTime, setLastCompletedEndTime] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Pomodoro State
   const [pomoMode, setPomoMode] = useState<"focus" | "short" | "long">("focus");
   const [pomoTimeLeft, setPomoTimeLeft] = useState(25 * 60);
@@ -69,6 +86,11 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
       setAlarms(list);
     });
 
+    // 4. Pomodoro history initial state
+    storage.getPomodoroHistory().then((list) => {
+      setPomodoroHistory(list);
+    });
+
     return () => {
       unsubPomo();
       unsubSw();
@@ -97,7 +119,19 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
             clearInterval(pomoTimerRef.current);
           }
           setPomoRunning(false);
-          notify("Pomodoro finished!");
+          notify(
+            pomoMode === "focus"
+              ? "Focus session completed! Plant your Zen Element."
+              : "Break finished!",
+          );
+          if (pomoMode === "focus") {
+            setLastCompletedDuration(pomoTotalTime);
+            setLastCompletedStartTime(
+              new Date(Date.now() - pomoTotalTime * 1000).toISOString(),
+            );
+            setLastCompletedEndTime(new Date().toISOString());
+            setShowPlantModal(true);
+          }
         }
       }, 1000);
     }
@@ -107,7 +141,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
         clearInterval(pomoTimerRef.current);
       }
     };
-  }, [pomoRunning, pomoEndTime]);
+  }, [pomoRunning, pomoEndTime, pomoMode, pomoTotalTime]);
 
   // Tick Stopwatch locally
   useEffect(() => {
@@ -210,6 +244,38 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
     setAlarms(list);
   };
 
+  // --- Zen Garden Handlers ---
+  const handlePlantElement = async () => {
+    let position = -1;
+    const occupied = new Set(pomodoroHistory.map((h) => h.position));
+    for (let i = 0; i < 25; i++) {
+      if (!occupied.has(i)) {
+        position = i;
+        break;
+      }
+    }
+    if (position === -1) {
+      position = pomodoroHistory.length % 25;
+    }
+
+    const newLog: PomodoroLog = {
+      id: Math.random().toString(36).substring(2, 9),
+      startTime: lastCompletedStartTime || new Date().toISOString(),
+      endTime: lastCompletedEndTime || new Date().toISOString(),
+      duration: lastCompletedDuration,
+      mode: "focus",
+      note: focusNote.trim() || (lang === "tr" ? "Odaklanma Seansı" : "Focus Session"),
+      element: selectedElement,
+      position,
+    };
+
+    const nextHistory = [...pomodoroHistory.filter((h) => h.position !== position), newLog];
+    await storage.setPomodoroHistory(nextHistory);
+    setPomodoroHistory(nextHistory);
+    setShowPlantModal(false);
+    setFocusNote("");
+  };
+
   // Notification and Audio Alert Helper
   const notify = (msg: string) => {
     try {
@@ -239,398 +305,628 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   const percent = pomoTimeLeft / pomoTotalTime;
   const progressOffset = CIRCLE_CIRCUMFERENCE * (1 - percent);
 
+  const renderZenElementSvg = (element: PomodoroLog["element"]) => {
+    switch (element) {
+      case "bonsai":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M12 48h40l-4 8H16l-4-8z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <rect x="20" y="56" width="6" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+            <rect x="38" y="56" width="6" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+            <path d="M32 48c0 0-4-8 1-14c5-6-2-12-2-12s-4 4-2 8c2 4-2 7-3 10c-1 3-3 8-3 8z" fill="#a1887f" stroke="#8d6e63" stroke-width="1.5"/>
+            <circle cx="25" cy="22" r="8" fill="rgba(129,199,132,0.85)" />
+            <circle cx="36" cy="18" r="9" fill="rgba(76,175,80,0.85)" />
+            <circle cx="44" cy="24" r="6.5" fill="rgba(129,199,132,0.85)" />
+          </svg>
+        );
+      case "koi":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="26" fill="rgba(129,212,250,0.1)" stroke="rgba(129,212,250,0.3)" stroke-width="1.5"/>
+            <path d="M22 36c4-4 12-2 16-6s4-12 4-12s-6 2-10 6s-2 12-2 12z" fill="#ffb74d" stroke="#f57c00" stroke-width="1.5"/>
+            <path d="M38 30c2-2 6-1 8-3s2-6 2-6s-3 1-5 3s-1 6-1 6z" fill="#e0e0e0" stroke="#9e9e9e" stroke-width="1"/>
+            <path d="M22 36c-2 2-6 2-6 2s1-4 3-6" stroke="#f57c00" stroke-width="1.5"/>
+          </svg>
+        );
+      case "pagoda":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="22" y="50" width="20" height="6" rx="1" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <path d="M16 46h32l-4-10H20l-4 10z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M20 34h24l-3-8H23l-3 8z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M23 24h18l-2-6H25l-2 6z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+            <line x1="32" y1="18" x2="32" y2="10" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+          </svg>
+        );
+      case "lantern":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M16 26c8-4 24-4 32 0l-4-6H20l-4 6z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <rect x="22" y="26" width="20" height="18" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <circle cx="32" cy="36" r="5" fill="#ffb74d" />
+            <rect x="28" y="44" width="8" height="12" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          </svg>
+        );
+      case "bamboo":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="28" y="10" width="5" height="12" rx="1" fill="rgba(129,199,132,0.7)" stroke="rgba(76,175,80,0.8)" stroke-width="1.5"/>
+            <rect x="28" y="24" width="5" height="12" rx="1" fill="rgba(129,199,132,0.7)" stroke="rgba(76,175,80,0.8)" stroke-width="1.5"/>
+            <rect x="28" y="38" width="5" height="12" rx="1" fill="rgba(129,199,132,0.7)" stroke="rgba(76,175,80,0.8)" stroke-width="1.5"/>
+            <path d="M33 16c4 0 8-3 10-6c-2 4-6 6-10 6z" fill="rgba(76,175,80,0.9)"/>
+            <path d="M28 30c-4 0-8-3-10-6c2 4 6 6 10 6z" fill="rgba(76,175,80,0.9)"/>
+            <path d="M33 44c4-1 8-4 9-8c-2 3-5 7-9 8z" fill="rgba(76,175,80,0.9)"/>
+          </svg>
+        );
+      case "pebble":
+        return (
+          <svg viewBox="0 0 64 64" fill="none">
+            <ellipse cx="32" cy="50" rx="20" ry="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <ellipse cx="32" cy="40" rx="15" ry="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <ellipse cx="32" cy="32" rx="10" ry="4" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const gridCells: any[] = [];
+  for (let i = 0; i < 25; i++) {
+    const log = pomodoroHistory.find((h) => h.position === i);
+    gridCells.push(
+      <div key={i} className="zen-grid-cell">
+        {log ? (
+          <>
+            <div className={`zen-element-wrapper ${log.element}`}>
+              {renderZenElementSvg(log.element)}
+            </div>
+            <div className="zen-tooltip">
+              <span className="zen-tooltip-note">{log.note}</span>
+              <span className="zen-tooltip-time">
+                {new Date(log.endTime).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US")}
+              </span>
+              <span className="zen-tooltip-time">
+                {Math.round(log.duration / 60)} {t.minutes_abbr}
+              </span>
+            </div>
+          </>
+        ) : (
+          <span style={{ opacity: 0.1, fontSize: "0.65rem" }}>+</span>
+        )}
+      </div>,
+    );
+  }
+
+  const filteredHistory = pomodoroHistory
+    .filter((log) => {
+      if (!searchQuery.trim()) {
+        return true;
+      }
+      return log.note?.toLowerCase().includes(searchQuery.toLowerCase());
+    })
+    .sort((a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime());
+
   return (
     <div id="pomodoro-view" className="view-content active">
-      <div className="pomodoro-dashboard">
-        {/* Main Pomodoro */}
-        <div className="pomodoro-main-card">
-          <div className="pomodoro-visual-container">
-            <svg className="progress-ring-main" width="240" height="240">
-              <circle
-                className="progress-ring__circle-bg"
-                stroke="rgba(255,255,255,0.05)"
-                stroke-width="8"
-                fill="transparent"
-                r="110"
-                cx="120"
-                cy="120"
-              />
-              <circle
-                id="pomodoro-progress"
-                className="progress-ring__circle"
-                stroke="var(--accent-color)"
-                stroke-width="8"
-                stroke-linecap="round"
-                fill="transparent"
-                r="110"
-                cx="120"
-                cy="120"
-                style={{
-                  strokeDasharray: CIRCLE_CIRCUMFERENCE,
-                  strokeDashoffset: progressOffset,
-                  transition: "stroke-dashoffset 0.3s",
-                }}
-              />
-            </svg>
-            <div className="pomodoro-timer-inner">
-              <div id="pomodoro-time">{formatTime(pomoTimeLeft)}</div>
-              <div id="pomodoro-label">{MODE_LABELS[pomoMode]}</div>
-            </div>
-          </div>
+      {/* Sub-Tab Navigation Header */}
+      <div className="pomodoro-tab-header">
+        <button
+          className={`pomo-tab-link ${activeTab === "timer" ? "active" : ""}`}
+          onClick={() => setActiveTab("timer")}
+        >
+          {t.pomo_tab_timer}
+        </button>
+        <button
+          className={`pomo-tab-link ${activeTab === "zen" ? "active" : ""}`}
+          onClick={() => setActiveTab("zen")}
+        >
+          {t.pomo_tab_zen}
+        </button>
+      </div>
 
-          <div className="pomodoro-controls">
-            <button
-              id="pomodoro-reset"
-              className="pomodoro-action-btn secondary"
-              title="Reset"
-              onClick={handlePomoReset}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                <polyline points="3 3 3 8 8 8"></polyline>
+      {activeTab === "timer" ? (
+        <div className="pomodoro-dashboard">
+          {/* Main Pomodoro */}
+          <div className="pomodoro-main-card">
+            <div className="pomodoro-visual-container">
+              <svg className="progress-ring-main" width="240" height="240">
+                <circle
+                  className="progress-ring__circle-bg"
+                  stroke="rgba(255,255,255,0.05)"
+                  stroke-width="8"
+                  fill="transparent"
+                  r="110"
+                  cx="120"
+                  cy="120"
+                />
+                <circle
+                  id="pomodoro-progress"
+                  className="progress-ring__circle"
+                  stroke="var(--accent-color)"
+                  stroke-width="8"
+                  stroke-linecap="round"
+                  fill="transparent"
+                  r="110"
+                  cx="120"
+                  cy="120"
+                  style={{
+                    strokeDasharray: CIRCLE_CIRCUMFERENCE,
+                    strokeDashoffset: progressOffset,
+                    transition: "stroke-dashoffset 0.3s",
+                  }}
+                />
               </svg>
-            </button>
-
-            {!pomoRunning ? (
-              <button
-                id="pomodoro-start"
-                className="pomodoro-action-btn primary play-btn"
-                onClick={handlePomoStart}
-              >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-            ) : (
-              <button
-                id="pomodoro-pause"
-                className="pomodoro-action-btn primary pause-btn"
-                onClick={handlePomoPause}
-              >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                </svg>
-              </button>
-            )}
-
-            <div style={{ width: "20px" }}></div>
-          </div>
-
-          <div className="pomodoro-modes" id="pomodoro-modes-container">
-            <button
-              className={`pomodoro-mode-btn ${pomoMode === "focus" ? "active" : ""}`}
-              onClick={() => handlePomoModeChange("focus")}
-            >
-              {lang === "tr" ? "Odaklanma" : "Focus"}
-            </button>
-            <button
-              className={`pomodoro-mode-btn ${pomoMode === "short" ? "active" : ""}`}
-              onClick={() => handlePomoModeChange("short")}
-            >
-              {lang === "tr" ? "Kısa Mola" : "Short"}
-            </button>
-            <button
-              className={`pomodoro-mode-btn ${pomoMode === "long" ? "active" : ""}`}
-              onClick={() => handlePomoModeChange("long")}
-            >
-              {lang === "tr" ? "Uzun Mola" : "Long"}
-            </button>
-          </div>
-        </div>
-
-        {/* Side Panel: Stopwatch & Alarm */}
-        <div className="pomodoro-side-panel">
-          {/* Stopwatch Mini Card */}
-          <div className="mini-tool-card" id="stopwatch-mini">
-            <div className="mini-tool-header">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span>{lang === "tr" ? "Kronometre" : "Stopwatch"}</span>
-            </div>
-            <div className="mini-tool-content">
-              <div id="stopwatch-time" className="mini-time">
-                {formatTime(swTime)}
+              <div className="pomodoro-timer-inner">
+                <div id="pomodoro-time">{formatTime(pomoTimeLeft)}</div>
+                <div id="pomodoro-label">{MODE_LABELS[pomoMode]}</div>
               </div>
-              <div className="mini-controls">
-                {!swRunning ? (
-                  <button
-                    id="sw-start-btn"
-                    className="mini-btn primary"
-                    onClick={handleSwStart}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                ) : (
-                  <button
-                    id="sw-pause-btn"
-                    className="mini-btn primary"
-                    onClick={handleSwPause}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                    </svg>
-                  </button>
-                )}
+            </div>
+
+            <div className="pomodoro-controls">
+              <button
+                id="pomodoro-reset"
+                className="pomodoro-action-btn secondary"
+                title="Reset"
+                onClick={handlePomoReset}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                  <polyline points="3 3 3 8 8 8"></polyline>
+                </svg>
+              </button>
+
+              {!pomoRunning ? (
                 <button
-                  id="sw-reset-btn"
-                  className="mini-btn secondary"
-                  onClick={handleSwReset}
+                  id="pomodoro-start"
+                  className="pomodoro-action-btn primary play-btn"
+                  onClick={handlePomoStart}
                 >
                   <svg
-                    width="14"
-                    height="14"
+                    width="28"
+                    height="28"
                     viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
+                    fill="currentColor"
                   >
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                    <polyline points="3 3 3 8 8 8"></polyline>
+                    <path d="M8 5v14l11-7z" />
                   </svg>
                 </button>
-              </div>
+              ) : (
+                <button
+                  id="pomodoro-pause"
+                  className="pomodoro-action-btn primary pause-btn"
+                  onClick={handlePomoPause}
+                >
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                  </svg>
+                </button>
+              )}
+
+              <div style={{ width: "20px" }}></div>
+            </div>
+
+            <div className="pomodoro-modes" id="pomodoro-modes-container">
+              <button
+                className={`pomodoro-mode-btn ${pomoMode === "focus" ? "active" : ""}`}
+                onClick={() => handlePomoModeChange("focus")}
+              >
+                {lang === "tr" ? "Odaklanma" : "Focus"}
+              </button>
+              <button
+                className={`pomodoro-mode-btn ${pomoMode === "short" ? "active" : ""}`}
+                onClick={() => handlePomoModeChange("short")}
+              >
+                {lang === "tr" ? "Kısa Mola" : "Short"}
+              </button>
+              <button
+                className={`pomodoro-mode-btn ${pomoMode === "long" ? "active" : ""}`}
+                onClick={() => handlePomoModeChange("long")}
+              >
+                {lang === "tr" ? "Uzun Mola" : "Long"}
+              </button>
             </div>
           </div>
 
-          {/* Alarm Card (Phone-style list) */}
-          <div
-            className="mini-tool-card"
-            id="alarm-mini"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              minHeight: "260px",
-            }}
-          >
-            <div className="mini-tool-header">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <span>{lang === "tr" ? "Alarmlar" : "Alarms"}</span>
-            </div>
-
-            {/* Input area */}
-            <div style={{ display: "flex", gap: "8px", width: "100%" }}>
-              <input
-                type="time"
-                className="mini-alarm-input"
-                style={{ flex: 1 }}
-                value={alarmInput}
-                onInput={(e) =>
-                  setAlarmInput((e.target as HTMLInputElement).value)
-                }
-              />
-              <button
-                className="mini-btn primary"
-                style={{
-                  borderRadius: "8px",
-                  padding: "0 12px",
-                  height: "36px",
-                }}
-                onClick={handleAddAlarm}
-              >
-                +
-              </button>
-            </div>
-
-            {/* Alarms list scroll viewport */}
-            <div
-              className="alarms-list-container"
-              style={{
-                flex: 1,
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                maxHeight: "180px",
-                paddingRight: "4px",
-              }}
-            >
-              {alarms.length === 0 ? (
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "var(--text-secondary)",
-                    textAlign: "center",
-                    marginTop: "1rem",
-                  }}
+          {/* Side Panel: Stopwatch & Alarm */}
+          <div className="pomodoro-side-panel">
+            {/* Stopwatch Mini Card */}
+            <div className="mini-tool-card" id="stopwatch-mini">
+              <div className="mini-tool-header">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  {lang === "tr" ? "Kurulu alarm yok" : "No alarms set"}
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span>{lang === "tr" ? "Kronometre" : "Stopwatch"}</span>
+              </div>
+              <div className="mini-tool-content">
+                <div id="stopwatch-time" className="mini-time">
+                  {formatTime(swTime)}
                 </div>
-              ) : (
-                alarms.map((alarm) => (
-                  <div
-                    key={alarm.id}
-                    className="alarm-row-item"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      background: "rgba(255,255,255,0.02)",
-                      border: "1px solid var(--card-border)",
-                      borderRadius: "12px",
-                      padding: "8px 12px",
-                      gap: "12px",
-                    }}
-                  >
-                    {/* Time display */}
-                    <span
-                      style={{
-                        fontSize: "1.2rem",
-                        fontWeight: "700",
-                        color: alarm.enabled
-                          ? "var(--text-primary)"
-                          : "var(--text-secondary)",
-                        flex: 1,
-                      }}
-                    >
-                      {alarm.time}
-                    </span>
-
-                    {/* Enable toggle checkbox styled as phone switch */}
-                    <label
-                      className="switch"
-                      style={{
-                        position: "relative",
-                        display: "inline-block",
-                        width: "34px",
-                        height: "20px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={alarm.enabled}
-                        onChange={(e) =>
-                          handleToggleAlarm(
-                            alarm.id,
-                            (e.target as HTMLInputElement).checked,
-                          )
-                        }
-                        style={{ opacity: 0, width: 0, height: 0 }}
-                      />
-                      <span
-                        className="slider round"
-                        style={{
-                          position: "absolute",
-                          cursor: "pointer",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          backgroundColor: alarm.enabled
-                            ? "var(--accent-color)"
-                            : "rgba(255,255,255,0.1)",
-                          transition: ".3s",
-                          borderRadius: "34px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            position: "absolute",
-                            content: '""',
-                            height: "14px",
-                            width: "14px",
-                            left: alarm.enabled ? "16px" : "3px",
-                            bottom: "3px",
-                            backgroundColor: "white",
-                            transition: ".3s",
-                            borderRadius: "50%",
-                          }}
-                        ></span>
-                      </span>
-                    </label>
-
-                    {/* Delete button */}
+                <div className="mini-controls">
+                  {!swRunning ? (
                     <button
-                      onClick={() => handleDeleteAlarm(alarm.id)}
-                      style={{
-                        background: "transparent",
-                        border: "none",
-                        color: "var(--text-secondary)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "4px",
-                        flexShrink: 0,
-                      }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.color = "var(--danger)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.color = "var(--text-secondary)")
-                      }
+                      id="sw-start-btn"
+                      className="mini-btn primary"
+                      onClick={handleSwStart}
                     >
                       <svg
                         width="14"
                         height="14"
                         viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        fill="currentColor"
                       >
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <path d="M8 5v14l11-7z" />
                       </svg>
                     </button>
+                  ) : (
+                    <button
+                      id="sw-pause-btn"
+                      className="mini-btn primary"
+                      onClick={handleSwPause}
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                      </svg>
+                    </button>
+                  )}
+                  <button
+                    id="sw-reset-btn"
+                    className="mini-btn secondary"
+                    onClick={handleSwReset}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                      <polyline points="3 3 3 8 8 8"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Alarm Card (Phone-style list) */}
+            <div
+              className="mini-tool-card"
+              id="alarm-mini"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                minHeight: "260px",
+              }}
+            >
+              <div className="mini-tool-header">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span>{lang === "tr" ? "Alarmlar" : "Alarms"}</span>
+              </div>
+
+              <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                <input
+                  type="time"
+                  className="mini-alarm-input"
+                  style={{ flex: 1 }}
+                  value={alarmInput}
+                  onInput={(e) =>
+                    setAlarmInput((e.target as HTMLInputElement).value)
+                  }
+                />
+                <button
+                  className="mini-btn primary"
+                  style={{
+                    borderRadius: "8px",
+                    padding: "0 12px",
+                    height: "36px",
+                  }}
+                  onClick={handleAddAlarm}
+                >
+                  +
+                </button>
+              </div>
+
+              <div
+                className="alarms-list-container"
+                style={{
+                  flex: 1,
+                  overflowY: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  maxHeight: "180px",
+                  paddingRight: "4px",
+                }}
+              >
+                {alarms.length === 0 ? (
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-secondary)",
+                      textAlign: "center",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    {lang === "tr" ? "Kurulu alarm yok" : "No alarms set"}
                   </div>
-                ))
-              )}
+                ) : (
+                  alarms.map((alarm) => (
+                    <div
+                      key={alarm.id}
+                      className="alarm-row-item"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid var(--card-border)",
+                        borderRadius: "12px",
+                        padding: "8px 12px",
+                        gap: "12px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "700",
+                          color: alarm.enabled
+                            ? "var(--text-primary)"
+                            : "var(--text-secondary)",
+                          flex: 1,
+                        }}
+                      >
+                        {alarm.time}
+                      </span>
+
+                      <label
+                        className="switch"
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                          width: "34px",
+                          height: "20px",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={alarm.enabled}
+                          onChange={(e) =>
+                            handleToggleAlarm(
+                              alarm.id,
+                              (e.target as HTMLInputElement).checked,
+                            )
+                          }
+                          style={{ opacity: 0, width: 0, height: 0 }}
+                        />
+                        <span
+                          className="slider round"
+                          style={{
+                            position: "absolute",
+                            cursor: "pointer",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: alarm.enabled
+                              ? "var(--accent-color)"
+                              : "rgba(255,255,255,0.1)",
+                            transition: ".3s",
+                            borderRadius: "34px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              position: "absolute",
+                              content: '""',
+                              height: "14px",
+                              width: "14px",
+                              left: alarm.enabled ? "16px" : "3px",
+                              bottom: "3px",
+                              backgroundColor: "white",
+                              transition: ".3s",
+                              borderRadius: "50%",
+                            }}
+                          ></span>
+                        </span>
+                      </label>
+
+                      <button
+                        onClick={() => handleDeleteAlarm(alarm.id)}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--text-secondary)",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "4px",
+                          flexShrink: 0,
+                        }}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.color = "var(--danger)")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.color = "var(--text-secondary)")
+                        }
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="zen-garden-panel">
+          {/* Zen Garden Sandbox Card */}
+          <div className="zen-sandbox-card">
+            <header className="zen-sandbox-header">
+              <h3>{t.zen_garden_title}</h3>
+              <p>{t.zen_garden_subtitle}</p>
+            </header>
+            <div className="zen-sandbox-canvas">
+              {gridCells}
+            </div>
+          </div>
+
+          {/* Focus History Log Card */}
+          <div className="zen-history-card">
+            <header className="zen-history-header">
+              <h3>{t.zen_history_title}</h3>
+              <input
+                type="text"
+                className="zen-search-input"
+                placeholder={t.zen_history_search}
+                value={searchQuery}
+                onInput={(e) => setSearchQuery((e.target as HTMLInputElement).value)}
+              />
+            </header>
+            <div className="zen-history-table-wrapper">
+              <table className="zen-history-table">
+                <thead>
+                  <tr>
+                    <th>{t.zen_history_col_date}</th>
+                    <th>{t.zen_history_col_duration}</th>
+                    <th>{t.zen_history_col_note}</th>
+                    <th>{t.zen_history_col_elem}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredHistory.length === 0 ? (
+                    <tr>
+                      <td colspan={4} className="empty-state">
+                        {t.zen_history_empty}
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredHistory.map((log) => (
+                      <tr key={log.id}>
+                        <td>
+                          {new Date(log.endTime).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                        <td>
+                          {Math.round(log.duration / 60)} {t.minutes_abbr}
+                        </td>
+                        <td>{log.note}</td>
+                        <td style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{ width: "24px", height: "24px", display: "inline-block" }}>
+                            {renderZenElementSvg(log.element)}
+                          </span>
+                          <span>{t[`zen_elem_${log.element}` as keyof typeof t] || log.element}</span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Zen Log Plant Modal Overlay */}
+      {showPlantModal && (
+        <div className="zen-plant-modal-overlay">
+          <div className="zen-plant-modal">
+            <h3>{t.zen_modal_title}</h3>
+            
+            <div className="zen-plant-modal-field">
+              <label>{t.zen_modal_question}</label>
+              <input
+                type="text"
+                className="zen-plant-input"
+                placeholder={t.zen_modal_placeholder}
+                value={focusNote}
+                onInput={(e) => setFocusNote((e.target as HTMLInputElement).value)}
+                autofocus
+              />
+            </div>
+
+            <div className="zen-plant-modal-field">
+              <label>{t.zen_modal_select}</label>
+              <div className="zen-element-grid">
+                {(["bonsai", "koi", "pagoda", "lantern", "bamboo", "pebble"] as const).map((el) => (
+                  <div
+                    key={el}
+                    className={`zen-element-select-card ${selectedElement === el ? "selected" : ""}`}
+                    onClick={() => setSelectedElement(el)}
+                  >
+                    <div style={{ width: "32px", height: "32px" }}>
+                      {renderZenElementSvg(el)}
+                    </div>
+                    <span>{t[`zen_elem_${el}` as keyof typeof t] || el}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button className="zen-plant-submit-btn" onClick={handlePlantElement}>
+              {t.zen_modal_plant}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

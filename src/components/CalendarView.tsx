@@ -1,6 +1,8 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
+import { googleSyncService } from "../services/googleSyncService.js";
+import { storage } from "../core/storage.js";
 
 interface CalendarViewProps {
   todos: Todo[];
@@ -14,8 +16,11 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeModalData, setActiveModalData] = useState<{
     title: string;
-    tasks: string[];
+    items: { type: "task" | "event"; text: string; time?: string }[];
   } | null>(null);
+
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+  const [isSyncingCalendar, setIsSyncingCalendar] = useState(false);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -81,6 +86,51 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     });
   });
 
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCalendar = async () => {
+      const syncSettings = await storage.getSyncSettings();
+      if (syncSettings.enabled && syncSettings.calendarEnabled) {
+        setIsSyncingCalendar(true);
+        try {
+          const token = await googleSyncService.getAuthToken(false);
+          const startStr = new Date(year, month, 1, 0, 0, 0).toISOString();
+          const endStr = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+          const items = await googleSyncService.getCalendarEvents(token, startStr, endStr);
+          if (isMounted) {
+            setCalendarEvents(items);
+          }
+        } catch (e) {
+          console.error("Google Calendar fetching error:", e);
+        } finally {
+          if (isMounted) {
+            setIsSyncingCalendar(false);
+          }
+        }
+      } else {
+        setCalendarEvents([]);
+      }
+    };
+    fetchCalendar();
+    return () => {
+      isMounted = false;
+    };
+  }, [currentDate]);
+
+  // Group events by date key: YYYY-MM-DD
+  const eventsByDate: Record<string, any[]> = {};
+  calendarEvents.forEach((event) => {
+    if (!event.start) return;
+    const dateStr = event.start.dateTime || event.start.date;
+    if (!dateStr) return;
+    const date = new Date(dateStr);
+    const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    if (!eventsByDate[dateKey]) {
+      eventsByDate[dateKey] = [];
+    }
+    eventsByDate[dateKey].push(event);
+  });
+
   const today = new Date();
   const isCurrentMonth =
     today.getFullYear() === year && today.getMonth() === month;
@@ -98,25 +148,57 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     const isToday = isCurrentMonth && today.getDate() === day;
     const dateKey = `${year}-${month}-${day}`;
     const dayTasks = completedTasksByDate[dateKey] || [];
+    const dayEvents = eventsByDate[dateKey] || [];
     const hasTasks = dayTasks.length > 0;
+    const hasEvents = dayEvents.length > 0;
+    const hasItems = hasTasks || hasEvents;
+
+    const modalItems: { type: "task" | "event"; text: string; time?: string }[] = [
+      ...dayTasks.map(t => ({ type: "task" as const, text: t })),
+      ...dayEvents.map(ev => {
+        const timeStr = ev.start.dateTime
+          ? new Date(ev.start.dateTime).toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : undefined;
+        return { type: "event" as const, text: ev.summary || "", time: timeStr };
+      }),
+    ];
 
     dayCells.push(
       <div
         key={`day-${day}`}
-        className={`calendar-day ${isToday ? "today" : ""} ${hasTasks ? "has-tasks" : ""}`}
+        className={`calendar-day ${isToday ? "today" : ""} ${hasItems ? "has-tasks" : ""}`}
         onClick={() => {
           setActiveModalData({
             title: `${day} ${monthName} ${year}`,
-            tasks: dayTasks,
+            items: modalItems,
           });
         }}
       >
         <span className="day-number">{day}</span>
-        {hasTasks && (
+        {hasItems && (
           <ul className="calendar-task-list">
             {dayTasks.map((t, idx) => (
-              <li key={idx}>{t}</li>
+              <li key={`task-${idx}`} className="calendar-task-item">
+                {t}
+              </li>
             ))}
+            {dayEvents.map((ev, idx) => {
+              const timeStr = ev.start.dateTime
+                ? new Date(ev.start.dateTime).toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "";
+              return (
+                <li key={`ev-${idx}`} className="calendar-event-item" title={ev.summary}>
+                  {timeStr && <span className="event-time">{timeStr}</span>}
+                  {ev.summary}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>,
@@ -185,7 +267,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
             </header>
             <div className="day-tasks-body">
               <ul id="day-tasks-list" className="day-tasks-list">
-                {activeModalData.tasks.length === 0 ? (
+                {activeModalData.items.length === 0 ? (
                   <p
                     style={{
                       color: "var(--text-secondary)",
@@ -194,28 +276,59 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
                     }}
                   >
                     {lang === "tr"
-                      ? "Bu güne ait tamamlanmış görev yok."
-                      : "No completed tasks for this day."}
+                      ? "Bu güne ait tamamlanmış görev veya etkinlik yok."
+                      : "No completed tasks or events for this day."}
                   </p>
                 ) : (
-                  activeModalData.tasks.map((taskText, idx) => (
-                    <li key={idx}>
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="var(--success)"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        style={{ flexShrink: 0 }}
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span>{taskText}</span>
-                    </li>
-                  ))
+                  activeModalData.items.map((item, idx) => {
+                    if (item.type === "task") {
+                      return (
+                        <li key={idx}>
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="var(--success)"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ flexShrink: 0 }}
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                          <span>{item.text}</span>
+                        </li>
+                      );
+                    } else {
+                      return (
+                        <li key={idx} className="calendar-event-detail">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#8b5cf6"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ flexShrink: 0 }}
+                          >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          <span>
+                            {item.time && (
+                              <strong style={{ color: "#c084fc", marginRight: "8px" }}>
+                                {item.time}
+                              </strong>
+                            )}
+                            {item.text}
+                          </span>
+                        </li>
+                      );
+                    }
+                  })
                 )}
               </ul>
             </div>

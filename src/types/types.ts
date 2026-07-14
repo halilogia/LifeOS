@@ -1,4 +1,5 @@
 export interface Todo {
+  id?: string; // Google Tasks ID
   text: string;
   completed: boolean;
   status: "todo" | "in-progress" | "done";
@@ -62,3 +63,15 @@ export interface WillpowerStreak {
     note?: string;
   }[];
 }
+
+export interface PomodoroLog {
+  id: string;
+  startTime: string; // ISO date
+  endTime: string;   // ISO date
+  duration: number;  // in seconds
+  mode: "focus" | "short" | "long";
+  note?: string;
+  element: "bonsai" | "koi" | "pagoda" | "lantern" | "bamboo" | "pebble";
+  position: number;  // 0-24 grid position
+}
+
