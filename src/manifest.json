@@ -6,11 +6,20 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications", "tabs", "alarms", "identity"],
-  "host_permissions": ["https://www.gamerpower.com/*"],
+  "permissions": [
+    "storage",
+    "notifications",
+    "tabs",
+    "alarms",
+    "identity"
+  ],
+  "host_permissions": [
+    "https://www.gamerpower.com/*"
+  ],
   "oauth2": {
-    "client_id": "848529321453-xxxxxxxxxxxxxxxx.apps.googleusercontent.com",
+    "client_id": "1061579928611-pgijn1nbhseg9pvkf72ooo6j8re44flb.apps.googleusercontent.com",
     "scopes": [
+      "email",
       "https://www.googleapis.com/auth/tasks",
       "https://www.googleapis.com/auth/calendar.readonly",
       "https://www.googleapis.com/auth/drive.appdata"
@@ -26,8 +35,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_start"
     }
   ]
