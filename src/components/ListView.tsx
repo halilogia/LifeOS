@@ -8,6 +8,9 @@ interface ListViewProps {
   onTabChange: (tab: "focus" | "routines") => void;
   onToggleTodo: (index: number) => void;
   onDeleteTodo: (index: number) => void;
+  googleSyncActive: boolean;
+  isSyncing: boolean;
+  onManualSync: () => void;
 }
 
 export function ListView({
@@ -17,6 +20,9 @@ export function ListView({
   onTabChange,
   onToggleTodo,
   onDeleteTodo,
+  googleSyncActive,
+  isSyncing,
+  onManualSync,
 }: ListViewProps) {
   const t = translations[lang];
 
@@ -35,6 +41,43 @@ export function ListView({
     <div id="list-view" className="view-content active">
       <div className="todo-card">
         <h1 className="greeting">{t.greeting}</h1>
+
+        {googleSyncActive && (
+          <div className="tasks-sync-bar">
+            <div className="tasks-sync-info">
+              <span className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}></span>
+              <span>
+                {isSyncing
+                  ? lang === "tr"
+                    ? "Google Görevler eşitleniyor..."
+                    : "Syncing Google Tasks..."
+                  : lang === "tr"
+                    ? "Google Görevler ile eşitlendi"
+                    : "Synced with Google Tasks"}
+              </span>
+            </div>
+            <button
+              className="sync-action-btn"
+              onClick={onManualSync}
+              disabled={isSyncing}
+              title={lang === "tr" ? "Şimdi Eşitle" : "Sync Now"}
+            >
+              <svg
+                className={isSyncing ? "sync-spinner" : ""}
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         <div className="todo-tabs">
           <button

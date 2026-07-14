@@ -1,5 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage } from "./core/storage.js";
+import { storage, GoogleSyncSettings } from "./core/storage.js";
+import { googleSyncService } from "./services/googleSyncService.js";
 import {
   checkAndResetRepeatingTasks,
   moveTaskWithStatus,
@@ -31,6 +32,15 @@ export function App() {
   const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // Google Sync States
+  const [syncSettings, setSyncSettingsState] = useState<GoogleSyncSettings>({
+    enabled: false,
+    tasksEnabled: false,
+    calendarEnabled: false,
+  });
+  const [googleUserEmail, setGoogleUserEmail] = useState<string>("");
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Free games notification toggle
   const [freeGamesNotificationsEnabled, setFreeGamesNotificationsEnabled] =
@@ -98,13 +108,17 @@ export function App() {
       setUniversalInfoBoxEnabled(config.universalInfoBoxEnabled ?? true);
       setUniversalInfoBoxHotkey(config.universalInfoBoxHotkey || "none");
 
+      // Load Google Sync Settings
+      const syncConfig = await storage.getSyncSettings();
+      setSyncSettingsState(syncConfig);
+
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
         "sidebar-open",
         config.sidebarOpen ?? true,
       );
 
-      // 3. Load and clean task items
+      // 3. Load and clean task items (Offline/Local first)
       const loadedTodos = await storage.getTodos();
       const clone = JSON.parse(JSON.stringify(loadedTodos));
       const hasResets = checkAndResetRepeatingTasks(clone);
@@ -115,7 +129,21 @@ export function App() {
         setTodos(loadedTodos);
       }
 
-      // 4. Set quote
+      // 4. Trigger background task sync if Google Sync is enabled
+      if (syncConfig.enabled) {
+        try {
+          const token = await googleSyncService.getAuthToken(false);
+          const uinfo = await googleSyncService.getUserInfo(token);
+          setGoogleUserEmail(uinfo.email);
+          if (syncConfig.tasksEnabled) {
+            await syncGoogleTasks(token);
+          }
+        } catch (e) {
+          console.warn("Silent Google OAuth login failed on startup:", e);
+        }
+      }
+
+      // 5. Set quote
       refreshQuote(config.lang);
     };
 
@@ -181,6 +209,226 @@ export function App() {
     }
   };
 
+  // --- Google Cloud Sync Handlers & Helpers ---
+  const triggerCloudBackup = async () => {
+    const settings = await storage.getSyncSettings();
+    if (settings.enabled) {
+      try {
+        const token = await googleSyncService.getAuthToken(false);
+        const allData = {
+          todos: await storage.getTodos(),
+          notes: await storage.getNotes(),
+          hifizProgress: await storage.getHifizProgress(),
+          srsProgress: await storage.getSrsProgress(),
+          customCategories: await storage.getCustomCategories(),
+          kpssProgress: await storage.getKpssProgress(),
+          customQuotes: await storage.getCustomQuotes(),
+          yeterlikler: await storage.getYeterlikler(),
+          kpssDailyStats: await storage.getKpssDailyStats(),
+          willpowerStreak: await storage.getWillpowerStreak(),
+          pomodoroHistory: await storage.getPomodoroHistory(),
+          lang,
+        };
+        await googleSyncService.backupToDrive(token, allData);
+        console.log("Cloud auto-backup completed successfully.");
+      } catch (e) {
+        console.error("Auto cloud backup failed:", e);
+      }
+    }
+  };
+
+  const syncGoogleTasks = async (token: string) => {
+    setIsSyncing(true);
+    try {
+      const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+      const routinesListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Routines");
+
+      const remoteFocusTasks = await googleSyncService.getTasks(token, focusListId);
+      const remoteRoutinesTasks = await googleSyncService.getTasks(token, routinesListId);
+
+      const localTodos = await storage.getTodos();
+
+      const parseDescription = (notes?: string) => {
+        if (!notes) return { repeat: "none" as const };
+        const match = notes.match(/\[repeat:(none|daily|weekly|monthly)\]/);
+        return {
+          repeat: match ? (match[1] as Todo["repeat"]) : ("none" as const),
+        };
+      };
+
+      const mappedFocus: Todo[] = remoteFocusTasks.map((t: any) => ({
+        id: t.id,
+        text: t.title,
+        completed: t.status === "completed",
+        status: t.status === "completed" ? "done" : "todo",
+        repeat: "none",
+        category: "general",
+        lastCompletedDate: t.completed || null,
+      }));
+
+      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
+        const { repeat } = parseDescription(t.notes);
+        return {
+          id: t.id,
+          text: t.title,
+          completed: t.status === "completed",
+          status: t.status === "completed" ? "done" : "todo",
+          repeat: repeat === "none" ? "daily" : repeat,
+          category: "general",
+          lastCompletedDate: t.completed || null,
+        };
+      });
+
+      const remoteTodos = [...mappedFocus, ...mappedRoutines];
+
+      // Upload unsynced local tasks
+      const unSyncedLocal = localTodos.filter((t) => !t.id);
+      for (const localTodo of unSyncedLocal) {
+        const isRoutine = localTodo.repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+        const notes = `[repeat:${localTodo.repeat}]`;
+        try {
+          const createdRemote = await googleSyncService.createTask(token, listId, {
+            title: localTodo.text,
+            notes,
+            status: localTodo.completed ? "completed" : "needsAction",
+          });
+          localTodo.id = createdRemote.id;
+          remoteTodos.push(localTodo);
+        } catch (err) {
+          console.error("Failed to upload offline task:", err);
+        }
+      }
+
+      await storage.setTodos(remoteTodos);
+      setTodos(remoteTodos);
+    } catch (e) {
+      console.error("Google Tasks sync failed:", e);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsSyncing(true);
+    try {
+      const token = await googleSyncService.getAuthToken(true);
+      const info = await googleSyncService.getUserInfo(token);
+      setGoogleUserEmail(info.email);
+      const nextSettings = {
+        ...syncSettings,
+        enabled: true,
+        tasksEnabled: true,
+        calendarEnabled: true,
+        userEmail: info.email,
+      };
+      await storage.setSyncSettings(nextSettings);
+      setSyncSettingsState(nextSettings);
+      await syncGoogleTasks(token);
+    } catch (e) {
+      console.error("Google sign in failed:", e);
+      alert(t.google_sync_error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleGoogleLogout = async () => {
+    setIsSyncing(true);
+    try {
+      const token = await googleSyncService.getAuthToken(false);
+      await googleSyncService.removeCachedAuthToken(token);
+    } catch (e) {
+      console.warn("Cached token remove skipped:", e);
+    }
+    setGoogleUserEmail("");
+    const nextSettings = {
+      enabled: false,
+      tasksEnabled: false,
+      calendarEnabled: false,
+      userEmail: "",
+    };
+    await storage.setSyncSettings(nextSettings);
+    setSyncSettingsState(nextSettings);
+    setIsSyncing(false);
+  };
+
+  const handleBackupToGoogleDrive = async () => {
+    setIsSyncing(true);
+    try {
+      const token = await googleSyncService.getAuthToken(false);
+      const allData = {
+        todos: await storage.getTodos(),
+        notes: await storage.getNotes(),
+        hifizProgress: await storage.getHifizProgress(),
+        srsProgress: await storage.getSrsProgress(),
+        customCategories: await storage.getCustomCategories(),
+        kpssProgress: await storage.getKpssProgress(),
+        customQuotes: await storage.getCustomQuotes(),
+        yeterlikler: await storage.getYeterlikler(),
+        kpssDailyStats: await storage.getKpssDailyStats(),
+        willpowerStreak: await storage.getWillpowerStreak(),
+        pomodoroHistory: await storage.getPomodoroHistory(),
+        lang,
+      };
+      await googleSyncService.backupToDrive(token, allData);
+      const nextSettings = {
+        ...syncSettings,
+        lastSyncedBackup: Date.now(),
+      };
+      await storage.setSyncSettings(nextSettings);
+      setSyncSettingsState(nextSettings);
+      alert(t.google_sync_success_backup);
+    } catch (e) {
+      console.error("Manual backup failed:", e);
+      alert(t.google_sync_error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleRestoreFromGoogleDrive = async () => {
+    setIsSyncing(true);
+    try {
+      const token = await googleSyncService.getAuthToken(false);
+      const restored = await googleSyncService.restoreFromDrive(token);
+      if (restored) {
+        if (restored.todos) await storage.setTodos(restored.todos);
+        if (restored.notes) await storage.setNotes(restored.notes);
+        if (restored.hifizProgress) await storage.setHifizProgress(restored.hifizProgress);
+        if (restored.srsProgress) await storage.setSrsProgress(restored.srsProgress);
+        if (restored.customCategories) await storage.setCustomCategories(restored.customCategories);
+        if (restored.kpssProgress) await storage.setKpssProgress(restored.kpssProgress);
+        if (restored.customQuotes) await storage.setCustomQuotes(restored.customQuotes);
+        if (restored.yeterlikler) await storage.setYeterlikler(restored.yeterlikler);
+        if (restored.kpssDailyStats) await storage.setKpssDailyStats(restored.kpssDailyStats);
+        if (restored.willpowerStreak) await storage.setWillpowerStreak(restored.willpowerStreak);
+        if (restored.pomodoroHistory) await storage.setPomodoroHistory(restored.pomodoroHistory);
+        if (restored.lang) await storage.setLang(restored.lang);
+
+        alert(t.google_sync_success_restore);
+        window.location.reload();
+      } else {
+        alert(t.google_sync_no_backup);
+      }
+    } catch (e) {
+      console.error("Restore failed:", e);
+      alert(t.google_sync_error);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleManualSyncTasks = async () => {
+    try {
+      const token = await googleSyncService.getAuthToken(false);
+      await syncGoogleTasks(token);
+    } catch (e) {
+      console.error("Manual task sync failed:", e);
+      alert(t.google_sync_error);
+    }
+  };
+
   // --- Task Mutators ---
   const handleAddTodo = async (text: string, repeat: Todo["repeat"]) => {
     const newTodo: Todo = {
@@ -191,9 +439,34 @@ export function App() {
       category: "general",
       lastCompletedDate: "",
     };
+
+    if (syncSettings.enabled && syncSettings.tasksEnabled) {
+      try {
+        const token = await googleSyncService.getAuthToken(false);
+        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+        const routinesListId = await googleSyncService.getOrCreateTaskList(
+          token,
+          "Life OS - Routines",
+        );
+        const isRoutine = repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+        const notes = `[repeat:${repeat}]`;
+
+        const remote = await googleSyncService.createTask(token, listId, {
+          title: text,
+          notes,
+          status: "needsAction",
+        });
+        newTodo.id = remote.id;
+      } catch (err) {
+        console.error("Failed to add task to Google Tasks:", err);
+      }
+    }
+
     const next = [...todos, newTodo];
     await storage.setTodos(next);
     setTodos(next);
+    triggerCloudBackup();
   };
 
   const handleToggleTodo = async (index: number) => {
@@ -212,24 +485,84 @@ export function App() {
       item.completedDates.push(now);
     }
 
+    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
+      try {
+        const token = await googleSyncService.getAuthToken(false);
+        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+        const routinesListId = await googleSyncService.getOrCreateTaskList(
+          token,
+          "Life OS - Routines",
+        );
+        const isRoutine = item.repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+
+        await googleSyncService.updateTask(token, listId, item.id, {
+          status: item.completed ? "completed" : "needsAction",
+          completed: item.completed ? new Date().toISOString() : null,
+        });
+      } catch (err) {
+        console.error("Failed to update Google Task:", err);
+      }
+    }
+
     await storage.setTodos(next);
     setTodos(next);
+    triggerCloudBackup();
   };
 
   const handleDeleteTodo = async (index: number) => {
+    const item = todos[index];
+    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
+      try {
+        const token = await googleSyncService.getAuthToken(false);
+        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+        const routinesListId = await googleSyncService.getOrCreateTaskList(
+          token,
+          "Life OS - Routines",
+        );
+        const isRoutine = item.repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+
+        await googleSyncService.deleteTask(token, listId, item.id);
+      } catch (err) {
+        console.error("Failed to delete Google Task:", err);
+      }
+    }
+
     const next = todos.filter((_, idx) => idx !== index);
     await storage.setTodos(next);
     setTodos(next);
+    triggerCloudBackup();
   };
 
-  const handleMoveTaskStatus = async (
-    index: number,
-    newStatus: Todo["status"],
-  ) => {
+  const handleMoveTaskStatus = async (index: number, newStatus: Todo["status"]) => {
     const next = [...todos];
     moveTaskWithStatus(index, newStatus, next);
+    const item = next[index];
+
+    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
+      try {
+        const token = await googleSyncService.getAuthToken(false);
+        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+        const routinesListId = await googleSyncService.getOrCreateTaskList(
+          token,
+          "Life OS - Routines",
+        );
+        const isRoutine = item.repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+
+        await googleSyncService.updateTask(token, listId, item.id, {
+          status: newStatus === "done" ? "completed" : "needsAction",
+          completed: newStatus === "done" ? new Date().toISOString() : null,
+        });
+      } catch (err) {
+        console.error("Failed to move Google Task:", err);
+      }
+    }
+
     await storage.setTodos(next);
     setTodos(next);
+    triggerCloudBackup();
   };
 
   const handleMoveTaskDirection = async (index: number, direction: number) => {
@@ -237,8 +570,31 @@ export function App() {
     const newStatus = getUpdatedStatuses(next, index, direction);
     if (newStatus) {
       moveTaskWithStatus(index, newStatus, next);
+      const item = next[index];
+
+      if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
+        try {
+          const token = await googleSyncService.getAuthToken(false);
+          const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
+          const routinesListId = await googleSyncService.getOrCreateTaskList(
+            token,
+            "Life OS - Routines",
+          );
+          const isRoutine = item.repeat !== "none";
+          const listId = isRoutine ? routinesListId : focusListId;
+
+          await googleSyncService.updateTask(token, listId, item.id, {
+            status: newStatus === "done" ? "completed" : "needsAction",
+            completed: newStatus === "done" ? new Date().toISOString() : null,
+          });
+        } catch (err) {
+          console.error("Failed to move Google Task direction:", err);
+        }
+      }
+
       await storage.setTodos(next);
       setTodos(next);
+      triggerCloudBackup();
     }
   };
 
@@ -341,6 +697,9 @@ export function App() {
             onTabChange={setActiveTab}
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
+            googleSyncActive={syncSettings.enabled && syncSettings.tasksEnabled}
+            isSyncing={isSyncing}
+            onManualSync={handleManualSyncTasks}
           />
         );
       case "kanban":
@@ -721,6 +1080,65 @@ export function App() {
                   </svg>
                   <span>{t.clear_all}</span>
                 </button>
+              </div>
+            </div>
+
+            {/* Google Cloud Sync settings card */}
+            <div className="settings-group" style={{ marginTop: "24px" }}>
+              <h3>{t.google_sync_title}</h3>
+              <div className="google-sync-card">
+                {!googleUserEmail ? (
+                  <button className="google-sync-btn primary" onClick={handleGoogleLogin} disabled={isSyncing}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    {t.google_sync_btn_login}
+                  </button>
+                ) : (
+                  <>
+                    <div className="google-account-info">
+                      <div className="google-user-details">
+                        <span className="google-user-label">{t.google_sync_connected_as}</span>
+                        <span className="google-user-email">{googleUserEmail}</span>
+                      </div>
+                      <button className="google-sync-btn danger" onClick={handleGoogleLogout} disabled={isSyncing} style={{ width: "auto", minWidth: "0" }}>
+                        {t.google_sync_btn_logout}
+                      </button>
+                    </div>
+
+                    <div className="google-sync-status-indicator" style={{ marginTop: "8px" }}>
+                      <span className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}></span>
+                      <span>
+                        {isSyncing ? (lang === "tr" ? "Senkronize ediliyor..." : "Syncing...") : t.google_sync_status_synced}
+                      </span>
+                    </div>
+
+                    {syncSettings.lastSyncedBackup && (
+                      <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: "4px" }}>
+                        {t.google_sync_last_synced} {new Date(syncSettings.lastSyncedBackup).toLocaleString(lang === "tr" ? "tr-TR" : "en-US")}
+                      </div>
+                    )}
+
+                    <div className="google-sync-actions" style={{ marginTop: "12px" }}>
+                      <button className="google-sync-btn" onClick={handleBackupToGoogleDrive} disabled={isSyncing}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        {t.google_sync_backup_now}
+                      </button>
+                      <button className="google-sync-btn" onClick={handleRestoreFromGoogleDrive} disabled={isSyncing}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        {t.google_sync_restore_now}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

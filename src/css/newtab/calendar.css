@@ -191,3 +191,20 @@
   max-height: 60vh;
   overflow-y: auto;
 }
+
+.calendar-task-list li.calendar-event-item {
+  background: rgba(139, 92, 246, 0.15);
+  border-left: 2px solid #8b5cf6;
+}
+
+.calendar-task-list li.calendar-event-item .event-time {
+  font-weight: 700;
+  color: #c084fc;
+  margin-right: 4px;
+}
+
+.day-tasks-list li.calendar-event-detail {
+  border-left-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.05);
+}
+
