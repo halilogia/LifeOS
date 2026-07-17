@@ -1,0 +1,629 @@
+/* ═══════════════════════════════════════════════════════
+   halka-arz.css  —  Halka Arz & BIST Hisse Takibi paneli
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Container ─────────────────────────────────────────── */
+.halka-arz-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 24px;
+  height: 100%;
+  overflow-y: auto;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* ── Page header ───────────────────────────────────────── */
+.halka-arz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.halka-arz-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.halka-arz-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.halka-arz-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.halka-arz-page-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+/* ── Fallback notice ───────────────────────────────────── */
+.halka-arz-fallback-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: #f59e0b;
+  margin-bottom: 4px;
+}
+
+/* ── Tab navigation ───────────────────────────────────── */
+.halka-arz-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 5px;
+  width: fit-content;
+}
+
+.ha-tab-btn {
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ha-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.ha-tab-btn.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.18) 100%);
+  color: #10b981;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
+}
+
+.ha-tab-badge {
+  background: rgba(16, 185, 129, 0.25);
+  color: #10b981;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 20px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ── Refresh button ─────────────────────────────────────── */
+.ha-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ha-refresh-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  transform: translateY(-1px);
+}
+
+.ha-refresh-btn:active {
+  transform: translateY(0);
+}
+
+.ha-refresh-btn.spinning svg {
+  animation: ha-spin 0.8s linear infinite;
+}
+
+@keyframes ha-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Loading & Error states ──────────────────────────────── */
+.ha-loading,
+.ha-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.ha-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(16, 185, 129, 0.2);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: ha-spin 0.9s linear infinite;
+}
+
+.ha-retry-btn {
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ha-retry-btn:hover {
+  background: rgba(16, 185, 129, 0.22);
+}
+
+/* ── Empty state ──────────────────────────────────────── */
+.ha-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 52px 24px;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════════════════
+   IPO Cards
+   ═══════════════════════════════════════════════════════ */
+
+.ipo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.ipo-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ipo-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+  background: var(--ipo-accent, rgba(255,255,255,0.08));
+}
+
+.ipo-card.status-active {
+  --ipo-accent: linear-gradient(90deg, #10b981, #059669);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+.ipo-card.status-upcoming {
+  --ipo-accent: linear-gradient(90deg, #f59e0b, #d97706);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.ipo-card.status-completed {
+  --ipo-accent: linear-gradient(90deg, #6366f1, #4f46e5);
+  border-color: rgba(99, 102, 241, 0.15);
+}
+.ipo-card.status-cancelled {
+  --ipo-accent: linear-gradient(90deg, #ef4444, #dc2626);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.ipo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* IPO card header */
+.ipo-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ipo-company-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ipo-company-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ipo-ticker-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: "Courier New", monospace;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+
+/* Status badge */
+.ipo-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ipo-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.ipo-status-badge.status-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+.ipo-status-badge.status-active .ipo-status-dot {
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: ha-pulse 1.5s ease-in-out infinite;
+}
+
+.ipo-status-badge.status-upcoming {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+.ipo-status-badge.status-upcoming .ipo-status-dot {
+  background: #f59e0b;
+}
+
+.ipo-status-badge.status-completed {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+.ipo-status-badge.status-completed .ipo-status-dot {
+  background: #6366f1;
+}
+
+.ipo-status-badge.status-cancelled {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+.ipo-status-badge.status-cancelled .ipo-status-dot {
+  background: #ef4444;
+}
+
+@keyframes ha-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* IPO card details */
+.ipo-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ipo-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.ipo-detail-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.ipo-detail-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+.ipo-sector-chip {
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+/* IPO card footer */
+.ipo-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+.ipo-kap-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.ipo-kap-link:hover {
+  background: rgba(99, 102, 241, 0.22);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Stock Quote Cards
+   ═══════════════════════════════════════════════════════ */
+
+.stock-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.stock-delay-note {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  opacity: 0.65;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stock-last-updated {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.stock-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.stock-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.stock-card.positive {
+  border-color: rgba(16, 185, 129, 0.2);
+}
+.stock-card.negative {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.stock-card.neutral {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.stock-card.error-card {
+  opacity: 0.55;
+}
+
+/* Stock header */
+.stock-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.stock-symbol-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.stock-symbol {
+  font-size: 0.88rem;
+  font-weight: 800;
+  font-family: "Courier New", monospace;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+.stock-company-name {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-sector-tag {
+  font-size: 0.66rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  padding: 2px 6px;
+  border-radius: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Price display */
+.stock-price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stock-price {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.stock-price.error-price {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.stock-change-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stock-change-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stock-change-pct {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.stock-card.positive .stock-change-value,
+.stock-card.positive .stock-change-pct {
+  color: #10b981;
+}
+.stock-card.positive .stock-change-pct {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.stock-card.negative .stock-change-value,
+.stock-card.negative .stock-change-pct {
+  color: #ef4444;
+}
+.stock-card.negative .stock-change-pct {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.stock-card.neutral .stock-change-value,
+.stock-card.neutral .stock-change-pct {
+  color: var(--text-secondary);
+}
+.stock-card.neutral .stock-change-pct {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Stock meta row (high/low/volume) */
+.stock-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stock-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.73rem;
+}
+
+.stock-meta-label {
+  color: var(--text-secondary);
+  opacity: 0.75;
+}
+
+.stock-meta-value {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Arrow indicators */
+.stock-arrow-up::before { content: "▲ "; font-size: 0.65em; }
+.stock-arrow-down::before { content: "▼ "; font-size: 0.65em; }

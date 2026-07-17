@@ -14,7 +14,10 @@
     "identity"
   ],
   "host_permissions": [
-    "https://www.gamerpower.com/*"
+    "https://www.gamerpower.com/*",
+    "https://query2.finance.yahoo.com/*",
+    "https://query1.finance.yahoo.com/*",
+    "https://www.isyatirim.com.tr/*"
   ],
   "oauth2": {
     "client_id": "1061579928611-pgijn1nbhseg9pvkf72ooo6j8re44flb.apps.googleusercontent.com",

@@ -72,6 +72,42 @@ export const storage = {
       chrome.storage.sync.set({ syncSettings }, resolve);
     });
   },
+  getGeminiApiKey: (): Promise<string> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["geminiApiKey"], (result) => {
+        resolve((result.geminiApiKey as string) || "");
+      });
+    });
+  },
+  setGeminiApiKey: (geminiApiKey: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ geminiApiKey }, resolve);
+    });
+  },
+  getAIProvider: (): Promise<string> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["aiProvider"], (result) => {
+        resolve((result.aiProvider as string) || "gemini");
+      });
+    });
+  },
+  setAIProvider: (aiProvider: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ aiProvider }, resolve);
+    });
+  },
+  getAIModel: (): Promise<string> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["aiModel"], (result) => {
+        resolve((result.aiModel as string) || "");
+      });
+    });
+  },
+  setAIModel: (aiModel: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ aiModel }, resolve);
+    });
+  },
   getTodos: (): Promise<Todo[]> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["todos"], (result) => {
@@ -285,6 +321,9 @@ export const storage = {
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",
                 "syncSettings",
+                "geminiApiKey",
+                "aiProvider",
+                "aiModel",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

@@ -7,6 +7,7 @@ export interface Todo {
   category: string;
   lastCompletedDate: string | null;
   completedDates?: string[];
+  dueDate?: string; // Target date (YYYY-MM-DD)
 }
 
 export type Language = "tr" | "en";

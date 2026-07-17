@@ -129,7 +129,7 @@ export const googleSyncService = {
   async createTask(
     token: string,
     taskListId: string,
-    task: { title: string; notes?: string; status?: "needsAction" | "completed" },
+    task: { title: string; notes?: string; status?: "needsAction" | "completed"; due?: string | null },
   ): Promise<any> {
     const url = `https://www.googleapis.com/tasks/v1/lists/${taskListId}/tasks`;
     const response = await fetch(url, {
@@ -153,7 +153,7 @@ export const googleSyncService = {
     token: string,
     taskListId: string,
     taskId: string,
-    task: { title?: string; notes?: string; status?: "needsAction" | "completed"; completed?: string | null },
+    task: { title?: string; notes?: string; status?: "needsAction" | "completed"; completed?: string | null; due?: string | null },
   ): Promise<any> {
     const url = `https://www.googleapis.com/tasks/v1/lists/${taskListId}/tasks/${taskId}`;
     const response = await fetch(url, {
@@ -211,6 +211,33 @@ export const googleSyncService = {
     }
     const data = await response.json();
     return data.items || [];
+  },
+
+  /**
+   * Create a calendar event in the primary calendar.
+   */
+  async createCalendarEvent(
+    token: string,
+    event: {
+      summary: string;
+      description?: string;
+      start: { dateTime?: string; date?: string; timeZone?: string };
+      end: { dateTime?: string; date?: string; timeZone?: string };
+    },
+  ): Promise<any> {
+    const url = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(event),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to create calendar event: ${response.statusText}`);
+    }
+    return response.json();
   },
 
   // ==========================================
