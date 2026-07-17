@@ -271,6 +271,7 @@ export function App() {
           notes: await storage.getNotes(),
           hifizProgress: await storage.getHifizProgress(),
           srsProgress: await storage.getSrsProgress(),
+          kpssSrsProgress: await storage.getKpssSrsProgress(),
           customCategories: await storage.getCustomCategories(),
           kpssProgress: await storage.getKpssProgress(),
           customQuotes: await storage.getCustomQuotes(),
@@ -418,6 +419,7 @@ export function App() {
         notes: await storage.getNotes(),
         hifizProgress: await storage.getHifizProgress(),
         srsProgress: await storage.getSrsProgress(),
+        kpssSrsProgress: await storage.getKpssSrsProgress(),
         customCategories: await storage.getCustomCategories(),
         kpssProgress: await storage.getKpssProgress(),
         customQuotes: await storage.getCustomQuotes(),
@@ -455,6 +457,7 @@ export function App() {
         if (restored.notes) await storage.setNotes(restored.notes);
         if (restored.hifizProgress) await storage.setHifizProgress(restored.hifizProgress);
         if (restored.srsProgress) await storage.setSrsProgress(restored.srsProgress);
+        if (restored.kpssSrsProgress) await storage.setKpssSrsProgress(restored.kpssSrsProgress);
         if (restored.customCategories) await storage.setCustomCategories(restored.customCategories);
         if (restored.kpssProgress) await storage.setKpssProgress(restored.kpssProgress);
         if (restored.customQuotes) await storage.setCustomQuotes(restored.customQuotes);

@@ -180,6 +180,18 @@ export const storage = {
       chrome.storage.sync.set({ srsProgress }, resolve);
     });
   },
+  getKpssSrsProgress: (): Promise<WordReviewData[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssSrsProgress"], (result) => {
+        resolve((result.kpssSrsProgress as WordReviewData[]) || []);
+      });
+    });
+  },
+  setKpssSrsProgress: (kpssSrsProgress: WordReviewData[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssSrsProgress }, resolve);
+    });
+  },
   getCustomCategories: (): Promise<string[]> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["customCategories"], (result) => {
@@ -332,6 +344,7 @@ export const storage = {
                 "srsProgress",
                 "customCategories",
                 "kpssProgress",
+                "kpssSrsProgress",
                 "customQuotes",
                 "yeterlikler",
                 "kpssDailyStats",

@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import { kpssService, kpssData } from "../services/kpssService.js";
+import { kpssService, kpssData, kpssDummyFlashcards } from "../services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "../types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
+import { storage } from "@/core/storage.js";
+import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } from "@/logic/srs.js";
+import { ReviewQuality, WordReviewData } from "@/types/word.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -88,10 +91,95 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState("");
   const [remainingCount, setRemainingCount] = useState(0);
 
+  // Active sub-tab
+  const [activeTab, setActiveTab] = useState<"progress" | "srs">("progress");
+
+  // KPSS SRS States
+  const [srsLoading, setSrsLoading] = useState(true);
+  const [srsQueue, setSrsQueue] = useState<WordReviewData[]>([]);
+  const [srsIndex, setSrsIndex] = useState(0);
+  const [srsFlipped, setSrsFlipped] = useState(false);
+  const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">("normal");
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Target date: September 6, 2026 10:15
   const kpssTargetDate = new Date("2026-09-06T10:15:00").getTime();
+
+  const loadKpssSrsQueue = async () => {
+    setSrsLoading(true);
+    try {
+      const progress = await storage.getKpssSrsProgress();
+      const progressMap = new Map<string, WordReviewData>();
+      progress.forEach((p) => progressMap.set(p.wordId, p));
+
+      const srsUniverse: SRSWordWithInfo[] = kpssDummyFlashcards.map((w) => {
+        const p = progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+        return {
+          ...p,
+          level: w.category,
+          listType: "kpss",
+          freq: 0,
+        };
+      });
+
+      const enrichedProgress: SRSWordWithInfo[] = progress.map((p) => {
+        const wInfo = kpssDummyFlashcards.find((w) => w.id === p.wordId);
+        return {
+          ...p,
+          level: wInfo?.category || "Tarih",
+          listType: "kpss",
+          freq: 0,
+        };
+      });
+
+      const queue = prepareSRSQueue(enrichedProgress, {
+        dailyGoal: 10,
+        isCustomMode: true,
+        filters: { listType: "kpss", levels: [] },
+        universe: srsUniverse,
+      });
+
+      setSrsQueue(queue);
+      setSrsIndex(0);
+      setSrsLoading(false);
+    } catch (e) {
+      console.error("Failed to load KPSS SRS Queue:", e);
+      setSrsLoading(false);
+    }
+  };
+
+  const handleKpssSrsReview = async (quality: ReviewQuality) => {
+    const reviewData = srsQueue[srsIndex];
+    if (!reviewData) {
+      return;
+    }
+
+    const outcome = calculateSM2(reviewData, quality, new Date());
+
+    const progress = await storage.getKpssSrsProgress();
+    const idx = progress.findIndex((p) => p.wordId === outcome.wordId);
+    if (idx >= 0) {
+      progress[idx] = outcome;
+    } else {
+      progress.push(outcome);
+    }
+    await storage.setKpssSrsProgress(progress);
+
+    // Fade animation transition
+    setSrsFadeState("slide-out");
+    setTimeout(() => {
+      setSrsIndex((prev) => prev + 1);
+      setSrsFlipped(false);
+      setSrsFadeState("normal");
+    }, 400);
+  };
+
+  useEffect(() => {
+    if (activeTab === "srs") {
+      loadKpssSrsQueue();
+    }
+  }, [activeTab]);
 
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
@@ -492,14 +580,32 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           </nav>
         </header>
 
-        <KpssCountdownBanner
-          lang={lang}
-          kpssTimeLeft={kpssTimeLeft}
-          estimatedTimeLeft={estimatedTimeLeft}
-          remainingCount={remainingCount}
-        />
+        {/* Sub-Tab Navigation Header */}
+        <div className="pomodoro-tab-header" style={{ marginBottom: "24px", display: "flex", justifyContent: "flex-start", gap: "10px" }}>
+          <button
+            className={`pomo-tab-link ${activeTab === "progress" ? "active" : ""}`}
+            onClick={() => setActiveTab("progress")}
+          >
+            {lang === "tr" ? "Konular & İlerleme" : "Topics & Progress"}
+          </button>
+          <button
+            className={`pomo-tab-link ${activeTab === "srs" ? "active" : ""}`}
+            onClick={() => setActiveTab("srs")}
+          >
+            {lang === "tr" ? "Aralıklı Tekrar (Kartlar)" : "Spaced Repetition (Cards)"}
+          </button>
+        </div>
 
-        {/* Dashboard Stat Progress Inputs and Charts */}
+        {activeTab === "progress" && (
+          <>
+            <KpssCountdownBanner
+              lang={lang}
+              kpssTimeLeft={kpssTimeLeft}
+              estimatedTimeLeft={estimatedTimeLeft}
+              remainingCount={remainingCount}
+            />
+
+            {/* Dashboard Stat Progress Inputs and Charts */}
         <div className="kpss-daily-stats-section">
           <div className="kpss-daily-input">
             <h3>{labels.stats_title}</h3>
@@ -660,6 +766,107 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             ></div>
           </div>
         </div>
+        </>
+        )}
+
+        {activeTab === "srs" && (
+          <div className="kpss-srs-deck-container" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0" }}>
+            {srsLoading ? (
+              <div className="ha-loading" style={{ minHeight: "260px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px" }}>
+                <div className="ha-spinner" />
+                <span style={{ fontSize: "0.95rem", color: "var(--text-secondary)" }}>
+                  {lang === "tr" ? "Tekrar kartları hazırlanıyor..." : "Preparing repetition cards..."}
+                </span>
+              </div>
+            ) : srsQueue.length === 0 || srsIndex >= srsQueue.length ? (
+              <div className="srs-finished" style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "16px", padding: "40px", textAlign: "center", backdropFilter: "blur(12px)", width: "100%", maxWidth: "550px" }}>
+                <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>🎉</div>
+                <h3 style={{ fontSize: "1.6rem", color: "var(--accent-color)", fontWeight: 700, marginBottom: "8px" }}>
+                  {lang === "tr" ? "Harika İş!" : "Great Job!"}
+                </h3>
+                <p style={{ opacity: 0.8, fontSize: "0.95rem", marginBottom: "24px", color: "var(--text-secondary)" }}>
+                  {lang === "tr"
+                    ? "Bugünlük tüm KPSS tekrar kartlarını tamamladınız."
+                    : "You have reviewed all due KPSS repetition cards for today."}
+                </p>
+                <button
+                  className="settings-add-btn"
+                  onClick={loadKpssSrsQueue}
+                  style={{ padding: "10px 24px" }}
+                >
+                  {lang === "tr" ? "Tekrar Yükle" : "Review Again"}
+                </button>
+              </div>
+            ) : (
+              (() => {
+                const currentReview = srsQueue[srsIndex];
+                const card = kpssDummyFlashcards.find((c) => c.id === currentReview.wordId);
+                if (!card) return null;
+
+                return (
+                  <div className="kpss-srs-active-section" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: "550px", fontSize: "0.85rem", opacity: 0.6 }}>
+                      <span>{card.category}</span>
+                      <span>{lang === "tr" ? `Kart ${srsIndex + 1} / ${srsQueue.length}` : `Card ${srsIndex + 1} / ${srsQueue.length}`}</span>
+                    </div>
+
+                    <div className="flashcard-container" style={{ width: "100%", maxWidth: "550px", height: "260px" }}>
+                      <div
+                        className={`flashcard-inner ${srsFlipped ? "flipped" : ""} ${srsFadeState === "slide-out" ? "fade-out" : ""}`}
+                        onClick={() => setSrsFlipped(!srsFlipped)}
+                      >
+                        <div className="flashcard-side flashcard-front" style={{ boxSizing: "border-box", padding: "30px" }}>
+                          <p style={{ fontSize: "1.25rem", fontWeight: "600", lineHeight: 1.5, color: "var(--text-primary)" }}>
+                            {card.question}
+                          </p>
+                          <span style={{ fontSize: "0.8rem", opacity: 0.5, marginTop: "24px", display: "inline-block", background: "rgba(255,255,255,0.05)", padding: "4px 10px", borderRadius: "20px" }}>
+                            💡 {lang === "tr" ? "Cevabı görmek için tıkla" : "Click to see answer"}
+                          </span>
+                        </div>
+                        <div className="flashcard-side flashcard-back" style={{ boxSizing: "border-box", padding: "30px" }}>
+                          <p style={{ fontSize: "1.45rem", fontWeight: "700", color: "var(--accent-color)", marginBottom: "12px" }}>
+                            {card.answer}
+                          </p>
+                          {card.hint && (
+                            <p style={{ fontSize: "0.9rem", opacity: 0.6, fontStyle: "italic", color: "var(--text-secondary)" }}>
+                              {lang === "tr" ? "İpucu: " : "Hint: "}{card.hint}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {srsFlipped && (
+                      <div className="srs-actions" style={{ display: "flex", gap: "12px", width: "100%", maxWidth: "550px", marginTop: "10px" }}>
+                        <button
+                          className="srs-btn srs-btn-hard"
+                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
+                          onClick={() => handleKpssSrsReview("hard")}
+                        >
+                          {lang === "tr" ? "Zor" : "Hard"}
+                        </button>
+                        <button
+                          className="srs-btn srs-btn-medium"
+                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
+                          onClick={() => handleKpssSrsReview("medium")}
+                        >
+                          {lang === "tr" ? "Orta" : "Medium"}
+                        </button>
+                        <button
+                          className="srs-btn srs-btn-easy"
+                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
+                          onClick={() => handleKpssSrsReview("easy")}
+                        >
+                          {lang === "tr" ? "Kolay" : "Easy"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()
+            )}
+          </div>
+        )}
       </div>
 
       {/* Details Description Modal */}

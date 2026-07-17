@@ -44,6 +44,11 @@ export const kpssData: Record<string, KpssTopic[]> = {
         "İsim, sıfat, zamir, zarf, edat, bağlaç, ünlem ve fiillerin özellikleri.",
     },
     {
+      title: "Fiilimsiler ve Fiilde Çatı",
+      description:
+        "İsim-fiil, sıfat-fiil, zarf-fiil özellikleri ve etken, edilgen, geçişli, geçişsiz fiil çatıları.",
+    },
+    {
       title: "Cümlenin Ögeleri",
       description:
         "Özne, yüklem, nesne, dolaylı tümleç ve zarf tümleci bulma yöntemleri.",
@@ -100,6 +105,11 @@ export const kpssData: Record<string, KpssTopic[]> = {
         "2, 3, 4, 5, 8, 9, 10 ve 11 ile bölünebilme kuralları ve kalan bulma.",
     },
     {
+      title: "EBOB - EKOK",
+      description:
+        "En büyük ortak bölen, en küçük ortak kat bulma formülleri ve EBOB-EKOK problemleri.",
+    },
+    {
       title: "Faktöriyel / Asal Sayılar",
       description:
         "Faktöriyel kavramı, asal sayılar ve aralarında asal sayılar özellikleri.",
@@ -152,6 +162,11 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Yüzde / Kar / Zarar / Karışım",
       description:
         "Yüzde hesaplamaları, ticari kar-zarar ve madde karışım problemleri.",
+    },
+    {
+      title: "Grafik ve Tablo Problemleri",
+      description:
+        "Daire, sütun ve çizgi grafikleri ile tabloları okuma, analiz etme ve yorumlama.",
     },
     {
       title: "İstatistik",
@@ -227,11 +242,6 @@ export const kpssData: Record<string, KpssTopic[]> = {
   ],
   tarih: [
     {
-      title: "Tarih Bilimi ve Kronoloji",
-      description:
-        "Tarih araştırmaları, takvimler ve ana tarihi dönemlerin sınıflandırılması.",
-    },
-    {
       title: "İslamiyet Öncesi Türk Tarihi",
       description:
         "Orta Asya Türk devletleri (Hunlar, Göktürkler, Uygurlar) ve göç hareketleri.",
@@ -299,23 +309,24 @@ export const kpssData: Record<string, KpssTopic[]> = {
   ],
   cografya: [
     {
-      title: "Harita Bilgisi",
-      description: "Ölçekler, projeksiyonlar ve harita okuma teknikleri.",
-    },
-    {
       title: "Türkiye’nin Coğrafi Konumu",
       description:
         "Matematiksel ve özel konum, yerel saat farkları ve kuşak özellikleri.",
     },
     {
-      title: "Türkiye’nin İklimi / Bitki Örtüsü",
-      description:
-        "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri.",
-    },
-    {
       title: "Türkiye’nin Fiziki Özellikleri",
       description:
         "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri.",
+    },
+    {
+      title: "Türkiye’nin Toprak, Su ve Doğal Varlıkları",
+      description:
+        "Toprak tipleri, akarsu rejimleri, göller, yer altı suları ve doğal çevre özellikleri.",
+    },
+    {
+      title: "Türkiye’nin İklimi / Bitki Örtüsü",
+      description:
+        "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri.",
     },
     {
       title: "Nüfus ve Yerleşme",
@@ -335,7 +346,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
     {
       title: "Madenler / Enerji Kaynakları",
       description:
-        "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez energy kaynakları.",
+        "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez enerji kaynakları.",
     },
     {
       title: "Sanayi ve Endüstri",
@@ -347,9 +358,9 @@ export const kpssData: Record<string, KpssTopic[]> = {
         "Türkiye'nin iç ve dış ticareti, ulaşım ağları ve önemli turizm merkezleri.",
     },
     {
-      title: "Bölgeler Coğrafyası",
+      title: "Bölgesel Kalkınma Projeleri",
       description:
-        "Türkiye'nin 7 bölgesinin kendine has fiziki ve beşeri özellikleri.",
+        "GAP, DAP, KOP, DOKAP, ZBK gibi bölgesel kalkınma projelerinin kapsamı ve amaçları.",
     },
   ],
   vatandaslik: [
@@ -498,3 +509,84 @@ export const kpssService = {
       : 0;
   },
 };
+
+export interface KpssFlashcard {
+  id: string;
+  question: string;
+  answer: string;
+  hint: string;
+  category: string;
+}
+
+export const kpssDummyFlashcards: KpssFlashcard[] = [
+  {
+    id: "kpss_f1",
+    question: "İlk Türk devletlerinde hükümdarın egemenlik yetkisini tanrısal kaynaklı almasına ne ad verilir?",
+    answer: "Kut İnancı",
+    hint: "K harfi ile başlar.",
+    category: "Tarih",
+  },
+  {
+    id: "kpss_f2",
+    question: "Osmanlı Devleti'nde padişahın mutlak otoritesini sınırlandıran ilk yazılı belge hangisidir?",
+    answer: "Sened-i İttifak (1808)",
+    hint: "II. Mahmut dönemi, Ayanlar ile yapılmıştır.",
+    category: "Tarih",
+  },
+  {
+    id: "kpss_f3",
+    question: "Türkiye'nin en yüksek zirvesi olan Ağrı Dağı hangi dağ oluşum türüne (orojenez) örnektir?",
+    answer: "Volkanik Dağ",
+    hint: "Magmanın yeryüzüne çıkıp soğumasıyla oluşmuştur.",
+    category: "Coğrafya",
+  },
+  {
+    id: "kpss_f4",
+    question: "Osmanlı Devleti ile Rusya arasında yapılan ve Osmanlı'nın ilk kez savaş tazminatı ödediği antlaşma hangisidir?",
+    answer: "Küçük Kaynarca Antlaşması (1774)",
+    hint: "Kırım'ın bağımsız olduğu antlaşmadır.",
+    category: "Tarih",
+  },
+  {
+    id: "kpss_f5",
+    question: "1982 Anayasası'na göre TBMM milletvekili genel seçimleri kaç yılda bir yapılır?",
+    answer: "5 yılda bir",
+    hint: "Cumhurbaşkanlığı seçimleri ile aynı gün yapılır.",
+    category: "Vatandaşlık",
+  },
+  {
+    id: "kpss_f6",
+    question: "Türkiye'de doğup Gürcistan topraklarından Karadeniz'e dökülen, en hızlı akışa sahip nehir hangisidir?",
+    answer: "Çoruh Nehri",
+    hint: "Doğu Karadeniz bölümündedir.",
+    category: "Coğrafya",
+  },
+  {
+    id: "kpss_f7",
+    question: "Kurtuluş Savaşı cepheler dönemini kapatan ve Mudanya Ateşkes Antlaşması'na zemin hazırlayan son askeri zafer hangisidir?",
+    answer: "Büyük Taarruz (Başkomutanlık Meydan Muharebesi)",
+    hint: "Ordular ilk hedefiniz Akdeniz'dir emrinin verildiği savaş.",
+    category: "Tarih",
+  },
+  {
+    id: "kpss_f8",
+    question: "Anayasa Mahkemesi üye sayısı 2017 anayasa değişikliği ile kaç olarak belirlenmiştir?",
+    answer: "15 Üye",
+    hint: "Üyelerin bir kısmını Cumhurbaşkanı, bir kısmını TBMM seçer.",
+    category: "Vatandaşlık",
+  },
+  {
+    id: "kpss_f9",
+    question: "Ülkemizde rüzgar erozyonunun ve rüzgar şekillerinin en fazla görüldüğü coğrafi bölge hangisidir?",
+    answer: "İç Anadolu Bölgesi",
+    hint: "Kuraklık ve bitki örtüsünün cılız olması etkilidir.",
+    category: "Coğrafya",
+  },
+  {
+    id: "kpss_f10",
+    question: "Milli Mücadele'nin gerekçesi, amacı ve yönteminin ilk kez belirtildiği ihtilal belgesi niteliğindeki genelge hangisidir?",
+    answer: "Amasya Genelgesi (1919)",
+    hint: "Mustafa Kemal, Rauf Orbay, Ali Fuat Cebesoy gibi isimlerin imzası bulunur.",
+    category: "Tarih",
+  },
+];
