@@ -373,25 +373,42 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           >
             <header className="settings-header" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "stretch" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <label style={{ fontSize: "0.85rem", opacity: 0.7 }}>{lang === "tr" ? "Tür:" : "Type:"}</label>
-                  <select
-                    value={noteType}
-                    onChange={(e) => setNoteType((e.target as HTMLSelectElement).value as any)}
-                    style={{
-                      background: "#1e1e24",
-                      color: "#f1f5f9",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "6px",
-                      padding: "4px 8px",
-                      fontSize: "0.85rem",
-                      outline: "none"
-                    }}
-                  >
-                    <option value="note">{lang === "tr" ? "Not" : "Note"}</option>
-                    <option value="diary">{lang === "tr" ? "Günlük Yazısı" : "Diary Entry"}</option>
-                    <option value="cornell">{lang === "tr" ? "Ders Notu (Cornell)" : "Cornell Study Note"}</option>
-                  </select>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <label style={{ fontSize: "0.82rem", opacity: 0.8, fontWeight: 600 }}>{lang === "tr" ? "Kayıt Türü:" : "Entry Type:"}</label>
+                  <div style={{ 
+                    display: "flex", 
+                    background: "rgba(255, 255, 255, 0.03)", 
+                    padding: "3px", 
+                    borderRadius: "10px", 
+                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    gap: "4px"
+                  }}>
+                    {(["note", "diary", "cornell"] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setNoteType(t)}
+                        style={{
+                          background: noteType === t ? "var(--accent-color)" : "transparent",
+                          border: "none",
+                          color: noteType === t ? "#fff" : "rgba(255, 255, 255, 0.6)",
+                          padding: "5px 12px",
+                          borderRadius: "7px",
+                          fontSize: "0.78rem",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                          boxShadow: noteType === t ? "0 4px 10px rgba(139, 92, 246, 0.3)" : "none"
+                        }}
+                      >
+                        {t === "note" 
+                          ? (lang === "tr" ? "Not" : "Note") 
+                          : t === "diary" 
+                            ? (lang === "tr" ? "Günlük" : "Diary") 
+                            : (lang === "tr" ? "Ders Notu" : "Cornell Note")}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <button
                   className="close-btn"
