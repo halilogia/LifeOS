@@ -16,7 +16,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeModalData, setActiveModalData] = useState<{
     title: string;
-    items: { type: "task" | "event"; text: string; time?: string }[];
+    items: { type: "task" | "event"; text: string; completed?: boolean; time?: string }[];
   } | null>(null);
 
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
@@ -68,22 +68,40 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Populate completed tasks map by date keys
-  const completedTasksByDate: Record<string, string[]> = {};
+  // Group tasks by date key: YYYY-MM-DD
+  const tasksByDate: Record<string, { text: string; completed: boolean }[]> = {};
   todos.forEach((todo) => {
+    // 1. Completed dates
     const dates =
       todo.completedDates ||
       (todo.lastCompletedDate ? [todo.lastCompletedDate] : []);
     dates.forEach((dateStr) => {
       const date = new Date(dateStr);
       const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-      if (!completedTasksByDate[dateKey]) {
-        completedTasksByDate[dateKey] = [];
+      if (!tasksByDate[dateKey]) {
+        tasksByDate[dateKey] = [];
       }
-      if (!completedTasksByDate[dateKey].includes(todo.text)) {
-        completedTasksByDate[dateKey].push(todo.text);
+      if (!tasksByDate[dateKey].some(t => t.text === todo.text && t.completed)) {
+        tasksByDate[dateKey].push({ text: todo.text, completed: true });
       }
     });
+
+    // 2. Due dates
+    if (todo.dueDate) {
+      const parts = todo.dueDate.split("-");
+      if (parts.length === 3) {
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const d = parseInt(parts[2], 10);
+        const dateKey = `${y}-${m}-${d}`;
+        if (!tasksByDate[dateKey]) {
+          tasksByDate[dateKey] = [];
+        }
+        if (!tasksByDate[dateKey].some(t => t.text === todo.text)) {
+          tasksByDate[dateKey].push({ text: todo.text, completed: todo.completed });
+        }
+      }
+    }
   });
 
   useEffect(() => {
@@ -123,12 +141,25 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     if (!event.start) return;
     const dateStr = event.start.dateTime || event.start.date;
     if (!dateStr) return;
-    const date = new Date(dateStr);
-    const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-    if (!eventsByDate[dateKey]) {
-      eventsByDate[dateKey] = [];
+    let dateKey = "";
+    if (event.start.date) {
+      const parts = event.start.date.split("-");
+      if (parts.length === 3) {
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const d = parseInt(parts[2], 10);
+        dateKey = `${y}-${m}-${d}`;
+      }
+    } else {
+      const date = new Date(dateStr);
+      dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     }
-    eventsByDate[dateKey].push(event);
+    if (dateKey) {
+      if (!eventsByDate[dateKey]) {
+        eventsByDate[dateKey] = [];
+      }
+      eventsByDate[dateKey].push(event);
+    }
   });
 
   const today = new Date();
@@ -147,14 +178,14 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   for (let day = 1; day <= daysInMonth; day++) {
     const isToday = isCurrentMonth && today.getDate() === day;
     const dateKey = `${year}-${month}-${day}`;
-    const dayTasks = completedTasksByDate[dateKey] || [];
+    const dayTasks = tasksByDate[dateKey] || [];
     const dayEvents = eventsByDate[dateKey] || [];
     const hasTasks = dayTasks.length > 0;
     const hasEvents = dayEvents.length > 0;
     const hasItems = hasTasks || hasEvents;
 
-    const modalItems: { type: "task" | "event"; text: string; time?: string }[] = [
-      ...dayTasks.map(t => ({ type: "task" as const, text: t })),
+    const modalItems: { type: "task" | "event"; text: string; completed?: boolean; time?: string }[] = [
+      ...dayTasks.map(t => ({ type: "task" as const, text: t.text, completed: t.completed })),
       ...dayEvents.map(ev => {
         const timeStr = ev.start.dateTime
           ? new Date(ev.start.dateTime).toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
@@ -181,8 +212,9 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
         {hasItems && (
           <ul className="calendar-task-list">
             {dayTasks.map((t, idx) => (
-              <li key={`task-${idx}`} className="calendar-task-item">
-                {t}
+              <li key={`task-${idx}`} className={`calendar-task-item ${t.completed ? "completed" : "pending"}`} style={{ textDecoration: t.completed ? "line-through" : "none", opacity: t.completed ? 0.6 : 1 }}>
+                <span style={{ marginRight: "4px" }}>{t.completed ? "✓" : "○"}</span>
+                {t.text}
               </li>
             ))}
             {dayEvents.map((ev, idx) => {
@@ -276,26 +308,30 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
                     }}
                   >
                     {lang === "tr"
-                      ? "Bu güne ait tamamlanmış görev veya etkinlik yok."
-                      : "No completed tasks or events for this day."}
+                      ? "Bu güne ait görev veya etkinlik yok."
+                      : "No tasks or events for this day."}
                   </p>
                 ) : (
                   activeModalData.items.map((item, idx) => {
                     if (item.type === "task") {
                       return (
-                        <li key={idx}>
+                        <li key={idx} style={{ textDecoration: item.completed ? "line-through" : "none", opacity: item.completed ? 0.6 : 1 }}>
                           <svg
                             width="20"
                             height="20"
                             viewBox="0 0 24 24"
                             fill="none"
-                            stroke="var(--success)"
+                            stroke={item.completed ? "var(--success)" : "var(--text-secondary)"}
                             stroke-width="2.5"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             style={{ flexShrink: 0 }}
                           >
-                            <polyline points="20 6 9 17 4 12"></polyline>
+                            {item.completed ? (
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            ) : (
+                              <circle cx="12" cy="12" r="10"></circle>
+                            )}
                           </svg>
                           <span>{item.text}</span>
                         </li>

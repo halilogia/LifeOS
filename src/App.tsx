@@ -23,6 +23,8 @@ import { PrayerView } from "./components/PrayerView.js";
 import { KpssView } from "./components/KpssView.js";
 import { FreeGamesView } from "./components/FreeGamesView.js";
 import { DetoxView } from "./components/DetoxView.js";
+import { HalkaArzView } from "./components/HalkaArzView.js";
+import { AIChatView } from "./components/AIChatView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
 
 export function App() {
@@ -45,6 +47,11 @@ export function App() {
   // Free games notification toggle
   const [freeGamesNotificationsEnabled, setFreeGamesNotificationsEnabled] =
     useState(true);
+
+  // AI Assistant States
+  const [aiProvider, setAiProvider] = useState<string>("gemini");
+  const [aiApiKey, setAiApiKey] = useState<string>("");
+  const [aiModel, setAiModel] = useState<string>("");
 
   // Universal Info Box / Inline Translation Bubble states
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
@@ -103,6 +110,7 @@ export function App() {
   // Todo Input States (moved to root level for correct fixed-position layout alignment)
   const [todoText, setTodoText] = useState("");
   const [todoRepeat, setTodoRepeat] = useState<Todo["repeat"]>("none");
+  const [todoDueDate, setTodoDueDate] = useState("");
 
   useEffect(() => {
     setTodoRepeat(activeTab === "focus" ? "none" : "daily");
@@ -129,6 +137,14 @@ export function App() {
       // Load Google Sync Settings
       const syncConfig = await storage.getSyncSettings();
       setSyncSettingsState(syncConfig);
+
+      // Load AI Configs
+      const provider = await storage.getAIProvider();
+      const key = await storage.getGeminiApiKey();
+      const model = await storage.getAIModel();
+      setAiProvider(provider);
+      setAiApiKey(key);
+      setAiModel(model);
 
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
@@ -282,6 +298,7 @@ export function App() {
         repeat: "none",
         category: "general",
         lastCompletedDate: t.completed || null,
+        dueDate: t.due ? t.due.split("T")[0] : undefined,
       }));
 
       const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
@@ -294,6 +311,7 @@ export function App() {
           repeat: repeat === "none" ? "daily" : repeat,
           category: "general",
           lastCompletedDate: t.completed || null,
+          dueDate: t.due ? t.due.split("T")[0] : undefined,
         };
       });
 
@@ -310,6 +328,7 @@ export function App() {
             title: localTodo.text,
             notes,
             status: localTodo.completed ? "completed" : "needsAction",
+            due: localTodo.dueDate ? `${localTodo.dueDate}T00:00:00.000Z` : undefined,
           });
           localTodo.id = createdRemote.id;
           remoteTodos.push(localTodo);
@@ -456,8 +475,18 @@ export function App() {
     }
   };
 
+  const handleUpdateAIConfig = async (provider: string, key: string, model: string) => {
+    setAiProvider(provider);
+    setAiApiKey(key);
+    setAiModel(model);
+    await storage.setAIProvider(provider);
+    await storage.setGeminiApiKey(key);
+    await storage.setAIModel(model);
+    triggerCloudBackup();
+  };
+
   // --- Task Mutators ---
-  const handleAddTodo = async (text: string, repeat: Todo["repeat"]) => {
+  const handleAddTodo = async (text: string, repeat: Todo["repeat"], dueDate?: string) => {
     const newTodo: Todo = {
       text,
       completed: false,
@@ -465,6 +494,7 @@ export function App() {
       status: "todo",
       category: "general",
       lastCompletedDate: "",
+      dueDate: dueDate || undefined,
     };
 
     if (syncSettings.enabled && syncSettings.tasksEnabled) {
@@ -483,6 +513,7 @@ export function App() {
           title: text,
           notes,
           status: "needsAction",
+          due: dueDate ? `${dueDate}T00:00:00.000Z` : undefined,
         });
         newTodo.id = remote.id;
       } catch (err) {
@@ -760,6 +791,32 @@ export function App() {
         return <FreeGamesView lang={lang} />;
       case "detox":
         return <DetoxView lang={lang} />;
+      case "halka-arz":
+        return <HalkaArzView lang={lang} />;
+      case "ai-chat":
+        return (
+          <AIChatView
+            lang={lang}
+            todos={todos}
+            onAddTodo={handleAddTodo}
+            onToggleTodo={handleToggleTodo}
+            onDeleteTodo={handleDeleteTodo}
+            onManualSync={async () => {
+              if (syncSettings.enabled && syncSettings.tasksEnabled) {
+                try {
+                  const token = await googleSyncService.getAuthToken(false);
+                  await syncGoogleTasks(token);
+                } catch (e) {
+                  console.error(e);
+                }
+              }
+            }}
+            aiProvider={aiProvider}
+            aiApiKey={aiApiKey}
+            aiModel={aiModel}
+            onSettingsOpen={() => setSettingsOpen(true)}
+          />
+        );
       default:
         return <FreeGamesView lang={lang} />;
     }
@@ -800,13 +857,22 @@ export function App() {
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
                     if (todoText.trim()) {
-                      handleAddTodo(todoText.trim(), todoRepeat);
+                      handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
                       setTodoText("");
+                      setTodoDueDate("");
                     }
                   }
                 }}
                 placeholder={t.todo_placeholder}
                 autocomplete="off"
+              />
+              <input
+                type="date"
+                id="todo-date-input"
+                className="todo-date-input"
+                value={todoDueDate}
+                onChange={(e) => setTodoDueDate((e.target as HTMLInputElement).value)}
+                title={lang === "tr" ? "Son Tarih" : "Due Date"}
               />
               <select
                 id="repeat-select"
@@ -827,8 +893,9 @@ export function App() {
                 id="add-btn"
                 onClick={() => {
                   if (todoText.trim()) {
-                    handleAddTodo(todoText.trim(), todoRepeat);
+                    handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
                     setTodoText("");
+                    setTodoDueDate("");
                   }
                 }}
                 aria-label="Add Task"
@@ -1109,6 +1176,74 @@ export function App() {
                   </svg>
                   <span>{t.clear_all}</span>
                 </button>
+              </div>
+            </div>
+
+            {/* Yapay Zeka (AI) settings card */}
+            <div className="settings-group" style={{ marginTop: "24px" }}>
+              <h3>{t.settings_ai_title}</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_provider}:</label>
+                  <select
+                    value={aiProvider}
+                    onChange={(e) => handleUpdateAIConfig((e.target as HTMLSelectElement).value, aiApiKey, aiModel)}
+                    style={{
+                      background: "#1e1e24",
+                      color: "#f1f5f9",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "6px",
+                      padding: "6px 12px",
+                      fontSize: "0.85rem",
+                      outline: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <option value="gemini">Gemini API</option>
+                    <option value="openrouter">OpenRouter API</option>
+                  </select>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_key}:</label>
+                  <input
+                    type="password"
+                    value={aiApiKey}
+                    placeholder="sk-or-v1-... veya AIzaSy..."
+                    onInput={(e) => handleUpdateAIConfig(aiProvider, (e.target as HTMLInputElement).value, aiModel)}
+                    style={{
+                      background: "rgba(0, 0, 0, 0.2)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: "6px",
+                      padding: "8px 12px",
+                      color: "#f1f5f9",
+                      fontSize: "0.85rem",
+                      outline: "none"
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_model}:</label>
+                  <input
+                    type="text"
+                    value={aiModel}
+                    placeholder={aiProvider === "openrouter" ? "google/gemini-2.5-flash" : "gemini-1.5-flash"}
+                    onInput={(e) => handleUpdateAIConfig(aiProvider, aiApiKey, (e.target as HTMLInputElement).value)}
+                    style={{
+                      background: "rgba(0, 0, 0, 0.2)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: "6px",
+                      padding: "8px 12px",
+                      color: "#f1f5f9",
+                      fontSize: "0.85rem",
+                      outline: "none"
+                    }}
+                  />
+                  <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
+                    {t.settings_ai_model_desc}
+                  </span>
+                </div>
               </div>
             </div>
 

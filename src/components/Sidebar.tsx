@@ -298,6 +298,47 @@ export function Sidebar({
           </button>
 
           <button
+            id="view-halka-arz-btn"
+            className={`sidebar-btn ${activeView === "halka-arz" ? "active" : ""}`}
+            onClick={() => onViewChange("halka-arz")}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
+            </svg>
+            <span>{t.view_halka_arz}</span>
+          </button>
+
+          <button
+            id="view-ai-chat-btn"
+            className={`sidebar-btn ${activeView === "ai-chat" ? "active" : ""}`}
+            onClick={() => onViewChange("ai-chat")}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>{t.view_ai_chat}</span>
+          </button>
+
+          <button
             id="view-detox-btn"
             className={`sidebar-btn ${activeView === "detox" ? "active" : ""}`}
             onClick={() => onViewChange("detox")}
