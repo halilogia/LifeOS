@@ -1,8 +1,8 @@
 /**
  * ipoService.ts
  * Halka Arz (IPO) veri servisi.
- * Birden fazla ücretsiz endpoint'i dener; hepsi başarısız olursa
- * demo / güncel-ish statik veri döner.
+ * halkarz.com sitesini tarayarak gerçek zamanlı aktif ve tamamlanmış halka arzları çeker.
+ * Hata durumunda statik fallback verisine döner.
  */
 
 export interface IPOEntry {
@@ -10,7 +10,7 @@ export interface IPOEntry {
   name: string;
   ticker: string;
   sector: string;
-  startDate: string; // ISO yyyy-mm-dd
+  startDate: string; // ISO yyyy-mm-dd veya tarih aralığı
   endDate: string;
   priceRange: string;
   lotSize: number;
@@ -100,6 +100,7 @@ const FALLBACK_IPOS: IPOEntry[] = [
 function isWithinLastDays(dateStr: string, days: number): boolean {
   try {
     const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return true; // Geçersiz tarih formatında son günlerdeymiş gibi gösterelim
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
     return d >= cutoff && d <= new Date();
@@ -108,50 +109,51 @@ function isWithinLastDays(dateStr: string, days: number): boolean {
   }
 }
 
-function parseIsyatirimResponse(html: string): IPOEntry[] | null {
-  // İş Yatırım'ın HTML'inden table satırlarını parse etmeye çalışır.
-  // Tarayıcı ortamında DOMParser kullanılabilir.
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const rows = doc.querySelectorAll("table tbody tr");
-    if (rows.length === 0) return null;
+function parseHalkarzDate(dateStr: string): { start: Date | null; end: Date | null; status: IPOEntry["status"] } {
+  if (!dateStr || dateStr.includes("Hazırlanıyor") || dateStr.includes("Taslak")) {
+    return { start: null, end: null, status: "upcoming" };
+  }
 
-    const results: IPOEntry[] = [];
-    rows.forEach((row, idx) => {
-      const cells = row.querySelectorAll("td");
-      if (cells.length < 5) return;
-      const name = cells[0]?.textContent?.trim() ?? "";
-      const ticker = cells[1]?.textContent?.trim() ?? "";
-      const startDate = cells[2]?.textContent?.trim() ?? "";
-      const endDate = cells[3]?.textContent?.trim() ?? "";
-      const price = cells[4]?.textContent?.trim() ?? "";
+  // Example: "8-9-10 Temmuz 2026" or "1-2 Temmuz 2026" or "30 Haziran, 1 Temmuz 2026"
+  const yearMatch = dateStr.match(/\d{4}/);
+  const year = yearMatch ? parseInt(yearMatch[0], 10) : new Date().getFullYear();
 
-      if (!name) return;
+  const monthsTr: Record<string, number> = {
+    ocak: 0, şubat: 1, mart: 2, nisan: 3, mayıs: 4, haziran: 5,
+    temmuz: 6, ağustos: 7, eylül: 8, ekim: 9, kasım: 10, aralık: 11
+  };
 
-      const now = new Date();
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      let status: IPOEntry["status"] = "completed";
-      if (start > now) status = "upcoming";
-      else if (end >= now) status = "active";
+  let monthIndex = 0;
+  for (const m in monthsTr) {
+    if (dateStr.toLowerCase().includes(m)) {
+      monthIndex = monthsTr[m];
+      break;
+    }
+  }
 
-      results.push({
-        id: `isy-${idx}`,
-        name,
-        ticker,
-        sector: cells[5]?.textContent?.trim() ?? "—",
-        startDate,
-        endDate,
-        priceRange: price,
-        lotSize: 1,
-        status,
-        kapUrl: "https://www.kap.org.tr/tr/bildirim-sorgu",
-      });
-    });
-    return results.length > 0 ? results : null;
-  } catch {
-    return null;
+  const numbers = dateStr.match(/\d+/g);
+  if (!numbers || numbers.length === 0) {
+    return { start: null, end: null, status: "completed" };
+  }
+
+  const days = numbers.map(n => parseInt(n, 10)).filter(n => n !== year && n < 32);
+  if (days.length === 0) {
+    return { start: null, end: null, status: "completed" };
+  }
+
+  const startDay = days[0];
+  const endDay = days[days.length - 1];
+
+  const startDate = new Date(year, monthIndex, startDay);
+  const endDate = new Date(year, monthIndex, endDay, 23, 59, 59);
+
+  const now = new Date();
+  if (now < startDate) {
+    return { start: startDate, end: endDate, status: "upcoming" };
+  } else if (now >= startDate && now <= endDate) {
+    return { start: startDate, end: endDate, status: "active" };
+  } else {
+    return { start: startDate, end: endDate, status: "completed" };
   }
 }
 
@@ -159,29 +161,67 @@ function parseIsyatirimResponse(html: string): IPOEntry[] | null {
 
 /**
  * Tüm halka arz verilerini çeker.
- * Önce İş Yatırım'dan çekmeye çalışır; başarısız olursa statik fallback döner.
- * isFallback=true ise veri statik demo datadan gelmiştir.
+ * halkarz.com anasayfasından makaleleri ayrıştırır; başarısız olursa statik fallback döner.
  */
 export async function fetchAllIPOs(): Promise<{
   data: IPOEntry[];
   isFallback: boolean;
 }> {
   try {
-    // İsyatirim halka arz takvimi sayfasını proxy olmadan fetch et.
-    // Chrome extension'larda same-origin kısıtı yoktur (manifest host_permissions).
-    const res = await fetch(
-      "https://www.isyatirim.com.tr/tr-tr/analiz/halka-arz-takvimi",
-      { signal: AbortSignal.timeout(8000) },
-    );
+    const res = await fetch("https://halkarz.com", {
+      signal: AbortSignal.timeout(8000),
+    });
     if (res.ok) {
       const html = await res.text();
-      const parsed = parseIsyatirimResponse(html);
-      if (parsed && parsed.length > 0) {
+      const articleRegex = /<article class="index-list">([\s\S]*?)<\/article>/g;
+      let match;
+      const parsed: IPOEntry[] = [];
+      let index = 0;
+
+      while ((match = articleRegex.exec(html)) !== null) {
+        const content = match[1];
+
+        // Extract Company Name
+        const nameMatch = content.match(/<h3 class="il-halka-arz-sirket"><a href="[^"]*" title="([^"]*)">/i);
+        const name = nameMatch ? nameMatch[1] : '';
+        if (!name) continue;
+
+        // Extract Url
+        const urlMatch = content.match(/href="([^"]*)"/i);
+        const url = urlMatch ? urlMatch[1] : 'https://halkarz.com';
+
+        // Extract Ticker / Code
+        const tickerMatch = content.match(/<span class="il-bist-kod">([\s\S]*?)<\/span>/i);
+        const ticker = tickerMatch ? tickerMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // Extract Dates
+        const dateMatch = content.match(/<time datetime="[^"]*" title="([^"]*)"/i) || content.match(/<time[^>]*>([\s\S]*?)<\/time>/i);
+        const dateRaw = dateMatch ? dateMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        const parsedDate = parseHalkarzDate(dateRaw);
+        const formatDateStr = (d: Date | null) => d ? d.toISOString().split('T')[0] : '';
+
+        parsed.push({
+          id: `ha-${ticker || index}`,
+          name,
+          ticker: ticker || "—",
+          sector: "Halka Arz",
+          startDate: formatDateStr(parsedDate.start) || dateRaw,
+          endDate: formatDateStr(parsedDate.end) || dateRaw,
+          priceRange: "Detaylar için siteyi ziyaret edin",
+          lotSize: 1,
+          status: parsedDate.status,
+          kapUrl: url,
+        });
+        index++;
+      }
+
+      if (parsed.length > 0) {
         return { data: parsed, isFallback: false };
       }
     }
-  } catch {
-    // Network hatası veya CORS — fallback'e geç
+  } catch (e) {
+    console.error("Failed to fetch from halkarz.com:", e);
   }
 
   return { data: FALLBACK_IPOS, isFallback: true };
