@@ -13,12 +13,16 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [quotes, setQuotes] = useState<CustomQuote[]>([]);
+  const [filterType, setFilterType] = useState<"all" | "note" | "diary" | "cornell">("all");
 
   // Note Modal States
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
+  const [noteType, setNoteType] = useState<"note" | "diary" | "cornell">("note");
+  const [noteCues, setNoteCues] = useState("");
+  const [noteSummary, setNoteSummary] = useState("");
 
   // Quote Modal States
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -47,16 +51,22 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       setEditingNoteId(note.id);
       setNoteTitle(note.title);
       setNoteContent(note.content);
+      setNoteType(note.type || "note");
+      setNoteCues(note.cues || "");
+      setNoteSummary(note.summary || "");
     } else {
       setEditingNoteId(null);
       setNoteTitle("");
       setNoteContent("");
+      setNoteType("note");
+      setNoteCues("");
+      setNoteSummary("");
     }
     setIsNoteModalOpen(true);
   };
 
   const handleSaveNote = async () => {
-    if (!noteTitle.trim() && !noteContent.trim()) {
+    if (!noteTitle.trim() && !noteContent.trim() && !noteCues.trim() && !noteSummary.trim()) {
       setIsNoteModalOpen(false);
       return;
     }
@@ -67,6 +77,9 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       if (idx !== -1) {
         currentNotes[idx].title = noteTitle;
         currentNotes[idx].content = noteContent;
+        currentNotes[idx].type = noteType;
+        currentNotes[idx].cues = noteCues;
+        currentNotes[idx].summary = noteSummary;
         currentNotes[idx].createdAt = new Date().toISOString();
       }
     } else {
@@ -74,6 +87,9 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         id: crypto.randomUUID(),
         title: noteTitle,
         content: noteContent,
+        type: noteType,
+        cues: noteCues,
+        summary: noteSummary,
         createdAt: new Date().toISOString(),
       });
     }
@@ -229,51 +245,118 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           </div>
         )}
 
+        {/* Filtering buttons */}
+        <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
+          <button 
+            className={`add-note-action-btn ${filterType === "all" ? "primary" : "secondary"}`}
+            style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
+            onClick={() => setFilterType("all")}
+          >
+            {lang === "tr" ? "Hepsi" : "All"}
+          </button>
+          <button 
+            className={`add-note-action-btn ${filterType === "note" ? "primary" : "secondary"}`}
+            style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
+            onClick={() => setFilterType("note")}
+          >
+            {lang === "tr" ? "Notlar" : "Notes"}
+          </button>
+          <button 
+            className={`add-note-action-btn ${filterType === "diary" ? "primary" : "secondary"}`}
+            style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
+            onClick={() => setFilterType("diary")}
+          >
+            {lang === "tr" ? "Günlükler" : "Diary"}
+          </button>
+          <button 
+            className={`add-note-action-btn ${filterType === "cornell" ? "primary" : "secondary"}`}
+            style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
+            onClick={() => setFilterType("cornell")}
+          >
+            {lang === "tr" ? "Cornell Notları" : "Cornell Notes"}
+          </button>
+        </div>
+
         <div id="notes-grid" className="notes-grid">
-          {notes.map((note) => {
-            const title =
-              note.title || (lang === "tr" ? "Başlıksız" : "Untitled");
-            const content =
-              note.content.length > 100
-                ? note.content.substring(0, 100) + "..."
-                : note.content;
-            return (
-              <div
-                key={note.id}
-                className="note-card"
-                onClick={() => handleOpenNoteModal(note)}
-              >
-                <div className="note-card-header">
-                  <h3 className="note-card-title">{title}</h3>
-                  <button
-                    className="note-delete-btn"
-                    title="Delete"
-                    onClick={(e) => handleDeleteNote(e, note.id)}
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+          {notes
+            .filter((n) => {
+              if (filterType === "all") return true;
+              return (n.type || "note") === filterType;
+            })
+            .map((note) => {
+              const title = note.title || (lang === "tr" ? "Başlıksız" : "Untitled");
+              const currentType = note.type || "note";
+              
+              return (
+                <div
+                  key={note.id}
+                  className="note-card"
+                  onClick={() => handleOpenNoteModal(note)}
+                >
+                  <div className="note-card-header">
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px", maxWidth: "80%" }}>
+                      <span className={`note-type-badge ${currentType}`}>
+                        {currentType === "diary" 
+                          ? (lang === "tr" ? "Günlük" : "Diary") 
+                          : currentType === "cornell" 
+                            ? (lang === "tr" ? "Cornell Notu" : "Cornell Note") 
+                            : (lang === "tr" ? "Not" : "Note")}
+                      </span>
+                      <h3 className="note-card-title">{title}</h3>
+                    </div>
+                    <button
+                      className="note-delete-btn"
+                      title="Delete"
+                      onClick={(e) => handleDeleteNote(e, note.id)}
                     >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {currentType === "cornell" ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, overflow: "hidden" }}>
+                      <div className="cornell-mini-grid">
+                        <div className="cornell-mini-column" title="Cues/Keywords">
+                          <strong>{lang === "tr" ? "İpuçları:" : "Cues:"}</strong><br/>
+                          {note.cues || "—"}
+                        </div>
+                        <div className="cornell-mini-column" title="Notlar:">
+                          <strong>{lang === "tr" ? "Notlar:" : "Notes:"}</strong><br/>
+                          {note.content || "—"}
+                        </div>
+                      </div>
+                      {note.summary && (
+                        <div className="cornell-mini-summary" title="Summary">
+                          <strong>{lang === "tr" ? "Özet:" : "Summary:"}</strong> {note.summary}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="note-card-content">
+                      {note.content}
+                    </div>
+                  )}
+
+                  <div className="note-card-footer">
+                    <span className="note-card-date">
+                      {new Date(note.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="note-card-content">{content}</div>
-                <div className="note-card-footer">
-                  <span className="note-card-date">
-                    {new Date(note.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
 
@@ -285,9 +368,39 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         >
           <div
             className="settings-content note-modal-content"
+            style={{ maxWidth: noteType === "cornell" ? "800px" : "600px" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <header className="settings-header">
+            <header className="settings-header" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "stretch" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <label style={{ fontSize: "0.85rem", opacity: 0.7 }}>{lang === "tr" ? "Tür:" : "Type:"}</label>
+                  <select
+                    value={noteType}
+                    onChange={(e) => setNoteType((e.target as HTMLSelectElement).value as any)}
+                    style={{
+                      background: "#1e1e24",
+                      color: "#f1f5f9",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "6px",
+                      padding: "4px 8px",
+                      fontSize: "0.85rem",
+                      outline: "none"
+                    }}
+                  >
+                    <option value="note">{lang === "tr" ? "Not" : "Note"}</option>
+                    <option value="diary">{lang === "tr" ? "Günlük Yazısı" : "Diary Entry"}</option>
+                    <option value="cornell">{lang === "tr" ? "Ders Notu (Cornell)" : "Cornell Study Note"}</option>
+                  </select>
+                </div>
+                <button
+                  className="close-btn"
+                  onClick={() => setIsNoteModalOpen(false)}
+                  style={{ margin: 0, padding: "0 6px", fontSize: "1.5rem" }}
+                >
+                  &times;
+                </button>
+              </div>
               <input
                 type="text"
                 id="note-title-input"
@@ -296,26 +409,92 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
                 onInput={(e) =>
                   setNoteTitle((e.target as HTMLInputElement).value)
                 }
-                placeholder={t.notes_placeholder}
+                placeholder={noteType === "diary" ? (lang === "tr" ? "Bugün nasıl hissediyorsun? veya Başlık..." : "How do you feel today? or Title...") : t.notes_placeholder}
               />
-              <button
-                className="close-btn"
-                onClick={() => setIsNoteModalOpen(false)}
-              >
-                &times;
-              </button>
             </header>
-            <div className="note-editor-body">
-              <textarea
-                id="note-content-input"
-                className="note-content-input"
-                value={noteContent}
-                onInput={(e) =>
-                  setNoteContent((e.target as HTMLTextAreaElement).value)
-                }
-                placeholder={t.notes_content_placeholder}
-              ></textarea>
+            
+            <div className="note-editor-body" style={{ padding: "0 10px" }}>
+              {noteType === "cornell" ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "10px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "12px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      <label style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                        {lang === "tr" ? "Anahtar Kelimeler / Sorular (Cues):" : "Keywords / Questions (Cues):"}
+                      </label>
+                      <textarea
+                        value={noteCues}
+                        onInput={(e) => setNoteCues((e.target as HTMLTextAreaElement).value)}
+                        placeholder={lang === "tr" ? "Temel fikirler, anahtar kelimeler veya olası sınav sorularını buraya yazın..." : "Write core ideas, keywords, or potential exam questions here..."}
+                        style={{
+                          background: "rgba(0, 0, 0, 0.2)",
+                          border: "1px solid var(--card-border)",
+                          borderRadius: "10px",
+                          padding: "12px",
+                          color: "#f1f5f9",
+                          fontSize: "0.85rem",
+                          height: "220px",
+                          resize: "none",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      <label style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                        {lang === "tr" ? "Not Alma Alanı (Notes):" : "Note-taking Column (Notes):"}
+                      </label>
+                      <textarea
+                        value={noteContent}
+                        onInput={(e) => setNoteContent((e.target as HTMLTextAreaElement).value)}
+                        placeholder={lang === "tr" ? "Ders esnasındaki ayrıntılı notlarınızı, formülleri ve açıklamaları buraya yazın..." : "Write detailed lecture notes, formulas, and explanations here..."}
+                        style={{
+                          background: "rgba(0, 0, 0, 0.2)",
+                          border: "1px solid var(--card-border)",
+                          borderRadius: "10px",
+                          padding: "12px",
+                          color: "#f1f5f9",
+                          fontSize: "0.85rem",
+                          height: "220px",
+                          resize: "none",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <label style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                      {lang === "tr" ? "Özet (Summary):" : "Summary:"}
+                    </label>
+                    <textarea
+                      value={noteSummary}
+                      onInput={(e) => setNoteSummary((e.target as HTMLTextAreaElement).value)}
+                      placeholder={lang === "tr" ? "Bu çalışma sayfasındaki bilgilerin kısa ve net bir özetini buraya yazın..." : "Write a brief and clear summary of the page details here..."}
+                      style={{
+                        background: "rgba(0, 0, 0, 0.2)",
+                        border: "1px solid var(--card-border)",
+                        borderRadius: "10px",
+                        padding: "12px",
+                        color: "#f1f5f9",
+                        fontSize: "0.85rem",
+                        height: "70px",
+                        resize: "none",
+                        outline: "none"
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <textarea
+                  id="note-content-input"
+                  className="note-content-input"
+                  value={noteContent}
+                  onInput={(e) =>
+                    setNoteContent((e.target as HTMLTextAreaElement).value)
+                  }
+                  placeholder={noteType === "diary" ? (lang === "tr" ? "Sevgili günlük, bugün..." : "Dear diary, today...") : t.notes_content_placeholder}
+                ></textarea>
+              )}
             </div>
+            
             <div className="settings-footer">
               <button
                 id="save-note-btn"

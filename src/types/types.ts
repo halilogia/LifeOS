@@ -36,6 +36,9 @@ export interface Note {
   content: string;
   color?: string;
   createdAt: string;
+  type?: "note" | "diary" | "cornell";
+  cues?: string;
+  summary?: string;
 }
 export interface KpssProgress {
   subject: string;
