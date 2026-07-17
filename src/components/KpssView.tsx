@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import { kpssService, kpssData } from "../services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "../types/types.js";
+import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -491,27 +492,12 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           </nav>
         </header>
 
-        {/* KPSS Countdown Banners */}
-        <div className="kpss-countdowns-banner">
-          <div className="kpss-countdown-card">
-            <span className="kpss-countdown-title">
-              {lang === "tr" ? "KPSS Lisans Sınavına Kalan Süre" : "Time to KPSS Exam"}
-            </span>
-            <span className="kpss-countdown-time">{kpssTimeLeft}</span>
-            <span className="kpss-countdown-subtitle">6 Eylül 2026 - 10:15</span>
-          </div>
-          <div className="kpss-countdown-card">
-            <span className="kpss-countdown-title">
-              {lang === "tr" ? "Tahmini Konuların Bitme Süresi" : "Estimated Study Completion Time"}
-            </span>
-            <span className="kpss-countdown-time">{estimatedTimeLeft}</span>
-            <span className="kpss-countdown-subtitle">
-              {lang === "tr"
-                ? `${remainingCount} Konu Kaldı · Ortalama 2 gün/konu`
-                : `${remainingCount} Topics Left · Average 2 days/topic`}
-            </span>
-          </div>
-        </div>
+        <KpssCountdownBanner
+          lang={lang}
+          kpssTimeLeft={kpssTimeLeft}
+          estimatedTimeLeft={estimatedTimeLeft}
+          remainingCount={remainingCount}
+        />
 
         {/* Dashboard Stat Progress Inputs and Charts */}
         <div className="kpss-daily-stats-section">
