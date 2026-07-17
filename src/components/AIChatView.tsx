@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
+import { storage } from "../core/storage.js";
 
 interface AIChatViewProps {
   lang: Language;
@@ -73,9 +74,36 @@ export function AIChatView({
   }, [messages, isBotTyping]);
 
   // Local Rule-Based Command Parser (Turkish & English fallback)
-  const parseLocalCommand = (query: string): { text: string; date?: string; parsed: boolean } => {
+  const parseLocalCommand = (query: string): { 
+    parsed: boolean; 
+    action?: "create_task" | "add_note";
+    text?: string; 
+    date?: string; 
+    note_type?: "note" | "diary" | "cornell";
+    content?: string;
+  } => {
     const textLower = query.toLowerCase().trim();
     const today = new Date();
+
+    // Check notes first
+    if (textLower.includes("günlük ekle") || textLower.includes("günlük yazısı ekle") || textLower.includes("günlük oluştur") || textLower.includes("günlük eklermisin")) {
+      const match = query.match(/(?:günlük ekle|günlük yazısı ekle|günlük oluştur|günlük eklermisin)\s*[:\-]?\s*(.+)$/i);
+      if (match) {
+        return { parsed: true, action: "add_note", note_type: "diary", content: match[1].trim() };
+      }
+    }
+    if (textLower.includes("ders notu ekle") || textLower.includes("cornell ders notu ekle") || textLower.includes("ders notu oluştur") || textLower.includes("ders notu eklermisin") || textLower.includes("cornell notu ekle")) {
+      const match = query.match(/(?:ders notu ekle|cornell ders notu ekle|ders notu oluştur|ders notu eklermisin|cornell notu ekle)\s*[:\-]?\s*(.+)$/i);
+      if (match) {
+        return { parsed: true, action: "add_note", note_type: "cornell", content: match[1].trim() };
+      }
+    }
+    if (textLower.includes("not ekle") || textLower.includes("not oluştur") || textLower.includes("not eklermisin")) {
+      const match = query.match(/(?:not ekle|not oluştur|not eklermisin)\s*[:\-]?\s*(.+)$/i);
+      if (match) {
+        return { parsed: true, action: "add_note", note_type: "note", content: match[1].trim() };
+      }
+    }
 
     // 1. Check for "yarın" / "tomorrow"
     if (textLower.startsWith("yarın") || textLower.includes(" yarın")) {
@@ -90,7 +118,7 @@ export function AIChatView({
         .trim();
       cleaned = cleaned.replace(/^[:\-,\s]+/, "").trim();
 
-      return { text: cleaned || "Görev", date: dateStr, parsed: true };
+      return { parsed: true, action: "create_task", text: cleaned || "Görev", date: dateStr };
     }
 
     if (textLower.startsWith("tomorrow") || textLower.includes(" tomorrow")) {
@@ -105,7 +133,7 @@ export function AIChatView({
         .trim();
       cleaned = cleaned.replace(/^[:\-,\s]+/, "").trim();
 
-      return { text: cleaned || "Task", date: dateStr, parsed: true };
+      return { parsed: true, action: "create_task", text: cleaned || "Task", date: dateStr };
     }
 
     // 2. Check for "ayın X'ine" / "ayın Xine"
@@ -119,7 +147,7 @@ export function AIChatView({
       const day = String(dayNum).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`;
 
-      return { text: taskText, date: dateStr, parsed: true };
+      return { parsed: true, action: "create_task", text: taskText, date: dateStr };
     }
 
     // 3. Check for specific date (e.g., "25 temmuz")
@@ -134,7 +162,7 @@ export function AIChatView({
         const year = today.getFullYear();
         const day = String(dayNum).padStart(2, "0");
         const dateStr = `${year}-${monthNum}-${day}`;
-        return { text: taskText, date: dateStr, parsed: true };
+        return { parsed: true, action: "create_task", text: taskText, date: dateStr };
       }
     }
 
@@ -149,7 +177,7 @@ export function AIChatView({
         const year = today.getFullYear();
         const day = String(dayNum).padStart(2, "0");
         const dateStr = `${year}-${monthNum}-${day}`;
-        return { text: taskText, date: dateStr, parsed: true };
+        return { parsed: true, action: "create_task", text: taskText, date: dateStr };
       }
     }
 
@@ -161,25 +189,30 @@ export function AIChatView({
         .replace(/görev oluştur/gi, "")
         .trim();
       cleaned = cleaned.replace(/^[:\-,\s]+/, "").trim();
-      return { text: cleaned, parsed: true };
+      return { parsed: true, action: "create_task", text: cleaned };
     }
 
-    return { text: query, parsed: false };
+    return { parsed: false };
   };
 
   // Call AI Service
   const callAI = async (userPrompt: string): Promise<{ reply: string; action?: string; params?: any }> => {
     const todayStr = new Date().toISOString().split("T")[0];
     const systemPrompt = `You are a helpful AI Assistant for the Life OS Personal Dashboard Chrome Extension. The current year is ${new Date().getFullYear()}. The current date is ${todayStr}.
-You can chat naturally, but if the user wants to add, create, or schedule a task, you must output a structured JSON response.
+You can chat naturally, but if the user wants to add, create, or schedule a task, or add a diary entry/note/study note, you must output a structured JSON response.
 Format your final output ONLY as a JSON object matching this schema:
 {
   "reply": "Your conversational response text in the user's language (Turkish or English).",
-  "action": "create_task" | "none",
+  "action": "create_task" | "add_note" | "none",
   "params": {
-    "text": "Task text",
-    "dueDate": "YYYY-MM-DD target date (calculated relative to today's date if requested)",
-    "repeat": "none" | "daily" | "weekly" | "monthly"
+    "text": "Task text (only for create_task)",
+    "dueDate": "YYYY-MM-DD target date (calculated relative to today's date if requested - only for create_task)",
+    "repeat": "none" | "daily" | "weekly" | "monthly" (only for create_task),
+    "note_type": "note" | "diary" | "cornell" (only for add_note),
+    "note_title": "Title for the note/diary/cornell entry (provide a suitable brief title if not explicitly provided - only for add_note)",
+    "note_content": "Content of the note or main notes section of Cornell notes (only for add_note)",
+    "note_cues": "Keywords, cues or questions (only for Cornell notes, cues/questions derived from context - only for add_note)",
+    "note_summary": "A brief summary of the study material (only for Cornell notes - only for add_note)"
   }
 }
 Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
@@ -281,6 +314,33 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     }
   };
 
+  const handleAddNoteFromAI = async (
+    type: "note" | "diary" | "cornell",
+    content: string,
+    title?: string,
+    cues?: string,
+    summary?: string
+  ) => {
+    const currentNotes = await storage.getNotes();
+    const formattedDate = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
+    const defaultTitle = title || (type === "diary"
+      ? (lang === "tr" ? `Günlük - ${formattedDate}` : `Diary - ${formattedDate}`)
+      : type === "cornell"
+        ? (lang === "tr" ? `Ders Notu - ${formattedDate}` : `Study Note - ${formattedDate}`)
+        : (lang === "tr" ? `Not - ${formattedDate}` : `Note - ${formattedDate}`));
+
+    currentNotes.push({
+      id: crypto.randomUUID(),
+      title: defaultTitle,
+      content: content,
+      type: type,
+      cues: cues || "",
+      summary: summary || "",
+      createdAt: new Date().toISOString()
+    });
+    await storage.setNotes(currentNotes);
+  };
+
   // Handle Send Message
   const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputVal).trim();
@@ -310,6 +370,13 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
           await onAddTodo(taskText, repeat, dueDate);
           await onManualSync();
+        } else if (aiResponse.action === "add_note" && aiResponse.params?.note_content) {
+          const type = aiResponse.params.note_type || "note";
+          const content = aiResponse.params.note_content;
+          const title = aiResponse.params.note_title;
+          const cues = aiResponse.params.note_cues;
+          const summary = aiResponse.params.note_summary;
+          await handleAddNoteFromAI(type, content, title, cues, summary);
         }
 
         setMessages((prev) => [
@@ -331,17 +398,32 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
           let replyText = "";
           if (localParsed.parsed) {
-            const dueDateFormatted = localParsed.date ? ` (${localParsed.date})` : "";
-            await onAddTodo(localParsed.text, "none", localParsed.date);
-            await onManualSync();
+            if (localParsed.action === "add_note" && localParsed.content) {
+              const type = localParsed.note_type || "note";
+              await handleAddNoteFromAI(type, localParsed.content);
+              
+              const typeLabel = type === "diary" 
+                ? (lang === "tr" ? "günlük yazısını" : "diary entry") 
+                : type === "cornell" 
+                  ? (lang === "tr" ? "Cornell ders notunu" : "Cornell study note") 
+                  : (lang === "tr" ? "notu" : "note");
+                  
+              replyText = lang === "tr"
+                ? `Harika! İstediğiniz ${typeLabel} Günlüğüm sekmesine başarıyla ekledim. ✓`
+                : `Sure! I have successfully added the ${typeLabel} to your My Diary tab. ✓`;
+            } else if (localParsed.action === "create_task" && localParsed.text) {
+              const dueDateFormatted = localParsed.date ? ` (${localParsed.date})` : "";
+              await onAddTodo(localParsed.text, "none", localParsed.date);
+              await onManualSync();
 
-            replyText = lang === "tr"
-              ? `Tamamdır! "${localParsed.text}" görevini${dueDateFormatted} takviminize ekledim. ✓`
-              : `Sure! I have added "${localParsed.text}" to your tasks list${dueDateFormatted}. ✓`;
+              replyText = lang === "tr"
+                ? `Tamamdır! "${localParsed.text}" görevini${dueDateFormatted} takviminize ekledim. ✓`
+                : `Sure! I have added "${localParsed.text}" to your tasks list${dueDateFormatted}. ✓`;
+            }
           } else {
             replyText = lang === "tr"
-              ? "Üzgünüm, bu komutu yerel olarak çözümleyemedim. Lütfen 'ayın 20sine görev oluştur: X' formatında yazmayı deneyin veya ayarlardan bir API anahtarı ekleyerek tam sohbet modunu aktifleştirin."
-              : "I couldn't parse this command locally. Try typing: 'create task for the 20th: X' or add an API Key in settings to enable full conversation mode.";
+              ? "Üzgünüm, bu komutu yerel olarak çözümleyemedim. Lütfen 'günlük ekle: ...', 'not ekle: ...' veya 'ders notu ekle: ...' formatında yazmayı deneyin."
+              : "I couldn't parse this command locally. Try: 'günlük ekle: ...', 'not ekle: ...' or 'ders notu ekle: ...'";
           }
 
           setMessages((prev) => [
@@ -364,13 +446,25 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       const localParsed = parseLocalCommand(query);
       let replyText = "";
       if (localParsed.parsed) {
-        const dueDateFormatted = localParsed.date ? ` (${localParsed.date})` : "";
-        await onAddTodo(localParsed.text, "none", localParsed.date);
-        await onManualSync();
-
-        replyText = lang === "tr"
-          ? `[Yerel Fallback] "${localParsed.text}" görevini${dueDateFormatted} ekledim. ✓`
-          : `[Local Fallback] Added "${localParsed.text}" task${dueDateFormatted} successfully. ✓`;
+        if (localParsed.action === "add_note" && localParsed.content) {
+          const type = localParsed.note_type || "note";
+          await handleAddNoteFromAI(type, localParsed.content);
+          const typeLabel = type === "diary" 
+            ? (lang === "tr" ? "günlük yazısını" : "diary entry") 
+            : type === "cornell" 
+              ? (lang === "tr" ? "Cornell ders notunu" : "Cornell study note") 
+              : (lang === "tr" ? "notu" : "note");
+          replyText = lang === "tr"
+            ? `[Yerel Fallback] İstediğiniz ${typeLabel} Günlüğüm sekmesine ekledim. ✓`
+            : `[Local Fallback] Added the ${typeLabel} successfully. ✓`;
+        } else if (localParsed.action === "create_task" && localParsed.text) {
+          const dueDateFormatted = localParsed.date ? ` (${localParsed.date})` : "";
+          await onAddTodo(localParsed.text, "none", localParsed.date);
+          await onManualSync();
+          replyText = lang === "tr"
+            ? `[Yerel Fallback] "${localParsed.text}" görevini${dueDateFormatted} ekledim. ✓`
+            : `[Local Fallback] Added "${localParsed.text}" task${dueDateFormatted}. ✓`;
+        }
       } else {
         replyText = lang === "tr"
           ? "Yapay zeka servisine bağlanırken bir sorun oluştu. Ayarlardan anahtarınızı/modelinizi kontrol edin."

@@ -130,6 +130,14 @@ export function App() {
       // 2. Load configurations
       const config = await storage.getSettings();
       setLang(config.lang);
+      
+      const savedOrder = await storage.getSidebarOrder();
+      if (savedOrder && savedOrder.length > 0) {
+        setActiveView(savedOrder[0]);
+      } else {
+        setActiveView("free-games");
+      }
+
       setSidebarOpen(config.sidebarOpen ?? true);
       setFreeGamesNotificationsEnabled(
         config.freeGamesNotificationsEnabled ?? true,

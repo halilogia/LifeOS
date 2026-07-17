@@ -179,3 +179,59 @@
   border-color: var(--accent-color);
   background: rgba(0, 0, 0, 0.3);
 }
+
+.note-type-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+.note-type-badge.standard {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.note-type-badge.diary {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.note-type-badge.cornell {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.cornell-mini-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+  height: 90px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.cornell-mini-column {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  padding: 6px;
+  overflow: hidden;
+  line-height: 1.3;
+}
+.cornell-mini-summary {
+  font-size: 0.72rem;
+  font-style: italic;
+  opacity: 0.7;
+  background: rgba(139, 92, 246, 0.03);
+  border-radius: 4px;
+  padding: 4px 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
