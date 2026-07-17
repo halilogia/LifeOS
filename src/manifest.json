@@ -17,7 +17,9 @@
     "https://www.gamerpower.com/*",
     "https://query2.finance.yahoo.com/*",
     "https://query1.finance.yahoo.com/*",
-    "https://www.isyatirim.com.tr/*"
+    "https://www.isyatirim.com.tr/*",
+    "https://openrouter.ai/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "oauth2": {
     "client_id": "1061579928611-pgijn1nbhseg9pvkf72ooo6j8re44flb.apps.googleusercontent.com",
