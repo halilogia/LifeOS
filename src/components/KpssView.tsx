@@ -8,6 +8,7 @@ interface KpssViewProps {
   aiProvider: string;
   aiApiKey: string;
   aiModel: string;
+  aiEndpoint: string;
 }
 
 interface QuizQuestion {
@@ -53,7 +54,7 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
   },
 };
 
-export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }: KpssViewProps) {
+export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, aiEndpoint }: KpssViewProps) {
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -184,7 +185,30 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }:
     try {
       let responseText = "";
 
-      if (aiProvider === "openrouter") {
+      if (aiProvider === "ollama") {
+        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
+        const url = baseUrl.includes("/v1") ? `${baseUrl}/chat/completions` : `${baseUrl}/v1/chat/completions`;
+        const modelName = aiModel || "llama3";
+        const payload = {
+          model: modelName,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ]
+        };
+
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        responseText = data.choices?.[0]?.message?.content || "";
+      } else if (aiProvider === "openrouter") {
+        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
+        const url = `${baseUrl}/chat/completions`;
         const modelName = aiModel || "google/gemini-2.5-flash";
         const headers: HeadersInit = {
           "Content-Type": "application/json",
@@ -201,7 +225,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }:
           response_format: { type: "json_object" }
         };
 
-        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        const res = await fetch(url, {
           method: "POST",
           headers,
           body: JSON.stringify(payload)
@@ -213,7 +237,8 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }:
       } else {
         // Gemini provider (default)
         const modelName = aiModel || "gemini-1.5-flash";
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${aiApiKey}`;
+        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://generativelanguage.googleapis.com/v1beta";
+        const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
         const payload = {
           contents: [{
             parts: [{

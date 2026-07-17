@@ -241,7 +241,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
           <span
             className="prayer-city-tag"
             onClick={() => setIsFormOpen((prev) => !prev)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", marginLeft: "12px" }}
           >
             {city}
           </span>
@@ -356,6 +356,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
                   alignItems: "center",
                   gap: "8px",
                   cursor: "pointer",
+                  marginLeft: "12px",
                 }}
                 onClick={() => setIsFormOpen((prev) => !prev)}
               >

@@ -20,7 +20,8 @@ export interface SettingsDrawerProps {
   aiProvider: string;
   aiApiKey: string;
   aiModel: string;
-  onUpdateAIConfig: (provider: string, key: string, model: string) => void;
+  aiEndpoint: string;
+  onUpdateAIConfig: (provider: string, key: string, model: string, endpoint?: string) => void;
   googleUserEmail: string;
   isSyncing: boolean;
   onGoogleLogin: () => void;
@@ -47,6 +48,7 @@ export function SettingsDrawer({
   aiProvider,
   aiApiKey,
   aiModel,
+  aiEndpoint,
   onUpdateAIConfig,
   googleUserEmail,
   isSyncing,
@@ -95,234 +97,245 @@ export function SettingsDrawer({
 
         {/* TAB 1: GENERAL SETTINGS */}
         {settingsTab === "general" && (
-          <div className="settings-group">
-            <h3>{t.settings_data_title}</h3>
-            <div className="settings-actions">
-              {/* Language Switch */}
-              <button className="settings-action-btn" onClick={onToggleLang}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="2" y1="12" x2="22" y2="12"></line>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                <span>{t.change_lang}</span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontWeight: 700,
-                    color: "var(--accent-color)",
-                  }}
-                >
-                  {lang.toUpperCase()}
-                </span>
-              </button>
-
-              {/* Free Games Notifications Toggle */}
-              <button
-                className="settings-action-btn"
-                onClick={onToggleFreeGamesNotifications}
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-                <span>{t.free_games_notifications_title}</span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontWeight: 700,
-                    color: freeGamesNotificationsEnabled
-                      ? "var(--accent-color)"
-                      : "var(--text-secondary)",
-                  }}
-                >
-                  {freeGamesNotificationsEnabled ? t.enabled : t.disabled}
-                </span>
-              </button>
-
-              {/* Universal Info Box Toggle */}
-              <button className="settings-action-btn" onClick={onToggleUniversalInfoBox}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                <span>{t.uib_title}</span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontWeight: 700,
-                    color: universalInfoBoxEnabled
-                      ? "var(--accent-color)"
-                      : "var(--text-secondary)",
-                  }}
-                >
-                  {universalInfoBoxEnabled ? t.enabled : t.disabled}
-                </span>
-              </button>
-
-              {/* Universal Info Box Hotkey Selection */}
-              {universalInfoBoxEnabled && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "8px 12px",
-                    background: "rgba(255, 255, 255, 0.03)",
-                    borderRadius: "6px",
-                    margin: "2px 0 6px 0",
-                  }}
-                >
-                  <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>
-                    {t.uib_hotkey}:
-                  </span>
-                  <select
-                    value={universalInfoBoxHotkey}
-                    onChange={(e) =>
-                      onUniversalInfoBoxHotkeyChange(
-                        (e.target as HTMLSelectElement).value,
-                      )
-                    }
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="settings-group">
+              <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
+                {lang === "tr" ? "Uygulama Ayarları" : "App Settings"}
+              </h3>
+              <div className="settings-actions">
+                {/* Language Switch */}
+                <button className="settings-action-btn" onClick={onToggleLang}>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                  <span>{t.change_lang}</span>
+                  <span
                     style={{
                       marginLeft: "auto",
-                      background: "#1e1e24",
-                      color: "#f1f5f9",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      borderRadius: "4px",
-                      padding: "4px 8px",
-                      fontSize: "0.85rem",
-                      outline: "none",
-                      cursor: "pointer",
+                      fontWeight: 700,
+                      color: "var(--accent-color)",
                     }}
                   >
-                    <option
-                      style={{ background: "#1e1e24", color: "#f1f5f9" }}
-                      value="none"
-                    >
-                      {t.uib_hotkey_none}
-                    </option>
-                    <option
-                      style={{ background: "#1e1e24", color: "#f1f5f9" }}
-                      value="alt"
-                    >
-                      {t.uib_hotkey_alt}
-                    </option>
-                    <option
-                      style={{ background: "#1e1e24", color: "#f1f5f9" }}
-                      value="ctrl"
-                    >
-                      {t.uib_hotkey_ctrl}
-                    </option>
-                    <option
-                      style={{ background: "#1e1e24", color: "#f1f5f9" }}
-                      value="shift"
-                    >
-                      {t.uib_hotkey_shift}
-                    </option>
-                  </select>
-                </div>
-              )}
+                    {lang.toUpperCase()}
+                  </span>
+                </button>
 
-              {/* Export Backup */}
-              <button className="settings-action-btn" onClick={onExportBackup}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                {/* Free Games Notifications Toggle */}
+                <button
+                  className="settings-action-btn"
+                  onClick={onToggleFreeGamesNotifications}
                 >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>{t.backup}</span>
-              </button>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>{t.free_games_notifications_title}</span>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontWeight: 700,
+                      color: freeGamesNotificationsEnabled
+                        ? "var(--accent-color)"
+                        : "var(--text-secondary)",
+                    }}
+                  >
+                    {freeGamesNotificationsEnabled ? t.enabled : t.disabled}
+                  </span>
+                </button>
 
-              {/* Import Backup */}
-              <label
-                className="settings-action-btn"
-                style={{
-                  cursor: "pointer",
-                  display: "flex",
-                  gap: "10px",
-                  alignItems: "center",
-                }}
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <span style={{ flex: 1 }}>{t.restore}</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  style={{ display: "none" }}
-                  onChange={onImportBackup}
-                />
-              </label>
+                {/* Universal Info Box Toggle */}
+                <button className="settings-action-btn" onClick={onToggleUniversalInfoBox}>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <span>{t.uib_title}</span>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontWeight: 700,
+                      color: universalInfoBoxEnabled
+                        ? "var(--accent-color)"
+                        : "var(--text-secondary)",
+                    }}
+                  >
+                    {universalInfoBoxEnabled ? t.enabled : t.disabled}
+                  </span>
+                </button>
 
-              {/* Delete / Reset All */}
-              <button
-                className="settings-action-btn danger"
-                onClick={onClearAllData}
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                {/* Universal Info Box Hotkey Selection */}
+                {universalInfoBoxEnabled && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "8px 12px",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      borderRadius: "6px",
+                      margin: "2px 0 6px 0",
+                    }}
+                  >
+                    <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>
+                      {t.uib_hotkey}:
+                    </span>
+                    <select
+                      value={universalInfoBoxHotkey}
+                      onChange={(e) =>
+                        onUniversalInfoBoxHotkeyChange(
+                          (e.target as HTMLSelectElement).value,
+                        )
+                      }
+                      style={{
+                        marginLeft: "auto",
+                        background: "#1e1e24",
+                        color: "#f1f5f9",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        borderRadius: "4px",
+                        padding: "4px 8px",
+                        fontSize: "0.85rem",
+                        outline: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <option
+                        style={{ background: "#1e1e24", color: "#f1f5f9" }}
+                        value="none"
+                      >
+                        {t.uib_hotkey_none}
+                      </option>
+                      <option
+                        style={{ background: "#1e1e24", color: "#f1f5f9" }}
+                        value="alt"
+                      >
+                        {t.uib_hotkey_alt}
+                      </option>
+                      <option
+                        style={{ background: "#1e1e24", color: "#f1f5f9" }}
+                        value="ctrl"
+                      >
+                        {t.uib_hotkey_ctrl}
+                      </option>
+                      <option
+                        style={{ background: "#1e1e24", color: "#f1f5f9" }}
+                        value="shift"
+                      >
+                        {t.uib_hotkey_shift}
+                      </option>
+                    </select>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="settings-group">
+              <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
+                {lang === "tr" ? "Veri Yönetimi (Manuel)" : "Data Management (Manual)"}
+              </h3>
+              <div className="settings-actions">
+                {/* Export Backup */}
+                <button className="settings-action-btn" onClick={onExportBackup}>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>{t.backup}</span>
+                </button>
+
+                {/* Import Backup */}
+                <label
+                  className="settings-action-btn"
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                  }}
                 >
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-                <span>{t.clear_all}</span>
-              </button>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span style={{ flex: 1 }}>{t.restore}</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    style={{ display: "none" }}
+                    onChange={onImportBackup}
+                  />
+                </label>
+
+                {/* Delete / Reset All */}
+                <button
+                  className="settings-action-btn danger"
+                  onClick={onClearAllData}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  <span>{t.clear_all}</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -336,7 +349,7 @@ export function SettingsDrawer({
                 <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_provider}:</label>
                 <select
                   value={aiProvider}
-                  onChange={(e) => onUpdateAIConfig((e.target as HTMLSelectElement).value, aiApiKey, aiModel)}
+                  onChange={(e) => onUpdateAIConfig((e.target as HTMLSelectElement).value, aiApiKey, aiModel, aiEndpoint)}
                   style={{
                     background: "#1e1e24",
                     color: "#f1f5f9",
@@ -350,6 +363,7 @@ export function SettingsDrawer({
                 >
                   <option value="gemini">Gemini API</option>
                   <option value="openrouter">OpenRouter API</option>
+                  <option value="ollama">Ollama (Local / LAN)</option>
                 </select>
               </div>
 
@@ -358,8 +372,8 @@ export function SettingsDrawer({
                 <input
                   type="password"
                   value={aiApiKey}
-                  placeholder="sk-or-v1-... veya AIzaSy..."
-                  onInput={(e) => onUpdateAIConfig(aiProvider, (e.target as HTMLInputElement).value, aiModel)}
+                  placeholder={aiProvider === "ollama" ? "Gerekli değil (Ollama)" : "sk-or-v1-... veya AIzaSy..."}
+                  onInput={(e) => onUpdateAIConfig(aiProvider, (e.target as HTMLInputElement).value, aiModel, aiEndpoint)}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -373,12 +387,50 @@ export function SettingsDrawer({
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+                  {lang === "tr" ? "Özel API Adresi (Endpoint URL):" : "Custom API Endpoint URL:"}
+                </label>
+                <input
+                  type="text"
+                  value={aiEndpoint}
+                  placeholder={
+                    aiProvider === "openrouter" 
+                      ? "https://openrouter.ai/api/v1" 
+                      : aiProvider === "ollama"
+                        ? "http://localhost:11434"
+                        : "https://generativelanguage.googleapis.com"
+                  }
+                  onInput={(e) => onUpdateAIConfig(aiProvider, aiApiKey, aiModel, (e.target as HTMLInputElement).value)}
+                  style={{
+                    background: "rgba(0, 0, 0, 0.2)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "6px",
+                    padding: "8px 12px",
+                    color: "#f1f5f9",
+                    fontSize: "0.85rem",
+                    outline: "none"
+                  }}
+                />
+                <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
+                  {lang === "tr" 
+                    ? "Örn: http://localhost:20120/v1 (9Router) veya http://192.168.1.100:11434 (LAN/Masaüstü Ollama)" 
+                    : "e.g. http://localhost:20120/v1 (9Router) or http://192.168.1.100:11434 (LAN/Desktop Ollama)"}
+                </span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                 <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_model}:</label>
                 <input
                   type="text"
                   value={aiModel}
-                  placeholder={aiProvider === "openrouter" ? "google/gemini-2.5-flash" : "gemini-1.5-flash"}
-                  onInput={(e) => onUpdateAIConfig(aiProvider, aiApiKey, (e.target as HTMLInputElement).value)}
+                  placeholder={
+                    aiProvider === "openrouter" 
+                      ? "google/gemini-2.5-flash" 
+                      : aiProvider === "ollama"
+                        ? "llama3"
+                        : "gemini-1.5-flash"
+                  }
+                  onInput={(e) => onUpdateAIConfig(aiProvider, aiApiKey, (e.target as HTMLInputElement).value, aiEndpoint)}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid rgba(255, 255, 255, 0.08)",
