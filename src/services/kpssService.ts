@@ -420,6 +420,7 @@ export const kpssService = {
     subject: string,
     topic: string,
     status: 0 | 1 | 2,
+    score?: number,
   ): Promise<void> {
     const progressList = await this.getKpssProgress();
     const index = progressList.findIndex(
@@ -427,13 +428,16 @@ export const kpssService = {
     );
 
     if (index !== -1) {
-      if (status === 0) {
+      if (status === 0 && score === undefined) {
         progressList.splice(index, 1);
       } else {
         progressList[index].status = status;
+        if (score !== undefined) {
+          progressList[index].score = score;
+        }
       }
-    } else if (status !== 0) {
-      progressList.push({ subject, topic, status });
+    } else {
+      progressList.push({ subject, topic, status, score });
     }
 
     await this.setKpssProgress(progressList);

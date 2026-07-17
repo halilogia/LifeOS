@@ -788,7 +788,15 @@ export function App() {
       case "prayer":
         return <PrayerView lang={lang} />;
       case "kpss":
-        return <KpssView lang={lang} onShowConfirm={showConfirm} />;
+        return (
+          <KpssView
+            lang={lang}
+            onShowConfirm={showConfirm}
+            aiProvider={aiProvider}
+            aiApiKey={aiApiKey}
+            aiModel={aiModel}
+          />
+        );
       case "free-games":
         return <FreeGamesView lang={lang} />;
       case "detox":
