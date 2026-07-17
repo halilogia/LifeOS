@@ -19,7 +19,9 @@
     "https://query1.finance.yahoo.com/*",
     "https://openrouter.ai/*",
     "https://generativelanguage.googleapis.com/*",
-    "https://halkarz.com/*"
+    "https://halkarz.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
   ],
   "oauth2": {
     "client_id": "1061579928611-pgijn1nbhseg9pvkf72ooo6j8re44flb.apps.googleusercontent.com",

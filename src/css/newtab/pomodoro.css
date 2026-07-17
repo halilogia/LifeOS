@@ -251,15 +251,58 @@
 }
 
 .mini-alarm-input {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 8px;
+  padding: 8px 14px;
   color: var(--text-primary);
-  font-size: 1.2rem;
-  width: 100%;
-  text-align: center;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
   outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: 100%;
+}
+
+.mini-alarm-input:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mini-alarm-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+}
+
+/* Customizing date/time text styling inside Webkit browser date edit */
+.mini-alarm-input::-webkit-datetime-edit {
+  padding: 0 4px;
+}
+
+.mini-alarm-input::-webkit-datetime-edit-text {
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 2px;
+}
+
+.mini-alarm-input::-webkit-datetime-edit-hour-field,
+.mini-alarm-input::-webkit-datetime-edit-minute-field {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Glowing purple clock picker icon */
+.mini-alarm-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(0.85);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.mini-alarm-input::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.1);
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(1);
 }
 
 .mini-controls {
@@ -284,6 +327,35 @@
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Premium New Tab Add Alarm Button */
+.newtab-alarm-add-btn {
+  background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%) !important;
+  border: none !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.25rem !important;
+  border-radius: 12px !important;
+  height: 36px !important;
+  width: 36px !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.newtab-alarm-add-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%) !important;
+  transform: translateY(-1px) scale(1.04) !important;
+  box-shadow: 0 6px 14px rgba(139, 92, 246, 0.3) !important;
+}
+
+.newtab-alarm-add-btn:active {
+  transform: translateY(0) scale(0.96) !important;
 }
 
 /* Zen Garden Tabs */
