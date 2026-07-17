@@ -159,6 +159,22 @@ export const kpssData: Record<string, KpssTopic[]> = {
         "Mod, medyan, açıklık ve standart sapma gibi temel istatistiksel veriler.",
     },
     {
+      title: "Kümeler",
+      description: "Kümelerde temel kavramlar, birleşim, kesişim, fark işlemleri ve küme problemleri.",
+    },
+    {
+      title: "Fonksiyonlar",
+      description: "Fonksiyon tanımı, çeşitleri, bileşke ve ters fonksiyon işlemleri.",
+    },
+    {
+      title: "Permütasyon / Kombinasyon / Olasılık",
+      description: "Sıralama (permütasyon), seçme (kombinasyon) ve olasılık hesabı kuralları.",
+    },
+    {
+      title: "Modüler Aritmetik / İşlem",
+      description: "Özel tanımlı işlemler, modül bulma ve periyodik tekrar eden problemler.",
+    },
+    {
       title: "Sayısal Mantık",
       description:
         "Şekil yeteneği, sayı dizileri ve mantıksal çıkarım soruları.",
