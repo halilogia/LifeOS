@@ -310,3 +310,159 @@ input[type="text"]::placeholder {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
 }
+
+/* --- Global Legibility Fix for Select Option Dropdowns --- */
+select option,
+.detox-select option,
+#repeat-select option {
+  background-color: #161622 !important;
+  color: #ffffff !important;
+  padding: 8px !important;
+}
+
+/* ── Premium Alarms Component Styles ────────────────── */
+.mini-alarm-input {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  color: white !important;
+  padding: 0 10px !important;
+  height: 32px !important;
+  font-size: 0.85rem !important;
+  outline: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+}
+
+.mini-alarm-input:hover {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.mini-alarm-input:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Webkit time editor styling */
+.mini-alarm-input::-webkit-datetime-edit {
+  padding: 0 2px;
+}
+
+.mini-alarm-input::-webkit-datetime-edit-text {
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 1px;
+}
+
+.mini-alarm-input::-webkit-datetime-edit-hour-field,
+.mini-alarm-input::-webkit-datetime-edit-minute-field {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Glowing purple clock picker icon */
+.mini-alarm-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(0.85);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.mini-alarm-input::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.1);
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(1);
+}
+
+/* Add alarm button */
+.popup-alarm-add-btn {
+  background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%) !important;
+  border: none !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  border-radius: 10px !important;
+  height: 32px !important;
+  width: 32px !important;
+  padding: 0 !important;
+}
+
+.popup-alarm-add-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%) !important;
+  transform: translateY(-1px) scale(1.04) !important;
+  box-shadow: 0 6px 14px rgba(139, 92, 246, 0.3) !important;
+}
+
+.popup-alarm-add-btn:active {
+  transform: translateY(0) scale(0.96) !important;
+}
+
+/* Custom Switch Toggle */
+.popup-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+}
+
+.popup-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.popup-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.08);
+  transition: .3s;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.popup-slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #94a3b8;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+.popup-switch input:checked + .popup-slider {
+  background-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+.popup-switch input:checked + .popup-slider:before {
+  transform: translateX(14px);
+  background-color: white;
+}
+
+/* Custom Delete Icon Button */
+.popup-alarm-delete-btn {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.popup-alarm-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+}

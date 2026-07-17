@@ -516,3 +516,69 @@ body.sidebar-open .top-header {
   opacity: 0.4;
   cursor: grabbing;
 }
+
+/* ── Top Header Date Input Custom Styling ────────────────── */
+.todo-date-input {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.todo-date-input:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+}
+
+.todo-date-input:focus {
+  border-color: var(--accent-color);
+  background: rgba(15, 15, 22, 0.4);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+}
+
+/* Customizing date text styling inside Webkit browser date edit */
+.todo-date-input::-webkit-datetime-edit {
+  padding: 0 4px;
+}
+
+.todo-date-input::-webkit-datetime-edit-fields-wrapper {
+  background: transparent;
+}
+
+.todo-date-input::-webkit-datetime-edit-text {
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 2px;
+}
+
+.todo-date-input::-webkit-datetime-edit-month-field,
+.todo-date-input::-webkit-datetime-edit-day-field,
+.todo-date-input::-webkit-datetime-edit-year-field {
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+}
+
+/* Custom styling for calendar icon */
+.todo-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(0.85);
+  margin-left: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.todo-date-input::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.1);
+  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(1);
+}
