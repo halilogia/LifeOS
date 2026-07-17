@@ -41,6 +41,7 @@ export interface KpssProgress {
   subject: string;
   topic: string;
   status: 0 | 1 | 2; // 0: reset, 1: working, 2: finished
+  score?: number; // test percentage score (0-100)
 }
 
 export interface CustomQuote {

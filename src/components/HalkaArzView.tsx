@@ -20,7 +20,7 @@ interface HalkaArzViewProps {
   lang: Language;
 }
 
-type TabId = "active" | "history" | "stocks";
+type TabId = "active" | "upcoming" | "history" | "stocks";
 
 // ── Format helpers ────────────────────────────────────────────────────────────
 
@@ -202,7 +202,7 @@ function IpoCard({ ipo, lang, t }: { ipo: IPOEntry; lang: Language; t: (typeof t
 
 // ── Stock Card ────────────────────────────────────────────────────────────────
 
-function StockCard({ quote, t }: { quote: StockQuote; t: (typeof translations)["tr"] }) {
+function StockCard({ quote, t, onClick }: { quote: StockQuote; t: (typeof translations)["tr"]; onClick: () => void }) {
   const meta = POPULAR_BIST_STOCKS.find((s) => s.symbol === quote.symbol);
   const sector = meta?.sector ?? "";
 
@@ -218,7 +218,7 @@ function StockCard({ quote, t }: { quote: StockQuote; t: (typeof translations)["
   const changeSign = quote.change > 0 ? "+" : "";
 
   return (
-    <div class={`stock-card ${direction} ${quote.error ? "error-card" : ""}`}>
+    <div class={`stock-card ${direction} ${quote.error ? "error-card" : ""}`} onClick={onClick}>
       {/* Header */}
       <div class="stock-card-header">
         <div class="stock-symbol-group">
@@ -297,6 +297,12 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   const [stocksLoaded, setStocksLoaded] = useState(false);
   const [stockLastUpdated, setStockLastUpdated] = useState<number | null>(null);
   const [stockRefreshing, setStockRefreshing] = useState(false);
+  const [selectedStockForChart, setSelectedStockForChart] = useState<string | null>(null);
+  const [chartFrameLoading, setChartFrameLoading] = useState(true);
+
+  // Derived filter states
+  const openIPOs = activeIPOs.filter((ipo) => ipo.status === "active");
+  const upcomingIPOs = activeIPOs.filter((ipo) => ipo.status === "upcoming");
 
   // ── Load IPOs on mount ──────────────────────────────────────────────────────
   const loadIPOs = useCallback(async () => {
@@ -387,7 +393,18 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
             <IconTrendUp />
             {t.ipo_tab_active}
             {!ipoLoading && !ipoError && (
-              <span class="ha-tab-badge">{activeIPOs.length}</span>
+              <span class="ha-tab-badge">{openIPOs.length}</span>
+            )}
+          </button>
+          <button
+            id="ha-tab-upcoming"
+            class={`ha-tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
+            onClick={() => setActiveTab("upcoming")}
+          >
+            <IconCalendar />
+            {t.ipo_tab_upcoming}
+            {!ipoLoading && !ipoError && (
+              <span class="ha-tab-badge">{upcomingIPOs.length}</span>
             )}
           </button>
           <button
@@ -412,7 +429,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
         </div>
 
         {/* Fallback notice (IPO tabs) */}
-        {ipoIsFallback && (activeTab === "active" || activeTab === "history") && (
+        {ipoIsFallback && (activeTab === "active" || activeTab === "upcoming" || activeTab === "history") && (
           <div class="halka-arz-fallback-notice">
             <IconWarning />
             {t.ipo_fallback_notice}
@@ -436,7 +453,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
                 </button>
               </div>
             )}
-            {!ipoLoading && !ipoError && activeIPOs.length === 0 && (
+            {!ipoLoading && !ipoError && openIPOs.length === 0 && (
               <div class="ha-empty">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style={{ opacity: 0.35 }}>
                   <circle cx="12" cy="12" r="10" />
@@ -445,9 +462,45 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
                 <p>{t.ipo_empty_active}</p>
               </div>
             )}
-            {!ipoLoading && !ipoError && activeIPOs.length > 0 && (
+            {!ipoLoading && !ipoError && openIPOs.length > 0 && (
               <div class="ipo-grid">
-                {activeIPOs.map((ipo) => (
+                {openIPOs.map((ipo) => (
+                  <IpoCard key={ipo.id} ipo={ipo} lang={lang} t={t} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── TAB: Upcoming IPOs ───────────────────────────────────────── */}
+        {activeTab === "upcoming" && (
+          <div id="ha-upcoming-container">
+            {ipoLoading && (
+              <div class="ha-loading">
+                <div class="ha-spinner" />
+                <span>{t.ipo_loading}</span>
+              </div>
+            )}
+            {!ipoLoading && ipoError && (
+              <div class="ha-error">
+                <span>{t.ipo_error}</span>
+                <button class="ha-retry-btn" onClick={loadIPOs}>
+                  {t.ipo_refresh}
+                </button>
+              </div>
+            )}
+            {!ipoLoading && !ipoError && upcomingIPOs.length === 0 && (
+              <div class="ha-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style={{ opacity: 0.35 }}>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+                <p>{t.ipo_empty_upcoming}</p>
+              </div>
+            )}
+            {!ipoLoading && !ipoError && upcomingIPOs.length > 0 && (
+              <div class="ipo-grid">
+                {upcomingIPOs.map((ipo) => (
                   <IpoCard key={ipo.id} ipo={ipo} lang={lang} t={t} />
                 ))}
               </div>
@@ -533,10 +586,18 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               </div>
             )}
 
-            {!stockLoading && !stockRefreshing && !stockError && stocks.length > 0 && (
+             {!stockLoading && !stockRefreshing && !stockError && stocks.length > 0 && (
               <div class="stock-grid">
                 {stocks.map((q) => (
-                  <StockCard key={q.symbol} quote={q} t={t} />
+                  <StockCard
+                    key={q.symbol}
+                    quote={q}
+                    t={t}
+                    onClick={() => {
+                      setChartFrameLoading(true);
+                      setSelectedStockForChart(q.symbol.replace(".IS", ""));
+                    }}
+                  />
                 ))}
               </div>
             )}
@@ -544,6 +605,35 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
         )}
 
       </div>
+
+      {/* TradingView Interactive Chart Modal */}
+      {selectedStockForChart && (
+        <div class="chart-modal-overlay" onClick={() => setSelectedStockForChart(null)}>
+          <div class="chart-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div class="chart-modal-header">
+              <h2>{selectedStockForChart} {lang === "tr" ? "Grafiği" : "Chart"}</h2>
+              <button class="chart-close-btn" onClick={() => setSelectedStockForChart(null)}>
+                {lang === "tr" ? "Kapat" : "Close"}
+              </button>
+            </div>
+            <div style={{ position: "relative", width: "100%", height: "500px" }}>
+              {chartFrameLoading && (
+                <div class="ha-loading" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(15, 15, 22, 0.95)", borderRadius: "12px", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px" }}>
+                  <div class="ha-spinner"></div>
+                  <span style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+                    {lang === "tr" ? "Grafik yükleniyor..." : "Loading chart..."}
+                  </span>
+                </div>
+              )}
+              <iframe
+                src={`https://s.tradingview.com/widgetembed/?symbol=BIST:${selectedStockForChart}&theme=dark&style=1&timezone=Europe%2FIstanbul`}
+                style="width: 100%; height: 100%; border: none; border-radius: 12px;"
+                onLoad={() => setChartFrameLoading(false)}
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

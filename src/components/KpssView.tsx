@@ -1,10 +1,19 @@
-import { useState, useEffect, useRef } from "preact/hooks";
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import { kpssService, kpssData } from "../services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "../types/types.js";
 
 interface KpssViewProps {
   lang: Language;
   onShowConfirm: (message: string, onConfirm: () => void) => void;
+  aiProvider: string;
+  aiApiKey: string;
+  aiModel: string;
+}
+
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
 }
 
 const SUBJECT_NAMES: Record<string, Record<string, string>> = {
@@ -39,13 +48,12 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
     stat_subject: "Subject",
     save: "Save",
     reset: "Reset",
-    reset_confirm:
-      "All your KPSS study statistics will be deleted. Are you sure?",
+    reset_confirm: "All your KPSS study statistics will be deleted. Are you sure?",
     details_title: "Topic Detail",
   },
 };
 
-export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
+export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }: KpssViewProps) {
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -62,7 +70,33 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
     description: string;
   } | null>(null);
 
+  // Quiz States
+  const [activeQuizTopic, setActiveQuizTopic] = useState<string | null>(null);
+  const [quizStep, setQuizStep] = useState<"intro" | "questions" | "result">("intro");
+  const [selectedQuizCount, setSelectedQuizCount] = useState(5);
+  const [quizLoading, setQuizLoading] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [quizResultScore, setQuizResultScore] = useState(0);
+  const [quizError, setQuizError] = useState<string | null>(null);
+
+  // Countdown Banners States
+  const [kpssTimeLeft, setKpssTimeLeft] = useState("");
+  const [estimatedTimeLeft, setEstimatedTimeLeft] = useState("");
+  const [remainingCount, setRemainingCount] = useState(0);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Target date: July 26, 2026 10:15
+  const kpssTargetDate = new Date("2026-07-26T10:15:00").getTime();
+
+  const loadKpssData = async () => {
+    const progress = await kpssService.getKpssProgress();
+    const stats = await kpssService.getKpssDailyStats();
+    setKpssProgress(progress);
+    setDailyStats(stats);
+  };
 
   useEffect(() => {
     loadKpssData();
@@ -76,11 +110,202 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
     drawChart();
   }, [dailyStats]);
 
-  const loadKpssData = async () => {
-    const progress = await kpssService.getKpssProgress();
-    const stats = await kpssService.getKpssDailyStats();
-    setKpssProgress(progress);
-    setDailyStats(stats);
+  // Real-time Countdown timer intervals
+  useEffect(() => {
+    const totalCount = Object.values(kpssData).reduce((acc, list) => acc + list.length, 0);
+    const finishedCount = kpssProgress.filter(p => p.status === 2).length;
+    const remaining = totalCount - finishedCount;
+    setRemainingCount(remaining);
+
+    const updateCountdown = () => {
+      const now = Date.now();
+
+      // 1. Exam countdown
+      const diffKpss = kpssTargetDate - now;
+      if (diffKpss <= 0) {
+        setKpssTimeLeft(lang === "tr" ? "Sınav Başladı!" : "Exam Started!");
+      } else {
+        const days = Math.floor(diffKpss / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diffKpss % (1000 * 60)) / 1000);
+        setKpssTimeLeft(
+          lang === "tr"
+            ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
+            : `${days}d, ${hours}h, ${mins}m, ${secs}s`
+        );
+      }
+
+      // 2. Study completion estimate (Remaining Topics * 2 days study rate)
+      const estimatedRemainingDays = remaining * 2;
+      const estimatedTargetDate = now + estimatedRemainingDays * 24 * 60 * 60 * 1000;
+      const diffEst = estimatedTargetDate - now;
+
+      if (remaining === 0) {
+        setEstimatedTimeLeft(lang === "tr" ? "Tebrikler, bitti!" : "Completed!");
+      } else {
+        const days = Math.floor(diffEst / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diffEst % (1000 * 60)) / 1000);
+        setEstimatedTimeLeft(
+          lang === "tr"
+            ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
+            : `${days}d, ${hours}h, ${mins}m, ${secs}s`
+        );
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, [kpssProgress, lang]);
+
+  // Dynamic AI Fetcher
+  const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
+    setQuizLoading(true);
+    setQuizError(null);
+    setQuizStep("questions");
+
+    const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
+    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
+[
+  {
+    "question": "Soru metni...",
+    "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği", "E seçeneği"],
+    "correctAnswer": 0
+  }
+]
+(correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
+
+    const userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
+
+    try {
+      let responseText = "";
+
+      if (aiProvider === "openrouter") {
+        const modelName = aiModel || "google/gemini-2.5-flash";
+        const headers: HeadersInit = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${aiApiKey}`,
+          "HTTP-Referer": "https://github.com/halilogia/chrome-extension-todo",
+          "X-Title": "ZenTodo Life OS Dashboard"
+        };
+        const payload = {
+          model: modelName,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ],
+          response_format: { type: "json_object" }
+        };
+
+        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        responseText = data.choices?.[0]?.message?.content || "";
+      } else {
+        // Gemini provider (default)
+        const modelName = aiModel || "gemini-1.5-flash";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${aiApiKey}`;
+        const payload = {
+          contents: [{
+            parts: [{
+              text: systemPrompt + "\n\n" + userPrompt
+            }]
+          }],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      }
+
+      let cleanJson = responseText.trim();
+      if (cleanJson.startsWith("```json")) {
+        cleanJson = cleanJson.substring(7);
+      }
+      if (cleanJson.startsWith("```")) {
+        cleanJson = cleanJson.substring(3);
+      }
+      if (cleanJson.endsWith("```")) {
+        cleanJson = cleanJson.substring(0, cleanJson.length - 3);
+      }
+      cleanJson = cleanJson.trim();
+
+      let parsed = JSON.parse(cleanJson);
+      if (!Array.isArray(parsed) && typeof parsed === "object") {
+        const keys = Object.keys(parsed);
+        if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {
+          parsed = parsed[keys[0]];
+        } else {
+          throw new Error("Invalid JSON structure returned by AI.");
+        }
+      }
+
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setQuizQuestions(parsed);
+        setCurrentQuestionIndex(0);
+        setSelectedAnswers(new Array(parsed.length).fill(-1));
+      } else {
+        throw new Error("No questions found in AI response.");
+      }
+    } catch (err: any) {
+      console.error("AI quiz generation error:", err);
+      setQuizError(lang === "tr" ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin." : "AI failed to generate quiz questions. Please try again.");
+    } finally {
+      setQuizLoading(false);
+    }
+  };
+
+  const handleFinishQuiz = async () => {
+    let correctCount = 0;
+    quizQuestions.forEach((q, idx) => {
+      if (selectedAnswers[idx] === q.correctAnswer) {
+        correctCount++;
+      }
+    });
+
+    const scorePercentage = Math.round((correctCount / quizQuestions.length) * 100);
+    setQuizResultScore(scorePercentage);
+    setQuizStep("result");
+
+    // Automatically map score to checklist status
+    let newStatus: 0 | 1 | 2 = 0;
+    if (scorePercentage >= 80) {
+      newStatus = 2; // Finished
+    } else if (scorePercentage >= 40) {
+      newStatus = 1; // Working
+    } else {
+      newStatus = 0; // Not Started
+    }
+
+    try {
+      await kpssService.updateTopicStatus(
+        currentSubject,
+        activeQuizTopic!,
+        newStatus,
+        scorePercentage
+      );
+      await loadKpssData();
+    } catch (err) {
+      console.error("Failed to update status on quiz completion:", err);
+    }
   };
 
   // Render chart on HTML Canvas using 2D context
@@ -134,8 +359,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
     }
 
     const barGap = 15;
-    const barWidth =
-      (chartWidth - barGap * (last7Days.length - 1)) / last7Days.length;
+    const barWidth = (chartWidth - barGap * (last7Days.length - 1)) / last7Days.length;
 
     last7Days.forEach((stat, i) => {
       const x = padding + i * (barWidth + barGap);
@@ -143,9 +367,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
       const y = height - padding - barHeight;
 
       const accentColor =
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--accent-color")
-          .trim() || "#8b5cf6";
+        getComputedStyle(document.documentElement).getPropertyValue("--accent-color").trim() || "#8b5cf6";
 
       // Draw rounded bar
       const gradient = ctx.createLinearGradient(x, y, x, height - padding);
@@ -177,7 +399,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
     });
   };
 
-  // Log progress updates
+  // Log progress updates manually
   const handleToggleTopic = async (topic: string) => {
     const progressItem = kpssProgress.find(
       (p) => p.subject === currentSubject && p.topic === topic,
@@ -220,10 +442,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
   const totalTopics = topics.length;
   const progressPercentage =
     totalTopics > 0
-      ? Math.round(
-          ((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) *
-            100,
-        )
+      ? Math.round(((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) * 100)
       : 0;
 
   const last7DaysData = dailyStats.slice(-7);
@@ -247,22 +466,40 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
           </nav>
         </header>
 
+        {/* KPSS Countdown Banners */}
+        <div className="kpss-countdowns-banner">
+          <div className="kpss-countdown-card">
+            <span className="kpss-countdown-title">
+              {lang === "tr" ? "KPSS Lisans Sınavına Kalan Süre" : "Time to KPSS Exam"}
+            </span>
+            <span className="kpss-countdown-time">{kpssTimeLeft}</span>
+            <span className="kpss-countdown-subtitle">26 Temmuz 2026 - 10:15</span>
+          </div>
+          <div className="kpss-countdown-card">
+            <span className="kpss-countdown-title">
+              {lang === "tr" ? "Tahmini Konuların Bitme Süresi" : "Estimated Study Completion Time"}
+            </span>
+            <span className="kpss-countdown-time">{estimatedTimeLeft}</span>
+            <span className="kpss-countdown-subtitle">
+              {lang === "tr"
+                ? `${remainingCount} Konu Kaldı · Ortalama 2 gün/konu`
+                : `${remainingCount} Topics Left · Average 2 days/topic`}
+            </span>
+          </div>
+        </div>
+
         {/* Dashboard Stat Progress Inputs and Charts */}
         <div className="kpss-daily-stats-section">
           <div className="kpss-daily-input">
             <h3>{labels.stats_title}</h3>
             <div className="kpss-stats-inputs">
               <div className="kpss-input-group">
-                <label for="kpss-questions-input">
-                  {labels.stat_questions}
-                </label>
+                <label for="kpss-questions-input">{labels.stat_questions}</label>
                 <input
                   type="number"
                   id="kpss-questions-input"
                   value={questionsInput}
-                  onInput={(e) =>
-                    setQuestionsInput((e.target as HTMLInputElement).value)
-                  }
+                  onInput={(e) => setQuestionsInput((e.target as HTMLInputElement).value)}
                   placeholder="0"
                   min="0"
                 />
@@ -272,9 +509,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
                 <select
                   id="kpss-subject-select"
                   value={subjectInput}
-                  onChange={(e) =>
-                    setSubjectInput((e.target as HTMLSelectElement).value)
-                  }
+                  onChange={(e) => setSubjectInput((e.target as HTMLSelectElement).value)}
                 >
                   {Object.keys(kpssData).map((subKey) => (
                     <option key={subKey} value={subKey}>
@@ -287,11 +522,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
                 <button id="kpss-save-stats-btn" onClick={handleSaveStats}>
                   {labels.save}
                 </button>
-                <button
-                  id="kpss-reset-stats-btn"
-                  className="secondary"
-                  onClick={handleResetStats}
-                >
+                <button id="kpss-reset-stats-btn" className="secondary" onClick={handleResetStats}>
                   {labels.reset}
                 </button>
               </div>
@@ -341,7 +572,35 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                   </div>
-                  <span className="kpss-topic-name">{t.title}</span>
+                  <span className="kpss-topic-name">
+                    {t.title}
+                    {progress && progress.score !== undefined && (
+                      <span className="kpss-topic-score-badge">%{progress.score}</span>
+                    )}
+                  </span>
+
+                  {/* Seviye Tespit Sınavı button */}
+                  <button
+                    className="kpss-exam-btn"
+                    title={lang === "tr" ? "Seviye Tespit Sınavı Çöz" : "Solve Proficiency Test"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveQuizTopic(t.title);
+                      setQuizStep("intro");
+                      setSelectedQuizCount(5);
+                      setQuizQuestions([]);
+                      setQuizError(null);
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                  </button>
+
                   <button
                     className="kpss-info-btn"
                     title="Detay"
@@ -377,9 +636,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
         {/* Progress tracker metrics */}
         <div className="kpss-progress-bar-container">
           <div className="kpss-progress-info">
-            <span id="kpss-subject-title">
-              {labels[currentSubject] || currentSubject}
-            </span>
+            <span id="kpss-subject-title">{labels[currentSubject] || currentSubject}</span>
             <span id="kpss-progress-text">
               %{progressPercentage} {labels.progress_text}
             </span>
@@ -396,10 +653,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
 
       {/* Details Description Modal */}
       {activeTopic && (
-        <div
-          className="settings-panel active"
-          onClick={() => setActiveTopic(null)}
-        >
+        <div className="settings-panel active" onClick={() => setActiveTopic(null)}>
           <div
             className="settings-content"
             style={{ maxWidth: "500px" }}
@@ -407,10 +661,7 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
           >
             <header className="settings-header">
               <h3>{labels.details_title}</h3>
-              <button
-                className="close-btn"
-                onClick={() => setActiveTopic(null)}
-              >
+              <button className="close-btn" onClick={() => setActiveTopic(null)}>
                 &times;
               </button>
             </header>
@@ -442,6 +693,193 @@ export function KpssView({ lang, onShowConfirm }: KpssViewProps) {
               >
                 {lang === "tr" ? "Anladım" : "Got it"}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive Quiz Modal */}
+      {activeQuizTopic && (
+        <div className="settings-panel active" onClick={() => { if (!quizLoading) { setActiveQuizTopic(null); } }}>
+          <div className="settings-content" style={{ maxWidth: "600px" }} onClick={(e) => e.stopPropagation()}>
+            <header className="settings-header">
+              <h3>{activeQuizTopic}</h3>
+              <button className="close-btn" onClick={() => setActiveQuizTopic(null)} disabled={quizLoading}>
+                &times;
+              </button>
+            </header>
+
+            <div className="note-editor-body" style={{ padding: "24px" }}>
+              {quizStep === "intro" && (
+                <div>
+                  <h4 style={{ marginBottom: "12px", color: "var(--accent-color)" }}>
+                    {lang === "tr" ? "Seviye Tespit Sınavı" : "Proficiency Quiz"}
+                  </h4>
+                  <p style={{ fontSize: "0.95rem", opacity: 0.8, lineHeight: 1.5 }}>
+                    {lang === "tr"
+                      ? "Seçtiğiniz konu hakkında yapay zekâ tarafından hazırlanan çoktan seçmeli bir test çözerek yetkinliğinizi ölçün. Soru sayısını seçip testi başlatabilirsiniz:"
+                      : "Measure your proficiency by solving a multiple-choice test prepared by AI. Choose the question count to start:"}
+                  </p>
+
+                  <div className="kpss-question-count-grid">
+                    {[5, 10, 15, 20, 25].map((count) => (
+                      <button
+                        key={count}
+                        className={`kpss-qcount-btn ${selectedQuizCount === count ? "active" : ""}`}
+                        onClick={() => setSelectedQuizCount(count)}
+                      >
+                        {count} {lang === "tr" ? "Soru" : "Q"}
+                      </button>
+                    ))}
+                  </div>
+
+                  {!aiApiKey && (
+                    <div className="halka-arz-fallback-notice" style={{ marginTop: "16px", background: "rgba(239, 68, 68, 0.12)", border: "1px solid rgba(239, 68, 68, 0.3)", color: "#ef4444" }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                      </svg>
+                      {lang === "tr"
+                        ? "Yapay zekâ testini başlatmak için Ayarlar panelinden bir AI API Anahtarı girmelisiniz."
+                        : "You must enter an AI API Key in the Settings panel to start the AI test."}
+                    </div>
+                  )}
+
+                  <div className="settings-footer" style={{ padding: "16px 0 0 0", marginTop: "24px" }}>
+                    <button
+                      className="settings-add-btn"
+                      style={{ width: "100%" }}
+                      disabled={!aiApiKey}
+                      onClick={() => fetchQuizFromAI(currentSubject, activeQuizTopic, selectedQuizCount)}
+                    >
+                      {lang === "tr" ? "Sınavı Başlat" : "Start Test"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {quizStep === "questions" && quizLoading && (
+                <div className="ha-loading" style={{ minHeight: "200px" }}>
+                  <div className="ha-spinner" />
+                  <span style={{ fontSize: "0.95rem" }}>
+                    {lang === "tr"
+                      ? "Yapay Zekâ seviye tespit sorularını oluşturuyor. Lütfen bekleyin..."
+                      : "AI is generating proficiency questions. Please wait..."}
+                  </span>
+                </div>
+              )}
+
+              {quizStep === "questions" && quizError && (
+                <div className="ha-error" style={{ minHeight: "200px" }}>
+                  <span>{quizError}</span>
+                  <button className="ha-retry-btn" onClick={() => fetchQuizFromAI(currentSubject, activeQuizTopic, selectedQuizCount)}>
+                    {lang === "tr" ? "Tekrar Dene" : "Retry"}
+                  </button>
+                </div>
+              )}
+
+              {quizStep === "questions" && !quizLoading && !quizError && quizQuestions.length > 0 && (
+                <div>
+                  <div className="kpss-quiz-progress-bar-container">
+                    <div
+                      className="kpss-quiz-progress-fill"
+                      style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", opacity: 0.6, marginBottom: "8px" }}>
+                    <span>{lang === "tr" ? `Soru ${currentQuestionIndex + 1} / ${quizQuestions.length}` : `Question ${currentQuestionIndex + 1} / ${quizQuestions.length}`}</span>
+                  </div>
+
+                  <div className="kpss-quiz-question-container">
+                    <div className="kpss-quiz-question-text">
+                      {quizQuestions[currentQuestionIndex].question}
+                    </div>
+                  </div>
+
+                  <div className="kpss-quiz-options-grid">
+                    {quizQuestions[currentQuestionIndex].options.map((opt, oIdx) => {
+                      const letter = ["A", "B", "C", "D", "E"][oIdx];
+                      const isSelected = selectedAnswers[currentQuestionIndex] === oIdx;
+                      return (
+                        <div
+                          key={oIdx}
+                          className={`kpss-quiz-option-card ${isSelected ? "selected" : ""}`}
+                          onClick={() => {
+                            const nextAnswers = [...selectedAnswers];
+                            nextAnswers[currentQuestionIndex] = oIdx;
+                            setSelectedAnswers(nextAnswers);
+                          }}
+                        >
+                          <div className="kpss-quiz-option-letter">{letter}</div>
+                          <span>{opt}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
+                    <button
+                      className="kpss-qcount-btn"
+                      style={{ flex: 1 }}
+                      disabled={currentQuestionIndex === 0}
+                      onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}
+                    >
+                      {lang === "tr" ? "Önceki" : "Previous"}
+                    </button>
+                    {currentQuestionIndex < quizQuestions.length - 1 ? (
+                      <button
+                        className="settings-add-btn"
+                        style={{ flex: 1, padding: 0 }}
+                        disabled={selectedAnswers[currentQuestionIndex] === -1}
+                        onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+                      >
+                        {lang === "tr" ? "Sonraki" : "Next"}
+                      </button>
+                    ) : (
+                      <button
+                        className="settings-add-btn"
+                        style={{ flex: 1, padding: 0 }}
+                        disabled={selectedAnswers[currentQuestionIndex] === -1}
+                        onClick={handleFinishQuiz}
+                      >
+                        {lang === "tr" ? "Sınavı Bitir" : "Finish Quiz"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {quizStep === "result" && (
+                <div style={{ textAlign: "center", padding: "12px" }}>
+                  <h4 style={{ color: "var(--accent-color)", fontSize: "1.4rem", marginBottom: "16px" }}>
+                    {lang === "tr" ? "Sınav Tamamlandı!" : "Quiz Completed!"}
+                  </h4>
+                  <div style={{ fontSize: "3.5rem", fontWeight: 800, color: quizResultScore >= 80 ? "#10b981" : quizResultScore >= 40 ? "#ffc107" : "#ef4444", marginBottom: "12px" }}>
+                    %{quizResultScore}
+                  </div>
+                  <p style={{ opacity: 0.8, fontSize: "0.95rem", lineHeight: 1.5, marginBottom: "24px" }}>
+                    {lang === "tr"
+                      ? `Bu konuda %${quizResultScore} oranında yetkinlik gösterdiniz.`
+                      : `You demonstrated a %${quizResultScore} proficiency in this topic.`}
+                    <br />
+                    <span style={{ fontSize: "0.85rem", opacity: 0.6, marginTop: "8px", display: "inline-block" }}>
+                      {quizResultScore >= 80
+                        ? (lang === "tr" ? "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi." : "Congratulations! Topic successfully marked as 'Completed'.")
+                        : quizResultScore >= 40
+                          ? (lang === "tr" ? "Konu 'Çalışılıyor' durumuna getirildi." : "Topic set to 'Working' status.")
+                          : (lang === "tr" ? "Konu 'Çalışılmadı' olarak sıfırlandı." : "Topic reset to 'Not Started'.")}
+                    </span>
+                  </p>
+
+                  <div className="settings-footer" style={{ padding: 0 }}>
+                    <button className="settings-add-btn" style={{ width: "100%" }} onClick={() => setActiveQuizTopic(null)}>
+                      {lang === "tr" ? "Bitir" : "Finish"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
