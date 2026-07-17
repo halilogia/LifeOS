@@ -258,6 +258,9 @@ export const translations = {
     settings_ai_key: "API Anahtarı",
     settings_ai_model: "Model Adı",
     settings_ai_model_desc: "Boş bırakılırsa varsayılan model kullanılır. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+    settings_tab_general: "Genel",
+    settings_tab_ai: "AI Asistan",
+    settings_tab_sync: "Eşitleme",
   },
   en: {
     view_list: "List",
@@ -514,6 +517,9 @@ export const translations = {
     settings_ai_key: "API Key",
     settings_ai_model: "Model Name",
     settings_ai_model_desc: "If left empty, default is used. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+    settings_tab_general: "General",
+    settings_tab_ai: "AI Assistant",
+    settings_tab_sync: "Sync",
   },
 };
 
