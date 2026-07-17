@@ -53,6 +53,7 @@ export function App() {
   const [aiProvider, setAiProvider] = useState<string>("gemini");
   const [aiApiKey, setAiApiKey] = useState<string>("");
   const [aiModel, setAiModel] = useState<string>("");
+  const [aiEndpoint, setAiEndpoint] = useState<string>("");
 
   // Universal Info Box / Inline Translation Bubble states
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
@@ -144,9 +145,11 @@ export function App() {
       const provider = await storage.getAIProvider();
       const key = await storage.getGeminiApiKey();
       const model = await storage.getAIModel();
+      const endpoint = await storage.getAIEndpoint();
       setAiProvider(provider);
       setAiApiKey(key);
       setAiModel(model);
+      setAiEndpoint(endpoint);
 
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
@@ -477,13 +480,16 @@ export function App() {
     }
   };
 
-  const handleUpdateAIConfig = async (provider: string, key: string, model: string) => {
+  const handleUpdateAIConfig = async (provider: string, key: string, model: string, endpoint?: string) => {
+    const epVal = endpoint || "";
     setAiProvider(provider);
     setAiApiKey(key);
     setAiModel(model);
+    setAiEndpoint(epVal);
     await storage.setAIProvider(provider);
     await storage.setGeminiApiKey(key);
     await storage.setAIModel(model);
+    await storage.setAIEndpoint(epVal);
     triggerCloudBackup();
   };
 
@@ -795,6 +801,7 @@ export function App() {
             aiProvider={aiProvider}
             aiApiKey={aiApiKey}
             aiModel={aiModel}
+            aiEndpoint={aiEndpoint}
           />
         );
       case "free-games":
@@ -824,6 +831,7 @@ export function App() {
             aiProvider={aiProvider}
             aiApiKey={aiApiKey}
             aiModel={aiModel}
+            aiEndpoint={aiEndpoint}
             onSettingsOpen={() => setSettingsOpen(true)}
           />
         );
@@ -947,6 +955,7 @@ export function App() {
         aiProvider={aiProvider}
         aiApiKey={aiApiKey}
         aiModel={aiModel}
+        aiEndpoint={aiEndpoint}
         onUpdateAIConfig={handleUpdateAIConfig}
         googleUserEmail={googleUserEmail}
         isSyncing={isSyncing}
@@ -959,7 +968,7 @@ export function App() {
 
       {/* Main Card Viewport Container */}
       <main id="container" className="container">
-        {activeView === "free-games" && (
+        {(activeView === "free-games" || activeView === "ai-chat") && (
           <header className="hero">
             <div id="clock" className="clock">
               {clockText}

@@ -108,6 +108,30 @@ export const storage = {
       chrome.storage.sync.set({ aiModel }, resolve);
     });
   },
+  getAIEndpoint: (): Promise<string> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["aiEndpoint"], (result) => {
+        resolve((result.aiEndpoint as string) || "");
+      });
+    });
+  },
+  setAIEndpoint: (aiEndpoint: string): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ aiEndpoint }, resolve);
+    });
+  },
+  getSidebarOrder: (): Promise<string[]> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["sidebarOrder"], (result) => {
+        resolve((result.sidebarOrder as string[]) || []);
+      });
+    });
+  },
+  setSidebarOrder: (sidebarOrder: string[]): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ sidebarOrder }, resolve);
+    });
+  },
   getTodos: (): Promise<Todo[]> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["todos"], (result) => {
@@ -324,6 +348,8 @@ export const storage = {
                 "geminiApiKey",
                 "aiProvider",
                 "aiModel",
+                "aiEndpoint",
+                "sidebarOrder",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

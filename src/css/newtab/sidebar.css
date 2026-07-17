@@ -107,3 +107,9 @@ body.sidebar-open .sidebar {
   left: 0;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
 }
+
+.sidebar-btn.dragging {
+  opacity: 0.4;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed var(--accent-color);
+}

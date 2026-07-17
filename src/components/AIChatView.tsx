@@ -12,6 +12,7 @@ interface AIChatViewProps {
   aiProvider: string;
   aiApiKey: string;
   aiModel: string;
+  aiEndpoint: string;
   onSettingsOpen: () => void;
 }
 
@@ -39,6 +40,7 @@ export function AIChatView({
   aiProvider,
   aiApiKey,
   aiModel,
+  aiEndpoint,
   onSettingsOpen,
 }: AIChatViewProps) {
   const t = translations[lang];
@@ -182,8 +184,37 @@ Format your final output ONLY as a JSON object matching this schema:
 }
 Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
-    if (aiProvider === "openrouter") {
-      const url = "https://openrouter.ai/api/v1/chat/completions";
+    if (aiProvider === "ollama") {
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
+      const url = baseUrl.includes("/v1") ? `${baseUrl}/chat/completions` : `${baseUrl}/v1/chat/completions`;
+      const modelName = aiModel || "llama3";
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ]
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error(`Ollama returned status ${res.status}`);
+      }
+
+      const data = await res.json();
+      const textResponse = data?.choices?.[0]?.message?.content;
+      if (!textResponse) {
+        throw new Error("Empty response from Ollama");
+      }
+      return JSON.parse(textResponse.trim());
+    } else if (aiProvider === "openrouter") {
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
+      const url = `${baseUrl}/chat/completions`;
       const modelName = aiModel || "google/gemini-2.5-flash";
       const res = await fetch(url, {
         method: "POST",
@@ -216,7 +247,8 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     } else {
       // Gemini API
       const modelName = aiModel || "gemini-1.5-flash";
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${aiApiKey}`;
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://generativelanguage.googleapis.com/v1beta";
+      const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
