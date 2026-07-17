@@ -570,3 +570,10 @@ body.sidebar-open .container {
     padding-left: 2rem;
   }
 }
+
+/* --- Global Legibility Fix for Select Option Dropdowns --- */
+select option {
+  background-color: #161622 !important;
+  color: #ffffff !important;
+  padding: 8px !important;
+}

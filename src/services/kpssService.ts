@@ -56,7 +56,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
     {
       title: "Cümle Türleri",
       description:
-        "Yapısına (basit, birleşik, sıralı, bağlı) ve anlamına göre cümle çeşitleri.",
+        "Yüklemin türü, yeri, anlamı ve yapısı (basit, birleşik, sıralı, bağlı) yönünden cümle çeşitleri; Karma Dil Bilgisi sorularında sıkça çıkar.",
     },
     {
       title: "Yazım Kuralları",
