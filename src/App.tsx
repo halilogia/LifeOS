@@ -27,6 +27,8 @@ import { HalkaArzView } from "./components/HalkaArzView.js";
 import { AIChatView } from "./components/AIChatView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
+import { HeroHeader } from "@/components/HeroHeader.js";
+import { FooterQuote } from "@/components/FooterQuote.js";
 
 export function App() {
   // Navigation & UI States
@@ -980,34 +982,13 @@ export function App() {
       {/* Main Card Viewport Container */}
       <main id="container" className="container">
         {sidebarOrder.length > 0 && activeView === sidebarOrder[0] && (
-          <header className="hero">
-            <div id="clock" className="clock">
-              {clockText}
-            </div>
-            <div id="date" className="date">
-              {dateText}
-            </div>
-          </header>
+          <HeroHeader clockText={clockText} dateText={dateText} />
         )}
 
         {renderActiveViewComponent()}
 
-        {/* Global Footer Quote Section */}
         {quoteText && (
-          <footer className="footer-quote" style={{ marginTop: "30px" }}>
-            <p
-              id="quote"
-              className="quote-text"
-              style={{
-                fontStyle: "italic",
-                textAlign: "center",
-                opacity: 0.85,
-                fontSize: "0.95rem",
-              }}
-            >
-              {quoteText}
-            </p>
-          </footer>
+          <FooterQuote quoteText={quoteText} />
         )}
       </main>
 
