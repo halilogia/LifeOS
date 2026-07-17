@@ -32,6 +32,7 @@ export function App() {
   // Navigation & UI States
   const [lang, setLang] = useState<Language>("tr");
   const [activeView, setActiveView] = useState<string>("free-games");
+  const [sidebarOrder, setSidebarOrder] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -132,6 +133,7 @@ export function App() {
       setLang(config.lang);
       
       const savedOrder = await storage.getSidebarOrder();
+      setSidebarOrder(savedOrder || []);
       if (savedOrder && savedOrder.length > 0) {
         setActiveView(savedOrder[0]);
       } else {
@@ -866,6 +868,7 @@ export function App() {
         }}
         onSidebarToggle={handleSidebarToggle}
         onSettingsOpen={() => setSettingsOpen(true)}
+        onOrderChange={(newOrder) => setSidebarOrder(newOrder)}
       />
 
       {/* Top Input Header (fixed positioning at the top viewport) */}
@@ -976,7 +979,7 @@ export function App() {
 
       {/* Main Card Viewport Container */}
       <main id="container" className="container">
-        {(activeView === "free-games" || activeView === "ai-chat") && (
+        {sidebarOrder.length > 0 && activeView === sidebarOrder[0] && (
           <header className="hero">
             <div id="clock" className="clock">
               {clockText}

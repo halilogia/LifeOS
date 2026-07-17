@@ -12,6 +12,7 @@ interface SidebarProps {
   onTabChange: (tab: "focus" | "routines") => void;
   onSidebarToggle: () => void;
   onSettingsOpen: () => void;
+  onOrderChange?: (newOrder: string[]) => void;
 }
 
 const DEFAULT_ORDER = [
@@ -40,6 +41,7 @@ export function Sidebar({
   onTabChange,
   onSidebarToggle,
   onSettingsOpen,
+  onOrderChange,
 }: SidebarProps) {
   const t = translations[lang];
   const [order, setOrder] = useState<string[]>(DEFAULT_ORDER);
@@ -47,11 +49,16 @@ export function Sidebar({
 
   useEffect(() => {
     storage.getSidebarOrder().then((saved) => {
+      let finalOrder = DEFAULT_ORDER;
       if (saved && saved.length > 0) {
         // Filter out deprecated keys, append missing ones
         const filtered = saved.filter((k) => DEFAULT_ORDER.includes(k));
         const missing = DEFAULT_ORDER.filter((k) => !filtered.includes(k));
-        setOrder([...filtered, ...missing]);
+        finalOrder = [...filtered, ...missing];
+      }
+      setOrder(finalOrder);
+      if (onOrderChange) {
+        onOrderChange(finalOrder);
       }
     });
   }, []);
@@ -80,6 +87,9 @@ export function Sidebar({
     setOrder(nextOrder);
     setDraggedItem(null);
     await storage.setSidebarOrder(nextOrder);
+    if (onOrderChange) {
+      onOrderChange(nextOrder);
+    }
   };
 
   return (

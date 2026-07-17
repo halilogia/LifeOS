@@ -189,3 +189,65 @@ export function formatMarketCap(mc?: number): string {
   if (mc >= 1_000_000) return `${(mc / 1_000_000).toFixed(2)}M ₺`;
   return `${mc.toLocaleString("tr-TR")} ₺`;
 }
+
+export interface StockHistoryItem {
+  timestamp: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export async function fetchStockHistory(
+  symbol: string,
+  range: string = "1mo",
+  interval: string = "1d"
+): Promise<StockHistoryItem[]> {
+  const fullSymbol = symbol.endsWith(".IS") ? symbol : `${symbol}.IS`;
+  try {
+    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=${interval}&range=${range}&includePrePost=false`;
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        Accept: "application/json",
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+    const result = json?.chart?.result?.[0];
+    if (!result) throw new Error("No chart result");
+
+    const timestamps: number[] = result.timestamp || [];
+    const quotes = result.indicators?.quote?.[0] || {};
+    const opens: number[] = quotes.open || [];
+    const highs: number[] = quotes.high || [];
+    const lows: number[] = quotes.low || [];
+    const closes: number[] = quotes.close || [];
+    const volumes: number[] = quotes.volume || [];
+
+    const history: StockHistoryItem[] = [];
+    for (let i = 0; i < timestamps.length; i++) {
+      if (
+        opens[i] !== undefined && opens[i] !== null &&
+        closes[i] !== undefined && closes[i] !== null
+      ) {
+        history.push({
+          timestamp: timestamps[i] * 1000,
+          open: opens[i],
+          high: highs[i] ?? opens[i],
+          low: lows[i] ?? opens[i],
+          close: closes[i],
+          volume: volumes[i] ?? 0,
+        });
+      }
+    }
+    return history;
+  } catch (e) {
+    console.error("fetchStockHistory error:", e);
+    return [];
+  }
+}
