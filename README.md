@@ -18,6 +18,10 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Sürükle-bırak (Drag-and-Drop) ve kolay taşımayı destekleyen modern **Kanban Panosu**.
 - **📚 KPSS Hazırlık Takibi**:
   - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
+  - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri ve sonuca göre otomatik güncellenen konu tamamlanma durumu.
+  - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
+- **📈 Özel Borsa İstanbul Grafik Paneli**:
+  - BIST hisseleri için tamamen kendi geliştirdiğimiz, Yahoo Finance veri altyapısıyla çalışan mum (Candlestick) grafik ekranı. 1M, 3M, 6M, 1Y zaman aralığı filtreleri ve fare takipli crosshair veri çubuğu.
 - **🕌 Namaz Vakitleri**:
   - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
@@ -27,8 +31,10 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Kelime ezberini bilimsel aralıklarla yapmanızı sağlayan A1, A2, B1, B2, C1, GRE, Phrasal Verbs ve Düzensiz Fiiller listelerine sahip Spaced Repetition modülü.
 - **📅 Tarih Bazlı Takvim**:
   - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
-- **✍️ Notlarım & Motivasyon Sözleri**:
-  - Renkli kartlarla not tutma, düzenleme ve kendi eklediğiniz motivasyon sözlerinden oluşan dinamik bir söz havuzu.
+- **✍️ Günlüğüm (Notlar & Ders Notları)**:
+  - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" türünde kayıtlar ekleme desteği. Premium pill segment butonları ile şık arayüz geçişleri. Yapay zeka sohbetinden doğrudan komutla günlük/not ekleyebilme desteği.
+- **🎛️ Dinamik Menü Sıralaması (Drag-and-Drop Sidebar)**:
+  - Sol sidebar üzerindeki navigasyon butonlarını sürükleyip bırakarak özelleştirilebilir sıralama. Sıralamadaki en üst sekmeye göre yer değiştiren akıllı Hero Saat widget'ı.
 - **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
   - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
   - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.

@@ -4,6 +4,21 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.1.0] - 2026-07-18
+### Eklendi
+- **BIST Hisseleri İçin Özel Mum Grafiği (Custom Canvas Stock Chart)**: Yavaş çalışan ve BIST verilerinde hata veren TradingView iframe'i yerine Yahoo Finance entegrasyonlu, tamamen özel çizilen HTML5 Canvas Candlestick (Mum) Grafik Paneli eklendi. Grafik üzerinde 1M, 3M, 6M, 1Y zaman aralığı filtreleri, fareyle takip edilen imleç (crosshair) ve Açılış, Kapanış, En Yüksek, En Düşük, Hacim bilgilerini gösteren anlık metadata çubuğu entegre edildi.
+- **Premium Günlük ve Not Yönetimi (Günlüğüm)**: "Notlar" kısmı "Günlüğüm" olarak yeniden adlandırıldı. Klasik notların yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" türünde kayıt ekleme desteği ile modal arayüzündeki standart tarayıcı açılır listesi (select dropdown) yerine modern, glassmorphic pill segment butonları (tabs) eklendi. Not eklemek için yapay zeka sohbet komutları ("günlük ekle...", "ders notu ekle...") desteği getirildi.
+- **Yapay Zeka ile KPSS Seviye Tespit Sınavı**: KPSS konuları için yapay zeka tarafından 5, 10, 15, 20, 25 soruluk çoktan seçmeli, 5 seçenekli (A-E) test oluşturma sistemi eklendi. Sonuca göre o konudaki yetkinlik yüzdesi hesaplanıp KPSS ilerleme durumuna otomatik işlenmektedir (>=80% tamamlandı, >=40% çalışılıyor).
+- **KPSS Çalışma Zamanı Tahmini ve Sınav Sayacı**: KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süreyi saniye hassasiyetinde gösteren sayaç ve kalan konulara göre (konu başına 2 gün çalışma hızı kabul edilerek) tahmini bitiş süresini gösteren dinamik tamamlanma sayacı entegre edildi.
+- **Dinamik Sürükle-Bırak Sidebar ve Akıllı Saat**: Sidebar menüsündeki ögelerin yerleri sürükle-bırak yöntemiyle yeniden sıralanabilir hale getirildi ve sıralama yerel depolamaya (local storage) kaydedildi. Üstteki Hero Dijital Saat widget'ı, sidebar'daki en üstte yer alan aktif sayfaya göre kendini dinamik olarak o sayfaya taşıyacak şekilde güncellendi.
+- **Yerel/Ollama Yapay Zeka Desteği**: Settings paneli üzerinden Ollama yerel yapay zeka sunucusu entegrasyon desteği sağlandı (Örn. masaüstü bilgisayarı Ollama sunucusu olarak kullanıp eklentiden bağlanabilme).
+- **Temiz Mimari (Clean Architecture) Refaktörü**: `App.tsx`, `KpssView.tsx` ve `PomodoroView.tsx` dosyalarındaki görsel kod yükü azaltılarak; `<HeroHeader />`, `<FooterQuote />`, `<KpssCountdownBanner />` ve `<PomoSidePanel />` gibi saf sunum (presentational) bileşenleri ayrı modüler `.tsx` dosyalarına taşındı.
+
+### Düzeltildi
+- Namaz vakitleri ile İstanbul şehri arasına hafif bir dikey boşluk eklenerek görsel hizalama iyileştirildi.
+
+---
+
 ## [3.0.0] - 2026-07-14
 ### Eklendi
 - **Google Bulut Senkronizasyonu (Google Drive AppData Sync)**: Tüm Life OS verilerini ( KPSS ilerlemesi, aralıklı tekrar kartları, hıfız kayıtları, notlar, pomodoro geçmişi, irade süresi vb.) Google Drive'ın gizli uygulama klasöründe yedekleyen ve geri yükleyen OAuth2 tabanlı sistem entegre edildi.

@@ -26,12 +26,9 @@ Automate privacy preferences by automatically declining cookie consent dialogs.
 - [ ] **Provider Blockers**: Intercept Consent Management script bundles (OneTrust, Cookiebot) from loading using declarative network requests.
 - [ ] **Scroll Locker Bypass**: Automatically unlock browser scroll states locked by banner overlays.
 
-### 4. 🌐 Universal Info Box & Inline Translator (Sayfa İçi Premium Çeviri Balonu)
-Integrate the premium text translation bubble directly into browser webpages, inspired by `Universal_Info_Box_Standalone`.
-- [x] **Selection Listener**: Content scripts to monitor mouse selections on any webpage.
-- [x] **Premium Glassmorphic Bubble**: A custom hover bubble (with "AI TRANSLATE" header, "✕" close button, fade-in animations, and blur styling) appearing dynamically next to the user's cursor.
-- [x] **Translation & AI Queries**: Pipe highlighted text into Google Translate or local Ollama instances for quick definitions/translations.
-- [x] **Configuration Settings**: Toggles in Settings to enable/disable the bubble, change font sizes, or require a hotkey trigger (e.g. holding Alt).
+### 4. 📚 KPSS Aralıklı Tekrar (SRS) Kart Veritabanı Entegrasyonu
+KPSS Flashcards aralıklı tekrar sistemi için geniş bilgi kartı veritabanının eklentiye entegre edilmesi.
+- [ ] **Kart Veritabanı**: Tarih, Coğrafya ve Vatandaşlık dersleri için kapsamlı bilgi kartı havuzunun (100+ kart) veritabanına yüklenmesi.
 
 ---
 
