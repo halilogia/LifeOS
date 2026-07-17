@@ -88,8 +88,8 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }:
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Target date: July 26, 2026 10:15
-  const kpssTargetDate = new Date("2026-07-26T10:15:00").getTime();
+  // Target date: September 6, 2026 10:15
+  const kpssTargetDate = new Date("2026-09-06T10:15:00").getTime();
 
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
@@ -473,7 +473,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel }:
               {lang === "tr" ? "KPSS Lisans Sınavına Kalan Süre" : "Time to KPSS Exam"}
             </span>
             <span className="kpss-countdown-time">{kpssTimeLeft}</span>
-            <span className="kpss-countdown-subtitle">26 Temmuz 2026 - 10:15</span>
+            <span className="kpss-countdown-subtitle">6 Eylül 2026 - 10:15</span>
           </div>
           <div className="kpss-countdown-card">
             <span className="kpss-countdown-title">
