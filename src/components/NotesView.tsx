@@ -13,7 +13,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [quotes, setQuotes] = useState<CustomQuote[]>([]);
-  const [filterType, setFilterType] = useState<"all" | "note" | "diary" | "cornell">("all");
+  const [filterType, setFilterType] = useState<"all" | "note" | "diary" | "cornell" | "quotes">("all");
 
   // Note Modal States
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
@@ -193,7 +193,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         </div>
 
         {/* Display Custom Quotes in a Small Sub-Section */}
-        {quotes.length > 0 && (
+        {quotes.length > 0 && (filterType === "all" || filterType === "quotes") && (
           <div className="quotes-sub-section" style={{ marginBottom: "20px" }}>
             <h3
               style={{
@@ -275,12 +275,20 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           >
             {lang === "tr" ? "Cornell Notları" : "Cornell Notes"}
           </button>
+          <button 
+            className={`add-note-action-btn ${filterType === "quotes" ? "primary" : "secondary"}`}
+            style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
+            onClick={() => setFilterType("quotes")}
+          >
+            {lang === "tr" ? "Sözler" : "Quotes"}
+          </button>
         </div>
 
         <div id="notes-grid" className="notes-grid">
           {notes
             .filter((n) => {
               if (filterType === "all") return true;
+              if (filterType === "quotes") return false;
               return (n.type || "note") === filterType;
             })
             .map((note) => {

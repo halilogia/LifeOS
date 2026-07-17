@@ -148,13 +148,9 @@ export function PomoSidePanel({
             }
           />
           <button
-            className="mini-btn primary"
-            style={{
-              borderRadius: "8px",
-              padding: "0 12px",
-              height: "36px",
-            }}
+            className="newtab-alarm-add-btn"
             onClick={onAddAlarm}
+            title={lang === "tr" ? "Alarm Ekle" : "Add Alarm"}
           >
             +
           </button>
