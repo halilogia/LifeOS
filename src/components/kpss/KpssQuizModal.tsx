@@ -1,10 +1,20 @@
 import { useState } from "preact/hooks";
+import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
 
 interface QuizQuestion {
   question: string;
   options: string[];
   correctAnswer: number;
   solution: string;
+  chart?: {
+    type: "bar" | "line" | "geometry";
+    title?: string;
+    labels?: string[];
+    values?: (number | string)[];
+    shape?: "triangle" | "circle" | "parallel_lines";
+    angles?: Record<string, string>;
+    sides?: Record<string, string>;
+  };
 }
 
 interface KpssQuizModalProps {
@@ -153,6 +163,10 @@ export function KpssQuizModal({
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", opacity: 0.6, marginBottom: "8px" }}>
                 <span>{lang === "tr" ? `Soru ${currentQuestionIndex + 1} / ${quizQuestions.length}` : `Question ${currentQuestionIndex + 1} / ${quizQuestions.length}`}</span>
               </div>
+
+              {quizQuestions[currentQuestionIndex].chart && (
+                <KpssQuestionCanvas chart={quizQuestions[currentQuestionIndex].chart} />
+              )}
 
               <div className="kpss-quiz-question-container">
                 <div className="kpss-quiz-question-text">
