@@ -518,67 +518,213 @@ body.sidebar-open .top-header {
 }
 
 /* ── Top Header Date Input Custom Styling ────────────────── */
-.todo-date-input {
+/* ── Custom Glassmorphic Date Picker Styling ────────────────── */
+.custom-datepicker {
+  position: relative;
+  display: inline-block;
+}
+
+.datepicker-trigger {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 8px 14px;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-family: inherit;
   font-size: 0.85rem;
   font-weight: 500;
   outline: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
   cursor: pointer;
-  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
 }
 
-.todo-date-input:hover {
+.datepicker-trigger.has-val {
+  color: var(--text-primary);
+  border-color: rgba(139, 92, 246, 0.20);
+}
+
+.datepicker-trigger:hover {
   border-color: rgba(139, 92, 246, 0.4);
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+  color: var(--text-primary);
 }
 
-.todo-date-input:focus {
-  border-color: var(--accent-color);
-  background: rgba(15, 15, 22, 0.4);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+.datepicker-trigger svg {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
 }
 
-/* Customizing date text styling inside Webkit browser date edit */
-.todo-date-input::-webkit-datetime-edit {
-  padding: 0 4px;
+.datepicker-trigger:hover svg {
+  color: var(--accent-color);
 }
 
-.todo-date-input::-webkit-datetime-edit-fields-wrapper {
+/* Calendar Dropdown Card */
+.datepicker-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1000;
+  width: 280px;
+  background: rgba(15, 15, 22, 0.98);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: datepickerSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes datepickerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header: Month navigation */
+.datepicker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.datepicker-title {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.datepicker-nav-btn {
   background: transparent;
-}
-
-.todo-date-input::-webkit-datetime-edit-text {
-  color: rgba(255, 255, 255, 0.3);
-  padding: 0 2px;
-}
-
-.todo-date-input::-webkit-datetime-edit-month-field,
-.todo-date-input::-webkit-datetime-edit-day-field,
-.todo-date-input::-webkit-datetime-edit-year-field {
-  color: rgba(255, 255, 255, 0.85);
-  text-transform: uppercase;
-}
-
-/* Custom styling for calendar icon */
-.todo-date-input::-webkit-calendar-picker-indicator {
-  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(0.85);
-  margin-left: 8px;
+  border: none;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.todo-date-input::-webkit-calendar-picker-indicator:hover {
-  transform: scale(1.1);
-  filter: invert(0.9) sepia(0.5) saturate(5) hue-rotate(240deg) opacity(1);
+.datepicker-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+/* Weekday labels */
+.datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.datepicker-weekday {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Day grid cells */
+.datepicker-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.datepicker-day {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.datepicker-day.current:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.datepicker-day.outside {
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+.datepicker-day.outside:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Selected state */
+.datepicker-day.selected {
+  background: var(--accent-color) !important;
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+/* Today state */
+.datepicker-day.today {
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.datepicker-day.today.selected {
+  border-color: transparent;
+}
+
+/* Footer: Actions */
+.datepicker-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.datepicker-footer-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.today-btn {
+  color: var(--accent-color);
+}
+
+.today-btn:hover {
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.clear-btn {
+  color: var(--text-secondary);
+}
+
+.clear-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--danger);
 }

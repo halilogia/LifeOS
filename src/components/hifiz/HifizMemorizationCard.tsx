@@ -32,7 +32,7 @@ export function HifizMemorizationCard({
   return (
     <div id="memorization-content" className="hifiz-sub-view active">
       {/* Stats row */}
-      <div className="hifiz-stats-row">
+      <div className="hifiz-stats">
         <div className="hifiz-stat-card">
           <div className="stat-icon memorized">
             <svg
