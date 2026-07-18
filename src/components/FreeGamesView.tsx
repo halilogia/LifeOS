@@ -5,9 +5,11 @@ import {
   HistoricalEpicGame,
   ExclusionSettings,
   defaultExclusions,
-} from "../services/gamesService.js";
-import { Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+} from "@/services/gamesService.js";
+import { Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
+import { GameCard } from "@/components/GameCard.js";
+import { HistoryCard } from "@/components/HistoryCard.js";
 
 interface FreeGamesViewProps {
   lang: Language;
@@ -476,100 +478,16 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
                     );
 
                     return (
-                      <div key={game.id} className="game-card">
-                        <div
-                          className="game-card-image"
-                          style={{ backgroundImage: `url('${game.image}')` }}
-                        >
-                          <div className="game-badges">
-                            {worthText ? (
-                              <span className="game-worth-badge">
-                                {worthText}
-                              </span>
-                            ) : (
-                              <span className="game-worth-badge free">
-                                {t.worth_free}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="game-card-content">
-                          <div className="game-platforms-container">
-                            {displayPlatforms.map((p) => (
-                              <span
-                                key={p}
-                                className={`game-platform-badge ${p.toLowerCase().replace(/\./g, "-").replace(/\s+/g, "-")}`}
-                                title={game.platforms}
-                              >
-                                {p}
-                              </span>
-                            ))}
-                          </div>
-                          <h3 className="game-title" title={game.title}>
-                            {game.title}
-                          </h3>
-                          <p
-                            className="game-description"
-                            title={game.description}
-                          >
-                            {game.description}
-                          </p>
-                          <div className="game-card-footer">
-                            <span className="game-expiry" title={expiryText}>
-                              <svg
-                                width="12"
-                                height="12"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                style={{
-                                  marginRight: "4px",
-                                  display: "inline-block",
-                                  verticalAlign: "middle",
-                                }}
-                              >
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                              </svg>
-                              <span
-                                style={{
-                                  display: "inline-block",
-                                  verticalAlign: "middle",
-                                }}
-                              >
-                                {expiryText}
-                              </span>
-                            </span>
-                            <a
-                              href={game.open_giveaway_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="game-claim-btn"
-                            >
-                              {t.get_game}
-                              <svg
-                                width="12"
-                                height="12"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                style={{
-                                  marginLeft: "4px",
-                                  display: "inline-block",
-                                  verticalAlign: "middle",
-                                }}
-                              >
-                                <line x1="7" y1="17" x2="17" y2="7" />
-                                <polyline points="7 7 17 7 17 17" />
-                              </svg>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
+                      <GameCard
+                        key={game.id}
+                        game={game}
+                        lang={lang}
+                        worthText={worthText}
+                        expiryText={expiryText}
+                        displayPlatforms={displayPlatforms}
+                        getGameLabel={t.get_game}
+                        worthFreeLabel={t.worth_free}
+                      />
                     );
                   })
                 )}
@@ -643,95 +561,17 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
 
             {!historyLoading && historyResults.length > 0 && (
               <div id="was-it-free-results" className="was-it-free-results">
-                {historyResults.map((game, idx) => {
-                  const metaHtml = game.metacriticScore ? (
-                    <div
-                      className="rating-item metacritic"
-                      title="Metacritic score"
-                    >
-                      <span className="rating-label">{t.metacritic_score}</span>{" "}
-                      <span className="rating-val">{game.metacriticScore}</span>
-                    </div>
-                  ) : null;
-
-                  const steamHtml = game.steamDBRating ? (
-                    <div className="rating-item steamdb" title="SteamDB rating">
-                      <span className="rating-label">{t.steamdb_score}</span>{" "}
-                      <span className="rating-val">%{game.steamDBRating}</span>
-                    </div>
-                  ) : null;
-
-                  return (
-                    <div key={idx} className="history-card">
-                      <div className="history-card-header">
-                        <div className="history-check-icon">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#10b981"
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        </div>
-                        <div className="history-card-title-group">
-                          <h3 className="history-title">{game.gameTitle}</h3>
-                          <span className="history-success-label">
-                            {t.was_free_success}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="history-card-body">
-                        <div className="history-info-row">
-                          <span className="history-label">{t.was_free_on}</span>
-                          <span className="history-value">
-                            {formatHistoryDate(game.freeDate)}
-                          </span>
-                        </div>
-                        {(metaHtml || steamHtml) && (
-                          <div className="history-ratings">
-                            {metaHtml}
-                            {steamHtml}
-                          </div>
-                        )}
-                      </div>
-                      <div className="history-card-footer">
-                        {game.epicStoreLink && (
-                          <a
-                            href={game.epicStoreLink}
-                            target="_blank"
-                            className="history-link-btn"
-                            rel="noopener noreferrer"
-                          >
-                            Epic Games
-                            <svg
-                              width="12"
-                              height="12"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              style={{
-                                marginLeft: "4px",
-                                display: "inline-block",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              <line x1="7" y1="17" x2="17" y2="7" />
-                              <polyline points="7 7 17 7 17 17" />
-                            </svg>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                {historyResults.map((game, idx) => (
+                  <HistoryCard
+                    key={idx}
+                    game={game}
+                    formattedDate={formatHistoryDate(game.freeDate)}
+                    wasFreeSuccessLabel={t.was_free_success}
+                    wasFreeOnLabel={t.was_free_on}
+                    metaScoreLabel={t.metacritic_score}
+                    steamScoreLabel={t.steamdb_score}
+                  />
+                ))}
               </div>
             )}
           </div>
