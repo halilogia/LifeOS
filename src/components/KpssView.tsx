@@ -97,6 +97,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   // Sorting state for topic lists
   const [sortBy, setSortBy] = useState<"default" | "questions" | "status">("default");
 
+  // Puan hedefi sistemi
+  const [targetScore, setTargetScore] = useState(80);
+
   // KPSS SRS States
   const [srsLoading, setSrsLoading] = useState(true);
   const [srsQueue, setSrsQueue] = useState<WordReviewData[]>([]);
@@ -187,8 +190,16 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
     const stats = await kpssService.getKpssDailyStats();
+    const target = await storage.getKpssTargetScore();
     setKpssProgress(progress);
     setDailyStats(stats);
+    setTargetScore(target);
+  };
+
+  const handleTargetScoreChange = async (val: number) => {
+    if (isNaN(val) || val < 0 || val > 100) return;
+    setTargetScore(val);
+    await storage.setKpssTargetScore(val);
   };
 
   useEffect(() => {
@@ -670,6 +681,61 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                   {getOverallNets().net} / {getOverallNets().max} Net
                 </div>
               </div>
+
+              {/* Puan Hedefi Takibi */}
+              {(() => {
+                const overallNet = getOverallNets().net;
+                const estimatedScore = Math.round((45 + overallNet * 0.458) * 10) / 10;
+                const scorePercentage = Math.min(100, Math.round((estimatedScore / targetScore) * 100));
+                const isTargetAchieved = estimatedScore >= targetScore;
+                
+                return (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", background: "rgba(255, 255, 255, 0.01)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "14px 18px", alignItems: "center" }}>
+                    
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                        🎯 {lang === "tr" ? "Puan Hedefi:" : "Score Target:"}
+                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <input
+                          type="number"
+                          min="50"
+                          max="100"
+                          value={targetScore}
+                          onChange={(e) => handleTargetScoreChange(parseFloat((e.target as HTMLInputElement).value))}
+                          style={{ width: "65px", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", color: "white", fontSize: "1rem", padding: "4px 8px", fontWeight: "700", textAlign: "center" }}
+                        />
+                        <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{lang === "tr" ? "Puan" : "Points"}</span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginLeft: "12px" }}>
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                        📈 {lang === "tr" ? "Tahmini P3 Puanı:" : "Estimated P3 Score:"}
+                      </span>
+                      <span style={{ fontSize: "1.4rem", fontWeight: "800", color: isTargetAchieved ? "#10b981" : "white" }}>
+                        {estimatedScore} Puan {isTargetAchieved && "👑"}
+                      </span>
+                    </div>
+
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: "200px", marginLeft: "auto" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", fontWeight: "600" }}>
+                        <span style={{ color: "var(--text-secondary)" }}>{lang === "tr" ? "Hedef İlerleme" : "Target Progress"}</span>
+                        <span style={{ color: isTargetAchieved ? "#10b981" : "var(--accent-color)" }}>%{scorePercentage}</span>
+                      </div>
+                      <div style={{ height: "8px", background: "rgba(255, 255, 255, 0.05)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${scorePercentage}%`, background: isTargetAchieved ? "linear-gradient(90deg, #10b981, #34d399)" : "var(--accent-color)", borderRadius: "4px" }}></div>
+                      </div>
+                      {isTargetAchieved && (
+                        <span style={{ fontSize: "0.65rem", color: "#10b981", fontWeight: "700", textAlign: "right" }}>
+                          🎉 {lang === "tr" ? "Tebrikler! Puan hedefinize ulaştınız." : "Congrats! You achieved your target."}
+                        </span>
+                      )}
+                    </div>
+
+                  </div>
+                );
+              })()}
 
               {/* Subject level breakdown */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "12px", marginTop: "8px" }}>
