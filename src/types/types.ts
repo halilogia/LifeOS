@@ -58,6 +58,7 @@ export interface KpssDailyStats {
   date: string;
   questions: number;
   subject: string;
+  videos?: number;
 }
 
 export interface WillpowerStreak {

@@ -487,18 +487,19 @@ export const kpssService = {
   },
 
   /**
-   * Appends or updates a day's KPSS question count stats.
+   * Appends or updates a day's KPSS question and video count stats.
    */
-  async saveKpssDailyStats(questions: number, subject: string): Promise<void> {
+  async saveKpssDailyStats(questions: number, videos: number, subject: string): Promise<void> {
     const today = new Date().toISOString().split("T")[0];
     const stats = await this.getKpssDailyStats();
 
     const existingIdx = stats.findIndex((s) => s.date === today);
     if (existingIdx !== -1) {
       stats[existingIdx].questions += questions;
+      stats[existingIdx].videos = (stats[existingIdx].videos || 0) + videos;
       stats[existingIdx].subject = subject;
     } else {
-      stats.push({ date: today, questions, subject });
+      stats.push({ date: today, questions, videos, subject });
     }
 
     // Keep only last 30 days
