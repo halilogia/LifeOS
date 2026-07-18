@@ -197,10 +197,24 @@ export function AIChatView({
 
   const cleanAndParseJSON = (text: string) => {
     let cleaned = text.trim();
-    if (cleaned.startsWith("```")) {
-      cleaned = cleaned.replace(/^```(?:json)?\n?/i, "").replace(/\n?```$/, "");
+    const firstBrace = cleaned.indexOf("{");
+    const firstBracket = cleaned.indexOf("[");
+    
+    let startIdx = -1;
+    let endIdx = -1;
+    
+    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+      startIdx = firstBrace;
+      endIdx = cleaned.lastIndexOf("}");
+    } else if (firstBracket !== -1) {
+      startIdx = firstBracket;
+      endIdx = cleaned.lastIndexOf("]");
     }
-    return JSON.parse(cleaned.trim());
+    
+    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+      cleaned = cleaned.substring(startIdx, endIdx + 1);
+    }
+    return JSON.parse(cleaned);
   };
 
   // Call AI Service
@@ -257,14 +271,24 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
       const url = `${baseUrl}/chat/completions`;
       const modelName = aiModel || "google/gemini-2.5-flash";
+      const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      if (aiApiKey && aiApiKey.trim()) {
+        headers["Authorization"] = `Bearer ${aiApiKey}`;
+      }
+
+      if (!isLocal) {
+        headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
+        headers["X-Title"] = "Life OS Dashboard";
+      }
+
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${aiApiKey}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://github.com/halilogia/chrome-extension-todo",
-          "X-Title": "Life OS Dashboard",
-        },
+        headers,
         body: JSON.stringify({
           model: modelName,
           messages: [
@@ -366,7 +390,8 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     setIsBotTyping(true);
 
     try {
-      if (aiApiKey && aiApiKey.trim()) {
+      const isLocalOrCustom = aiEndpoint && (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1"));
+      if ((aiApiKey && aiApiKey.trim()) || isLocalOrCustom) {
         const aiResponse = await callAI(query);
         setIsBotTyping(false);
 
