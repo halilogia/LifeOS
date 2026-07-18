@@ -8,7 +8,6 @@ interface KpssTopicListProps {
   currentSubject: string;
   sortBy: "default" | "questions" | "status";
   onSortByChange: (val: "default" | "questions" | "status") => void;
-  onToggleTopic: (topic: string) => void;
   onStartQuiz: (topic: string) => void;
   onShowDetail: (topic: { title: string; description: string }) => void;
   labels: Record<string, string>;
@@ -21,7 +20,6 @@ export function KpssTopicList({
   currentSubject,
   sortBy,
   onSortByChange,
-  onToggleTopic,
   onStartQuiz,
   onShowDetail,
   labels,
@@ -79,21 +77,30 @@ export function KpssTopicList({
               key={t.title}
               className="kpss-topic-item"
               data-status={status.toString()}
-              onClick={() => onToggleTopic(t.title)}
+              onClick={() => onStartQuiz(t.title)}
+              style={{ cursor: "pointer" }}
             >
               <div className="kpss-status-indicator">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
+                {status === 1 && (
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="white" style={{ opacity: 1, transform: "scale(1)" }}>
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                )}
+                {status === 2 && (
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style={{ opacity: 1, transform: "scale(1)" }}
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
               </div>
               <span className="kpss-topic-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span>{t.title}</span>

@@ -60,7 +60,7 @@ export function KpssQuizModal({
 
   return (
     <div className="settings-panel active" onClick={() => { if (!quizLoading) { onClose(); } }}>
-      <div className="settings-drawer" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "600px", width: "95%" }}>
+      <div className="settings-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "600px", width: "95%" }}>
         <div className="settings-header">
           <h3>{activeQuizTopic}</h3>
           <button className="close-btn" onClick={onClose} disabled={quizLoading}>

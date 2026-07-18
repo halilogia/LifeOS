@@ -583,20 +583,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
   };
 
-  const handleToggleTopic = async (topic: string) => {
-    const progressItem = kpssProgress.find(
-      (p) => p.subject === currentSubject && p.topic === topic,
-    );
-    const currentStatus = progressItem ? progressItem.status : 0;
-    const nextStatus: 0 | 1 | 2 = ((currentStatus + 1) % 3) as 0 | 1 | 2;
-
-    await kpssService.updateTopicStatus(currentSubject, topic, nextStatus);
-    loadKpssData();
-  };
-
-  const handleStartQuiz = (topic: string) => {
+  const handleStartQuiz = (topic: string, subject?: string) => {
+    const targetSubject = subject || currentSubject;
+    if (subject && subject !== currentSubject) {
+      setCurrentSubject(subject);
+    }
     setActiveQuizTopic(topic);
-    const quizKey = `${currentSubject}_${topic}`;
+    const quizKey = `${targetSubject}_${topic}`;
     const pastQuiz = pastQuizzes[quizKey];
     if (pastQuiz) {
       setQuizQuestions(pastQuiz.questions);
@@ -737,7 +730,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             <KpssAutoPlannerCard
               lang={lang}
               kpssProgress={kpssProgress}
-              onToggleTopic={handleToggleTopic}
+              onStartQuiz={handleStartQuiz}
               labels={labels}
             />
 
@@ -802,7 +795,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               currentSubject={currentSubject}
               sortBy={sortBy}
               onSortByChange={setSortBy}
-              onToggleTopic={handleToggleTopic}
               onStartQuiz={handleStartQuiz}
               onShowDetail={setActiveTopic}
               labels={labels}

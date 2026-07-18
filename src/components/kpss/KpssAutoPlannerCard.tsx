@@ -5,14 +5,14 @@ import { kpssData } from "@/services/kpssService.js";
 interface KpssAutoPlannerCardProps {
   lang: Language;
   kpssProgress: KpssProgress[];
-  onToggleTopic: (subject: string, topicTitle: string) => void;
+  onStartQuiz: (subject: string, topicTitle: string) => void;
   labels: Record<string, string>;
 }
 
 export function KpssAutoPlannerCard({
   lang,
   kpssProgress,
-  onToggleTopic,
+  onStartQuiz,
   labels,
 }: KpssAutoPlannerCardProps) {
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -82,7 +82,7 @@ export function KpssAutoPlannerCard({
 
   return (
     <div className="mini-tool-card" style={{ marginTop: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyBox: "space-between", width: "100%", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -129,8 +129,8 @@ export function KpssAutoPlannerCard({
         <>
           <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
             {lang === "tr"
-              ? "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular:"
-              : "Recommended topics to review today based on remaining time and topic density:"}
+              ? "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular (Başlatmak için tıklayın):"
+              : "Recommended topics to review today based on remaining time and topic density (Click to start):"}
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -140,6 +140,8 @@ export function KpssAutoPlannerCard({
               return (
                 <div
                   key={idx}
+                  onClick={() => onStartQuiz(item.subjectKey, item.topicTitle)}
+                  className="kpss-topic-recommendation-item"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -147,7 +149,9 @@ export function KpssAutoPlannerCard({
                     padding: "10px 14px",
                     background: "rgba(255, 255, 255, 0.02)",
                     border: "1px solid var(--card-border)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
@@ -168,35 +172,15 @@ export function KpssAutoPlannerCard({
                       {item.topicTitle}
                     </span>
                   </div>
-                  <div
-                    onClick={() => onToggleTopic(item.subjectKey, item.topicTitle)}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "6px",
-                      border: `2px solid ${status === 2 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.2)"}`,
-                      background: status === 2 ? "var(--accent-color)" : "transparent",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      flexShrink: 0
-                    }}
-                  >
-                    {status === 2 && (
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="white"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
+                  <div>
+                    {status === 1 ? (
+                      <span style={{ fontSize: "0.68rem", color: "#ffc107", background: "rgba(255, 193, 7, 0.1)", padding: "2px 8px", borderRadius: "20px", fontWeight: "600" }}>
+                        {lang === "tr" ? "Çalışılıyor" : "Working"}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", background: "rgba(255, 255, 255, 0.04)", padding: "2px 8px", borderRadius: "20px", fontWeight: "600" }}>
+                        {lang === "tr" ? "Başlanmadı" : "Not Started"}
+                      </span>
                     )}
                   </div>
                 </div>
