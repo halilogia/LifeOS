@@ -28,6 +28,7 @@ import { EisenhowerView } from "@/components/EisenhowerView.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
+import { DatePicker } from "@/components/DatePicker.js";
 
 export function App() {
   // Navigation & UI States
@@ -1009,13 +1010,10 @@ export function App() {
                 placeholder={t.todo_placeholder}
                 autocomplete="off"
               />
-              <input
-                type="date"
-                id="todo-date-input"
-                className="todo-date-input"
+              <DatePicker
                 value={todoDueDate}
-                onChange={(e) => setTodoDueDate((e.target as HTMLInputElement).value)}
-                title={lang === "tr" ? "Son Tarih" : "Due Date"}
+                onChange={setTodoDueDate}
+                lang={lang}
               />
               <select
                 id="repeat-select"
