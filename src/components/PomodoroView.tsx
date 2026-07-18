@@ -30,6 +30,11 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Pomodoro State
+  const [customTimes, setCustomTimes] = useState<{ focus: number; short: number; long: number }>({
+    focus: 25 * 60,
+    short: 5 * 60,
+    long: 15 * 60,
+  });
   const [pomoMode, setPomoMode] = useState<"focus" | "short" | "long">("focus");
   const [pomoTimeLeft, setPomoTimeLeft] = useState(25 * 60);
   const [pomoTotalTime, setPomoTotalTime] = useState(25 * 60);
@@ -90,6 +95,13 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
     // 4. Pomodoro history initial state
     storage.getPomodoroHistory().then((list) => {
       setPomodoroHistory(list);
+    });
+
+    // 5. Load custom times settings
+    storage.getPomoCustomTimes().then((times) => {
+      if (times) {
+        setCustomTimes(times);
+      }
     });
 
     return () => {
@@ -191,8 +203,20 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
 
   // --- Main Pomodoro Logic ---
   const handlePomoModeChange = async (mode: "focus" | "short" | "long") => {
-    const totalTime = MODE_TIMES[mode];
+    const totalTime = customTimes[mode];
     await pomodoroManager.resetTimer(mode, totalTime);
+  };
+
+  const handleCustomTimeChange = async (mode: "focus" | "short" | "long", mins: number) => {
+    if (isNaN(mins) || mins <= 0) return;
+    const seconds = mins * 60;
+    const newTimes = { ...customTimes, [mode]: seconds };
+    setCustomTimes(newTimes);
+    await storage.setPomoCustomTimes(newTimes);
+
+    if (!pomoRunning && pomoMode === mode) {
+      await pomodoroManager.resetTimer(mode, seconds);
+    }
   };
 
   const handlePomoStart = async () => {
@@ -540,6 +564,49 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
               >
                 {lang === "tr" ? "Uzun Mola" : "Long"}
               </button>
+            </div>
+
+            {/* Pomodoro Duration Editor */}
+            <div style={{ display: "flex", gap: "10px", marginTop: "16px", background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "10px 14px", alignItems: "center", width: "100%" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>⏱️ {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}</span>
+              
+              <div style={{ display: "flex", gap: "10px", alignItems: "center", marginLeft: "auto" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Odak" : "Focus"}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="120"
+                    value={Math.round(customTimes.focus / 60)}
+                    onChange={(e) => handleCustomTimeChange("focus", parseInt((e.target as HTMLInputElement).value, 10))}
+                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+                  />
+                </div>
+                
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Kısa" : "Short"}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={Math.round(customTimes.short / 60)}
+                    onChange={(e) => handleCustomTimeChange("short", parseInt((e.target as HTMLInputElement).value, 10))}
+                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+                  />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Uzun" : "Long"}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={Math.round(customTimes.long / 60)}
+                    onChange={(e) => handleCustomTimeChange("long", parseInt((e.target as HTMLInputElement).value, 10))}
+                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 

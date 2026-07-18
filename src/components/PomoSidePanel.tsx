@@ -73,7 +73,7 @@ export function PomoSidePanel({
     }
   };
 
-  const playWhiteNoise = () => {
+  const playHairdryer = () => {
     stopAllSounds();
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -81,26 +81,46 @@ export function PomoSidePanel({
       audioContextRef.current = ctx;
 
       const bufferSize = 2 * ctx.sampleRate;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
+      const brownNoiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = brownNoiseBuffer.getChannelData(0);
+      let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
+        const white = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 3.5;
       }
 
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-      whiteNoise.loop = true;
-      whiteNoiseSourceRef.current = whiteNoise;
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = brownNoiseBuffer;
+      noiseSource.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 350;
+
+      const motorOsc = ctx.createOscillator();
+      motorOsc.type = "sine";
+      motorOsc.frequency.value = 90;
+
+      const motorGain = ctx.createGain();
+      motorGain.gain.value = 0.15;
 
       const gainNode = ctx.createGain();
       gainNode.gain.value = volume;
       whiteNoiseGainRef.current = gainNode;
 
-      whiteNoise.connect(gainNode);
+      noiseSource.connect(filter);
+      filter.connect(gainNode);
+      motorOsc.connect(motorGain);
+      motorGain.connect(gainNode);
       gainNode.connect(ctx.destination);
-      whiteNoise.start();
+
+      noiseSource.start();
+      motorOsc.start();
+      whiteNoiseSourceRef.current = noiseSource as any;
     } catch (e) {
-      console.error("Failed to play white noise:", e);
+      console.error("Failed to play hairdryer:", e);
     }
   };
 
@@ -123,13 +143,13 @@ export function PomoSidePanel({
       setActiveSound(soundType);
       setIsPlaying(true);
       if (soundType === "white_noise") {
-        playWhiteNoise();
+        playHairdryer();
       } else if (soundType === "rain") {
-        playAudioUrl("https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg");
+        playAudioUrl("https://www.soundjay.com/nature/sounds/rain-07.mp3");
       } else if (soundType === "wind") {
-        playAudioUrl("https://actions.google.com/sounds/v1/weather/fine_wind_outside.ogg");
+        playAudioUrl("https://www.soundjay.com/nature/sounds/wind-howl-01.mp3");
       } else if (soundType === "lofi") {
-        playAudioUrl("https://coderadio-admin.freecodecamp.org/radio/8010/radio.mp3");
+        playAudioUrl("https://lofi.stream.laut.fm/lofi");
       }
     }
   };
@@ -499,7 +519,7 @@ export function PomoSidePanel({
               transition: "all 0.2s ease"
             }}
           >
-            🔊 {lang === "tr" ? "Beyaz Gürültü" : "White Noise"}
+            💨 {lang === "tr" ? "Saç Kurutma" : "Hairdryer"}
           </button>
 
           <button
