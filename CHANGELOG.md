@@ -4,6 +4,21 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.2.0] - 2026-07-18
+### Eklendi
+- **Notlar & Günlük İçin Gelişmiş Sözler Filtresi**: Günlüğüm (Notes) sekmesine özel "Sözler" filtresi eklendi. "Hepsi" ve "Sözler" seçildiğinde özel motivasyon sözlerinize erişim sağlanırken, diğer not kategorileri seçildiğinde ekranın sade kalması adına sözler listesi otomatik olarak gizlenir.
+- **Amazon Luna & Ücretsiz Oyun Kısayolları**: Ücretsiz Oyunlar ekranının üst kısmına hızlı talep butonları eklenerek Prime Gaming, Epic Games, Steam, GOG ve yeni talep edilen Amazon Luna (`https://luna.amazon.com/claims/home?g=s`) sayfalarına hızlı geçiş sağlandı.
+- **9Router Proxy ve Yerel Model Entegrasyonu**:
+  - Yapay zeka ayarları sadeleştirilerek sadece `9Router Proxy (OpenAI Uyumlu)` seçeneği arayüzde bırakıldı. Gemini ve Ollama seçenekleri kaldırıldı.
+  - Yapay zeka istek paketlerinden katı `response_format: { type: "json_object" }` parametresi kaldırılarak, yerel proxy modelleriyle ve Llama 3 tabanlı modellerle %100 uyumluluk sağlandı.
+  - Model yanıtlarındaki markdown kod bloklarını (` ```json ... ``` `) otomatik temizleyen `cleanAndParseJSON` filtresi entegre edildi.
+  - Yerel 9Router proxy'sine erişimi tarayıcı CORS engelinden korumak adına `manifest.json` dosyasına `localhost` ve `127.0.0.1` izinleri eklendi.
+- **Temiz Mimari (Clean Architecture) Geliştirmesi**: Görsel kod ayırma kuralına uygun şekilde `FreeGamesView.tsx` dosyasından `<GameCard />` ve `<HistoryCard />` sunum bileşenleri ayrıştırıldı.
+- **Premium Alarm Buton Güncellemeleri**: Ana sayfa Pomodoro alarm bölümündeki ekleme ve silme düğmeleri görsel olarak mor-indigo renk geçişli şık butonlar ve SVG çöp kutusu ikonlarıyla değiştirildi. Varsayılan onay listesi seçim elemanları premium slider switch'ler ile güncellendi.
+- **Açılır Kutu Okunabilirlik İyileştirmesi**: Açılır kutulardaki (Detox seçici vb.) beyaz üzeri beyaz yazı okunma kontrast hatası, tüm seçenek etiketlerine koyu arka plan (`#161622`) ve beyaz metin uygulanarak çözüldü.
+
+---
+
 ## [3.1.0] - 2026-07-18
 ### Eklendi
 - **BIST Hisseleri İçin Özel Mum Grafiği (Custom Canvas Stock Chart)**: Yavaş çalışan ve BIST verilerinde hata veren TradingView iframe'i yerine Yahoo Finance entegrasyonlu, tamamen özel çizilen HTML5 Canvas Candlestick (Mum) Grafik Paneli eklendi. Grafik üzerinde 1M, 3M, 6M, 1Y zaman aralığı filtreleri, fareyle takip edilen imleç (crosshair) ve Açılış, Kapanış, En Yüksek, En Düşük, Hacim bilgilerini gösteren anlık metadata çubuğu entegre edildi.
