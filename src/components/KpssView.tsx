@@ -1072,17 +1072,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       <div className="kpss-container">
         <header className="kpss-header">
           <h2>KPSS Hazırlık</h2>
-          <nav className="kpss-subject-nav">
-            {Object.keys(kpssData).map((subKey) => (
-              <button
-                key={subKey}
-                className={`kpss-subject-btn ${currentSubject === subKey ? "active" : ""}`}
-                onClick={() => setCurrentSubject(subKey)}
-              >
-                {labels[subKey] || subKey}
-              </button>
-            ))}
-          </nav>
         </header>
 
         {/* Sub-Tab Navigation Header */}
@@ -1147,6 +1136,23 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               labels={labels}
               subjectsList={Object.keys(kpssData)}
             />
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%", marginTop: "32px", marginBottom: "16px" }}>
+              <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-primary)" }}>
+                {lang === "tr" ? "Ders Seçimi:" : "Select Subject:"}
+              </div>
+              <nav className="kpss-subject-nav">
+                {Object.keys(kpssData).map((subKey) => (
+                  <button
+                    key={subKey}
+                    className={`kpss-subject-btn ${currentSubject === subKey ? "active" : ""}`}
+                    onClick={() => setCurrentSubject(subKey)}
+                  >
+                    {labels[subKey] || subKey}
+                  </button>
+                ))}
+              </nav>
+            </div>
 
             <KpssTopicList
               lang={lang}

@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import { Language, KpssProgress } from "@/types/types.js";
 import { kpssData } from "@/services/kpssService.js";
 
@@ -14,6 +15,8 @@ export function KpssAutoPlannerCard({
   onToggleTopic,
   labels,
 }: KpssAutoPlannerCardProps) {
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
   // 1. Calculate remaining days until exam (September 6, 2026 10:15)
   const examDate = new Date("2026-09-06T10:15:00").getTime();
   const diffTime = examDate - Date.now();
@@ -79,16 +82,43 @@ export function KpssAutoPlannerCard({
 
   return (
     <div className="mini-tool-card" style={{ marginTop: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
-        <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
-          {lang === "tr" ? "KPSS Günlük Konu Planlayıcı" : "KPSS Daily Auto-Planner"}
-        </span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
+            {lang === "tr" ? "KPSS Günlük Konu Planlayıcı" : "KPSS Daily Auto-Planner"}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowInfoModal(true)}
+          style={{
+            background: "rgba(255, 255, 255, 0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "50%",
+            width: "24px",
+            height: "24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "var(--accent-color)",
+            outline: "none",
+            transition: "all 0.2s ease"
+          }}
+          title={lang === "tr" ? "Sistem Nasıl Çalışır?" : "How does it work?"}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </button>
       </div>
 
       {totalUncompleted === 0 ? (
@@ -215,6 +245,103 @@ export function KpssAutoPlannerCard({
             </span>
           </div>
         </>
+      )}
+
+      {/* Info Explanation Modal */}
+      {showInfoModal && (
+        <div
+          onClick={() => setShowInfoModal(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.65)",
+            backdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            animation: "fadeIn 0.2s ease"
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "rgba(30, 30, 46, 0.95)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "16px",
+              padding: "24px",
+              maxWidth: "500px",
+              width: "90%",
+              boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
+              color: "#f1f5f9",
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", paddingBottom: "12px" }}>
+              <span style={{ fontSize: "1.05rem", fontWeight: "700", color: "var(--accent-color)" }}>
+                {lang === "tr" ? "KPSS Planlayıcı Nasıl Çalışır?" : "How KPSS Planner Works?"}
+              </span>
+              <button
+                onClick={() => setShowInfoModal(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-secondary)",
+                  fontSize: "1.3rem",
+                  cursor: "pointer",
+                  lineHeight: 1
+                }}
+              >
+                &times;
+              </button>
+            </div>
+            
+            <div style={{ fontSize: "0.85rem", lineHeight: 1.6, display: "flex", flexDirection: "column", gap: "12px" }}>
+              {lang === "tr" ? (
+                <>
+                  <p><strong>1. Kalan Gün Hesabı:</strong> Sınav tarihi (6 Eylül 2026) ile bugün arasındaki kalan gün sayısını hesaplar.</p>
+                  <p><strong>2. Konu Dağıtımı:</strong> Henüz tamamlanmamış (durumu "Tamamlandı" olmayan) tüm konularınızı kalan gün sayısına dengeli bir şekilde böler ve her güne eşit iş yükü çıkarır.</p>
+                  <p><strong>3. Günlük Çalışma Hızı:</strong> Kalan toplam konu sayısının kalan gün sayısına oranıdır (Konu/Gün). Bu oran 1.5'in üstündeyse mor, 3.0'ın üstündeyse kırmızı renkli uyarı gösterilir.</p>
+                  <p><strong>4. Günlük Soru Hedefi:</strong> Ayarlarda belirlediğiniz hedef nete ulaşabilmeniz için çözmeniz gereken toplam soru sayısı KPSS konu ağırlıklarına göre dağıtılır. Günlük soru hedefiniz: <br/>
+                  <code style={{ background: "rgba(0,0,0,0.3)", padding: "2px 6px", borderRadius: "4px" }}>(Kalan Hedef Soru / Kalan Gün Sayısı)</code> formülüyle dinamik olarak her gün güncellenir.</p>
+                </>
+              ) : (
+                <>
+                  <p><strong>1. Days Left Calculation:</strong> Calculates the exact days remaining until the exam date (September 6, 2026).</p>
+                  <p><strong>2. Topic Distribution:</strong> Filters all uncompleted topics and spreads them evenly across the remaining days to keep you on track.</p>
+                  <p><strong>3. Daily Study Pace:</strong> Calculated by dividing remaining topics by remaining days. Rates above 1.5 highlight moderate pace, and above 3.0 require high intensity.</p>
+                  <p><strong>4. Daily Question Target:</strong> Based on your target net configured in settings, total required questions are distributed by subject weights. Your daily target updates using: <br/>
+                  <code style={{ background: "rgba(0,0,0,0.3)", padding: "2px 6px", borderRadius: "4px" }}>(Target Questions Left / Days Remaining)</code> dynamically each day.</p>
+                </>
+              )}
+            </div>
+
+            <button
+              onClick={() => setShowInfoModal(false)}
+              style={{
+                alignSelf: "flex-end",
+                background: "var(--accent-color)",
+                border: "none",
+                borderRadius: "8px",
+                padding: "8px 16px",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "0.85rem",
+                cursor: "pointer",
+                transition: "opacity 0.2s"
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.9")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
+            >
+              {lang === "tr" ? "Kapat" : "Close"}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
