@@ -6,6 +6,10 @@ import {
 } from "../features/hifizData.js";
 import { HifizProgress, HifizItem, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
+import { HifizMemorizationCard } from "@/components/hifiz/HifizMemorizationCard.js";
+import { HifizYeterliklerCard } from "@/components/hifiz/HifizYeterliklerCard.js";
+import { HifizMushafModal } from "@/components/hifiz/HifizMushafModal.js";
+import { HifizYeterlikModal } from "@/components/hifiz/HifizYeterlikModal.js";
 
 interface HifizViewProps {
   lang: Language;
@@ -279,352 +283,38 @@ export function HifizView({ lang }: HifizViewProps) {
               </div>
             </div>
 
-            {/* Stats Dashboard */}
-            <div className="hifiz-stats">
-              <div className="hifiz-stat-card">
-                <div className="stat-icon memorized">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                </div>
-                <div className="stat-info">
-                  <span className="stat-label">{t.hifiz_stat_memorized}</span>
-                  <span id="hifiz-stat-memorized-count" className="stat-value">
-                    {memorizedCount}
-                  </span>
-                </div>
-              </div>
-
-              <div className="hifiz-stat-card">
-                <div className="stat-icon progress">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                </div>
-                <div className="stat-info">
-                  <span className="stat-label">{t.hifiz_stat_in_progress}</span>
-                  <span id="hifiz-stat-progress-count" className="stat-value">
-                    {inProgressCount}
-                  </span>
-                </div>
-              </div>
-
-              <div className="hifiz-stat-card">
-                <div className="stat-icon total">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                  </svg>
-                </div>
-                <div className="stat-info">
-                  <span className="stat-label">{t.hifiz_stat_total}</span>
-                  <span id="hifiz-stat-total-count" className="stat-value">
-                    {totalCount}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="hifiz-filters">
-              <button
-                className={`hifiz-filter-btn ${category === "surahs" ? "active" : ""}`}
-                onClick={() => setCategory("surahs")}
-              >
-                {t.hifiz_cat_surahs}
-              </button>
-              <button
-                className={`hifiz-filter-btn ${category === "duas" ? "active" : ""}`}
-                onClick={() => setCategory("duas")}
-              >
-                {t.hifiz_cat_duas}
-              </button>
-            </div>
-
-            {/* Grid display */}
-            <div id="hifiz-grid" className="hifiz-grid">
-              {filteredItems.map((item) => {
-                const itemProgress = hifizProgress.find(
-                  (p) => p.itemId === item.id,
-                ) || {
-                  itemId: item.id,
-                  status: "not_started" as const,
-                  lastUpdated: new Date().toISOString(),
-                };
-
-                const totalPagesCount = item.totalPages || 1;
-                const pageStatuses =
-                  itemProgress.pageStatuses ||
-                  new Array(totalPagesCount).fill("not_started");
-                const memorizedPagesCount = pageStatuses.filter(
-                  (s) => s === "memorized",
-                ).length;
-                const pagePercent = Math.round(
-                  (memorizedPagesCount / totalPagesCount) * 100,
-                );
-
-                const statusText =
-                  t[`hifiz_status_${itemProgress.status}` as keyof typeof t] ||
-                  itemProgress.status;
-                const catLabel =
-                  t[`hifiz_cat_${item.category}` as keyof typeof t] ||
-                  item.category;
-
-                return (
-                  <div
-                    key={item.id}
-                    className="hifiz-card"
-                    onClick={() => {
-                      if (item.pages && item.pages.length > 0) {
-                        openMushaf(item);
-                      } else if (item.url) {
-                        window.open(item.url, "_blank");
-                      } else {
-                        handleCycleStatus(item.id);
-                      }
-                    }}
-                  >
-                    <div className="hifiz-card-top">
-                      <span className="hifiz-cat-badge">{catLabel}</span>
-                      <div
-                        className={`hifiz-status-badge status-${itemProgress.status}`}
-                        title="Status"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCycleStatus(item.id);
-                        }}
-                      ></div>
-                    </div>
-
-                    <div className="hifiz-card-body">
-                      <h3>{item.title}</h3>
-                      {item.description && (
-                        <p className="hifiz-desc">{item.description}</p>
-                      )}
-
-                      {totalPagesCount > 1 && (
-                        <div className="hifiz-pages-container">
-                          <div className="hifiz-progress-track">
-                            <div
-                              className="hifiz-progress-fill"
-                              style={{ width: `${pagePercent}%` }}
-                            ></div>
-                          </div>
-                          <div className="hifiz-pages-grid">
-                            {pageStatuses.map((status, idx) => (
-                              <div
-                                key={idx}
-                                className={`hifiz-page-box status-${status}`}
-                                title={`Sayfa ${idx + 1}`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCyclePageStatus(item.id, idx);
-                                }}
-                              >
-                                {idx + 1}
-                              </div>
-                            ))}
-                          </div>
-                          <div className="hifiz-progress-text">
-                            {memorizedPagesCount}/{totalPagesCount}{" "}
-                            {t.hifiz_progress_pages}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="hifiz-card-footer">
-                      <span className="status-text">{statusText}</span>
-                      <div className="hifiz-actions">
-                        {item.pages && item.pages.length > 0 ? (
-                          <button
-                            className="hifiz-action-btn open-mushaf"
-                            title="Open Mushaf"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openMushaf(item);
-                            }}
-                          >
-                            <svg
-                              width="18"
-                              height="18"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                            </svg>
-                          </button>
-                        ) : (
-                          item.url && (
-                            <button
-                              className="hifiz-action-btn open-url"
-                              title="Diyanet Link"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(item.url, "_blank");
-                              }}
-                            >
-                              <svg
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              >
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                              </svg>
-                            </button>
-                          )
-                        )}
-                        <button
-                          className="hifiz-action-btn cycle-status"
-                          title="Change status"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCycleStatus(item.id);
-                          }}
-                        >
-                          <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path d="M23 4v6h-6"></path>
-                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <HifizMemorizationCard
+              lang={lang}
+              category={category}
+              hifizProgress={hifizProgress}
+              t={t}
+              memorizedCount={memorizedCount}
+              inProgressCount={inProgressCount}
+              totalCount={totalCount}
+              filteredItems={filteredItems}
+              onSetCategory={setCategory}
+              onOpenMushaf={openMushaf}
+              onCycleStatus={handleCycleStatus}
+              onCyclePageStatus={handleCyclePageStatus}
+            />
           </div>
         )}
 
         {/* VIEW 2: IMAM-HATIP YETERLIKLER CHECKLIST */}
         {subView === "yeterlikler" && (
-          <div id="yeterlikler-content" className="hifiz-sub-view active">
-            <div className="hifiz-header">
-              <h2>A. Aday Din Görevlisi (İmam-Hatip) Yeterlikleri</h2>
-            </div>
-
-            <div className="hifiz-overall-progress-container">
-              <div className="hifiz-overall-info">
-                <span>
-                  {lang === "tr" ? "Müfredat İlerlemesi" : "Checklist Progress"}
-                </span>
-                <span id="yeterlikler-overall-percent">
-                  {yeterliklerPercent}%
-                </span>
-              </div>
-              <div className="hifiz-overall-bar">
-                <div
-                  id="yeterlikler-overall-fill"
-                  className="hifiz-overall-fill"
-                  style={{ width: `${yeterliklerPercent}%` }}
-                ></div>
-              </div>
-            </div>
-
-            <div className="yeterlikler-list">
-              {YETERLIKLER_DATA.map((item, index) => {
-                const isCompleted = yeterlikler.includes(index);
-                return (
-                  <div
-                    key={index}
-                    className={`yeterlik-item ${isCompleted ? "completed" : ""}`}
-                    onClick={() => handleToggleYeterlik(index)}
-                  >
-                    <div className="yeterlik-checkbox">
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                    <div className="yeterlik-text">{item.title}</div>
-                    <button
-                      className="yeterlik-info-btn"
-                      title="Detay"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveYeterlik({
-                          title: item.title,
-                          description: item.description,
-                        });
-                      }}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <HifizYeterliklerCard
+            lang={lang}
+            yeterliklerPercent={yeterliklerPercent}
+            yeterlikler={yeterlikler}
+            YETERLIKLER_DATA={YETERLIKLER_DATA}
+            onToggleYeterlik={handleToggleYeterlik}
+            onOpenYeterlikDetail={(item) =>
+              setActiveYeterlik({
+                title: item.title,
+                description: item.description,
+              })
+            }
+          />
         )}
       </div>
 
@@ -632,123 +322,26 @@ export function HifizView({ lang }: HifizViewProps) {
       {activeMushafItem &&
         activeMushafItem.pages &&
         activeMushafItem.pages.length > 0 && (
-          <div className="settings-panel active" onClick={closeMushaf}>
-            <div
-              className="hifiz-modal-content"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <header className="settings-header">
-                <h3 id="hifiz-image-title">{activeMushafItem.title}</h3>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "15px",
-                    alignItems: "center",
-                    marginRight: "10px",
-                  }}
-                >
-                  <span
-                    id="hifiz-page-info"
-                    style={{
-                      fontSize: "0.95rem",
-                      color: "var(--text-secondary)",
-                      fontWeight: 600,
-                      background: "rgba(255,255,255,0.05)",
-                      padding: "4px 10px",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    {currentPageIndex + 1} / {activeMushafItem.pages.length}
-                  </span>
-                  <button
-                    className="close-btn"
-                    onClick={closeMushaf}
-                    style={{ margin: 0, fontSize: "1.8rem" }}
-                  >
-                    &times;
-                  </button>
-                </div>
-              </header>
-              <div className="hifiz-image-body">
-                <button
-                  id="hifiz-prev-page"
-                  className="hifiz-nav-btn"
-                  disabled={currentPageIndex === 0}
-                  onClick={() =>
-                    setCurrentPageIndex((prev) => Math.max(0, prev - 1))
-                  }
-                >
-                  &lt;
-                </button>
-                <div className="hifiz-image-container">
-                  <img
-                    id="hifiz-mushaf-img"
-                    src={`data/quran_images/sayfa_${String(activeMushafItem.pages[currentPageIndex]).padStart(3, "0")}.png`}
-                    alt="Mushaf Sayfası"
-                  />
-                </div>
-                <button
-                  id="hifiz-next-page"
-                  className="hifiz-nav-btn"
-                  disabled={
-                    currentPageIndex === activeMushafItem.pages.length - 1
-                  }
-                  onClick={() =>
-                    setCurrentPageIndex((prev) =>
-                      Math.min(activeMushafItem.pages!.length - 1, prev + 1),
-                    )
-                  }
-                >
-                  &gt;
-                </button>
-              </div>
-            </div>
-          </div>
+          <HifizMushafModal
+            activeMushafItem={activeMushafItem}
+            currentPageIndex={currentPageIndex}
+            onCloseMushaf={closeMushaf}
+            onPrevPage={() => setCurrentPageIndex((prev) => Math.max(0, prev - 1))}
+            onNextPage={() =>
+              setCurrentPageIndex((prev) =>
+                Math.min(activeMushafItem.pages!.length - 1, prev + 1),
+              )
+            }
+          />
         )}
 
       {/* Yeterlik Info Detail Modal */}
       {activeYeterlik && (
-        <div
-          className="settings-panel active"
-          onClick={() => setActiveYeterlik(null)}
-        >
-          <div
-            className="settings-content"
-            style={{ maxWidth: "500px" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <header className="settings-header">
-              <h3 id="yeterlik-modal-title">{activeYeterlik.title}</h3>
-              <button
-                className="close-btn"
-                onClick={() => setActiveYeterlik(null)}
-              >
-                &times;
-              </button>
-            </header>
-            <div className="note-editor-body" style={{ padding: "24px" }}>
-              <p
-                id="yeterlik-modal-description"
-                style={{
-                  fontSize: "1.1rem",
-                  lineHeight: 1.6,
-                  color: "var(--text-primary)",
-                }}
-              >
-                {activeYeterlik.description}
-              </p>
-            </div>
-            <div className="settings-footer">
-              <button
-                className="settings-add-btn"
-                style={{ width: "auto", padding: "0 30px" }}
-                onClick={() => setActiveYeterlik(null)}
-              >
-                {lang === "tr" ? "Anladım" : "Got it"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <HifizYeterlikModal
+          lang={lang}
+          activeYeterlik={activeYeterlik}
+          onClose={() => setActiveYeterlik(null)}
+        />
       )}
     </div>
   );
