@@ -127,6 +127,18 @@ export const storage = {
       chrome.storage.sync.set({ aiEndpoint }, resolve);
     });
   },
+  getAIShowThinking: (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["aiShowThinking"], (result) => {
+        resolve(result.aiShowThinking !== undefined ? (result.aiShowThinking as boolean) : true);
+      });
+    });
+  },
+  setAIShowThinking: (aiShowThinking: boolean): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ aiShowThinking }, resolve);
+    });
+  },
   getSidebarOrder: (): Promise<string[]> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["sidebarOrder"], (result) => {
@@ -480,6 +492,7 @@ export const storage = {
                 "aiEndpoint",
                 "sidebarOrder",
                 "detox_limits",
+                "aiShowThinking",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {
