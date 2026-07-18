@@ -31,6 +31,9 @@ interface SettingsResult {
   kpssTargetScore?: number;
   universalInfoBoxEnabled?: boolean;
   universalInfoBoxHotkey?: string;
+  kpssGoalType?: "net" | "score";
+  kpssTargetNet?: number;
+  kpssChartType?: "line" | "bar";
 }
 
 export const storage = {
@@ -361,6 +364,42 @@ export const storage = {
       chrome.storage.sync.set({ kpssTargetScore: score }, resolve);
     });
   },
+  getKpssGoalType: (): Promise<"net" | "score"> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssGoalType"], (result: any) => {
+        resolve((result.kpssGoalType as "net" | "score") || "net");
+      });
+    });
+  },
+  setKpssGoalType: (type: "net" | "score"): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssGoalType: type }, resolve);
+    });
+  },
+  getKpssTargetNet: (): Promise<number> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssTargetNet"], (result: any) => {
+        resolve(result.kpssTargetNet !== undefined ? result.kpssTargetNet : 80);
+      });
+    });
+  },
+  setKpssTargetNet: (net: number): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssTargetNet: net }, resolve);
+    });
+  },
+  getKpssChartType: (): Promise<"line" | "bar"> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssChartType"], (result: any) => {
+        resolve((result.kpssChartType as "line" | "bar") || "line");
+      });
+    });
+  },
+  setKpssChartType: (type: "line" | "bar"): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssChartType: type }, resolve);
+    });
+  },
   setPrayerLocation: (city: string, country: string): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
@@ -416,6 +455,9 @@ export const storage = {
                 "pomoBlockEnabled",
                 "pomoCustomTimes",
                 "kpssTargetScore",
+                "kpssGoalType",
+                "kpssTargetNet",
+                "kpssChartType",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",
