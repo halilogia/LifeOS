@@ -274,14 +274,19 @@ export function KpssQuizModal({
                 </button>
                 {currentQuestionIndex < totalQuizLength - 1 ? (
                   <button
-                    className="settings-add-btn"
+                    className={`settings-add-btn ${currentQuestionIndex >= quizQuestions.length - 1 ? "loading" : ""}`}
                     style={{ flex: 1, padding: 0 }}
                     disabled={selectedAnswers[currentQuestionIndex] === -1 || currentQuestionIndex >= quizQuestions.length - 1}
                     onClick={onNextQuestion}
                   >
-                    {currentQuestionIndex >= quizQuestions.length - 1
-                      ? (lang === "tr" ? "Sonraki (Yükleniyor...)" : "Next (Loading...)")
-                      : (lang === "tr" ? "Sonraki" : "Next")}
+                    {currentQuestionIndex >= quizQuestions.length - 1 ? (
+                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                        <span className="kpss-btn-loader" />
+                        {lang === "tr" ? "Sonraki (Yükleniyor...)" : "Next (Loading...)"}
+                      </span>
+                    ) : (
+                      lang === "tr" ? "Sonraki" : "Next"
+                    )}
                   </button>
                 ) : (
                   <button

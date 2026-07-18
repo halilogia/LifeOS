@@ -22,7 +22,23 @@ export function getKpssSystemPrompt(subjectKey: string, lang: Language): string 
    - Çizgi Grafiği: { "type": "line", "title": "Grafik Başlığı", "labels": ["1990", "2000", "2010"], "values": [120, 250, 480] }
    - Geometri Üçgen Şekli: { "type": "geometry", "shape": "triangle", "angles": { "A": "60°", "B": "x", "C": "80°" }, "sides": { "AB": "6", "BC": "8", "AC": "y" } }
    - Geometri Çember Şekli: { "type": "geometry", "shape": "circle", "sides": { "radius": "5" } }
-   - Paralel Doğrular ve Açı Soruları: { "type": "geometry", "shape": "parallel_lines", "angles": { "top_right": "120°", "bottom_left": "x" } }`;
+   - Paralel Doğrular ve Açı Soruları: { "type": "geometry", "shape": "parallel_lines", "angles": { "top_right": "60°", "bottom_left": "x" } }
+
+### Geometri Kusursuz Örnek Soru Taslağı (Buna Birebir Uygun Hazırla):
+{
+  "question": "Aşağıdaki şekilde [AB] // [CD] paralel doğruları d doğrusu ile kesilmektedir. Oluşan açılar şekilde verilmiştir. Buna göre x açısı kaç derecedir?",
+  "options": ["30°", "45°", "60°", "75°", "90°"],
+  "correctAnswer": 2,
+  "solution": "İç ters açılar kuralına göre [AB] ve [CD] paralel doğruları arasındaki zıt yöne bakan açılar eşittir. Bu nedenle x = 60 derecedir.",
+  "chart": {
+    "type": "geometry",
+    "shape": "parallel_lines",
+    "angles": {
+      "top_right": "60°",
+      "bottom_left": "x"
+    }
+  }
+}`;
       break;
 
     case "cografya":
@@ -39,7 +55,21 @@ export function getKpssSystemPrompt(subjectKey: string, lang: Language): string 
        { "x": 48, "y": 78, "label": "II" }
      ]
    }
-5. Türkiye haritası koordinat ipuçları: Marmara civarı (x: 20-80, y: 15-40), Ege civarı (x: 10-60, y: 60-120), Akdeniz civarı (x: 110-220, y: 90-140), Karadeniz civarı (x: 120-330, y: 35-70), İç Anadolu (x: 120-220, y: 45-90), Doğu Anadolu (x: 220-385, y: 80-130), Güneydoğu Anadolu (x: 240-385, y: 130-160).`;
+5. Türkiye haritası koordinat ipuçları: Marmara civarı (x: 20-80, y: 15-40), Ege civarı (x: 10-60, y: 60-120), Akdeniz civarı (x: 110-220, y: 90-140), Karadeniz civarı (x: 120-330, y: 35-70), İç Anadolu (x: 120-220, y: 45-90), Doğu Anadolu (x: 220-385, y: 80-130), Güneydoğu Anadolu (x: 240-385, y: 130-160).
+
+### Coğrafya Kusursuz Örnek Soru Taslağı (Buna Birebir Uygun Hazırla):
+{
+  "question": "Türkiye’nin göreceli (özel) konumu, ülkenin denizellik-karasallık, yükselti ve jeopolitik özelliklerinin bir sonucudur. Buna göre, aşağıdakilerden hangisi Türkiye'nin göreceli konumuyla açıklanan bir durumdur?",
+  "options": [
+    "Dört mevsim belirgin iklim koşullarının yaşanması",
+    "Güneş ışınlarının hiçbir zaman dik açıyla düşmemesi",
+    "Aynı anda farklı iklim ve hava koşullarının görülebilmesi",
+    "Kuzey rüzgarlarının sıcaklığı düşürücü etki yapması",
+    "Yıl boyunca batı rüzgarlarının etkisinde bulunması"
+  ],
+  "correctAnswer": 2,
+  "solution": "Aynı anda farklı iklim ve hava özelliklerinin (örneğin Antalya'da denize girilirken Erzurum'da kayak yapılması) yaşanması yükselti ve kısa mesafede değişen yer şekilleriyle ilgilidir ve bu göreceli (özel) konumdur. Diğer şıklar ise enlem ve orta kuşakta yer alma ile ilgili mutlak konumun sonuçlarıdır."
+}`;
       break;
 
     case "turkce":
@@ -53,7 +83,21 @@ export function getKpssSystemPrompt(subjectKey: string, lang: Language): string 
       subjectRules = `
 ### Tarih Özel Kuralları:
 1. Tarih soruları kronolojik olarak tamamen doğru ve bilimsel literatüre uygun olmalıdır. Kesinlikle uydurma veya kurgusal olaylar içermemelidir.
-2. Sorularda padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihine yönelik kronolojik veya nedensel bağlamları kusursuz kurgula.`;
+2. Sorularda padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihine yönelik kronolojik veya nedensel bağlamları kusursuz kurgula.
+
+### Tarih Kusursuz Örnek Soru Taslağı (Buna Birebir Uygun Hazırla):
+{
+  "question": "Osmanlı Devleti’nde Lale Devri (1718-1730) boyunca batı tarzı yenilikler yapılmaya başlanmıştır. Aşağıdakilerden hangisi bu dönemde gerçekleştirilen yeniliklerden biri değildir?",
+  "options": [
+    "İlk kez geçici elçiliklerin açılması",
+    "Nizam-ı Cedit adıyla yeni bir ordunun kurulması",
+    "Yalova'da kağıt imalathanesinin kurulması",
+    "İlk kez çiçek aşısı uygulamasının yapılması",
+    "İbrahim Müteferrika tarafından matbaanın getirilmesi"
+  ],
+  "correctAnswer": 1,
+  "solution": "Nizam-ı Cedit ordusunun kurulması III. Selim dönemi yeniliklerindendir. Lale Devri (III. Ahmed dönemi) yeniliği değildir. Diğer seçenekler Lale Devri'ne aittir."
+}`;
       break;
 
     case "vatandaslik":
