@@ -789,18 +789,73 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", background: "rgba(255, 255, 255, 0.01)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "14px 18px", alignItems: "center" }}>
                     
                     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                        🎯 {lang === "tr" ? "Puan Hedefi:" : "Score Target:"}
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <circle cx="12" cy="12" r="6"></circle>
+                          <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                        {lang === "tr" ? "Puan Hedefi:" : "Score Target:"}
                       </span>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <input
-                          type="number"
-                          min="50"
-                          max="100"
-                          value={targetScore}
-                          onChange={(e) => handleTargetScoreChange(parseFloat((e.target as HTMLInputElement).value))}
-                          style={{ width: "65px", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", color: "white", fontSize: "1rem", padding: "4px 8px", fontWeight: "700", textAlign: "center" }}
-                        />
+                        <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "30px" }}>
+                          <button
+                            type="button"
+                            onClick={() => handleTargetScoreChange(targetScore - 1)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "rgba(255, 255, 255, 0.6)",
+                              padding: "0 10px",
+                              cursor: "pointer",
+                              fontSize: "1.1rem",
+                              fontWeight: "bold",
+                              display: "flex",
+                              alignItems: "center",
+                              height: "100%",
+                              userSelect: "none"
+                            }}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            min="50"
+                            max="100"
+                            value={targetScore}
+                            onChange={(e) => handleTargetScoreChange(parseFloat((e.target as HTMLInputElement).value))}
+                            style={{
+                              width: "30px",
+                              background: "none",
+                              border: "none",
+                              color: "white",
+                              fontSize: "0.95rem",
+                              padding: 0,
+                              fontWeight: "700",
+                              textAlign: "center",
+                              outline: "none"
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleTargetScoreChange(targetScore + 1)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "rgba(255, 255, 255, 0.6)",
+                              padding: "0 10px",
+                              cursor: "pointer",
+                              fontSize: "1.1rem",
+                              fontWeight: "bold",
+                              display: "flex",
+                              alignItems: "center",
+                              height: "100%",
+                              userSelect: "none"
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
                         <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{lang === "tr" ? "Puan" : "Points"}</span>
                       </div>
                     </div>
@@ -964,9 +1019,19 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               {lang === "tr" ? "Konu Dağılımı ve Çalışma Takibi" : "Topic Syllabus & Progress"}
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
-                ⚙️ {lang === "tr" ? "Sıralama:" : "Sort By:"}
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="10" y1="6" x2="21" y2="6"></line>
+                  <line x1="10" y1="12" x2="21" y2="12"></line>
+                  <line x1="10" y1="18" x2="21" y2="18"></line>
+                  <path d="M4 6h1v4"></path>
+                  <path d="M4 10h2"></path>
+                  <path d="M6 6H4"></path>
+                </svg>
+                <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                  {lang === "tr" ? "Sıralama:" : "Sort By:"}
+                </span>
+              </div>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy((e.target as HTMLSelectElement).value as any)}
