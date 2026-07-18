@@ -26,6 +26,7 @@ import { DetoxView } from "./components/DetoxView.js";
 import { HalkaArzView } from "./components/HalkaArzView.js";
 import { AIChatView } from "./components/AIChatView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
+import { EisenhowerView } from "@/components/EisenhowerView.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
@@ -55,6 +56,9 @@ export function App() {
   // Calendar tasks due today notification toggle
   const [calendarNotificationsEnabled, setCalendarNotificationsEnabled] =
     useState(true);
+
+  // Pomodoro focus blocking toggle
+  const [pomoBlockEnabled, setPomoBlockEnabled] = useState(true);
 
   // AI Assistant States
   const [aiProvider, setAiProvider] = useState<string>("openrouter");
@@ -152,6 +156,9 @@ export function App() {
       );
       setCalendarNotificationsEnabled(
         config.calendarNotificationsEnabled ?? true,
+      );
+      setPomoBlockEnabled(
+        config.pomoBlockEnabled ?? true,
       );
       setUniversalInfoBoxEnabled(config.universalInfoBoxEnabled ?? true);
       setUniversalInfoBoxHotkey(config.universalInfoBoxHotkey || "none");
@@ -758,6 +765,23 @@ export function App() {
     setCalendarNotificationsEnabled(nextVal);
   };
 
+  const handleTogglePomoBlock = async () => {
+    const nextVal = !pomoBlockEnabled;
+    await storage.setPomoBlockEnabled(nextVal);
+    setPomoBlockEnabled(nextVal);
+  };
+
+  const handleUpdateTodoUrgentImportant = async (originalIndex: number, urgent: boolean, important: boolean) => {
+    const updated = [...todos];
+    updated[originalIndex] = {
+      ...updated[originalIndex],
+      urgent,
+      important,
+    };
+    setTodos(updated);
+    await storage.setTodos(updated);
+  };
+
   const handleToggleUniversalInfoBox = async () => {
     const nextVal = !universalInfoBoxEnabled;
     await storage.setUniversalInfoBox(nextVal, universalInfoBoxHotkey);
@@ -805,6 +829,14 @@ export function App() {
             lang={lang}
             onMoveTaskStatus={handleMoveTaskStatus}
             onMoveTaskDirection={handleMoveTaskDirection}
+          />
+        );
+      case "eisenhower":
+        return (
+          <EisenhowerView
+            todos={todos}
+            lang={lang}
+            onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
           />
         );
       case "notes":
@@ -976,6 +1008,8 @@ export function App() {
         onToggleFreeGamesNotifications={handleToggleFreeGamesNotifications}
         calendarNotificationsEnabled={calendarNotificationsEnabled}
         onToggleCalendarNotifications={handleToggleCalendarNotifications}
+        pomoBlockEnabled={pomoBlockEnabled}
+        onTogglePomoBlock={handleTogglePomoBlock}
         universalInfoBoxEnabled={universalInfoBoxEnabled}
         onToggleUniversalInfoBox={handleToggleUniversalInfoBox}
         universalInfoBoxHotkey={universalInfoBoxHotkey}

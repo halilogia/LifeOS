@@ -12,6 +12,8 @@ export interface SettingsDrawerProps {
   onToggleFreeGamesNotifications: () => void;
   calendarNotificationsEnabled: boolean;
   onToggleCalendarNotifications: () => void;
+  pomoBlockEnabled: boolean;
+  onTogglePomoBlock: () => void;
   universalInfoBoxEnabled: boolean;
   onToggleUniversalInfoBox: () => void;
   universalInfoBoxHotkey: string;
@@ -42,6 +44,8 @@ export function SettingsDrawer({
   onToggleFreeGamesNotifications,
   calendarNotificationsEnabled,
   onToggleCalendarNotifications,
+  pomoBlockEnabled,
+  onTogglePomoBlock,
   universalInfoBoxEnabled,
   onToggleUniversalInfoBox,
   universalInfoBoxHotkey,
@@ -198,6 +202,38 @@ export function SettingsDrawer({
                     }}
                   >
                     {calendarNotificationsEnabled ? t.enabled : t.disabled}
+                  </span>
+                </button>
+
+                {/* Pomodoro Focus Block Toggle */}
+                <button
+                  className="settings-action-btn"
+                  onClick={onTogglePomoBlock}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>{lang === "tr" ? "Pomodoro Odak Engelleyici" : "Pomodoro Focus Blocker"}</span>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontWeight: 700,
+                      color: pomoBlockEnabled
+                        ? "var(--accent-color)"
+                        : "var(--text-secondary)",
+                    }}
+                  >
+                    {pomoBlockEnabled ? t.enabled : t.disabled}
                   </span>
                 </button>
 

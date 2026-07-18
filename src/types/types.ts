@@ -8,6 +8,8 @@ export interface Todo {
   lastCompletedDate: string | null;
   completedDates?: string[];
   dueDate?: string; // Target date (YYYY-MM-DD)
+  urgent?: boolean;
+  important?: boolean;
 }
 
 export type Language = "tr" | "en";

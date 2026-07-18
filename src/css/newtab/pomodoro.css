@@ -774,3 +774,29 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Sound Equalizer Visualizer */
+.sound-bar {
+  display: inline-block;
+  width: 3px;
+  background-color: var(--accent-color);
+  border-radius: 3px;
+  animation: pulse-bar 1s infinite alternate;
+}
+.sound-bar.bar-1 { height: 10px; animation-delay: 0.1s; }
+.sound-bar.bar-2 { height: 14px; animation-delay: 0.4s; }
+.sound-bar.bar-3 { height: 8px; animation-delay: 0.2s; }
+
+@keyframes pulse-bar {
+  0% { height: 4px; }
+  100% { height: 14px; }
+}
+
+.ambient-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.ambient-btn.active:hover {
+  background: rgba(139, 92, 246, 0.25) !important;
+  border-color: var(--accent-color) !important;
+}
+

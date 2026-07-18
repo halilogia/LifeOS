@@ -22,6 +22,7 @@ const DEFAULT_ORDER = [
   "willpower",
   "pomodoro",
   "kanban",
+  "eisenhower",
   "hifiz",
   "notes",
   "srs",
@@ -298,6 +299,36 @@ export function Sidebar({
                       <line x1="15" y1="3" x2="15" y2="21"></line>
                     </svg>
                     <span>{t.view_kanban}</span>
+                  </button>
+                );
+              case "eisenhower":
+                return (
+                  <button
+                    key={key}
+                    id="view-eisenhower-btn"
+                    className={itemClass}
+                    onClick={() => onViewChange("eisenhower")}
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, key)}
+                    onDragOver={(e) => handleDragOver(e, key)}
+                    onDrop={(e) => handleDrop(e, key)}
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                      <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                      <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                      <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    </svg>
+                    <span>{lang === "tr" ? "Eisenhower Matrisi" : "Eisenhower Matrix"}</span>
                   </button>
                 );
               case "hifiz":

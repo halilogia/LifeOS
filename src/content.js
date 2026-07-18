@@ -6,6 +6,21 @@
   styleEl.innerHTML = "html, body { display: none !important; }";
   document.documentElement.appendChild(styleEl);
 
+  // Real-time listener for Pomodoro timer start/stop or settings changes
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === "local" && changes["pomodoro_timer_state"]) {
+      window.location.reload();
+    }
+    if (areaName === "sync" && (
+      changes["detox_enabled"] || 
+      changes["detox_blocked_sites"] || 
+      changes["detox_end_time"] || 
+      changes["pomoBlockEnabled"]
+    )) {
+      window.location.reload();
+    }
+  });
+
   // Retrieve configurations from chrome storage
   chrome.storage.sync.get(
     [
@@ -14,37 +29,48 @@
       "detox_end_time",
       "custom_quotes",
       "lang",
+      "pomoBlockEnabled",
     ],
     (settings) => {
-      const enabled = settings.detox_enabled || false;
-      const blockedSites = settings.detox_blocked_sites || [];
-      const endTime = settings.detox_end_time || 0;
-      const lang = settings.lang || "tr";
+      chrome.storage.local.get(["pomodoro_timer_state"], (localRes) => {
+        const enabled = settings.detox_enabled || false;
+        const blockedSites = settings.detox_blocked_sites || [];
+        const endTime = settings.detox_end_time || 0;
+        const lang = settings.lang || "tr";
+        const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
+        const pomoState = localRes.pomodoro_timer_state || {};
 
-      // Verify if host matches blocked configurations
-      const isBlockedHost = blockedSites.some((site) =>
-        currentHost.includes(site),
-      );
-      const isTimeActive = endTime === -1 || endTime > Date.now(); // -1 represents permanent
+        // Verify if host matches blocked configurations
+        const isBlockedHost = blockedSites.some((site) =>
+          currentHost.includes(site),
+        );
+        const isTimeActive = endTime === -1 || endTime > Date.now();
 
-      if (enabled && isBlockedHost && isTimeActive) {
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", () => {
-            setupBlockPage(endTime, settings.custom_quotes || [], lang);
-          });
+        const isDetoxActive = enabled && isBlockedHost && isTimeActive;
+        const isPomoActive = pomoBlockEnabled && isBlockedHost && pomoState.running && pomoState.mode === "focus";
+
+        if (isDetoxActive || isPomoActive) {
+          const targetEndTime = isPomoActive ? pomoState.endTime : endTime;
+          const isPomo = isPomoActive;
+
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => {
+              setupBlockPage(targetEndTime, settings.custom_quotes || [], lang, isPomo);
+            });
+          } else {
+            setupBlockPage(targetEndTime, settings.custom_quotes || [], lang, isPomo);
+          }
         } else {
-          setupBlockPage(endTime, settings.custom_quotes || [], lang);
+          // Remove hiding stylesheet if not active
+          if (styleEl.parentNode) {
+            styleEl.parentNode.removeChild(styleEl);
+          }
         }
-      } else {
-        // Remove hiding stylesheet if detox is not active
-        if (styleEl.parentNode) {
-          styleEl.parentNode.removeChild(styleEl);
-        }
-      }
+      });
     },
   );
 
-  function setupBlockPage(endTime, customQuotes, lang) {
+  function setupBlockPage(endTime, customQuotes, lang, isPomo) {
     // Remove temporary hiding style element
     if (styleEl && styleEl.parentNode) {
       styleEl.parentNode.removeChild(styleEl);
@@ -110,15 +136,17 @@
     const randomQuote =
       quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
-    const titleText = lang === "tr" ? "Odaklanma Zamanı!" : "Time to Focus!";
-    const descText =
-      lang === "tr"
-        ? "Bu web sitesi, sosyal medya detoksunuz kapsamında engellenmiştir."
-        : "This website is currently blocked as part of your social media detox.";
+    const titleText = isPomo 
+      ? (lang === "tr" ? "Odaklanma Zamanı!" : "Focus Session!")
+      : (lang === "tr" ? "Odaklanma Zamanı!" : "Time to Focus!");
+    const descText = isPomo
+      ? (lang === "tr" ? "Bu web sitesi, aktif Pomodoro odaklanma seansınız boyunca geçici olarak engellenmiştir." : "This website is temporarily blocked during your active Pomodoro focus session.")
+      : (lang === "tr" ? "Bu web sitesi, sosyal medya detoksunuz kapsamında engellenmiştir." : "This website is currently blocked as part of your social media detox.");
     const buttonText =
       lang === "tr" ? "Kontrol Paneline Git" : "Go to Dashboard";
-    const timeRemainingLabel =
-      lang === "tr" ? "Detoks Süresi" : "Detox Duration";
+    const timeRemainingLabel = isPomo
+      ? (lang === "tr" ? "Kalan Odak Süresi" : "Remaining Focus Time")
+      : (lang === "tr" ? "Detoks Süresi" : "Detox Duration");
     const permanentLabel = lang === "tr" ? "Süresiz Blok" : "Permanent Block";
 
     const blockHtml = `
