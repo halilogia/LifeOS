@@ -4,6 +4,14 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.4.0] - 2026-07-18
+### Eklendi
+- **Yapay Zeka Ses Sentezleyiciler**: Odak sesleri ve müzikleri (Yağmur, Rüzgar, Lo-Fi) harici mp3 sunucu bağımlılığından kurtarılarak tamamen çevrimdışı çalışabilen Web Audio API fiziksel ses sentezleyicilerine dönüştürüldü. Rüzgar uğultuları için LFO sweep modu, yağmur için stokastik üstel söndürmeli damla vuruşları ve Lo-Fi kanalı için vinyl çıtırtılı warm rhodes akor döngüsü sentezlendi.
+- **Kişiselleştirilmiş Koyu Tema Takvim Seçici (Custom DatePicker)**: Yapılacak işler için son tarih belirlemede kullanılan beyaz renkli yerel tarayıcı takvimi kaldırıldı; yerine eklentinin mor gradientli ve dark-glassmorphic estetiğiyle bütünleşen, ay geçişli, dairesel seçimli özel `DatePicker` bileşeni eklendi.
+- **Hıfız/Ezber Arayüzü Kart Düzeni**: Ezberlerim ekranında alt alta dizilerek yer kaplayan "Ezberlendi", "Çalışılıyor" ve "Hedef" durum kartları, yatayda tek satırda yan yana duracak şekilde grid düzenine geçirildi.
+- **KPSS Tamamen Otomatik Sınav Tabanlı Süreç**: Konularda manuel olarak tik atıp tamamlama seçeneği kaldırıldı; konu durumları (Başlanmadı / Çalışılıyor / Tamamlandı) tamamen AI quiz seviye belirleme sınavından alınan başarı oranlarına göre (skor >= 80 ise tamamlandı, >= 40 ise çalışılıyor) otomatik hesaplanır hale getirildi. Planlayıcı satırlarına tıklandığında ilgili derse otomatik geçerek sınavı açan akıllı yönlendirme eklendi.
+- **Sınav Başlama Arayüzü Bulanıklığı**: Seviye tespit sınavı başlama modal penceresinin arkasında checklist yazılarının saydam şekilde okunma hatası, modal yapısına `%98` opaklıkta slate arka plan ve `backdrop-filter: blur` eklenerek çözüldü.
+
 ## [3.3.0] - 2026-07-18
 ### Eklendi
 - **KPSS Hedef Ayarları "Ayarlar" Paneline Taşındı**: Net ve Puan hedefi belirleme kontrolleri (artırma/azaltma düğmeleri ve hedef türü seçicileri) KPSS ana ekranından kaldırıldı ve sol alt köşedeki Ayarlar paneline entegre edildi.

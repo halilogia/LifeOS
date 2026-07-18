@@ -294,12 +294,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     return () => clearInterval(interval);
   }, [kpssProgress, lang]);
 
-  // Dynamic AI Fetcher
-  const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
-    setQuizLoading(true);
-    setQuizError(null);
-    setQuizStep("questions");
-
+  // Dynamic AI Fetcher with pre-fetch (1st question immediately, others in background)
+  const fetchQuestionsSubsetFromAI = async (
+    subjectKey: string,
+    topicName: string,
+    count: number,
+    excludeQuestions: QuizQuestion[] = []
+  ): Promise<QuizQuestion[]> => {
     const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
     const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın. Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
 [
@@ -312,216 +313,244 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 ]
 (correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
 
-    const userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
+    let userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
+    if (excludeQuestions.length > 0) {
+      userPrompt += ` Üreteceğin sorular şu sorulardan tamamen farklı olmalıdır: ${JSON.stringify(excludeQuestions.map(q => q.question))}`;
+    }
 
-    try {
-      let responseText = "";
+    let responseText = "";
 
-      if (aiProvider === "ollama") {
-        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
-        const url = baseUrl.includes("/v1") ? `${baseUrl}/chat/completions` : `${baseUrl}/v1/chat/completions`;
-        const modelName = aiModel || "llama3";
-        const payload = {
-          model: modelName,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-          ],
-          stream: false
-        };
+    if (aiProvider === "ollama") {
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
+      const url = baseUrl.includes("/v1") ? `${baseUrl}/chat/completions` : `${baseUrl}/v1/chat/completions`;
+      const modelName = aiModel || "llama3";
+      const payload = {
+        model: modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        stream: false
+      };
 
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-        if (!res.ok) {
-          let errBody = "";
-          try {
-            errBody = await res.text();
-          } catch (_) {}
-          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-        }
-        const data = await res.json();
-        responseText = data.choices?.[0]?.message?.content || "";
-      } else if (aiProvider === "openrouter") {
-        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
-        const url = `${baseUrl}/chat/completions`;
-        const modelName = aiModel || "google/gemini-2.5-flash";
-        const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+      if (!res.ok) {
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+      }
+      const data = await res.json();
+      responseText = data.choices?.[0]?.message?.content || "";
+    } else if (aiProvider === "openrouter") {
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
+      const url = `${baseUrl}/chat/completions`;
+      const modelName = aiModel || "google/gemini-2.5-flash";
+      const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
 
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
 
-        if (aiApiKey && aiApiKey.trim()) {
-          headers["Authorization"] = `Bearer ${aiApiKey}`;
-        }
-
-        if (!isLocal) {
-          headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
-          headers["X-Title"] = "ZenTodo Life OS Dashboard";
-        }
-
-        const payload = {
-          model: modelName,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-          ],
-          stream: false
-        };
-
-        const res = await fetch(url, {
-          method: "POST",
-          headers,
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-          let errBody = "";
-          try {
-            errBody = await res.text();
-          } catch (_) {}
-          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-        }
-        const data = await res.json();
-        responseText = data.choices?.[0]?.message?.content || "";
-      } else {
-        // Gemini provider (default)
-        const modelName = aiModel || "gemini-1.5-flash";
-        const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://generativelanguage.googleapis.com/v1beta";
-        const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
-        const payload = {
-          contents: [{
-            parts: [{
-              text: systemPrompt + "\n\n" + userPrompt
-            }]
-          }],
-          generationConfig: {
-            responseMimeType: "application/json"
-          }
-        };
-
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-          let errBody = "";
-          try {
-            errBody = await res.text();
-          } catch (_) {}
-          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-        }
-        const data = await res.json();
-        responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (aiApiKey && aiApiKey.trim()) {
+        headers["Authorization"] = `Bearer ${aiApiKey}`;
       }
 
-      let cleaned = responseText.trim();
-      
-      // 1. Remove think blocks entirely
-      cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
-
-      // 2. Normalize smart quotes and typical invalid characters
-      cleaned = cleaned
-        .replace(/[\u201C\u201D]/g, '"') // smart double quotes
-        .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
-
-      const firstBrace = cleaned.indexOf("{");
-      const firstBracket = cleaned.indexOf("[");
-      
-      let isObject = false;
-      let startIdx = -1;
-      
-      if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
-        startIdx = firstBrace;
-        isObject = true;
-      } else if (firstBracket !== -1) {
-        startIdx = firstBracket;
-        isObject = false;
+      if (!isLocal) {
+        headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
+        headers["X-Title"] = "ZenTodo Life OS Dashboard";
       }
+
+      const payload = {
+        model: modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        stream: false
+      };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+      }
+      const data = await res.json();
+      responseText = data.choices?.[0]?.message?.content || "";
+    } else {
+      // Gemini provider (default)
+      const modelName = aiModel || "gemini-1.5-flash";
+      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://generativelanguage.googleapis.com/v1beta";
+      const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
+      const payload = {
+        contents: [{
+          parts: [{
+            text: systemPrompt + "\n\n" + userPrompt
+          }]
+        }],
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+      }
+      const data = await res.json();
+      responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    }
+
+    let cleaned = responseText.trim();
+    cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+    cleaned = cleaned
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2018\u2019]/g, "'");
+
+    const firstBrace = cleaned.indexOf("{");
+    const firstBracket = cleaned.indexOf("[");
+    
+    let isObject = false;
+    let startIdx = -1;
+    
+    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+      startIdx = firstBrace;
+      isObject = true;
+    } else if (firstBracket !== -1) {
+      startIdx = firstBracket;
+      isObject = false;
+    }
+    
+    if (startIdx !== -1) {
+      const openChar = isObject ? "{" : "[";
+      const closeChar = isObject ? "}" : "]";
       
-      if (startIdx !== -1) {
-        const openChar = isObject ? "{" : "[";
-        const closeChar = isObject ? "}" : "]";
-        
-        let braceCount = 0;
-        let endIdx = -1;
-        let inString = false;
-        let escape = false;
-        
-        for (let i = startIdx; i < cleaned.length; i++) {
-          const char = cleaned[i];
-          if (escape) {
-            escape = false;
-            continue;
-          }
-          if (char === "\\") {
-            escape = true;
-            continue;
-          }
-          if (char === '"') {
-            inString = !inString;
-            continue;
-          }
-          if (!inString) {
-            if (char === openChar) {
-              braceCount++;
-            } else if (char === closeChar) {
-              braceCount--;
-              if (braceCount === 0) {
-                endIdx = i;
-                break;
-              }
+      let braceCount = 0;
+      let endIdx = -1;
+      let inString = false;
+      let escape = false;
+      
+      for (let i = startIdx; i < cleaned.length; i++) {
+        const char = cleaned[i];
+        if (escape) {
+          escape = false;
+          continue;
+        }
+        if (char === "\\") {
+          escape = true;
+          continue;
+        }
+        if (char === '"') {
+          inString = !inString;
+          continue;
+        }
+        if (!inString) {
+          if (char === openChar) {
+            braceCount++;
+          } else if (char === closeChar) {
+            braceCount--;
+            if (braceCount === 0) {
+              endIdx = i;
+              break;
             }
           }
         }
-        
-        if (endIdx !== -1) {
-          cleaned = cleaned.substring(startIdx, endIdx + 1);
-        }
       }
       
-      let parsed;
-      try {
-        parsed = JSON.parse(cleaned);
-      } catch (firstErr) {
-        try {
-          // Remove trailing commas and add missing commas between lines
-          let patched = cleaned
-            .replace(/,\s*([\]}])/g, "$1")
-            .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
-          parsed = JSON.parse(patched);
-        } catch (secErr) {
-          console.warn("[KpssView JSON parse Fallback] Failed twice. Substring was:", cleaned);
-          // Return a structured empty list instead of throwing to prevent UI crash alert
-          parsed = [];
-        }
+      if (endIdx !== -1) {
+        cleaned = cleaned.substring(startIdx, endIdx + 1);
       }
-      if (!Array.isArray(parsed) && typeof parsed === "object") {
-        const keys = Object.keys(parsed);
-        if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {
-          parsed = parsed[keys[0]];
-        } else {
-          throw new Error("Invalid JSON structure returned by AI.");
-        }
+    }
+    
+    let parsed;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch (firstErr) {
+      try {
+        let patched = cleaned
+          .replace(/,\s*([\]}])/g, "$1")
+          .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
+        parsed = JSON.parse(patched);
+      } catch (secErr) {
+        console.warn("[KpssView JSON parse Fallback] Failed twice. Substring was:", cleaned);
+        parsed = [];
+      }
+    }
+    if (!Array.isArray(parsed) && typeof parsed === "object") {
+      const keys = Object.keys(parsed);
+      if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {
+        parsed = parsed[keys[0]];
+      } else {
+        throw new Error("Invalid JSON structure returned by AI.");
+      }
+    }
+
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed as QuizQuestion[];
+    }
+    return [];
+  };
+
+  const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
+    setQuizLoading(true);
+    setQuizError(null);
+    setQuizStep("questions");
+    setQuizQuestions([]);
+
+    try {
+      // 1. Get first question immediately
+      const firstList = await fetchQuestionsSubsetFromAI(subjectKey, topicName, 1);
+      if (firstList.length === 0) {
+        throw new Error("Soru üretilemedi.");
       }
 
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        setQuizQuestions(parsed);
-        setCurrentQuestionIndex(0);
-        setSelectedAnswers(new Array(parsed.length).fill(-1));
-      } else {
-        throw new Error("No questions found in AI response.");
+      const firstQuestion = firstList[0];
+      setQuizQuestions([firstQuestion]);
+      setCurrentQuestionIndex(0);
+      setSelectedAnswers(new Array(count).fill(-1));
+      setQuizLoading(false); // First question loaded, let user start!
+
+      // 2. Pre-fetch remaining count - 1 questions in the background
+      if (count > 1) {
+        fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [firstQuestion])
+          .then((remainingQuestions) => {
+            if (remainingQuestions.length > 0) {
+              setQuizQuestions((prev) => {
+                const updated = [...prev, ...remainingQuestions];
+                return updated.slice(0, count);
+              });
+            }
+          })
+          .catch((err) => {
+            console.error("Background questions pre-fetch failed:", err);
+          });
       }
     } catch (err: any) {
       console.error("AI quiz generation error:", err);
       setQuizError(lang === "tr" ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin." : "AI failed to generate quiz questions. Please try again.");
-    } finally {
       setQuizLoading(false);
     }
   };
@@ -899,7 +928,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         quizError={quizError}
         aiApiKey={aiApiKey}
         aiEndpoint={aiEndpoint}
-        onClose={() => setActiveQuizTopic(null)}
+        onClose={() => {
+          setActiveQuizTopic(null);
+          setQuizStep("intro");
+          setQuizLoading(false);
+          setQuizQuestions([]);
+          setSelectedAnswers([]);
+          setQuizError(null);
+        }}
         onSetSelectedQuizCount={setSelectedQuizCount}
         onStartQuiz={() => fetchQuizFromAI(currentSubject, activeQuizTopic!, selectedQuizCount)}
         onSelectAnswer={(oIdx) => {

@@ -10,6 +10,7 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 
 - **🎯 Gelişmiş Odaklanma (Pomodoro, Kronometre ve Alarmlar)**:
   - Verimli çalışma seansları için özelleştirilebilir odaklanma zamanlayıcısı (Focus, Kısa Mola, Uzun Mola modları) ve dairesel SVG ilerleme çubuğu.
+  - **Fiziksel Ses Sentezleyiciler**: Pomodoro seansları için harici site bağımlılığı olmayan çevrimdışı Web Audio API sentezleyicileri (LFO dalgalanmalı Rüzgar, stokastik tıkırtılı Yağmur damlaları, vinyl çıtırtılı warm Lo-Fi piyano döngüsü ve saç kurutma makinesi gürültüsü).
   - **Telefon Tipi Alarmlar**: Klasik alarm arayüzleri gibi çalışabilen, aktif/pasif hale getirilebilen, listeden silinebilen ve çaldığında otomatik kapanan çoklu alarm modülü.
   - **Senkronize Kronometre**: Sekmeler ve sağ üst pop-up penceresi arasında canlı olarak senkronize olan entegre kronometre.
 - **📋 Görev Yönetimi (To-Do & Kanban)**:
@@ -18,7 +19,7 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Sürükle-bırak (Drag-and-Drop) ve kolay taşımayı destekleyen modern **Kanban Panosu**.
 - **📚 KPSS Hazırlık Takibi**:
   - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
-  - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri ve sonuca göre otomatik güncellenen konu tamamlanma durumu.
+  - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri. Sınav sonucuna göre konu durumları otomatik güncellenir 
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
 - **📈 Özel Borsa İstanbul Grafik Paneli**:
   - BIST hisseleri için tamamen kendi geliştirdiğimiz, Yahoo Finance veri altyapısıyla çalışan mum (Candlestick) grafik ekranı. 1M, 3M, 6M, 1Y zaman aralığı filtreleri ve fare takipli crosshair veri çubuğu.
