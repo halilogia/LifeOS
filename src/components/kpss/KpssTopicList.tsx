@@ -10,6 +10,7 @@ interface KpssTopicListProps {
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onToggleTopic: (topic: string) => void;
   onStartQuiz: (topic: string) => void;
+  onShowDetail: (topic: { title: string; description: string }) => void;
   labels: Record<string, string>;
 }
 
@@ -22,6 +23,7 @@ export function KpssTopicList({
   onSortByChange,
   onToggleTopic,
   onStartQuiz,
+  onShowDetail,
   labels,
 }: KpssTopicListProps) {
   return (
@@ -75,62 +77,79 @@ export function KpssTopicList({
           return (
             <div
               key={t.title}
-              className={`kpss-topic-card status-${status}`}
+              className="kpss-topic-item"
+              data-status={status.toString()}
+              onClick={() => onToggleTopic(t.title)}
             >
-              <div className="kpss-topic-main">
-                <div
-                  className={`kpss-checkbox ${status === 2 ? "checked" : status === 1 ? "working" : ""}`}
-                  onClick={() => onToggleTopic(t.title)}
-                  title={
-                    status === 2
-                      ? lang === "tr"
-                        ? "Tamamlandı"
-                        : "Completed"
-                      : status === 1
-                      ? lang === "tr"
-                        ? "Çalışılıyor"
-                        : "Working"
-                      : lang === "tr"
-                      ? "Başlanmadı"
-                      : "Not Started"
-                  }
+              <div className="kpss-status-indicator">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </div>
-                <span className="kpss-topic-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span>{t.title}</span>
-                  <span className="kpss-topic-q-badge" style={{ fontSize: "0.65rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid var(--card-border)", padding: "2px 6px", borderRadius: "4px", color: "var(--text-secondary)", fontWeight: "600" }}>
-                    {t.questionsCount} {lang === "tr" ? "Soru" : "Q"}
-                  </span>
-                  {progress && progress.score !== undefined && (
-                    <span className="kpss-topic-score-badge">%{progress.score}</span>
-                  )}
-                </span>
-
-                {/* Seviye Tespit Sınavı button */}
-                <button
-                  className="kpss-quiz-trigger-btn"
-                  onClick={() => onStartQuiz(t.title)}
-                  title={lang === "tr" ? "Yapay Zekâ ile Test Çöz" : "Take AI Quiz"}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
-                  <span>{lang === "tr" ? "Test Çöz" : "Quiz"}</span>
-                </button>
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
               </div>
-              <p className="kpss-topic-desc">{t.description}</p>
+              <span className="kpss-topic-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span>{t.title}</span>
+                <span className="kpss-topic-q-badge" style={{ fontSize: "0.65rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid var(--card-border)", padding: "2px 6px", borderRadius: "4px", color: "var(--text-secondary)", fontWeight: "600" }}>
+                  {t.questionsCount} {lang === "tr" ? "Soru" : "Q"}
+                </span>
+                {progress && progress.score !== undefined && (
+                  <span className="kpss-topic-score-badge">%{progress.score}</span>
+                )}
+              </span>
+
+              {/* Seviye Tespit Sınavı button */}
+              <button
+                className="kpss-exam-btn"
+                title={lang === "tr" ? "Seviye Tespit Sınavı Çöz" : "Solve Proficiency Test"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onStartQuiz(t.title);
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </button>
+
+              {/* Detail Info button */}
+              <button
+                className="kpss-info-btn"
+                title="Detay"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onShowDetail({
+                    title: t.title,
+                    description: t.description,
+                  });
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </button>
             </div>
           );
         })}
