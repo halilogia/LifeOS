@@ -19,6 +19,9 @@ interface KpssViewProps {
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
+  goalType: "net" | "score";
+  targetNet: number;
+  targetScore: number;
 }
 
 interface QuizQuestion {
@@ -64,7 +67,7 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
   },
 };
 
-export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, aiEndpoint }: KpssViewProps) {
+export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, aiEndpoint, goalType, targetNet, targetScore }: KpssViewProps) {
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -106,9 +109,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [sortBy, setSortBy] = useState<"default" | "questions" | "status">("default");
 
   // KPSS Hedef ve Grafik Sistemleri
-  const [targetScore, setTargetScore] = useState(80);
-  const [goalType, setGoalType] = useState<"net" | "score">("net");
-  const [targetNet, setTargetNet] = useState<number>(80);
   const [chartType, setChartType] = useState<"line" | "bar">("line");
 
   // KPSS SRS States
@@ -201,34 +201,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
     const stats = await kpssService.getKpssDailyStats();
-    const target = await storage.getKpssTargetScore();
-    const gType = await storage.getKpssGoalType();
-    const tNet = await storage.getKpssTargetNet();
     const cType = await storage.getKpssChartType();
     
     setKpssProgress(progress);
     setDailyStats(stats);
-    setTargetScore(target);
-    setGoalType(gType);
-    setTargetNet(tNet);
     setChartType(cType);
-  };
-
-  const handleTargetScoreChange = async (val: number) => {
-    if (isNaN(val) || val < 0 || val > 100) return;
-    setTargetScore(val);
-    await storage.setKpssTargetScore(val);
-  };
-
-  const handleTargetNetChange = async (val: number) => {
-    if (isNaN(val) || val < 0 || val > 120) return;
-    setTargetNet(val);
-    await storage.setKpssTargetNet(val);
-  };
-
-  const handleGoalTypeChange = async (type: "net" | "score") => {
-    setGoalType(type);
-    await storage.setKpssGoalType(type);
   };
 
   const handleChartTypeChange = async (type: "line" | "bar") => {
@@ -581,11 +558,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
       ctx.setLineDash([]); // Reset line dash style
 
-      // Draw values on the right edge
+      // Draw values: Soru on the left edge, Video on the right edge to prevent overlap!
       ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
       ctx.font = "bold 9px Inter";
+      
+      ctx.textAlign = "left";
+      ctx.fillText(`${lang === "tr" ? "Hedef Soru" : "Target Q"}: ${dailyQuestionsTarget}`, padding + 4, yTargetQ - 4);
+      
       ctx.textAlign = "right";
-      ctx.fillText(`${lang === "tr" ? "Hedef Soru" : "Target Q"}: ${dailyQuestionsTarget}`, width - padding - 4, yTargetQ - 4);
       ctx.fillText(`${lang === "tr" ? "Hedef Video" : "Target V"}: ${dailyVideosTarget}`, width - padding - 4, yTargetV - 4);
     };
 
@@ -654,12 +634,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
         ctx.setLineDash([]); // Reset
 
-        // Draw indicators
+        // Draw indicators: Soru on the left edge, Video on the right edge to prevent overlap!
         ctx.fillStyle = "white";
         ctx.font = "bold 10px Inter";
+        
         ctx.textAlign = "left";
-        ctx.fillText(`🎯 ${lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target"}: ${dailyQuestionsTarget} Soru`, padding + 10, yTargetQ - 6);
-        ctx.fillText(`🎯 ${lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target"}: ${dailyVideosTarget} Video`, padding + 10, yTargetV - 6);
+        ctx.fillText(`${lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target"}: ${dailyQuestionsTarget} Soru`, padding + 10, yTargetQ - 6);
+        
+        ctx.textAlign = "right";
+        ctx.fillText(`${lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target"}: ${dailyVideosTarget} Video`, width - padding - 10, yTargetV - 6);
 
         // X-Axis date label mapping
         for (let i = 0; i < chartDays; i++) {
@@ -1035,9 +1018,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               overallNet={overallNet}
               maxNet={maxNet}
               estimatedScore={estimatedScore}
-              onGoalTypeChange={handleGoalTypeChange}
-              onTargetNetChange={handleTargetNetChange}
-              onTargetScoreChange={handleTargetScoreChange}
               getSubjectNets={getSubjectNets}
               labels={labels}
               subjectsList={Object.keys(kpssData)}

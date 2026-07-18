@@ -36,6 +36,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **No Tailwind CSS**: Use vanilla CSS only.
 * Write custom styles in modular, domain-specific chunks under `src/css/newtab/<feature>.css` (e.g. `pomodoro.css`, `willpower.css`, `tasks.css`).
 * Respect the dark glassmorphic design system: use vibrant accents, smooth borders, and micro-interactions.
+* **No Low-Quality Emojis for Visual Labels**: Emojis like 📈, 📊, 🎯, ⚙️, 🔥, 📅, 🙋‍♂️, 🗑️, 📥, 👑, 🎉 must not be used as visual icons or prefixes in titles/buttons/labels. Always prefer premium custom inline SVGs or clean text representation.
 
 ### 2.2 Preact Declarative States (No Manual DOM Queries)
 * **Zero Direct DOM Queries**: Do not call `document.getElementById` or `document.querySelector` to update layouts or read values.

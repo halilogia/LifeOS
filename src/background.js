@@ -10,8 +10,10 @@ function saveBufferToStorage() {
   if (activeDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
     if (elapsed > 0) {
+      // Capped to a maximum of 12 seconds to filter out periods when computer is in sleep or locked
+      const normalElapsed = Math.min(elapsed, 12);
       screenTimeBuffer[activeDomain] =
-        (screenTimeBuffer[activeDomain] || 0) + elapsed;
+        (screenTimeBuffer[activeDomain] || 0) + normalElapsed;
       domainStartTime = now; // reset start time to prevent double counting
     }
   }
@@ -48,8 +50,9 @@ function handleDomainChange(newDomain) {
   if (currentDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
     if (elapsed > 0) {
+      const normalElapsed = Math.min(elapsed, 12);
       screenTimeBuffer[currentDomain] =
-        (screenTimeBuffer[currentDomain] || 0) + elapsed;
+        (screenTimeBuffer[currentDomain] || 0) + normalElapsed;
     }
   }
 

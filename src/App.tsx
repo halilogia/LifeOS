@@ -9,10 +9,8 @@ import {
 import { translations } from "./utils/i18n.js";
 import { Language, Todo } from "./types/types.js";
 
-// Import View Components
 import { Sidebar } from "./components/Sidebar.js";
 import { ListView } from "./components/ListView.js";
-import { KanbanView } from "./components/KanbanView.js";
 import { NotesView } from "./components/NotesView.js";
 import { PomodoroView } from "./components/PomodoroView.js";
 import { WillpowerView } from "./components/WillpowerView.js";
@@ -69,6 +67,11 @@ export function App() {
   // Universal Info Box / Inline Translation Bubble states
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
   const [universalInfoBoxHotkey, setUniversalInfoBoxHotkey] = useState("none");
+
+  // KPSS Target Settings States
+  const [kpssGoalType, setKpssGoalType] = useState<"net" | "score">("net");
+  const [kpssTargetNet, setKpssTargetNet] = useState<number>(80);
+  const [kpssTargetScore, setKpssTargetScore] = useState<number>(80);
 
   // Custom confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -177,6 +180,14 @@ export function App() {
       setAiModel(model);
       setAiEndpoint(endpoint);
 
+      // Load KPSS configurations
+      const kGoalType = await storage.getKpssGoalType();
+      const kTargetNet = await storage.getKpssTargetNet();
+      const kTargetScore = await storage.getKpssTargetScore();
+      setKpssGoalType(kGoalType);
+      setKpssTargetNet(kTargetNet);
+      setKpssTargetScore(kTargetScore);
+
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
         "sidebar-open",
@@ -235,6 +246,24 @@ export function App() {
       day: "numeric",
     };
     setDateText(now.toLocaleDateString(locale, options));
+  };
+
+  // Trigger language change updates
+  const handleKpssGoalTypeChange = async (type: "net" | "score") => {
+    setKpssGoalType(type);
+    await storage.setKpssGoalType(type);
+  };
+
+  const handleKpssTargetNetChange = async (val: number) => {
+    if (isNaN(val) || val < 0 || val > 120) return;
+    setKpssTargetNet(val);
+    await storage.setKpssTargetNet(val);
+  };
+
+  const handleKpssTargetScoreChange = async (val: number) => {
+    if (isNaN(val) || val < 0 || val > 100) return;
+    setKpssTargetScore(val);
+    await storage.setKpssTargetScore(val);
   };
 
   // Trigger language change updates
@@ -824,9 +853,11 @@ export function App() {
         );
       case "kanban":
         return (
-          <KanbanView
+          <EisenhowerView
             todos={todos}
             lang={lang}
+            defaultTab="kanban"
+            onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
             onMoveTaskStatus={handleMoveTaskStatus}
             onMoveTaskDirection={handleMoveTaskDirection}
           />
@@ -836,7 +867,10 @@ export function App() {
           <EisenhowerView
             todos={todos}
             lang={lang}
+            defaultTab="matrix"
             onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
+            onMoveTaskStatus={handleMoveTaskStatus}
+            onMoveTaskDirection={handleMoveTaskDirection}
           />
         );
       case "notes":
@@ -862,6 +896,9 @@ export function App() {
             aiApiKey={aiApiKey}
             aiModel={aiModel}
             aiEndpoint={aiEndpoint}
+            goalType={kpssGoalType}
+            targetNet={kpssTargetNet}
+            targetScore={kpssTargetScore}
           />
         );
       case "free-games":
@@ -1029,6 +1066,12 @@ export function App() {
         syncSettings={syncSettings}
         onBackupToGoogleDrive={handleBackupToGoogleDrive}
         onRestoreFromGoogleDrive={handleRestoreFromGoogleDrive}
+        kpssGoalType={kpssGoalType}
+        kpssTargetNet={kpssTargetNet}
+        kpssTargetScore={kpssTargetScore}
+        onKpssGoalTypeChange={handleKpssGoalTypeChange}
+        onKpssTargetNetChange={handleKpssTargetNetChange}
+        onKpssTargetScoreChange={handleKpssTargetScoreChange}
       />
 
       {/* Main Card Viewport Container */}

@@ -33,6 +33,12 @@ export interface SettingsDrawerProps {
   syncSettings: GoogleSyncSettings;
   onBackupToGoogleDrive: () => void;
   onRestoreFromGoogleDrive: () => void;
+  kpssGoalType: "net" | "score";
+  kpssTargetNet: number;
+  kpssTargetScore: number;
+  onKpssGoalTypeChange: (type: "net" | "score") => void;
+  onKpssTargetNetChange: (val: number) => void;
+  onKpssTargetScoreChange: (val: number) => void;
 }
 
 export function SettingsDrawer({
@@ -65,6 +71,12 @@ export function SettingsDrawer({
   syncSettings,
   onBackupToGoogleDrive,
   onRestoreFromGoogleDrive,
+  kpssGoalType,
+  kpssTargetNet,
+  kpssTargetScore,
+  onKpssGoalTypeChange,
+  onKpssTargetNetChange,
+  onKpssTargetScoreChange,
 }: SettingsDrawerProps) {
   const t = translations[lang];
   const [settingsTab, setSettingsTab] = useState<"general" | "ai" | "sync">("general");
@@ -329,6 +341,133 @@ export function SettingsDrawer({
                     </select>
                   </div>
                 )}
+              </div>
+            </div>
+
+            <div className="settings-group" style={{ marginTop: "10px" }}>
+              <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
+                {lang === "tr" ? "KPSS Hedef Ayarları" : "KPSS Goal Settings"}
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "12px 14px" }}>
+                
+                {/* Goal Type Pill Selector */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+                    {lang === "tr" ? "Hedef Türü" : "Goal Type"}
+                  </span>
+                  <div style={{ display: "flex", gap: "2px", background: "rgba(255, 255, 255, 0.05)", padding: "2px", borderRadius: "6px", border: "1px solid var(--card-border)" }}>
+                    <button
+                      type="button"
+                      onClick={() => onKpssGoalTypeChange("net")}
+                      style={{
+                        background: kpssGoalType === "net" ? "var(--accent-color)" : "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "0.65rem",
+                        padding: "4px 10px",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: "600",
+                        transition: "background 0.2s"
+                      }}
+                    >
+                      {lang === "tr" ? "Net" : "Net"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onKpssGoalTypeChange("score")}
+                      style={{
+                        background: kpssGoalType === "score" ? "var(--accent-color)" : "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "0.65rem",
+                        padding: "4px 10px",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontWeight: "600",
+                        transition: "background 0.2s"
+                      }}
+                    >
+                      {lang === "tr" ? "Puan" : "Score"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Target Tuning Controls */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+                    {kpssGoalType === "net" ? (lang === "tr" ? "Soru Net Hedefi" : "Net Target") : (lang === "tr" ? "Puan Hedefi" : "Score Target")}
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "30px" }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (kpssGoalType === "net") {
+                          onKpssTargetNetChange(Math.max(10, kpssTargetNet - 1));
+                        } else {
+                          onKpssTargetScoreChange(Math.max(40, kpssTargetScore - 1));
+                        }
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "rgba(255, 255, 255, 0.6)",
+                        padding: "0 10px",
+                        cursor: "pointer",
+                        fontSize: "1.1rem",
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        height: "100%",
+                        userSelect: "none"
+                      }}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      value={kpssGoalType === "net" ? kpssTargetNet : kpssTargetScore}
+                      readOnly
+                      style={{
+                        width: "30px",
+                        background: "none",
+                        border: "none",
+                        color: "white",
+                        fontSize: "0.95rem",
+                        padding: 0,
+                        fontWeight: "700",
+                        textAlign: "center",
+                        outline: "none"
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (kpssGoalType === "net") {
+                          onKpssTargetNetChange(Math.min(120, kpssTargetNet + 1));
+                        } else {
+                          onKpssTargetScoreChange(Math.min(100, kpssTargetScore + 1));
+                        }
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "rgba(255, 255, 255, 0.6)",
+                        padding: "0 10px",
+                        cursor: "pointer",
+                        fontSize: "1.1rem",
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        height: "100%",
+                        userSelect: "none"
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
