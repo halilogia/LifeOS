@@ -31,6 +31,15 @@ interface QuizQuestion {
   options: string[];
   correctAnswer: number;
   solution: string;
+  chart?: {
+    type: "bar" | "line" | "geometry";
+    title?: string;
+    labels?: string[];
+    values?: (number | string)[];
+    shape?: "triangle" | "circle" | "parallel_lines";
+    angles?: Record<string, string>;
+    sides?: Record<string, string>;
+  };
 }
 
 interface KpssPastQuiz {
@@ -301,14 +310,27 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     count: number,
     excludeQuestions: QuizQuestion[] = []
   ): Promise<QuizQuestion[]> => {
+    const tStart = performance.now();
+    console.log(`%c[AI Fetch - Start] Requesting ${count} questions for "${topicName}"`, "color: #a78bfa; font-weight: bold;");
+
     const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
-    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın. Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
+    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.
+Eğer hazırladığın soru bir grafik okuma, nüfus/ekonomi istatistiği tablosu, çizgi grafik okuma veya geometri (üçgen açı/kenar, çember, paralel doğrular kesen) sorusu ise nesneye isteğe bağlı bir "chart" alanı ekle.
+"chart" alanı şu formatlardan biri olmalıdır:
+1. Sütun Grafiği: { "type": "bar", "title": "Grafik Başlığı", "labels": ["Oca", "Şub", "Mar"], "values": [15, 30, 25] }
+2. Çizgi Grafiği: { "type": "line", "title": "Grafik Başlığı", "labels": ["1990", "2000", "2010"], "values": [120, 250, 480] }
+3. Geometri Üçgen Şekli: { "type": "geometry", "shape": "triangle", "angles": { "A": "60°", "B": "x", "C": "80°" }, "sides": { "AB": "6", "BC": "8", "AC": "y" } }
+4. Geometri Çember Şekli: { "type": "geometry", "shape": "circle", "sides": { "radius": "5" } }
+5. Paralel Doğrular ve Açı Soruları: { "type": "geometry", "shape": "parallel_lines", "angles": { "top_right": "120°", "bottom_left": "x" } }
+
+Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
 [
   {
     "question": "Soru metni...",
     "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği", "E seçeneği"],
     "correctAnswer": 0,
-    "solution": "Sorunun detaylı çözümü ve açıklama metni..."
+    "solution": "Sorunun detaylı çözümü...",
+    "chart": { ... } // Sadece grafik/geometri soruları için isteğe bağlı
   }
 ]
 (correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
@@ -319,6 +341,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
 
     let responseText = "";
+    const tNetworkStart = performance.now();
 
     if (aiProvider === "ollama") {
       const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
@@ -339,6 +362,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         body: JSON.stringify(payload)
       });
 
+      const tNetworkEnd = performance.now();
+      console.log(`[AI Fetch - Network] Ollama HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
+
       if (!res.ok) {
         let errBody = "";
         try {
@@ -346,7 +372,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         } catch (_) {}
         throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
       }
+
+      const tReadStart = performance.now();
       const data = await res.json();
+      const tReadEnd = performance.now();
+      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
       responseText = data.choices?.[0]?.message?.content || "";
     } else if (aiProvider === "openrouter") {
       const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
@@ -382,6 +412,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         body: JSON.stringify(payload)
       });
 
+      const tNetworkEnd = performance.now();
+      console.log(`[AI Fetch - Network] 9Router/OpenRouter HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
+
       if (!res.ok) {
         let errBody = "";
         try {
@@ -389,7 +422,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         } catch (_) {}
         throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
       }
+
+      const tReadStart = performance.now();
       const data = await res.json();
+      const tReadEnd = performance.now();
+      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
       responseText = data.choices?.[0]?.message?.content || "";
     } else {
       // Gemini provider (default)
@@ -413,6 +450,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         body: JSON.stringify(payload)
       });
 
+      const tNetworkEnd = performance.now();
+      console.log(`[AI Fetch - Network] Gemini API HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
+
       if (!res.ok) {
         let errBody = "";
         try {
@@ -420,10 +460,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         } catch (_) {}
         throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
       }
+
+      const tReadStart = performance.now();
       const data = await res.json();
+      const tReadEnd = performance.now();
+      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
       responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     }
 
+    const tCleanStart = performance.now();
     let cleaned = responseText.trim();
     cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
     cleaned = cleaned
@@ -507,6 +552,12 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         throw new Error("Invalid JSON structure returned by AI.");
       }
     }
+
+    const tCleanEnd = performance.now();
+    console.log(`[AI Fetch - Clean & Parse] Extract JSON in ${Math.round(tCleanEnd - tCleanStart)} ms`);
+
+    const tTotal = performance.now() - tStart;
+    console.log(`%c[AI Fetch - Complete] Successfully loaded ${count} questions in ${Math.round(tTotal)} ms`, "color: #10b981; font-weight: bold;");
 
     if (Array.isArray(parsed) && parsed.length > 0) {
       return parsed as QuizQuestion[];
