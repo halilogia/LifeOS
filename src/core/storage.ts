@@ -28,6 +28,7 @@ interface SettingsResult {
   calendarNotificationsEnabled?: boolean;
   pomoBlockEnabled?: boolean;
   pomoCustomTimes?: { focus: number; short: number; long: number };
+  kpssTargetScore?: number;
   universalInfoBoxEnabled?: boolean;
   universalInfoBoxHotkey?: string;
 }
@@ -348,6 +349,18 @@ export const storage = {
       chrome.storage.sync.set({ pomoCustomTimes: times }, resolve);
     });
   },
+  getKpssTargetScore: (): Promise<number> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["kpssTargetScore"], (result: any) => {
+        resolve(result.kpssTargetScore !== undefined ? result.kpssTargetScore : 80);
+      });
+    });
+  },
+  setKpssTargetScore: (score: number): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ kpssTargetScore: score }, resolve);
+    });
+  },
   setPrayerLocation: (city: string, country: string): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
@@ -402,6 +415,7 @@ export const storage = {
                 "calendarNotificationsEnabled",
                 "pomoBlockEnabled",
                 "pomoCustomTimes",
+                "kpssTargetScore",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",
