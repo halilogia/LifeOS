@@ -4,6 +4,15 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.3.0] - 2026-07-18
+### Eklendi
+- **KPSS Hedef Ayarları "Ayarlar" Paneline Taşındı**: Net ve Puan hedefi belirleme kontrolleri (artırma/azaltma düğmeleri ve hedef türü seçicileri) KPSS ana ekranından kaldırıldı ve sol alt köşedeki Ayarlar paneline entegre edildi.
+- **Eisenhower Matrisi ve Kanban Menü Birleştirmesi**: Navigasyon sidebar'ındaki ayrı duran Kanban ve Eisenhower Matrix butonları, tek bir premium "Eisenhower & Kanban" menü seçeneği altında birleştirildi.
+- **Düşük Kaliteli Emojilerin SVG İkonlarla Değiştirilmesi**: Arayüzlerdeki 📈, 📊 ve 🎯 gibi emojiler mor temalı yüksek çözünürlüklü vektörel SVG simgelerle güncellendi.
+- **Grafik Yazı Üst Üste Binme Hatası Düzeltildi**: Çizgi grafikte soru ve video hedeflerinin çakışmasını engellemek amacıyla hedefler sol ve sağ kenarlara zıt olarak hizalandı.
+- **Ekran Süresi Uyku Modu (Sleep) Düzeltmesi**: Bilgisayar kilitlendiğinde veya uykuya geçtiğinde süre birikmesini engellemek için tekil zaman artışları arka planda maksimum 12 saniye ile sınırlandırıldı.
+- **Yasaklanan Emojiler Kuralı**: [.agents/AGENTS.md](file:///c:/Users/emre_/.agents/AGENTS.md) dosyasına görsel etiketlerde düşük kaliteli emoji kullanımını yasaklayan kural eklendi.
+
 ## [3.2.0] - 2026-07-18
 ### Eklendi
 - **Notlar & Günlük İçin Gelişmiş Sözler Filtresi**: Günlüğüm (Notes) sekmesine özel "Sözler" filtresi eklendi. "Hepsi" ve "Sözler" seçildiğinde özel motivasyon sözlerinize erişim sağlanırken, diğer not kategorileri seçildiğinde ekranın sade kalması adına sözler listesi otomatik olarak gizlenir.
