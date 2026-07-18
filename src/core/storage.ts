@@ -25,6 +25,7 @@ interface SettingsResult {
   prayerCity?: string;
   prayerCountry?: string;
   freeGamesNotificationsEnabled?: boolean;
+  calendarNotificationsEnabled?: boolean;
   universalInfoBoxEnabled?: boolean;
   universalInfoBoxHotkey?: string;
 }
@@ -258,6 +259,7 @@ export const storage = {
     prayerCity?: string;
     prayerCountry?: string;
     freeGamesNotificationsEnabled: boolean;
+    calendarNotificationsEnabled: boolean;
     universalInfoBoxEnabled: boolean;
     universalInfoBoxHotkey: string;
   }> => {
@@ -269,6 +271,7 @@ export const storage = {
           "prayerCity",
           "prayerCountry",
           "freeGamesNotificationsEnabled",
+          "calendarNotificationsEnabled",
           "universalInfoBoxEnabled",
           "universalInfoBoxHotkey",
         ],
@@ -280,6 +283,8 @@ export const storage = {
             prayerCountry: result.prayerCountry || "Turkey",
             freeGamesNotificationsEnabled:
               result.freeGamesNotificationsEnabled ?? true,
+            calendarNotificationsEnabled:
+              result.calendarNotificationsEnabled ?? true,
             universalInfoBoxEnabled: result.universalInfoBoxEnabled ?? true,
             universalInfoBoxHotkey: result.universalInfoBoxHotkey || "none",
           });
@@ -299,6 +304,14 @@ export const storage = {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
         { freeGamesNotificationsEnabled: enabled },
+        resolve,
+      );
+    });
+  },
+  setCalendarNotificationsEnabled: (enabled: boolean): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { calendarNotificationsEnabled: enabled },
         resolve,
       );
     });
@@ -354,6 +367,7 @@ export const storage = {
                 "prayerCountry",
                 "willpowerStreak",
                 "freeGamesNotificationsEnabled",
+                "calendarNotificationsEnabled",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",

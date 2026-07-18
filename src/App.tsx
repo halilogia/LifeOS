@@ -52,6 +52,10 @@ export function App() {
   const [freeGamesNotificationsEnabled, setFreeGamesNotificationsEnabled] =
     useState(true);
 
+  // Calendar tasks due today notification toggle
+  const [calendarNotificationsEnabled, setCalendarNotificationsEnabled] =
+    useState(true);
+
   // AI Assistant States
   const [aiProvider, setAiProvider] = useState<string>("openrouter");
   const [aiApiKey, setAiApiKey] = useState<string>("");
@@ -145,6 +149,9 @@ export function App() {
       setSidebarOpen(config.sidebarOpen ?? true);
       setFreeGamesNotificationsEnabled(
         config.freeGamesNotificationsEnabled ?? true,
+      );
+      setCalendarNotificationsEnabled(
+        config.calendarNotificationsEnabled ?? true,
       );
       setUniversalInfoBoxEnabled(config.universalInfoBoxEnabled ?? true);
       setUniversalInfoBoxHotkey(config.universalInfoBoxHotkey || "none");
@@ -745,6 +752,12 @@ export function App() {
     setFreeGamesNotificationsEnabled(nextVal);
   };
 
+  const handleToggleCalendarNotifications = async () => {
+    const nextVal = !calendarNotificationsEnabled;
+    await storage.setCalendarNotificationsEnabled(nextVal);
+    setCalendarNotificationsEnabled(nextVal);
+  };
+
   const handleToggleUniversalInfoBox = async () => {
     const nextVal = !universalInfoBoxEnabled;
     await storage.setUniversalInfoBox(nextVal, universalInfoBoxHotkey);
@@ -961,6 +974,8 @@ export function App() {
         onToggleLang={handleToggleLang}
         freeGamesNotificationsEnabled={freeGamesNotificationsEnabled}
         onToggleFreeGamesNotifications={handleToggleFreeGamesNotifications}
+        calendarNotificationsEnabled={calendarNotificationsEnabled}
+        onToggleCalendarNotifications={handleToggleCalendarNotifications}
         universalInfoBoxEnabled={universalInfoBoxEnabled}
         onToggleUniversalInfoBox={handleToggleUniversalInfoBox}
         universalInfoBoxHotkey={universalInfoBoxHotkey}

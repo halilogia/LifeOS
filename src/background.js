@@ -180,25 +180,84 @@ async function checkFreeGames() {
   );
 }
 
+async function checkCalendarTasks() {
+  chrome.storage.sync.get(
+    ["calendarNotificationsEnabled", "lang", "todos"],
+    (syncRes) => {
+      const notificationsEnabled = syncRes.calendarNotificationsEnabled ?? true;
+      if (!notificationsEnabled) {
+        return;
+      }
+
+      const lang = syncRes.lang || "tr";
+      const todos = syncRes.todos || [];
+
+      // sv locale returns YYYY-MM-DD format reliably
+      const todayStr = new Date().toLocaleDateString("sv");
+      const dueToday = todos.filter((t) => !t.completed && t.dueDate === todayStr);
+
+      if (dueToday.length === 0) {
+        return;
+      }
+
+      chrome.storage.local.get(["last_calendar_notification_date"], (localRes) => {
+        const lastDate = localRes.last_calendar_notification_date;
+        if (lastDate === todayStr) {
+          return;
+        }
+
+        const title =
+          lang === "tr"
+            ? "Bugün Yapılacak Görevleriniz Var"
+            : "You Have Tasks Due Today";
+        const message =
+          lang === "tr"
+            ? `Bugün tamamlamanız gereken ${dueToday.length} adet görev bulunuyor. Görmek için tıklayın!`
+            : `You have ${dueToday.length} tasks to complete today. Click to view!`;
+
+        chrome.notifications.create("calendar_tasks_due_today", {
+          type: "basic",
+          iconUrl: "icons/icon-128.png",
+          title: title,
+          message: message,
+          priority: 2,
+        });
+
+        chrome.storage.local.set({ last_calendar_notification_date: todayStr });
+      });
+    },
+  );
+}
+
 // Alarm Trigger Listener
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "check_free_games") {
     checkFreeGames();
+  } else if (alarm.name === "check_calendar_tasks") {
+    checkCalendarTasks();
   }
 });
 
 // Register Alarms on installation and browser startup
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
+  chrome.alarms.create("check_calendar_tasks", { periodInMinutes: 30 });
   checkFreeGames();
+  checkCalendarTasks();
 });
 
 chrome.runtime.onStartup.addListener(() => {
   chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
+  chrome.alarms.create("check_calendar_tasks", { periodInMinutes: 30 });
+  checkCalendarTasks();
 });
 
-// Listen for notification clicks to open the giveaway claim links
+// Listen for notification clicks to open the giveaway claim links or newtab page
 chrome.notifications.onClicked.addListener((notificationId) => {
+  if (notificationId === "calendar_tasks_due_today") {
+    chrome.tabs.create({ url: "chrome://newtab" });
+    return;
+  }
   const giveawayId = parseInt(notificationId, 10);
   if (!isNaN(giveawayId)) {
     chrome.tabs.create({
