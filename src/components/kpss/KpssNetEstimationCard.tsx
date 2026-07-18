@@ -8,9 +8,6 @@ interface KpssNetEstimationCardProps {
   overallNet: number;
   maxNet: number;
   estimatedScore: number;
-  onGoalTypeChange: (type: "net" | "score") => void;
-  onTargetNetChange: (val: number) => void;
-  onTargetScoreChange: (val: number) => void;
   getSubjectNets: (subKey: string) => { net: number; max: number };
   labels: Record<string, string>;
   subjectsList: string[];
@@ -24,9 +21,6 @@ export function KpssNetEstimationCard({
   overallNet,
   maxNet,
   estimatedScore,
-  onGoalTypeChange,
-  onTargetNetChange,
-  onTargetScoreChange,
   getSubjectNets,
   labels,
   subjectsList,
@@ -36,22 +30,6 @@ export function KpssNetEstimationCard({
   const currentValue = isNetMode ? overallNet : estimatedScore;
   const percentage = Math.min(100, Math.round((currentValue / activeTarget) * 100));
   const isTargetAchieved = currentValue >= activeTarget;
-
-  const handleDecrease = () => {
-    if (isNetMode) {
-      onTargetNetChange(Math.max(10, targetNet - 1));
-    } else {
-      onTargetScoreChange(Math.max(40, targetScore - 1));
-    }
-  };
-
-  const handleIncrease = () => {
-    if (isNetMode) {
-      onTargetNetChange(Math.min(120, targetNet + 1));
-    } else {
-      onTargetScoreChange(Math.min(100, targetScore + 1));
-    }
-  };
 
   return (
     <div className="mini-tool-card" style={{ marginTop: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
@@ -74,138 +52,48 @@ export function KpssNetEstimationCard({
       {/* Target Tracker Section */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", background: "rgba(255, 255, 255, 0.01)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "14px 18px", alignItems: "center" }}>
         
-        {/* Toggle + Target Selector */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
-              </svg>
-              {lang === "tr" ? "Hedef:" : "Target:"}
-            </span>
-            
-            {/* Goal Type Pill Selector */}
-            <div style={{ display: "flex", gap: "2px", background: "rgba(255, 255, 255, 0.05)", padding: "2px", borderRadius: "6px", border: "1px solid var(--card-border)" }}>
-              <button
-                type="button"
-                onClick={() => onGoalTypeChange("net")}
-                style={{
-                  background: isNetMode ? "var(--accent-color)" : "transparent",
-                  border: "none",
-                  color: "white",
-                  fontSize: "0.65rem",
-                  padding: "2px 8px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                  transition: "background 0.2s"
-                }}
-              >
-                {lang === "tr" ? "Net" : "Net"}
-              </button>
-              <button
-                type="button"
-                onClick={() => onGoalTypeChange("score")}
-                style={{
-                  background: !isNetMode ? "var(--accent-color)" : "transparent",
-                  border: "none",
-                  color: "white",
-                  fontSize: "0.65rem",
-                  padding: "2px 8px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                  transition: "background 0.2s"
-                }}
-              >
-                {lang === "tr" ? "Puan" : "Score"}
-              </button>
-            </div>
-          </div>
-          
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "30px" }}>
-              <button
-                type="button"
-                onClick={handleDecrease}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "rgba(255, 255, 255, 0.6)",
-                  padding: "0 10px",
-                  cursor: "pointer",
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  height: "100%",
-                  userSelect: "none"
-                }}
-              >
-                -
-              </button>
-              <input
-                type="number"
-                value={activeTarget}
-                readOnly
-                style={{
-                  width: "30px",
-                  background: "none",
-                  border: "none",
-                  color: "white",
-                  fontSize: "0.95rem",
-                  padding: 0,
-                  fontWeight: "700",
-                  textAlign: "center",
-                  outline: "none"
-                }}
-              />
-              <button
-                type="button"
-                onClick={handleIncrease}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "rgba(255, 255, 255, 0.6)",
-                  padding: "0 10px",
-                  cursor: "pointer",
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                  display: "flex",
-                  alignItems: "center",
-                  height: "100%",
-                  userSelect: "none"
-                }}
-              >
-                +
-              </button>
-            </div>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
-              {isNetMode ? (lang === "tr" ? "Net" : "Nets") : (lang === "tr" ? "Puan" : "Points")}
-            </span>
-          </div>
+        {/* Active Target Score / Net Display */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+            {isNetMode ? (lang === "tr" ? "Net Hedefi:" : "Net Target:") : (lang === "tr" ? "Puan Hedefi:" : "Score Target:")}
+          </span>
+          <span style={{ fontSize: "1.4rem", fontWeight: "800", color: "white" }}>
+            {activeTarget} {isNetMode ? (lang === "tr" ? "Net" : "Nets") : (lang === "tr" ? "Puan" : "Points")}
+          </span>
         </div>
 
         {/* Current State Indicator */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginLeft: "12px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginLeft: "24px" }}>
           {isNetMode ? (
             <>
-              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                📈 {lang === "tr" ? "Tahmini P3 Puanı:" : "Estimated P3 Score:"}
+              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                {lang === "tr" ? "Mevcut Toplam Net:" : "Current Total Net:"}
               </span>
               <span style={{ fontSize: "1.4rem", fontWeight: "800", color: isTargetAchieved ? "#10b981" : "white" }}>
-                {estimatedScore} Puan {isTargetAchieved && "👑"}
+                {overallNet} Net {isTargetAchieved && "👑"}
               </span>
             </>
           ) : (
             <>
-              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                📊 {lang === "tr" ? "Mevcut Toplam Net:" : "Current Total Net:"}
+              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                  <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+                {lang === "tr" ? "Tahmini P3 Puanı:" : "Estimated P3 Score:"}
               </span>
               <span style={{ fontSize: "1.4rem", fontWeight: "800", color: isTargetAchieved ? "#10b981" : "white" }}>
-                {overallNet} Net {isTargetAchieved && "👑"}
+                {estimatedScore} Puan {isTargetAchieved && "👑"}
               </span>
             </>
           )}
