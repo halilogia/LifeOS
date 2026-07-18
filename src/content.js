@@ -30,10 +30,16 @@
           const isBlockedHost = blockedSites.some((site) =>
             currentHost.includes(site),
           );
+
+          // For Pomodoro block list, block default 5 social media sites + custom sites when Pomodoro is running
+          const defaultSites = ["instagram.com", "facebook.com", "youtube.com", "tiktok.com", "x.com", "twitter.com"];
+          const isPomoBlockedHost = blockedSites.some((site) => currentHost.includes(site)) || 
+                                    defaultSites.some((site) => currentHost.includes(site));
+
           const isTimeActive = endTime === -1 || endTime > Date.now();
 
           const isDetoxActive = enabled && isBlockedHost && isTimeActive;
-          const isPomoActive = pomoBlockEnabled && isBlockedHost && pomoState.running && pomoState.mode === "focus";
+          const isPomoActive = pomoBlockEnabled && isPomoBlockedHost && pomoState.running && pomoState.mode === "focus";
 
           // Calculate daily limit
           const detoxLimits = settings.detox_limits || {};
@@ -93,6 +99,15 @@
 
   // On startup
   checkScreenTimeLimits();
+
+  // Watch URL changes for dynamic Single-Page-Apps (like YouTube) to enforce immediate block rules
+  let lastUrl = location.href;
+  setInterval(() => {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      checkScreenTimeLimits();
+    }
+  }, 500);
 
   function showTopWarningBanner(minutesLeft, lang, domain) {
     if (sessionStorage.getItem("detox_warning_dismissed") === "true") {
@@ -177,23 +192,42 @@
       styleEl.parentNode.removeChild(styleEl);
     }
 
-    // Apply viewport styles
-    const applyStyles = () => {
-      document.body.style.margin = "0";
-      document.body.style.padding = "0";
-      document.body.style.height = "100vh";
-      document.body.style.width = "100vw";
-      document.body.style.overflow = "hidden";
-      document.body.style.background =
-        "radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%)";
-      document.body.style.color = "#f8fafc";
-      document.body.style.fontFamily = "'Inter', sans-serif";
-      document.body.style.display = "flex";
-      document.body.style.alignItems = "center";
-      document.body.style.justifyContent = "center";
-    };
-
-    applyStyles();
+    // Force stylesheet overlay style tag
+    let styleTag = document.getElementById("detox-block-style");
+    if (!styleTag) {
+      styleTag = document.createElement("style");
+      styleTag.id = "detox-block-style";
+      styleTag.innerHTML = `
+        html, body {
+          overflow: hidden !important;
+          height: 100vh !important;
+          width: 100vw !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background: #09090d !important;
+        }
+        body > :not(#detox-block-overlay) {
+          display: none !important;
+        }
+        #detox-block-overlay {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%) !important;
+          z-index: 2147483647 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-family: 'Inter', sans-serif !important;
+          box-sizing: border-box !important;
+          margin: 0 !important;
+          padding: 16px !important;
+        }
+      `;
+      document.head.appendChild(styleTag);
+    }
 
     // Load fonts
     const fontLink = document.createElement("link");
@@ -366,8 +400,14 @@
     let timerInterval = null;
 
     const setupDOMAndTimer = () => {
-      applyStyles();
-      document.body.innerHTML = blockHtml;
+      let overlay = document.getElementById("detox-block-overlay");
+      if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "detox-block-overlay";
+        document.body.appendChild(overlay);
+      }
+      overlay.innerHTML = blockHtml;
+
       const timerText = document.getElementById("detox-timer-text");
 
       if (timerInterval) {
@@ -411,7 +451,7 @@
 
     // Lock page structure with MutationObserver to block Single-Page-App client-side rendering
     const observer = new MutationObserver(() => {
-      if (!document.getElementById("detox-block-card")) {
+      if (!document.getElementById("detox-block-overlay")) {
         observer.disconnect();
         setupDOMAndTimer();
         observer.observe(document.body, { childList: true, subtree: true });
