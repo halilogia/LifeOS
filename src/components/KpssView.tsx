@@ -1,10 +1,16 @@
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import { kpssService, kpssData, kpssDummyFlashcards } from "../services/kpssService.js";
-import { KpssProgress, KpssDailyStats, Language } from "../types/types.js";
+import { useState, useEffect, useRef } from "preact/hooks";
+import { kpssService, kpssData, kpssDummyFlashcards } from "@/services/kpssService.js";
+import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { storage } from "@/core/storage.js";
 import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } from "@/logic/srs.js";
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
+
+// Extracted Presentational Sub-components
+import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
+import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
+import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
+import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -620,7 +626,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     });
   };
 
-  // Log progress updates manually
   const handleToggleTopic = async (topic: string) => {
     const progressItem = kpssProgress.find(
       (p) => p.subject === currentSubject && p.topic === topic,
@@ -630,6 +635,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
     await kpssService.updateTopicStatus(currentSubject, topic, nextStatus);
     loadKpssData();
+  };
+
+  const handleStartQuiz = (topic: string) => {
+    setActiveQuizTopic(topic);
+    setQuizStep("intro");
+    setSelectedQuizCount(5);
+    setQuizQuestions([]);
+    setQuizError(null);
   };
 
   // Add daily studies count
@@ -718,6 +731,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const last7DaysData = dailyStats.slice(-7);
   const showChartPlaceholder = last7DaysData.length === 0;
 
+  const overallNetObj = getOverallNets();
+  const overallNet = overallNetObj.net;
+  const maxNet = overallNetObj.max;
+  const estimatedScore = Math.round((45 + overallNet * 0.458) * 10) / 10;
+  const scorePercentage = Math.min(100, Math.round((estimatedScore / targetScore) * 100));
+  const isTargetAchieved = estimatedScore >= targetScore;
+
   return (
     <div id="kpss-view" className="view-content active">
       <div className="kpss-container">
@@ -759,506 +779,82 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               estimatedTimeLeft={estimatedTimeLeft}
               remainingCount={remainingCount}
             />
+            <KpssNetEstimationCard
+              lang={lang}
+              targetScore={targetScore}
+              overallNet={overallNet}
+              maxNet={maxNet}
+              estimatedScore={estimatedScore}
+              scorePercentage={scorePercentage}
+              isTargetAchieved={isTargetAchieved}
+              onTargetScoreChange={handleTargetScoreChange}
+              getSubjectNets={getSubjectNets}
+              labels={labels}
+              subjectsList={Object.keys(kpssData)}
+            />
 
-            {/* Dynamic Net Estimation Section */}
-            <div className="mini-tool-card" style={{ marginTop: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                  </svg>
-                  <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
-                    {lang === "tr" ? "KPSS Lisans Tahmini Net Skoru" : "KPSS Estimated Net Score"}
-                  </span>
-                </div>
-                <div style={{ fontSize: "1.4rem", fontWeight: "800", color: "var(--accent-color)" }}>
-                  {getOverallNets().net} / {getOverallNets().max} Net
-                </div>
-              </div>
+            <KpssDailyStatsCard
+              lang={lang}
+              questionsInput={questionsInput}
+              videosInput={videosInput}
+              subjectInput={subjectInput}
+              chartDays={chartDays}
+              canvasRef={canvasRef}
+              onQuestionsInputChange={setQuestionsInput}
+              onVideosInputChange={setVideosInput}
+              onSubjectInputChange={setSubjectInput}
+              onSaveStats={handleSaveStats}
+              onResetStats={handleResetStats}
+              onChartDaysChange={setChartDays}
+              labels={labels}
+              subjectsList={Object.keys(kpssData)}
+            />
 
-              {/* Puan Hedefi Takibi */}
-              {(() => {
-                const overallNet = getOverallNets().net;
-                const estimatedScore = Math.round((45 + overallNet * 0.458) * 10) / 10;
-                const scorePercentage = Math.min(100, Math.round((estimatedScore / targetScore) * 100));
-                const isTargetAchieved = estimatedScore >= targetScore;
-                
-                return (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", background: "rgba(255, 255, 255, 0.01)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "14px 18px", alignItems: "center" }}>
-                    
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <circle cx="12" cy="12" r="6"></circle>
-                          <circle cx="12" cy="12" r="2"></circle>
-                        </svg>
-                        {lang === "tr" ? "Puan Hedefi:" : "Score Target:"}
-                      </span>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "30px" }}>
-                          <button
-                            type="button"
-                            onClick={() => handleTargetScoreChange(targetScore - 1)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "rgba(255, 255, 255, 0.6)",
-                              padding: "0 10px",
-                              cursor: "pointer",
-                              fontSize: "1.1rem",
-                              fontWeight: "bold",
-                              display: "flex",
-                              alignItems: "center",
-                              height: "100%",
-                              userSelect: "none"
-                            }}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            min="50"
-                            max="100"
-                            value={targetScore}
-                            onChange={(e) => handleTargetScoreChange(parseFloat((e.target as HTMLInputElement).value))}
-                            style={{
-                              width: "30px",
-                              background: "none",
-                              border: "none",
-                              color: "white",
-                              fontSize: "0.95rem",
-                              padding: 0,
-                              fontWeight: "700",
-                              textAlign: "center",
-                              outline: "none"
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleTargetScoreChange(targetScore + 1)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "rgba(255, 255, 255, 0.6)",
-                              padding: "0 10px",
-                              cursor: "pointer",
-                              fontSize: "1.1rem",
-                              fontWeight: "bold",
-                              display: "flex",
-                              alignItems: "center",
-                              height: "100%",
-                              userSelect: "none"
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
-                        <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{lang === "tr" ? "Puan" : "Points"}</span>
-                      </div>
-                    </div>
+            <KpssTopicList
+              lang={lang}
+              topics={topics}
+              kpssProgress={kpssProgress}
+              currentSubject={currentSubject}
+              sortBy={sortBy}
+              onSortByChange={setSortBy}
+              onToggleTopic={handleToggleTopic}
+              onStartQuiz={handleStartQuiz}
+              labels={labels}
+            />
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginLeft: "12px" }}>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                        📈 {lang === "tr" ? "Tahmini P3 Puanı:" : "Estimated P3 Score:"}
-                      </span>
-                      <span style={{ fontSize: "1.4rem", fontWeight: "800", color: isTargetAchieved ? "#10b981" : "white" }}>
-                        {estimatedScore} Puan {isTargetAchieved && "👑"}
-                      </span>
-                    </div>
-
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: "200px", marginLeft: "auto" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", fontWeight: "600" }}>
-                        <span style={{ color: "var(--text-secondary)" }}>{lang === "tr" ? "Hedef İlerleme" : "Target Progress"}</span>
-                        <span style={{ color: isTargetAchieved ? "#10b981" : "var(--accent-color)" }}>%{scorePercentage}</span>
-                      </div>
-                      <div style={{ height: "8px", background: "rgba(255, 255, 255, 0.05)", borderRadius: "4px", overflow: "hidden" }}>
-                        <div style={{ height: "100%", width: `${scorePercentage}%`, background: isTargetAchieved ? "linear-gradient(90deg, #10b981, #34d399)" : "var(--accent-color)", borderRadius: "4px" }}></div>
-                      </div>
-                      {isTargetAchieved && (
-                        <span style={{ fontSize: "0.65rem", color: "#10b981", fontWeight: "700", textAlign: "right" }}>
-                          🎉 {lang === "tr" ? "Tebrikler! Puan hedefinize ulaştınız." : "Congrats! You achieved your target."}
-                        </span>
-                      )}
-                    </div>
-
-                  </div>
-                );
-              })()}
-
-              {/* Subject level breakdown */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "12px", marginTop: "8px" }}>
-                {Object.keys(kpssData).map((subKey) => {
-                  const { net, max } = getSubjectNets(subKey);
-                  const percentage = max > 0 ? Math.round((net / max) * 100) : 0;
-                  return (
-                    <div key={subKey} style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "10px 12px", display: "flex", flexDirection: "column", gap: "6px" }}>
-                      <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                        {labels[subKey] || subKey}
-                      </span>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                        <span style={{ fontSize: "1rem", fontWeight: "700", color: "var(--text-primary)" }}>{net} <span style={{ fontSize: "0.7rem", fontWeight: "500", color: "var(--text-secondary)" }}>/ {max}</span></span>
-                        <span style={{ fontSize: "0.7rem", color: "var(--accent-color)", fontWeight: "700" }}>%{percentage}</span>
-                      </div>
-                      <div style={{ height: "4px", background: "rgba(255, 255, 255, 0.05)", borderRadius: "2px", overflow: "hidden" }}>
-                        <div style={{ height: "100%", width: `${percentage}%`, background: "var(--accent-color)", borderRadius: "2px" }}></div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Dashboard Stat Progress Inputs and Charts */}
-        <div className="kpss-daily-stats-section" style={{ marginTop: "28px" }}>
-          <div className="kpss-daily-input">
-            <h3>{labels.stats_title}</h3>
-            <div className="kpss-stats-inputs">
-              <div className="kpss-input-group">
-                <label for="kpss-questions-input">{labels.stat_questions}</label>
-                <input
-                  type="number"
-                  id="kpss-questions-input"
-                  value={questionsInput}
-                  onInput={(e) => setQuestionsInput((e.target as HTMLInputElement).value)}
-                  placeholder="0"
-                  min="0"
-                />
-              </div>
-              <div className="kpss-input-group">
-                <label for="kpss-videos-input">{lang === "tr" ? "İzlenen Video" : "Videos Watched"}</label>
-                <input
-                  type="number"
-                  id="kpss-videos-input"
-                  value={videosInput}
-                  onInput={(e) => setVideosInput((e.target as HTMLInputElement).value)}
-                  placeholder="0"
-                  min="0"
-                />
-              </div>
-              <div className="kpss-input-group">
-                <label for="kpss-subject-select">{labels.stat_subject}</label>
-                <select
-                  id="kpss-subject-select"
-                  value={subjectInput}
-                  onChange={(e) => setSubjectInput((e.target as HTMLSelectElement).value)}
-                >
-                  {Object.keys(kpssData).map((subKey) => (
-                    <option key={subKey} value={subKey}>
-                      {labels[subKey] || subKey}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="kpss-action-btns">
-                <button id="kpss-save-stats-btn" onClick={handleSaveStats}>
-                  {labels.save}
-                </button>
-                <button id="kpss-reset-stats-btn" className="secondary" onClick={handleResetStats}>
-                  {labels.reset}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="kpss-chart-container" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                📊 {lang === "tr" ? "İlerleme Grafiği" : "Progress Chart"}
-              </span>
-              <div style={{ display: "flex", gap: "6px" }}>
-                <button
-                  onClick={() => setChartDays(7)}
-                  style={{
-                    background: chartDays === 7 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid var(--card-border)",
-                    borderRadius: "6px",
-                    color: "white",
-                    fontSize: "0.65rem",
-                    padding: "2px 8px",
-                    cursor: "pointer",
-                    fontWeight: "600",
-                    transition: "all 0.2s"
-                  }}
-                >
-                  {lang === "tr" ? "7 Gün" : "7 Days"}
-                </button>
-                <button
-                  onClick={() => setChartDays(30)}
-                  style={{
-                    background: chartDays === 30 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid var(--card-border)",
-                    borderRadius: "6px",
-                    color: "white",
-                    fontSize: "0.65rem",
-                    padding: "2px 8px",
-                    cursor: "pointer",
-                    fontWeight: "600",
-                    transition: "all 0.2s"
-                  }}
-                >
-                  {lang === "tr" ? "30 Gün" : "30 Days"}
-                </button>
-              </div>
-            </div>
-            <canvas
-              ref={canvasRef}
-              id="kpss-history-chart"
-              style={{ display: "block", width: "100%", height: "200px" }}
-            ></canvas>
-          </div>
-        </div>
-
-        {/* Topic checklist details */}
-        <div className="kpss-content">
-          {/* Sort Options Bar */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "8px 12px", width: "100%" }}>
-            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-              {lang === "tr" ? "Konu Dağılımı ve Çalışma Takibi" : "Topic Syllabus & Progress"}
-            </span>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="10" y1="6" x2="21" y2="6"></line>
-                  <line x1="10" y1="12" x2="21" y2="12"></line>
-                  <line x1="10" y1="18" x2="21" y2="18"></line>
-                  <path d="M4 6h1v4"></path>
-                  <path d="M4 10h2"></path>
-                  <path d="M6 6H4"></path>
-                </svg>
-                <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-                  {lang === "tr" ? "Sıralama:" : "Sort By:"}
+            {/* Progress tracker metrics */}
+            <div className="kpss-progress-bar-container">
+              <div className="kpss-progress-info">
+                <span id="kpss-subject-title">{labels[currentSubject] || currentSubject}</span>
+                <span id="kpss-progress-text">
+                  %{progressPercentage} {labels.progress_text}
                 </span>
               </div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy((e.target as HTMLSelectElement).value as any)}
-                style={{
-                  background: "#161622",
-                  border: "1px solid var(--card-border)",
-                  borderRadius: "6px",
-                  color: "white",
-                  fontSize: "0.75rem",
-                  padding: "2px 8px",
-                  cursor: "pointer",
-                  outline: "none"
-                }}
-              >
-                <option value="default">{lang === "tr" ? "Müfredat Sırası" : "Syllabus Order"}</option>
-                <option value="questions">{lang === "tr" ? "Soru Sıklığı (Çoktan Aza)" : "Question Frequency"}</option>
-                <option value="status">{lang === "tr" ? "Tamamlanma Durumu" : "Completion Status"}</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="kpss-topic-list" className="kpss-topic-list">
-            {topics.map((t) => {
-              const progress = kpssProgress.find(
-                (p) => p.subject === currentSubject && p.topic === t.title,
-              );
-              const status = progress ? progress.status : 0;
-              return (
+              <div className="kpss-progress-track">
                 <div
-                  key={t.title}
-                  className="kpss-topic-item"
-                  data-status={status.toString()}
-                  onClick={() => handleToggleTopic(t.title)}
-                >
-                  <div className="kpss-status-indicator">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </div>
-                  <span className="kpss-topic-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                     <span>{t.title}</span>
-                     <span className="kpss-topic-q-badge" style={{ fontSize: "0.65rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid var(--card-border)", padding: "2px 6px", borderRadius: "4px", color: "var(--text-secondary)", fontWeight: "600" }}>
-                       {t.questionsCount} {lang === "tr" ? "Soru" : "Q"}
-                     </span>
-                     {progress && progress.score !== undefined && (
-                       <span className="kpss-topic-score-badge">%{progress.score}</span>
-                     )}
-                   </span>
-
-                  {/* Seviye Tespit Sınavı button */}
-                  <button
-                    className="kpss-exam-btn"
-                    title={lang === "tr" ? "Seviye Tespit Sınavı Çöz" : "Solve Proficiency Test"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveQuizTopic(t.title);
-                      setQuizStep("intro");
-                      setSelectedQuizCount(5);
-                      setQuizQuestions([]);
-                      setQuizError(null);
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                      <polyline points="14 2 14 8 20 8"></polyline>
-                      <line x1="16" y1="13" x2="8" y2="13"></line>
-                      <line x1="16" y1="17" x2="8" y2="17"></line>
-                      <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                  </button>
-
-                  <button
-                    className="kpss-info-btn"
-                    title="Detay"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveTopic({
-                        title: t.title,
-                        description: t.description,
-                      });
-                    }}
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Progress tracker metrics */}
-        <div className="kpss-progress-bar-container">
-          <div className="kpss-progress-info">
-            <span id="kpss-subject-title">{labels[currentSubject] || currentSubject}</span>
-            <span id="kpss-progress-text">
-              %{progressPercentage} {labels.progress_text}
-            </span>
-          </div>
-          <div className="kpss-progress-track">
-            <div
-              id="kpss-progress-fill"
-              className="kpss-progress-fill"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-        </div>
-        </>
+                  id="kpss-progress-fill"
+                  className="kpss-progress-fill"
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
+              </div>
+            </div>
+          </>
         )}
 
         {activeTab === "srs" && (
           <div className="kpss-srs-deck-container" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0" }}>
-            {srsLoading ? (
-              <div className="ha-loading" style={{ minHeight: "260px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px" }}>
-                <div className="ha-spinner" />
-                <span style={{ fontSize: "0.95rem", color: "var(--text-secondary)" }}>
-                  {lang === "tr" ? "Tekrar kartları hazırlanıyor..." : "Preparing repetition cards..."}
-                </span>
-              </div>
-            ) : srsQueue.length === 0 || srsIndex >= srsQueue.length ? (
-              <div className="srs-finished" style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "16px", padding: "40px", textAlign: "center", backdropFilter: "blur(12px)", width: "100%", maxWidth: "550px" }}>
-                <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>🎉</div>
-                <h3 style={{ fontSize: "1.6rem", color: "var(--accent-color)", fontWeight: 700, marginBottom: "8px" }}>
-                  {lang === "tr" ? "Harika İş!" : "Great Job!"}
-                </h3>
-                <p style={{ opacity: 0.8, fontSize: "0.95rem", marginBottom: "24px", color: "var(--text-secondary)" }}>
-                  {lang === "tr"
-                    ? "Bugünlük tüm KPSS tekrar kartlarını tamamladınız."
-                    : "You have reviewed all due KPSS repetition cards for today."}
-                </p>
-                <button
-                  className="settings-add-btn"
-                  onClick={loadKpssSrsQueue}
-                  style={{ padding: "10px 24px" }}
-                >
-                  {lang === "tr" ? "Tekrar Yükle" : "Review Again"}
-                </button>
-              </div>
-            ) : (
-              (() => {
-                const currentReview = srsQueue[srsIndex];
-                const card = kpssDummyFlashcards.find((c) => c.id === currentReview.wordId);
-                if (!card) return null;
-
-                return (
-                  <div className="kpss-srs-active-section" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: "550px", fontSize: "0.85rem", opacity: 0.6 }}>
-                      <span>{card.category}</span>
-                      <span>{lang === "tr" ? `Kart ${srsIndex + 1} / ${srsQueue.length}` : `Card ${srsIndex + 1} / ${srsQueue.length}`}</span>
-                    </div>
-
-                    <div className="flashcard-container" style={{ width: "100%", maxWidth: "550px", height: "260px" }}>
-                      <div
-                        className={`flashcard-inner ${srsFlipped ? "flipped" : ""} ${srsFadeState === "slide-out" ? "fade-out" : ""}`}
-                        onClick={() => setSrsFlipped(!srsFlipped)}
-                      >
-                        <div className="flashcard-side flashcard-front" style={{ boxSizing: "border-box", padding: "30px" }}>
-                          <p style={{ fontSize: "1.25rem", fontWeight: "600", lineHeight: 1.5, color: "var(--text-primary)" }}>
-                            {card.question}
-                          </p>
-                          <span style={{ fontSize: "0.8rem", opacity: 0.5, marginTop: "24px", display: "inline-block", background: "rgba(255,255,255,0.05)", padding: "4px 10px", borderRadius: "20px" }}>
-                            💡 {lang === "tr" ? "Cevabı görmek için tıkla" : "Click to see answer"}
-                          </span>
-                        </div>
-                        <div className="flashcard-side flashcard-back" style={{ boxSizing: "border-box", padding: "30px" }}>
-                          <p style={{ fontSize: "1.45rem", fontWeight: "700", color: "var(--accent-color)", marginBottom: "12px" }}>
-                            {card.answer}
-                          </p>
-                          {card.hint && (
-                            <p style={{ fontSize: "0.9rem", opacity: 0.6, fontStyle: "italic", color: "var(--text-secondary)" }}>
-                              {lang === "tr" ? "İpucu: " : "Hint: "}{card.hint}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {srsFlipped && (
-                      <div className="srs-actions" style={{ display: "flex", gap: "12px", width: "100%", maxWidth: "550px", marginTop: "10px" }}>
-                        <button
-                          className="srs-btn srs-btn-hard"
-                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
-                          onClick={() => handleKpssSrsReview("hard")}
-                        >
-                          {lang === "tr" ? "Zor" : "Hard"}
-                        </button>
-                        <button
-                          className="srs-btn srs-btn-medium"
-                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
-                          onClick={() => handleKpssSrsReview("medium")}
-                        >
-                          {lang === "tr" ? "Orta" : "Medium"}
-                        </button>
-                        <button
-                          className="srs-btn srs-btn-easy"
-                          style={{ flex: 1, padding: "12px", borderRadius: "12px", cursor: "pointer" }}
-                          onClick={() => handleKpssSrsReview("easy")}
-                        >
-                          {lang === "tr" ? "Kolay" : "Easy"}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })()
-            )}
+            <KpssSrsCard
+              lang={lang}
+              srsLoading={srsLoading}
+              srsQueue={srsQueue}
+              srsIndex={srsIndex}
+              srsFlipped={srsFlipped}
+              srsFadeState={srsFadeState}
+              onFlipChange={setSrsFlipped}
+              onReviewQuality={handleKpssSrsReview}
+              kpssDummyFlashcards={kpssDummyFlashcards}
+              onReloadQueue={loadKpssSrsQueue}
+            />
           </div>
         )}
       </div>
