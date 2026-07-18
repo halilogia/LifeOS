@@ -28,7 +28,7 @@ export function getKpssSystemPrompt(subjectKey: string, lang: Language): string 
     case "cografya":
       subjectRules = `
 ### Coğrafya Özel Kuralları:
-1. Bilimsel ve Akademik Doğruluk: Sorularda ve şıklarda hiçbir coğrafi çelişki olmamalıdır. Örneğin; "Aynı anda farklı mevsim özelliklerinin yaşanması" mutlak konum (enlem) ile DEĞİL, göreceli konum (yükselti, karasallık-denizellik) ile açıklanır! Bu tür temel akademik kavram hataları KESİNLİKLE yapma.
+1. Bilimsel ve Akademik Doğruluk: Sorularda ve şıklarda hiçbir coğrafi çelişki olmamalıdır. Örneğin; "Aynı anda farklı mevsim özelliklerinin yaşanması" mutlak konum (enlem) ile DEĞİL, göreceli konum (yükselti, karasallık-denizellik) ile açıklanır! Türkiye'de doğu-batı yönlü sıcaklık/mevsimsel farkların enlemle hiçbir ilgisi yoktur (çünkü enlem güney-kuzey yönlüdür). "Enlem etkisiyle doğuda yaz batıda kış yaşanır" gibi tamamen yanlış/uydurma cümleleri KESİNLİKLE kurma!
 2. Soru köklerinde "Coğrafi konum" gibi genel ifadeler yerine, sorunun hedefine göre "Matematik (Mutlak) Konum" veya "Göreceli (Özel) Konum" ayrımını net şekilde belirt.
 3. Eğer hazırladığın soru Türkiye Coğrafyası dersiyle ilgili ve harita bilgisi okumayı gerektiriyorsa (örn: "Haritada numaralandırılmış alanların hangisinde...", "Haritada taralı bölgelerin hangisinde..."), nesneye isteğe bağlı bir "map" alanı ekle.
 4. "map" alanı şu yapıda olmalıdır:

@@ -118,6 +118,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [quizStep, setQuizStep] = useState<"intro" | "questions" | "result">("intro");
   const [selectedQuizCount, setSelectedQuizCount] = useState(5);
   const [quizLoading, setQuizLoading] = useState(false);
+  const [isBackgroundLoading, setIsBackgroundLoading] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -526,6 +527,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
     setQuizLoading(true);
+    setIsBackgroundLoading(false);
     setQuizError(null);
     setQuizStep("questions");
     setQuizQuestions([]);
@@ -545,6 +547,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
       // 2. Pre-fetch remaining count - 1 questions in the background
       if (count > 1) {
+        setIsBackgroundLoading(true);
         fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [firstQuestion])
           .then((remainingQuestions) => {
             if (remainingQuestions.length > 0) {
@@ -556,12 +559,18 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           })
           .catch((err) => {
             console.error("Background questions pre-fetch failed:", err);
+          })
+          .finally(() => {
+            setIsBackgroundLoading(false);
           });
+      } else {
+        setIsBackgroundLoading(false);
       }
     } catch (err: any) {
       console.error("AI quiz generation error:", err);
       setQuizError(lang === "tr" ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin." : "AI failed to generate quiz questions. Please try again.");
       setQuizLoading(false);
+      setIsBackgroundLoading(false);
     }
   };
 
@@ -931,6 +940,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         quizStep={quizStep}
         selectedQuizCount={selectedQuizCount}
         quizLoading={quizLoading}
+        isBackgroundLoading={isBackgroundLoading}
         quizQuestions={quizQuestions}
         currentQuestionIndex={currentQuestionIndex}
         selectedAnswers={selectedAnswers}

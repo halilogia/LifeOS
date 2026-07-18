@@ -29,6 +29,7 @@ interface KpssQuizModalProps {
   quizStep: "intro" | "questions" | "result";
   selectedQuizCount: number;
   quizLoading: boolean;
+  isBackgroundLoading: boolean;
   quizQuestions: QuizQuestion[];
   currentQuestionIndex: number;
   selectedAnswers: number[];
@@ -54,6 +55,7 @@ export function KpssQuizModal({
   quizStep,
   selectedQuizCount,
   quizLoading,
+  isBackgroundLoading,
   quizQuestions,
   currentQuestionIndex,
   selectedAnswers,
@@ -72,6 +74,8 @@ export function KpssQuizModal({
   subjectNames,
 }: KpssQuizModalProps) {
   if (!activeQuizTopic) return null;
+
+  const totalQuizLength = isBackgroundLoading ? selectedQuizCount : quizQuestions.length;
 
   return (
     <div className="settings-panel active" onClick={onClose}>
@@ -161,12 +165,12 @@ export function KpssQuizModal({
               <div className="kpss-quiz-progress-bar-container">
                 <div
                   className="kpss-quiz-progress-fill"
-                  style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
+                  style={{ width: `${((currentQuestionIndex + 1) / totalQuizLength) * 100}%` }}
                 />
               </div>
 
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", opacity: 0.6, marginBottom: "8px" }}>
-                <span>{lang === "tr" ? `Soru ${currentQuestionIndex + 1} / ${quizQuestions.length}` : `Question ${currentQuestionIndex + 1} / ${quizQuestions.length}`}</span>
+                <span>{lang === "tr" ? `Soru ${currentQuestionIndex + 1} / ${totalQuizLength}` : `Question ${currentQuestionIndex + 1} / ${totalQuizLength}`}</span>
               </div>
 
               {quizQuestions[currentQuestionIndex].chart && (
@@ -268,14 +272,16 @@ export function KpssQuizModal({
                 >
                   {lang === "tr" ? "Önceki" : "Previous"}
                 </button>
-                {currentQuestionIndex < quizQuestions.length - 1 ? (
+                {currentQuestionIndex < totalQuizLength - 1 ? (
                   <button
                     className="settings-add-btn"
                     style={{ flex: 1, padding: 0 }}
-                    disabled={selectedAnswers[currentQuestionIndex] === -1}
+                    disabled={selectedAnswers[currentQuestionIndex] === -1 || currentQuestionIndex >= quizQuestions.length - 1}
                     onClick={onNextQuestion}
                   >
-                    {lang === "tr" ? "Sonraki" : "Next"}
+                    {currentQuestionIndex >= quizQuestions.length - 1
+                      ? (lang === "tr" ? "Sonraki (Yükleniyor...)" : "Next (Loading...)")
+                      : (lang === "tr" ? "Sonraki" : "Next")}
                   </button>
                 ) : (
                   <button
