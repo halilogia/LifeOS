@@ -151,7 +151,13 @@ export function PomoTimerCard({
 
       {/* Pomodoro Duration Editor */}
       <div style={{ display: "flex", gap: "10px", marginTop: "16px", background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "10px 14px", alignItems: "center", width: "100%" }}>
-        <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>⏱️ {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}</span>
+        <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}
+        </span>
         
         <div style={{ display: "flex", gap: "10px", alignItems: "center", marginLeft: "auto" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
