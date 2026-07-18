@@ -5,6 +5,8 @@ import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { storage } from "@/core/storage.js";
 import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } from "@/logic/srs.js";
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
+import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
+import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/logic/kpssCalculator.js";
 
 // Extracted Presentational Sub-components
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
@@ -264,41 +266,8 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
     const updateCountdown = () => {
       const now = Date.now();
-
-      // 1. Exam countdown
-      const diffKpss = kpssTargetDate - now;
-      if (diffKpss <= 0) {
-        setKpssTimeLeft(lang === "tr" ? "Sınav Başladı!" : "Exam Started!");
-      } else {
-        const days = Math.floor(diffKpss / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60));
-        const secs = Math.floor((diffKpss % (1000 * 60)) / 1000);
-        setKpssTimeLeft(
-          lang === "tr"
-            ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
-            : `${days}d, ${hours}h, ${mins}m, ${secs}s`
-        );
-      }
-
-      // 2. Study completion estimate (Remaining Topics * 2 days study rate)
-      const estimatedRemainingDays = remaining * 2;
-      const estimatedTargetDate = now + estimatedRemainingDays * 24 * 60 * 60 * 1000;
-      const diffEst = estimatedTargetDate - now;
-
-      if (remaining === 0) {
-        setEstimatedTimeLeft(lang === "tr" ? "Tebrikler, bitti!" : "Completed!");
-      } else {
-        const days = Math.floor(diffEst / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60));
-        const secs = Math.floor((diffEst % (1000 * 60)) / 1000);
-        setEstimatedTimeLeft(
-          lang === "tr"
-            ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
-            : `${days}d, ${hours}h, ${mins}m, ${secs}s`
-        );
-      }
+      setKpssTimeLeft(calculateKpssCountdown(kpssTargetDate, now, lang));
+      setEstimatedTimeLeft(calculateEstimatedCompletionTime(remaining, now, lang));
     };
 
     updateCountdown();
@@ -318,38 +287,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     console.log(`%c[AI Fetch - Start] Requesting ${count} questions for "${topicName}"`, "color: #a78bfa; font-weight: bold;");
 
     const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
-    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.
-Eğer hazırladığın soru bir grafik okuma, nüfus/ekonomi istatistiği tablosu, çizgi grafik okuma veya geometri (üçgen açı/kenar, çember, paralel doğrular kesen) sorusu ise nesneye isteğe bağlı bir "chart" alanı ekle.
-"chart" alanı şu formatlardan biri olmalıdır:
-1. Sütun Grafiği: { "type": "bar", "title": "Grafik Başlığı", "labels": ["Oca", "Şub", "Mar"], "values": [15, 30, 25] }
-2. Çizgi Grafiği: { "type": "line", "title": "Grafik Başlığı", "labels": ["1990", "2000", "2010"], "values": [120, 250, 480] }
-3. Geometri Üçgen Şekli: { "type": "geometry", "shape": "triangle", "angles": { "A": "60°", "B": "x", "C": "80°" }, "sides": { "AB": "6", "BC": "8", "AC": "y" } }
-4. Geometri Çember Şekli: { "type": "geometry", "shape": "circle", "sides": { "radius": "5" } }
-5. Paralel Doğrular ve Açı Soruları: { "type": "geometry", "shape": "parallel_lines", "angles": { "top_right": "120°", "bottom_left": "x" } }
-
-Eğer hazırladığın soru Türkiye Coğrafyası dersiyle ilgili ve harita bilgisi okumayı gerektiriyorsa (örn: "Haritada numaralandırılmış alanların hangisinde...", "Haritada taralı bölgelerin hangisinde..."), nesneye isteğe bağlı bir "map" alanı ekle.
-"map" alanı şu yapıda olmalıdır:
-{
-  "highlightRegions": ["marmara" | "ege" | "akdeniz" | "karadeniz" | "ic_anadolu" | "dogu_anadolu" | "guneydogu_anadolu"], // Renklendirilecek coğrafi bölgelerin isimleri (birden fazla olabilir)
-  "markers": [ // Harita üzerine yerleştirilecek işaretçiler (maksimum 5 adet). X ve Y değerleri 0-100 arasında yüzdesel koordinatlardır (Haritanın sol üst köşesi 0,0'dır)
-    { "x": 18, "y": 42, "label": "I" },
-    { "x": 48, "y": 78, "label": "II" }
-  ]
-}
-Türkiye haritası koordinat ipuçları: Marmara civarı (x: 20-80, y: 15-40), Ege civarı (x: 10-60, y: 60-120), Akdeniz civarı (x: 110-220, y: 90-140), Karadeniz civarı (x: 120-330, y: 35-70), İç Anadolu (x: 120-220, y: 45-90), Doğu Anadolu (x: 220-385, y: 80-130), Güneydoğu Anadolu (x: 240-385, y: 130-160).
-
-Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
-[
-  {
-    "question": "Soru metni...",
-    "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği", "E seçeneği"],
-    "correctAnswer": 0,
-    "solution": "Sorunun detaylı çözümü...",
-    "chart": { ... }, // İsteğe bağlı
-    "map": { ... } // Coğrafya harita soruları için isteğe bağlı
-  }
-]
-(correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
+    const systemPrompt = getKpssSystemPrompt(subjectKey, lang);
 
     let userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
     if (excludeQuestions.length > 0) {
@@ -369,7 +307,10 @@ Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi 
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
-        stream: false
+        stream: false,
+        options: {
+          temperature: 0.2
+        }
       };
 
       const res = await fetch(url, {
@@ -419,7 +360,8 @@ Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi 
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
-        stream: false
+        stream: false,
+        temperature: 0.2
       };
 
       const res = await fetch(url, {
@@ -456,7 +398,8 @@ Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi 
           }]
         }],
         generationConfig: {
-          responseMimeType: "application/json"
+          responseMimeType: "application/json",
+          temperature: 0.2
         }
       };
 
