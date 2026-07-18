@@ -63,6 +63,7 @@ export function App() {
   const [aiApiKey, setAiApiKey] = useState<string>("");
   const [aiModel, setAiModel] = useState<string>("free");
   const [aiEndpoint, setAiEndpoint] = useState<string>("http://localhost:20128/v1");
+  const [aiShowThinking, setAiShowThinking] = useState<boolean>(true);
 
   // Universal Info Box / Inline Translation Bubble states
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
@@ -177,10 +178,12 @@ export function App() {
       const key = await storage.getGeminiApiKey();
       const model = await storage.getAIModel();
       const endpoint = await storage.getAIEndpoint();
+      const showThinking = await storage.getAIShowThinking();
       setAiProvider(provider);
       setAiApiKey(key);
       setAiModel(model);
       setAiEndpoint(endpoint);
+      setAiShowThinking(showThinking);
 
       // Load KPSS configurations
       const kGoalType = await storage.getKpssGoalType();
@@ -562,6 +565,12 @@ export function App() {
     triggerCloudBackup();
   };
 
+  const handleUpdateAIShowThinking = async (val: boolean) => {
+    setAiShowThinking(val);
+    await storage.setAIShowThinking(val);
+    triggerCloudBackup();
+  };
+
   // --- Task Mutators ---
   const handleAddTodo = async (text: string, repeat: Todo["repeat"], dueDate?: string) => {
     const newTodo: Todo = {
@@ -940,6 +949,7 @@ export function App() {
             aiApiKey={aiApiKey}
             aiModel={aiModel}
             aiEndpoint={aiEndpoint}
+            aiShowThinking={aiShowThinking}
             onSettingsOpen={() => setSettingsOpen(true)}
           />
         );
@@ -1070,6 +1080,8 @@ export function App() {
         aiModel={aiModel}
         aiEndpoint={aiEndpoint}
         onUpdateAIConfig={handleUpdateAIConfig}
+        aiShowThinking={aiShowThinking}
+        onUpdateAIShowThinking={handleUpdateAIShowThinking}
         googleUserEmail={googleUserEmail}
         isSyncing={isSyncing}
         onGoogleLogin={handleGoogleLogin}

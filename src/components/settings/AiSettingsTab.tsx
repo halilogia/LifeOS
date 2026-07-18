@@ -7,6 +7,8 @@ interface AiSettingsTabProps {
   aiModel: string;
   aiEndpoint: string;
   onUpdateAIConfig: (provider: string, key: string, model: string, endpoint?: string) => void;
+  aiShowThinking: boolean;
+  onUpdateAIShowThinking: (val: boolean) => void;
 }
 
 export function AiSettingsTab({
@@ -16,6 +18,8 @@ export function AiSettingsTab({
   aiModel,
   aiEndpoint,
   onUpdateAIConfig,
+  aiShowThinking,
+  onUpdateAIShowThinking,
 }: AiSettingsTabProps) {
   return (
     <div className="settings-group">
@@ -93,6 +97,28 @@ export function AiSettingsTab({
               ? "Kullanmak istediğiniz model ID'si (Örn: free, meta-llama/llama-3-8b-instruct:free)"
               : "Model ID you wish to use (e.g. free, meta-llama/llama-3-8b-instruct:free)"}
           </span>
+        </div>
+
+        {/* Toggle Show Thinking Process */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
+          <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+            {lang === "tr" ? "Düşünme Sürecini (Thinking) Göster:" : "Show Thinking Process:"}
+          </label>
+          <button
+            type="button"
+            onClick={() => onUpdateAIShowThinking(!aiShowThinking)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 700,
+              color: aiShowThinking ? "var(--accent-color)" : "var(--text-secondary)",
+              fontSize: "0.85rem",
+              padding: "4px 8px"
+            }}
+          >
+            {aiShowThinking ? t.enabled : t.disabled}
+          </button>
         </div>
       </div>
     </div>

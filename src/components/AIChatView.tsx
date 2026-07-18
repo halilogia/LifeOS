@@ -14,6 +14,7 @@ interface AIChatViewProps {
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
+  aiShowThinking?: boolean;
   onSettingsOpen: () => void;
 }
 
@@ -21,6 +22,7 @@ interface Message {
   sender: "user" | "bot";
   text: string;
   time: string;
+  thinking?: string;
 }
 
 const monthsMap: Record<string, number> = {
@@ -42,6 +44,7 @@ export function AIChatView({
   aiApiKey,
   aiModel,
   aiEndpoint,
+  aiShowThinking = true,
   onSettingsOpen,
 }: AIChatViewProps) {
   const t = translations[lang];
@@ -50,6 +53,7 @@ export function AIChatView({
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputVal, setInputVal] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [openThinkingIndexes, setOpenThinkingIndexes] = useState<Record<number, boolean>>({});
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -217,8 +221,36 @@ export function AIChatView({
     return JSON.parse(cleaned);
   };
 
+  const parseAIResponse = (rawText: string) => {
+    let thinking = "";
+    const thinkStart = rawText.indexOf("<think>");
+    const thinkEnd = rawText.indexOf("</think>");
+    if (thinkStart !== -1 && thinkEnd !== -1 && thinkEnd > thinkStart) {
+      thinking = rawText.substring(thinkStart + 7, thinkEnd).trim();
+    }
+    
+    try {
+      const parsed = cleanAndParseJSON(rawText);
+      return {
+        reply: parsed.reply || "",
+        action: parsed.action || "none",
+        params: parsed.params || null,
+        thinking
+      };
+    } catch (e) {
+      // Fallback: clean out the think block and use raw response as conversational reply
+      const reply = rawText.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
+      return {
+        reply,
+        action: "none",
+        params: null,
+        thinking
+      };
+    }
+  };
+
   // Call AI Service
-  const callAI = async (userPrompt: string): Promise<{ reply: string; action?: string; params?: any }> => {
+  const callAI = async (userPrompt: string): Promise<{ reply: string; action?: string; params?: any; thinking?: string }> => {
     const todayStr = new Date().toISOString().split("T")[0];
     const systemPrompt = `You are a helpful AI Assistant for the Life OS Personal Dashboard Chrome Extension. The current year is ${new Date().getFullYear()}. The current date is ${todayStr}.
 You can chat naturally, but if the user wants to add, create, or schedule a task, or add a diary entry/note/study note, you must output a structured JSON response.
@@ -266,7 +298,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       if (!textResponse) {
         throw new Error("Empty response from Ollama");
       }
-      return cleanAndParseJSON(textResponse);
+      return parseAIResponse(textResponse);
     } else if (aiProvider === "openrouter") {
       const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
       const url = `${baseUrl}/chat/completions`;
@@ -307,7 +339,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       if (!textResponse) {
         throw new Error("Empty response from OpenRouter");
       }
-      return cleanAndParseJSON(textResponse);
+      return parseAIResponse(textResponse);
     } else {
       // Gemini API
       const modelName = aiModel || "gemini-1.5-flash";
@@ -341,7 +373,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       if (!textResponse) {
         throw new Error("Empty response from Gemini");
       }
-      return JSON.parse(textResponse.trim());
+      return parseAIResponse(textResponse);
     }
   };
 
@@ -416,6 +448,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           {
             sender: "bot",
             text: aiResponse.reply,
+            thinking: aiResponse.thinking,
             time: new Date().toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
               hour: "2-digit",
               minute: "2-digit",
@@ -561,6 +594,72 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
                 {msg.sender === "user" ? "👤" : "🤖"}
               </div>
               <div className="message-bubble">
+                {msg.thinking && aiShowThinking && (
+                  <div
+                    style={{
+                      background: "rgba(255, 255, 255, 0.03)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: "6px",
+                      padding: "8px 10px",
+                      marginBottom: "8px",
+                      fontSize: "0.78rem"
+                    }}
+                  >
+                    <div
+                      onClick={() => {
+                        setOpenThinkingIndexes((prev) => ({
+                          ...prev,
+                          [idx]: !prev[idx]
+                        }));
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                        color: "var(--text-secondary)",
+                        userSelect: "none"
+                      }}
+                    >
+                      <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        {lang === "tr" ? "Düşünme Süreci" : "Thinking Process"}
+                      </span>
+                      <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>
+                        {openThinkingIndexes[idx] !== false ? "▲" : "▼"}
+                      </span>
+                    </div>
+                    {openThinkingIndexes[idx] !== false && (
+                      <div
+                        style={{
+                          marginTop: "6px",
+                          lineHeight: 1.4,
+                          color: "rgba(255, 255, 255, 0.6)",
+                          whiteSpace: "pre-wrap",
+                          borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+                          paddingTop: "6px",
+                          fontStyle: "italic"
+                        }}
+                      >
+                        {msg.thinking}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <p className="msg-text">{msg.text}</p>
                 <span className="msg-time">{msg.time}</span>
               </div>

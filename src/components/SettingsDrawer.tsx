@@ -31,6 +31,8 @@ export interface SettingsDrawerProps {
   aiModel: string;
   aiEndpoint: string;
   onUpdateAIConfig: (provider: string, key: string, model: string, endpoint?: string) => void;
+  aiShowThinking: boolean;
+  onUpdateAIShowThinking: (val: boolean) => void;
   googleUserEmail: string;
   isSyncing: boolean;
   onGoogleLogin: () => void;
@@ -71,6 +73,8 @@ export function SettingsDrawer({
   aiModel,
   aiEndpoint,
   onUpdateAIConfig,
+  aiShowThinking,
+  onUpdateAIShowThinking,
   googleUserEmail,
   isSyncing,
   onGoogleLogin,
@@ -186,6 +190,8 @@ export function SettingsDrawer({
             aiModel={aiModel}
             aiEndpoint={aiEndpoint}
             onUpdateAIConfig={onUpdateAIConfig}
+            aiShowThinking={aiShowThinking}
+            onUpdateAIShowThinking={onUpdateAIShowThinking}
           />
         )}
 
