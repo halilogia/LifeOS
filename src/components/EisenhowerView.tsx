@@ -14,7 +14,7 @@ interface EisenhowerViewProps {
 export function EisenhowerView({
   todos,
   lang,
-  defaultTab = "matrix",
+  defaultTab = "kanban",
   onUpdateTodoUrgentImportant,
   onMoveTaskStatus,
   onMoveTaskDirection,

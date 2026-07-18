@@ -878,7 +878,7 @@ export function App() {
           <EisenhowerView
             todos={todos}
             lang={lang}
-            defaultTab="matrix"
+            defaultTab="kanban"
             onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
             onMoveTaskStatus={handleMoveTaskStatus}
             onMoveTaskDirection={handleMoveTaskDirection}

@@ -138,17 +138,37 @@ export function KpssAutoPlannerCard({
                       {item.topicTitle}
                     </span>
                   </div>
-                  <input
-                    type="checkbox"
-                    checked={status === 2}
-                    onChange={() => onToggleTopic(item.subjectKey, item.topicTitle)}
+                  <div
+                    onClick={() => onToggleTopic(item.subjectKey, item.topicTitle)}
                     style={{
-                      width: "16px",
-                      height: "16px",
-                      accentColor: "var(--accent-color)",
-                      cursor: "pointer"
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "6px",
+                      border: `2px solid ${status === 2 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.2)"}`,
+                      background: status === 2 ? "var(--accent-color)" : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      flexShrink: 0
                     }}
-                  />
+                  >
+                    {status === 2 && (
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    )}
+                  </div>
                 </div>
               );
             })}
