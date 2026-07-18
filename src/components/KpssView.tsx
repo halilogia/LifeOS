@@ -29,6 +29,16 @@ interface QuizQuestion {
   question: string;
   options: string[];
   correctAnswer: number;
+  solution: string;
+}
+
+interface KpssPastQuiz {
+  subject: string;
+  topic: string;
+  score: number;
+  questions: QuizQuestion[];
+  selectedAnswers: number[];
+  date: string;
 }
 
 const SUBJECT_NAMES: Record<string, Record<string, string>> = {
@@ -97,6 +107,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [quizResultScore, setQuizResultScore] = useState(0);
   const [quizError, setQuizError] = useState<string | null>(null);
+  const [pastQuizzes, setPastQuizzes] = useState<Record<string, KpssPastQuiz>>({});
 
   // Countdown Banners States
   const [kpssTimeLeft, setKpssTimeLeft] = useState("");
@@ -207,6 +218,12 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     setKpssProgress(progress);
     setDailyStats(stats);
     setChartType(cType);
+
+    chrome.storage.local.get(["kpss_past_quizzes"], (res) => {
+      if (res.kpss_past_quizzes) {
+        setPastQuizzes(res.kpss_past_quizzes as Record<string, KpssPastQuiz>);
+      }
+    });
   };
 
   const handleChartTypeChange = async (type: "line" | "bar") => {
@@ -285,12 +302,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     setQuizStep("questions");
 
     const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
-    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
+    const systemPrompt = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın. Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
 [
   {
     "question": "Soru metni...",
     "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği", "E seçeneği"],
-    "correctAnswer": 0
+    "correctAnswer": 0,
+    "solution": "Sorunun detaylı çözümü ve açıklama metni..."
   }
 ]
 (correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
@@ -538,9 +556,31 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         newStatus,
         scorePercentage
       );
+
+      // Save past quiz results
+      const quizKey = `${currentSubject}_${activeQuizTopic}`;
+      const newQuizRecord: KpssPastQuiz = {
+        subject: currentSubject,
+        topic: activeQuizTopic!,
+        score: scorePercentage,
+        questions: quizQuestions,
+        selectedAnswers: selectedAnswers,
+        date: new Date().toISOString().split("T")[0]
+      };
+
+      const updatedPast = {
+        ...pastQuizzes,
+        [quizKey]: newQuizRecord
+      };
+      setPastQuizzes(updatedPast);
+      chrome.storage.local.set({ kpss_past_quizzes: updatedPast });
+
+      // Automatically add solved test questions count to progress chart
+      await kpssService.saveKpssDailyStats(quizQuestions.length, 0, currentSubject);
+
       await loadKpssData();
     } catch (err) {
-      console.error("Failed to update status on quiz completion:", err);
+      console.error("Failed to update status and save stats on quiz completion:", err);
     }
   };
 
@@ -970,10 +1010,20 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   const handleStartQuiz = (topic: string) => {
     setActiveQuizTopic(topic);
-    setQuizStep("intro");
-    setSelectedQuizCount(5);
-    setQuizQuestions([]);
-    setQuizError(null);
+    const quizKey = `${currentSubject}_${topic}`;
+    const pastQuiz = pastQuizzes[quizKey];
+    if (pastQuiz) {
+      setQuizQuestions(pastQuiz.questions);
+      setSelectedAnswers(pastQuiz.selectedAnswers);
+      setQuizResultScore(pastQuiz.score);
+      setQuizStep("result");
+    } else {
+      setQuizStep("intro");
+      setSelectedQuizCount(5);
+      setQuizQuestions([]);
+      setSelectedAnswers([]);
+      setQuizError(null);
+    }
   };
 
   // Add daily studies count
@@ -1354,23 +1404,83 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                   <div className="kpss-quiz-options-grid">
                     {quizQuestions[currentQuestionIndex].options.map((opt, oIdx) => {
                       const letter = ["A", "B", "C", "D", "E"][oIdx];
+                      const isAnswered = selectedAnswers[currentQuestionIndex] !== -1;
                       const isSelected = selectedAnswers[currentQuestionIndex] === oIdx;
+                      const isCorrect = oIdx === quizQuestions[currentQuestionIndex].correctAnswer;
+                      
+                      let cardStyle: any = {
+                        transition: "all 0.2s ease",
+                      };
+                      
+                      if (isAnswered) {
+                        if (isCorrect) {
+                          cardStyle = {
+                            ...cardStyle,
+                            border: "1px solid rgba(16, 185, 129, 0.4)",
+                            background: "rgba(16, 185, 129, 0.08)",
+                            color: "#34d399",
+                            cursor: "default"
+                          };
+                        } else if (isSelected) {
+                          cardStyle = {
+                            ...cardStyle,
+                            border: "1px solid rgba(239, 68, 68, 0.4)",
+                            background: "rgba(239, 68, 68, 0.08)",
+                            color: "#f87171",
+                            cursor: "default"
+                          };
+                        } else {
+                          cardStyle = {
+                            ...cardStyle,
+                            opacity: 0.4,
+                            cursor: "default"
+                          };
+                        }
+                      }
+
                       return (
                         <div
                           key={oIdx}
-                          className={`kpss-quiz-option-card ${isSelected ? "selected" : ""}`}
+                          className={`kpss-quiz-option-card ${isSelected && !isAnswered ? "selected" : ""}`}
+                          style={cardStyle}
                           onClick={() => {
+                            if (isAnswered) return;
                             const nextAnswers = [...selectedAnswers];
                             nextAnswers[currentQuestionIndex] = oIdx;
                             setSelectedAnswers(nextAnswers);
                           }}
                         >
-                          <div className="kpss-quiz-option-letter">{letter}</div>
+                          <div
+                            className="kpss-quiz-option-letter"
+                            style={isAnswered && isCorrect ? { background: "#10b981", color: "white" } : (isAnswered && isSelected ? { background: "#ef4444", color: "white" } : {})}
+                          >
+                            {letter}
+                          </div>
                           <span>{opt}</span>
                         </div>
                       );
                     })}
                   </div>
+
+                  {/* Solution display box */}
+                  {selectedAnswers[currentQuestionIndex] !== -1 && (
+                    <div style={{
+                      marginTop: "16px",
+                      padding: "12px 16px",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      borderLeft: "4px solid var(--accent-color)",
+                      borderRadius: "8px",
+                      fontSize: "0.82rem",
+                      lineHeight: 1.5,
+                      color: "rgba(255, 255, 255, 0.7)",
+                      textAlign: "left"
+                    }}>
+                      <div style={{ fontWeight: "700", color: "var(--accent-color)", marginBottom: "4px" }}>
+                        {lang === "tr" ? "Çözüm Açıklaması:" : "Solution & Explanation:"}
+                      </div>
+                      {quizQuestions[currentQuestionIndex].solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")}
+                    </div>
+                  )}
 
                   <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
                     <button
@@ -1412,7 +1522,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                   <div style={{ fontSize: "3.5rem", fontWeight: 800, color: quizResultScore >= 80 ? "#10b981" : quizResultScore >= 40 ? "#ffc107" : "#ef4444", marginBottom: "12px" }}>
                     %{quizResultScore}
                   </div>
-                  <p style={{ opacity: 0.8, fontSize: "0.95rem", lineHeight: 1.5, marginBottom: "24px" }}>
+                  <p style={{ opacity: 0.8, fontSize: "0.95rem", lineHeight: 1.5, marginBottom: "20px" }}>
                     {lang === "tr"
                       ? `Bu konuda %${quizResultScore} oranında yetkinlik gösterdiniz.`
                       : `You demonstrated a %${quizResultScore} proficiency in this topic.`}
@@ -1426,9 +1536,113 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                     </span>
                   </p>
 
-                  <div className="settings-footer" style={{ padding: 0 }}>
-                    <button className="settings-add-btn" style={{ width: "100%" }} onClick={() => setActiveQuizTopic(null)}>
-                      {lang === "tr" ? "Bitir" : "Finish"}
+                  {/* Scrollable Questions Review list */}
+                  <div style={{
+                    maxHeight: "220px",
+                    overflowY: "auto",
+                    textAlign: "left",
+                    marginBottom: "24px",
+                    background: "rgba(0, 0, 0, 0.2)",
+                    borderRadius: "12px",
+                    padding: "12px",
+                    border: "1px solid rgba(255, 255, 255, 0.05)"
+                  }}>
+                    <h5 style={{ margin: "0 0 12px 0", fontSize: "0.88rem", color: "var(--accent-color)", fontWeight: "600" }}>
+                      {lang === "tr" ? "Soruları İncele:" : "Review Questions:"}
+                    </h5>
+                    {quizQuestions.map((q, qIdx) => {
+                      const userAns = selectedAnswers[qIdx];
+                      const isCorrect = userAns === q.correctAnswer;
+                      return (
+                        <div key={qIdx} style={{ paddingBottom: "12px", marginBottom: "12px", borderBottom: qIdx < quizQuestions.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none" }}>
+                          <p style={{ margin: "0 0 8px 0", fontWeight: "600", fontSize: "0.82rem", color: "#ffffff" }}>
+                            {qIdx + 1}. {q.question}
+                          </p>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px", marginBottom: "8px" }}>
+                            {q.options.map((opt, oIdx) => {
+                              const letter = ["A", "B", "C", "D", "E"][oIdx];
+                              const isCorrectOpt = oIdx === q.correctAnswer;
+                              const isSelectedOpt = userAns === oIdx;
+                              let color = "var(--text-secondary)";
+                              let weight = "normal";
+                              if (isCorrectOpt) {
+                                color = "#10b981";
+                                weight = "600";
+                              } else if (isSelectedOpt) {
+                                color = "#ef4444";
+                                weight = "600";
+                              }
+                              return (
+                                <span key={oIdx} style={{ fontSize: "0.78rem", color, fontWeight: weight }}>
+                                  {letter}) {opt} {isSelectedOpt && (lang === "tr" ? " (Sizin Cevabınız)" : " (Your Answer)")} {isCorrectOpt && (lang === "tr" ? " (Doğru Cevap)" : " (Correct Answer)")}
+                                </span>
+                              );
+                            })}
+                          </div>
+                          <div style={{ fontSize: "0.78rem", color: "rgba(255, 255, 255, 0.65)", background: "rgba(255, 255, 255, 0.02)", padding: "8px", borderRadius: "6px", borderLeft: "3px solid var(--accent-color)" }}>
+                            <strong>{lang === "tr" ? "Çözüm: " : "Solution: "}</strong> {q.solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="settings-footer" style={{ padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div style={{ display: "flex", gap: "10px", width: "100%" }}>
+                      <button
+                        className="kpss-qcount-btn"
+                        style={{ flex: 1 }}
+                        onClick={() => {
+                          setQuizStep("intro");
+                          setSelectedQuizCount(5);
+                          setQuizQuestions([]);
+                          setSelectedAnswers([]);
+                          setQuizError(null);
+                        }}
+                      >
+                        {lang === "tr" ? "Seviyeni Tekrar Çöz" : "Re-take Test"}
+                      </button>
+                      <button
+                        className="kpss-qcount-btn"
+                        style={{ flex: 1 }}
+                        onClick={() => {
+                          let text = `KPSS Sınav Raporu\n`;
+                          text += `Ders: ${SUBJECT_NAMES[lang][currentSubject] || currentSubject}\n`;
+                          text += `Konu: ${activeQuizTopic}\n`;
+                          text += `Skor: %${quizResultScore}\n`;
+                          text += `Tarih: ${new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US")}\n`;
+                          text += `=========================================\n\n`;
+
+                          quizQuestions.forEach((q, idx) => {
+                            const userAnsIdx = selectedAnswers[idx];
+                            const correctAnsIdx = q.correctAnswer;
+                            const letters = ["A", "B", "C", "D", "E"];
+                            
+                            text += `Soru ${idx + 1}: ${q.question}\n`;
+                            q.options.forEach((opt, oIdx) => {
+                              text += `${letters[oIdx]}) ${opt}\n`;
+                            });
+                            text += `-----------------------------------------\n`;
+                            text += `Sizin Cevabınız: ${userAnsIdx !== -1 ? letters[userAnsIdx] : "Boş"}\n`;
+                            text += `Doğru Cevap: ${letters[correctAnsIdx]}\n`;
+                            text += `Çözüm: ${q.solution || "Açıklama bulunmuyor."}\n`;
+                            text += `=========================================\n\n`;
+                          });
+
+                          const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+                          const url = URL.createObjectURL(blob);
+                          const link = document.createElement("a");
+                          link.href = url;
+                          link.download = `KPSS_Sinav_${currentSubject}_${activeQuizTopic?.replace(/\s+/g, "_")}.txt`;
+                          link.click();
+                          URL.revokeObjectURL(url);
+                        }}
+                      >
+                        {lang === "tr" ? "Dışarı Aktar" : "Export"}
+                      </button>
+                    </div>
+                    <button className="settings-add-btn" style={{ width: "100%", padding: 0 }} onClick={() => setActiveQuizTopic(null)}>
+                      {lang === "tr" ? "Kapat" : "Close"}
                     </button>
                   </div>
                 </div>
