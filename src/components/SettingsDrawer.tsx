@@ -5,6 +5,8 @@ import { GoogleSyncSettings } from "@/core/storage.js";
 import { GeneralSettingsTab } from "@/components/settings/GeneralSettingsTab.js";
 import { AiSettingsTab } from "@/components/settings/AiSettingsTab.js";
 import { SyncSettingsTab } from "@/components/settings/SyncSettingsTab.js";
+import { KpssSettingsTab } from "@/components/settings/KpssSettingsTab.js";
+import { DetoxSettingsTab } from "@/components/settings/DetoxSettingsTab.js";
 
 export interface SettingsDrawerProps {
   isOpen: boolean;
@@ -86,7 +88,7 @@ export function SettingsDrawer({
   onDetoxLimitsChange,
 }: SettingsDrawerProps) {
   const t = translations[lang];
-  const [settingsTab, setSettingsTab] = useState<"general" | "ai" | "sync">("general");
+  const [settingsTab, setSettingsTab] = useState<"general" | "kpss" | "detox" | "ai" | "sync">("general");
 
   if (!isOpen) return null;
 
@@ -107,6 +109,18 @@ export function SettingsDrawer({
             onClick={() => setSettingsTab("general")}
           >
             {t.settings_tab_general}
+          </button>
+          <button
+            className={`settings-tab-btn ${settingsTab === "kpss" ? "active" : ""}`}
+            onClick={() => setSettingsTab("kpss")}
+          >
+            {t.settings_tab_kpss || "KPSS"}
+          </button>
+          <button
+            className={`settings-tab-btn ${settingsTab === "detox" ? "active" : ""}`}
+            onClick={() => setSettingsTab("detox")}
+          >
+            {t.settings_tab_detox || "Detox"}
           </button>
           <button
             className={`settings-tab-btn ${settingsTab === "ai" ? "active" : ""}`}
@@ -138,21 +152,32 @@ export function SettingsDrawer({
             onToggleUniversalInfoBox={onToggleUniversalInfoBox}
             universalInfoBoxHotkey={universalInfoBoxHotkey}
             onUniversalInfoBoxHotkeyChange={onUniversalInfoBoxHotkeyChange}
+          />
+        )}
+
+        {/* TAB 2: KPSS SETTINGS */}
+        {settingsTab === "kpss" && (
+          <KpssSettingsTab
+            lang={lang}
             kpssGoalType={kpssGoalType}
             kpssTargetNet={kpssTargetNet}
             kpssTargetScore={kpssTargetScore}
             onKpssGoalTypeChange={onKpssGoalTypeChange}
             onKpssTargetNetChange={onKpssTargetNetChange}
             onKpssTargetScoreChange={onKpssTargetScoreChange}
-            detoxLimits={detoxLimits}
-            onDetoxLimitsChange={onDetoxLimitsChange}
-            onExportBackup={onExportBackup}
-            onImportBackup={onImportBackup}
-            onClearAllData={onClearAllData}
           />
         )}
 
-        {/* TAB 2: AI ASSISTANT SETTINGS */}
+        {/* TAB 3: DETOX SETTINGS */}
+        {settingsTab === "detox" && (
+          <DetoxSettingsTab
+            lang={lang}
+            detoxLimits={detoxLimits}
+            onDetoxLimitsChange={onDetoxLimitsChange}
+          />
+        )}
+
+        {/* TAB 4: AI ASSISTANT SETTINGS */}
         {settingsTab === "ai" && (
           <AiSettingsTab
             t={t}
@@ -164,7 +189,7 @@ export function SettingsDrawer({
           />
         )}
 
-        {/* TAB 3: GOOGLE CLOUD SYNC SETTINGS */}
+        {/* TAB 5: GOOGLE CLOUD SYNC & BACKUP SETTINGS */}
         {settingsTab === "sync" && (
           <SyncSettingsTab
             t={t}
@@ -176,6 +201,9 @@ export function SettingsDrawer({
             onGoogleLogout={onGoogleLogout}
             onBackupToGoogleDrive={onBackupToGoogleDrive}
             onRestoreFromGoogleDrive={onRestoreFromGoogleDrive}
+            onExportBackup={onExportBackup}
+            onImportBackup={onImportBackup}
+            onClearAllData={onClearAllData}
           />
         )}
       </div>
