@@ -310,8 +310,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ],
-          response_format: { type: "json_object" }
+          ]
         };
 
         const res = await fetch(url, {
