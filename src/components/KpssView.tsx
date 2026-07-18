@@ -94,6 +94,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   // Active sub-tab
   const [activeTab, setActiveTab] = useState<"progress" | "srs">("progress");
 
+  // Sorting state for topic lists
+  const [sortBy, setSortBy] = useState<"default" | "questions" | "status">("default");
+
   // KPSS SRS States
   const [srsLoading, setSrsLoading] = useState(true);
   const [srsQueue, setSrsQueue] = useState<WordReviewData[]>([]);
@@ -542,7 +545,54 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     });
   };
 
-  const topics = kpssData[currentSubject] || [];
+  const getSubjectNets = (subKey: string) => {
+    const tList = kpssData[subKey] || [];
+    let totalNet = 0;
+    let totalQuestions = 0;
+
+    tList.forEach((t) => {
+      totalQuestions += t.questionsCount;
+      const prog = kpssProgress.find((p) => p.subject === subKey && p.topic === t.title);
+      if (prog) {
+        if (prog.score !== undefined) {
+          totalNet += (prog.score / 100) * t.questionsCount;
+        } else if (prog.status === 2) {
+          totalNet += 0.8 * t.questionsCount;
+        } else if (prog.status === 1) {
+          totalNet += 0.4 * t.questionsCount;
+        }
+      }
+    });
+    return { net: Math.round(totalNet * 10) / 10, max: totalQuestions };
+  };
+
+  const getOverallNets = () => {
+    let totalNet = 0;
+    let totalMax = 0;
+    Object.keys(kpssData).forEach((subKey) => {
+      const { net, max } = getSubjectNets(subKey);
+      totalNet += net;
+      totalMax += max;
+    });
+    return { net: Math.round(totalNet * 10) / 10, max: totalMax };
+  };
+
+  const getSortedTopics = () => {
+    const rawTopics = [...(kpssData[currentSubject] || [])];
+    if (sortBy === "questions") {
+      return rawTopics.sort((a, b) => b.questionsCount - a.questionsCount);
+    }
+    if (sortBy === "status") {
+      return rawTopics.sort((a, b) => {
+        const statusA = kpssProgress.find((p) => p.subject === currentSubject && p.topic === a.title)?.status || 0;
+        const statusB = kpssProgress.find((p) => p.subject === currentSubject && p.topic === b.title)?.status || 0;
+        return statusB - statusA;
+      });
+    }
+    return rawTopics;
+  };
+
+  const topics = getSortedTopics();
 
   // Subject progress percentage
   const completedTopicsCount = kpssProgress.filter(
@@ -552,7 +602,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     (p) => p.subject === currentSubject && p.status === 1,
   ).length;
 
-  const totalTopics = topics.length;
+  const totalTopics = (kpssData[currentSubject] || []).length;
   const progressPercentage =
     totalTopics > 0
       ? Math.round(((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) * 100)
@@ -594,7 +644,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             {lang === "tr" ? "Aralıklı Tekrar (Kartlar)" : "Spaced Repetition (Cards)"}
           </button>
         </div>
-
         {activeTab === "progress" && (
           <>
             <KpssCountdownBanner
@@ -603,6 +652,47 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               estimatedTimeLeft={estimatedTimeLeft}
               remainingCount={remainingCount}
             />
+
+            {/* Dynamic Net Estimation Section */}
+            <div className="mini-tool-card" style={{ marginTop: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
+                    {lang === "tr" ? "KPSS Lisans Tahmini Net Skoru" : "KPSS Estimated Net Score"}
+                  </span>
+                </div>
+                <div style={{ fontSize: "1.4rem", fontWeight: "800", color: "var(--accent-color)" }}>
+                  {getOverallNets().net} / {getOverallNets().max} Net
+                </div>
+              </div>
+
+              {/* Subject level breakdown */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "12px", marginTop: "8px" }}>
+                {Object.keys(kpssData).map((subKey) => {
+                  const { net, max } = getSubjectNets(subKey);
+                  const percentage = max > 0 ? Math.round((net / max) * 100) : 0;
+                  return (
+                    <div key={subKey} style={{ background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "10px 12px", display: "flex", flexDirection: "column", gap: "6px" }}>
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                        {labels[subKey] || subKey}
+                      </span>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                        <span style={{ fontSize: "1rem", fontWeight: "700", color: "var(--text-primary)" }}>{net} <span style={{ fontSize: "0.7rem", fontWeight: "500", color: "var(--text-secondary)" }}>/ {max}</span></span>
+                        <span style={{ fontSize: "0.7rem", color: "var(--accent-color)", fontWeight: "700" }}>%{percentage}</span>
+                      </div>
+                      <div style={{ height: "4px", background: "rgba(255, 255, 255, 0.05)", borderRadius: "2px", overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${percentage}%`, background: "var(--accent-color)", borderRadius: "2px" }}></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
             {/* Dashboard Stat Progress Inputs and Charts */}
         <div className="kpss-daily-stats-section">
@@ -661,6 +751,36 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
         {/* Topic checklist details */}
         <div className="kpss-content">
+          {/* Sort Options Bar */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "8px 12px", width: "100%" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+              {lang === "tr" ? "Konu Dağılımı ve Çalışma Takibi" : "Topic Syllabus & Progress"}
+            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
+                ⚙️ {lang === "tr" ? "Sıralama:" : "Sort By:"}
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy((e.target as HTMLSelectElement).value as any)}
+                style={{
+                  background: "#161622",
+                  border: "1px solid var(--card-border)",
+                  borderRadius: "6px",
+                  color: "white",
+                  fontSize: "0.75rem",
+                  padding: "2px 8px",
+                  cursor: "pointer",
+                  outline: "none"
+                }}
+              >
+                <option value="default">{lang === "tr" ? "Müfredat Sırası" : "Syllabus Order"}</option>
+                <option value="questions">{lang === "tr" ? "Soru Sıklığı (Çoktan Aza)" : "Question Frequency"}</option>
+                <option value="status">{lang === "tr" ? "Tamamlanma Durumu" : "Completion Status"}</option>
+              </select>
+            </div>
+          </div>
+
           <div id="kpss-topic-list" className="kpss-topic-list">
             {topics.map((t) => {
               const progress = kpssProgress.find(
@@ -688,12 +808,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                   </div>
-                  <span className="kpss-topic-name">
-                    {t.title}
-                    {progress && progress.score !== undefined && (
-                      <span className="kpss-topic-score-badge">%{progress.score}</span>
-                    )}
-                  </span>
+                  <span className="kpss-topic-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                     <span>{t.title}</span>
+                     <span className="kpss-topic-q-badge" style={{ fontSize: "0.65rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid var(--card-border)", padding: "2px 6px", borderRadius: "4px", color: "var(--text-secondary)", fontWeight: "600" }}>
+                       {t.questionsCount} {lang === "tr" ? "Soru" : "Q"}
+                     </span>
+                     {progress && progress.score !== undefined && (
+                       <span className="kpss-topic-score-badge">%{progress.score}</span>
+                     )}
+                   </span>
 
                   {/* Seviye Tespit Sınavı button */}
                   <button

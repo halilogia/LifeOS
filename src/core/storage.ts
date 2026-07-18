@@ -27,6 +27,7 @@ interface SettingsResult {
   freeGamesNotificationsEnabled?: boolean;
   calendarNotificationsEnabled?: boolean;
   pomoBlockEnabled?: boolean;
+  pomoCustomTimes?: { focus: number; short: number; long: number };
   universalInfoBoxEnabled?: boolean;
   universalInfoBoxHotkey?: string;
 }
@@ -329,6 +330,24 @@ export const storage = {
       );
     });
   },
+  getPomoCustomTimes: (): Promise<{ focus: number; short: number; long: number }> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["pomoCustomTimes"], (result: any) => {
+        resolve(
+          (result.pomoCustomTimes as { focus: number; short: number; long: number }) || {
+            focus: 25 * 60,
+            short: 5 * 60,
+            long: 15 * 60,
+          }
+        );
+      });
+    });
+  },
+  setPomoCustomTimes: (times: { focus: number; short: number; long: number }): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ pomoCustomTimes: times }, resolve);
+    });
+  },
   setPrayerLocation: (city: string, country: string): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
@@ -382,6 +401,7 @@ export const storage = {
                 "freeGamesNotificationsEnabled",
                 "calendarNotificationsEnabled",
                 "pomoBlockEnabled",
+                "pomoCustomTimes",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",
