@@ -325,12 +325,21 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
         const url = `${baseUrl}/chat/completions`;
         const modelName = aiModel || "google/gemini-2.5-flash";
-        const headers: HeadersInit = {
+        const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+
+        const headers: Record<string, string> = {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${aiApiKey}`,
-          "HTTP-Referer": "https://github.com/halilogia/chrome-extension-todo",
-          "X-Title": "ZenTodo Life OS Dashboard"
         };
+
+        if (aiApiKey && aiApiKey.trim()) {
+          headers["Authorization"] = `Bearer ${aiApiKey}`;
+        }
+
+        if (!isLocal) {
+          headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
+          headers["X-Title"] = "ZenTodo Life OS Dashboard";
+        }
+
         const payload = {
           model: modelName,
           messages: [
@@ -375,19 +384,25 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
-      let cleanJson = responseText.trim();
-      if (cleanJson.startsWith("```json")) {
-        cleanJson = cleanJson.substring(7);
+      let cleaned = responseText.trim();
+      const firstBrace = cleaned.indexOf("{");
+      const firstBracket = cleaned.indexOf("[");
+      
+      let startIdx = -1;
+      let endIdx = -1;
+      
+      if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+        startIdx = firstBrace;
+        endIdx = cleaned.lastIndexOf("}");
+      } else if (firstBracket !== -1) {
+        startIdx = firstBracket;
+        endIdx = cleaned.lastIndexOf("]");
       }
-      if (cleanJson.startsWith("```")) {
-        cleanJson = cleanJson.substring(3);
+      
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        cleaned = cleaned.substring(startIdx, endIdx + 1);
       }
-      if (cleanJson.endsWith("```")) {
-        cleanJson = cleanJson.substring(0, cleanJson.length - 3);
-      }
-      cleanJson = cleanJson.trim();
-
-      let parsed = JSON.parse(cleanJson);
+      let parsed = JSON.parse(cleaned);
       if (!Array.isArray(parsed) && typeof parsed === "object") {
         const keys = Object.keys(parsed);
         if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {
@@ -1183,7 +1198,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                     ))}
                   </div>
 
-                  {!aiApiKey && (
+                  {!(aiApiKey || (aiEndpoint && (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1")))) && (
                     <div className="halka-arz-fallback-notice" style={{ marginTop: "16px", background: "rgba(239, 68, 68, 0.12)", border: "1px solid rgba(239, 68, 68, 0.3)", color: "#ef4444" }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
@@ -1200,7 +1215,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                     <button
                       className="settings-add-btn"
                       style={{ width: "100%" }}
-                      disabled={!aiApiKey}
+                      disabled={!(aiApiKey || (aiEndpoint && (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1"))))}
                       onClick={() => fetchQuizFromAI(currentSubject, activeQuizTopic, selectedQuizCount)}
                     >
                       {lang === "tr" ? "Sınavı Başlat" : "Start Test"}
