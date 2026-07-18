@@ -67,7 +67,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   // Input states
   const [questionsInput, setQuestionsInput] = useState("");
+  const [videosInput, setVideosInput] = useState("");
   const [subjectInput, setSubjectInput] = useState("turkce");
+  const [chartDays, setChartDays] = useState<7 | 30>(7);
 
   // Detail Modal
   const [activeTopic, setActiveTopic] = useState<{
@@ -212,7 +214,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   useEffect(() => {
     drawChart();
-  }, [dailyStats]);
+  }, [dailyStats, chartDays, targetScore, kpssProgress]);
 
   // Real-time Countdown timer intervals
   useEffect(() => {
@@ -442,8 +444,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       return;
     }
 
-    const stats = dailyStats;
-    const last7Days = stats.slice(-7);
     const ctx = canvas.getContext("2d");
     if (!ctx) {
       return;
@@ -466,15 +466,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     const chartWidth = width - padding * 2;
     const chartHeight = height - padding * 2;
 
-    const maxQuestions = Math.max(...last7Days.map((s) => s.questions), 10);
-
     ctx.clearRect(0, 0, width, height);
 
-    if (last7Days.length === 0) {
-      return;
-    }
-
-    // Grid lines
+    // Draw Grid lines
     ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
     ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -485,44 +479,144 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       ctx.stroke();
     }
 
-    const barGap = 15;
-    const barWidth = (chartWidth - barGap * (last7Days.length - 1)) / last7Days.length;
+    const stats = dailyStats || [];
+    const lastNDays = stats.slice(-chartDays);
 
-    last7Days.forEach((stat, i) => {
-      const x = padding + i * (barWidth + barGap);
-      const barHeight = (stat.questions / maxQuestions) * chartHeight;
-      const y = height - padding - barHeight;
+    if (lastNDays.length === 0) {
+      // Draw dynamic recommendation chart (empty state)
+      const overallNet = getOverallNets().net;
+      const estimatedScore = Math.round((45 + overallNet * 0.458) * 10) / 10;
+      const scoreDiff = Math.max(0, targetScore - estimatedScore);
+      const recommendedQuestions = Math.round(scoreDiff * 75);
+      const recommendedVideos = Math.round(scoreDiff * 2.5);
 
-      const accentColor =
-        getComputedStyle(document.documentElement).getPropertyValue("--accent-color").trim() || "#8b5cf6";
+      const barWidth = 70;
+      const barGap = 50;
+      const centerX = padding + chartWidth / 2;
 
-      // Draw rounded bar
-      const gradient = ctx.createLinearGradient(x, y, x, height - padding);
-      gradient.addColorStop(0, accentColor);
-      gradient.addColorStop(1, "rgba(139, 92, 246, 0.1)");
-      ctx.fillStyle = gradient;
+      const xQ = centerX - barWidth - barGap / 2;
+      const xV = centerX + barGap / 2;
 
-      const radius = 6;
+      const hQ = chartHeight * 0.7;
+      const hV = chartHeight * 0.65;
+
+      const yQ = height - padding - hQ;
+      const yV = height - padding - hV;
+
+      // Draw Questions Bar (Slate gray / #6b7280)
+      const gradQ = ctx.createLinearGradient(xQ, yQ, xQ, height - padding);
+      gradQ.addColorStop(0, "#6b7280");
+      gradQ.addColorStop(1, "rgba(107, 114, 128, 0.1)");
+      ctx.fillStyle = gradQ;
       ctx.beginPath();
-      if (barHeight > radius) {
-        ctx.roundRect(x, y, barWidth, barHeight, [radius, radius, 0, 0]);
+      ctx.roundRect(xQ, yQ, barWidth, hQ, [8, 8, 0, 0]);
+      ctx.fill();
+
+      // Draw Videos Bar (Blue / #3b82f6)
+      const gradV = ctx.createLinearGradient(xV, yV, xV, height - padding);
+      gradV.addColorStop(0, "#3b82f6");
+      gradV.addColorStop(1, "rgba(59, 130, 246, 0.1)");
+      ctx.fillStyle = gradV;
+      ctx.beginPath();
+      ctx.roundRect(xV, yV, barWidth, hV, [8, 8, 0, 0]);
+      ctx.fill();
+
+      // Draw values on top
+      ctx.fillStyle = "white";
+      ctx.font = "bold 13px Inter";
+      ctx.textAlign = "center";
+      ctx.fillText(`${recommendedQuestions} ${lang === "tr" ? "Soru" : "Q"}`, xQ + barWidth / 2, yQ - 10);
+      ctx.fillText(`${recommendedVideos} ${lang === "tr" ? "Video" : "Vids"}`, xV + barWidth / 2, yV - 10);
+
+      // Draw sub-labels at the bottom
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.font = "600 10px Inter";
+      ctx.fillText(lang === "tr" ? "Kalan Soru İhtiyacı" : "Questions Needed", xQ + barWidth / 2, height - padding + 18);
+      ctx.fillText(lang === "tr" ? "Kalan Video İhtiyacı" : "Videos Needed", xV + barWidth / 2, height - padding + 18);
+
+      // Draw a small subtitle at the top center
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.font = "bold 11px Inter";
+      ctx.fillText(
+        lang === "tr" 
+          ? `Hedef Puan (${targetScore}) İçin Kalan Tahmini Çalışma İhtiyacınız`
+          : `Estimated Study Needed For Target Score (${targetScore})`,
+        centerX,
+        padding - 12
+      );
+      return;
+    }
+
+    // Draw study progress logs
+    const maxQuestions = Math.max(...lastNDays.map((s) => s.questions), 10);
+    const maxVideos = Math.max(...lastNDays.map((s) => s.videos || 0), 1);
+
+    const slotWidth = chartWidth / lastNDays.length;
+    const barGap = 2; // space between the two bars of the same day
+    const slotPadding = lastNDays.length > 10 ? 2 : 6;
+    const barWidth = (slotWidth - slotPadding * 2 - barGap) / 2;
+
+    lastNDays.forEach((stat, i) => {
+      const slotX = padding + i * slotWidth;
+      const xQ = slotX + slotPadding;
+      const xV = xQ + barWidth + barGap;
+
+      // Heights: scaled to their maxes
+      const hQ = (stat.questions / maxQuestions) * (chartHeight - 20);
+      const hV = (((stat.videos || 0) / maxVideos) * (chartHeight - 20));
+
+      const yQ = height - padding - hQ;
+      const yV = height - padding - hV;
+
+      // Questions: Green (#10b981)
+      const gradQ = ctx.createLinearGradient(xQ, yQ, xQ, height - padding);
+      gradQ.addColorStop(0, "#10b981");
+      gradQ.addColorStop(1, "rgba(16, 185, 129, 0.1)");
+      ctx.fillStyle = gradQ;
+      ctx.beginPath();
+      if (hQ > 4) {
+        ctx.roundRect(xQ, yQ, barWidth, hQ, [4, 4, 0, 0]);
       } else {
-        ctx.rect(x, y, barWidth, Math.max(barHeight, 2));
+        ctx.rect(xQ, yQ, barWidth, Math.max(hQ, 2));
       }
       ctx.fill();
 
-      // Draw date labels
-      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-      ctx.font = "500 10px Inter";
-      ctx.textAlign = "center";
-      const dateParts = stat.date.split("-");
-      const dateLabel = `${dateParts[2]}/${dateParts[1]}`;
-      ctx.fillText(dateLabel, x + barWidth / 2, height - padding + 18);
+      // Videos: Blue (#3b82f6)
+      const gradV = ctx.createLinearGradient(xV, yV, xV, height - padding);
+      gradV.addColorStop(0, "#3b82f6");
+      gradV.addColorStop(1, "rgba(59, 130, 246, 0.1)");
+      ctx.fillStyle = gradV;
+      ctx.beginPath();
+      if (hV > 4) {
+        ctx.roundRect(xV, yV, barWidth, hV, [4, 4, 0, 0]);
+      } else {
+        ctx.rect(xV, yV, barWidth, Math.max(hV, 2));
+      }
+      ctx.fill();
 
-      // Draw values
-      ctx.fillStyle = "white";
-      ctx.font = "bold 11px Inter";
-      ctx.fillText(stat.questions.toString(), x + barWidth / 2, y - 8);
+      // Draw values on top if we have enough slot width (7-day view)
+      if (lastNDays.length <= 7) {
+        ctx.fillStyle = "white";
+        ctx.font = "bold 9px Inter";
+        ctx.textAlign = "center";
+        
+        if (stat.questions > 0) {
+          ctx.fillText(stat.questions.toString(), xQ + barWidth / 2, yQ - 6);
+        }
+        if ((stat.videos || 0) > 0) {
+          ctx.fillText((stat.videos || 0).toString(), xV + barWidth / 2, yV - 6);
+        }
+      }
+
+      // Draw Date labels under the slot
+      if (lastNDays.length <= 7 || i % 5 === 0) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.font = "500 10px Inter";
+        ctx.textAlign = "center";
+        const dateParts = stat.date.split("-");
+        const dateLabel = `${dateParts[2]}/${dateParts[1]}`;
+        ctx.fillText(dateLabel, slotX + slotWidth / 2, height - padding + 18);
+      }
     });
   };
 
@@ -540,10 +634,12 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   // Add daily studies count
   const handleSaveStats = async () => {
-    const questions = parseInt(questionsInput, 10);
-    if (questions > 0) {
-      await kpssService.saveKpssDailyStats(questions, subjectInput);
+    const questions = parseInt(questionsInput, 10) || 0;
+    const videos = parseInt(videosInput, 10) || 0;
+    if (questions > 0 || videos > 0) {
+      await kpssService.saveKpssDailyStats(questions, videos, subjectInput);
       setQuestionsInput("");
+      setVideosInput("");
       loadKpssData();
     }
   };
@@ -761,7 +857,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             </div>
 
             {/* Dashboard Stat Progress Inputs and Charts */}
-        <div className="kpss-daily-stats-section">
+        <div className="kpss-daily-stats-section" style={{ marginTop: "28px" }}>
           <div className="kpss-daily-input">
             <h3>{labels.stats_title}</h3>
             <div className="kpss-stats-inputs">
@@ -772,6 +868,17 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
                   id="kpss-questions-input"
                   value={questionsInput}
                   onInput={(e) => setQuestionsInput((e.target as HTMLInputElement).value)}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div className="kpss-input-group">
+                <label for="kpss-videos-input">{lang === "tr" ? "İzlenen Video" : "Videos Watched"}</label>
+                <input
+                  type="number"
+                  id="kpss-videos-input"
+                  value={videosInput}
+                  onInput={(e) => setVideosInput((e.target as HTMLInputElement).value)}
                   placeholder="0"
                   min="0"
                 />
@@ -801,17 +908,51 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             </div>
           </div>
 
-          <div className="kpss-chart-container">
+          <div className="kpss-chart-container" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                📊 {lang === "tr" ? "İlerleme Grafiği" : "Progress Chart"}
+              </span>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <button
+                  onClick={() => setChartDays(7)}
+                  style={{
+                    background: chartDays === 7 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid var(--card-border)",
+                    borderRadius: "6px",
+                    color: "white",
+                    fontSize: "0.65rem",
+                    padding: "2px 8px",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  {lang === "tr" ? "7 Gün" : "7 Days"}
+                </button>
+                <button
+                  onClick={() => setChartDays(30)}
+                  style={{
+                    background: chartDays === 30 ? "var(--accent-color)" : "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid var(--card-border)",
+                    borderRadius: "6px",
+                    color: "white",
+                    fontSize: "0.65rem",
+                    padding: "2px 8px",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  {lang === "tr" ? "30 Gün" : "30 Days"}
+                </button>
+              </div>
+            </div>
             <canvas
               ref={canvasRef}
               id="kpss-history-chart"
-              style={{ display: showChartPlaceholder ? "none" : "block" }}
+              style={{ display: "block", width: "100%", height: "200px" }}
             ></canvas>
-            {showChartPlaceholder && (
-              <div id="kpss-chart-placeholder" className="chart-placeholder">
-                <p>{labels.chart_empty}</p>
-              </div>
-            )}
           </div>
         </div>
 
