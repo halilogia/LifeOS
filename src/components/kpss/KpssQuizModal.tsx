@@ -59,11 +59,11 @@ export function KpssQuizModal({
   if (!activeQuizTopic) return null;
 
   return (
-    <div className="settings-panel active" onClick={() => { if (!quizLoading) { onClose(); } }}>
+    <div className="settings-panel active" onClick={onClose}>
       <div className="settings-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "600px", width: "95%" }}>
         <div className="settings-header">
           <h3>{activeQuizTopic}</h3>
-          <button className="close-btn" onClick={onClose} disabled={quizLoading}>
+          <button className="close-btn" onClick={onClose}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
