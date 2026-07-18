@@ -745,3 +745,58 @@ body.sidebar-open .top-header {
   justify-content: center;
   align-items: center;
 }
+
+/* ── KPSS Question Map Styling ────────────────── */
+.kpss-map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kpss-map-region {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1.5;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kpss-map-region:hover {
+  fill: rgba(255, 255, 255, 0.08);
+}
+
+.kpss-map-region.highlighted {
+  fill: rgba(139, 92, 246, 0.25);
+  stroke: #8b5cf6;
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.3));
+}
+
+.kpss-map-pin {
+  background: var(--accent-color);
+  border: 2px solid white;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 2px 4px rgba(0,0,0,0.5);
+  animation: mapPinPulse 2s infinite ease-in-out;
+}
+
+@keyframes mapPinPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 0 6px rgba(139, 92, 246, 0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}

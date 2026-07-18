@@ -40,6 +40,10 @@ interface QuizQuestion {
     angles?: Record<string, string>;
     sides?: Record<string, string>;
   };
+  map?: {
+    highlightRegions?: string[];
+    markers?: Array<{ x: number; y: number; label: string }>;
+  };
 }
 
 interface KpssPastQuiz {
@@ -323,6 +327,17 @@ Eğer hazırladığın soru bir grafik okuma, nüfus/ekonomi istatistiği tablos
 4. Geometri Çember Şekli: { "type": "geometry", "shape": "circle", "sides": { "radius": "5" } }
 5. Paralel Doğrular ve Açı Soruları: { "type": "geometry", "shape": "parallel_lines", "angles": { "top_right": "120°", "bottom_left": "x" } }
 
+Eğer hazırladığın soru Türkiye Coğrafyası dersiyle ilgili ve harita bilgisi okumayı gerektiriyorsa (örn: "Haritada numaralandırılmış alanların hangisinde...", "Haritada taralı bölgelerin hangisinde..."), nesneye isteğe bağlı bir "map" alanı ekle.
+"map" alanı şu yapıda olmalıdır:
+{
+  "highlightRegions": ["marmara" | "ege" | "akdeniz" | "karadeniz" | "ic_anadolu" | "dogu_anadolu" | "guneydogu_anadolu"], // Renklendirilecek coğrafi bölgelerin isimleri (birden fazla olabilir)
+  "markers": [ // Harita üzerine yerleştirilecek işaretçiler (maksimum 5 adet). X ve Y değerleri 0-100 arasında yüzdesel koordinatlardır (Haritanın sol üst köşesi 0,0'dır)
+    { "x": 18, "y": 42, "label": "I" },
+    { "x": 48, "y": 78, "label": "II" }
+  ]
+}
+Türkiye haritası koordinat ipuçları: Marmara civarı (x: 20-80, y: 15-40), Ege civarı (x: 10-60, y: 60-120), Akdeniz civarı (x: 110-220, y: 90-140), Karadeniz civarı (x: 120-330, y: 35-70), İç Anadolu (x: 120-220, y: 45-90), Doğu Anadolu (x: 220-385, y: 80-130), Güneydoğu Anadolu (x: 240-385, y: 130-160).
+
 Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi formatında döndürmelisin. Her nesne şu yapıda olmalıdır:
 [
   {
@@ -330,7 +345,8 @@ Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi 
     "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği", "E seçeneği"],
     "correctAnswer": 0,
     "solution": "Sorunun detaylı çözümü...",
-    "chart": { ... } // Sadece grafik/geometri soruları için isteğe bağlı
+    "chart": { ... }, // İsteğe bağlı
+    "map": { ... } // Coğrafya harita soruları için isteğe bağlı
   }
 ]
 (correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
