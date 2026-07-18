@@ -71,6 +71,10 @@ export function PomoSidePanel({
       audioContextRef.current.close();
       audioContextRef.current = null;
     }
+    if ((window as any).lofiTimer) {
+      clearInterval((window as any).lofiTimer);
+      (window as any).lofiTimer = null;
+    }
   };
 
   const playHairdryer = () => {
@@ -124,15 +128,206 @@ export function PomoSidePanel({
     }
   };
 
-  const playAudioUrl = (url: string) => {
+  const playRain = () => {
     stopAllSounds();
-    const audio = new Audio(url);
-    audio.volume = volume;
-    audio.loop = true;
-    audioRef.current = audio;
-    audio.play().catch((err) => {
-      console.error("Audio playback error:", err);
-    });
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioCtx();
+      audioContextRef.current = ctx;
+
+      const bufferSize = 4 * ctx.sampleRate;
+      const rainBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = rainBuffer.getChannelData(0);
+
+      // 1. Background soft brown noise (rain hum)
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 0.18; // soft background volume
+      }
+
+      // 2. Individual transient raindrop patters
+      for (let i = 0; i < bufferSize; i++) {
+        if (Math.random() > 0.9996) {
+          const clickAmp = Math.random() * 0.15 + 0.05;
+          const decayLen = Math.floor(Math.random() * 400 + 150);
+          for (let j = 0; j < decayLen && (i + j) < bufferSize; j++) {
+            const t = j / ctx.sampleRate;
+            const freq = Math.random() * 1400 + 1800;
+            const envelope = Math.exp(-j / (decayLen / 4.5));
+            output[i + j] += Math.sin(2 * Math.PI * freq * t) * clickAmp * envelope;
+          }
+        }
+      }
+
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = rainBuffer;
+      noiseSource.loop = true;
+
+      const lowpass = ctx.createBiquadFilter();
+      lowpass.type = "lowpass";
+      lowpass.frequency.value = 1600;
+
+      const highpass = ctx.createBiquadFilter();
+      highpass.type = "highpass";
+      highpass.frequency.value = 120;
+
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = volume * 0.8;
+      whiteNoiseGainRef.current = gainNode;
+
+      noiseSource.connect(lowpass);
+      lowpass.connect(highpass);
+      highpass.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      noiseSource.start();
+      whiteNoiseSourceRef.current = noiseSource as any;
+    } catch (e) {
+      console.error("Failed to play rain:", e);
+    }
+  };
+
+  const playWind = () => {
+    stopAllSounds();
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioCtx();
+      audioContextRef.current = ctx;
+
+      const bufferSize = 4 * ctx.sampleRate;
+      const brownBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = brownBuffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 1.8;
+      }
+
+      const noiseSource = ctx.createBufferSource();
+      noiseSource.buffer = brownBuffer;
+      noiseSource.loop = true;
+
+      const bandpass = ctx.createBiquadFilter();
+      bandpass.type = "bandpass";
+      bandpass.Q.value = 1.8;
+      bandpass.frequency.value = 300;
+
+      const lowcut = ctx.createBiquadFilter();
+      lowcut.type = "highpass";
+      lowcut.frequency.value = 80;
+
+      const lfo = ctx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.value = 0.06;
+
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 180;
+
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = volume * 0.6;
+      whiteNoiseGainRef.current = gainNode;
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(bandpass.frequency);
+
+      noiseSource.connect(bandpass);
+      bandpass.connect(lowcut);
+      lowcut.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      lfo.start();
+      noiseSource.start();
+      whiteNoiseSourceRef.current = noiseSource as any;
+    } catch (e) {
+      console.error("Failed to play wind:", e);
+    }
+  };
+
+  const playLofi = () => {
+    stopAllSounds();
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioCtx();
+      audioContextRef.current = ctx;
+
+      const bufferSize = ctx.sampleRate * 2;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const hiss = (Math.random() * 2 - 1) * 0.015;
+        const crackle = Math.random() > 0.9995 ? (Math.random() * 2 - 1) * 0.4 : 0;
+        output[i] = hiss + crackle;
+      }
+
+      const crackleSource = ctx.createBufferSource();
+      crackleSource.buffer = noiseBuffer;
+      crackleSource.loop = true;
+
+      const crackleFilter = ctx.createBiquadFilter();
+      crackleFilter.type = "bandpass";
+      crackleFilter.frequency.value = 1000;
+      crackleFilter.Q.value = 0.5;
+
+      const masterGain = ctx.createGain();
+      masterGain.gain.value = volume;
+      whiteNoiseGainRef.current = masterGain;
+
+      crackleSource.connect(crackleFilter);
+      crackleFilter.connect(masterGain);
+      crackleSource.start();
+      whiteNoiseSourceRef.current = crackleSource as any;
+
+      const chords = [
+        [130.81, 164.81, 196.00, 246.94], // Cmaj7
+        [110.00, 130.81, 164.81, 196.00], // Am7
+        [87.31, 110.00, 130.81, 164.81],  // Fmaj7
+        [98.00, 123.47, 146.83, 174.61]   // G7
+      ];
+
+      let chordIdx = 0;
+
+      const playNextChord = () => {
+        if (!audioContextRef.current || audioContextRef.current.state === "closed") return;
+        const now = ctx.currentTime;
+        const chordNotes = chords[chordIdx];
+        chordIdx = (chordIdx + 1) % chords.length;
+
+        chordNotes.forEach((freq) => {
+          const osc = ctx.createOscillator();
+          osc.type = "triangle";
+          osc.frequency.value = freq;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = "lowpass";
+          filter.frequency.value = 500;
+
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.12, now + 1.2);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.8);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(masterGain);
+
+          osc.start(now);
+          osc.stop(now + 4);
+        });
+      };
+
+      playNextChord();
+      const timer = setInterval(playNextChord, 4000);
+      (window as any).lofiTimer = timer;
+
+      masterGain.connect(ctx.destination);
+    } catch (e) {
+      console.error("Failed to play lofi:", e);
+    }
   };
 
   const handleSoundToggle = (soundType: typeof activeSound) => {
@@ -145,11 +340,11 @@ export function PomoSidePanel({
       if (soundType === "white_noise") {
         playHairdryer();
       } else if (soundType === "rain") {
-        playAudioUrl("https://www.soundjay.com/nature/sounds/rain-07.mp3");
+        playRain();
       } else if (soundType === "wind") {
-        playAudioUrl("https://www.soundjay.com/nature/sounds/wind-howl-01.mp3");
+        playWind();
       } else if (soundType === "lofi") {
-        playAudioUrl("https://lofi.stream.laut.fm/lofi");
+        playLofi();
       }
     }
   };
