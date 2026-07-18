@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
+import { KpssQuestionMap } from "@/components/kpss/KpssQuestionMap.js";
 
 interface QuizQuestion {
   question: string;
@@ -14,6 +15,10 @@ interface QuizQuestion {
     shape?: "triangle" | "circle" | "parallel_lines";
     angles?: Record<string, string>;
     sides?: Record<string, string>;
+  };
+  map?: {
+    highlightRegions?: string[];
+    markers?: Array<{ x: number; y: number; label: string }>;
   };
 }
 
@@ -166,6 +171,10 @@ export function KpssQuizModal({
 
               {quizQuestions[currentQuestionIndex].chart && (
                 <KpssQuestionCanvas chart={quizQuestions[currentQuestionIndex].chart} />
+              )}
+
+              {quizQuestions[currentQuestionIndex].map && (
+                <KpssQuestionMap map={quizQuestions[currentQuestionIndex].map} />
               )}
 
               <div className="kpss-quiz-question-container">
