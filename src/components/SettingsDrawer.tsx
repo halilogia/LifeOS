@@ -10,6 +10,8 @@ export interface SettingsDrawerProps {
   onToggleLang: () => void;
   freeGamesNotificationsEnabled: boolean;
   onToggleFreeGamesNotifications: () => void;
+  calendarNotificationsEnabled: boolean;
+  onToggleCalendarNotifications: () => void;
   universalInfoBoxEnabled: boolean;
   onToggleUniversalInfoBox: () => void;
   universalInfoBoxHotkey: string;
@@ -38,6 +40,8 @@ export function SettingsDrawer({
   onToggleLang,
   freeGamesNotificationsEnabled,
   onToggleFreeGamesNotifications,
+  calendarNotificationsEnabled,
+  onToggleCalendarNotifications,
   universalInfoBoxEnabled,
   onToggleUniversalInfoBox,
   universalInfoBoxHotkey,
@@ -160,6 +164,40 @@ export function SettingsDrawer({
                     }}
                   >
                     {freeGamesNotificationsEnabled ? t.enabled : t.disabled}
+                  </span>
+                </button>
+
+                {/* Calendar Tasks Notifications Toggle */}
+                <button
+                  className="settings-action-btn"
+                  onClick={onToggleCalendarNotifications}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>{lang === "tr" ? "Bugünkü Görevleri Bildir" : "Notify Today's Tasks"}</span>
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      fontWeight: 700,
+                      color: calendarNotificationsEnabled
+                        ? "var(--accent-color)"
+                        : "var(--text-secondary)",
+                    }}
+                  >
+                    {calendarNotificationsEnabled ? t.enabled : t.disabled}
                   </span>
                 </button>
 
