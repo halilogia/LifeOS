@@ -4,6 +4,9 @@ import { pomodoroManager, AlarmItem } from "../core/pomodoroManager.js";
 import { storage } from "../core/storage.js";
 import { translations } from "../utils/i18n.js";
 import { PomoSidePanel } from "@/components/PomoSidePanel.js";
+import { PomoTimerCard } from "@/components/pomodoro/PomoTimerCard.js";
+import { PomoZenGardenCard } from "@/components/pomodoro/PomoZenGardenCard.js";
+import { PomoZenHistoryCard } from "@/components/pomodoro/PomoZenHistoryCard.js";
 
 interface PomodoroViewProps {
   lang: Language;
@@ -452,163 +455,23 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
 
       {activeTab === "timer" ? (
         <div className="pomodoro-dashboard">
-          {/* Main Pomodoro */}
-          <div className="pomodoro-main-card">
-            <div className="pomodoro-visual-container">
-              <svg className="progress-ring-main" width="240" height="240">
-                <circle
-                  className="progress-ring__circle-bg"
-                  stroke="rgba(255,255,255,0.05)"
-                  stroke-width="8"
-                  fill="transparent"
-                  r="110"
-                  cx="120"
-                  cy="120"
-                />
-                <circle
-                  id="pomodoro-progress"
-                  className="progress-ring__circle"
-                  stroke="var(--accent-color)"
-                  stroke-width="8"
-                  stroke-linecap="round"
-                  fill="transparent"
-                  r="110"
-                  cx="120"
-                  cy="120"
-                  style={{
-                    strokeDasharray: CIRCLE_CIRCUMFERENCE,
-                    strokeDashoffset: progressOffset,
-                    transition: "stroke-dashoffset 0.3s",
-                  }}
-                />
-              </svg>
-              <div className="pomodoro-timer-inner">
-                <div id="pomodoro-time">{formatTime(pomoTimeLeft)}</div>
-                <div id="pomodoro-label">{MODE_LABELS[pomoMode]}</div>
-              </div>
-            </div>
-
-            <div className="pomodoro-controls">
-              <button
-                id="pomodoro-reset"
-                className="pomodoro-action-btn secondary"
-                title="Reset"
-                onClick={handlePomoReset}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                  <polyline points="3 3 3 8 8 8"></polyline>
-                </svg>
-              </button>
-
-              {!pomoRunning ? (
-                <button
-                  id="pomodoro-start"
-                  className="pomodoro-action-btn primary play-btn"
-                  onClick={handlePomoStart}
-                >
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
-              ) : (
-                <button
-                  id="pomodoro-pause"
-                  className="pomodoro-action-btn primary pause-btn"
-                  onClick={handlePomoPause}
-                >
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                  </svg>
-                </button>
-              )}
-
-              <div style={{ width: "20px" }}></div>
-            </div>
-
-            <div className="pomodoro-modes" id="pomodoro-modes-container">
-              <button
-                className={`pomodoro-mode-btn ${pomoMode === "focus" ? "active" : ""}`}
-                onClick={() => handlePomoModeChange("focus")}
-              >
-                {lang === "tr" ? "Odaklanma" : "Focus"}
-              </button>
-              <button
-                className={`pomodoro-mode-btn ${pomoMode === "short" ? "active" : ""}`}
-                onClick={() => handlePomoModeChange("short")}
-              >
-                {lang === "tr" ? "Kısa Mola" : "Short"}
-              </button>
-              <button
-                className={`pomodoro-mode-btn ${pomoMode === "long" ? "active" : ""}`}
-                onClick={() => handlePomoModeChange("long")}
-              >
-                {lang === "tr" ? "Uzun Mola" : "Long"}
-              </button>
-            </div>
-
-            {/* Pomodoro Duration Editor */}
-            <div style={{ display: "flex", gap: "10px", marginTop: "16px", background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "10px 14px", alignItems: "center", width: "100%" }}>
-              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>⏱️ {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}</span>
-              
-              <div style={{ display: "flex", gap: "10px", alignItems: "center", marginLeft: "auto" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Odak" : "Focus"}</span>
-                  <input
-                    type="number"
-                    min="1"
-                    max="120"
-                    value={Math.round(customTimes.focus / 60)}
-                    onChange={(e) => handleCustomTimeChange("focus", parseInt((e.target as HTMLInputElement).value, 10))}
-                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
-                  />
-                </div>
-                
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Kısa" : "Short"}</span>
-                  <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={Math.round(customTimes.short / 60)}
-                    onChange={(e) => handleCustomTimeChange("short", parseInt((e.target as HTMLInputElement).value, 10))}
-                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
-                  />
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Uzun" : "Long"}</span>
-                  <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={Math.round(customTimes.long / 60)}
-                    onChange={(e) => handleCustomTimeChange("long", parseInt((e.target as HTMLInputElement).value, 10))}
-                    style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <PomoTimerCard
+            lang={lang}
+            pomoMode={pomoMode}
+            pomoTimeLeft={pomoTimeLeft}
+            pomoTotalTime={pomoTotalTime}
+            pomoRunning={pomoRunning}
+            customTimes={customTimes}
+            progressOffset={progressOffset}
+            CIRCLE_CIRCUMFERENCE={CIRCLE_CIRCUMFERENCE}
+            MODE_LABELS={MODE_LABELS}
+            formatTime={formatTime}
+            onPomoReset={handlePomoReset}
+            onPomoStart={handlePomoStart}
+            onPomoPause={handlePomoPause}
+            onPomoModeChange={handlePomoModeChange}
+            onCustomTimeChange={handleCustomTimeChange}
+          />
 
           {/* Side Panel: Stopwatch & Alarm */}
           <PomoSidePanel
@@ -628,118 +491,27 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
         </div>
       ) : (
         <div className="zen-garden-panel">
-          {/* Zen Garden Sandbox Card */}
-          <div className="zen-sandbox-card">
-            <header className="zen-sandbox-header">
-              <h3>{t.zen_garden_title}</h3>
-              <p>{t.zen_garden_subtitle}</p>
-            </header>
-            <div className="zen-sandbox-canvas">
-              {gridCells}
-            </div>
-          </div>
+          <PomoZenGardenCard
+            lang={lang}
+            gridCells={gridCells}
+            showPlantModal={showPlantModal}
+            focusNote={focusNote}
+            selectedElement={selectedElement}
+            t={t}
+            onSetFocusNote={setFocusNote}
+            onSetSelectedElement={setSelectedElement}
+            onPlantElement={handlePlantElement}
+            renderZenElementSvg={renderZenElementSvg}
+          />
 
-          {/* Focus History Log Card */}
-          <div className="zen-history-card">
-            <header className="zen-history-header">
-              <h3>{t.zen_history_title}</h3>
-              <input
-                type="text"
-                className="zen-search-input"
-                placeholder={t.zen_history_search}
-                value={searchQuery}
-                onInput={(e) => setSearchQuery((e.target as HTMLInputElement).value)}
-              />
-            </header>
-            <div className="zen-history-table-wrapper">
-              <table className="zen-history-table">
-                <thead>
-                  <tr>
-                    <th>{t.zen_history_col_date}</th>
-                    <th>{t.zen_history_col_duration}</th>
-                    <th>{t.zen_history_col_note}</th>
-                    <th>{t.zen_history_col_elem}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredHistory.length === 0 ? (
-                    <tr>
-                      <td colspan={4} className="empty-state">
-                        {t.zen_history_empty}
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredHistory.map((log) => (
-                      <tr key={log.id}>
-                        <td>
-                          {new Date(log.endTime).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </td>
-                        <td>
-                          {Math.round(log.duration / 60)} {t.minutes_abbr}
-                        </td>
-                        <td>{log.note}</td>
-                        <td style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ width: "24px", height: "24px", display: "inline-block" }}>
-                            {renderZenElementSvg(log.element)}
-                          </span>
-                          <span>{t[`zen_elem_${log.element}` as keyof typeof t] || log.element}</span>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Zen Log Plant Modal Overlay */}
-      {showPlantModal && (
-        <div className="zen-plant-modal-overlay">
-          <div className="zen-plant-modal">
-            <h3>{t.zen_modal_title}</h3>
-            
-            <div className="zen-plant-modal-field">
-              <label>{t.zen_modal_question}</label>
-              <input
-                type="text"
-                className="zen-plant-input"
-                placeholder={t.zen_modal_placeholder}
-                value={focusNote}
-                onInput={(e) => setFocusNote((e.target as HTMLInputElement).value)}
-                autofocus
-              />
-            </div>
-
-            <div className="zen-plant-modal-field">
-              <label>{t.zen_modal_select}</label>
-              <div className="zen-element-grid">
-                {(["bonsai", "koi", "pagoda", "lantern", "bamboo", "pebble"] as const).map((el) => (
-                  <div
-                    key={el}
-                    className={`zen-element-select-card ${selectedElement === el ? "selected" : ""}`}
-                    onClick={() => setSelectedElement(el)}
-                  >
-                    <div style={{ width: "32px", height: "32px" }}>
-                      {renderZenElementSvg(el)}
-                    </div>
-                    <span>{t[`zen_elem_${el}` as keyof typeof t] || el}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <button className="zen-plant-submit-btn" onClick={handlePlantElement}>
-              {t.zen_modal_plant}
-            </button>
-          </div>
+          <PomoZenHistoryCard
+            lang={lang}
+            searchQuery={searchQuery}
+            onSearchQueryInput={setSearchQuery}
+            filteredHistory={filteredHistory}
+            t={t}
+            renderZenElementSvg={renderZenElementSvg}
+          />
         </div>
       )}
     </div>
