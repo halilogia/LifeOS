@@ -324,6 +324,7 @@
 
 .kpss-input-group input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .kpss-action-btns {
@@ -572,13 +573,13 @@
 }
 
 .kpss-quiz-option-card.correct .kpss-quiz-option-letter {
-  background: rgba(16, 185, 129, 0.2) ;
-  color: #34d399 ;
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
 }
 
 .kpss-quiz-option-card.wrong .kpss-quiz-option-letter {
-  background: rgba(239, 68, 68, 0.2) ;
-  color: #f87171 ;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
 }
 
 /* Quiz progress bar */
@@ -618,7 +619,8 @@
   text-align: center;
 }
 
-.kpss-qcount-btn:hover, .kpss-qcount-btn.active {
+.kpss-qcount-btn:hover,
+.kpss-qcount-btn.active {
   background: var(--accent-color);
   color: white;
   border-color: var(--accent-color);

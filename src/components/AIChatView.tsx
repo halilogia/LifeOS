@@ -201,32 +201,83 @@ export function AIChatView({
 
   const cleanAndParseJSON = (text: string) => {
     let cleaned = text.trim();
+    
+    // First strip out <think> tags if present to prevent any brace counting mismatch inside thoughts
+    cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
     const firstBrace = cleaned.indexOf("{");
     const firstBracket = cleaned.indexOf("[");
     
+    let isObject = false;
     let startIdx = -1;
-    let endIdx = -1;
     
     if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
       startIdx = firstBrace;
-      endIdx = cleaned.lastIndexOf("}");
+      isObject = true;
     } else if (firstBracket !== -1) {
       startIdx = firstBracket;
-      endIdx = cleaned.lastIndexOf("]");
+      isObject = false;
     }
     
-    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    if (startIdx === -1) {
+      return JSON.parse(cleaned);
+    }
+    
+    const openChar = isObject ? "{" : "[";
+    const closeChar = isObject ? "}" : "]";
+    
+    let braceCount = 0;
+    let endIdx = -1;
+    let inString = false;
+    let escape = false;
+    
+    for (let i = startIdx; i < cleaned.length; i++) {
+      const char = cleaned[i];
+      if (escape) {
+        escape = false;
+        continue;
+      }
+      if (char === "\\") {
+        escape = true;
+        continue;
+      }
+      if (char === '"') {
+        inString = !inString;
+        continue;
+      }
+      if (!inString) {
+        if (char === openChar) {
+          braceCount++;
+        } else if (char === closeChar) {
+          braceCount--;
+          if (braceCount === 0) {
+            endIdx = i;
+            break;
+          }
+        }
+      }
+    }
+    
+    if (endIdx !== -1) {
       cleaned = cleaned.substring(startIdx, endIdx + 1);
     }
+    
+    // Replace typical smart quotes or invalid json characters that models might write
+    cleaned = cleaned
+      .replace(/[\u201C\u201D]/g, '"') // smart double quotes
+      .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
+
     return JSON.parse(cleaned);
   };
 
   const parseAIResponse = (rawText: string) => {
     let thinking = "";
-    const thinkStart = rawText.indexOf("<think>");
-    const thinkEnd = rawText.indexOf("</think>");
-    if (thinkStart !== -1 && thinkEnd !== -1 && thinkEnd > thinkStart) {
-      thinking = rawText.substring(thinkStart + 7, thinkEnd).trim();
+    
+    // Case-insensitive think match with optional whitespaces
+    const thinkRegex = /<think>([\s\S]*?)<\/think>/i;
+    const thinkMatch = rawText.match(thinkRegex);
+    if (thinkMatch) {
+      thinking = thinkMatch[1].trim();
     }
     
     try {
