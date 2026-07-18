@@ -800,3 +800,20 @@ body.sidebar-open .top-header {
     box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
   }
 }
+
+/* ── KPSS Button Loading Spinner ────────────────── */
+.kpss-btn-loader {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: kpssSpin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes kpssSpin {
+  to { transform: rotate(360deg); }
+}
