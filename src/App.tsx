@@ -37,6 +37,7 @@ export function App() {
   const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsInitialTab, setSettingsInitialTab] = useState<"general" | "kpss" | "detox" | "ai" | "sync">("general");
 
   // Google Sync States
   const [syncSettings, setSyncSettingsState] = useState<GoogleSyncSettings>({
@@ -854,6 +855,11 @@ export function App() {
     });
   };
 
+  const handleOpenSettings = (tab: "general" | "kpss" | "detox" | "ai" | "sync" = "general") => {
+    setSettingsInitialTab(tab);
+    setSettingsOpen(true);
+  };
+
   // Render current dashboard card sub-view
   const renderActiveViewComponent = () => {
     switch (activeView) {
@@ -950,7 +956,7 @@ export function App() {
             aiModel={aiModel}
             aiEndpoint={aiEndpoint}
             aiShowThinking={aiShowThinking}
-            onSettingsOpen={() => setSettingsOpen(true)}
+            onSettingsOpen={() => handleOpenSettings("ai")}
           />
         );
       default:
@@ -975,7 +981,7 @@ export function App() {
           handleTabChange(tabVal);
         }}
         onSidebarToggle={handleSidebarToggle}
-        onSettingsOpen={() => setSettingsOpen(true)}
+        onSettingsOpen={() => handleOpenSettings("general")}
         onOrderChange={(newOrder) => setSidebarOrder(newOrder)}
       />
 
@@ -1060,6 +1066,7 @@ export function App() {
       <SettingsDrawer
         isOpen={settingsOpen}
         onClose={() => setSettingsOpen(false)}
+        initialTab={settingsInitialTab}
         lang={lang}
         onToggleLang={handleToggleLang}
         freeGamesNotificationsEnabled={freeGamesNotificationsEnabled}
@@ -1107,7 +1114,7 @@ export function App() {
 
         {renderActiveViewComponent()}
 
-        {quoteText && (
+        {quoteText && activeView !== "ai-chat" && (
           <FooterQuote quoteText={quoteText} />
         )}
       </main>

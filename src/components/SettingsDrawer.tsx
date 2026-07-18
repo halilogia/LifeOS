@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { GoogleSyncSettings } from "@/core/storage.js";
@@ -48,6 +48,7 @@ export interface SettingsDrawerProps {
   onKpssTargetScoreChange: (val: number) => void;
   detoxLimits: Record<string, number>;
   onDetoxLimitsChange: (limits: Record<string, number>) => void;
+  initialTab?: "general" | "kpss" | "detox" | "ai" | "sync";
 }
 
 export function SettingsDrawer({
@@ -90,9 +91,16 @@ export function SettingsDrawer({
   onKpssTargetScoreChange,
   detoxLimits,
   onDetoxLimitsChange,
+  initialTab,
 }: SettingsDrawerProps) {
   const t = translations[lang];
   const [settingsTab, setSettingsTab] = useState<"general" | "kpss" | "detox" | "ai" | "sync">("general");
+
+  useEffect(() => {
+    if (isOpen && initialTab) {
+      setSettingsTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
 
   if (!isOpen) return null;
 
