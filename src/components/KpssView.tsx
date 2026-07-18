@@ -11,6 +11,7 @@ import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.j
 import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
 import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
 import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
+import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -1010,6 +1011,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               estimatedTimeLeft={estimatedTimeLeft}
               remainingCount={remainingCount}
             />
+
+            <KpssAutoPlannerCard
+              lang={lang}
+              kpssProgress={kpssProgress}
+              onToggleTopic={handleToggleTopic}
+              labels={labels}
+            />
+
             <KpssNetEstimationCard
               lang={lang}
               goalType={goalType}

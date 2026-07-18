@@ -6,71 +6,172 @@
   styleEl.innerHTML = "html, body { display: none !important; }";
   document.documentElement.appendChild(styleEl);
 
-  // Real-time listener for Pomodoro timer start/stop or settings changes
+  function checkScreenTimeLimits() {
+    chrome.storage.sync.get(
+      [
+        "detox_enabled",
+        "detox_blocked_sites",
+        "detox_end_time",
+        "custom_quotes",
+        "lang",
+        "pomoBlockEnabled",
+        "detox_limits"
+      ],
+      (settings) => {
+        chrome.storage.local.get(["pomodoro_timer_state", "screen_time_stats"], (localRes) => {
+          const enabled = settings.detox_enabled || false;
+          const blockedSites = settings.detox_blocked_sites || [];
+          const endTime = settings.detox_end_time || 0;
+          const lang = settings.lang || "tr";
+          const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
+          const pomoState = localRes.pomodoro_timer_state || {};
+
+          // Verify if host matches blocked configurations
+          const isBlockedHost = blockedSites.some((site) =>
+            currentHost.includes(site),
+          );
+          const isTimeActive = endTime === -1 || endTime > Date.now();
+
+          const isDetoxActive = enabled && isBlockedHost && isTimeActive;
+          const isPomoActive = pomoBlockEnabled && isBlockedHost && pomoState.running && pomoState.mode === "focus";
+
+          // Calculate daily limit
+          const detoxLimits = settings.detox_limits || {};
+          const limitDomain = Object.keys(detoxLimits).find((domain) => currentHost.includes(domain));
+          const activeLimitMinutes = limitDomain ? detoxLimits[limitDomain] : 0;
+
+          let isLimitExceeded = false;
+          let remainingSeconds = 999999;
+          if (activeLimitMinutes > 0 && limitDomain) {
+            const todayStr = new Date().toLocaleDateString("sv");
+            const dailyStats = localRes.screen_time_stats?.[todayStr] || {};
+            const spentSeconds = dailyStats[limitDomain] || 0;
+            const limitSeconds = activeLimitMinutes * 60;
+            isLimitExceeded = spentSeconds >= limitSeconds;
+            remainingSeconds = limitSeconds - spentSeconds;
+          }
+
+          if (isDetoxActive || isPomoActive || isLimitExceeded) {
+            const targetEndTime = isPomoActive ? pomoState.endTime : (isLimitExceeded ? -1 : endTime);
+            const isPomo = isPomoActive;
+            const isLimitBlock = isLimitExceeded && !isDetoxActive && !isPomoActive;
+
+            setupBlockPage(targetEndTime, settings.custom_quotes || [], lang, isPomo, isLimitBlock, activeLimitMinutes);
+          } else {
+            // Remove hiding stylesheet if not active
+            if (styleEl.parentNode) {
+              styleEl.parentNode.removeChild(styleEl);
+            }
+
+            // Check warning banner: if remaining time <= 5 minutes (300 seconds)
+            if (activeLimitMinutes > 0 && remainingSeconds > 0 && remainingSeconds <= 300) {
+              showTopWarningBanner(Math.ceil(remainingSeconds / 60), lang, limitDomain);
+            } else {
+              removeWarningBanner();
+            }
+          }
+        });
+      }
+    );
+  }
+
+  // Real-time listener for Pomodoro timer start/stop, screen time, or settings changes
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === "local" && changes["pomodoro_timer_state"]) {
-      window.location.reload();
+    if (areaName === "local" && (changes["pomodoro_timer_state"] || changes["screen_time_stats"])) {
+      checkScreenTimeLimits();
     }
     if (areaName === "sync" && (
       changes["detox_enabled"] || 
       changes["detox_blocked_sites"] || 
       changes["detox_end_time"] || 
-      changes["pomoBlockEnabled"]
+      changes["pomoBlockEnabled"] ||
+      changes["detox_limits"]
     )) {
-      window.location.reload();
+      checkScreenTimeLimits();
     }
   });
 
-  // Retrieve configurations from chrome storage
-  chrome.storage.sync.get(
-    [
-      "detox_enabled",
-      "detox_blocked_sites",
-      "detox_end_time",
-      "custom_quotes",
-      "lang",
-      "pomoBlockEnabled",
-    ],
-    (settings) => {
-      chrome.storage.local.get(["pomodoro_timer_state"], (localRes) => {
-        const enabled = settings.detox_enabled || false;
-        const blockedSites = settings.detox_blocked_sites || [];
-        const endTime = settings.detox_end_time || 0;
-        const lang = settings.lang || "tr";
-        const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
-        const pomoState = localRes.pomodoro_timer_state || {};
+  // On startup
+  checkScreenTimeLimits();
 
-        // Verify if host matches blocked configurations
-        const isBlockedHost = blockedSites.some((site) =>
-          currentHost.includes(site),
-        );
-        const isTimeActive = endTime === -1 || endTime > Date.now();
-
-        const isDetoxActive = enabled && isBlockedHost && isTimeActive;
-        const isPomoActive = pomoBlockEnabled && isBlockedHost && pomoState.running && pomoState.mode === "focus";
-
-        if (isDetoxActive || isPomoActive) {
-          const targetEndTime = isPomoActive ? pomoState.endTime : endTime;
-          const isPomo = isPomoActive;
-
-          if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", () => {
-              setupBlockPage(targetEndTime, settings.custom_quotes || [], lang, isPomo);
-            });
-          } else {
-            setupBlockPage(targetEndTime, settings.custom_quotes || [], lang, isPomo);
-          }
-        } else {
-          // Remove hiding stylesheet if not active
-          if (styleEl.parentNode) {
-            styleEl.parentNode.removeChild(styleEl);
-          }
-        }
+  function showTopWarningBanner(minutesLeft, lang, domain) {
+    if (sessionStorage.getItem("detox_warning_dismissed") === "true") {
+      return;
+    }
+    
+    let banner = null;
+    let host = document.getElementById("detox-warning-banner-host");
+    if (!host) {
+      host = document.createElement("div");
+      host.id = "detox-warning-banner-host";
+      host.style.position = "fixed";
+      host.style.top = "16px";
+      host.style.left = "50%";
+      host.style.transform = "translateX(-50%)";
+      host.style.zIndex = "2147483647";
+      host.style.pointerEvents = "auto";
+      document.body.appendChild(host);
+      
+      const shadow = host.attachShadow({ mode: "open" });
+      
+      const wrapper = document.createElement("div");
+      wrapper.id = "detox-warning-banner";
+      wrapper.style.display = "flex";
+      wrapper.style.alignItems = "center";
+      wrapper.style.gap = "12px";
+      wrapper.style.background = "rgba(15, 15, 20, 0.85)";
+      wrapper.style.backdropFilter = "blur(12px)";
+      wrapper.style.webkitBackdropFilter = "blur(12px)";
+      wrapper.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+      wrapper.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.5)";
+      wrapper.style.borderRadius = "12px";
+      wrapper.style.padding = "10px 18px";
+      wrapper.style.color = "#fff";
+      wrapper.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      wrapper.style.fontSize = "13px";
+      wrapper.style.fontWeight = "600";
+      
+      const textSpan = document.createElement("span");
+      textSpan.id = "detox-warning-text";
+      
+      const closeBtn = document.createElement("button");
+      closeBtn.textContent = "✕";
+      closeBtn.style.background = "transparent";
+      closeBtn.style.border = "none";
+      closeBtn.style.color = "rgba(255, 255, 255, 0.6)";
+      closeBtn.style.cursor = "pointer";
+      closeBtn.style.fontSize = "12px";
+      closeBtn.style.padding = "2px 6px";
+      closeBtn.addEventListener("click", () => {
+        sessionStorage.setItem("detox_warning_dismissed", "true");
+        host.remove();
       });
-    },
-  );
+      
+      wrapper.appendChild(textSpan);
+      wrapper.appendChild(closeBtn);
+      shadow.appendChild(wrapper);
+      
+      banner = textSpan;
+    } else if (host.shadowRoot) {
+      banner = host.shadowRoot.getElementById("detox-warning-text");
+    }
+    
+    if (banner) {
+      const siteLabel = domain.replace(".com", "").toUpperCase();
+      banner.textContent = lang === "tr"
+        ? `⚠️ Sosyal Medya Limiti: ${siteLabel} için kalan süreniz ${minutesLeft} dakika.`
+        : `⚠️ Social Media Limit: You have ${minutesLeft} minutes left for ${siteLabel}.`;
+    }
+  }
 
-  function setupBlockPage(endTime, customQuotes, lang, isPomo) {
+  function removeWarningBanner() {
+    const host = document.getElementById("detox-warning-banner-host");
+    if (host) {
+      host.remove();
+    }
+  }
+
+  function setupBlockPage(endTime, customQuotes, lang, isPomo, isLimitBlock, activeLimitMinutes) {
     // Remove temporary hiding style element
     if (styleEl && styleEl.parentNode) {
       styleEl.parentNode.removeChild(styleEl);
@@ -136,18 +237,27 @@
     const randomQuote =
       quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
-    const titleText = isPomo 
-      ? (lang === "tr" ? "Odaklanma Zamanı!" : "Focus Session!")
-      : (lang === "tr" ? "Odaklanma Zamanı!" : "Time to Focus!");
-    const descText = isPomo
-      ? (lang === "tr" ? "Bu web sitesi, aktif Pomodoro odaklanma seansınız boyunca geçici olarak engellenmiştir." : "This website is temporarily blocked during your active Pomodoro focus session.")
-      : (lang === "tr" ? "Bu web sitesi, sosyal medya detoksunuz kapsamında engellenmiştir." : "This website is currently blocked as part of your social media detox.");
+    let titleText = (lang === "tr" ? "Odaklanma Zamanı!" : "Time to Focus!");
+    let descText = (lang === "tr" ? "Bu web sitesi, sosyal medya detoksunuz kapsamında engellenmiştir." : "This website is currently blocked as part of your social media detox.");
+
+    if (isPomo) {
+      titleText = (lang === "tr" ? "Odaklanma Zamanı!" : "Focus Session!");
+      descText = (lang === "tr" ? "Bu web sitesi, aktif Pomodoro odaklanma seansınız boyunca geçici olarak engellenmiştir." : "This website is temporarily blocked during your active Pomodoro focus session.");
+    } else if (isLimitBlock) {
+      titleText = (lang === "tr" ? "Günlük Limite Ulaştınız!" : "Daily Limit Reached!");
+      descText = lang === "tr"
+        ? `Bu web sitesi için günlük ${activeLimitMinutes} dakikalık kullanım limitinizi doldurdunuz. Kendinize zaman ayırın!`
+        : `You have reached your daily ${activeLimitMinutes}-minute usage limit for this website. Take a break!`;
+    }
+
     const buttonText =
       lang === "tr" ? "Kontrol Paneline Git" : "Go to Dashboard";
     const timeRemainingLabel = isPomo
       ? (lang === "tr" ? "Kalan Odak Süresi" : "Remaining Focus Time")
       : (lang === "tr" ? "Detoks Süresi" : "Detox Duration");
-    const permanentLabel = lang === "tr" ? "Süresiz Blok" : "Permanent Block";
+    const permanentLabel = isLimitBlock 
+      ? (lang === "tr" ? "Günlük Limit Doldu" : "Daily Limit Expired") 
+      : (lang === "tr" ? "Süresiz Blok" : "Permanent Block");
 
     const blockHtml = `
       <div id="detox-block-card" style="

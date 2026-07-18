@@ -8,6 +8,65 @@ interface NotesViewProps {
   onShowConfirm: (message: string, onConfirm: () => void) => void;
 }
 
+function renderMarkdown(text: string): string {
+  if (!text) return "";
+  // Escape HTML first to prevent XSS injection (crucial safety audit compliance!)
+  let html = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Parse Code blocks: ```javascript ... ```
+  html = html.replace(/```([\s\S]+?)```/g, (_, code) => {
+    return `<pre style="background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; font-family: monospace; overflow-x: auto; margin: 8px 0; border: 1px solid var(--card-border); color: #a78bfa; white-space: pre-wrap; word-break: break-all;"><code>${code.trim()}</code></pre>`;
+  });
+
+  // Parse Inline code: `code`
+  html = html.replace(/`([^`]+)`/g, "<code style=\"background: rgba(139, 92, 246, 0.15); color: var(--accent-color); padding: 2px 5px; border-radius: 4px; font-family: monospace;\">$1</code>");
+
+  // Parse Bold: **text**
+  html = html.replace(/\*\*([^\*]+)\*\*/g, "<strong>$1</strong>");
+
+  // Parse Italic: *text*
+  html = html.replace(/\*([^\*]+)\*/g, "<em>$1</em>");
+
+  // Parse Headings: #, ##, ###
+  html = html.replace(/^### (.*$)/gim, "<h4 style=\"margin: 10px 0 6px 0; color: #a78bfa; font-weight: 700;\">$1</h4>");
+  html = html.replace(/^## (.*$)/gim, "<h3 style=\"margin: 12px 0 8px 0; color: #a78bfa; font-weight: 700;\">$1</h3>");
+  html = html.replace(/^# (.*$)/gim, "<h2 style=\"margin: 14px 0 10px 0; color: #a78bfa; font-weight: 800; border-bottom: 1px solid var(--card-border); padding-bottom: 4px;\">$1</h2>");
+
+  // Parse Lists: - or * items
+  const lines = html.split("\n");
+  let inList = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.startsWith("- ") || line.startsWith("* ")) {
+      const content = line.substring(2);
+      let prefix = "";
+      if (!inList) {
+        prefix = "<ul style=\"padding-left: 20px; margin: 6px 0;\">";
+        inList = true;
+      }
+      lines[i] = `${prefix}<li style="margin: 4px 0;">${content}</li>`;
+    } else {
+      if (inList) {
+        lines[i] = `</ul>${lines[i]}`;
+        inList = false;
+      }
+    }
+  }
+  if (inList) {
+    lines[lines.length - 1] = `${lines[lines.length - 1]}</ul>`;
+  }
+  html = lines.join("\n");
+
+  // Convert double newlines to paragraph spacers, single to br
+  html = html.replace(/\n\n/g, "</p><p style=\"margin: 8px 0;\">");
+  html = html.replace(/\n/g, "<br />");
+
+  return `<p style="margin: 0; line-height: 1.6;">${html}</p>`;
+}
+
 export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const t = translations[lang];
 
@@ -29,6 +88,15 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const [quoteContent, setQuoteContent] = useState("");
   const [quoteAuthor, setQuoteAuthor] = useState("");
 
+  // Inline Note Editor States
+  const [inlineEditingId, setInlineEditingId] = useState<string | null>(null);
+  const [inlineTitle, setInlineTitle] = useState("");
+  const [inlineContent, setInlineContent] = useState("");
+  const [inlineCues, setInlineCues] = useState("");
+  const [inlineSummary, setInlineSummary] = useState("");
+
+  let clickTimer: any = null;
+
   useEffect(() => {
     loadData();
   }, []);
@@ -43,6 +111,44 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       ),
     );
     setQuotes(loadedQuotes);
+  };
+
+  // Inline Operations
+  const startInlineEdit = (note: Note) => {
+    setInlineEditingId(note.id);
+    setInlineTitle(note.title);
+    setInlineContent(note.content);
+    setInlineCues(note.cues || "");
+    setInlineSummary(note.summary || "");
+  };
+
+  const handleCardClick = (note: Note) => {
+    if (inlineEditingId === note.id) return;
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+      clickTimer = null;
+      startInlineEdit(note);
+    } else {
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        handleOpenNoteModal(note);
+      }, 250);
+    }
+  };
+
+  const handleSaveInlineNote = async (id: string) => {
+    const currentNotes = await storage.getNotes();
+    const idx = currentNotes.findIndex((n) => n.id === id);
+    if (idx !== -1) {
+      currentNotes[idx].title = inlineTitle;
+      currentNotes[idx].content = inlineContent;
+      currentNotes[idx].cues = inlineCues;
+      currentNotes[idx].summary = inlineSummary;
+      currentNotes[idx].createdAt = new Date().toISOString();
+      await storage.setNotes(currentNotes);
+      setInlineEditingId(null);
+      loadData();
+    }
   };
 
   // Notes Operations
@@ -294,74 +400,217 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
             .map((note) => {
               const title = note.title || (lang === "tr" ? "Başlıksız" : "Untitled");
               const currentType = note.type || "note";
+              const isInlineEditing = inlineEditingId === note.id;
               
               return (
                 <div
                   key={note.id}
                   className="note-card"
-                  onClick={() => handleOpenNoteModal(note)}
+                  onClick={() => handleCardClick(note)}
+                  style={{
+                    cursor: isInlineEditing ? "default" : "pointer",
+                    height: "auto",
+                    minHeight: "180px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                  }}
                 >
-                  <div className="note-card-header">
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px", maxWidth: "80%" }}>
-                      <span className={`note-type-badge ${currentType}`}>
-                        {currentType === "diary" 
-                          ? (lang === "tr" ? "Günlük" : "Diary") 
-                          : currentType === "cornell" 
-                            ? (lang === "tr" ? "Cornell Notu" : "Cornell Note") 
-                            : (lang === "tr" ? "Not" : "Note")}
-                      </span>
-                      <h3 className="note-card-title">{title}</h3>
-                    </div>
-                    <button
-                      className="note-delete-btn"
-                      title="Delete"
-                      onClick={(e) => handleDeleteNote(e, note.id)}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                    </button>
-                  </div>
-                  
-                  {currentType === "cornell" ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, overflow: "hidden" }}>
-                      <div className="cornell-mini-grid">
-                        <div className="cornell-mini-column" title="Cues/Keywords">
-                          <strong>{lang === "tr" ? "İpuçları:" : "Cues:"}</strong><br/>
-                          {note.cues || "—"}
-                        </div>
-                        <div className="cornell-mini-column" title="Notlar:">
-                          <strong>{lang === "tr" ? "Notlar:" : "Notes:"}</strong><br/>
-                          {note.content || "—"}
-                        </div>
-                      </div>
-                      {note.summary && (
-                        <div className="cornell-mini-summary" title="Summary">
-                          <strong>{lang === "tr" ? "Özet:" : "Summary:"}</strong> {note.summary}
-                        </div>
+                  {isInlineEditing ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }} onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="text"
+                        value={inlineTitle}
+                        onInput={(e) => setInlineTitle((e.target as HTMLInputElement).value)}
+                        style={{
+                          width: "100%",
+                          background: "rgba(0,0,0,0.3)",
+                          border: "1px solid var(--card-border)",
+                          color: "#fff",
+                          padding: "8px 12px",
+                          borderRadius: "8px",
+                          fontSize: "0.85rem",
+                          fontWeight: "bold",
+                          outline: "none"
+                        }}
+                        placeholder={lang === "tr" ? "Başlık..." : "Title..."}
+                      />
+                      
+                      {currentType === "cornell" ? (
+                        <>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                            <textarea
+                              value={inlineCues}
+                              onInput={(e) => setInlineCues((e.target as HTMLTextAreaElement).value)}
+                              style={{
+                                width: "100%",
+                                background: "rgba(0,0,0,0.3)",
+                                border: "1px solid var(--card-border)",
+                                color: "#fff",
+                                padding: "8px",
+                                borderRadius: "8px",
+                                fontSize: "0.8rem",
+                                height: "100px",
+                                resize: "none",
+                                outline: "none"
+                              }}
+                              placeholder={lang === "tr" ? "Anahtar Kelimeler..." : "Cues..."}
+                            />
+                            <textarea
+                              value={inlineContent}
+                              onInput={(e) => setInlineContent((e.target as HTMLTextAreaElement).value)}
+                              style={{
+                                width: "100%",
+                                background: "rgba(0,0,0,0.3)",
+                                border: "1px solid var(--card-border)",
+                                color: "#fff",
+                                padding: "8px",
+                                borderRadius: "8px",
+                                fontSize: "0.8rem",
+                                height: "100px",
+                                resize: "none",
+                                outline: "none"
+                              }}
+                              placeholder={lang === "tr" ? "Notlar (Markdown)..." : "Notes (Markdown)..."}
+                            />
+                          </div>
+                          <textarea
+                            value={inlineSummary}
+                            onInput={(e) => setInlineSummary((e.target as HTMLTextAreaElement).value)}
+                            style={{
+                              width: "100%",
+                              background: "rgba(0,0,0,0.3)",
+                              border: "1px solid var(--card-border)",
+                              color: "#fff",
+                              padding: "8px",
+                              borderRadius: "8px",
+                              fontSize: "0.8rem",
+                              height: "60px",
+                              resize: "none",
+                              outline: "none"
+                            }}
+                            placeholder={lang === "tr" ? "Özet..." : "Summary..."}
+                          />
+                        </>
+                      ) : (
+                        <textarea
+                          value={inlineContent}
+                          onInput={(e) => setInlineContent((e.target as HTMLTextAreaElement).value)}
+                          style={{
+                            width: "100%",
+                            background: "rgba(0,0,0,0.3)",
+                            border: "1px solid var(--card-border)",
+                            color: "#fff",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            fontSize: "0.82rem",
+                            height: "120px",
+                            resize: "none",
+                            outline: "none"
+                          }}
+                          placeholder={lang === "tr" ? "Not içeriği (Markdown)..." : "Content (Markdown)..."}
+                        />
                       )}
+
+                      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "4px" }}>
+                        <button
+                          type="button"
+                          onClick={() => setInlineEditingId(null)}
+                          style={{
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid var(--card-border)",
+                            color: "var(--text-secondary)",
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            fontSize: "0.72rem",
+                            fontWeight: "600",
+                            cursor: "pointer"
+                          }}
+                        >
+                          {lang === "tr" ? "İptal" : "Cancel"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSaveInlineNote(note.id)}
+                          style={{
+                            background: "var(--accent-color)",
+                            border: "none",
+                            color: "white",
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            fontSize: "0.72rem",
+                            fontWeight: "600",
+                            cursor: "pointer"
+                          }}
+                        >
+                          {lang === "tr" ? "Kaydet" : "Save"}
+                        </button>
+                      </div>
                     </div>
                   ) : (
-                    <div className="note-card-content">
-                      {note.content}
-                    </div>
-                  )}
+                    <>
+                      <div className="note-card-header" style={{ width: "100%" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "4px", maxWidth: "80%" }}>
+                          <span className={`note-type-badge ${currentType}`}>
+                            {currentType === "diary" 
+                              ? (lang === "tr" ? "Günlük" : "Diary") 
+                              : currentType === "cornell" 
+                                ? (lang === "tr" ? "Cornell Notu" : "Cornell Note") 
+                                : (lang === "tr" ? "Not" : "Note")}
+                          </span>
+                          <h3 className="note-card-title">{title}</h3>
+                        </div>
+                        <button
+                          className="note-delete-btn"
+                          title="Delete"
+                          onClick={(e) => handleDeleteNote(e, note.id)}
+                        >
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      {currentType === "cornell" ? (
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1, overflow: "hidden", width: "100%" }}>
+                          <div className="cornell-mini-grid" style={{ gap: "10px" }}>
+                            <div className="cornell-mini-column" title="Cues/Keywords">
+                              <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "İpuçları:" : "Cues:"}</strong>
+                              <div style={{ marginTop: "4px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.cues || "") }} />
+                            </div>
+                            <div className="cornell-mini-column" title="Notlar:">
+                              <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "Notlar:" : "Notes:"}</strong>
+                              <div style={{ marginTop: "4px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.content || "") }} />
+                            </div>
+                          </div>
+                          {note.summary && (
+                            <div className="cornell-mini-summary" title="Summary" style={{ borderTop: "1px dashed var(--card-border)", paddingTop: "6px" }}>
+                              <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "Özet:" : "Summary:"}</strong>
+                              <div style={{ marginTop: "2px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.summary || "") }} />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="note-card-content" style={{ flex: 1, width: "100%", overflow: "hidden", textOverflow: "ellipsis" }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.content || "") }} />
+                      )}
 
-                  <div className="note-card-footer">
-                    <span className="note-card-date">
-                      {new Date(note.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
+                      <div className="note-card-footer" style={{ width: "100%" }}>
+                        <span className="note-card-date">
+                          {new Date(note.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               );
             })}

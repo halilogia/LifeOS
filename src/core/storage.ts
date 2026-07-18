@@ -425,6 +425,18 @@ export const storage = {
       });
     });
   },
+  getDetoxLimits: (): Promise<Record<string, number>> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(["detox_limits"], (result) => {
+        resolve((result.detox_limits as Record<string, number>) || {});
+      });
+    });
+  },
+  setDetoxLimits: (limits: Record<string, number>): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ detox_limits: limits }, resolve);
+    });
+  },
   migrateLocalToSync: async (): Promise<void> => {
     return new Promise((resolve) => {
       chrome.storage.local.get(null, async (localData) => {
@@ -467,6 +479,7 @@ export const storage = {
                 "aiModel",
                 "aiEndpoint",
                 "sidebarOrder",
+                "detox_limits",
               ];
               const filteredData: Record<string, any> = {};
               for (const key of syncKeys) {

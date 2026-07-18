@@ -68,10 +68,12 @@ export function App() {
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
   const [universalInfoBoxHotkey, setUniversalInfoBoxHotkey] = useState("none");
 
-  // KPSS Target Settings States
   const [kpssGoalType, setKpssGoalType] = useState<"net" | "score">("net");
   const [kpssTargetNet, setKpssTargetNet] = useState<number>(80);
   const [kpssTargetScore, setKpssTargetScore] = useState<number>(80);
+
+  // Detox Limits States
+  const [detoxLimits, setDetoxLimits] = useState<Record<string, number>>({});
 
   // Custom confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -188,6 +190,10 @@ export function App() {
       setKpssTargetNet(kTargetNet);
       setKpssTargetScore(kTargetScore);
 
+      // Load Detox Limits configurations
+      const dLimits = await storage.getDetoxLimits();
+      setDetoxLimits(dLimits);
+
       // Apply body class for legacy CSS compatibilities
       document.body.classList.toggle(
         "sidebar-open",
@@ -264,6 +270,11 @@ export function App() {
     if (isNaN(val) || val < 0 || val > 100) return;
     setKpssTargetScore(val);
     await storage.setKpssTargetScore(val);
+  };
+
+  const handleDetoxLimitsChange = async (limits: Record<string, number>) => {
+    setDetoxLimits(limits);
+    await storage.setDetoxLimits(limits);
   };
 
   // Trigger language change updates
@@ -1072,6 +1083,8 @@ export function App() {
         onKpssGoalTypeChange={handleKpssGoalTypeChange}
         onKpssTargetNetChange={handleKpssTargetNetChange}
         onKpssTargetScoreChange={handleKpssTargetScoreChange}
+        detoxLimits={detoxLimits}
+        onDetoxLimitsChange={handleDetoxLimitsChange}
       />
 
       {/* Main Card Viewport Container */}
