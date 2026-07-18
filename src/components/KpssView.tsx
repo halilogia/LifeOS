@@ -309,7 +309,8 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ]
+          ],
+          stream: false
         };
 
         const res = await fetch(url, {
@@ -318,7 +319,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) {
+          let errBody = "";
+          try {
+            errBody = await res.text();
+          } catch (_) {}
+          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+        }
         const data = await res.json();
         responseText = data.choices?.[0]?.message?.content || "";
       } else if (aiProvider === "openrouter") {
@@ -345,7 +352,8 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ]
+          ],
+          stream: false
         };
 
         const res = await fetch(url, {
@@ -354,7 +362,13 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) {
+          let errBody = "";
+          try {
+            errBody = await res.text();
+          } catch (_) {}
+          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+        }
         const data = await res.json();
         responseText = data.choices?.[0]?.message?.content || "";
       } else {
@@ -379,15 +393,26 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) {
+          let errBody = "";
+          try {
+            errBody = await res.text();
+          } catch (_) {}
+          throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
+        }
         const data = await res.json();
         responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       }
 
       let cleaned = responseText.trim();
       
-      // First strip out <think> tags if present to prevent any brace counting mismatch inside thoughts
+      // 1. Remove think blocks entirely
       cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
+      // 2. Normalize smart quotes and typical invalid characters
+      cleaned = cleaned
+        .replace(/[\u201C\u201D]/g, '"') // smart double quotes
+        .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
 
       const firstBrace = cleaned.indexOf("{");
       const firstBracket = cleaned.indexOf("[");
@@ -403,55 +428,63 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         isObject = false;
       }
       
-      if (startIdx === -1) {
-        return JSON.parse(cleaned);
-      }
-      
-      const openChar = isObject ? "{" : "[";
-      const closeChar = isObject ? "}" : "]";
-      
-      let braceCount = 0;
-      let endIdx = -1;
-      let inString = false;
-      let escape = false;
-      
-      for (let i = startIdx; i < cleaned.length; i++) {
-        const char = cleaned[i];
-        if (escape) {
-          escape = false;
-          continue;
-        }
-        if (char === "\\") {
-          escape = true;
-          continue;
-        }
-        if (char === '"') {
-          inString = !inString;
-          continue;
-        }
-        if (!inString) {
-          if (char === openChar) {
-            braceCount++;
-          } else if (char === closeChar) {
-            braceCount--;
-            if (braceCount === 0) {
-              endIdx = i;
-              break;
+      if (startIdx !== -1) {
+        const openChar = isObject ? "{" : "[";
+        const closeChar = isObject ? "}" : "]";
+        
+        let braceCount = 0;
+        let endIdx = -1;
+        let inString = false;
+        let escape = false;
+        
+        for (let i = startIdx; i < cleaned.length; i++) {
+          const char = cleaned[i];
+          if (escape) {
+            escape = false;
+            continue;
+          }
+          if (char === "\\") {
+            escape = true;
+            continue;
+          }
+          if (char === '"') {
+            inString = !inString;
+            continue;
+          }
+          if (!inString) {
+            if (char === openChar) {
+              braceCount++;
+            } else if (char === closeChar) {
+              braceCount--;
+              if (braceCount === 0) {
+                endIdx = i;
+                break;
+              }
             }
           }
         }
+        
+        if (endIdx !== -1) {
+          cleaned = cleaned.substring(startIdx, endIdx + 1);
+        }
       }
       
-      if (endIdx !== -1) {
-        cleaned = cleaned.substring(startIdx, endIdx + 1);
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch (firstErr) {
+        try {
+          // Remove trailing commas and add missing commas between lines
+          let patched = cleaned
+            .replace(/,\s*([\]}])/g, "$1")
+            .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
+          parsed = JSON.parse(patched);
+        } catch (secErr) {
+          console.warn("[KpssView JSON parse Fallback] Failed twice. Substring was:", cleaned);
+          // Return a structured empty list instead of throwing to prevent UI crash alert
+          parsed = [];
+        }
       }
-      
-      // Replace typical smart quotes or invalid json characters that models might write
-      cleaned = cleaned
-        .replace(/[\u201C\u201D]/g, '"') // smart double quotes
-        .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
-
-      let parsed = JSON.parse(cleaned);
       if (!Array.isArray(parsed) && typeof parsed === "object") {
         const keys = Object.keys(parsed);
         if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {

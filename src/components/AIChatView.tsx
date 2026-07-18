@@ -202,9 +202,15 @@ export function AIChatView({
   const cleanAndParseJSON = (text: string) => {
     let cleaned = text.trim();
     
-    // First strip out <think> tags if present to prevent any brace counting mismatch inside thoughts
+    // 1. Remove think blocks entirely
     cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
 
+    // 2. Normalize smart quotes and typical invalid characters
+    cleaned = cleaned
+      .replace(/[\u201C\u201D]/g, '"') // smart double quotes
+      .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
+
+    // 3. Find first brace or bracket
     const firstBrace = cleaned.indexOf("{");
     const firstBracket = cleaned.indexOf("[");
     
@@ -220,7 +226,8 @@ export function AIChatView({
     }
     
     if (startIdx === -1) {
-      return JSON.parse(cleaned);
+      // No JSON container found, attempt to parse directly or return as a reply string
+      return { reply: cleaned, action: "none", params: null };
     }
     
     const openChar = isObject ? "{" : "[";
@@ -262,12 +269,27 @@ export function AIChatView({
       cleaned = cleaned.substring(startIdx, endIdx + 1);
     }
     
-    // Replace typical smart quotes or invalid json characters that models might write
-    cleaned = cleaned
-      .replace(/[\u201C\u201D]/g, '"') // smart double quotes
-      .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
-
-    return JSON.parse(cleaned);
+    try {
+      return JSON.parse(cleaned);
+    } catch (parseError) {
+      // Extremely robust fallback: if JSON parsing fails after substring extraction,
+      // scan if there is a simpler conversational markdown block, or try to clean JSON syntax
+      try {
+        // Try fixing missing commas or trailing commas which models commonly output
+        let patched = cleaned
+          .replace(/,\s*([\]}])/g, "$1") // remove trailing commas before closing braces/brackets
+          .replace(/(["\d])\s*\n\s*"/g, '$1,\n"'); // add missing commas between adjacent keys
+        return JSON.parse(patched);
+      } catch (secError) {
+        console.warn("[cleanAndParseJSON Fallback] JSON parsing failed twice. Raw text was:", text);
+        // Return a safe object instead of throwing, so the UI never crashes or gives alerts
+        return {
+          reply: text.replace(/<think>[\s\S]*?<\/think>/gi, "").trim(),
+          action: "none",
+          params: null
+        };
+      }
+    }
   };
 
   const parseAIResponse = (rawText: string) => {
@@ -304,10 +326,11 @@ export function AIChatView({
   const callAI = async (userPrompt: string): Promise<{ reply: string; action?: string; params?: any; thinking?: string }> => {
     const todayStr = new Date().toISOString().split("T")[0];
     const systemPrompt = `You are a helpful AI Assistant for the Life OS Personal Dashboard Chrome Extension. The current year is ${new Date().getFullYear()}. The current date is ${todayStr}.
+You MUST default to replying in Turkish unless the user explicitly requests you in their prompt to reply in another specific language (e.g. English, Arabic, Korean, French, German, Spanish, etc.). If the user does not explicitly request a foreign language response, always respond in Turkish.
 You can chat naturally, but if the user wants to add, create, or schedule a task, or add a diary entry/note/study note, you must output a structured JSON response.
 Format your final output ONLY as a JSON object matching this schema:
 {
-  "reply": "Your conversational response text in the user's language (Turkish or English).",
+  "reply": "Your conversational response text (default to Turkish unless explicitly requested otherwise).",
   "action": "create_task" | "add_note" | "none",
   "params": {
     "text": "Task text (only for create_task)",
@@ -336,12 +359,17 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ]
+          ],
+          stream: false
         })
       });
 
       if (!res.ok) {
-        throw new Error(`Ollama returned status ${res.status}`);
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`Ollama returned status ${res.status}: ${errBody || res.statusText}`);
       }
 
       const data = await res.json();
@@ -377,12 +405,17 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ]
+          ],
+          stream: false
         })
       });
 
       if (!res.ok) {
-        throw new Error(`OpenRouter API returned status ${res.status}`);
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`OpenRouter API returned status ${res.status}: ${errBody || res.statusText}`);
       }
 
       const data = await res.json();
@@ -416,7 +449,11 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       });
 
       if (!res.ok) {
-        throw new Error(`Gemini API returned status ${res.status}`);
+        let errBody = "";
+        try {
+          errBody = await res.text();
+        } catch (_) {}
+        throw new Error(`Gemini API returned status ${res.status}: ${errBody || res.statusText}`);
       }
 
       const data = await res.json();
@@ -582,9 +619,10 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
             : `[Local Fallback] Added "${localParsed.text}" task${dueDateFormatted}. ✓`;
         }
       } else {
+        const errorMsg = e instanceof Error ? e.message : String(e);
         replyText = lang === "tr"
-          ? "Yapay zeka servisine bağlanırken bir sorun oluştu. Ayarlardan anahtarınızı/modelinizi kontrol edin."
-          : "Error connecting to the AI service. Please verify your settings and API Key.";
+          ? `Yapay zeka servisine bağlanırken bir sorun oluştu: ${errorMsg}`
+          : `Error connecting to the AI service: ${errorMsg}`;
       }
 
       setMessages((prev) => [
