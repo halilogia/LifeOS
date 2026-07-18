@@ -53,10 +53,10 @@ export function App() {
     useState(true);
 
   // AI Assistant States
-  const [aiProvider, setAiProvider] = useState<string>("gemini");
+  const [aiProvider, setAiProvider] = useState<string>("openrouter");
   const [aiApiKey, setAiApiKey] = useState<string>("");
-  const [aiModel, setAiModel] = useState<string>("");
-  const [aiEndpoint, setAiEndpoint] = useState<string>("");
+  const [aiModel, setAiModel] = useState<string>("free");
+  const [aiEndpoint, setAiEndpoint] = useState<string>("http://localhost:20128/v1");
 
   // Universal Info Box / Inline Translation Bubble states
   const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);

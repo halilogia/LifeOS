@@ -87,7 +87,7 @@ export const storage = {
   getAIProvider: (): Promise<string> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["aiProvider"], (result) => {
-        resolve((result.aiProvider as string) || "gemini");
+        resolve((result.aiProvider as string) || "openrouter");
       });
     });
   },
@@ -99,7 +99,7 @@ export const storage = {
   getAIModel: (): Promise<string> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["aiModel"], (result) => {
-        resolve((result.aiModel as string) || "");
+        resolve((result.aiModel as string) || "free");
       });
     });
   },
@@ -111,7 +111,7 @@ export const storage = {
   getAIEndpoint: (): Promise<string> => {
     return new Promise((resolve) => {
       chrome.storage.sync.get(["aiEndpoint"], (result) => {
-        resolve((result.aiEndpoint as string) || "");
+        resolve((result.aiEndpoint as string) || "http://localhost:20128/v1");
       });
     });
   },

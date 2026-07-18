@@ -347,24 +347,7 @@ export function SettingsDrawer({
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_provider}:</label>
-                <select
-                  value={aiProvider}
-                  onChange={(e) => onUpdateAIConfig((e.target as HTMLSelectElement).value, aiApiKey, aiModel, aiEndpoint)}
-                  style={{
-                    background: "#1e1e24",
-                    color: "#f1f5f9",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "6px",
-                    padding: "6px 12px",
-                    fontSize: "0.85rem",
-                    outline: "none",
-                    cursor: "pointer"
-                  }}
-                >
-                  <option value="gemini">Gemini API</option>
-                  <option value="openrouter">OpenRouter API</option>
-                  <option value="ollama">Ollama (Local / LAN)</option>
-                </select>
+                <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--accent-color)" }}>9Router Proxy (OpenAI Uyumlu)</span>
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -372,8 +355,8 @@ export function SettingsDrawer({
                 <input
                   type="password"
                   value={aiApiKey}
-                  placeholder={aiProvider === "ollama" ? "Gerekli değil (Ollama)" : "sk-or-v1-... veya AIzaSy..."}
-                  onInput={(e) => onUpdateAIConfig(aiProvider, (e.target as HTMLInputElement).value, aiModel, aiEndpoint)}
+                  placeholder="9Router API Key (Örn: sk-72l... veya bos bırakın)"
+                  onInput={(e) => onUpdateAIConfig("openrouter", (e.target as HTMLInputElement).value, aiModel, aiEndpoint)}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -393,14 +376,8 @@ export function SettingsDrawer({
                 <input
                   type="text"
                   value={aiEndpoint}
-                  placeholder={
-                    aiProvider === "openrouter" 
-                      ? "https://openrouter.ai/api/v1" 
-                      : aiProvider === "ollama"
-                        ? "http://localhost:11434"
-                        : "https://generativelanguage.googleapis.com"
-                  }
-                  onInput={(e) => onUpdateAIConfig(aiProvider, aiApiKey, aiModel, (e.target as HTMLInputElement).value)}
+                  placeholder="http://localhost:20128/v1"
+                  onInput={(e) => onUpdateAIConfig("openrouter", aiApiKey, aiModel, (e.target as HTMLInputElement).value)}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -413,8 +390,8 @@ export function SettingsDrawer({
                 />
                 <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
                   {lang === "tr" 
-                    ? "Örn: http://localhost:20120/v1 (9Router) veya http://192.168.1.100:11434 (LAN/Masaüstü Ollama)" 
-                    : "e.g. http://localhost:20120/v1 (9Router) or http://192.168.1.100:11434 (LAN/Desktop Ollama)"}
+                    ? "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)" 
+                    : "e.g. http://localhost:20128/v1 (9Router default address)"}
                 </span>
               </div>
 
@@ -423,14 +400,8 @@ export function SettingsDrawer({
                 <input
                   type="text"
                   value={aiModel}
-                  placeholder={
-                    aiProvider === "openrouter" 
-                      ? "google/gemini-2.5-flash" 
-                      : aiProvider === "ollama"
-                        ? "llama3"
-                        : "gemini-1.5-flash"
-                  }
-                  onInput={(e) => onUpdateAIConfig(aiProvider, aiApiKey, (e.target as HTMLInputElement).value, aiEndpoint)}
+                  placeholder="free"
+                  onInput={(e) => onUpdateAIConfig("openrouter", aiApiKey, (e.target as HTMLInputElement).value, aiEndpoint)}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -442,7 +413,9 @@ export function SettingsDrawer({
                   }}
                 />
                 <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
-                  {t.settings_ai_model_desc}
+                  {lang === "tr"
+                    ? "Kullanmak istediğiniz model ID'si (Örn: free, meta-llama/llama-3-8b-instruct:free)"
+                    : "Model ID you wish to use (e.g. free, meta-llama/llama-3-8b-instruct:free)"}
                 </span>
               </div>
             </div>

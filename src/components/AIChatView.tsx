@@ -195,6 +195,14 @@ export function AIChatView({
     return { parsed: false };
   };
 
+  const cleanAndParseJSON = (text: string) => {
+    let cleaned = text.trim();
+    if (cleaned.startsWith("```")) {
+      cleaned = cleaned.replace(/^```(?:json)?\n?/i, "").replace(/\n?```$/, "");
+    }
+    return JSON.parse(cleaned.trim());
+  };
+
   // Call AI Service
   const callAI = async (userPrompt: string): Promise<{ reply: string; action?: string; params?: any }> => {
     const todayStr = new Date().toISOString().split("T")[0];
@@ -244,7 +252,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       if (!textResponse) {
         throw new Error("Empty response from Ollama");
       }
-      return JSON.parse(textResponse.trim());
+      return cleanAndParseJSON(textResponse);
     } else if (aiProvider === "openrouter") {
       const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
       const url = `${baseUrl}/chat/completions`;
@@ -262,8 +270,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
-          ],
-          response_format: { type: "json_object" }
+          ]
         })
       });
 
@@ -276,7 +283,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       if (!textResponse) {
         throw new Error("Empty response from OpenRouter");
       }
-      return JSON.parse(textResponse.trim());
+      return cleanAndParseJSON(textResponse);
     } else {
       // Gemini API
       const modelName = aiModel || "gemini-1.5-flash";
