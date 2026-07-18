@@ -26,6 +26,7 @@ interface SettingsResult {
   prayerCountry?: string;
   freeGamesNotificationsEnabled?: boolean;
   calendarNotificationsEnabled?: boolean;
+  pomoBlockEnabled?: boolean;
   universalInfoBoxEnabled?: boolean;
   universalInfoBoxHotkey?: string;
 }
@@ -260,6 +261,7 @@ export const storage = {
     prayerCountry?: string;
     freeGamesNotificationsEnabled: boolean;
     calendarNotificationsEnabled: boolean;
+    pomoBlockEnabled: boolean;
     universalInfoBoxEnabled: boolean;
     universalInfoBoxHotkey: string;
   }> => {
@@ -272,6 +274,7 @@ export const storage = {
           "prayerCountry",
           "freeGamesNotificationsEnabled",
           "calendarNotificationsEnabled",
+          "pomoBlockEnabled",
           "universalInfoBoxEnabled",
           "universalInfoBoxHotkey",
         ],
@@ -285,6 +288,8 @@ export const storage = {
               result.freeGamesNotificationsEnabled ?? true,
             calendarNotificationsEnabled:
               result.calendarNotificationsEnabled ?? true,
+            pomoBlockEnabled:
+              result.pomoBlockEnabled ?? true,
             universalInfoBoxEnabled: result.universalInfoBoxEnabled ?? true,
             universalInfoBoxHotkey: result.universalInfoBoxHotkey || "none",
           });
@@ -312,6 +317,14 @@ export const storage = {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
         { calendarNotificationsEnabled: enabled },
+        resolve,
+      );
+    });
+  },
+  setPomoBlockEnabled: (enabled: boolean): Promise<void> => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { pomoBlockEnabled: enabled },
         resolve,
       );
     });
@@ -368,6 +381,7 @@ export const storage = {
                 "willpowerStreak",
                 "freeGamesNotificationsEnabled",
                 "calendarNotificationsEnabled",
+                "pomoBlockEnabled",
                 "universalInfoBoxEnabled",
                 "universalInfoBoxHotkey",
                 "pomodoroHistory",

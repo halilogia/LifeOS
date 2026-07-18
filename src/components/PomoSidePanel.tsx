@@ -1,5 +1,6 @@
 import { AlarmItem } from "../core/pomodoroManager.js";
 import { Language } from "../types/types.js";
+import { useState, useEffect, useRef } from "preact/hooks";
 
 interface PomoSidePanelProps {
   lang: Language;
@@ -30,6 +31,109 @@ export function PomoSidePanel({
   onToggleAlarm,
   onDeleteAlarm,
 }: PomoSidePanelProps) {
+  const [activeSound, setActiveSound] = useState<"none" | "rain" | "wind" | "white_noise" | "lofi">("none");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const whiteNoiseSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const whiteNoiseGainRef = useRef<GainNode | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+    if (whiteNoiseGainRef.current) {
+      whiteNoiseGainRef.current.gain.value = volume;
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    return () => {
+      stopAllSounds();
+    };
+  }, []);
+
+  const stopAllSounds = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (whiteNoiseSourceRef.current) {
+      try {
+        whiteNoiseSourceRef.current.stop();
+      } catch (e) {}
+      whiteNoiseSourceRef.current = null;
+    }
+    whiteNoiseGainRef.current = null;
+    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+  };
+
+  const playWhiteNoise = () => {
+    stopAllSounds();
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioCtx();
+      audioContextRef.current = ctx;
+
+      const bufferSize = 2 * ctx.sampleRate;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      whiteNoise.loop = true;
+      whiteNoiseSourceRef.current = whiteNoise;
+
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = volume;
+      whiteNoiseGainRef.current = gainNode;
+
+      whiteNoise.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      whiteNoise.start();
+    } catch (e) {
+      console.error("Failed to play white noise:", e);
+    }
+  };
+
+  const playAudioUrl = (url: string) => {
+    stopAllSounds();
+    const audio = new Audio(url);
+    audio.volume = volume;
+    audio.loop = true;
+    audioRef.current = audio;
+    audio.play().catch((err) => {
+      console.error("Audio playback error:", err);
+    });
+  };
+
+  const handleSoundToggle = (soundType: typeof activeSound) => {
+    if (activeSound === soundType && isPlaying) {
+      stopAllSounds();
+      setIsPlaying(false);
+    } else {
+      setActiveSound(soundType);
+      setIsPlaying(true);
+      if (soundType === "white_noise") {
+        playWhiteNoise();
+      } else if (soundType === "rain") {
+        playAudioUrl("https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg");
+      } else if (soundType === "wind") {
+        playAudioUrl("https://actions.google.com/sounds/v1/weather/fine_wind_outside.ogg");
+      } else if (soundType === "lofi") {
+        playAudioUrl("https://coderadio-admin.freecodecamp.org/radio/8010/radio.mp3");
+      }
+    }
+  };
+
   const formatTime = (timeInSecs: number) => {
     const mins = Math.floor(timeInSecs / 60);
     const secs = timeInSecs % 60;
@@ -297,6 +401,164 @@ export function PomoSidePanel({
               </div>
             ))
           )}
+        </div>
+      </div>
+
+      {/* Ambient Sounds Player Mini Card */}
+      <div className="mini-tool-card" id="ambient-player-mini" style={{ marginTop: "16px" }}>
+        <div className="mini-tool-header">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+          <span style={{ fontSize: "0.85rem", fontWeight: "600" }}>
+            {lang === "tr" ? "Odak Müzikleri & Sesleri" : "Focus Sounds & Music"}
+          </span>
+          
+          {/* Pulsing Sound wave visualizer when playing */}
+          {isPlaying && (
+            <div className="sound-visualizer" style={{ display: "flex", gap: "2px", marginLeft: "auto", alignItems: "flex-end", height: "12px" }}>
+              <span className="sound-bar bar-1"></span>
+              <span className="sound-bar bar-2"></span>
+              <span className="sound-bar bar-3"></span>
+            </div>
+          )}
+        </div>
+
+        <div className="ambient-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "12px" }}>
+          <button
+            className={`ambient-btn ${activeSound === "rain" && isPlaying ? "active" : ""}`}
+            onClick={() => handleSoundToggle("rain")}
+            style={{
+              padding: "10px 8px",
+              background: activeSound === "rain" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
+              border: activeSound === "rain" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              borderRadius: "10px",
+              color: activeSound === "rain" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease"
+            }}
+          >
+            🌧️ {lang === "tr" ? "Yağmur" : "Rain"}
+          </button>
+
+          <button
+            className={`ambient-btn ${activeSound === "wind" && isPlaying ? "active" : ""}`}
+            onClick={() => handleSoundToggle("wind")}
+            style={{
+              padding: "10px 8px",
+              background: activeSound === "wind" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
+              border: activeSound === "wind" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              borderRadius: "10px",
+              color: activeSound === "wind" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease"
+            }}
+          >
+            🍃 {lang === "tr" ? "Rüzgar" : "Wind"}
+          </button>
+
+          <button
+            className={`ambient-btn ${activeSound === "white_noise" && isPlaying ? "active" : ""}`}
+            onClick={() => handleSoundToggle("white_noise")}
+            style={{
+              padding: "10px 8px",
+              background: activeSound === "white_noise" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
+              border: activeSound === "white_noise" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              borderRadius: "10px",
+              color: activeSound === "white_noise" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease"
+            }}
+          >
+            🔊 {lang === "tr" ? "Beyaz Gürültü" : "White Noise"}
+          </button>
+
+          <button
+            className={`ambient-btn ${activeSound === "lofi" && isPlaying ? "active" : ""}`}
+            onClick={() => handleSoundToggle("lofi")}
+            style={{
+              padding: "10px 8px",
+              background: activeSound === "lofi" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
+              border: activeSound === "lofi" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              borderRadius: "10px",
+              color: activeSound === "lofi" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease"
+            }}
+          >
+            📻 {lang === "tr" ? "Lo-Fi Radyo" : "Lo-Fi Radio"}
+          </button>
+        </div>
+
+        {/* Volume Slider Controls */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px", background: "rgba(0,0,0,0.15)", padding: "6px 10px", borderRadius: "8px" }}>
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            onChange={(e) => setVolume(parseFloat((e.target as HTMLInputElement).value))}
+            style={{
+              flex: 1,
+              height: "4px",
+              borderRadius: "2px",
+              background: "rgba(255, 255, 255, 0.1)",
+              outline: "none",
+              cursor: "pointer",
+              WebkitAppearance: "none"
+            }}
+          />
+          <span style={{ fontSize: "0.68rem", color: "var(--text-secondary)", minWidth: "22px", textAlign: "right" }}>
+            {Math.round(volume * 100)}%
+          </span>
         </div>
       </div>
     </div>
