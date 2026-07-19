@@ -2,7 +2,8 @@ import { useState, useEffect } from "preact/hooks";
 import {
   INITIAL_HIFIZ_ITEMS,
   YETERLIKLER_DATA,
-} from "../features/hifizData.js";
+} from "@/domain/data/hifizData.js";
+
 import { HifizProgress, HifizItem, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
 import { HifizMemorizationCard } from "@/components/hifiz/HifizMemorizationCard.js";

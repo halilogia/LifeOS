@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language, PomodoroLog } from "../types/types.js";
-import { pomodoroManager, AlarmItem } from "../core/pomodoroManager.js";
+import { pomodoroManager, AlarmItem } from "@/infrastructure/services/PomodoroManagerService.js";
 import { translations } from "../utils/i18n.js";
 import { PomoSidePanel } from "@/components/PomoSidePanel.js";
 import { PomoTimerCard } from "@/components/pomodoro/PomoTimerCard.js";

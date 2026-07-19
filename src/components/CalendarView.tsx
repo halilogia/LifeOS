@@ -1,7 +1,11 @@
 import { useState, useEffect } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
-import { googleSyncService } from "../services/googleSyncService.js";
+import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
+import { GoogleCalendarApi } from "@/infrastructure/api/GoogleCalendarApi.js";
+
+const _authApi = new GoogleAuthApi();
+const _calendarApi = new GoogleCalendarApi();
 
 interface CalendarViewProps {
   todos: Todo[];
@@ -114,10 +118,10 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
       if (syncEnabled && calendarEnabled) {
         setIsSyncingCalendar(true);
         try {
-          const token = await googleSyncService.getAuthToken(false);
+          const token = await _authApi.getAuthToken(false);
           const startStr = new Date(year, month, 1, 0, 0, 0).toISOString();
           const endStr = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-          const items = await googleSyncService.getCalendarEvents(token, startStr, endStr);
+          const items = await _calendarApi.getCalendarEvents(token, startStr, endStr);
           if (isMounted) {
             setCalendarEvents(items);
           }

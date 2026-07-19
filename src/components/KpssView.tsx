@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import { kpssService, kpssData, kpssDummyFlashcards } from "@/services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
-import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } from "@/logic/srs.js";
-import { ReviewQuality, WordReviewData } from "@/types/word.js";
+import { calculateSM2, prepareSRSQueue, createInitialSRSWord, type SRSWordWithInfo } from "@/domain/services/SrsService.js";
+import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
 import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
-import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/logic/kpssCalculator.js";
+import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/domain/services/KpssCalculatorService.js";
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service, QuizQuestion } from "@/services/kpssAiService.js";
-import { getSubjectNets as getSubjectNets_logic, getOverallNets as getOverallNets_logic } from "@/logic/kpssCalculator.js";
+import { getSubjectNets as getSubjectNets_logic, getOverallNets as getOverallNets_logic } from "@/domain/services/KpssCalculatorService.js";
 
 
 
