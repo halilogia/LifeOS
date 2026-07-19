@@ -7,35 +7,11 @@ import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } 
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
 import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
 import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/logic/kpssCalculator.js";
-import exam2021 from "@/data/kpss/exam2021.json";
-import exam2020 from "@/data/kpss/exam2020.json";
-import exam2019 from "@/data/kpss/exam2019.json";
-import exam2018 from "@/data/kpss/exam2018.json";
-import exam2017 from "@/data/kpss/exam2017.json";
-import exam2015 from "@/data/kpss/exam2015.json";
-import exam2014 from "@/data/kpss/exam2014.json";
-import exam2013 from "@/data/kpss/exam2013.json";
-import exam2012 from "@/data/kpss/exam2012.json";
-import exam2011 from "@/data/kpss/exam2011.json";
-import exam2010 from "@/data/kpss/exam2010.json";
-import exam2009 from "@/data/kpss/exam2009.json";
-import examTarihArsivi from "@/data/kpss/exam_tarih_arsivi.json";
+import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
+import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service, QuizQuestion } from "@/services/kpssAiService.js";
+import { getSubjectNets as getSubjectNets_logic, getOverallNets as getOverallNets_logic } from "@/logic/kpssCalculator.js";
 
-const KPSS_YEARLY_DATA: Record<string, any> = {
-  "2021": exam2021,
-  "2020": exam2020,
-  "2019": exam2019,
-  "2018": exam2018,
-  "2017": exam2017,
-  "2015": exam2015,
-  "2014": exam2014,
-  "2013": exam2013,
-  "2012": exam2012,
-  "2011": exam2011,
-  "2010": exam2010,
-  "2009": exam2009,
-  "tarih_arsivi": examTarihArsivi
-};
+
 
 // Extracted Presentational Sub-components
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
@@ -58,25 +34,7 @@ interface KpssViewProps {
   targetScore: number;
 }
 
-interface QuizQuestion {
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  solution: string;
-  chart?: {
-    type: "bar" | "line" | "geometry";
-    title?: string;
-    labels?: string[];
-    values?: (number | string)[];
-    shape?: "triangle" | "circle" | "parallel_lines";
-    angles?: Record<string, string>;
-    sides?: Record<string, string>;
-  };
-  map?: {
-    highlightRegions?: string[];
-    markers?: Array<{ x: number; y: number; label: string }>;
-  };
-}
+
 
 const getLocalQuestionsForTopic = (subjectKey: string, topicName: string): QuizQuestion[] => {
   const aggregated: QuizQuestion[] = [];
@@ -323,252 +281,21 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   }, [kpssProgress, lang]);
 
   // Dynamic AI Fetcher with pre-fetch (1st question immediately, others in background)
-  const fetchQuestionsSubsetFromAI = async (
+  const fetchQuestionsSubsetFromAI = (
     subjectKey: string,
     topicName: string,
     count: number,
     excludeQuestions: QuizQuestion[] = [],
     fewShotExamples: QuizQuestion[] = []
   ): Promise<QuizQuestion[]> => {
-    const tStart = performance.now();
-    console.log(`%c[AI Fetch - Start] Requesting ${count} questions for "${topicName}"`, "color: #a78bfa; font-weight: bold;");
-
-    const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
-    const systemPrompt = getKpssSystemPrompt(subjectKey, lang, fewShotExamples);
-
-    let userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
-    if (excludeQuestions.length > 0) {
-      userPrompt += ` Üreteceğin sorular şu sorulardan tamamen farklı olmalıdır: ${JSON.stringify(excludeQuestions.map(q => q.question))}`;
-    }
-
-    let responseText = "";
-    const tNetworkStart = performance.now();
-
-    if (aiProvider === "ollama") {
-      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "http://localhost:11434";
-      const url = baseUrl.includes("/v1") ? `${baseUrl}/chat/completions` : `${baseUrl}/v1/chat/completions`;
-      const modelName = aiModel || "llama3";
-      const payload = {
-        model: modelName,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        stream: false,
-        options: {
-          temperature: 0.2
-        }
-      };
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const tNetworkEnd = performance.now();
-      console.log(`[AI Fetch - Network] Ollama HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
-
-      if (!res.ok) {
-        let errBody = "";
-        try {
-          errBody = await res.text();
-        } catch (_) {}
-        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-      }
-
-      const tReadStart = performance.now();
-      const data = await res.json();
-      const tReadEnd = performance.now();
-      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
-      responseText = data.choices?.[0]?.message?.content || "";
-    } else if (aiProvider === "openrouter") {
-      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://openrouter.ai/api/v1";
-      const url = `${baseUrl}/chat/completions`;
-      const modelName = aiModel || "google/gemini-2.5-flash";
-      const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
-
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-
-      if (aiApiKey && aiApiKey.trim()) {
-        headers["Authorization"] = `Bearer ${aiApiKey}`;
-      }
-
-      if (!isLocal) {
-        headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
-        headers["X-Title"] = "ZenTodo Life OS Dashboard";
-      }
-
-      const payload = {
-        model: modelName,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        stream: false,
-        temperature: 0.2
-      };
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(payload)
-      });
-
-      const tNetworkEnd = performance.now();
-      console.log(`[AI Fetch - Network] 9Router/OpenRouter HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
-
-      if (!res.ok) {
-        let errBody = "";
-        try {
-          errBody = await res.text();
-        } catch (_) {}
-        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-      }
-
-      const tReadStart = performance.now();
-      const data = await res.json();
-      const tReadEnd = performance.now();
-      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
-      responseText = data.choices?.[0]?.message?.content || "";
-    } else {
-      // Gemini provider (default)
-      const modelName = aiModel || "gemini-1.5-flash";
-      const baseUrl = aiEndpoint && aiEndpoint.trim() ? aiEndpoint.trim().replace(/\/$/, "") : "https://generativelanguage.googleapis.com/v1beta";
-      const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
-      const payload = {
-        contents: [{
-          parts: [{
-            text: systemPrompt + "\n\n" + userPrompt
-          }]
-        }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.2
-        }
-      };
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const tNetworkEnd = performance.now();
-      console.log(`[AI Fetch - Network] Gemini API HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`);
-
-      if (!res.ok) {
-        let errBody = "";
-        try {
-          errBody = await res.text();
-        } catch (_) {}
-        throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
-      }
-
-      const tReadStart = performance.now();
-      const data = await res.json();
-      const tReadEnd = performance.now();
-      console.log(`[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`);
-      responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    }
-
-    const tCleanStart = performance.now();
-    let cleaned = responseText.trim();
-    cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
-    cleaned = cleaned
-      .replace(/[\u201C\u201D]/g, '"')
-      .replace(/[\u2018\u2019]/g, "'");
-
-    const firstBrace = cleaned.indexOf("{");
-    const firstBracket = cleaned.indexOf("[");
-    
-    let isObject = false;
-    let startIdx = -1;
-    
-    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
-      startIdx = firstBrace;
-      isObject = true;
-    } else if (firstBracket !== -1) {
-      startIdx = firstBracket;
-      isObject = false;
-    }
-    
-    if (startIdx !== -1) {
-      const openChar = isObject ? "{" : "[";
-      const closeChar = isObject ? "}" : "]";
-      
-      let braceCount = 0;
-      let endIdx = -1;
-      let inString = false;
-      let escape = false;
-      
-      for (let i = startIdx; i < cleaned.length; i++) {
-        const char = cleaned[i];
-        if (escape) {
-          escape = false;
-          continue;
-        }
-        if (char === "\\") {
-          escape = true;
-          continue;
-        }
-        if (char === '"') {
-          inString = !inString;
-          continue;
-        }
-        if (!inString) {
-          if (char === openChar) {
-            braceCount++;
-          } else if (char === closeChar) {
-            braceCount--;
-            if (braceCount === 0) {
-              endIdx = i;
-              break;
-            }
-          }
-        }
-      }
-      
-      if (endIdx !== -1) {
-        cleaned = cleaned.substring(startIdx, endIdx + 1);
-      }
-    }
-    
-    let parsed;
-    try {
-      parsed = JSON.parse(cleaned);
-    } catch (firstErr) {
-      try {
-        let patched = cleaned
-          .replace(/,\s*([\]}])/g, "$1")
-          .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
-        parsed = JSON.parse(patched);
-      } catch (secErr) {
-        console.warn("[KpssView JSON parse Fallback] Failed twice. Substring was:", cleaned);
-        parsed = [];
-      }
-    }
-    if (!Array.isArray(parsed) && typeof parsed === "object") {
-      const keys = Object.keys(parsed);
-      if (keys.length > 0 && Array.isArray(parsed[keys[0]])) {
-        parsed = parsed[keys[0]];
-      } else {
-        throw new Error("Invalid JSON structure returned by AI.");
-      }
-    }
-
-    const tCleanEnd = performance.now();
-    console.log(`[AI Fetch - Clean & Parse] Extract JSON in ${Math.round(tCleanEnd - tCleanStart)} ms`);
-
-    const tTotal = performance.now() - tStart;
-    console.log(`%c[AI Fetch - Complete] Successfully loaded ${count} questions in ${Math.round(tTotal)} ms`, "color: #10b981; font-weight: bold;");
-
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed as QuizQuestion[];
-    }
-    return [];
+    return fetchQuestionsSubsetFromAI_service(
+      subjectKey,
+      topicName,
+      count,
+      { aiProvider, aiModel, aiApiKey, aiEndpoint, lang, SUBJECT_NAMES },
+      excludeQuestions,
+      fewShotExamples
+    );
   };
 
   const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
@@ -824,35 +551,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   };
 
   const getSubjectNets = (subKey: string) => {
-    const tList = kpssData[subKey] || [];
-    let totalNet = 0;
-    let totalQuestions = 0;
-
-    tList.forEach((t) => {
-      totalQuestions += t.questionsCount;
-      const prog = kpssProgress.find((p) => p.subject === subKey && p.topic === t.title);
-      if (prog) {
-        if (prog.score !== undefined) {
-          totalNet += (prog.score / 100) * t.questionsCount;
-        } else if (prog.status === 2) {
-          totalNet += 0.8 * t.questionsCount;
-        } else if (prog.status === 1) {
-          totalNet += 0.4 * t.questionsCount;
-        }
-      }
-    });
-    return { net: Math.round(totalNet * 10) / 10, max: totalQuestions };
+    return getSubjectNets_logic(subKey, kpssData, kpssProgress);
   };
 
   const getOverallNets = () => {
-    let totalNet = 0;
-    let totalMax = 0;
-    Object.keys(kpssData).forEach((subKey) => {
-      const { net, max } = getSubjectNets(subKey);
-      totalNet += net;
-      totalMax += max;
-    });
-    return { net: Math.round(totalNet * 10) / 10, max: totalMax };
+    return getOverallNets_logic(kpssData, kpssProgress);
   };
 
   const getSortedTopics = () => {
