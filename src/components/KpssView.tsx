@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import { kpssService, kpssData, kpssDummyFlashcards } from "@/services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
-import { storage } from "@/core/storage.js";
 import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } from "@/logic/srs.js";
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
 import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
@@ -158,7 +157,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const loadKpssSrsQueue = async () => {
     setSrsLoading(true);
     try {
-      const progress = await storage.getKpssSrsProgress();
+      const progress: any[] = await new Promise((r) =>
+        chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
+          r((res.kpssSrsProgress as any[]) || [])
+        )
+      );
       const progressMap = new Map<string, WordReviewData>();
       progress.forEach((p) => progressMap.set(p.wordId, p));
 
@@ -206,14 +209,18 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
     const outcome = calculateSM2(reviewData, quality, new Date());
 
-    const progress = await storage.getKpssSrsProgress();
-    const idx = progress.findIndex((p) => p.wordId === outcome.wordId);
-    if (idx >= 0) {
-      progress[idx] = outcome;
-    } else {
-      progress.push(outcome);
-    }
-    await storage.setKpssSrsProgress(progress);
+      const progress: any[] = await new Promise((r) =>
+        chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
+          r((res.kpssSrsProgress as any[]) || [])
+        )
+      );
+      const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
+      if (idx >= 0) {
+        progress[idx] = outcome;
+      } else {
+        progress.push(outcome);
+      }
+      await new Promise<void>((r) => chrome.storage.sync.set({ kpssSrsProgress: progress }, r));
 
     // Fade animation transition
     setSrsFadeState("slide-out");
@@ -233,7 +240,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
     const stats = await kpssService.getKpssDailyStats();
-    const cType = await storage.getKpssChartType();
+    const cType: "line" | "bar" = await new Promise((r) =>
+      chrome.storage.sync.get(["kpssChartType"], (res) =>
+        r((res.kpssChartType as "line" | "bar") || "line")
+      )
+    );
     
     setKpssProgress(progress);
     setDailyStats(stats);
@@ -248,7 +259,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   const handleChartTypeChange = async (type: "line" | "bar") => {
     setChartType(type);
-    await storage.setKpssChartType(type);
+    chrome.storage.sync.set({ kpssChartType: type });
   };
 
   useEffect(() => {

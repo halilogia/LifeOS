@@ -1,5 +1,5 @@
 import { Language } from "@/types/types.js";
-import { GoogleSyncSettings } from "@/core/storage.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 
 interface SyncSettingsTabProps {
   t: any;

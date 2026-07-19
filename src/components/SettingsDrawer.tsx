@@ -1,7 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
-import { GoogleSyncSettings } from "@/core/storage.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { GeneralSettingsTab } from "@/components/settings/GeneralSettingsTab.js";
 import { AiSettingsTab } from "@/components/settings/AiSettingsTab.js";
 import { SyncSettingsTab } from "@/components/settings/SyncSettingsTab.js";

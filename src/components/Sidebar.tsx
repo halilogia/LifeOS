@@ -1,7 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
-import { storage } from "../core/storage.js";
 
 interface SidebarProps {
   lang: Language;
@@ -48,7 +47,11 @@ export function Sidebar({
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   useEffect(() => {
-    storage.getSidebarOrder().then((saved) => {
+    new Promise<string[]>((resolve) =>
+      chrome.storage.sync.get(["sidebarOrder"], (res) =>
+        resolve((res.sidebarOrder as string[]) || [])
+      )
+    ).then((saved) => {
       let finalOrder = DEFAULT_ORDER;
       if (saved && saved.length > 0) {
         // Filter out deprecated keys, append missing ones
@@ -86,7 +89,7 @@ export function Sidebar({
 
     setOrder(nextOrder);
     setDraggedItem(null);
-    await storage.setSidebarOrder(nextOrder);
+    chrome.storage.sync.set({ sidebarOrder: nextOrder });
     if (onOrderChange) {
       onOrderChange(nextOrder);
     }

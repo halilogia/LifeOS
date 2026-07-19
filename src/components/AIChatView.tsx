@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
-import { storage } from "../core/storage.js";
 
 interface AIChatViewProps {
   lang: Language;
@@ -472,7 +471,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     cues?: string,
     summary?: string
   ) => {
-    const currentNotes = await storage.getNotes();
+    const currentNotes: any[] = await new Promise((r) =>
+      chrome.storage.sync.get(["notes"], (res) => r((res.notes as any[]) || []))
+    );
     const formattedDate = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
     const defaultTitle = title || (type === "diary"
       ? (lang === "tr" ? `Günlük - ${formattedDate}` : `Diary - ${formattedDate}`)
@@ -489,7 +490,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       summary: summary || "",
       createdAt: new Date().toISOString()
     });
-    await storage.setNotes(currentNotes);
+    await new Promise<void>((r) => chrome.storage.sync.set({ notes: currentNotes }, r));
   };
 
   // Handle Send Message

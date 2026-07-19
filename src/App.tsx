@@ -1,570 +1,130 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage } from "./core/storage.js";
-import type { GoogleSyncSettings } from "./core/storage.js";
-import { googleSyncService } from "./services/googleSyncService.js";
-import { useTodos } from "./presentation/hooks/useTodos.js";
-import { translations } from "./utils/i18n.js";
-import type { Language } from "./types/types.js";
-import { Todo } from "./types/types.js";
-import { useTodoRepository, RepositoryProvider } from "./infrastructure/di/RepositoryContext.js";
+import { translations } from "@/utils/i18n.js";
+import type { Language } from "@/domain/value-objects/Language.js";
+import { useTodos } from "@/presentation/hooks/useTodos.js";
+import { useSync } from "@/presentation/hooks/useSync.js";
+import { useSettings } from "@/presentation/hooks/useSettings.js";
+import { useUI } from "@/presentation/hooks/useUI.js";
+import { useAppInit } from "@/presentation/hooks/useAppInit.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 
-import { Sidebar } from "./components/Sidebar.js";
-import { ListView } from "./components/ListView.js";
-import { NotesView } from "./components/NotesView.js";
-import { PomodoroView } from "./components/PomodoroView.js";
-import { WillpowerView } from "./components/WillpowerView.js";
-import { HifizView } from "./components/HifizView.js";
-import { SrsView } from "./components/SrsView.js";
-import { CalendarView } from "./components/CalendarView.js";
-import { PrayerView } from "./components/PrayerView.js";
-import { KpssView } from "./components/KpssView.js";
-import { FreeGamesView } from "./components/FreeGamesView.js";
-import { DetoxView } from "./components/DetoxView.js";
-import { HalkaArzView } from "./components/HalkaArzView.js";
-import { AIChatView } from "./components/AIChatView.js";
+import { Sidebar } from "@/components/Sidebar.js";
+import { ListView } from "@/components/ListView.js";
+import { NotesView } from "@/components/NotesView.js";
+import { PomodoroView } from "@/components/PomodoroView.js";
+import { WillpowerView } from "@/components/WillpowerView.js";
+import { HifizView } from "@/components/HifizView.js";
+import { SrsView } from "@/components/SrsView.js";
+import { CalendarView } from "@/components/CalendarView.js";
+import { PrayerView } from "@/components/PrayerView.js";
+import { KpssView } from "@/components/KpssView.js";
+import { FreeGamesView } from "@/components/FreeGamesView.js";
+import { DetoxView } from "@/components/DetoxView.js";
+import { HalkaArzView } from "@/components/HalkaArzView.js";
+import { AIChatView } from "@/components/AIChatView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
 import { EisenhowerView } from "@/components/EisenhowerView.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
 import { DatePicker } from "@/components/DatePicker.js";
+import type { Todo } from "@/types/types.js";
+
+// Singleton repository — created once outside component to avoid re-instantiation
+const todoRepository = new ChromeStorageTodoRepository();
 
 export function App() {
-  // Navigation & UI States
-  const [lang, setLang] = useState<Language>("tr");
-  const [activeView, setActiveView] = useState<string>("free-games");
-  const [sidebarOrder, setSidebarOrder] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsInitialTab, setSettingsInitialTab] = useState<"general" | "kpss" | "detox" | "ai" | "sync">("general");
+  // ─── Settings Hook ────────────────────────────────────────────────────────
+  const {
+    lang,
+    setLangState,
+    sidebarOpen,
+    setSidebarOpenState,
+    freeGamesNotificationsEnabled,
+    calendarNotificationsEnabled,
+    pomoBlockEnabled,
+    universalInfoBoxEnabled,
+    universalInfoBoxHotkey,
+    aiProvider,
+    aiApiKey,
+    aiModel,
+    aiEndpoint,
+    aiShowThinking,
+    kpssGoalType,
+    kpssTargetNet,
+    kpssTargetScore,
+    detoxLimits,
+    loadSettings,
+    handleToggleLang,
+    handleSidebarToggle,
+    handleToggleFreeGamesNotifications,
+    handleToggleCalendarNotifications,
+    handleTogglePomoBlock,
+    handleToggleUniversalInfoBox,
+    handleUniversalInfoBoxHotkeyChange,
+    handleClearAllData,
+    handleUpdateAIConfig,
+    handleUpdateAIShowThinking,
+    handleKpssGoalTypeChange,
+    handleKpssTargetNetChange,
+    handleKpssTargetScoreChange,
+    handleDetoxLimitsChange,
+  } = useSettings();
 
-  // Google Sync States
-  const [syncSettings, setSyncSettingsState] = useState<GoogleSyncSettings>({
-    enabled: false,
-    tasksEnabled: false,
-    calendarEnabled: false,
+  // ─── UI Hook ──────────────────────────────────────────────────────────────
+  const {
+    activeView,
+    setActiveView,
+    sidebarOrder,
+    setSidebarOrder,
+    activeTab,
+    setActiveTab,
+    settingsOpen,
+    setSettingsOpen,
+    settingsInitialTab,
+    clockText,
+    dateText,
+    quoteText,
+    confirmDialog,
+    setConfirmDialog,
+    alertDialog,
+    setAlertDialog,
+    showConfirm,
+    showAlert,
+    refreshClock,
+    refreshQuote,
+    handleViewChange,
+    handleTabChange: handleTabChangeUI,
+    handleOpenSettings,
+    loadSidebarOrder,
+  } = useUI(lang as Language);
+
+  const t = translations[lang as Language];
+
+  // ─── Sync Hook ────────────────────────────────────────────────────────────
+  const {
+    syncSettings,
+    setSyncSettingsState,
+    googleUserEmail,
+    setGoogleUserEmail,
+    isSyncing,
+    loadSyncSettings,
+    handleGoogleLogin,
+    handleGoogleLogout,
+    handleManualSyncTasks,
+    handleBackupToGoogleDrive,
+    handleRestoreFromGoogleDrive,
+    triggerCloudBackup,
+  } = useSync({
+    showAlert,
+    errorLabel: t.google_sync_error,
+    detailLabel: lang === "tr" ? "Detay" : "Detail",
+    successBackupLabel: t.google_sync_success_backup,
+    successRestoreLabel: t.google_sync_success_restore,
+    noBackupLabel: t.google_sync_no_backup,
   });
-  const [googleUserEmail, setGoogleUserEmail] = useState<string>("");
-  const [isSyncing, setIsSyncing] = useState(false);
 
-  // Free games notification toggle
-  const [freeGamesNotificationsEnabled, setFreeGamesNotificationsEnabled] =
-    useState(true);
-
-  // Calendar tasks due today notification toggle
-  const [calendarNotificationsEnabled, setCalendarNotificationsEnabled] =
-    useState(true);
-
-  // Pomodoro focus blocking toggle
-  const [pomoBlockEnabled, setPomoBlockEnabled] = useState(true);
-
-  // AI Assistant States
-  const [aiProvider, setAiProvider] = useState<string>("openrouter");
-  const [aiApiKey, setAiApiKey] = useState<string>("");
-  const [aiModel, setAiModel] = useState<string>("free");
-  const [aiEndpoint, setAiEndpoint] = useState<string>("http://localhost:20128/v1");
-  const [aiShowThinking, setAiShowThinking] = useState<boolean>(true);
-
-  // Universal Info Box / Inline Translation Bubble states
-  const [universalInfoBoxEnabled, setUniversalInfoBoxEnabled] = useState(true);
-  const [universalInfoBoxHotkey, setUniversalInfoBoxHotkey] = useState("none");
-
-  const [kpssGoalType, setKpssGoalType] = useState<"net" | "score">("net");
-  const [kpssTargetNet, setKpssTargetNet] = useState<number>(80);
-  const [kpssTargetScore, setKpssTargetScore] = useState<number>(80);
-
-  // Detox Limits States
-  const [detoxLimits, setDetoxLimits] = useState<Record<string, number>>({});
-
-  // Custom confirm dialog state
-  const [confirmDialog, setConfirmDialog] = useState<{
-    isOpen: boolean;
-    message: string;
-    onConfirm: () => void;
-  }>({
-    isOpen: false,
-    message: "",
-    onConfirm: () => { },
-  });
-
-  const showConfirm = (message: string, onConfirm: () => void) => {
-    setConfirmDialog({
-      isOpen: true,
-      message,
-      onConfirm: () => {
-        onConfirm();
-        setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
-      },
-    });
-  };
-
-  // Custom alert dialog state
-  const [alertDialog, setAlertDialog] = useState<{
-    isOpen: boolean;
-    message: string;
-    onConfirm?: () => void;
-  }>({
-    isOpen: false,
-    message: "",
-  });
-
-  const showAlert = (message: string, onConfirm?: () => void) => {
-    setAlertDialog({
-      isOpen: true,
-      message,
-      onConfirm,
-    });
-  };
-
-  // Time & Date State
-  const [clockText, setClockText] = useState("00:00");
-  const [dateText, setDateText] = useState("");
-
-  // Quotes State
-  const [quoteText, setQuoteText] = useState("");
-
-  // Todo Input States (moved to root level for correct fixed-position layout alignment)
-  const [todoText, setTodoText] = useState("");
-  const [todoRepeat, setTodoRepeat] = useState<Todo["repeat"]>("none");
-  const [todoDueDate, setTodoDueDate] = useState("");
-
-  const handleTabChange = (tabVal: "focus" | "routines") => {
-    setActiveTab(tabVal);
-    setTodoRepeat(tabVal === "focus" ? "none" : "daily");
-  };
-
-  const t = translations[lang];
-
-  // Initialize and load configurations
-  useEffect(() => {
-    const initializeApp = async () => {
-      // 1. Run storage migrations (sync storage setup)
-      await storage.migrateLocalToSync();
-
-      // 2. Load configurations
-      const config = await storage.getSettings();
-      setLang(config.lang);
-
-      const savedOrder = await storage.getSidebarOrder();
-      setSidebarOrder(savedOrder || []);
-      if (savedOrder && savedOrder.length > 0) {
-        setActiveView(savedOrder[0]);
-      } else {
-        setActiveView("free-games");
-      }
-
-      setSidebarOpen(config.sidebarOpen ?? true);
-      setFreeGamesNotificationsEnabled(
-        config.freeGamesNotificationsEnabled ?? true,
-      );
-      setCalendarNotificationsEnabled(
-        config.calendarNotificationsEnabled ?? true,
-      );
-      setPomoBlockEnabled(
-        config.pomoBlockEnabled ?? true,
-      );
-      setUniversalInfoBoxEnabled(config.universalInfoBoxEnabled ?? true);
-      setUniversalInfoBoxHotkey(config.universalInfoBoxHotkey || "none");
-
-      // Load Google Sync Settings
-      const syncConfig = await storage.getSyncSettings();
-      setSyncSettingsState(syncConfig);
-
-      // Load AI Configs
-      const provider = await storage.getAIProvider();
-      const key = await storage.getGeminiApiKey();
-      const model = await storage.getAIModel();
-      const endpoint = await storage.getAIEndpoint();
-      const showThinking = await storage.getAIShowThinking();
-      setAiProvider(provider);
-      setAiApiKey(key);
-      setAiModel(model);
-      setAiEndpoint(endpoint);
-      setAiShowThinking(showThinking);
-
-      // Load KPSS configurations
-      const kGoalType = await storage.getKpssGoalType();
-      const kTargetNet = await storage.getKpssTargetNet();
-      const kTargetScore = await storage.getKpssTargetScore();
-      setKpssGoalType(kGoalType);
-      setKpssTargetNet(kTargetNet);
-      setKpssTargetScore(kTargetScore);
-
-      // Load Detox Limits configurations
-      const dLimits = await storage.getDetoxLimits();
-      setDetoxLimits(dLimits);
-
-      // Apply body class for legacy CSS compatibilities
-      document.body.classList.toggle(
-        "sidebar-open",
-        config.sidebarOpen ?? true,
-      );
-
-      // 3. Load and clean task items (Offline/Local first)
-      await initTodos();
-
-      // 4. Trigger background task sync if Google Sync is enabled
-      if (syncConfig.enabled) {
-        try {
-          const token = await googleSyncService.getAuthToken(false);
-          const uinfo = await googleSyncService.getUserInfo(token);
-          setGoogleUserEmail(uinfo.email);
-          if (syncConfig.tasksEnabled) {
-            await syncGoogleTasks(token);
-          }
-        } catch (e) {
-          console.warn("Silent Google OAuth login failed on startup:", e);
-        }
-      }
-
-      // 5. Set quote
-      refreshQuote(config.lang);
-    };
-
-    initializeApp();
-
-    // Setup clocks ticking interval
-    const clockInterval = setInterval(refreshClock, 1000);
-    refreshClock();
-
-    return () => clearInterval(clockInterval);
-  }, []);
-
-  // Update clock elements in real-time
-  const refreshClock = () => {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    setClockText(`${hours}:${minutes}`);
-
-    const locale = lang === "tr" ? "tr-TR" : "en-US";
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    };
-    setDateText(now.toLocaleDateString(locale, options));
-  };
-
-  // Trigger language change updates
-  const handleKpssGoalTypeChange = async (type: "net" | "score") => {
-    setKpssGoalType(type);
-    await storage.setKpssGoalType(type);
-  };
-
-  const handleKpssTargetNetChange = async (val: number) => {
-    if (isNaN(val) || val < 0 || val > 120) return;
-    setKpssTargetNet(val);
-    await storage.setKpssTargetNet(val);
-  };
-
-  const handleKpssTargetScoreChange = async (val: number) => {
-    if (isNaN(val) || val < 0 || val > 100) return;
-    setKpssTargetScore(val);
-    await storage.setKpssTargetScore(val);
-  };
-
-  const handleDetoxLimitsChange = async (limits: Record<string, number>) => {
-    setDetoxLimits(limits);
-    await storage.setDetoxLimits(limits);
-  };
-
-  // Trigger language change updates
-  useEffect(() => {
-    refreshClock();
-    refreshQuote(lang);
-  }, [lang]);
-
-  // Load a random quote from default translations + user custom quotes
-  const refreshQuote = async (activeLang: Language) => {
-    const customQuotes = await storage.getCustomQuotes();
-    const defaultQuoteCount = 7;
-    const poolSize = defaultQuoteCount + customQuotes.length;
-    const randomIndex = Math.floor(Math.random() * poolSize);
-
-    if (randomIndex < defaultQuoteCount) {
-      const quoteKeys = [
-        "quote_1",
-        "quote_2",
-        "quote_3",
-        "quote_4",
-        "quote_5",
-        "quote_6",
-        "quote_7",
-      ];
-      const randomKey = quoteKeys[
-        randomIndex
-      ] as keyof (typeof translations)["tr"];
-      setQuoteText(translations[activeLang][randomKey]);
-    } else {
-      const custom = customQuotes[randomIndex - defaultQuoteCount];
-      setQuoteText(
-        custom.author
-          ? `"${custom.text}" — ${custom.author}`
-          : `"${custom.text}"`,
-      );
-    }
-  };
-
-  // --- Google Cloud Sync Handlers & Helpers ---
-  const triggerCloudBackup = async () => {
-    const settings = await storage.getSyncSettings();
-    if (settings.enabled) {
-      try {
-        const token = await googleSyncService.getAuthToken(false);
-        const allData = {
-          todos: await storage.getTodos(),
-          notes: await storage.getNotes(),
-          hifizProgress: await storage.getHifizProgress(),
-          srsProgress: await storage.getSrsProgress(),
-          kpssSrsProgress: await storage.getKpssSrsProgress(),
-          customCategories: await storage.getCustomCategories(),
-          kpssProgress: await storage.getKpssProgress(),
-          customQuotes: await storage.getCustomQuotes(),
-          yeterlikler: await storage.getYeterlikler(),
-          kpssDailyStats: await storage.getKpssDailyStats(),
-          willpowerStreak: await storage.getWillpowerStreak(),
-          pomodoroHistory: await storage.getPomodoroHistory(),
-          lang,
-        };
-        await googleSyncService.backupToDrive(token, allData);
-        console.log("Cloud auto-backup completed successfully.");
-      } catch (e) {
-        console.error("Auto cloud backup failed:", e);
-      }
-    }
-  };
-
-  const syncGoogleTasks = async (token: string) => {
-    setIsSyncing(true);
-    try {
-      const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-      const routinesListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Routines");
-
-      const remoteFocusTasks = await googleSyncService.getTasks(token, focusListId);
-      const remoteRoutinesTasks = await googleSyncService.getTasks(token, routinesListId);
-
-      const localTodos = await storage.getTodos();
-
-      const parseDescription = (notes?: string) => {
-        if (!notes) return { repeat: "none" as const };
-        const match = notes.match(/\[repeat:(none|daily|weekly|monthly)\]/);
-        return {
-          repeat: match ? (match[1] as Todo["repeat"]) : ("none" as const),
-        };
-      };
-
-      const mappedFocus: Todo[] = remoteFocusTasks.map((t: any) => ({
-        id: t.id,
-        text: t.title,
-        completed: t.status === "completed",
-        status: t.status === "completed" ? "done" : "todo",
-        repeat: "none",
-        category: "general",
-        lastCompletedDate: t.completed || null,
-        dueDate: t.due ? t.due.split("T")[0] : undefined,
-      }));
-
-      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
-        const { repeat } = parseDescription(t.notes);
-        return {
-          id: t.id,
-          text: t.title,
-          completed: t.status === "completed",
-          status: t.status === "completed" ? "done" : "todo",
-          repeat: repeat === "none" ? "daily" : repeat,
-          category: "general",
-          lastCompletedDate: t.completed || null,
-          dueDate: t.due ? t.due.split("T")[0] : undefined,
-        };
-      });
-
-      const remoteTodos = [...mappedFocus, ...mappedRoutines];
-
-      // Upload unsynced local tasks
-      const unSyncedLocal = localTodos.filter((t) => !t.id);
-      for (const localTodo of unSyncedLocal) {
-        const isRoutine = localTodo.repeat !== "none";
-        const listId = isRoutine ? routinesListId : focusListId;
-        const notes = `[repeat:${localTodo.repeat}]`;
-        try {
-          const createdRemote = await googleSyncService.createTask(token, listId, {
-            title: localTodo.text,
-            notes,
-            status: localTodo.completed ? "completed" : "needsAction",
-            due: localTodo.dueDate ? `${localTodo.dueDate}T00:00:00.000Z` : undefined,
-          });
-          localTodo.id = createdRemote.id;
-          remoteTodos.push(localTodo);
-        } catch (err) {
-          console.error("Failed to upload offline task:", err);
-        }
-      }
-
-      await storage.setTodos(remoteTodos);
-      setTodos(remoteTodos);
-    } catch (e) {
-      console.error("Google Tasks sync failed:", e);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setIsSyncing(true);
-    try {
-      const token = await googleSyncService.getAuthToken(true);
-      const info = await googleSyncService.getUserInfo(token);
-      setGoogleUserEmail(info.email);
-      const nextSettings = {
-        ...syncSettings,
-        enabled: true,
-        tasksEnabled: true,
-        calendarEnabled: true,
-        userEmail: info.email,
-      };
-      await storage.setSyncSettings(nextSettings);
-      setSyncSettingsState(nextSettings);
-      await syncGoogleTasks(token);
-    } catch (e) {
-      console.error("Google sign in failed:", e);
-      const errMsg = e instanceof Error ? e.message : String(e);
-      const detailLabel = lang === "tr" ? "Detay" : "Detail";
-      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  const handleGoogleLogout = async () => {
-    setIsSyncing(true);
-    try {
-      const token = await googleSyncService.getAuthToken(false);
-      await googleSyncService.removeCachedAuthToken(token);
-    } catch (e) {
-      console.warn("Cached token remove skipped:", e);
-    }
-    setGoogleUserEmail("");
-    const nextSettings = {
-      enabled: false,
-      tasksEnabled: false,
-      calendarEnabled: false,
-      userEmail: "",
-    };
-    await storage.setSyncSettings(nextSettings);
-    setSyncSettingsState(nextSettings);
-    setIsSyncing(false);
-  };
-
-  const handleBackupToGoogleDrive = async () => {
-    setIsSyncing(true);
-    try {
-      const token = await googleSyncService.getAuthToken(false);
-      const allData = {
-        todos: await storage.getTodos(),
-        notes: await storage.getNotes(),
-        hifizProgress: await storage.getHifizProgress(),
-        srsProgress: await storage.getSrsProgress(),
-        kpssSrsProgress: await storage.getKpssSrsProgress(),
-        customCategories: await storage.getCustomCategories(),
-        kpssProgress: await storage.getKpssProgress(),
-        customQuotes: await storage.getCustomQuotes(),
-        yeterlikler: await storage.getYeterlikler(),
-        kpssDailyStats: await storage.getKpssDailyStats(),
-        willpowerStreak: await storage.getWillpowerStreak(),
-        pomodoroHistory: await storage.getPomodoroHistory(),
-        lang,
-      };
-      await googleSyncService.backupToDrive(token, allData);
-      const nextSettings = {
-        ...syncSettings,
-        lastSyncedBackup: Date.now(),
-      };
-      await storage.setSyncSettings(nextSettings);
-      setSyncSettingsState(nextSettings);
-      showAlert(t.google_sync_success_backup);
-    } catch (e) {
-      console.error("Manual backup failed:", e);
-      const errMsg = e instanceof Error ? e.message : String(e);
-      const detailLabel = lang === "tr" ? "Detay" : "Detail";
-      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  const handleRestoreFromGoogleDrive = async () => {
-    setIsSyncing(true);
-    try {
-      const token = await googleSyncService.getAuthToken(false);
-      const restored = await googleSyncService.restoreFromDrive(token);
-      if (restored) {
-        if (restored.todos) await storage.setTodos(restored.todos);
-        if (restored.notes) await storage.setNotes(restored.notes);
-        if (restored.hifizProgress) await storage.setHifizProgress(restored.hifizProgress);
-        if (restored.srsProgress) await storage.setSrsProgress(restored.srsProgress);
-        if (restored.kpssSrsProgress) await storage.setKpssSrsProgress(restored.kpssSrsProgress);
-        if (restored.customCategories) await storage.setCustomCategories(restored.customCategories);
-        if (restored.kpssProgress) await storage.setKpssProgress(restored.kpssProgress);
-        if (restored.customQuotes) await storage.setCustomQuotes(restored.customQuotes);
-        if (restored.yeterlikler) await storage.setYeterlikler(restored.yeterlikler);
-        if (restored.kpssDailyStats) await storage.setKpssDailyStats(restored.kpssDailyStats);
-        if (restored.willpowerStreak) await storage.setWillpowerStreak(restored.willpowerStreak);
-        if (restored.pomodoroHistory) await storage.setPomodoroHistory(restored.pomodoroHistory);
-        if (restored.lang) await storage.setLang(restored.lang);
-
-        showAlert(t.google_sync_success_restore, () => {
-          window.location.reload();
-        });
-      } else {
-        showAlert(t.google_sync_no_backup);
-      }
-    } catch (e) {
-      console.error("Restore failed:", e);
-      const errMsg = e instanceof Error ? e.message : String(e);
-      const detailLabel = lang === "tr" ? "Detay" : "Detail";
-      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
-
-  const handleManualSyncTasks = async () => {
-    try {
-      const token = await googleSyncService.getAuthToken(false);
-      await syncGoogleTasks(token);
-    } catch (e) {
-      console.error("Manual task sync failed:", e);
-      const errMsg = e instanceof Error ? e.message : String(e);
-      const detailLabel = lang === "tr" ? "Detay" : "Detail";
-      showAlert(`${t.google_sync_error}\n\n[${detailLabel}]: ${errMsg}`);
-    }
-  };
-
-  const handleUpdateAIConfig = async (provider: string, key: string, model: string, endpoint?: string) => {
-    const epVal = endpoint || "";
-    setAiProvider(provider);
-    setAiApiKey(key);
-    setAiModel(model);
-    setAiEndpoint(epVal);
-    await storage.setAIProvider(provider);
-    await storage.setGeminiApiKey(key);
-    await storage.setAIModel(model);
-    await storage.setAIEndpoint(epVal);
-    triggerCloudBackup();
-  };
-
-  const handleUpdateAIShowThinking = async (val: boolean) => {
-    setAiShowThinking(val);
-    await storage.setAIShowThinking(val);
-    triggerCloudBackup();
-  };
-
-  // Get the Todo repository from DI context
-  const todoRepository = useTodoRepository();
-
-  // useTodos Hook – manages todo state, CRUD, and Google Tasks sync
+  // ─── Todos Hook ───────────────────────────────────────────────────────────
   const {
     todos,
     setTodos,
@@ -577,74 +137,75 @@ export function App() {
     handleUpdateTodoUrgentImportant,
     handleExportBackup,
     handleImportBackup,
-  } = useTodos(todoRepository, syncSettings, triggerCloudBackup, showAlert, t);
+  } = useTodos(todoRepository, syncSettings, triggerCloudBackup, showAlert, t as Record<string, string>);
 
-  // --- Sidebar toggles ---
-  const handleSidebarToggle = () => {
-    const stateVal = !sidebarOpen;
-    setSidebarOpen(stateVal);
-    storage.setSidebarOpen(stateVal);
-    document.body.classList.toggle("sidebar-open", stateVal);
+  // ─── App Init ─────────────────────────────────────────────────────────────
+  useAppInit({
+    onSettingsLoaded: (config) => {
+      setLangState(config.lang as Language);
+      setSidebarOpenState(config.sidebarOpen);
+      document.body.classList.toggle("sidebar-open", config.sidebarOpen);
+      loadSettings(); // Load AI/KPSS/Detox settings too
+    },
+    onTodosLoaded: (loadedTodos) => {
+      setTodos(loadedTodos as any);
+    },
+    onSyncSettingsLoaded: (settings) => {
+      setSyncSettingsState(settings as any);
+    },
+    onGoogleUserEmail: (email) => {
+      setGoogleUserEmail(email);
+    },
+    onSidebarOrderLoaded: (order) => {
+      setSidebarOrder(order);
+      if (order && order.length > 0) {
+        setActiveView(order[0]);
+      } else {
+        setActiveView("free-games");
+      }
+    },
+    onQuoteRefreshed: (langVal) => {
+      refreshQuote(langVal as Language);
+    },
+    onClockStarted: () => {
+      refreshClock(lang as Language);
+    },
+  });
+
+  // Sync initTodos into the DI-backed useAppInit flow
+  useEffect(() => {
+    initTodos();
+  }, []);
+
+  // Re-render clock/quote on lang change
+  useEffect(() => {
+    refreshClock(lang as Language);
+    refreshQuote(lang as Language);
+  }, [lang]);
+
+  // ─── Local todo input state (UI-only, belongs in App layout) ───────────────
+  const [todoText, setTodoText] = useState("");
+  const [todoRepeat, setTodoRepeat] = useState<Todo["repeat"]>("none");
+  const [todoDueDate, setTodoDueDate] = useState("");
+
+  const handleTabChange = (tabVal: "focus" | "routines") => {
+    setActiveTab(tabVal);
+    setTodoRepeat(tabVal === "focus" ? "none" : "daily");
+    handleTabChangeUI(tabVal);
   };
 
-  const handleViewChange = (view: string) => {
-    setActiveView(view);
-  };
-
-  // --- Settings Panel operations ---
-  const handleToggleLang = async () => {
-    const nextLang: Language = lang === "tr" ? "en" : "tr";
-    setLang(nextLang);
-    await storage.setLang(nextLang);
-  };
-
-  const handleToggleFreeGamesNotifications = async () => {
-    const nextVal = !freeGamesNotificationsEnabled;
-    await storage.setFreeGamesNotificationsEnabled(nextVal);
-    setFreeGamesNotificationsEnabled(nextVal);
-  };
-
-  const handleToggleCalendarNotifications = async () => {
-    const nextVal = !calendarNotificationsEnabled;
-    await storage.setCalendarNotificationsEnabled(nextVal);
-    setCalendarNotificationsEnabled(nextVal);
-  };
-
-  const handleTogglePomoBlock = async () => {
-    const nextVal = !pomoBlockEnabled;
-    await storage.setPomoBlockEnabled(nextVal);
-    setPomoBlockEnabled(nextVal);
-  };
-
-  const handleToggleUniversalInfoBox = async () => {
-    const nextVal = !universalInfoBoxEnabled;
-    await storage.setUniversalInfoBox(nextVal, universalInfoBoxHotkey);
-    setUniversalInfoBoxEnabled(nextVal);
-  };
-
-  const handleUniversalInfoBoxHotkeyChange = async (hotkey: string) => {
-    await storage.setUniversalInfoBox(universalInfoBoxEnabled, hotkey);
-    setUniversalInfoBoxHotkey(hotkey);
-  };
-
-  const handleClearAllData = async () => {
+  const handleClearAllDataConfirm = () => {
     const confirmMsg =
       lang === "tr"
         ? "Tüm verileriniz kalıcı olarak silinecektir. Emin misiniz?"
         : "All your data will be permanently deleted. Are you sure?";
-
     showConfirm(confirmMsg, async () => {
-      await storage.clearAll(lang);
+      await handleClearAllData();
       window.location.reload();
     });
   };
 
-  const handleOpenSettings = (tab: "general" | "kpss" | "detox" | "ai" | "sync" = "general") => {
-    setSettingsInitialTab(tab);
-    setSettingsOpen(true);
-  };
-
-  // Render current dashboard card sub-view
+  // ─── View Router ───────────────────────────────────────────────────────────
   const renderActiveViewComponent = () => {
     switch (activeView) {
       case "list":
@@ -652,7 +213,7 @@ export function App() {
           <ListView
             todos={todos}
             activeTab={activeTab}
-            lang={lang}
+            lang={lang as Language}
             onTabChange={handleTabChange}
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
@@ -662,21 +223,11 @@ export function App() {
           />
         );
       case "kanban":
-        return (
-          <EisenhowerView
-            todos={todos as any}
-            lang={lang}
-            defaultTab="kanban"
-            onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
-            onMoveTaskStatus={handleMoveTaskStatus as any}
-            onMoveTaskDirection={handleMoveTaskDirection as any}
-          />
-        );
       case "eisenhower":
         return (
           <EisenhowerView
             todos={todos as any}
-            lang={lang}
+            lang={lang as Language}
             defaultTab="kanban"
             onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
             onMoveTaskStatus={handleMoveTaskStatus as any}
@@ -684,23 +235,23 @@ export function App() {
           />
         );
       case "notes":
-        return <NotesView lang={lang} onShowConfirm={showConfirm} />;
+        return <NotesView lang={lang as Language} onShowConfirm={showConfirm} />;
       case "pomodoro":
-        return <PomodoroView lang={lang} />;
+        return <PomodoroView lang={lang as Language} />;
       case "willpower":
-        return <WillpowerView lang={lang} onShowConfirm={showConfirm} />;
+        return <WillpowerView lang={lang as Language} onShowConfirm={showConfirm} />;
       case "hifiz":
-        return <HifizView lang={lang} />;
+        return <HifizView lang={lang as Language} />;
       case "srs":
-        return <SrsView lang={lang} />;
+        return <SrsView lang={lang as Language} />;
       case "calendar":
-        return <CalendarView todos={todos} lang={lang} />;
+        return <CalendarView todos={todos} lang={lang as Language} />;
       case "prayer":
-        return <PrayerView lang={lang} />;
+        return <PrayerView lang={lang as Language} />;
       case "kpss":
         return (
           <KpssView
-            lang={lang}
+            lang={lang as Language}
             onShowConfirm={showConfirm}
             aiProvider={aiProvider}
             aiApiKey={aiApiKey}
@@ -712,29 +263,20 @@ export function App() {
           />
         );
       case "free-games":
-        return <FreeGamesView lang={lang} />;
+        return <FreeGamesView lang={lang as Language} />;
       case "detox":
-        return <DetoxView lang={lang} />;
+        return <DetoxView lang={lang as Language} />;
       case "halka-arz":
-        return <HalkaArzView lang={lang} />;
+        return <HalkaArzView lang={lang as Language} />;
       case "ai-chat":
         return (
           <AIChatView
-            lang={lang}
+            lang={lang as Language}
             todos={todos}
             onAddTodo={handleAddTodo}
             onToggleTodo={handleToggleTodo}
             onDeleteTodo={handleDeleteTodo}
-            onManualSync={async () => {
-              if (syncSettings.enabled && syncSettings.tasksEnabled) {
-                try {
-                  const token = await googleSyncService.getAuthToken(false);
-                  await syncGoogleTasks(token);
-                } catch (e) {
-                  console.error(e);
-                }
-              }
-            }}
+            onManualSync={handleManualSyncTasks}
             aiProvider={aiProvider}
             aiApiKey={aiApiKey}
             aiModel={aiModel}
@@ -744,10 +286,11 @@ export function App() {
           />
         );
       default:
-        return <FreeGamesView lang={lang} />;
+        return <FreeGamesView lang={lang as Language} />;
     }
   };
 
+  // ─── JSX Template ─────────────────────────────────────────────────────────
   return (
     <>
       {/* Background visual overlay blur */}
@@ -755,7 +298,7 @@ export function App() {
 
       {/* Sidebar Navigation */}
       <Sidebar
-        lang={lang}
+        lang={lang as Language}
         activeView={activeView}
         activeTab={activeTab}
         sidebarOpen={sidebarOpen}
@@ -769,7 +312,7 @@ export function App() {
         onOrderChange={(newOrder) => setSidebarOrder(newOrder)}
       />
 
-      {/* Top Input Header (fixed positioning at the top viewport) */}
+      {/* Top Input Header */}
       {activeView === "list" && (
         <header className="top-header" style={{ display: "flex" }}>
           <div className="global-input-container">
@@ -778,26 +321,18 @@ export function App() {
                 type="text"
                 id="todo-input"
                 value={todoText}
-                onInput={(e) =>
-                  setTodoText((e.target as HTMLInputElement).value)
-                }
+                onInput={(e) => setTodoText((e.target as HTMLInputElement).value)}
                 onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    if (todoText.trim()) {
-                      handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
-                      setTodoText("");
-                      setTodoDueDate("");
-                    }
+                  if (e.key === "Enter" && todoText.trim()) {
+                    handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
+                    setTodoText("");
+                    setTodoDueDate("");
                   }
                 }}
                 placeholder={t.todo_placeholder}
                 autocomplete="off"
               />
-              <DatePicker
-                value={todoDueDate}
-                onChange={setTodoDueDate}
-                lang={lang}
-              />
+              <DatePicker value={todoDueDate} onChange={setTodoDueDate} lang={lang as Language} />
               <select
                 id="repeat-select"
                 className="repeat-select"
@@ -824,16 +359,7 @@ export function App() {
                 }}
                 aria-label="Add Task"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -843,12 +369,12 @@ export function App() {
         </header>
       )}
 
-      {/* Settings Panel Drawer Modal */}
+      {/* Settings Drawer */}
       <SettingsDrawer
         isOpen={settingsOpen}
         onClose={() => setSettingsOpen(false)}
         initialTab={settingsInitialTab}
-        lang={lang}
+        lang={lang as Language}
         onToggleLang={handleToggleLang}
         freeGamesNotificationsEnabled={freeGamesNotificationsEnabled}
         onToggleFreeGamesNotifications={handleToggleFreeGamesNotifications}
@@ -862,7 +388,7 @@ export function App() {
         onUniversalInfoBoxHotkeyChange={handleUniversalInfoBoxHotkeyChange}
         onExportBackup={handleExportBackup}
         onImportBackup={handleImportBackup}
-        onClearAllData={handleClearAllData}
+        onClearAllData={handleClearAllDataConfirm}
         aiProvider={aiProvider}
         aiApiKey={aiApiKey}
         aiModel={aiModel}
@@ -874,7 +400,7 @@ export function App() {
         isSyncing={isSyncing}
         onGoogleLogin={handleGoogleLogin}
         onGoogleLogout={handleGoogleLogout}
-        syncSettings={syncSettings}
+        syncSettings={syncSettings as any}
         onBackupToGoogleDrive={handleBackupToGoogleDrive}
         onRestoreFromGoogleDrive={handleRestoreFromGoogleDrive}
         kpssGoalType={kpssGoalType}
@@ -887,37 +413,33 @@ export function App() {
         onDetoxLimitsChange={handleDetoxLimitsChange}
       />
 
-      {/* Main Card Viewport Container */}
+      {/* Main Viewport */}
       <main id="container" className="container">
         {sidebarOrder.length > 0 && activeView === sidebarOrder[0] && (
           <HeroHeader clockText={clockText} dateText={dateText} />
         )}
-
         {renderActiveViewComponent()}
-
         {quoteText && activeView !== "ai-chat" && (
           <FooterQuote quoteText={quoteText} />
         )}
       </main>
 
+      {/* Confirm Modal */}
       <ConfirmModal
         isOpen={confirmDialog.isOpen}
         message={confirmDialog.message}
-        lang={lang}
+        lang={lang as Language}
         onConfirm={confirmDialog.onConfirm}
-        onCancel={() =>
-          setConfirmDialog((prev) => ({ ...prev, isOpen: false }))
-        }
+        onCancel={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
       />
 
+      {/* Alert Modal */}
       <ConfirmModal
         isOpen={alertDialog.isOpen}
         message={alertDialog.message}
-        lang={lang}
+        lang={lang as Language}
         onConfirm={() => {
-          if (alertDialog.onConfirm) {
-            alertDialog.onConfirm();
-          }
+          if (alertDialog.onConfirm) alertDialog.onConfirm();
           setAlertDialog({ isOpen: false, message: "" });
         }}
         isAlert={true}

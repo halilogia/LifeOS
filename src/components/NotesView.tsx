@@ -1,5 +1,4 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage } from "../core/storage.js";
 import { Note, CustomQuote, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
 import { NoteCard } from "@/components/notes/NoteCard.js";
@@ -103,8 +102,12 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   }, []);
 
   const loadData = async () => {
-    const loadedNotes = await storage.getNotes();
-    const loadedQuotes = await storage.getCustomQuotes();
+    const loadedNotes: Note[] = await new Promise((r) =>
+      chrome.storage.sync.get(["notes"], (res) => r((res.notes as Note[]) || []))
+    );
+    const loadedQuotes: CustomQuote[] = await new Promise((r) =>
+      chrome.storage.sync.get(["customQuotes"], (res) => r((res.customQuotes as CustomQuote[]) || []))
+    );
     setNotes(
       loadedNotes.sort(
         (a, b) =>
@@ -138,7 +141,9 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   };
 
   const handleSaveInlineNote = async (id: string) => {
-    const currentNotes = await storage.getNotes();
+    const currentNotes: Note[] = await new Promise((r) =>
+      chrome.storage.sync.get(["notes"], (res) => r((res.notes as Note[]) || []))
+    );
     const idx = currentNotes.findIndex((n) => n.id === id);
     if (idx !== -1) {
       currentNotes[idx].title = inlineTitle;
@@ -146,7 +151,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       currentNotes[idx].cues = inlineCues;
       currentNotes[idx].summary = inlineSummary;
       currentNotes[idx].createdAt = new Date().toISOString();
-      await storage.setNotes(currentNotes);
+      await new Promise<void>((r) => chrome.storage.sync.set({ notes: currentNotes }, r));
       setInlineEditingId(null);
       loadData();
     }
@@ -178,7 +183,9 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       return;
     }
 
-    const currentNotes = await storage.getNotes();
+    const currentNotes: Note[] = await new Promise((r) =>
+      chrome.storage.sync.get(["notes"], (res) => r((res.notes as Note[]) || []))
+    );
     if (editingNoteId) {
       const idx = currentNotes.findIndex((n) => n.id === editingNoteId);
       if (idx !== -1) {
@@ -201,7 +208,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       });
     }
 
-    await storage.setNotes(currentNotes);
+    await new Promise<void>((r) => chrome.storage.sync.set({ notes: currentNotes }, r));
     setIsNoteModalOpen(false);
     loadData();
   };
@@ -213,9 +220,11 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         ? "Bu notu silmek istediğinize emin misiniz?"
         : "Are you sure you want to delete this note?";
     onShowConfirm(confirmMsg, async () => {
-      const currentNotes = await storage.getNotes();
+      const currentNotes: Note[] = await new Promise((r) =>
+        chrome.storage.sync.get(["notes"], (res) => r((res.notes as Note[]) || []))
+      );
       const filtered = currentNotes.filter((n) => n.id !== id);
-      await storage.setNotes(filtered);
+      await new Promise<void>((r) => chrome.storage.sync.set({ notes: filtered }, r));
       loadData();
     });
   };
@@ -227,13 +236,15 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
       return;
     }
 
-    const currentQuotes = await storage.getCustomQuotes();
+    const currentQuotes: CustomQuote[] = await new Promise((r) =>
+      chrome.storage.sync.get(["customQuotes"], (res) => r((res.customQuotes as CustomQuote[]) || []))
+    );
     currentQuotes.push({
       text: quoteContent.trim(),
       author: quoteAuthor.trim() || undefined,
     });
 
-    await storage.setCustomQuotes(currentQuotes);
+    await new Promise<void>((r) => chrome.storage.sync.set({ customQuotes: currentQuotes }, r));
     setIsQuoteModalOpen(false);
     loadData();
   };
@@ -244,9 +255,11 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         ? "Bu sözü silmek istediğinize emin misiniz?"
         : "Are you sure you want to delete this quote?";
     onShowConfirm(confirmMsg, async () => {
-      const currentQuotes = await storage.getCustomQuotes();
+      const currentQuotes: CustomQuote[] = await new Promise((r) =>
+        chrome.storage.sync.get(["customQuotes"], (res) => r((res.customQuotes as CustomQuote[]) || []))
+      );
       currentQuotes.splice(index, 1);
-      await storage.setCustomQuotes(currentQuotes);
+      await new Promise<void>((r) => chrome.storage.sync.set({ customQuotes: currentQuotes }, r));
       loadData();
     });
   };

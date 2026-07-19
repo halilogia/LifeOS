@@ -1,7 +1,7 @@
 /**
  * useSync Hook
  * Presentation hook that wraps Google Sync related state and use cases.
- * Currently wraps the existing App.tsx sync logic for future migration.
+ * Accepts showAlert + translations so it can surface errors to the user.
  */
 
 import { useState, useCallback } from "preact/hooks";
@@ -26,25 +26,35 @@ function createSyncPort() {
             tasksApi.getOrCreateTaskList(token, title),
         getTasks: (token: string, taskListId: string) =>
             tasksApi.getTasks(token, taskListId),
-        createTask: (
-            token: string,
-            taskListId: string,
-            task: any,
-        ) => tasksApi.createTask(token, taskListId, task),
-        updateTask: (
-            token: string,
-            taskListId: string,
-            taskId: string,
-            task: any,
-        ) => tasksApi.updateTask(token, taskListId, taskId, task),
+        createTask: (token: string, taskListId: string, task: any) =>
+            tasksApi.createTask(token, taskListId, task),
+        updateTask: (token: string, taskListId: string, taskId: string, task: any) =>
+            tasksApi.updateTask(token, taskListId, taskId, task),
         deleteTask: (token: string, taskListId: string, taskId: string) =>
             tasksApi.deleteTask(token, taskListId, taskId),
-        removeCachedAuthToken: (token: string) =>
-            authApi.removeCachedAuthToken(token),
+        removeCachedAuthToken: (token: string) => authApi.removeCachedAuthToken(token),
     };
 }
 
-export function useSync() {
+export interface UseSyncOptions {
+    showAlert?: (message: string, onConfirm?: () => void) => void;
+    errorLabel?: string;     // e.g. translations[lang].google_sync_error
+    detailLabel?: string;    // e.g. "Detay" or "Detail"
+    successBackupLabel?: string;
+    successRestoreLabel?: string;
+    noBackupLabel?: string;
+}
+
+export function useSync(options: UseSyncOptions = {}) {
+    const {
+        showAlert,
+        errorLabel = "Sync error",
+        detailLabel = "Detail",
+        successBackupLabel,
+        successRestoreLabel,
+        noBackupLabel,
+    } = options;
+
     const [syncSettings, setSyncSettingsState] = useState<GoogleSyncSettings>({
         enabled: false,
         tasksEnabled: false,
@@ -79,13 +89,19 @@ export function useSync() {
                 setGoogleUserEmail(result.email);
                 const settings = await syncRepo.getSyncSettings();
                 setSyncSettingsState(settings);
-                // Trigger initial sync after login
                 await syncTasksUC.execute();
+            } else if (!result.success && showAlert) {
+                const errMsg = result.error ?? "Unknown error";
+                showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
             }
+        } catch (e) {
+            const errMsg = e instanceof Error ? e.message : String(e);
+            console.error("Google sign in failed:", e);
+            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
         } finally {
             setIsSyncing(false);
         }
-    }, []);
+    }, [showAlert, errorLabel, detailLabel]);
 
     const handleGoogleLogout = useCallback(async () => {
         setIsSyncing(true);
@@ -106,27 +122,64 @@ export function useSync() {
         setIsSyncing(true);
         try {
             await syncTasksUC.execute();
+        } catch (e) {
+            const errMsg = e instanceof Error ? e.message : String(e);
+            console.error("Manual task sync failed:", e);
+            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
         } finally {
             setIsSyncing(false);
         }
-    }, []);
+    }, [showAlert, errorLabel, detailLabel]);
 
     const handleBackupToGoogleDrive = useCallback(async () => {
         setIsSyncing(true);
         try {
             await backupUC.execute();
+            // Update lastSyncedBackup timestamp
+            const current = await syncRepo.getSyncSettings();
+            const updated = { ...current, lastSyncedBackup: Date.now() };
+            await syncRepo.setSyncSettings(updated);
+            setSyncSettingsState(updated);
+            if (showAlert && successBackupLabel) showAlert(successBackupLabel);
+        } catch (e) {
+            const errMsg = e instanceof Error ? e.message : String(e);
+            console.error("Manual backup failed:", e);
+            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
         } finally {
             setIsSyncing(false);
         }
-    }, []);
+    }, [showAlert, errorLabel, detailLabel, successBackupLabel]);
 
     const handleRestoreFromGoogleDrive = useCallback(async () => {
         setIsSyncing(true);
         try {
             const result = await restoreUC.execute();
+            if (result.restored) {
+                if (showAlert && successRestoreLabel) {
+                    showAlert(successRestoreLabel, () => window.location.reload());
+                }
+            } else {
+                if (showAlert && noBackupLabel) showAlert(noBackupLabel);
+            }
             return result;
+        } catch (e) {
+            const errMsg = e instanceof Error ? e.message : String(e);
+            console.error("Restore failed:", e);
+            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
         } finally {
             setIsSyncing(false);
+        }
+    }, [showAlert, errorLabel, detailLabel, successRestoreLabel, noBackupLabel]);
+
+    const triggerCloudBackup = useCallback(async () => {
+        const settings = await syncRepo.getSyncSettings();
+        if (settings.enabled) {
+            try {
+                await backupUC.execute();
+                console.log("Cloud auto-backup completed successfully.");
+            } catch (e) {
+                console.error("Auto cloud backup failed:", e);
+            }
         }
     }, []);
 
@@ -134,6 +187,7 @@ export function useSync() {
         syncSettings,
         setSyncSettingsState,
         googleUserEmail,
+        setGoogleUserEmail,
         isSyncing,
         loadSyncSettings,
         handleGoogleLogin,
@@ -141,5 +195,6 @@ export function useSync() {
         handleManualSyncTasks,
         handleBackupToGoogleDrive,
         handleRestoreFromGoogleDrive,
+        triggerCloudBackup,
     };
 }

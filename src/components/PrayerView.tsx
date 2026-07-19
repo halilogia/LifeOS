@@ -1,6 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
 import { prayerService, PrayerTimes } from "../services/prayerService.js";
-import { storage } from "../core/storage.js";
 import { Language } from "../types/types.js";
 
 interface PrayerViewProps {
@@ -131,8 +130,10 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     setLoading(true);
     setError(false);
     try {
-      const settings = await storage.getSettings();
-      const activeCity = targetCity || settings.prayerCity || "Istanbul";
+      const res = await new Promise<any>((resolve) =>
+        chrome.storage.sync.get(["prayerCity"], (r) => resolve(r))
+      );
+      const activeCity = targetCity || (res.prayerCity as string) || "Istanbul";
       setCity(activeCity);
 
       const prayerTimes = await prayerService.getPrayerTimes(
@@ -180,7 +181,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     if (!newCity) {
       return;
     }
-    await storage.setPrayerLocation(newCity, "Turkey");
+    chrome.storage.sync.set({ prayerCity: newCity, prayerCountry: "Turkey" });
     setIsFormOpen(false);
     loadPrayers(newCity);
   };
