@@ -1,11 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { storage, GoogleSyncSettings } from "./core/storage.js";
 import { googleSyncService } from "./services/googleSyncService.js";
-import {
-  checkAndResetRepeatingTasks,
-  moveTaskWithStatus,
-  getUpdatedStatuses,
-} from "./features/tasks.js";
+import { useTodos } from "./presentation/hooks/useTodos.js";
 import { translations } from "./utils/i18n.js";
 import { Language, Todo } from "./types/types.js";
 
@@ -86,7 +82,7 @@ export function App() {
   }>({
     isOpen: false,
     message: "",
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   const showConfirm = (message: string, onConfirm: () => void) => {
@@ -125,9 +121,6 @@ export function App() {
   // Quotes State
   const [quoteText, setQuoteText] = useState("");
 
-  // Global Sync Todos State
-  const [todos, setTodos] = useState<Todo[]>([]);
-
   // Todo Input States (moved to root level for correct fixed-position layout alignment)
   const [todoText, setTodoText] = useState("");
   const [todoRepeat, setTodoRepeat] = useState<Todo["repeat"]>("none");
@@ -149,7 +142,7 @@ export function App() {
       // 2. Load configurations
       const config = await storage.getSettings();
       setLang(config.lang);
-      
+
       const savedOrder = await storage.getSidebarOrder();
       setSidebarOrder(savedOrder || []);
       if (savedOrder && savedOrder.length > 0) {
@@ -206,15 +199,7 @@ export function App() {
       );
 
       // 3. Load and clean task items (Offline/Local first)
-      const loadedTodos = await storage.getTodos();
-      const clone = JSON.parse(JSON.stringify(loadedTodos));
-      const hasResets = checkAndResetRepeatingTasks(clone);
-      if (hasResets) {
-        await storage.setTodos(clone);
-        setTodos(clone);
-      } else {
-        setTodos(loadedTodos);
-      }
+      await initTodos();
 
       // 4. Trigger background task sync if Google Sync is enabled
       if (syncConfig.enabled) {
@@ -573,176 +558,20 @@ export function App() {
     triggerCloudBackup();
   };
 
-  // --- Task Mutators ---
-  const handleAddTodo = async (text: string, repeat: Todo["repeat"], dueDate?: string) => {
-    const newTodo: Todo = {
-      text,
-      completed: false,
-      repeat,
-      status: "todo",
-      category: "general",
-      lastCompletedDate: "",
-      dueDate: dueDate || undefined,
-    };
-
-    if (syncSettings.enabled && syncSettings.tasksEnabled) {
-      try {
-        const token = await googleSyncService.getAuthToken(false);
-        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-        const routinesListId = await googleSyncService.getOrCreateTaskList(
-          token,
-          "Life OS - Routines",
-        );
-        const isRoutine = repeat !== "none";
-        const listId = isRoutine ? routinesListId : focusListId;
-        const notes = `[repeat:${repeat}]`;
-
-        const remote = await googleSyncService.createTask(token, listId, {
-          title: text,
-          notes,
-          status: "needsAction",
-          due: dueDate ? `${dueDate}T00:00:00.000Z` : undefined,
-        });
-        newTodo.id = remote.id;
-      } catch (err) {
-        console.error("Failed to add task to Google Tasks:", err);
-      }
-    }
-
-    const next = [...todos, newTodo];
-    await storage.setTodos(next);
-    setTodos(next);
-    triggerCloudBackup();
-  };
-
-  const handleToggleTodo = async (index: number) => {
-    const next = [...todos];
-    const item = next[index];
-
-    item.completed = !item.completed;
-    item.status = item.completed ? "done" : "todo";
-
-    if (item.completed) {
-      const now = new Date().toISOString();
-      item.lastCompletedDate = now;
-      if (!item.completedDates) {
-        item.completedDates = [];
-      }
-      item.completedDates.push(now);
-    }
-
-    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
-      try {
-        const token = await googleSyncService.getAuthToken(false);
-        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-        const routinesListId = await googleSyncService.getOrCreateTaskList(
-          token,
-          "Life OS - Routines",
-        );
-        const isRoutine = item.repeat !== "none";
-        const listId = isRoutine ? routinesListId : focusListId;
-
-        await googleSyncService.updateTask(token, listId, item.id, {
-          status: item.completed ? "completed" : "needsAction",
-          completed: item.completed ? new Date().toISOString() : null,
-        });
-      } catch (err) {
-        console.error("Failed to update Google Task:", err);
-      }
-    }
-
-    await storage.setTodos(next);
-    setTodos(next);
-    triggerCloudBackup();
-  };
-
-  const handleDeleteTodo = async (index: number) => {
-    const item = todos[index];
-    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
-      try {
-        const token = await googleSyncService.getAuthToken(false);
-        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-        const routinesListId = await googleSyncService.getOrCreateTaskList(
-          token,
-          "Life OS - Routines",
-        );
-        const isRoutine = item.repeat !== "none";
-        const listId = isRoutine ? routinesListId : focusListId;
-
-        await googleSyncService.deleteTask(token, listId, item.id);
-      } catch (err) {
-        console.error("Failed to delete Google Task:", err);
-      }
-    }
-
-    const next = todos.filter((_, idx) => idx !== index);
-    await storage.setTodos(next);
-    setTodos(next);
-    triggerCloudBackup();
-  };
-
-  const handleMoveTaskStatus = async (index: number, newStatus: Todo["status"]) => {
-    const next = [...todos];
-    moveTaskWithStatus(index, newStatus, next);
-    const item = next[index];
-
-    if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
-      try {
-        const token = await googleSyncService.getAuthToken(false);
-        const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-        const routinesListId = await googleSyncService.getOrCreateTaskList(
-          token,
-          "Life OS - Routines",
-        );
-        const isRoutine = item.repeat !== "none";
-        const listId = isRoutine ? routinesListId : focusListId;
-
-        await googleSyncService.updateTask(token, listId, item.id, {
-          status: newStatus === "done" ? "completed" : "needsAction",
-          completed: newStatus === "done" ? new Date().toISOString() : null,
-        });
-      } catch (err) {
-        console.error("Failed to move Google Task:", err);
-      }
-    }
-
-    await storage.setTodos(next);
-    setTodos(next);
-    triggerCloudBackup();
-  };
-
-  const handleMoveTaskDirection = async (index: number, direction: number) => {
-    const next = [...todos];
-    const newStatus = getUpdatedStatuses(next, index, direction);
-    if (newStatus) {
-      moveTaskWithStatus(index, newStatus, next);
-      const item = next[index];
-
-      if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
-        try {
-          const token = await googleSyncService.getAuthToken(false);
-          const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-          const routinesListId = await googleSyncService.getOrCreateTaskList(
-            token,
-            "Life OS - Routines",
-          );
-          const isRoutine = item.repeat !== "none";
-          const listId = isRoutine ? routinesListId : focusListId;
-
-          await googleSyncService.updateTask(token, listId, item.id, {
-            status: newStatus === "done" ? "completed" : "needsAction",
-            completed: newStatus === "done" ? new Date().toISOString() : null,
-          });
-        } catch (err) {
-          console.error("Failed to move Google Task direction:", err);
-        }
-      }
-
-      await storage.setTodos(next);
-      setTodos(next);
-      triggerCloudBackup();
-    }
-  };
+  // useTodos Hook – manages todo state, CRUD, and Google Tasks sync
+  const {
+    todos,
+    setTodos,
+    initTodos,
+    handleAddTodo,
+    handleToggleTodo,
+    handleDeleteTodo,
+    handleMoveTaskStatus,
+    handleMoveTaskDirection,
+    handleUpdateTodoUrgentImportant,
+    handleExportBackup,
+    handleImportBackup,
+  } = useTodos(syncSettings, triggerCloudBackup, showAlert, t);
 
   // --- Sidebar toggles ---
   const handleSidebarToggle = () => {
@@ -763,47 +592,6 @@ export function App() {
     await storage.setLang(nextLang);
   };
 
-  const handleExportBackup = async () => {
-    const dataList = await storage.getTodos();
-    const blob = new Blob([JSON.stringify(dataList, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `zentodo-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImportBackup = (e: Event) => {
-    const input = e.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (Array.isArray(parsed)) {
-          await storage.setTodos(parsed);
-          setTodos(parsed);
-          showAlert(translations[lang].alert_restore_success);
-        } else {
-          showAlert(translations[lang].alert_restore_invalid);
-        }
-      } catch (err) {
-        console.error(err);
-        const errMsg = err instanceof Error ? err.message : String(err);
-        const detailLabel = lang === "tr" ? "Detay" : "Detail";
-        showAlert(`${translations[lang].alert_restore_error}\n\n[${detailLabel}]: ${errMsg}`);
-      }
-      input.value = "";
-    };
-    reader.readAsText(input.files[0]);
-  };
-
   const handleToggleFreeGamesNotifications = async () => {
     const nextVal = !freeGamesNotificationsEnabled;
     await storage.setFreeGamesNotificationsEnabled(nextVal);
@@ -820,17 +608,6 @@ export function App() {
     const nextVal = !pomoBlockEnabled;
     await storage.setPomoBlockEnabled(nextVal);
     setPomoBlockEnabled(nextVal);
-  };
-
-  const handleUpdateTodoUrgentImportant = async (originalIndex: number, urgent: boolean, important: boolean) => {
-    const updated = [...todos];
-    updated[originalIndex] = {
-      ...updated[originalIndex],
-      urgent,
-      important,
-    };
-    setTodos(updated);
-    await storage.setTodos(updated);
   };
 
   const handleToggleUniversalInfoBox = async () => {
@@ -881,23 +658,23 @@ export function App() {
       case "kanban":
         return (
           <EisenhowerView
-            todos={todos}
+            todos={todos as any}
             lang={lang}
             defaultTab="kanban"
             onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
-            onMoveTaskStatus={handleMoveTaskStatus}
-            onMoveTaskDirection={handleMoveTaskDirection}
+            onMoveTaskStatus={handleMoveTaskStatus as any}
+            onMoveTaskDirection={handleMoveTaskDirection as any}
           />
         );
       case "eisenhower":
         return (
           <EisenhowerView
-            todos={todos}
+            todos={todos as any}
             lang={lang}
             defaultTab="kanban"
             onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
-            onMoveTaskStatus={handleMoveTaskStatus}
-            onMoveTaskDirection={handleMoveTaskDirection}
+            onMoveTaskStatus={handleMoveTaskStatus as any}
+            onMoveTaskDirection={handleMoveTaskDirection as any}
           />
         );
       case "notes":
