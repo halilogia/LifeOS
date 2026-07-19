@@ -26,16 +26,16 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   }, [symbol, range]);
 
   useEffect(() => {
-    if (loading || history.length === 0) return;
+    if (loading || history.length === 0) {return;}
     draw();
   }, [history, loading, hoveredPoint]);
 
   const draw = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {return;}
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     // Handle high DPI screens
     const dpr = window.devicePixelRatio || 1;
@@ -153,7 +153,7 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
 
   const handleMouseMove = (e: MouseEvent) => {
     const canvas = canvasRef.current;
-    if (!canvas || history.length === 0) return;
+    if (!canvas || history.length === 0) {return;}
 
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;

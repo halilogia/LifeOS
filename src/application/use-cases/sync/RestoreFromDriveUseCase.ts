@@ -23,7 +23,7 @@ export class RestoreFromDriveUseCase {
 
     async execute(): Promise<RestoreResult> {
         const syncSettings = await this.syncRepo.getSyncSettings();
-        if (!syncSettings.enabled) return { restored: false };
+        if (!syncSettings.enabled) {return { restored: false };}
 
         try {
             const token = await this.getAuthToken();

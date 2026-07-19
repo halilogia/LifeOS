@@ -13,7 +13,7 @@ export class GoogleCalendarApi {
         const res = await fetch(url, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.ok) throw new Error(`Calendar fetch failed: ${res.statusText}`);
+        if (!res.ok) {throw new Error(`Calendar fetch failed: ${res.statusText}`);}
         const data = await res.json();
         return data.items || [];
     }
@@ -28,7 +28,7 @@ export class GoogleCalendarApi {
             },
             body: JSON.stringify(event),
         });
-        if (!res.ok) throw new Error(`Calendar event creation failed: ${res.statusText}`);
+        if (!res.ok) {throw new Error(`Calendar event creation failed: ${res.statusText}`);}
         return await res.json();
     }
 }

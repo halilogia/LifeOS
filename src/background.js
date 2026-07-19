@@ -273,7 +273,7 @@ chrome.notifications.onClicked.addListener((notificationId) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "translate_text") {
     chrome.storage.sync.get(["lang"], async (res) => {
-      let targetLang = res.lang === "tr" ? "tr" : "en";
+      const targetLang = res.lang === "tr" ? "tr" : "en";
       try {
         let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
           message.text,

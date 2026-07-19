@@ -4,7 +4,6 @@
  * Application layer - defines the boundary between application and infrastructure.
  */
 
-import type { RepeatType } from "../../domain/value-objects/RepeatType.js";
 
 export interface RemoteTask {
     readonly id: string;

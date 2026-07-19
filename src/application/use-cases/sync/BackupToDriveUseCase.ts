@@ -18,7 +18,7 @@ export class BackupToDriveUseCase {
 
     async execute(): Promise<void> {
         const syncSettings = await this.syncRepo.getSyncSettings();
-        if (!syncSettings.enabled) return;
+        if (!syncSettings.enabled) {return;}
 
         // Get auth token from chrome.identity via chrome.storage cached token
         const token = await this.getAuthToken();

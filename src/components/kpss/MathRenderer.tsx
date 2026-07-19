@@ -7,7 +7,7 @@ interface MathRendererProps {
 }
 
 export function MathRenderer({ text, style }: MathRendererProps) {
-  if (!text) return null;
+  if (!text) {return null;}
 
   // Split by block math ($$...$$) first, then inline math ($...$)
   // We use a regex that captures both, maintaining the correct order.
@@ -21,7 +21,7 @@ export function MathRenderer({ text, style }: MathRendererProps) {
           try {
             const html = katex.renderToString(math, { displayMode: true, throwOnError: false });
             return <div key={idx} dangerouslySetInnerHTML={{ __html: html }} style={{ margin: "10px 0" }} />;
-          } catch (e) {
+          } catch {
             return <span key={idx}>{part}</span>;
           }
         } else if (part.startsWith("$") && part.endsWith("$")) {
@@ -29,7 +29,7 @@ export function MathRenderer({ text, style }: MathRendererProps) {
           try {
             const html = katex.renderToString(math, { displayMode: false, throwOnError: false });
             return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
-          } catch (e) {
+          } catch {
             return <span key={idx}>{part}</span>;
           }
         }

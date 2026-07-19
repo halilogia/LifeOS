@@ -1,4 +1,3 @@
-import { translations } from "./i18n.js";
 import type { Language } from "../types/types.js";
 
 export function updateTime(

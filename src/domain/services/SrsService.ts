@@ -147,7 +147,7 @@ export function prepareSRSQueue(
 
     // Filter due words (nextReviewDate <= now)
     const dueWords = allWords.filter((w) => {
-        if (!w.nextReviewDate) return true;
+        if (!w.nextReviewDate) {return true;}
         const nextReview = new Date(w.nextReviewDate);
         return nextReview <= now;
     });

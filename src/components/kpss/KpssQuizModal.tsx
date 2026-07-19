@@ -74,7 +74,7 @@ export function KpssQuizModal({
   onRetakeQuiz,
   subjectNames,
 }: KpssQuizModalProps) {
-  if (!activeQuizTopic) return null;
+  if (!activeQuizTopic) {return null;}
 
   const [showInfo, setShowInfo] = useState(false);
   const totalQuizLength = isBackgroundLoading ? selectedQuizCount : quizQuestions.length;
@@ -441,7 +441,6 @@ export function KpssQuizModal({
                 </h5>
                 {quizQuestions.map((q, qIdx) => {
                   const userAns = selectedAnswers[qIdx];
-                  const isCorrect = userAns === q.correctAnswer;
                   return (
                     <div key={qIdx} style={{ paddingBottom: "12px", marginBottom: "12px", borderBottom: qIdx < quizQuestions.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none" }}>
                       <p style={{ margin: "0 0 8px 0", fontWeight: "600", fontSize: "0.82rem", color: "#ffffff" }}>

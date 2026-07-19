@@ -74,7 +74,7 @@ export function toggleTodo(todo: Todo): Todo {
  * Returns a new Todo object.
  */
 export function updateTodoStatus(todo: Todo, newStatus: TodoStatus): Todo {
-    if (todo.status === newStatus) return todo;
+    if (todo.status === newStatus) {return todo;}
 
     const now = new Date().toISOString();
     const completed = isCompleted(newStatus);

@@ -78,7 +78,7 @@ export function Sidebar({
 
   const handleDrop = async (e: any, targetId: string) => {
     e.preventDefault();
-    if (!draggedItem || draggedItem === targetId) return;
+    if (!draggedItem || draggedItem === targetId) {return;}
 
     const nextOrder = [...order];
     const draggedIdx = nextOrder.indexOf(draggedItem);

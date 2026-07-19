@@ -53,8 +53,8 @@ async function getCached(): Promise<StockQuote[] | null> {
   try {
     const result = await chrome.storage.local.get(CACHE_KEY);
     const cached = result[CACHE_KEY] as StockCache | undefined;
-    if (!cached) return null;
-    if (Date.now() - cached.timestamp > CACHE_TTL_MS) return null;
+    if (!cached) {return null;}
+    if (Date.now() - cached.timestamp > CACHE_TTL_MS) {return null;}
     return cached.data;
   } catch {
     return null;
@@ -86,11 +86,11 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) {throw new Error(`HTTP ${res.status}`);}
 
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
-    if (!meta) throw new Error("No meta data");
+    if (!meta) {throw new Error("No meta data");}
 
     const price: number = meta.regularMarketPrice ?? 0;
     const prev: number = meta.previousClose ?? meta.chartPreviousClose ?? price;
@@ -141,7 +141,7 @@ export async function fetchStockPrices(
   // Cache kontrolü (sadece tam liste için)
   if (!symbols) {
     const cached = await getCached();
-    if (cached) return cached;
+    if (cached) {return cached;}
   }
 
   // Paralel fetch (her hisse ayrı istek — rate limit riski az)
@@ -170,23 +170,23 @@ export async function refreshStockPrices(): Promise<StockQuote[]> {
 // ── Format helpers (UI tarafında da kullanılabilir) ────────────────────────────
 
 export function formatPrice(price: number, currency = "TRY"): string {
-  if (price === 0) return "—";
+  if (price === 0) {return "—";}
   const symbol = currency === "TRY" ? "₺" : currency;
   return `${price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
 }
 
 export function formatVolume(vol: number): string {
-  if (vol === 0) return "—";
-  if (vol >= 1_000_000_000) return `${(vol / 1_000_000_000).toFixed(2)}B`;
-  if (vol >= 1_000_000) return `${(vol / 1_000_000).toFixed(2)}M`;
-  if (vol >= 1_000) return `${(vol / 1_000).toFixed(1)}K`;
+  if (vol === 0) {return "—";}
+  if (vol >= 1_000_000_000) {return `${(vol / 1_000_000_000).toFixed(2)}B`;}
+  if (vol >= 1_000_000) {return `${(vol / 1_000_000).toFixed(2)}M`;}
+  if (vol >= 1_000) {return `${(vol / 1_000).toFixed(1)}K`;}
   return vol.toLocaleString("tr-TR");
 }
 
 export function formatMarketCap(mc?: number): string {
-  if (!mc) return "—";
-  if (mc >= 1_000_000_000) return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;
-  if (mc >= 1_000_000) return `${(mc / 1_000_000).toFixed(2)}M ₺`;
+  if (!mc) {return "—";}
+  if (mc >= 1_000_000_000) {return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;}
+  if (mc >= 1_000_000) {return `${(mc / 1_000_000).toFixed(2)}M ₺`;}
   return `${mc.toLocaleString("tr-TR")} ₺`;
 }
 
@@ -215,11 +215,11 @@ export async function fetchStockHistory(
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) {throw new Error(`HTTP ${res.status}`);}
 
     const json = await res.json();
     const result = json?.chart?.result?.[0];
-    if (!result) throw new Error("No chart result");
+    if (!result) {throw new Error("No chart result");}
 
     const timestamps: number[] = result.timestamp || [];
     const quotes = result.indicators?.quote?.[0] || {};

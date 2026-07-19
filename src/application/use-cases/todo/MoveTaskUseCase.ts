@@ -64,10 +64,10 @@ export class MoveTaskUseCase {
         item: Todo,
         newStatus: TodoStatus,
     ): Promise<void> {
-        if (!item.id) return;
+        if (!item.id) {return;}
 
         const syncSettings = await this.syncRepo.getSyncSettings();
-        if (!syncSettings.enabled || !syncSettings.tasksEnabled || !this.syncPort) return;
+        if (!syncSettings.enabled || !syncSettings.tasksEnabled || !this.syncPort) {return;}
 
         try {
             const token = await this.syncPort.getAuthToken(false);

@@ -8,10 +8,10 @@ interface IpoCardProps {
 }
 
 function formatDate(dateStr: string, lang: Language): string {
-  if (!dateStr) return "—";
+  if (!dateStr) {return "—";}
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return dateStr;
+    if (isNaN(d.getTime())) {return dateStr;}
     if (lang === "tr") {
       const months = [
         "Oca", "Şub", "Mar", "Nis", "May", "Haz",

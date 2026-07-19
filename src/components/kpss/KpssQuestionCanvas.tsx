@@ -19,10 +19,10 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {return;}
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     // Handle High DPI scaling
     const dpr = window.devicePixelRatio || 1;
@@ -106,7 +106,11 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
 
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.roundRect ? ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]) : ctx.rect(x, y, barW, barH);
+      if (ctx.roundRect) {
+        ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+      } else {
+        ctx.rect(x, y, barW, barH);
+      }
       ctx.fill();
 
       // Draw border highlight
@@ -181,8 +185,8 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
     ctx.lineWidth = 3;
     ctx.beginPath();
     points.forEach((pt, idx) => {
-      if (idx === 0) ctx.moveTo(pt.x, pt.y);
-      else ctx.lineTo(pt.x, pt.y);
+      if (idx === 0) {ctx.moveTo(pt.x, pt.y);}
+      else {ctx.lineTo(pt.x, pt.y);}
     });
     ctx.stroke();
 
@@ -261,16 +265,16 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
       // Angle Labels (inside near corners)
       ctx.font = "11px sans-serif";
       ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-      if (angles.A) ctx.fillText(angles.A, ax, ay + 26);
-      if (angles.B) ctx.fillText(angles.B, bx + 28, by - 12);
-      if (angles.C) ctx.fillText(angles.C, cx - 28, cy - 12);
+      if (angles.A) {ctx.fillText(angles.A, ax, ay + 26);}
+      if (angles.B) {ctx.fillText(angles.B, bx + 28, by - 12);}
+      if (angles.C) {ctx.fillText(angles.C, cx - 28, cy - 12);}
 
       // Side Labels (midpoints of sides)
       ctx.font = "italic bold 12px sans-serif";
       ctx.fillStyle = "#ffc107";
-      if (sides.AB) ctx.fillText(sides.AB, (ax + bx) / 2 - 18, (ay + by) / 2);
-      if (sides.BC) ctx.fillText(sides.BC, (bx + cx) / 2, by + 18);
-      if (sides.AC) ctx.fillText(sides.AC, (ax + cx) / 2 + 18, (ay + cy) / 2);
+      if (sides.AB) {ctx.fillText(sides.AB, (ax + bx) / 2 - 18, (ay + by) / 2);}
+      if (sides.BC) {ctx.fillText(sides.BC, (bx + cx) / 2, by + 18);}
+      if (sides.AC) {ctx.fillText(sides.AC, (ax + cx) / 2 + 18, (ay + cy) / 2);}
 
     } else if (shape === "circle") {
       const cx = w / 2;
@@ -315,7 +319,7 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
 
       // Other labels if passed
       ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-      if (angles.center) ctx.fillText(angles.center, cx + 18, cy - 16);
+      if (angles.center) {ctx.fillText(angles.center, cx + 18, cy - 16);}
 
     } else if (shape === "parallel_lines") {
       const ly1 = 70;
@@ -353,20 +357,20 @@ export function KpssQuestionCanvas({ chart }: KpssQuestionCanvasProps) {
       ctx.font = "bold 12px sans-serif";
       ctx.fillStyle = "#ffc107";
 
-      if (angles.top_left) ctx.fillText(angles.top_left, tx - 25, ty - 18);
-      if (angles.top_right) ctx.fillText(angles.top_right, tx + 20, ty - 18);
-      if (angles.bottom_left) ctx.fillText(angles.bottom_left, tx - 20, ty + 18);
-      if (angles.bottom_right) ctx.fillText(angles.bottom_right, tx + 25, ty + 18);
+      if (angles.top_left) {ctx.fillText(angles.top_left, tx - 25, ty - 18);}
+      if (angles.top_right) {ctx.fillText(angles.top_right, tx + 20, ty - 18);}
+      if (angles.bottom_left) {ctx.fillText(angles.bottom_left, tx - 20, ty + 18);}
+      if (angles.bottom_right) {ctx.fillText(angles.bottom_right, tx + 25, ty + 18);}
 
-      if (angles.bottom_top_left) ctx.fillText(angles.bottom_top_left, bx - 25, by - 18);
-      if (angles.bottom_top_right) ctx.fillText(angles.bottom_top_right, bx + 20, by - 18);
-      if (angles.bottom_bottom_left) ctx.fillText(angles.bottom_bottom_left, bx - 20, by + 18);
-      if (angles.bottom_bottom_right) ctx.fillText(angles.bottom_bottom_right, bx + 25, by + 18);
+      if (angles.bottom_top_left) {ctx.fillText(angles.bottom_top_left, bx - 25, by - 18);}
+      if (angles.bottom_top_right) {ctx.fillText(angles.bottom_top_right, bx + 20, by - 18);}
+      if (angles.bottom_bottom_left) {ctx.fillText(angles.bottom_bottom_left, bx - 20, by + 18);}
+      if (angles.bottom_bottom_right) {ctx.fillText(angles.bottom_bottom_right, bx + 25, by + 18);}
 
       // Fallback
-      if (angles.a) ctx.fillText(angles.a, tx + 20, ty - 18);
-      if (angles.b) ctx.fillText(angles.b, bx - 20, by + 18);
-      if (angles.x) ctx.fillText(angles.x, bx - 20, by + 18);
+      if (angles.a) {ctx.fillText(angles.a, tx + 20, ty - 18);}
+      if (angles.b) {ctx.fillText(angles.b, bx - 20, by + 18);}
+      if (angles.x) {ctx.fillText(angles.x, bx - 20, by + 18);}
     }
   };
 

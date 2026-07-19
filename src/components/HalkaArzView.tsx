@@ -30,10 +30,10 @@ type TabId = "active" | "upcoming" | "history" | "stocks";
 // ── Format helpers ────────────────────────────────────────────────────────────
 
 function formatDate(dateStr: string, lang: Language): string {
-  if (!dateStr) return "—";
+  if (!dateStr) {return "—";}
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return dateStr;
+    if (isNaN(d.getTime())) {return dateStr;}
     if (lang === "tr") {
       const months = [
         "Oca", "Şub", "Mar", "Nis", "May", "Haz",
@@ -203,7 +203,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
 
   // ── Load stocks when tab is opened ─────────────────────────────────────────
   const loadStocks = useCallback(async () => {
-    if (stocksLoaded) return;
+    if (stocksLoaded) {return;}
     setStockLoading(true);
     setStockError(false);
     try {

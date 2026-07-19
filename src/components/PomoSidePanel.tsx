@@ -63,7 +63,9 @@ export function PomoSidePanel({
     if (whiteNoiseSourceRef.current) {
       try {
         whiteNoiseSourceRef.current.stop();
-      } catch (e) {}
+      } catch {
+        // ignore error if already stopped
+      }
       whiteNoiseSourceRef.current = null;
     }
     whiteNoiseGainRef.current = null;
@@ -292,7 +294,7 @@ export function PomoSidePanel({
       let chordIdx = 0;
 
       const playNextChord = () => {
-        if (!audioContextRef.current || audioContextRef.current.state === "closed") return;
+        if (!audioContextRef.current || audioContextRef.current.state === "closed") {return;}
         const now = ctx.currentTime;
         const chordNotes = chords[chordIdx];
         chordIdx = (chordIdx + 1) % chords.length;

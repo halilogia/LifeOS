@@ -86,10 +86,10 @@ export function KpssDailyStatsCard({
 
   const drawChart = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {return;}
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     const rect = canvas.getBoundingClientRect();
     if (rect.width === 0) {
@@ -130,8 +130,8 @@ export function KpssDailyStatsCard({
     const estimatedScore = Math.round((40 + overallNet * 0.5) * 10) / 10;
     const daysRemaining = Math.max(1, Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24)));
 
-    let remainingQuestions = 0;
-    let remainingVideos = 0;
+    let remainingQuestions: number;
+    let remainingVideos: number;
 
     if (goalType === "net") {
       const netDiff = Math.max(0, targetNet - overallNet);
@@ -150,7 +150,7 @@ export function KpssDailyStatsCard({
     const maxVideos = Math.max(...lastNDays.map((s) => s.videos || 0), dailyVideosTarget, 1);
 
     const getX = (index: number, count: number) => {
-      if (count === 1) return padding + chartWidth / 2;
+      if (count === 1) {return padding + chartWidth / 2;}
       return padding + (index / (count - 1)) * chartWidth;
     };
 
@@ -392,8 +392,8 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYQ(lastNDays[i].questions);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) {ctx.moveTo(x, y);}
+        else {ctx.lineTo(x, y);}
       }
       ctx.stroke();
 
@@ -403,8 +403,8 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYV(lastNDays[i].videos || 0);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) {ctx.moveTo(x, y);}
+        else {ctx.lineTo(x, y);}
       }
       ctx.stroke();
     }

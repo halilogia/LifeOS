@@ -100,7 +100,7 @@ const FALLBACK_IPOS: IPOEntry[] = [
 function isWithinLastDays(dateStr: string, days: number): boolean {
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return true; // Geçersiz tarih formatında son günlerdeymiş gibi gösterelim
+    if (isNaN(d.getTime())) {return true;} // Geçersiz tarih formatında son günlerdeymiş gibi gösterelim
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
     return d >= cutoff && d <= new Date();
@@ -184,7 +184,7 @@ export async function fetchAllIPOs(): Promise<{
         // Extract Company Name
         const nameMatch = content.match(/<h3 class="il-halka-arz-sirket"><a href="[^"]*" title="([^"]*)">/i);
         const name = nameMatch ? nameMatch[1] : '';
-        if (!name) continue;
+        if (!name) {continue;}
 
         // Extract Url
         const urlMatch = content.match(/href="([^"]*)"/i);
