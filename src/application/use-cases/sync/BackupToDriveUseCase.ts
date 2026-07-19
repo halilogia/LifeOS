@@ -1,63 +1,47 @@
 /**
  * BackupToDriveUseCase
- * Application use case for backing up all data to Google Drive.
+ *
+ * Application use case for backing up all application data to Google Drive.
+ * Collects data from repositories and delegates upload to the drive port.
  */
 
 import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
 import type { IDriveBackupPort } from "../../ports/IDriveBackupPort.js";
 import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { INoteRepository } from "../../../domain/repositories/INoteRepository.js";
-
-export interface BackupData {
-    readonly todos: unknown;
-    readonly notes: unknown;
-    readonly lang: string;
-    [key: string]: unknown;
-}
 
 export class BackupToDriveUseCase {
     constructor(
         private syncRepo: ISyncRepository,
         private drivePort: IDriveBackupPort,
-        private todoRepo?: ITodoRepository,
-        private noteRepo?: INoteRepository,
-    ) { }
+        private todoRepo: ITodoRepository,
+    ) {}
 
-    async execute(additionalData?: Record<string, unknown>): Promise<boolean> {
+    async execute(): Promise<void> {
         const syncSettings = await this.syncRepo.getSyncSettings();
-        if (!syncSettings.enabled) return false;
+        if (!syncSettings.enabled) return;
 
-        try {
-            const token = await this.getAuthToken();
-            const allData: Record<string, unknown> = {
-                ...additionalData,
-            };
+        // Get auth token from chrome.identity via chrome.storage cached token
+        const token = await this.getAuthToken();
 
-            if (this.todoRepo) {
-                allData.todos = await this.todoRepo.getAll();
-            }
-            if (this.noteRepo) {
-                allData.notes = await this.noteRepo.getAll();
-            }
+        // Gather all backup data from chrome.storage.sync directly
+        const allData = await new Promise<Record<string, unknown>>((resolve) => {
+            chrome.storage.sync.get(null, (result) => {
+                resolve(result as Record<string, unknown>);
+            });
+        });
 
-            const result = await this.drivePort.backupToDrive(token, allData);
-
-            if (result) {
-                await this.syncRepo.setSyncSettings({
-                    ...syncSettings,
-                    lastSyncedBackup: Date.now(),
-                });
-            }
-
-            return result;
-        } catch (e) {
-            console.error("Backup to Drive failed:", e);
-            return false;
-        }
+        await this.drivePort.backupToDrive(token, allData);
     }
 
     private async getAuthToken(): Promise<string> {
-        // This will be overridden when infrastructure is connected
-        throw new Error("Auth token retrieval not implemented - connect infrastructure layer");
+        return new Promise((resolve, reject) => {
+            chrome.identity.getAuthToken({ interactive: false }, (token) => {
+                if (chrome.runtime.lastError || !token) {
+                    reject(new Error(chrome.runtime.lastError?.message ?? "No auth token"));
+                } else {
+                    resolve(token as string);
+                }
+            });
+        });
     }
 }
