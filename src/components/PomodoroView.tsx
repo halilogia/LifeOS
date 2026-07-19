@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language, PomodoroLog } from "../types/types.js";
 import { pomodoroManager, AlarmItem } from "../core/pomodoroManager.js";
-import { storage } from "../core/storage.js";
 import { translations } from "../utils/i18n.js";
 import { PomoSidePanel } from "@/components/PomoSidePanel.js";
 import { PomoTimerCard } from "@/components/pomodoro/PomoTimerCard.js";
@@ -96,12 +95,13 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
     });
 
     // 4. Pomodoro history initial state
-    storage.getPomodoroHistory().then((list) => {
-      setPomodoroHistory(list);
+    chrome.storage.sync.get(["pomodoroHistory"], (res) => {
+      setPomodoroHistory((res.pomodoroHistory as PomodoroLog[]) || []);
     });
 
     // 5. Load custom times settings
-    storage.getPomoCustomTimes().then((times) => {
+    chrome.storage.sync.get(["pomoCustomTimes"], (res) => {
+      const times = res.pomoCustomTimes as { focus: number; short: number; long: number } | undefined;
       if (times) {
         setCustomTimes(times);
       }
@@ -215,7 +215,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
     const seconds = mins * 60;
     const newTimes = { ...customTimes, [mode]: seconds };
     setCustomTimes(newTimes);
-    await storage.setPomoCustomTimes(newTimes);
+    chrome.storage.sync.set({ pomoCustomTimes: newTimes });
 
     if (!pomoRunning && pomoMode === mode) {
       await pomodoroManager.resetTimer(mode, seconds);
@@ -298,7 +298,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
     };
 
     const nextHistory = [...pomodoroHistory.filter((h) => h.position !== position), newLog];
-    await storage.setPomodoroHistory(nextHistory);
+    await new Promise<void>((r) => chrome.storage.sync.set({ pomodoroHistory: nextHistory }, r));
     setPomodoroHistory(nextHistory);
     setShowPlantModal(false);
     setFocusNote("");

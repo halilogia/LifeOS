@@ -2,7 +2,6 @@ import { useState, useEffect } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
 import { googleSyncService } from "../services/googleSyncService.js";
-import { storage } from "../core/storage.js";
 
 interface CalendarViewProps {
   todos: Todo[];
@@ -107,8 +106,12 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   useEffect(() => {
     let isMounted = true;
     const fetchCalendar = async () => {
-      const syncSettings = await storage.getSyncSettings();
-      if (syncSettings.enabled && syncSettings.calendarEnabled) {
+      const syncData = await new Promise<any>((resolve) =>
+        chrome.storage.sync.get(["syncEnabled", "syncCalendarEnabled"], (res) => resolve(res))
+      );
+      const syncEnabled = syncData.syncEnabled === true;
+      const calendarEnabled = syncData.syncCalendarEnabled === true;
+      if (syncEnabled && calendarEnabled) {
         setIsSyncingCalendar(true);
         try {
           const token = await googleSyncService.getAuthToken(false);

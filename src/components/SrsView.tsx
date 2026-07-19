@@ -1,5 +1,4 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage } from "../core/storage.js";
 import {
   calculateSM2,
   prepareSRSQueue,
@@ -33,7 +32,11 @@ export function SrsView({ lang }: SrsViewProps) {
     try {
       const data = await getAllWords();
       setWordsData(data);
-      const progress = await storage.getSrsProgress();
+      const progress: any[] = await new Promise((resolve) =>
+        chrome.storage.sync.get(["srsProgress"], (res) =>
+          resolve((res.srsProgress as any[]) || [])
+        )
+      );
 
       const progressMap = new Map<string, WordReviewData>();
       progress.forEach((p) => progressMap.set(p.wordId, p));
@@ -84,16 +87,21 @@ export function SrsView({ lang }: SrsViewProps) {
 
     const outcome = calculateSM2(reviewData, quality, new Date());
 
-    const progress = await storage.getSrsProgress();
-    const idx = progress.findIndex((p) => p.wordId === outcome.wordId);
+      const progress: any[] = await new Promise((resolve) =>
+        chrome.storage.sync.get(["srsProgress"], (res) =>
+          resolve((res.srsProgress as any[]) || [])
+        )
+      );
+
+    const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
     if (idx >= 0) {
       progress[idx] = outcome;
     } else {
       progress.push(outcome);
     }
-    await storage.setSrsProgress(progress);
-
-    // Run fade transition
+    await new Promise<void>((resolve) =>
+      chrome.storage.sync.set({ srsProgress: progress }, resolve)
+    );
     setFadeState("slide-out");
     setTimeout(() => {
       setCurrentWordIndex((prev) => prev + 1);

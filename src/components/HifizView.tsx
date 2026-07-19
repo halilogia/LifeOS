@@ -1,5 +1,4 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage } from "../core/storage.js";
 import {
   INITIAL_HIFIZ_ITEMS,
   YETERLIKLER_DATA,
@@ -46,8 +45,12 @@ export function HifizView({ lang }: HifizViewProps) {
   }, []);
 
   const loadData = async () => {
-    const progress = await storage.getHifizProgress();
-    const completedYeterlikler = await storage.getYeterlikler();
+    const progress: HifizProgress[] = await new Promise((r) =>
+      chrome.storage.sync.get(["hifizProgress"], (res) => r((res.hifizProgress as HifizProgress[]) || []))
+    );
+    const completedYeterlikler: number[] = await new Promise((r) =>
+      chrome.storage.sync.get(["yeterlikler"], (res) => r((res.yeterlikler as number[]) || []))
+    );
     setHifizProgress(progress);
     setYeterlikler(completedYeterlikler);
   };
@@ -94,7 +97,9 @@ export function HifizView({ lang }: HifizViewProps) {
   // Cycle item status (not_started -> in_progress -> memorized)
   const handleCycleStatus = async (itemId: string) => {
     const itemData = INITIAL_HIFIZ_ITEMS.find((i) => i.id === itemId);
-    const progress = await storage.getHifizProgress();
+    const progress: HifizProgress[] = await new Promise((r) =>
+      chrome.storage.sync.get(["hifizProgress"], (res) => r((res.hifizProgress as HifizProgress[]) || []))
+    );
     const idx = progress.findIndex((p) => p.itemId === itemId);
     const statuses: HifizProgress["status"][] = [
       "not_started",
@@ -128,7 +133,7 @@ export function HifizView({ lang }: HifizViewProps) {
       }
     }
 
-    await storage.setHifizProgress(progress);
+    await new Promise<void>((r) => chrome.storage.sync.set({ hifizProgress: progress }, r));
     setHifizProgress(progress);
   };
 
@@ -139,7 +144,9 @@ export function HifizView({ lang }: HifizViewProps) {
       return;
     }
 
-    const progress = await storage.getHifizProgress();
+    const progress: HifizProgress[] = await new Promise((r) =>
+      chrome.storage.sync.get(["hifizProgress"], (res) => r((res.hifizProgress as HifizProgress[]) || []))
+    );
     let itemProgress = progress.find((p) => p.itemId === itemId);
 
     if (!itemProgress) {
@@ -183,17 +190,19 @@ export function HifizView({ lang }: HifizViewProps) {
       itemProgress.status = "not_started";
     }
 
-    await storage.setHifizProgress(progress);
+    await new Promise<void>((r) => chrome.storage.sync.set({ hifizProgress: progress }, r));
     setHifizProgress(progress);
   };
 
   // Yeterlik items checkbox toggle
   const handleToggleYeterlik = async (index: number) => {
-    const currentCompleted = await storage.getYeterlikler();
+    const currentCompleted: number[] = await new Promise((r) =>
+      chrome.storage.sync.get(["yeterlikler"], (res) => r((res.yeterlikler as number[]) || []))
+    );
     const next = currentCompleted.includes(index)
       ? currentCompleted.filter((i) => i !== index)
       : [...currentCompleted, index];
-    await storage.setYeterlikler(next);
+    await new Promise<void>((r) => chrome.storage.sync.set({ yeterlikler: next }, r));
     setYeterlikler(next);
   };
 

@@ -180,6 +180,7 @@ export function useUI(initialLang: Language = "tr") {
         quoteText,
         // Dialogs
         confirmDialog,
+        setConfirmDialog,
         alertDialog,
         setAlertDialog,
         // Actions

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { storage } from "../core/storage.js";
 import { WillpowerStreak, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
 
@@ -32,14 +31,17 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
   }, []);
 
   const loadData = async () => {
-    let streakData = await storage.getWillpowerStreak();
+    const result = await new Promise<any>((resolve) =>
+      chrome.storage.sync.get(["willpowerStreak"], (res) => resolve(res.willpowerStreak))
+    );
+    let streakData = result;
     if (!streakData) {
       streakData = {
         startDate: new Date().toISOString(),
         bestStreakDays: 0,
         history: [],
       };
-      await storage.setWillpowerStreak(streakData);
+      chrome.storage.sync.set({ willpowerStreak: streakData });
     }
     setData(streakData);
     calculateTime(streakData.startDate);
@@ -95,7 +97,9 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
         history: [...data.history, historyItem],
       };
 
-      await storage.setWillpowerStreak(updatedData);
+      await new Promise<void>((resolve) =>
+        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve)
+      );
       setNote("");
       setData(updatedData);
       calculateTime(nowStr);
