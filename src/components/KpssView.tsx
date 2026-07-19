@@ -7,18 +7,34 @@ import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } 
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
 import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
 import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/logic/kpssCalculator.js";
-import kpss2019 from "@/data/kpss/kpss2019.json";
-import kpss2020 from "@/data/kpss/kpss2020.json";
-import kpss2021 from "@/data/kpss/kpss2021.json";
-
-import exam2019 from "@/data/kpss/exams/exam2019.json";
-import exam2020 from "@/data/kpss/exams/exam2020.json";
-import exam2021 from "@/data/kpss/exams/exam2021.json";
+import exam2021 from "@/data/kpss/exam2021.json";
+import exam2020 from "@/data/kpss/exam2020.json";
+import exam2019 from "@/data/kpss/exam2019.json";
+import exam2018 from "@/data/kpss/exam2018.json";
+import exam2017 from "@/data/kpss/exam2017.json";
+import exam2015 from "@/data/kpss/exam2015.json";
+import exam2014 from "@/data/kpss/exam2014.json";
+import exam2013 from "@/data/kpss/exam2013.json";
+import exam2012 from "@/data/kpss/exam2012.json";
+import exam2011 from "@/data/kpss/exam2011.json";
+import exam2010 from "@/data/kpss/exam2010.json";
+import exam2009 from "@/data/kpss/exam2009.json";
+import examTarihArsivi from "@/data/kpss/exam_tarih_arsivi.json";
 
 const KPSS_YEARLY_DATA: Record<string, any> = {
-  "2019": exam2019,
+  "2021": exam2021,
   "2020": exam2020,
-  "2021": exam2021
+  "2019": exam2019,
+  "2018": exam2018,
+  "2017": exam2017,
+  "2015": exam2015,
+  "2014": exam2014,
+  "2013": exam2013,
+  "2012": exam2012,
+  "2011": exam2011,
+  "2010": exam2010,
+  "2009": exam2009,
+  "tarih_arsivi": examTarihArsivi
 };
 
 // Extracted Presentational Sub-components
@@ -62,15 +78,9 @@ interface QuizQuestion {
   };
 }
 
-const KPSS_AI_TEMPLATES: Record<string, any> = {
-  "2019": kpss2019,
-  "2020": kpss2020,
-  "2021": kpss2021
-};
-
 const getLocalQuestionsForTopic = (subjectKey: string, topicName: string): QuizQuestion[] => {
   const aggregated: QuizQuestion[] = [];
-  Object.values(KPSS_AI_TEMPLATES).forEach((yearData) => {
+  Object.values(KPSS_YEARLY_DATA).forEach((yearData) => {
     const list = yearData[subjectKey];
     if (Array.isArray(list)) {
       list.forEach((q: any) => {

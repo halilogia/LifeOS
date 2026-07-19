@@ -1,0 +1,32 @@
+{
+  "tarih": [],
+  "cografya": [],
+  "matematik": [
+    {
+      "topic": "Genel Matematik",
+      "question": "D A = m(ABD) m(DBE) x ] ] = m(ACD) m(DCE) 25 ] ° = m(BDC) 25 ] B C E = m(BAC) x Yukarıdaki verilere göre, x kaç derecedir?",
+      "options": [
+        "25",
+        "30",
+        "38",
+        "42",
+        "50"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "C D ABCD bir dikdörtgen E AB 3 AF = A B F 2 cm EAF üçgeninin alanı 2 olduğuna göre, ABCD 2 dikdörtgeninin alanı kaç cm dir?",
+      "options": [
+        "36",
+        "42",
+        "48",
+        "52",
+        "60"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
+    }
+  ]
+}
