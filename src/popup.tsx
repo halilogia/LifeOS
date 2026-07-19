@@ -4,7 +4,7 @@ import {
   pomodoroManager,
   PomoState,
   AlarmItem,
-} from "./core/pomodoroManager.js";
+} from "./infrastructure/services/PomodoroManagerService.js";
 
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 55; // Smaller circle for compact view (r=55)

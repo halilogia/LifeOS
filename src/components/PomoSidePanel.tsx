@@ -1,4 +1,4 @@
-import { AlarmItem } from "../core/pomodoroManager.js";
+import { AlarmItem } from "@/infrastructure/services/PomodoroManagerService.js";
 import { Language } from "../types/types.js";
 import { useState, useEffect, useRef } from "preact/hooks";
 

@@ -10,7 +10,12 @@
  */
 
 import { useState, useCallback } from "preact/hooks";
-import { googleSyncService } from "../../services/googleSyncService.js";
+import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
+import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+
+const _authApi = new GoogleAuthApi();
+const _tasksApi = new GoogleTasksApi();
+
 import {
     checkAndResetRepeatingTasks,
     moveTaskWithStatus,
@@ -68,9 +73,9 @@ export function useTodos(
 
         if (syncSettings.enabled && syncSettings.tasksEnabled) {
             try {
-                const token = await googleSyncService.getAuthToken(false);
-                const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-                const routinesListId = await googleSyncService.getOrCreateTaskList(
+                const token = await _authApi.getAuthToken(false);
+                const focusListId = await _tasksApi.getOrCreateTaskList(token, "Life OS - Focus");
+                const routinesListId = await _tasksApi.getOrCreateTaskList(
                     token,
                     "Life OS - Routines",
                 );
@@ -78,7 +83,7 @@ export function useTodos(
                 const listId = isRoutine ? routinesListId : focusListId;
                 const notes = `[repeat:${repeat}]`;
 
-                const remote = await googleSyncService.createTask(token, listId, {
+                const remote = await _tasksApi.createTask(token, listId, {
                     title: text,
                     notes,
                     status: "needsAction",
@@ -115,16 +120,16 @@ export function useTodos(
 
         if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
             try {
-                const token = await googleSyncService.getAuthToken(false);
-                const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-                const routinesListId = await googleSyncService.getOrCreateTaskList(
+                const token = await _authApi.getAuthToken(false);
+                const focusListId = await _tasksApi.getOrCreateTaskList(token, "Life OS - Focus");
+                const routinesListId = await _tasksApi.getOrCreateTaskList(
                     token,
                     "Life OS - Routines",
                 );
                 const isRoutine = item.repeat !== "none";
                 const listId = isRoutine ? routinesListId : focusListId;
 
-                await googleSyncService.updateTask(token, listId, item.id, {
+                await _tasksApi.updateTask(token, listId, item.id, {
                     status: item.completed ? "completed" : "needsAction",
                     completed: item.completed ? new Date().toISOString() : null,
                 });
@@ -143,16 +148,16 @@ export function useTodos(
         const item = todos[index];
         if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
             try {
-                const token = await googleSyncService.getAuthToken(false);
-                const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-                const routinesListId = await googleSyncService.getOrCreateTaskList(
+                const token = await _authApi.getAuthToken(false);
+                const focusListId = await _tasksApi.getOrCreateTaskList(token, "Life OS - Focus");
+                const routinesListId = await _tasksApi.getOrCreateTaskList(
                     token,
                     "Life OS - Routines",
                 );
                 const isRoutine = item.repeat !== "none";
                 const listId = isRoutine ? routinesListId : focusListId;
 
-                await googleSyncService.deleteTask(token, listId, item.id);
+                await _tasksApi.deleteTask(token, listId, item.id);
             } catch (err) {
                 console.error("Failed to delete Google Task:", err);
             }
@@ -171,16 +176,16 @@ export function useTodos(
 
         if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
             try {
-                const token = await googleSyncService.getAuthToken(false);
-                const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-                const routinesListId = await googleSyncService.getOrCreateTaskList(
+                const token = await _authApi.getAuthToken(false);
+                const focusListId = await _tasksApi.getOrCreateTaskList(token, "Life OS - Focus");
+                const routinesListId = await _tasksApi.getOrCreateTaskList(
                     token,
                     "Life OS - Routines",
                 );
                 const isRoutine = item.repeat !== "none";
                 const listId = isRoutine ? routinesListId : focusListId;
 
-                await googleSyncService.updateTask(token, listId, item.id, {
+                await _tasksApi.updateTask(token, listId, item.id, {
                     status: newStatus === "done" ? "completed" : "needsAction",
                     completed: newStatus === "done" ? new Date().toISOString() : null,
                 });
@@ -203,16 +208,16 @@ export function useTodos(
 
             if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
                 try {
-                    const token = await googleSyncService.getAuthToken(false);
-                    const focusListId = await googleSyncService.getOrCreateTaskList(token, "Life OS - Focus");
-                    const routinesListId = await googleSyncService.getOrCreateTaskList(
+                    const token = await _authApi.getAuthToken(false);
+                    const focusListId = await _tasksApi.getOrCreateTaskList(token, "Life OS - Focus");
+                    const routinesListId = await _tasksApi.getOrCreateTaskList(
                         token,
                         "Life OS - Routines",
                     );
                     const isRoutine = item.repeat !== "none";
                     const listId = isRoutine ? routinesListId : focusListId;
 
-                    await googleSyncService.updateTask(token, listId, item.id, {
+                    await _tasksApi.updateTask(token, listId, item.id, {
                         status: newStatus === "done" ? "completed" : "needsAction",
                         completed: newStatus === "done" ? new Date().toISOString() : null,
                     });

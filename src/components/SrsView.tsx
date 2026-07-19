@@ -3,10 +3,12 @@ import {
   calculateSM2,
   prepareSRSQueue,
   createInitialSRSWord,
-  SRSWordWithInfo,
-} from "../logic/srs.js";
+  type SRSWordWithInfo,
+  type WordReviewData,
+  type ReviewQuality,
+} from "@/domain/services/SrsService.js";
 import { getAllWords } from "../services/vocabularyService.js";
-import { Word, WordReviewData, ReviewQuality } from "../types/word.js";
+import { Word } from "../types/word.js";
 import { Language } from "../types/types.js";
 
 interface SrsViewProps {

@@ -1,3 +1,9 @@
+/**
+ * KpssCalculatorService
+ * Domain service for KPSS calculation utilities.
+ * Pure functions — no external dependencies beyond domain types.
+ */
+
 import { KpssTopic } from "@/services/kpssService.js";
 import { KpssProgress } from "@/types/types.js";
 
