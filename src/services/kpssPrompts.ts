@@ -1,6 +1,6 @@
 import { Language } from "@/types/types.js";
 
-export function getKpssSystemPrompt(subjectKey: string, lang: Language): string {
+export function getKpssSystemPrompt(subjectKey: string, lang: Language, dynamicExamples?: any[]): string {
   // Baseline prompt detailing the structure and ÖSYM rules
   const baseRules = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.
 
@@ -131,5 +131,9 @@ Yanıtını başka hiçbir açıklama yapmadan, SADECE geçerli bir JSON dizisi 
 ]
 (correctAnswer 0-4 arasında doğru seçeneğin indeksidir). Kesinlikle JSON formatı dışında hiçbir açıklama, giriş veya kod bloğu dışı metin yazma. Sadece geçerli JSON döndür.`;
 
-  return baseRules + subjectRules + outputFormat;
+  let finalPrompt = baseRules + subjectRules + outputFormat;
+  if (dynamicExamples && dynamicExamples.length > 0) {
+    finalPrompt += `\n\n### Üreteceğin Yeni Sorular İçin Referans Alacağın Örnek KPSS Soruları (Few-Shot Examples):\n${JSON.stringify(dynamicExamples, null, 2)}\n\nHazırlayacağın yeni sorular bu örneklerin zorluk seviyesini, çelişkisiz yapısını ve kelime dilini referans almalı ama bunlardan TAMAMEN FARKLI konuları veya detayları sormalıdır.`;
+  }
+  return finalPrompt;
 }

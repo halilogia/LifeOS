@@ -1,0 +1,146 @@
+{
+  "cografya": [
+    {
+      "topic": "Türkiye’nin Coğrafi Konumu",
+      "question": "Türkiye’nin göreceli (özel) konumu, ülkenin denizellik-karasallık, yükselti ve jeopolitik özelliklerinin bir sonucudur. Buna göre, aşağıdakilerden hangisi Türkiye'nin göreceli konumuyla açıklanan bir durumdur?",
+      "options": [
+        "Dört mevsim belirgin iklim koşullarının yaşanması",
+        "Güneş ışınlarının hiçbir zaman dik açıyla düşmemesi",
+        "Aynı anda farklı iklim ve hava koşullarının görülebilmesi",
+        "Kuzey rüzgarlarının sıcaklığı düşürücü etki yapması",
+        "Yıl boyunca batı rüzgarlarının etkisinde bulunması"
+      ],
+      "correctAnswer": 2,
+      "solution": "Aynı anda farklı iklim ve hava özelliklerinin yaşanması (örn: Antalya'da denize girilirken Erzurum'da kayak yapılması) kısa mesafede değişen yükselti ve yer şekilleriyle, yani göreceli (özel) konumla açıklanır. Diğer şıklar mutlak konumun (enlem ve orta kuşak) sonuçlarıdır."
+    },
+    {
+      "topic": "Türkiye’nin Coğrafi Konumu",
+      "question": "Karadeniz’de tuzluluk oranının Akdeniz’den daha az olmasında;\nI. büyük akarsularla beslenmesi,\nII. buharlaşmanın daha az olması,\nIII. derinliğin fazla olması,\nIV. kirliliğin yüksek olması\nfaktörlerinden hangileri etkili olmuştur?",
+      "options": [
+        "I ve II",
+        "I ve III",
+        "II ve III",
+        "II ve IV",
+        "III ve IV"
+      ],
+      "correctAnswer": 0,
+      "solution": "Karadeniz'in tuzluluk oranının daha az olması; büyük akarsularca tatlı su beslemesinin yüksek olması ve enlem etkisine bağlı olarak buharlaşmanın Akdeniz'e kıyasla daha az olmasının bir sonucudur. Derinlik ve kirlilik tuzluluğu doğrudan etkilemez."
+    },
+    {
+      "topic": "Türkiye’nin Coğrafi Konumu",
+      "question": "Türkiye'nin coğrafi konumuna bağlı olarak ortaya çıkan bazı özellikler mutlak (matematik) konum ile açıklanırken bazıları göreceli (özel) konumla açıklanır. Buna göre, aşağıda verilen özelliklerden hangisi Türkiye'nin mutlak konumunun doğrudan bir sonucudur?",
+      "options": [
+        "Doğu-batı yönünde yerel saat farkının 76 dakika olması",
+        "Kısa mesafelerde iklim özelliklerinin büyük değişiklik göstermesi",
+        "Transit ticaret yollarının kavşağında yer alması",
+        "Zengin bor ve linyit yataklarına sahip olması",
+        "Üç tarafının farklı denizlerle çevrili olması"
+      ],
+      "correctAnswer": 0,
+      "solution": "Türkiye 26°-45° Doğu boylamları arasında yer alır. 45 - 26 = 19 boylam farkı vardır. Boylamlar arası 4 dakika olduğundan, 19 x 4 = 76 dakikalık yerel saat farkı mutlak (matematik) konumun doğrudan sonucudur. Diğer seçenekler jeopolitik ve jeolojik özel konum etkenleridir."
+    },
+    {
+      "topic": "Türkiye’nin İklimi / Bitki Örtüsü",
+      "question": "Türkiye’de, birbirine çok yakın alanlarda farklı iklim özellikleri görülebilir. Çevresinden farklı iklim özelliklerinin görüldüğü bu tip alanlara mikroklima adı verilir. Mikroklima alanlarında normal koşullarda o bölgede yetişmesi mümkün olmayan bitkiler yetişebilir.\nBuna göre;\nI. Iğdır Ovası’nda pamuk yetiştirilmesi,\nII. Çukurova’da mısır yetiştirilmesi,\nIII. Çoruh Vadisi’nde zeytin yetiştirilmesi,\nIV. Meriç Vadisi’nde çeltik yetiştirilmesi\nuygulamalarından hangileri mikroklimaya örnek gösterilebilir?",
+      "options": [
+        "I ve II",
+        "I ve III",
+        "II ve III",
+        "II ve IV",
+        "III ve IV"
+      ],
+      "correctAnswer": 1,
+      "solution": "Iğdır Ovası'nda pamuk ve Çoruh Vadisi'nde (Artvin) zeytin yetiştirilmesi, çevrelerine göre çukurda kalan korunaklı vadilerde oluşan mikroklima (yerel küçük iklim) koşullarının bir sonucudur. Çukurova'da mısır ve Meriç'te çeltik ise bölgenin genel tarım ve sulama şartları doğrultusunda yetiştirilir."
+    },
+    {
+      "topic": "Türkiye’nin Fiziki Özellikleri",
+      "question": "Türkiye'nin yer şekilleri ve jeolojik yapısı düşünüldüğünde, yerleşim tarihi açısından öneme sahip aşağıdaki tarihi alanlar ile bulundukları il eşleştirmelerinden hangisi yanlıştır?",
+      "options": [
+        "Karain Mağarası - Antalya",
+        "Çatalhöyük - Konya",
+        "Alacahöyük - Çorum",
+        "Hattuşa Ören Yeri - Yozgat",
+        "Truva Antik Kenti - Çanakkale"
+      ],
+      "correctAnswer": 3,
+      "solution": "Hattuşa, Hitit Devleti'nin başkentidir ve Yozgat'ta değil, Çorum'un Boğazkale ilçesi sınırlarında yer almaktadır. Diğer eşleştirmeler tamamen doğrudur."
+    }
+  ],
+  "tarih": [
+    {
+      "topic": "Osmanlı Kültür ve Medeniyeti",
+      "question": "Osmanlı Devleti ilk daimî elçiliğini aşağıdaki Avrupa başkentlerinin hangisinde açmıştır?",
+      "options": [
+        "Berlin",
+        "Viyana",
+        "Paris",
+        "Londra",
+        "Moskova"
+      ],
+      "correctAnswer": 3,
+      "solution": "Osmanlı Devleti Lale Devri'nde ilk geçici elçiliğini Paris'te (Yirmisekiz Mehmed Çelebi) açmıştır. İlk daimî (sürekli) elçiliğini ise III. Selim döneminde Londra'da (Yusuf Agâh Efendi) faaliyete geçirmiştir."
+    },
+    {
+      "topic": "Osmanlı Kültür ve Medeniyeti",
+      "question": "Tarih Öğretmeni Yasemin: 'II. Mahmut, Osmanlı merkez teşkilatında köklü idari değişiklikler yapmıştır.' diyerek öğrencilerinden bu duruma örnek vermelerini istemiştir. Aşağıdakilerden hangisi bu örneklerden biridir?",
+      "options": [
+        "Sekban-ı Cedit Ocağının kurulması",
+        "Heyet-i Vükelanın (Bakanlar Kurulu) oluşturulması",
+        "Mekteb-i Harbiyenin açılması",
+        "Yeniçeri Ocağının kaldırılması",
+        "Muzika-i Hümayunun kurulması"
+      ],
+      "correctAnswer": 1,
+      "solution": "Heyet-i Vükela (Bakanlar Kurulu), Divan teşkilatının kaldırılarak yerine kurulan idari bir kuruldur ve II. Mahmut dönemi merkez teşkilatı yeniliğidir. Diğer seçenekler askeri ve kültürel alanlardadır."
+    },
+    {
+      "topic": "İslamiyet Öncesi Türk Tarihi",
+      "question": "Aşağıdakilerden hangisi Türk tarihinde önemli bir yeri olan Uygurlarla ilgili değildir?",
+      "options": [
+        "Yerleşik hayat tarzını yaygınlaştırmışlardır.",
+        "Maniheizm dinini benimsemişlerdir.",
+        "Yazılı hukuk belgeleri düzenlemişlerdir.",
+        "Kayıp baskı yöntemiyle kitap çoğaltmışlardır.",
+        "Tarihlerini Manas Destanı’yla anlatmışlardır."
+      ],
+      "correctAnswer": 4,
+      "solution": "Manas Destanı Uygurlara değil, Kırgızlara aittir. Diğer seçenekler Uygurlar döneminin karakteristik yerleşik kültür özellikleridir."
+    },
+    {
+      "topic": "20. Yüzyılda Osmanlı",
+      "question": "Birinci Dünya Savaşı sırasında Medine’yi İngilizlere ve isyancı Araplara karşı kahramanca müdafaa eden ve 'Medine Müdafii', 'Çöl Kaplanı' unvanlarıyla bilinen Osmanlı komutanı kimdir?",
+      "options": [
+        "Cemal Paşa",
+        "Fahrettin Paşa",
+        "Halil Kut Paşa",
+        "Cevat Çobanlı Paşa",
+        "Nurettin Paşa"
+      ],
+      "correctAnswer": 1,
+      "solution": "Birinci Dünya Savaşı'nda Medine'yi olağanüstü zor koşullarda son ana kadar savunan efsanevi komutan Fahrettin (Türkkan) Paşa'dır."
+    }
+  ],
+  "matematik": [
+    {
+      "topic": "Doğruda ve Üçgende Açılar",
+      "question": "Aşağıdaki şekilde [AB] // [CD] paralel doğruları d doğrusu ile kesilmektedir. Oluşan açılar şekilde verilmiştir. Buna göre x açısı kaç derecedir?",
+      "options": [
+        "30°",
+        "45°",
+        "60°",
+        "75°",
+        "90°"
+      ],
+      "correctAnswer": 2,
+      "solution": "İç ters açılar kuralına göre [AB] ve [CD] paralel doğruları arasındaki zıt yöne bakan açılar eşittir. Bu nedenle x = 60 derecedir.",
+      "chart": {
+        "type": "geometry",
+        "shape": "parallel_lines",
+        "angles": {
+          "top_right": "60°",
+          "bottom_left": "x"
+        }
+      }
+    }
+  ]
+}

@@ -7,6 +7,19 @@ import { calculateSM2, prepareSRSQueue, createInitialSRSWord, SRSWordWithInfo } 
 import { ReviewQuality, WordReviewData } from "@/types/word.js";
 import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
 import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/logic/kpssCalculator.js";
+import kpss2019 from "@/data/kpss/kpss2019.json";
+import kpss2020 from "@/data/kpss/kpss2020.json";
+import kpss2021 from "@/data/kpss/kpss2021.json";
+
+import exam2019 from "@/data/kpss/exams/exam2019.json";
+import exam2020 from "@/data/kpss/exams/exam2020.json";
+import exam2021 from "@/data/kpss/exams/exam2021.json";
+
+const KPSS_YEARLY_DATA: Record<string, any> = {
+  "2019": exam2019,
+  "2020": exam2020,
+  "2021": exam2021
+};
 
 // Extracted Presentational Sub-components
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
@@ -15,6 +28,7 @@ import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
 import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
 import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssQuizModal } from "@/components/kpss/KpssQuizModal.js";
+import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -47,6 +61,27 @@ interface QuizQuestion {
     markers?: Array<{ x: number; y: number; label: string }>;
   };
 }
+
+const KPSS_AI_TEMPLATES: Record<string, any> = {
+  "2019": kpss2019,
+  "2020": kpss2020,
+  "2021": kpss2021
+};
+
+const getLocalQuestionsForTopic = (subjectKey: string, topicName: string): QuizQuestion[] => {
+  const aggregated: QuizQuestion[] = [];
+  Object.values(KPSS_AI_TEMPLATES).forEach((yearData) => {
+    const list = yearData[subjectKey];
+    if (Array.isArray(list)) {
+      list.forEach((q: any) => {
+        if (q.topic === topicName) {
+          aggregated.push(q);
+        }
+      });
+    }
+  });
+  return aggregated;
+};
 
 interface KpssPastQuiz {
   subject: string;
@@ -132,7 +167,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [remainingCount, setRemainingCount] = useState(0);
 
   // Active sub-tab
-  const [activeTab, setActiveTab] = useState<"progress" | "srs">("progress");
+  const [activeTab, setActiveTab] = useState<"progress" | "srs" | "past-exams">("progress");
 
   // Sorting state for topic lists
   const [sortBy, setSortBy] = useState<"default" | "questions" | "status">("default");
@@ -282,13 +317,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     subjectKey: string,
     topicName: string,
     count: number,
-    excludeQuestions: QuizQuestion[] = []
+    excludeQuestions: QuizQuestion[] = [],
+    fewShotExamples: QuizQuestion[] = []
   ): Promise<QuizQuestion[]> => {
     const tStart = performance.now();
     console.log(`%c[AI Fetch - Start] Requesting ${count} questions for "${topicName}"`, "color: #a78bfa; font-weight: bold;");
 
     const subjectName = SUBJECT_NAMES[lang][subjectKey] || subjectKey;
-    const systemPrompt = getKpssSystemPrompt(subjectKey, lang);
+    const systemPrompt = getKpssSystemPrompt(subjectKey, lang, fewShotExamples);
 
     let userPrompt = `${subjectName} dersinin '${topicName}' konusu hakkında tam ${count} adet soru içeren zorlayıcı bir KPSS seviye tespit testi oluştur.`;
     if (excludeQuestions.length > 0) {
@@ -533,38 +569,80 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     setQuizQuestions([]);
 
     try {
-      // 1. Get first question immediately
-      const firstList = await fetchQuestionsSubsetFromAI(subjectKey, topicName, 1);
-      if (firstList.length === 0) {
-        throw new Error("Soru üretilemedi.");
-      }
+      // Check if we have verified questions in our local question bank
+      const localQuestions = getLocalQuestionsForTopic(subjectKey, topicName);
 
-      const firstQuestion = firstList[0];
-      setQuizQuestions([firstQuestion]);
-      setCurrentQuestionIndex(0);
-      setSelectedAnswers(new Array(count).fill(-1));
-      setQuizLoading(false); // First question loaded, let user start!
+      if (localQuestions.length > 0) {
+        if (localQuestions.length >= count) {
+          // Case 1: We have enough local questions, load all instantly!
+          setQuizQuestions(localQuestions.slice(0, count));
+          setCurrentQuestionIndex(0);
+          setSelectedAnswers(new Array(count).fill(-1));
+          setQuizLoading(false);
+          setIsBackgroundLoading(false);
+          console.log(`[KPSS Question Bank] Loaded ${count} questions instantly from local bank.`);
+        } else {
+          // Case 2: We have some local questions, load them and fetch the rest in background
+          setQuizQuestions(localQuestions);
+          setCurrentQuestionIndex(0);
+          setSelectedAnswers(new Array(count).fill(-1));
+          setQuizLoading(false); // Let user start immediately!
+          setIsBackgroundLoading(true);
 
-      // 2. Pre-fetch remaining count - 1 questions in the background
-      if (count > 1) {
-        setIsBackgroundLoading(true);
-        fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [firstQuestion])
-          .then((remainingQuestions) => {
-            if (remainingQuestions.length > 0) {
-              setQuizQuestions((prev) => {
-                const updated = [...prev, ...remainingQuestions];
-                return updated.slice(0, count);
-              });
-            }
-          })
-          .catch((err) => {
-            console.error("Background questions pre-fetch failed:", err);
-          })
-          .finally(() => {
-            setIsBackgroundLoading(false);
-          });
+          const neededCount = count - localQuestions.length;
+          console.log(`[KPSS Question Bank] Loaded ${localQuestions.length} questions instantly. Fetching remaining ${neededCount} from AI.`);
+
+          fetchQuestionsSubsetFromAI(subjectKey, topicName, neededCount, localQuestions, localQuestions)
+            .then((remainingQuestions) => {
+              if (remainingQuestions.length > 0) {
+                setQuizQuestions((prev) => {
+                  const updated = [...prev, ...remainingQuestions];
+                  return updated.slice(0, count);
+                });
+              }
+            })
+            .catch((err) => {
+              console.error("Background questions pre-fetch failed:", err);
+            })
+            .finally(() => {
+              setIsBackgroundLoading(false);
+            });
+        }
       } else {
-        setIsBackgroundLoading(false);
+        // Case 3: No local questions available, generate all via AI
+        // 1. Get first question immediately
+        const firstList = await fetchQuestionsSubsetFromAI(subjectKey, topicName, 1);
+        if (firstList.length === 0) {
+          throw new Error("Soru üretilemedi.");
+        }
+
+        const firstQuestion = firstList[0];
+        setQuizQuestions([firstQuestion]);
+        setCurrentQuestionIndex(0);
+        setSelectedAnswers(new Array(count).fill(-1));
+        setQuizLoading(false); // First question loaded, let user start!
+
+        // 2. Pre-fetch remaining count - 1 questions in the background
+        if (count > 1) {
+          setIsBackgroundLoading(true);
+          fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [firstQuestion])
+            .then((remainingQuestions) => {
+              if (remainingQuestions.length > 0) {
+                setQuizQuestions((prev) => {
+                  const updated = [...prev, ...remainingQuestions];
+                  return updated.slice(0, count);
+                });
+              }
+            })
+            .catch((err) => {
+              console.error("Background questions pre-fetch failed:", err);
+            })
+            .finally(() => {
+              setIsBackgroundLoading(false);
+            });
+        } else {
+          setIsBackgroundLoading(false);
+        }
       }
     } catch (err: any) {
       console.error("AI quiz generation error:", err);
@@ -597,12 +675,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
 
     try {
-      await kpssService.updateTopicStatus(
-        currentSubject,
-        activeQuizTopic!,
-        newStatus,
-        scorePercentage
-      );
+      const isRegularTopic = (kpssData[currentSubject] || []).some((t) => t.title === activeQuizTopic);
+      if (isRegularTopic) {
+        await kpssService.updateTopicStatus(
+          currentSubject,
+          activeQuizTopic!,
+          newStatus,
+          scorePercentage
+        );
+      }
 
       // Save past quiz results
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
@@ -651,6 +732,65 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       setSelectedAnswers([]);
       setQuizError(null);
     }
+  };
+
+  const handleStartPastExam = (year: string, subject: string) => {
+    let questions: QuizQuestion[] = [];
+
+    if (year === "karma") {
+      // Aggregate questions from all years
+      Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
+        const yearData = KPSS_YEARLY_DATA[y];
+        if (subject === "all") {
+          // Add all subjects
+          Object.values(yearData).forEach((list: any) => {
+            if (Array.isArray(list)) questions.push(...list);
+          });
+        } else {
+          const list = yearData[subject];
+          if (Array.isArray(list)) questions.push(...list);
+        }
+      });
+      // Shuffle the aggregated questions
+      questions = [...questions].sort(() => Math.random() - 0.5);
+    } else {
+      // Load specific year
+      const yearData = KPSS_YEARLY_DATA[year];
+      if (yearData) {
+        if (subject === "all") {
+          Object.values(yearData).forEach((list: any) => {
+            if (Array.isArray(list)) questions.push(...list);
+          });
+        } else {
+          questions = yearData[subject] || [];
+        }
+      }
+    }
+
+    if (questions.length === 0) {
+      setQuizError(lang === "tr" ? "Bu kategori için çıkmış soru bulunamadı." : "No past questions found for this category.");
+      setQuizStep("questions");
+      setActiveQuizTopic(lang === "tr" ? "Hata" : "Error");
+      return;
+    }
+
+    setQuizQuestions(questions);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswers(new Array(questions.length).fill(-1));
+    setSelectedQuizCount(questions.length);
+    setQuizStep("questions");
+
+    const subjectName = subject === "all" 
+      ? (lang === "tr" ? "GY-GK Karma" : "GY-GK Mixed")
+      : (subject === "cografya" ? (lang === "tr" ? "Coğrafya" : "Geography") : (subject === "tarih" ? (lang === "tr" ? "Tarih" : "History") : "Matematik"));
+    
+    const yearName = year === "karma" 
+      ? (lang === "tr" ? "Karma Yıllar" : "Mixed Years")
+      : year;
+
+    setActiveQuizTopic(lang === "tr" ? `${yearName} KPSS Çıkmış Sorular (${subjectName})` : `${yearName} KPSS Past Questions (${subjectName})`);
+    setQuizLoading(false);
+    setIsBackgroundLoading(false);
   };
 
   // Add daily studies count
@@ -764,6 +904,12 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             onClick={() => setActiveTab("srs")}
           >
             {lang === "tr" ? "Aralıklı Tekrar (Kartlar)" : "Spaced Repetition (Cards)"}
+          </button>
+          <button
+            className={`pomo-tab-link ${activeTab === "past-exams" ? "active" : ""}`}
+            onClick={() => setActiveTab("past-exams")}
+          >
+            {lang === "tr" ? "Çıkmış Sorular (ÖSYM)" : "Past Exams (ÖSYM)"}
           </button>
         </div>
         {activeTab === "progress" && (
@@ -882,6 +1028,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               onReloadQueue={loadKpssSrsQueue}
             />
           </div>
+        )}
+
+        {activeTab === "past-exams" && (
+          <KpssPastExamsDashboard
+            lang={lang}
+            labels={labels}
+            onStartPastExam={handleStartPastExam}
+          />
         )}
       </div>
 
