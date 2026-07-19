@@ -90,19 +90,19 @@ export function AIChatView({
 
     // Check notes first
     if (textLower.includes("günlük ekle") || textLower.includes("günlük yazısı ekle") || textLower.includes("günlük oluştur") || textLower.includes("günlük eklermisin")) {
-      const match = query.match(/(?:günlük ekle|günlük yazısı ekle|günlük oluştur|günlük eklermisin)\s*[:\-]?\s*(.+)$/i);
+      const match = query.match(/(?:günlük ekle|günlük yazısı ekle|günlük oluştur|günlük eklermisin)\s*[:-]?\s*(.+)$/i);
       if (match) {
         return { parsed: true, action: "add_note", note_type: "diary", content: match[1].trim() };
       }
     }
     if (textLower.includes("ders notu ekle") || textLower.includes("cornell ders notu ekle") || textLower.includes("ders notu oluştur") || textLower.includes("ders notu eklermisin") || textLower.includes("cornell notu ekle")) {
-      const match = query.match(/(?:ders notu ekle|cornell ders notu ekle|ders notu oluştur|ders notu eklermisin|cornell notu ekle)\s*[:\-]?\s*(.+)$/i);
+      const match = query.match(/(?:ders notu ekle|cornell ders notu ekle|ders notu oluştur|ders notu eklermisin|cornell notu ekle)\s*[:-]?\s*(.+)$/i);
       if (match) {
         return { parsed: true, action: "add_note", note_type: "cornell", content: match[1].trim() };
       }
     }
     if (textLower.includes("not ekle") || textLower.includes("not oluştur") || textLower.includes("not eklermisin")) {
-      const match = query.match(/(?:not ekle|not oluştur|not eklermisin)\s*[:\-]?\s*(.+)$/i);
+      const match = query.match(/(?:not ekle|not oluştur|not eklermisin)\s*[:-]?\s*(.+)$/i);
       if (match) {
         return { parsed: true, action: "add_note", note_type: "note", content: match[1].trim() };
       }
@@ -134,13 +134,13 @@ export function AIChatView({
         .replace(/for/gi, "")
         .replace(/(task|todo)?\s*(create|add|write)/gi, "")
         .trim();
-      cleaned = cleaned.replace(/^[:\-,\s]+/, "").trim();
+      cleaned = cleaned.replace(/^[:,\s-]+/, "").trim();
 
       return { parsed: true, action: "create_task", text: cleaned || "Task", date: dateStr };
     }
 
     // 2. Check for "ayın X'ine" / "ayın Xine"
-    const ayinMatch = textLower.match(/(?:ayın\s+)?(\d+)(?:'sine|'sine\s+|sine|sine\s+|'ine|ine|'na|na|a|e)?\s+(?:görev|task)?\s*(?:oluştur|ekle|yaz)\s*[:\-]?\s*(.+)$/i);
+    const ayinMatch = textLower.match(/(?:ayın\s+)?(\d+)(?:'sine|'sine\s+|sine|sine\s+|'ine|ine|'na|na|a|e)?\s+(?:görev|task)?\s*(?:oluştur|ekle|yaz)\s*[:-]?\s*(.+)$/i);
     if (ayinMatch) {
       const dayNum = parseInt(ayinMatch[1], 10);
       const taskText = ayinMatch[2].trim();
@@ -154,7 +154,7 @@ export function AIChatView({
     }
 
     // 3. Check for specific date (e.g., "25 temmuz")
-    const trDateMatch = textLower.match(/(\d+)\s+([a-zA-Zçıöşğüİ]+)\s*(?:için)?\s+(?:görev|task)?\s*(?:oluştur|ekle|yaz)\s*[:\-]?\s*(.+)$/i);
+    const trDateMatch = textLower.match(/(\d+)\s+([a-zA-Zçıöşğüİ]+)\s*(?:için)?\s+(?:görev|task)?\s*(?:oluştur|ekle|yaz)\s*[:-]?\s*(.+)$/i);
     if (trDateMatch) {
       const dayNum = parseInt(trDateMatch[1], 10);
       const monthName = trDateMatch[2].toLowerCase();
@@ -169,7 +169,7 @@ export function AIChatView({
       }
     }
 
-    const enDateMatch = textLower.match(/(?:create|add)\s+task\s+for\s+([a-zA-Z]+)\s+(\d+)\s*[:\-]?\s*(.+)$/i);
+    const enDateMatch = textLower.match(/(?:create|add)\s+task\s+for\s+([a-zA-Z]+)\s+(\d+)\s*[:-]?\s*(.+)$/i);
     if (enDateMatch) {
       const monthName = enDateMatch[1].toLowerCase();
       const dayNum = parseInt(enDateMatch[2], 10);
@@ -270,7 +270,7 @@ export function AIChatView({
     
     try {
       return JSON.parse(cleaned);
-    } catch (parseError) {
+    } catch {
       // Extremely robust fallback: if JSON parsing fails after substring extraction,
       // scan if there is a simpler conversational markdown block, or try to clean JSON syntax
       try {
@@ -279,7 +279,7 @@ export function AIChatView({
           .replace(/,\s*([\]}])/g, "$1") // remove trailing commas before closing braces/brackets
           .replace(/(["\d])\s*\n\s*"/g, '$1,\n"'); // add missing commas between adjacent keys
         return JSON.parse(patched);
-      } catch (secError) {
+      } catch {
         console.warn("[cleanAndParseJSON Fallback] JSON parsing failed twice. Raw text was:", text);
         // Return a safe object instead of throwing, so the UI never crashes or gives alerts
         return {
@@ -309,7 +309,7 @@ export function AIChatView({
         params: parsed.params || null,
         thinking
       };
-    } catch (e) {
+    } catch {
       // Fallback: clean out the think block and use raw response as conversational reply
       const reply = rawText.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
       return {
@@ -367,7 +367,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         let errBody = "";
         try {
           errBody = await res.text();
-        } catch (_) {}
+        } catch {
+          // ignore
+        }
         throw new Error(`Ollama returned status ${res.status}: ${errBody || res.statusText}`);
       }
 
@@ -413,7 +415,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         let errBody = "";
         try {
           errBody = await res.text();
-        } catch (_) {}
+        } catch {
+          // ignore
+        }
         throw new Error(`OpenRouter API returned status ${res.status}: ${errBody || res.statusText}`);
       }
 
@@ -451,7 +455,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         let errBody = "";
         try {
           errBody = await res.text();
-        } catch (_) {}
+        } catch {
+          // ignore
+        }
         throw new Error(`Gemini API returned status ${res.status}: ${errBody || res.statusText}`);
       }
 

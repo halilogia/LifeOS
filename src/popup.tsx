@@ -84,7 +84,6 @@ function PopupApp() {
       ) : (
         <PopupDetoxTab
           t={t}
-          lang={lang}
           detoxEnabled={detoxEnabled}
           detoxBlockedSites={detoxBlockedSites}
           detoxEndTime={detoxEndTime}

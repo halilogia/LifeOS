@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "preact/hooks";
+import { useState, useEffect, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { IpoCard } from "@/components/halkaarz/IpoCard.js";
@@ -12,13 +12,7 @@ import {
 import {
   fetchStockPrices,
   refreshStockPrices,
-  POPULAR_BIST_STOCKS,
   StockQuote,
-  formatPrice,
-  formatVolume,
-  formatMarketCap,
-  fetchStockHistory,
-  StockHistoryItem,
 } from "@/services/bistService.js";
 
 interface HalkaArzViewProps {
@@ -29,27 +23,7 @@ type TabId = "active" | "upcoming" | "history" | "stocks";
 
 // ── Format helpers ────────────────────────────────────────────────────────────
 
-function formatDate(dateStr: string, lang: Language): string {
-  if (!dateStr) {return "—";}
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) {return dateStr;}
-    if (lang === "tr") {
-      const months = [
-        "Oca", "Şub", "Mar", "Nis", "May", "Haz",
-        "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
-      ];
-      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-    }
-    return d.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return dateStr;
-  }
-}
+
 
 function formatTime(ts: number): string {
   return new Date(ts).toLocaleTimeString("tr-TR", {
@@ -80,14 +54,7 @@ function IconCalendar() {
   );
 }
 
-function IconTag() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-      <line x1="7" y1="7" x2="7.01" y2="7" />
-    </svg>
-  );
-}
+
 
 function IconTrendUp() {
   return (
@@ -98,14 +65,7 @@ function IconTrendUp() {
   );
 }
 
-function IconExternalLink() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="7" y1="17" x2="17" y2="7" />
-      <polyline points="7 7 17 7 17 17" />
-    </svg>
-  );
-}
+
 
 function IconRefresh() {
   return (
@@ -137,14 +97,7 @@ function IconClock() {
 
 // ── IPO Status helper ─────────────────────────────────────────────────────────
 
-function statusLabel(status: IPOEntry["status"], t: (typeof translations)["tr"]): string {
-  switch (status) {
-    case "active":    return t.ipo_status_active;
-    case "upcoming":  return t.ipo_status_upcoming;
-    case "completed": return t.ipo_status_completed;
-    case "cancelled": return t.ipo_status_cancelled;
-  }
-}
+
 
 
 
@@ -172,7 +125,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   const [stockLastUpdated, setStockLastUpdated] = useState<number | null>(null);
   const [stockRefreshing, setStockRefreshing] = useState(false);
   const [selectedStockForChart, setSelectedStockForChart] = useState<string | null>(null);
-  const [chartFrameLoading, setChartFrameLoading] = useState(true);
+
 
   // Derived filter states
   const openIPOs = activeIPOs.filter((ipo) => ipo.status === "active");
@@ -468,7 +421,6 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
                     quote={q}
                     t={t}
                     onClick={() => {
-                      setChartFrameLoading(true);
                       setSelectedStockForChart(q.symbol.replace(".IS", ""));
                     }}
                   />

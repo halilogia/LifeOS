@@ -1,6 +1,5 @@
 interface PopupDetoxTabProps {
   t: Record<string, string>;
-  lang: string;
   detoxEnabled: boolean;
   detoxBlockedSites: string[];
   detoxEndTime: number;
@@ -22,7 +21,6 @@ const SUPPORTED_SITES = [
 
 export function PopupDetoxTab({
   t,
-  lang,
   detoxEnabled,
   detoxBlockedSites,
   detoxEndTime,
