@@ -6,7 +6,6 @@
 
 import { useEffect, useCallback } from "preact/hooks";
 import type { Language } from "../../domain/value-objects/Language.js";
-import { googleSyncService } from "../../services/googleSyncService.js";
 import { checkAndResetRepeatingTasks } from "../../domain/services/TaskService.js";
 import { ChromeStorageTodoRepository } from "../../infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageSyncRepository } from "../../infrastructure/persistence/ChromeStorageSyncRepository.js";
