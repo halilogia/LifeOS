@@ -3,6 +3,9 @@
  * Core domain entity representing a task.
  * Domain layer - no external dependencies.
  * Uses domain value objects for type safety.
+ * 
+ * NOTE: This entity is kept mutable to match existing codebase usage.
+ * Immutable helpers (createTodo, toggleTodo, etc.) are provided for new code.
  */
 
 import type { RepeatType } from "../value-objects/RepeatType.js";
@@ -10,17 +13,17 @@ import type { TodoStatus } from "../value-objects/TodoStatus.js";
 import { isCompleted } from "../value-objects/TodoStatus.js";
 
 export interface Todo {
-    readonly id?: string;
-    readonly text: string;
-    readonly completed: boolean;
-    readonly status: TodoStatus;
-    readonly repeat: RepeatType;
-    readonly category: string;
-    readonly lastCompletedDate: string | null;
-    readonly completedDates?: readonly string[];
-    readonly dueDate?: string;
-    readonly urgent?: boolean;
-    readonly important?: boolean;
+    id?: string; // Google Tasks ID
+    text: string;
+    completed: boolean;
+    status: TodoStatus;
+    repeat: RepeatType;
+    category: string;
+    lastCompletedDate: string | null;
+    completedDates?: string[];
+    dueDate?: string; // Target date (YYYY-MM-DD)
+    urgent?: boolean;
+    important?: boolean;
 }
 
 /**
@@ -49,7 +52,7 @@ export function createTodo(params: {
 
 /**
  * Toggles the completed state of a Todo.
- * Returns a new Todo object (immutable).
+ * Returns a new Todo object.
  */
 export function toggleTodo(todo: Todo): Todo {
     const newCompleted = !todo.completed;
@@ -68,7 +71,7 @@ export function toggleTodo(todo: Todo): Todo {
 /**
  * Updates the status of a Todo.
  * If status is "done", also sets completed=true and records the date.
- * Returns a new Todo object (immutable).
+ * Returns a new Todo object.
  */
 export function updateTodoStatus(todo: Todo, newStatus: TodoStatus): Todo {
     if (todo.status === newStatus) return todo;
@@ -89,7 +92,7 @@ export function updateTodoStatus(todo: Todo, newStatus: TodoStatus): Todo {
 
 /**
  * Updates the Eisenhower matrix fields (urgent/important).
- * Returns a new Todo object (immutable).
+ * Returns a new Todo object.
  */
 export function updateTodoPriorities(
     todo: Todo,
@@ -105,7 +108,7 @@ export function updateTodoPriorities(
 
 /**
  * Assigns a Google Tasks ID to a Todo.
- * Returns a new Todo object (immutable).
+ * Returns a new Todo object.
  */
 export function assignTodoId(todo: Todo, id: string): Todo {
     return { ...todo, id };
