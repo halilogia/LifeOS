@@ -1,0 +1,138 @@
+{
+  "cografya": [
+    {
+      "topic": "Türkiye’nin Toprak, Su ve Doğal Varlıkları",
+      "question": "Aşağıdaki illerin hangisinde jips (alçı taşı) karstına ait yer şekilleri daha yaygın olarak görülür?",
+      "options": [
+        "Yozgat",
+        "Diyarbakır",
+        "Giresun",
+        "Kastamonu",
+        "Sivas"
+      ],
+      "correctAnswer": 4,
+      "solution": "Türkiye'de jips (alçı taşı) karstı dendiğinde akla ilk gelen yer Sivas ve çevresidir. Sivas jips karstı topografyasının en karakteristik görüldüğü ildir."
+    },
+    {
+      "topic": "Nüfus ve Yerleşme",
+      "question": "Türkiye’nin 1927-2017 yılları arasındaki nüfusu incelendiğinde yıllık nüfus artış hızının en düşük olduğu dönemin 1940-1945 yılları arasında (binde 10.5) olduğu görülür.\nBu durum üzerinde aşağıdakilerden hangisinin etkisi en fazladır?",
+      "options": [
+        "Seferberlik ilan edilerek erkek nüfusun büyük kısmının silah altına alınması",
+        "Ülke genelinde yaşanan salgın hastalıklar",
+        "Ülke dışına işçi göçlerinin başlaması",
+        "Uygulanan aktif nüfus azaltıcı politikalar",
+        "Eğitim seviyesinin hızla yükselmesi"
+      ],
+      "correctAnswer": 0,
+      "solution": "İkinci Dünya Savaşı yıllarına denk gelen 1940-1945 döneminde Türkiye'de seferberlik ilan edilmiş ve yetişkin erkek nüfus asker altına alınmıştır. Bu durum evlilik ve doğum oranlarını düşürerek nüfus artış hızını binde 10.5 ile Cumhuriyet tarihinin en düşük seviyesine indirmiştir."
+    },
+    {
+      "topic": "Nüfus ve Yerleşme",
+      "question": "Türkiye’nin Karadeniz kıyı kuşağında, tarım ve yerleşim alanlarında dağınık yerleşme tipinin yaygın olarak görülmesinde aşağıdakilerden hangisinin etkisi söylenemez?",
+      "options": [
+        "Su kaynaklarının bol ve yaygın olması",
+        "Eğim değerlerinin yüksek olması",
+        "Geniş ve engebesiz platoların geniş yer kaplaması",
+        "Arazinin derin vadiler ve akarsularla parçalanmış olması",
+        "Dağlık ve engebeli arazi yapısı"
+      ],
+      "correctAnswer": 2,
+      "solution": "Karadeniz kıyı kuşağında dağınık yerleşmenin nedenleri su kaynaklarının bolluğu ve arazinin çok engebeli/parçalanmış olmasıdır. Bölgede geniş ve düz platoların yaygın olması söz konusu değildir."
+    },
+    {
+      "topic": "Ulaşım / Ticaret / Turizm",
+      "question": "Türkiye’de kıyı turizmi (deniz turizmi) sezonunun en uzun olduğu kıyı kuşağı Akdeniz kıyılarıdır.\nBu durumun temel coğrafi nedeni aşağıdakilerden hangisidir?",
+      "options": [
+        "Enlemin etkisiyle güneşli gün sayısının ve deniz suyu sıcaklığının fazla olması",
+        "Geniş ve kumlu plajların (kumsalların) varlığı",
+        "Tarihî ve doğal güzelliklerin zengin olması",
+        "Ulaşım ve beşyıldızlı konaklama imkânlarının gelişmiş olması",
+        "Kıyı şeridi uzunluğunun diğer bölgelerden fazla olması"
+      ],
+      "correctAnswer": 0,
+      "solution": "Akdeniz kıyılarında deniz suyu sıcaklığının yüksek olması ve enleme bağlı olarak güneşli gün sayısının en fazla olması kıyı turizmi sezonunu en uzun kılan temel faktördür."
+    }
+  ],
+  "tarih": [
+    {
+      "topic": "İslamiyet Öncesi Türk Tarihi",
+      "question": "İslamiyet öncesi Türk devletlerinde kullanılan bazı devlet ve toplum terimleri ile bunların günümüzdeki karşılıkları arasında yapılan aşağıdaki eşleştirmelerden hangisi yanlıştır?",
+      "options": [
+        "İlig - Hükümdar",
+        "Kün - Halk",
+        "Oguş - Aile",
+        "Ayukı - Yargıç",
+        "Örgin - Taht"
+      ],
+      "correctAnswer": 3,
+      "solution": "Ayukı, İslamiyet öncesi Türk devletlerinde 'hükümet' (bakanlar kurulu) anlamına gelir. Yargıç (hakim) anlamına gelen terim ise 'Yargan'dır."
+    },
+    {
+      "topic": "Anadolu Selçuklu ve Beylikler",
+      "question": "Türkiye Selçuklu Devleti’nin ilk başkenti olan İznik’in Birinci Haçlı Ordusu tarafından işgal edilmesi üzerine, devlet merkezinin Konya’ya taşınması aşağıdaki hükümdarların hangisi döneminde gerçekleşmiştir?",
+      "options": [
+        "I. Kılıç Arslan",
+        "I. Mesut",
+        "I. Alâeddin Keykubat",
+        "I. Gıyaseddin Keyhüsrev",
+        "I. İzzettin Keykavus"
+      ],
+      "correctAnswer": 0,
+      "solution": "I. Haçlı Seferi sırasında İznik kaybedilince, Türkiye Selçuklu Hükümdarı I. Kılıç Arslan başkenti daha iç kesimde ve güvenli olan Konya'ya taşımıştır."
+    },
+    {
+      "topic": "İlk Türk İslam Devletleri",
+      "question": "Türk-İslam devletlerinde devlet yönetimmi, hükümdarın görevleri, adalet ve ülke idaresi hakkında yöneticilere bilgi ve öğüt veren nasihatname tarzındaki eserlere ne ad verilir?",
+      "options": [
+        "Mülkname",
+        "Siyasetname",
+        "Seyahatname",
+        "İcazetname",
+        "Menakıbname"
+      ],
+      "correctAnswer": 1,
+      "solution": "Devlet yöneticilerine yönetim sanatını öğreten ve öğütler veren eserlere Siyasetname denir (Örn: Nizamülmülk'ün Siyasetname'si)."
+    },
+    {
+      "topic": "Osmanlı Kültür ve Medeniyeti",
+      "question": "Osmanlı Devleti’nin ilk yıllarında, fetihleri özendirmek amacıyla fethedilen kalenin veya bölgenin yönetimi ile gelirinin geçici olarak fetheden komutana verilmesi usulü aşağıdakilerden hangisi nedir?",
+      "options": [
+        "Kılıç hakkı",
+        "İltizam sistemi",
+        "Gedik hakkı",
+        "Millet sistemi",
+        "Cülus bahşişi"
+      ],
+      "correctAnswer": 0,
+      "solution": "Kılıç hakkı, fetihleri teşvik etmek amacıyla fethedilen arazinin dirlik olarak fetheden komutana verilmesidir. Bu gelenek ilk beylik yıllarında sınırların hızla genişlemesini sağlamıştır."
+    },
+    {
+      "topic": "Osmanlı Siyaseti (Kuruluş-Dağılma)",
+      "question": "III. Selim dönemi ıslahat hazırlıkları kapsamında kurulan ve eyaletlerden gelen temsilcilerin de katıldığı, danışma ve meşveret amaçlı büyük meclisin adı aşağıdakilerden hangisidir?",
+      "options": [
+        "Meclis-i Vâlâ",
+        "Divan-ı Hümayun",
+        "Meclis-i Mebusan",
+        "Meclis-i Meşveret",
+        "Babıali Meclisi"
+      ],
+      "correctAnswer": 3,
+      "solution": "III. Selim Nizam-ı Cedit ıslahatlarını planlarken devlet adamlarının katılımıyla 'Meclis-i Meşveret' adında geniş kapsamlı bir danışma meclisi toplamıştır."
+    }
+  ],
+  "matematik": [
+    {
+      "topic": "Doğruda ve Üçgende Açılar",
+      "question": "Bir üçgenin iç açılarının ölçüleri sırasıyla 2, 3 ve 4 sayılarıyla doğru orantılıdır. Buna göre, bu üçgenin en büyük iç açısı kaç derecedir?",
+      "options": [
+        "40°",
+        "60°",
+        "80°",
+        "100°",
+        "120°"
+      ],
+      "correctAnswer": 2,
+      "solution": "Doğru orantı kuralına göre iç açılar 2k, 3k ve 4k olsun. Üçgenin iç açılar toplamı 180 derecedir. 2k + 3k + 4k = 9k = 180 ise k = 20 bulunur. En büyük iç açı 4k = 4 * 20 = 80 derecedir."
+    }
+  ]
+}

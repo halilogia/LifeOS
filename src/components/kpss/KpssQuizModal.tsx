@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
 import { KpssQuestionMap } from "@/components/kpss/KpssQuestionMap.js";
+import { MathRenderer } from "@/components/kpss/MathRenderer.js";
 
 interface QuizQuestion {
   question: string;
@@ -183,7 +184,7 @@ export function KpssQuizModal({
 
               <div className="kpss-quiz-question-container">
                 <div className="kpss-quiz-question-text">
-                  {quizQuestions[currentQuestionIndex].question}
+                  <MathRenderer text={quizQuestions[currentQuestionIndex].question} />
                 </div>
               </div>
 
@@ -237,7 +238,7 @@ export function KpssQuizModal({
                       >
                         {letter}
                       </div>
-                      <span>{opt}</span>
+                      <span><MathRenderer text={opt} /></span>
                     </div>
                   );
                 })}
@@ -259,7 +260,7 @@ export function KpssQuizModal({
                   <div style={{ fontWeight: "700", color: "var(--accent-color)", marginBottom: "4px" }}>
                     {lang === "tr" ? "Çözüm Açıklaması:" : "Solution & Explanation:"}
                   </div>
-                  {quizQuestions[currentQuestionIndex].solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")}
+                  <MathRenderer text={quizQuestions[currentQuestionIndex].solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")} />
                 </div>
               )}
 
@@ -344,7 +345,7 @@ export function KpssQuizModal({
                   return (
                     <div key={qIdx} style={{ paddingBottom: "12px", marginBottom: "12px", borderBottom: qIdx < quizQuestions.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none" }}>
                       <p style={{ margin: "0 0 8px 0", fontWeight: "600", fontSize: "0.82rem", color: "#ffffff" }}>
-                        {qIdx + 1}. {q.question}
+                        {qIdx + 1}. <MathRenderer text={q.question} />
                       </p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px", marginBottom: "8px" }}>
                         {q.options.map((opt, oIdx) => {
@@ -362,13 +363,13 @@ export function KpssQuizModal({
                           }
                           return (
                             <span key={oIdx} style={{ fontSize: "0.78rem", color, fontWeight: weight }}>
-                              {letter}) {opt} {isSelectedOpt && (lang === "tr" ? " (Sizin Cevabınız)" : " (Your Answer)")} {isCorrectOpt && (lang === "tr" ? " (Doğru Cevap)" : " (Correct Answer)")}
+                              {letter}) <MathRenderer text={opt} /> {isSelectedOpt && (lang === "tr" ? " (Sizin Cevabınız)" : " (Your Answer)")} {isCorrectOpt && (lang === "tr" ? " (Doğru Cevap)" : " (Correct Answer)")}
                             </span>
                           );
                         })}
                       </div>
                       <div style={{ fontSize: "0.78rem", color: "rgba(255, 255, 255, 0.65)", background: "rgba(255, 255, 255, 0.02)", padding: "8px", borderRadius: "6px", borderLeft: "3px solid var(--accent-color)" }}>
-                        <strong>{lang === "tr" ? "Çözüm: " : "Solution: "}</strong> {q.solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")}
+                        <strong>{lang === "tr" ? "Çözüm: " : "Solution: "}</strong> <MathRenderer text={q.solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")} />
                       </div>
                     </div>
                   );
