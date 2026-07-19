@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { translations } from "@/utils/i18n.js";
+import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { useTodos } from "@/presentation/hooks/useTodos.js";
 import { useSync } from "@/presentation/hooks/useSync.js";
@@ -98,7 +98,7 @@ export function App() {
     handleOpenSettings,
   } = useUI();
 
-  const t = translations[lang as Language];
+  const t = getTranslation(lang as Language);
 
   // ─── Sync Hook ────────────────────────────────────────────────────────────
   const {

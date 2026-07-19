@@ -10,12 +10,14 @@ import {
 import { getAllWords } from "../services/vocabularyService.js";
 import { Word } from "../types/word.js";
 import { Language } from "../types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface SrsViewProps {
   lang: Language;
 }
 
 export function SrsView({ lang }: SrsViewProps) {
+  const t = getTranslation(lang);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [wordsData, setWordsData] = useState<Word[]>([]);
@@ -117,9 +119,7 @@ export function SrsView({ lang }: SrsViewProps) {
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
           <div className="srs-preparing">
-            {lang === "tr"
-              ? "Kelime havuzu hazırlanıyor..."
-              : "Preparing vocabulary pool..."}
+            {t.srs_preparing}
           </div>
         </div>
       </div>
@@ -131,9 +131,7 @@ export function SrsView({ lang }: SrsViewProps) {
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
           <div className="srs-error">
-            {lang === "tr"
-              ? "Kelime havuzu yüklenirken bir hata oluştu."
-              : "An error occurred while loading the vocabulary pool."}
+            {t.srs_error_loading}
           </div>
         </div>
       </div>
@@ -157,15 +155,13 @@ export function SrsView({ lang }: SrsViewProps) {
                 fontWeight: 700,
               }}
             >
-              {lang === "tr" ? "Harika İş!" : "Great Job!"}
+              {t.srs_great_job}
             </h3>
             <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>
-              {lang === "tr"
-                ? "Bugünkü tüm kelime tekrarlarını tamamladın."
-                : "You've finished all your vocabulary reviews for today."}
+              {t.srs_finished_message}
             </p>
             <button onClick={loadSrsQueue} className="srs-restart-btn">
-              {lang === "tr" ? "Yeniden Başla" : "Restart"}
+              {t.srs_restart}
             </button>
           </div>
         </div>
@@ -188,7 +184,7 @@ export function SrsView({ lang }: SrsViewProps) {
       ? wordInfo.categories[0].translations.join(", ")
       : "") ||
     wordInfo.definitions?.[0] ||
-    (lang === "tr" ? "Tanım bulunamadı" : "Definition not found");
+    t.srs_def_missing;
 
   const wordFontSize =
     wordInfo.word.length > 15
@@ -211,7 +207,7 @@ export function SrsView({ lang }: SrsViewProps) {
                 color: "var(--text-primary)",
               }}
             >
-              {lang === "tr" ? "Aralıklı Tekrar" : "Spaced Repetition"}
+              {t.srs_spaced_repetition}
             </h2>
             <div className="srs-progress">
               {currentWordIndex + 1} / {currentQueue.length}
@@ -259,9 +255,7 @@ export function SrsView({ lang }: SrsViewProps) {
                     marginTop: "2rem",
                   }}
                 >
-                  {lang === "tr"
-                    ? "Anlamını görmek için tıklayın"
-                    : "Click to see translation"}
+                  {t.srs_click_to_see}
                 </p>
               </div>
 
@@ -331,7 +325,7 @@ export function SrsView({ lang }: SrsViewProps) {
                       handleReview("hard");
                     }}
                   >
-                    {lang === "tr" ? "Zor" : "Hard"}
+                    {t.srs_hard}
                   </button>
                   <button
                     className="srs-btn srs-btn-medium"
@@ -340,7 +334,7 @@ export function SrsView({ lang }: SrsViewProps) {
                       handleReview("medium");
                     }}
                   >
-                    {lang === "tr" ? "Orta" : "Medium"}
+                    {t.srs_medium}
                   </button>
                   <button
                     className="srs-btn srs-btn-easy"
@@ -349,7 +343,7 @@ export function SrsView({ lang }: SrsViewProps) {
                       handleReview("easy");
                     }}
                   >
-                    {lang === "tr" ? "Kolay" : "Easy"}
+                    {t.srs_easy}
                   </button>
                 </div>
               </div>

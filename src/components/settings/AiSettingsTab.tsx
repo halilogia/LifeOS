@@ -53,7 +53,7 @@ export function AiSettingsTab({
       }
     } catch (err: any) {
       console.error("Failed to fetch models:", err);
-      setModelError(lang === "tr" ? "Modeller yüklenemedi." : "Failed to load models.");
+      setModelError(t.settings_ai_failed_models);
     } finally {
       setLoadingModels(false);
     }
@@ -79,8 +79,8 @@ export function AiSettingsTab({
     "ollama": "Ollama",
     "gemini": "Google Gemini",
     "gcli": "Gemini CLI",
-    "other": lang === "tr" ? "9Router Kombinasyonları (Combos)" : "9Router Combos",
-    "Other": lang === "tr" ? "9Router Kombinasyonları (Combos)" : "9Router Combos"
+    "other": t.settings_ai_combos,
+    "Other": t.settings_ai_combos
   };
 
   const groupedModels: Record<string, { id: string; name: string }[]> = {};
@@ -147,7 +147,7 @@ export function AiSettingsTab({
               }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.7")}
-              title={showKey ? (lang === "tr" ? "Gizle" : "Hide") : (lang === "tr" ? "Göster" : "Show")}
+              title={showKey ? t.settings_ai_hide : t.settings_ai_show}
             >
               {showKey ? (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -166,7 +166,7 @@ export function AiSettingsTab({
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
-            {lang === "tr" ? "Özel API Adresi (Endpoint URL):" : "Custom API Endpoint URL:"}
+            {t.settings_ai_endpoint}
           </label>
           <input
             type="text"
@@ -184,16 +184,14 @@ export function AiSettingsTab({
             }}
           />
           <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
-            {lang === "tr" 
-              ? "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)" 
-              : "e.g. http://localhost:20128/v1 (9Router default address)"}
+            {t.settings_ai_endpoint_desc}
           </span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
-              {lang === "tr" ? "Model Seçin:" : "Select Model:"}
+              {t.settings_ai_select_model}
             </label>
             <button
               type="button"
@@ -210,9 +208,7 @@ export function AiSettingsTab({
                 outline: "none"
               }}
             >
-              {loadingModels 
-                ? (lang === "tr" ? "Yükleniyor..." : "Loading...") 
-                : (lang === "tr" ? "Modelleri Getir" : "Fetch Models")}
+              {loadingModels ? t.settings_ai_loading : t.settings_ai_fetch_models}
             </button>
           </div>
 
@@ -220,7 +216,7 @@ export function AiSettingsTab({
             <input
               type="text"
               value={filterText}
-              placeholder={lang === "tr" ? "Model ara (Örn: deepseek)..." : "Search model (e.g. deepseek)..."}
+              placeholder={t.settings_ai_search_model}
               onInput={(e) => setFilterText((e.target as HTMLInputElement).value)}
               style={{
                 background: "rgba(0, 0, 0, 0.25)",
@@ -255,7 +251,7 @@ export function AiSettingsTab({
                 cursor: "pointer"
               }}
             >
-              <option value="">-- {lang === "tr" ? "Bir model seçin" : "Select a model"} --</option>
+              <option value="">-- {t.settings_ai_select_model_placeholder} --</option>
               {Object.keys(groupedModels).map((provider) => (
                 <optgroup key={provider} label={provider} style={{ background: "#1e1e2e", color: "var(--accent-color)" }}>
                   {groupedModels[provider].map((m) => (
@@ -268,12 +264,12 @@ export function AiSettingsTab({
             </select>
           ) : (
             <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontStyle: "italic", opacity: 0.7 }}>
-              {modelError || (lang === "tr" ? "Mevcut modeller otomatik listelenecektir." : "Available models will be listed automatically.")}
+              {modelError || t.settings_ai_models_auto_list}
             </span>
           )}
 
           <label style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500, marginTop: "6px" }}>
-            {lang === "tr" ? "Aktif / Özel Model Kimliği:" : "Active / Custom Model ID:"}
+            {t.settings_ai_active_id}
           </label>
           <input
             type="text"
@@ -291,16 +287,14 @@ export function AiSettingsTab({
             }}
           />
           <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
-            {lang === "tr"
-              ? "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz."
-              : "You can select from the list above or manually type the full model ID here."}
+            {t.settings_ai_active_id_desc}
           </span>
         </div>
 
         {/* Toggle Show Thinking Process */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
           <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
-            {lang === "tr" ? "Düşünme Sürecini (Thinking) Göster:" : "Show Thinking Process:"}
+            {t.settings_ai_show_thinking}
           </label>
           <button
             type="button"

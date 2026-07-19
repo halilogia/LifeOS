@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { getTranslation } from "../utils/i18n.js";
 
 interface SidebarProps {
   lang: Language;
@@ -42,7 +42,7 @@ export function Sidebar({
   onSettingsOpen,
   onOrderChange,
 }: SidebarProps) {
-  const t = translations[lang];
+  const t = getTranslation(lang);
   const [order, setOrder] = useState<string[]>(DEFAULT_ORDER);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
@@ -301,7 +301,7 @@ export function Sidebar({
                       <rect x="14" y="14" width="7" height="7" rx="1"></rect>
                       <rect x="3" y="14" width="7" height="7" rx="1"></rect>
                     </svg>
-                    <span>{lang === "tr" ? "Eisenhower & Kanban" : "Eisenhower & Kanban"}</span>
+                    <span>{t.sidebar_eisenhower}</span>
                   </button>
                 );
               case "hifiz":
@@ -329,7 +329,7 @@ export function Sidebar({
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                     </svg>
-                    <span>{lang === "tr" ? "Ezberlerim" : "Memorizations"}</span>
+                    <span>{t.sidebar_hifiz}</span>
                   </button>
                 );
               case "notes":

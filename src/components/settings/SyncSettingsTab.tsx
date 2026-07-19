@@ -58,7 +58,7 @@ export function SyncSettingsTab({
               <div className="google-sync-status-indicator" style={{ marginTop: "8px" }}>
                 <span className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}></span>
                 <span>
-                  {isSyncing ? (lang === "tr" ? "Senkronize ediliyor..." : "Syncing...") : t.google_sync_status_synced}
+                  {isSyncing ? t.settings_syncing : t.google_sync_status_synced}
                 </span>
               </div>
 
@@ -94,7 +94,7 @@ export function SyncSettingsTab({
       {/* Manual Backup and Restore Actions */}
       <div className="settings-group">
         <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
-          {lang === "tr" ? "Veri Yönetimi (Manuel)" : "Data Management (Manual)"}
+          {t.settings_sync_data_manual}
         </h3>
         <div className="settings-actions">
           {/* Export Backup */}
