@@ -1,7 +1,6 @@
-import { Language, HifizProgress, HifizItem } from "@/types/types.js";
+import { HifizProgress, HifizItem } from "@/types/types.js";
 
 interface HifizMemorizationCardProps {
-  lang: Language;
   category: "surahs" | "duas";
   hifizProgress: HifizProgress[];
   t: any;
@@ -16,7 +15,6 @@ interface HifizMemorizationCardProps {
 }
 
 export function HifizMemorizationCard({
-  lang,
   category,
   hifizProgress,
   t,

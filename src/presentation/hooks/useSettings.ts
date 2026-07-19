@@ -157,13 +157,13 @@ export function useSettings() {
     }, []);
 
     const handleKpssTargetNetChange = useCallback(async (val: number) => {
-        if (isNaN(val) || val < 0 || val > 120) return;
+        if (isNaN(val) || val < 0 || val > 120) {return;}
         setKpssTargetNet(val);
         await syncSet({ kpssTargetNet: val });
     }, []);
 
     const handleKpssTargetScoreChange = useCallback(async (val: number) => {
-        if (isNaN(val) || val < 0 || val > 100) return;
+        if (isNaN(val) || val < 0 || val > 100) {return;}
         setKpssTargetScore(val);
         await syncSet({ kpssTargetScore: val });
     }, []);

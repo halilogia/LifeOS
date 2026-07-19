@@ -23,7 +23,6 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   } | null>(null);
 
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
-  const [isSyncingCalendar, setIsSyncingCalendar] = useState(false);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -116,7 +115,6 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
       const syncEnabled = syncData.syncEnabled === true;
       const calendarEnabled = syncData.syncCalendarEnabled === true;
       if (syncEnabled && calendarEnabled) {
-        setIsSyncingCalendar(true);
         try {
           const token = await _authApi.getAuthToken(false);
           const startStr = new Date(year, month, 1, 0, 0, 0).toISOString();
@@ -128,9 +126,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
         } catch (e) {
           console.error("Google Calendar fetching error:", e);
         } finally {
-          if (isMounted) {
-            setIsSyncingCalendar(false);
-          }
+          // calendar sync finished
         }
       } else {
         setCalendarEvents([]);
@@ -145,9 +141,9 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   // Group events by date key: YYYY-MM-DD
   const eventsByDate: Record<string, any[]> = {};
   calendarEvents.forEach((event) => {
-    if (!event.start) return;
+    if (!event.start) {return;}
     const dateStr = event.start.dateTime || event.start.date;
-    if (!dateStr) return;
+    if (!dateStr) {return;}
     let dateKey = "";
     if (event.start.date) {
       const parts = event.start.date.split("-");

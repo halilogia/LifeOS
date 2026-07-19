@@ -4,7 +4,7 @@ import { translations } from "../utils/i18n.js";
 function formatDueDate(dateStr: string, lang: Language): string {
   try {
     const parts = dateStr.split("-");
-    if (parts.length !== 3) return dateStr;
+    if (parts.length !== 3) {return dateStr;}
     const y = parseInt(parts[0], 10);
     const m = parseInt(parts[1], 10) - 1;
     const d = parseInt(parts[2], 10);

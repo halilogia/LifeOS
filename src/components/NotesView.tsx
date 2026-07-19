@@ -9,7 +9,7 @@ interface NotesViewProps {
 }
 
 function renderMarkdown(text: string): string {
-  if (!text) return "";
+  if (!text) {return "";}
   // Escape HTML first to prevent XSS injection (crucial safety audit compliance!)
   let html = text
     .replace(/&/g, "&amp;")
@@ -127,7 +127,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   };
 
   const handleCardClick = (note: Note) => {
-    if (inlineEditingId === note.id) return;
+    if (inlineEditingId === note.id) {return;}
     if (clickTimer) {
       clearTimeout(clickTimer);
       clickTimer = null;
@@ -407,8 +407,8 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         <div id="notes-grid" className="notes-grid">
           {notes
             .filter((n) => {
-              if (filterType === "all") return true;
-              if (filterType === "quotes") return false;
+              if (filterType === "all") {return true;}
+              if (filterType === "quotes") {return false;}
               return (n.type || "note") === filterType;
             })
             .map((note) => (

@@ -492,11 +492,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         if (subject === "all") {
           // Add all subjects
           Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) questions.push(...list);
+            if (Array.isArray(list)) {questions.push(...list);}
           });
         } else {
           const list = yearData[subject];
-          if (Array.isArray(list)) questions.push(...list);
+          if (Array.isArray(list)) {questions.push(...list);}
         }
       });
       // Shuffle the aggregated questions
@@ -507,7 +507,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       if (yearData) {
         if (subject === "all") {
           Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) questions.push(...list);
+            if (Array.isArray(list)) {questions.push(...list);}
           });
         } else {
           questions = yearData[subject] || [];
@@ -715,7 +715,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               onSortByChange={setSortBy}
               onStartQuiz={handleStartQuiz}
               onShowDetail={setActiveTopic}
-              labels={labels}
             />
 
             {/* Progress tracker metrics */}
@@ -757,7 +756,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         {activeTab === "past-exams" && (
           <KpssPastExamsDashboard
             lang={lang}
-            labels={labels}
             onStartPastExam={handleStartPastExam}
           />
         )}

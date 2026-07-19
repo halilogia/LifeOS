@@ -26,7 +26,6 @@ export interface SettingsDrawerProps {
   onExportBackup: () => void;
   onImportBackup: (e: any) => void;
   onClearAllData: () => void;
-  aiProvider: string;
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
@@ -69,7 +68,6 @@ export function SettingsDrawer({
   onExportBackup,
   onImportBackup,
   onClearAllData,
-  aiProvider,
   aiApiKey,
   aiModel,
   aiEndpoint,
@@ -102,7 +100,7 @@ export function SettingsDrawer({
     }
   }, [isOpen, initialTab]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div className="settings-panel active" onClick={onClose}>

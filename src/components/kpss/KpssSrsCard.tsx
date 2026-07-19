@@ -63,7 +63,7 @@ export function KpssSrsCard({
 
   const currentReview = srsQueue[srsIndex];
   const card = kpssDummyFlashcards.find((c) => c.id === currentReview.wordId);
-  if (!card) return null;
+  if (!card) {return null;}
 
   return (
     <div className="kpss-srs-active-section" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", width: "100%" }}>

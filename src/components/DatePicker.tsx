@@ -131,14 +131,14 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
 
   // Format label for trigger button
   const formatDateLabel = (dateStr: string) => {
-    if (!dateStr) return lang === "tr" ? "Son Tarih" : "Due Date";
+    if (!dateStr) {return lang === "tr" ? "Son Tarih" : "Due Date";}
     const [y, m, d] = dateStr.split("-").map(Number);
     const mName = lang === "tr" ? monthsTr[m - 1].substring(0, 3) : monthsEn[m - 1].substring(0, 3);
     return lang === "tr" ? `${d} ${mName} ${y}` : `${mName} ${d}, ${y}`;
   };
 
   const isSelected = (y: number, m: number, d: number) => {
-    if (!value) return false;
+    if (!value) {return false;}
     const [vy, vm, vd] = value.split("-").map(Number);
     return vy === y && vm === m + 1 && vd === d;
   };

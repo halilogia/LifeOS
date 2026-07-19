@@ -11,7 +11,6 @@ interface PomodoroViewProps {
   lang: Language;
 }
 
-const MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 const MODE_LABELS = { focus: "FOCUS", short: "SHORT", long: "LONG" };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
 
@@ -211,7 +210,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   };
 
   const handleCustomTimeChange = async (mode: "focus" | "short" | "long", mins: number) => {
-    if (isNaN(mins) || mins <= 0) return;
+    if (isNaN(mins) || mins <= 0) {return;}
     const seconds = mins * 60;
     const newTimes = { ...customTimes, [mode]: seconds };
     setCustomTimes(newTimes);
@@ -459,7 +458,6 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
             lang={lang}
             pomoMode={pomoMode}
             pomoTimeLeft={pomoTimeLeft}
-            pomoTotalTime={pomoTotalTime}
             pomoRunning={pomoRunning}
             customTimes={customTimes}
             progressOffset={progressOffset}
@@ -492,7 +490,6 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
       ) : (
         <div className="zen-garden-panel">
           <PomoZenGardenCard
-            lang={lang}
             gridCells={gridCells}
             showPlantModal={showPlantModal}
             focusNote={focusNote}

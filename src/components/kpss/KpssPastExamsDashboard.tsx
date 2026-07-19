@@ -4,13 +4,11 @@ import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 
 interface KpssPastExamsDashboardProps {
   lang: Language;
-  labels: Record<string, string>;
   onStartPastExam: (year: string, subject: string) => void;
 }
 
 export function KpssPastExamsDashboard({
   lang,
-  labels,
   onStartPastExam
 }: KpssPastExamsDashboardProps) {
   const [selectedYear, setSelectedYear] = useState<string>("2019");
@@ -49,7 +47,7 @@ export function KpssPastExamsDashboard({
     }
     
     const data = KPSS_YEARLY_DATA[year];
-    if (!data) return 0;
+    if (!data) {return 0;}
     
     if (subject === "all") {
       return (data.tarih?.length || 0) + (data.cografya?.length || 0) + (data.matematik?.length || 0);

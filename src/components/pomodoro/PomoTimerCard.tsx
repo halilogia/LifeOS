@@ -4,7 +4,6 @@ interface PomoTimerCardProps {
   lang: Language;
   pomoMode: "focus" | "short" | "long";
   pomoTimeLeft: number;
-  pomoTotalTime: number;
   pomoRunning: boolean;
   customTimes: { focus: number; short: number; long: number };
   progressOffset: number;
@@ -22,7 +21,6 @@ export function PomoTimerCard({
   lang,
   pomoMode,
   pomoTimeLeft,
-  pomoTotalTime,
   pomoRunning,
   customTimes,
   progressOffset,

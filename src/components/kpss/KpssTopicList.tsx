@@ -10,7 +10,6 @@ interface KpssTopicListProps {
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onStartQuiz: (topic: string) => void;
   onShowDetail: (topic: { title: string; description: string }) => void;
-  labels: Record<string, string>;
 }
 
 export function KpssTopicList({
@@ -22,7 +21,6 @@ export function KpssTopicList({
   onSortByChange,
   onStartQuiz,
   onShowDetail,
-  labels,
 }: KpssTopicListProps) {
   return (
     <div className="kpss-content">

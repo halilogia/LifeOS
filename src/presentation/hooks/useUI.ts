@@ -11,7 +11,7 @@ import type { CustomQuote } from "../../types/types.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
-export function useUI(initialLang: Language = "tr") {
+export function useUI() {
     // Navigation
     const [activeView, setActiveView] = useState<string>("free-games");
     const [sidebarOrder, setSidebarOrder] = useState<string[]>([]);

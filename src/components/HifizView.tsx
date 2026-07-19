@@ -294,7 +294,6 @@ export function HifizView({ lang }: HifizViewProps) {
             </div>
 
             <HifizMemorizationCard
-              lang={lang}
               category={category}
               hifizProgress={hifizProgress}
               t={t}

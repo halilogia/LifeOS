@@ -81,8 +81,8 @@ export function moveTaskWithStatus(
     index: number,
     newStatus: Todo["status"],
 ): Todo[] {
-    if (index < 0 || index >= todos.length) return [...todos];
-    if (todos[index].status === newStatus) return [...todos];
+    if (index < 0 || index >= todos.length) {return [...todos];}
+    if (todos[index].status === newStatus) {return [...todos];}
 
     const updated = [...todos];
     updated[index] = updateTodoStatus(updated[index], newStatus);
@@ -99,7 +99,7 @@ export function getUpdatedStatuses(
     index: number,
     direction: 1 | -1,
 ): Todo["status"] | null {
-    if (index < 0 || index >= todos.length) return null;
+    if (index < 0 || index >= todos.length) {return null;}
 
     const statuses: Todo["status"][] = ["todo", "in-progress", "done"];
     const nextIdx = statuses.indexOf(todos[index].status) + direction;
@@ -114,7 +114,7 @@ export function getUpdatedStatuses(
  * Expected format: [repeat:daily] or [repeat:weekly] etc.
  */
 export function parseRepeatFromNotes(notes?: string): RepeatType {
-    if (!notes) return "none";
+    if (!notes) {return "none";}
     const match = notes.match(/\[repeat:(none|daily|weekly|monthly)\]/);
     return match ? (match[1] as RepeatType) : "none";
 }

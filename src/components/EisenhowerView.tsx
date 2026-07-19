@@ -64,7 +64,7 @@ export function EisenhowerView({
 
   const handleDrop = (quadId: string) => {
     setDragOverQuad(null);
-    if (draggedIndex === null) return;
+    if (draggedIndex === null) {return;}
 
     let urgent: any = undefined;
     let important: any = undefined;

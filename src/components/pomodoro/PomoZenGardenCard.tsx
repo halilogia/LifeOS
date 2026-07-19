@@ -1,7 +1,6 @@
-import { Language, PomodoroLog } from "@/types/types.js";
+import { PomodoroLog } from "@/types/types.js";
 
 interface PomoZenGardenCardProps {
-  lang: Language;
   gridCells: any[];
   showPlantModal: boolean;
   focusNote: string;
@@ -14,7 +13,6 @@ interface PomoZenGardenCardProps {
 }
 
 export function PomoZenGardenCard({
-  lang,
   gridCells,
   showPlantModal,
   focusNote,

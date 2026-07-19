@@ -96,8 +96,7 @@ export function App() {
     handleViewChange,
     handleTabChange: handleTabChangeUI,
     handleOpenSettings,
-    loadSidebarOrder,
-  } = useUI(lang as Language);
+  } = useUI();
 
   const t = translations[lang as Language];
 
@@ -108,7 +107,6 @@ export function App() {
     googleUserEmail,
     setGoogleUserEmail,
     isSyncing,
-    loadSyncSettings,
     handleGoogleLogin,
     handleGoogleLogout,
     handleManualSyncTasks,
@@ -389,7 +387,6 @@ export function App() {
         onExportBackup={handleExportBackup}
         onImportBackup={handleImportBackup}
         onClearAllData={handleClearAllDataConfirm}
-        aiProvider={aiProvider}
         aiApiKey={aiApiKey}
         aiModel={aiModel}
         aiEndpoint={aiEndpoint}
@@ -439,7 +436,7 @@ export function App() {
         message={alertDialog.message}
         lang={lang as Language}
         onConfirm={() => {
-          if (alertDialog.onConfirm) alertDialog.onConfirm();
+          if (alertDialog.onConfirm) {alertDialog.onConfirm();}
           setAlertDialog({ isOpen: false, message: "" });
         }}
         isAlert={true}

@@ -275,7 +275,7 @@ export function AIChatView({
       // scan if there is a simpler conversational markdown block, or try to clean JSON syntax
       try {
         // Try fixing missing commas or trailing commas which models commonly output
-        let patched = cleaned
+        const patched = cleaned
           .replace(/,\s*([\]}])/g, "$1") // remove trailing commas before closing braces/brackets
           .replace(/(["\d])\s*\n\s*"/g, '$1,\n"'); // add missing commas between adjacent keys
         return JSON.parse(patched);
@@ -496,7 +496,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
   // Handle Send Message
   const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputVal).trim();
-    if (!query) return;
+    if (!query) {return;}
 
     if (!textToSend) {
       setInputVal("");

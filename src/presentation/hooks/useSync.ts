@@ -97,7 +97,7 @@ export function useSync(options: UseSyncOptions = {}) {
         } catch (e) {
             const errMsg = e instanceof Error ? e.message : String(e);
             console.error("Google sign in failed:", e);
-            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
+            if (showAlert) {showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);}
         } finally {
             setIsSyncing(false);
         }
@@ -125,7 +125,7 @@ export function useSync(options: UseSyncOptions = {}) {
         } catch (e) {
             const errMsg = e instanceof Error ? e.message : String(e);
             console.error("Manual task sync failed:", e);
-            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
+            if (showAlert) {showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);}
         } finally {
             setIsSyncing(false);
         }
@@ -140,11 +140,11 @@ export function useSync(options: UseSyncOptions = {}) {
             const updated = { ...current, lastSyncedBackup: Date.now() };
             await syncRepo.setSyncSettings(updated);
             setSyncSettingsState(updated);
-            if (showAlert && successBackupLabel) showAlert(successBackupLabel);
+            if (showAlert && successBackupLabel) {showAlert(successBackupLabel);}
         } catch (e) {
             const errMsg = e instanceof Error ? e.message : String(e);
             console.error("Manual backup failed:", e);
-            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
+            if (showAlert) {showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);}
         } finally {
             setIsSyncing(false);
         }
@@ -159,13 +159,13 @@ export function useSync(options: UseSyncOptions = {}) {
                     showAlert(successRestoreLabel, () => window.location.reload());
                 }
             } else {
-                if (showAlert && noBackupLabel) showAlert(noBackupLabel);
+                if (showAlert && noBackupLabel) {showAlert(noBackupLabel);}
             }
             return result;
         } catch (e) {
             const errMsg = e instanceof Error ? e.message : String(e);
             console.error("Restore failed:", e);
-            if (showAlert) showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
+            if (showAlert) {showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);}
         } finally {
             setIsSyncing(false);
         }

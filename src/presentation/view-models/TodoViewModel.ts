@@ -106,7 +106,7 @@ export class TodoViewModel {
      * Returns the completion percentage (0-100).
      */
     static completionPercentage(todos: readonly Todo[]): number {
-        if (todos.length === 0) return 0;
+        if (todos.length === 0) {return 0;}
         return Math.round(
             (todos.filter((t) => t.completed).length / todos.length) * 100,
         );
@@ -117,7 +117,7 @@ export class TodoViewModel {
      */
     static sortByCompletion(todos: readonly Todo[]): Todo[] {
         return [...todos].sort((a, b) => {
-            if (a.completed === b.completed) return 0;
+            if (a.completed === b.completed) {return 0;}
             return a.completed ? 1 : -1;
         });
     }
@@ -126,7 +126,7 @@ export class TodoViewModel {
      * Filters todos by a search query (matches text field).
      */
     static search(todos: readonly Todo[], query: string): Todo[] {
-        if (!query.trim()) return [...todos];
+        if (!query.trim()) {return [...todos];}
         const lower = query.toLowerCase();
         return todos.filter((t) => t.text.toLowerCase().includes(lower));
     }

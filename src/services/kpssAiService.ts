@@ -251,7 +251,7 @@ export const fetchQuestionsSubsetFromAI = async (
     parsed = JSON.parse(cleaned);
   } catch (firstErr) {
     try {
-      let patched = cleaned
+      const patched = cleaned
         .replace(/,\s*([\]}])/g, "$1")
         .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
       parsed = JSON.parse(patched);

@@ -171,7 +171,7 @@ export function useTodos(
 
     // --- Move Task Status ---
     const handleMoveTaskStatus = useCallback(async (index: number, newStatus: Todo["status"]) => {
-        let next = moveTaskWithStatus(todos as any, index, newStatus) as Todo[];
+        const next = moveTaskWithStatus(todos as any, index, newStatus) as Todo[];
         const item = next[index];
 
         if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
@@ -203,7 +203,7 @@ export function useTodos(
     const handleMoveTaskDirection = useCallback(async (index: number, direction: number) => {
         const newStatus = getUpdatedStatuses(todos as any, index, direction as 1 | -1);
         if (newStatus) {
-            let next = moveTaskWithStatus(todos as any, index, newStatus) as Todo[];
+            const next = moveTaskWithStatus(todos as any, index, newStatus) as Todo[];
             const item = next[index];
 
             if (syncSettings.enabled && syncSettings.tasksEnabled && item.id) {
