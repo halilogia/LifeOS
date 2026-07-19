@@ -25,10 +25,10 @@ function renderMarkdown(text: string): string {
   html = html.replace(/`([^`]+)`/g, "<code style=\"background: rgba(139, 92, 246, 0.15); color: var(--accent-color); padding: 2px 5px; border-radius: 4px; font-family: monospace;\">$1</code>");
 
   // Parse Bold: **text**
-  html = html.replace(/\*\*([^\*]+)\*\*/g, "<strong>$1</strong>");
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 
   // Parse Italic: *text*
-  html = html.replace(/\*([^\*]+)\*/g, "<em>$1</em>");
+  html = html.replace(/\*([^*]+)\*/g, "<em>$1</em>");
 
   // Parse Headings: #, ##, ###
   html = html.replace(/^### (.*$)/gim, "<h4 style=\"margin: 10px 0 6px 0; color: #a78bfa; font-weight: 700;\">$1</h4>");

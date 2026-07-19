@@ -51,7 +51,7 @@ export const fetchQuestionsSubsetFromAI = async (
     userPrompt += ` Üreteceğin sorular şu sorulardan tamamen farklı olmalıdır: ${JSON.stringify(excludeQuestions.map(q => q.question))}`;
   }
 
-  let responseText = "";
+  let responseText: string;
   const tNetworkStart = performance.now();
 
   if (aiProvider === "ollama") {
@@ -83,7 +83,9 @@ export const fetchQuestionsSubsetFromAI = async (
       let errBody = "";
       try {
         errBody = await res.text();
-      } catch (_) {}
+      } catch {
+        // ignore
+      }
       throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
     }
 
@@ -134,7 +136,9 @@ export const fetchQuestionsSubsetFromAI = async (
       let errBody = "";
       try {
         errBody = await res.text();
-      } catch (_) {}
+      } catch {
+        // ignore
+      }
       throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
     }
 
@@ -173,7 +177,9 @@ export const fetchQuestionsSubsetFromAI = async (
       let errBody = "";
       try {
         errBody = await res.text();
-      } catch (_) {}
+      } catch {
+        // ignore
+      }
       throw new Error(`HTTP error! status: ${res.status}: ${errBody || res.statusText}`);
     }
 
@@ -249,13 +255,13 @@ export const fetchQuestionsSubsetFromAI = async (
   let parsed;
   try {
     parsed = JSON.parse(cleaned);
-  } catch (firstErr) {
+  } catch {
     try {
       const patched = cleaned
         .replace(/,\s*([\]}])/g, "$1")
         .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
       parsed = JSON.parse(patched);
-    } catch (secErr) {
+    } catch {
       console.warn("[KpssView JSON parse Fallback] Failed twice. Substring was:", cleaned);
       parsed = [];
     }

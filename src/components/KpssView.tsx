@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { kpssService, kpssData, kpssDummyFlashcards } from "@/services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { calculateSM2, prepareSRSQueue, createInitialSRSWord, type SRSWordWithInfo } from "@/domain/services/SrsService.js";
 import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
-import { getKpssSystemPrompt } from "@/services/kpssPrompts.js";
 import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/domain/services/KpssCalculatorService.js";
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service, QuizQuestion } from "@/services/kpssAiService.js";
@@ -413,7 +412,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     setQuizStep("result");
 
     // Automatically map score to checklist status
-    let newStatus: 0 | 1 | 2 = 0;
+    let newStatus: 0 | 1 | 2;
     if (scorePercentage >= 80) {
       newStatus = 2; // Finished
     } else if (scorePercentage >= 40) {
@@ -600,8 +599,6 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       ? Math.round(((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) * 100)
       : 0;
 
-  const last7DaysData = dailyStats.slice(-7);
-  const showChartPlaceholder = last7DaysData.length === 0;
 
   const overallNetObj = getOverallNets();
   const overallNet = overallNetObj.net;

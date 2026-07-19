@@ -191,7 +191,6 @@ export function SettingsDrawer({
         {settingsTab === "ai" && (
           <AiSettingsTab
             t={t}
-            lang={lang}
             aiApiKey={aiApiKey}
             aiModel={aiModel}
             aiEndpoint={aiEndpoint}

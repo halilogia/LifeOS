@@ -1,9 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
-import { Language } from "@/types/types.js";
 
 interface AiSettingsTabProps {
   t: any;
-  lang: Language;
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
@@ -14,7 +12,6 @@ interface AiSettingsTabProps {
 
 export function AiSettingsTab({
   t,
-  lang,
   aiApiKey,
   aiModel,
   aiEndpoint,

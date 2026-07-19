@@ -9,7 +9,7 @@ export function getKpssSystemPrompt(subjectKey: string, lang: Language, dynamicE
 2. Soru Kökünde Kesin Netlik: Soru kökleri yoruma kapalı, neyi sorduğu %100 açık olmalıdır. Muğlaklıklardan kaçın.
 3. Tek ve Kesin Doğru Cevap: Sorudaki diğer 4 yanlış seçenek (çeldiriciler) akademik olarak tamamen yanlış olmalı, doğru seçenek ise hiçbir tartışmaya veya farklı yoruma yol açmayacak derecede kesin bir doğru bilgi olmalıdır.`;
 
-  let subjectRules = "";
+  let subjectRules: string;
 
   switch (subjectKey) {
     case "geometri":

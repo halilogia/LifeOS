@@ -1,4 +1,3 @@
-import { Language } from "../types/types.js";
 
 interface HeroHeaderProps {
   clockText: string;
