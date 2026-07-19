@@ -1,6 +1,36 @@
 import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 
+import exam2021 from "@/data/kpss/exam2021.json";
+import exam2020 from "@/data/kpss/exam2020.json";
+import exam2019 from "@/data/kpss/exam2019.json";
+import exam2018 from "@/data/kpss/exam2018.json";
+import exam2017 from "@/data/kpss/exam2017.json";
+import exam2015 from "@/data/kpss/exam2015.json";
+import exam2014 from "@/data/kpss/exam2014.json";
+import exam2013 from "@/data/kpss/exam2013.json";
+import exam2012 from "@/data/kpss/exam2012.json";
+import exam2011 from "@/data/kpss/exam2011.json";
+import exam2010 from "@/data/kpss/exam2010.json";
+import exam2009 from "@/data/kpss/exam2009.json";
+import examTarihArsivi from "@/data/kpss/exam_tarih_arsivi.json";
+
+const KPSS_YEARLY_DATA: Record<string, any> = {
+  "2021": exam2021,
+  "2020": exam2020,
+  "2019": exam2019,
+  "2018": exam2018,
+  "2017": exam2017,
+  "2015": exam2015,
+  "2014": exam2014,
+  "2013": exam2013,
+  "2012": exam2012,
+  "2011": exam2011,
+  "2010": exam2010,
+  "2009": exam2009,
+  "tarih_arsivi": examTarihArsivi
+};
+
 interface KpssPastExamsDashboardProps {
   lang: Language;
   labels: Record<string, string>;
@@ -16,17 +46,52 @@ export function KpssPastExamsDashboard({
   const [selectedSubject, setSelectedSubject] = useState<string>("cografya");
 
   const years = [
-    { id: "2019", label: "2019 KPSS" },
-    { id: "2020", label: "2020 KPSS" },
     { id: "2021", label: "2021 KPSS" },
+    { id: "2020", label: "2020 KPSS" },
+    { id: "2019", label: "2019 KPSS" },
+    { id: "2018", label: "2018 KPSS" },
+    { id: "2017", label: "2017 KPSS" },
+    { id: "2015", label: "2015 KPSS" },
+    { id: "2014", label: "2014 KPSS" },
+    { id: "2013", label: "2013 KPSS" },
+    { id: "2012", label: "2012 KPSS" },
+    { id: "2011", label: "2011 KPSS" },
+    { id: "2010", label: "2010 KPSS" },
+    { id: "2009", label: "2009 KPSS" },
+    { id: "tarih_arsivi", label: lang === "tr" ? "Tarih Soru Arşivi" : "History Q Archive" },
     { id: "karma", label: lang === "tr" ? "Karma Sınav (Karışık)" : "Mixed Past Exam" }
   ];
 
+  const getSubjectCount = (year: string, subject: string) => {
+    if (year === "karma") {
+      let sum = 0;
+      Object.entries(KPSS_YEARLY_DATA).forEach(([yKey, yData]) => {
+        if (yKey !== "tarih_arsivi") {
+          if (subject === "all") {
+            sum += (yData.tarih?.length || 0) + (yData.cografya?.length || 0) + (yData.matematik?.length || 0);
+          } else if (yData[subject]) {
+            sum += yData[subject].length;
+          }
+        }
+      });
+      return sum;
+    }
+    
+    const data = KPSS_YEARLY_DATA[year];
+    if (!data) return 0;
+    
+    if (subject === "all") {
+      return (data.tarih?.length || 0) + (data.cografya?.length || 0) + (data.matematik?.length || 0);
+    }
+    
+    return data[subject]?.length || 0;
+  };
+
   const subjects = [
-    { id: "cografya", label: lang === "tr" ? "Coğrafya" : "Geography", count: selectedYear === "karma" ? 13 : (selectedYear === "2019" ? 5 : 4) },
-    { id: "tarih", label: lang === "tr" ? "Tarih" : "History", count: selectedYear === "karma" ? 20 : (selectedYear === "2019" ? 4 : (selectedYear === "2020" ? 5 : 11)) },
-    { id: "matematik", label: lang === "tr" ? "Matematik / Geometri" : "Math / Geometry", count: selectedYear === "karma" ? 3 : 1 },
-    { id: "all", label: lang === "tr" ? "Tüm Dersler (GY-GK)" : "All Subjects (GY-GK)", count: selectedYear === "karma" ? 36 : (selectedYear === "2019" ? 10 : (selectedYear === "2020" ? 10 : 16)) }
+    { id: "cografya", label: lang === "tr" ? "Coğrafya" : "Geography", count: getSubjectCount(selectedYear, "cografya") },
+    { id: "tarih", label: lang === "tr" ? "Tarih" : "History", count: getSubjectCount(selectedYear, "tarih") },
+    { id: "matematik", label: lang === "tr" ? "Matematik / Geometri" : "Math / Geometry", count: getSubjectCount(selectedYear, "matematik") },
+    { id: "all", label: lang === "tr" ? "Tüm Dersler (GY-GK)" : "All Subjects (GY-GK)", count: getSubjectCount(selectedYear, "all") }
   ];
 
   const handleStart = () => {

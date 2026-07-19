@@ -1,0 +1,905 @@
+{
+  "tarih": [
+    {
+      "topic": "Genel Tarih",
+      "question": "Göktürk Devleti’nde, Bilge Kağan’ın Budist tapınağı yaptırma isteğine Vezir Tonyukuk, Budizm’i benimse- menin Türklerin mücadeleci ruhunu kaybetmelerine neden olacağı düşüncesiyle karşı çıkmıştır. Yalnız bu bilgiyle, I. toplumun dinî arayış içerisinde olduğu, II. kağanın kararlarının sorgulanabildiği, III. din değiştirmenin yaşam biçimini etkilediği durumlarından hangilerine ulaşılabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "I ve II",
+        "II ve III",
+        "I, II ve III"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (1. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Türklerin İslamiyet’e geçmeleriyle aşağıdakiler- den hangisi kültürel hayatlarında bir sanat kolu oluşturacak derecede önem kazanmıştır?",
+      "options": [
+        "Hat",
+        "Maden işçiliği",
+        "Heykel",
+        "Oyma",
+        "Dokuma"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (2. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Selçuklularda, I. hükümdarın Tanrı adına insanları yönetmekle görevli olması, II. ülkenin, hanedan üyelerinin ortak malı sayıl- ması, III. din işlerinin halifeye, dünya işlerinin sultana ait olması durumlarından hangilerinin taht kavgalarına ne- den olduğu savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "II ve III"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (3. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Orhan Bey zamanında, I. ilk Osmanlı medresesinin açılması, II. Rumeli’ye geçilmesi, III. yaya ve atlı düzenli bir ordunun kurulması gelişmelerinden hangileri Osmanlı Devleti’nin bu dönemde teşkilatlanmaya başladığının bir göster- gesi olduğu savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "I ve III",
+        "II ve III",
+        "I, II ve III"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (4. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "XVII. yüzyılın başlarında Osmanlı Devleti’nin 32 eya- leti varken bu yüzyılın ortalarında 25’i timar sistemi- ne dahil, 9’u sâlyâneli olmak üzere toplam eyalet sa- yısı 34’ü bulmuştur. Bu durumla ilgili olarak, I. İlk kez toprak kaybedilmiştir. II. Beylerbeyi sayısı artmıştır. III. Timar sistemi bozulmuştur. yargılarından hangilerine ulaşılabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III Diğer sayfaya geçiniz. 15"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (5. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Osmanlı Devleti’nde, I. Avrupa mallarının ülkeye girmesi, II. ticaret yollarının değişmesi, III. esnaf teşkilatının bozulması durumlarından hangilerinin ekonomiyi olumsuz yönde etkilediği savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (6. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "XIX. yüzyılda Osmanlı Devleti’nde dağılmayı önlemek amacıyla birtakım düşünce akımları ortaya çıkmıştır. Bu düşünce akımlarından Osmanlıcılık düşünce- sinin önemini kaybetmesinde, I. Avrupa’da ulus devletlerin ortaya çıkması, II. Meşrutiyet’in ilanına rağmen azınlıkların ayrılıkçı hareketlerini sürdürmesi, III. Yeniçeri Ocağı’nın kaldırılması durumlarından hangilerinin etkili olduğu savunu- labilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "II ve III"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (7. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Osmanlı Devleti’nde gerekli görüldüğünde herhangi bir yöneticinin mal varlığına el konulabilmesi (müsa- dere) usulü Tanzimat Fermanı’yla kaldırılmıştır. Bu usulün kaldırılmasıyla yöneticinin, I. Devlete olan güveni artmıştır. II. Özel mülkiyet hakkına güvence getirilmiştir. III. Yöneticilik yetkileri artırılmıştır. yargılarından hangilerine ulaşılabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "I ve II",
+        "I ve III",
+        "II ve III 16"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (8. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Osmanlı Devleti’nde, I. Tanzimat’ın ilanı, II. Meşrutiyet’in ilanı, III. Islahat Fermanı’nın ilanı gelişmelerinin hangilerinde Avrupa’da görülen 1848 ihtilallerinin etkisi olduğu savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "II ve III"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (9. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Kurtuluş Savaşı’nda, TBMM Hükûmetinin yarı res- mî yayın organı hâline gelen gazete aşağıdakiler- den hangisidir?",
+      "options": [
+        "Hakimiyet-i Milliye",
+        "Peyam-ı Sabah",
+        "İrade-i Milliye",
+        "Yenigün",
+        "İkdam Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (10. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Kurtuluş Savaşı’nda,  Birinci İnönü Zaferi’nden sonra Anlaşma Dev- letlerinin Londra’da konferans düzenlemesi ve TBMM’yi davet etmesi  Sakarya Zaferi’nden sonra Fransa’nın TBMM’ yle Ankara Antlaşması’nı yapması gelişmeleriyle aşağıdakilerden hangisine ulaşıl- dığı savunulabilir?",
+      "options": [
+        "Anlaşma Devletlerinin TBMM’yi Sakarya Savaşı’ ndan sonra tanıdığına",
+        "İngiltere’nin savaşın sonuna kadar Yunanlıları desteklediğine",
+        "Halkların dış politikada etkili olduğuna",
+        "Uluslararası antlaşmaları uygulamak zorunluluğu olduğuna",
+        "Askerî başarıların Anlaşma Devletlerini TBMM’ yle antlaşma yapmaya zorladığına"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (11. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Türkiye Büyük Millet Meclisi, 11 Mayıs 1920 tarihinde Bekir Sami Bey’in başkanlığında bir heyeti, Moskova’ ya Sovyetler Birliği’yle bağlantı kurmak ve dostluk antlaşması ortamı hazırlamak amacıyla göndermiştir. TBMM’nin, Sovyetler Birliği’yle antlaşma yapma gereği duymasındaki amacın aşağıdakilerden hangisi olduğu savunulabilir?",
+      "options": [
+        "Londra Konferansı’nın yapılmasını geciktirmek",
+        "Sovyetler Birliği’ndeki yeni rejimin ülkede yayıl- masını önlemek",
+        "Kafkasya Cumhuriyetlerinin kurulmasını engelle- mek",
+        "Düşmanları aynı olan iki ülke arasında siyasi ve askerî güç birliği sağlamak",
+        "Mecliste birlikte hareket edilmesini sağlayarak gruplaşmaları önlemek 17"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (12. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Kurtuluş Savaşı’nın bütün şiddetiyle devam ettiği bir ortamda ara seçimlere gidilerek TBMM’nin çalışma- larını sürdürmesi sağlanmıştır. Bu bilgiyle aşağıdakilerden hangisine ulaşılabilir?",
+      "options": [
+        "Halk egemenliğinin sürekliliğine önem verildiğine",
+        "TBMM Hükûmetiyle İstanbul Hükûmeti arasında görüş ayrılığı olduğuna",
+        "TBMM’ye Mebuslar Meclisinden katılım olduğu- na",
+        "Ulusal güçlerin birleştirilmek istendiğine",
+        "Mecliste görüş ayrılıklarının olduğuna"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (13. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Türkiye, Musul’un Misakımillî sınırları içinde oldu- ğuna aşağıdakilerden hangisini gerekçe olarak göstermiştir?",
+      "options": [
+        "Türklerden başka ulusların da yaşamasını",
+        "Sykes-Picot Anlaşması’na göre Fransızlara veril- miş olmasını",
+        "Mondros Mütarekesi’nin imzalandığı tarihte Os- manlı sınırları içinde olmasını",
+        "Petrol bakımından zengin olmasını",
+        "İngiltere’nin mandası olmasını Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (14. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Lozan Antlaşması’yla, I. Boğazlar Komisyonunun kurulması, II. İstanbul’daki Rumlarla Batı Trakya’daki Türkle- rin mübadele dışında bırakılması, III. Yunanistan’ın savaş tazminatı karşılığı Kara- ağaç’ı, Türkiye’ye vermesi konularından hangileri Türk-Yunan ilişkilerinde uygulamalardan kaynaklanan sorunlara neden olmuştur?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "I ve II",
+        "II ve III",
+        "I, II ve III"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (15. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Türkiye Cumhuriyeti’nde Türk kadını erkekle eşit olarak, I. mirastan aynı oranda pay alma ve tanık olma, II. milletvekili seçme ve seçilme, III. belediye seçimlerine katılma haklarını kazanmıştır. Bu kazanımların kronolojik sıralaması aşağıdaki- lerden hangisidir?",
+      "options": [
+        "I, II, III",
+        "I, III, II",
+        "II, I, III",
+        "II, III, I",
+        "III, I, II 18"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (16. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": " Kapitülasyonların kaldırılması  Kabotaj Kanunu’nun çıkarılması Yukarıdaki gelişmelerde aşağıdaki ilkelerden han- gisinin temel alındığı savunulabilir?",
+      "options": [
+        "Bağımsızlık",
+        "Laiklik",
+        "Halkçılık",
+        "Devletçilik",
+        "İnkılapçılık"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (17. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Atatürk’ün milliyetçilik anlayışının ırk, mezhep ve sınıf ayrılıklarına karşı olması, I. millî birlik ve beraberlik, II. kültürel birlik, III. sosyal dayanışma durumlarından hangilerini desteklediğini göste- rir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (18. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Atatürk, “Ülkeler çeşitlidir, fakat uygarlık birdir ve bir milletin kalkınması için de bu tek uygarlığa katılması gerekir. Osmanlı Devleti’nin düşüşü Batı’ya karşı elde ettiği başarılardan çok, mağrur olarak kendisini Avru- pa milletlerine bağlayan ilişkileri kestiği gün başlamış- tır.” demiştir. Atatürk’ün bu anlatımıyla aşağıdakilerden hangi- sine vurgu yaptığı söylenebilir?",
+      "options": [
+        "Eski bir tarih mirasına sahip olunduğuna",
+        "Batı’nın yayılmacı siyaset izlediğine",
+        "Çağdaşlaşmanın gereğine",
+        "İmparatorlukların siyasi varlıklarını korumalarının güçlüğüne",
+        "Batı uygarlığının kendisinden önceki uygarlıklar- dan yararlandığına"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (19. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "I. Hilafet II. Şeriye ve Evkâf Bakanlığı III. Erkânı Harbiye Bakanlığı 1924 yılında, yukarıdakilerden hangilerinin yöne- tim birliğini güçlendirmek amacıyla kaldırıldığı savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III 19"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (20. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Osmanlı Döneminde XIX. yüzyılın ilk yarısında sarık ve kavuk yerine fesin giyilmesine, Cumhuriyet Döne- minin ilk yıllarında ise fesin yerine şapkanın giyilme- sine karşı çıkılmıştır. Bu iki duruma göre, I. Yenilikler anlayış değişikliğinin sonucudur. II. Yenilikler tepkiyle karşılanmıştır. III. Yeniliklerin benimsenmesi belli bir süreci gerek- tirmiştir. yargılarından hangilerine ulaşılabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "II ve III",
+        "I, II ve III"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (21. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Aşağıdakilerden hangisi, cumhuriyetin ilanının doğurduğu sonuçlardan biri değildir?",
+      "options": [
+        "Hükûmet kurmanın yeni yönteme bağlanması",
+        "Devletin rejiminin adının konması",
+        "İstiklal Marşı’nın kabul edilmesi",
+        "Devletin başkanının belirlenmesi",
+        "Halifeliğin kaldırılması Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (22. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "TBMM, aşağıdakilerden hangisiyle padişah ve ha- lifenin siyasi ve hukuki yetkilerini üstlenmiştir?",
+      "options": [
+        "Teşkilat-ı Esâsiye Kanunu’nun kabul edilmesi",
+        "Tekâlif-i Milliye Buyrukları’nın çıkarılması",
+        "İstanbul’un resmen işgal edilmesi",
+        "Lozan Antlaşması’nın imzalanması",
+        "Hıyanet-i Vataniye Kanunu’nun çıkarılması"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (23. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Aşağıdakilerden hangisi demokratik devlet anla- yışıyla bağdaşmaz?",
+      "options": [
+        "Seçimlerin düzenli aralıklarla tekrarlanması",
+        "Gelir ve servet ediniminin kısıtlanması",
+        "Etkin siyasi makama seçimle gelinmesi",
+        "Siyasi partilerin serbestçe kurulması",
+        "İktidarın el değiştirebilmesi 20"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (24. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Atatürk Dönemi ekonomisinde, I. Türkiye’nin ulusal çıkarlarına aykırı olmayan ya- bancı sermayeden yararlanma, II. âşar vergisini kaldırma, III. ekonomik politikaların uygulanmasında bilim ve teknolojiyi temel alma durumlarından hangileriyle üretimi artırmanın amaçlandığı savunulabilir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (25. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "1929’da başlayan dünya ekonomik bunalımıyla dün- ya ticaretinde bir düşüş olmuştur. Aşağıdakilerden hangisi bu durumla ortaya çıkan sonuçlardan biri değildir?",
+      "options": [
+        "Yaşamsal ham madde ihtiyacının artması",
+        "Sömürge edinme yarışının başlaması",
+        "Halkın alım gücünün azalması",
+        "Para değerlerinin düşmesi",
+        "İşsizliğin artması Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (26. Soru)."
+    },
+    {
+      "topic": "Genel Tarih",
+      "question": "Ülkedeki tüm siyasi görüşlerin yönetime yansıtıl- ması amacıyla, I. Terakkiperver Cumhuriyet Partisinin kurulması, II. Serbest Cumhuriyet Partisinin kurulması, III. Demokrat Partinin kurulması gelişmelerinden hangileri Atatürk Döneminde ger- çekleşmiştir?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "Yalnız III",
+        "I ve II",
+        "I, II ve III"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Tarih Sorusu (27. Soru)."
+    }
+  ],
+  "cografya": [
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Atatürk Döneminde Türk hakimiyetinin sağlandığı Boğazların stratejik öneminin günümüzde daha da artmasında, aşağıdakilerden hangisinin etkisi olduğu savunulamaz?",
+      "options": [
+        "Eski Doğu Bloku Ülkelerinin Batı ile ilişkilerinin yoğunlaşmaya başlaması",
+        "Varşova Paktı’nın dağılması",
+        "Boğazların Batı’ya açılan en önemli kapı olma özelliğini koruması",
+        "Kafkaslardaki devletler arasında sınır sorunları- nın yaşanması",
+        "Rusya Federasyonu’nun Kafkas devletleri üze- rinde etkinliğini korumaya çalışması 21"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (28. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "I. Atatürk ilkelerinin Türkiye Devleti’nin temel nite- likleri olarak kabul edilmesi II. Milletvekili yeminlerinin “Vallahi.” yerine “Namu- sum üzerine söz veriyorum.’’ şeklinde değiştiril- mesi III. Anayasa Mahkemesinin kurulması Yukarıdakilerden hangileri Atatürk Dönemi geliş- meleri arasındadır?",
+      "options": [
+        "Yalnız I",
+        "Yalnız II",
+        "I ve II",
+        "I ve III",
+        "I, II ve III"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (29. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Balkan Devletleri arasında yakınlaşma başlaması ve Balkan Paktı’nın kurulmasında aşağıdakilerden hangisinin etkisi olduğu savunulamaz?",
+      "options": [
+        "Birleşmiş Milletler Teşkilatının kurulmuş olması",
+        "İtalya’nın Doğu Akdeniz’e egemen olmak iste- mesi",
+        "Almanya’da Nazi Partisinin iktidara gelmesi",
+        "Silahlanma yarışının hızlanması",
+        "İtalya’da faşizmin güçlenmesi Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (30. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Bir Türkiye fiziki haritasında kahverengi tonlarının fazla olduğu yerlerle ilgili olarak aşağıdakilerden hangisi söylenemez?",
+      "options": [
+        "Karın yerde kalma süresinin uzun olduğu",
+        "Yıllık sıcaklık farkının az olduğu",
+        "Gerçek alanla iz düşümsel alan arasındaki farkın fazla olduğu",
+        "Akarsuların çağlayanlar oluşturduğu",
+        "Ulaşımda güçlüklerle karşılaşıldığı"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (31. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Aşağıdakilerden hangisinin Akdeniz Bölgesi’yle Karadeniz Bölgesi arasında farklılık göstermesi enlem etkisine bağlanamaz?",
+      "options": [
+        "Orman üst sınırı",
+        "Deniz turizmine uygun sürenin uzunluğu",
+        "Yağışın mevsimlere göre dağılışı",
+        "Tarım ürünlerinin olgunlaşma süresi",
+        "Gündüz süresinin uzunluğu"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (32. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Aşağıdakilerden hangisi, Güneydoğu Anadolu Bölgesi’nde nüfusun yoğun olduğu alanlar ara- sında yer almaz?",
+      "options": [
+        "Su kaynaklarına yakın alanlar",
+        "Sulama olanakları iyileşen ovalar",
+        "Ulaşım açısından önemli kavşaklar",
+        "Endüstrinin yoğun olduğu yerler",
+        "Hidroelektrik enerjinin üretildiği yerler Diğer sayfaya geçiniz. 22"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (35. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’de, çalışan nüfus içinde tarım sektörünün oranı 1980 yılında % 60 iken, bu oran 2000 yılında % 48’e düşmüştür. Aşağıdakilerden hangisinin bu azalmaya neden olduğu söylenebilir?",
+      "options": [
+        "Dış satımda tarım ürünleri payının azalması",
+        "Tarımda makineleşmenin artması",
+        "Kent sayısının artması",
+        "Ulaşım olanaklarının artması",
+        "Yetiştirilen tarım ürünü çeşidinin artması"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (36. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’nin tarım politikalarıyla ilgili önemli uygulama- larından biri de destekleme alımlarıdır. Bu politikanın temeli, devletin üreticiye önceden ilan ettiği taban fi- yattan ürününü satın alma garantisi vermesidir. Buna göre, aşağıdakilerden hangisi destekleme alımlarının amaçlarından biri değildir?",
+      "options": [
+        "Üreticinin ürettiği ürünlerin elde kalmasını engel- lemesi",
+        "Üreticinin fiyatlardaki ani iniş ve çıkışlardan zarar görmesini engellemesi",
+        "Ürünlerin uygun fiyatlarla piyasaya sunulması ve keyfî fiyat artışlarının önüne geçmesi",
+        "Aynı tarım ürünlerinin ülke genelinde benzer fi- yatlarla satılmasını sağlaması",
+        "Pazarlarda belli tarımsal ürünlere olan talebin artırılması"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (38. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’nin büyükbaş hayvancılığıyla ilgili olarak aşağıdaki bilgilerden hangisi doğrudur?",
+      "options": [
+        "Et ve süt verimleri yüksek olan ırklar çoğunluk- tadır.",
+        "Büyükbaş hayvancılık için uygun otlaklar giderek artmaktadır.",
+        "Küçükbaş hayvancılığa göre daha yaygın bir et- kinliktir.",
+        "Besicilik ve ahır hayvancılığı, kentlerin yakın çev- resinde gelişmiştir.",
+        "Dış satımda canlı büyükbaş hayvanların payı fazladır. Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (39. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Akdeniz Bölgesi’nin ekonomik bakımdan gelişme- sinde aşağıdakilerden hangisinin etkisi diğerlerin- den daha azdır?",
+      "options": [
+        "Kıyı balıkçılığının yapılması",
+        "Tarıma dayalı endüstri kuruluşlarının bulunması",
+        "Turfanda meyve ve sebze üretiminin fazla olması",
+        "Turizm etkinliği ve potansiyeli bakımından zengin olması",
+        "Dış ticarette önemli yeri olan büyük limanlara sa- hip olması"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (40. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’de aşağıdakilerden hangisinin ormana verdiği zararın diğerlerinden daha az olduğu söy- lenebilir?",
+      "options": [
+        "Tarım alanı açma",
+        "Keçi otlatma",
+        "Yangınlar",
+        "Heyelan",
+        "Kaçak kesim"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (41. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Doğu Karadeniz ve Hakkâri bölümlerinde, I. akarsuların akış hızının yüksek olması, II. tarımsal ürün çeşidinin az olması, III. yayla ve dağ turizminin gelişmiş olması, IV. bölüm dışına göçün fazla olması özelliklerinden hangileri ortaktır?",
+      "options": [
+        "I ve II",
+        "I ve III",
+        "I ve IV",
+        "II ve III",
+        "III ve IV 24"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (42. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’de tarımsal etkinliklerin zorlaşmasında, I. eğimin fazla olması, II. ortalama yükseltinin fazla olması, III. şiddetli yaz kuraklığı yaşanması etkili olmaktadır. Buna göre, I, II ve III numaralı etmenlerin daha çok etkili olduğu iller aşağıdakilerin hangisinde verilmiştir? I II III",
+      "options": [
+        "Kars Konya Rize",
+        "Konya Rize Kars",
+        "Rize Kars Konya",
+        "Kars Rize Konya",
+        "Rize Konya Kars"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (43. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "I. Afyonkarahisar – Et ve süt ürünleri II. Kırıkkale – Petrokimya III. Zonguldak – Orman ürünleri IV. İstanbul – Pamuklu dokuma Yukarıdaki illerden hangileri, birlikte verilen en- düstri kolu için gerekli ham madde bakımından zengindir?",
+      "options": [
+        "I ve II",
+        "I ve III",
+        "II ve III",
+        "II ve IV",
+        "III ve IV Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (44. Soru)."
+    },
+    {
+      "topic": "Genel Coğrafya",
+      "question": "Türkiye’nin ekonomik etkinliklerine ait aşağıdaki bilgilerden hangisi doğrudur?",
+      "options": [
+        "Elektrik enerjisinin büyük bir kısmı yenilenebilir enerji kaynaklarından elde edilir.",
+        "Kırsal kesimde en yaygın hayvancılık etkinliği arıcılık ve balıkçılıktır.",
+        "Tarım sektörünün millî gelirdeki payı diğer sek- törlerden fazladır.",
+        "Dış ticarette ilk sırada yer alan ülke Amerika Birleşik Devletleri’dir.",
+        "Gıda endüstrisinde ham maddenin büyük bir kısmı ülke içinden karşılanmaktadır."
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Coğrafya Sorusu (45. Soru)."
+    }
+  ],
+  "matematik": [
+    {
+      "topic": "Genel Matematik",
+      "question": "+ + = x 1 x 1 3 9 1 9 27 olduğuna göre, x kaçtır?",
+      "options": [
+        "3",
+        "2",
+        "1",
+        "1 −",
+        "2 −"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "5 21 − ifadesi aşağıdakilerden hangisine eşittir?",
+      "options": [
+        "− 7 3 2",
+        "− 5 3 2",
+        "− 7 5 3",
+        "+ 5 3 3",
+        "+ 5 7 3"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "2 2 a b 16 − = 1 1 17 a b a b 16 + = + − olduğuna göre, a kaçtır?",
+      "options": [
+        "13 2",
+        "15 2",
+        "17 2",
+        "19 4",
+        "21 4"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "3 x 3 3 − = x y 2 3 x 2 2 2 + + x xy y olduğuna göre, x y kaçtır?",
+      "options": [
+        "3 −",
+        "2 −",
+        "1",
+        "2",
+        "3"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "+ − = 2 x 4x 7 0 denkleminin bir kökü a olduğuna göre, ( )( )( )( ) a 1 a 1 a 3 a 5 − + + + çarpımı kaçtır?",
+      "options": [
+        "12",
+        "14",
+        "15",
+        "18",
+        "20 Diğer sayfaya geçiniz. 8"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "1 x R ve x 4 < ∈ olmak üzere, 3x x 1 2 − − − ifadesinin eşiti aşağıdakilerden hangisidir?",
+      "options": [
+        "4x 3 − −",
+        "4x 1 − −",
+        "4x 3 −",
+        "4x 1 +",
+        "4x 3 +"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "a ve k pozitif tam sayılar olmak üzere, k 6 2 a ! • = eşitliğinde k en büyük değerini aldığında a kaç olur?",
+      "options": [
+        "15",
+        "25",
+        "30",
+        "45",
+        "60"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "a ve b birer pozitif tam sayı olmak üzere, ( ) 2 ekok a, b 2 3 • = olacak biçimde kaç farklı ( ) a, b sıralı ikilisi vardır?",
+      "options": [
+        "6",
+        "12",
+        "13",
+        "14",
+        "15 9"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "− − + 2x 1 x 5 0 x 3 ≥ − eşitsizliğinin çözüm kümesi, I. ≤1 x 2 II. ≤ ≤ 1 x 3 2 III. 3 x 5 < ≤ IV. x 5 ≥ kümelerinin hangilerinin birleşimiyle oluşmuştur?",
+      "options": [
+        "Yalnız II",
+        "Yalnız III",
+        "I ve III",
+        "I ve IV",
+        "II ve IV"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "2 ( ) + x y = 2 x y 3 2 2 + = olduğuna göre, x y • çarpımı kaçtır? 2",
+      "options": [
+        "0",
+        "−1",
+        "1",
+        "1 2",
+        "−1 Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "a bir gerçel sayı olmak üzere, ( )( ) − + + = − 2 2 2 a a a 2 2 2 8 olduğuna göre, a kaçtır?",
+      "options": [
+        "−2",
+        "−1",
+        "0",
+        "1",
+        "2"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "k bir doğal sayı olmak üzere, 1 den k ye kadar olan sayıların toplamı a, 9 dan k ye kadar olan sayıların toplamı ise b ile gösteriliyor. a b 4254 + = olduğuna göre, a kaçtır?",
+      "options": [
+        "2145",
+        "2146",
+        "2148",
+        "2150",
+        "2154 10"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "A a, b, c, d, e = kümesi aşağıda verilen ∗ işlemi ile bir değişmeli grup oluşturmaktadır. ∗ a b c d e a d e a b c b c e a b c d a b c d e d b c d e a e c d e a b Her ∈ x A için xf fonksiyonu ( ) 1 xf y x− = ∗y ; y A ∈ biçiminde tanımlanıyor. Buna göre, ( ) ( ) e b f f e aşağıdakilerden hangisine eşittir?",
+      "options": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "32 kişinin katıldığı bir sınavda her bir öğrenci mate- matik ya da fen testlerinden en az birini yapmıştır. Yalnız matematik testini yapan öğrenci sayısı fen testini yapan öğrenci sayısının 2 katından 4 eksiktir. Buna göre, yalnız matematik testini yapan öğrenci sayısı kaçtır?",
+      "options": [
+        "12",
+        "14",
+        "16",
+        "18",
+        "20 Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "x sayıda işçinin günde 10 saat çalışmasıyla 15 günde bitirilebilen bir iş, işçi sayısı artırılarak ve günde 8 sa- at çalışılarak 12 günde bitirilebiliyor. Buna göre, x aşağıdakilerden hangisi olabilir?",
+      "options": [
+        "10",
+        "12",
+        "18",
+        "24",
+        "32"
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Adnan, arkadaşına ‘‘5 yıl sonra yaşım, doğum yılı- mın rakamları toplamına eşit olacak.’’ diyor. Bu konuşma 2000 yılında geçtiğine göre, Adnan hangi yıl doğmuştur?",
+      "options": [
+        "1964",
+        "1973",
+        "1975",
+        "1979",
+        "1980"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Sıfırdan büyük a, b, c sayıları sırasıyla 2, 4, 6 sayı- ları ile orantılı ve 2 b a c = + olduğuna göre, a b c + + toplamı kaçtır?",
+      "options": [
+        "5",
+        "6",
+        "7",
+        "8",
+        "10 11"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Bir deniz motoru AB yolunu saatte ( ) v 20 + km hızla 24 dakikada, aynı yolu saatte ( ) v 6 − km hızla 32 dakikada alıyor. Buna göre, AB yolu kaç km dir?",
+      "options": [
+        "40,2",
+        "40,8",
+        "41,2",
+        "41,6",
+        "41,8"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Belirli bir yükseklikten bırakılan bir top, yere vuruşun- dan sonra bir önceki yüksekliğinin 3 8 i kadar yük- selmektedir. Top yere ikinci vuruşundan sonra 108 cm yüksel- diğine göre, birinci vuruşundan sonra kaç cm yükselmiştir?",
+      "options": [
+        "160",
+        "162",
+        "168",
+        "204",
+        "288 Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Bir satıcı etiket fiyatı 300 TL olan bir ürüne önce % 20, sonra indirimli fiyat üzerinden % x indirim yapıyor. Satıcı ürünü ikinci indirimden sonra 168 TL ye sattığına göre, x kaçtır?",
+      "options": [
+        "20",
+        "25",
+        "30",
+        "35",
+        "40"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "3 ü kız 4 ü erkek olan bir grup yan yana oturacaktır. Bu oturumda 3 kız öğrencinin yan yana bulunma olasılığı kaçtır? 7",
+      "options": [
+        "3",
+        "1 7",
+        "2 7 7",
+        "5",
+        "4 7 Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Tuz oranı % 20 olan tuzlu sudan 30 litre su buhar- laştırılırsa yeni tuz oranı % 30 oluyor. Buna göre, başlangıçtaki tuzlu su miktarı kaç litredir?",
+      "options": [
+        "120",
+        "100",
+        "90",
+        "80",
+        "60"
+      ],
+      "correctAnswer": 2,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "ABCD bir kare D C 60 [ ] [ ] EF AD ⊥ F ] x E ° = m(ECB) 60 ] ° = m(ABE) 60 60 = AB 4 cm A B 4 = EF x Yukarıdaki verilere göre x kaç cm dir?",
+      "options": [
+        "4 3 −",
+        "3 2 −",
+        "2 3 +",
+        "2 2 +",
+        "1 3 +"
+      ],
+      "correctAnswer": 0,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "y b K 3 x O a 4 Yukarıdaki dik koordinat sisteminde ( ) K 4, 3 nokta- sından geçen doğru x eksenini apsisi a olan, y ekse- nini de ordinatı b olan noktalarda kesmektedir. Buna göre, ( )( ) a 4 b 3 − − çarpımının değeri kaçtır?",
+      "options": [
+        "8",
+        "12",
+        "14",
+        "16",
+        "18 Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "2005 yılında yapılan toplam ihracat x bin TL fazla, 2007 yılında yapılan toplam ihracat x bin TL az olsaydı iki yılda yapılan ihracat tutarları eşit olacaktı. Buna göre x kaçtır?",
+      "options": [
+        "150",
+        "200",
+        "250",
+        "300",
+        "350 14"
+      ],
+      "correctAnswer": 1,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Şirketin 2008 yılındaki gıda ihracatı 2004 yılına göre yüzde kaç azalmıştır?",
+      "options": [
+        "52,5",
+        "55",
+        "60",
+        "62,5",
+        "65"
+      ],
+      "correctAnswer": 3,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
+    },
+    {
+      "topic": "Genel Matematik",
+      "question": "Aşağıda şirketin yıllara göre toplam ihracatının daire grafiğiyle gösterimi verilmiştir. 2006 2004 75 105 90 60 30 2005 2007 2008 Buna göre, 2006 yılında yaptığı gıda ve giyim ihra- cat tutarları (gıda; giyim) bin TL türünden aşağı- dakilerden hangisi olamaz?",
+      "options": [
+        "150; 350",
+        "200; 300",
+        "250; 250",
+        "300; 200",
+        "350; 250) GENEL YETENEK TESTİ BİTTİ. GENEL KÜLTÜR TESTİNE GEÇİNİZ. Diğer sayfaya geçiniz."
+      ],
+      "correctAnswer": 4,
+      "solution": "ÖSYM Çıkmış Matematik Sorusu (60. Soru)."
+    }
+  ]
+}
