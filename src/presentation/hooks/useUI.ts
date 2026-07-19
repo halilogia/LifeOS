@@ -1,13 +1,15 @@
 /**
  * useUI Hook
  * Presentation hook that wraps UI-related state (navigation, clock, quotes, dialogs).
- * Currently wraps the existing App.tsx UI logic for future migration.
+ * Uses chrome.storage.sync directly instead of legacy core/storage.
  */
 
-import { useState, useCallback, useEffect } from "preact/hooks";
+import { useState, useCallback } from "preact/hooks";
 import type { Language } from "../../domain/value-objects/Language.js";
 import { translations } from "../../utils/i18n.js";
-import { storage } from "../../core/storage.js";
+import type { CustomQuote } from "../../types/types.js";
+
+const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
 export function useUI(initialLang: Language = "tr") {
     // Navigation
@@ -92,7 +94,11 @@ export function useUI(initialLang: Language = "tr") {
 
     const refreshQuote = useCallback(
         async (activeLang: Language) => {
-            const customQuotes = await storage.getCustomQuotes();
+            const customQuotes: CustomQuote[] = await new Promise((resolve) => {
+                chrome.storage.sync.get(["customQuotes"], (result) => {
+                    resolve((result.customQuotes as CustomQuote[]) || []);
+                });
+            });
             const defaultQuoteCount = 7;
             const poolSize = defaultQuoteCount + customQuotes.length;
             const randomIndex = Math.floor(Math.random() * poolSize);
@@ -143,7 +149,11 @@ export function useUI(initialLang: Language = "tr") {
     );
 
     const loadSidebarOrder = useCallback(async () => {
-        const savedOrder = await storage.getSidebarOrder();
+        const savedOrder: string[] = await new Promise((resolve) => {
+            chrome.storage.sync.get([SIDEBAR_ORDER_KEY], (result) => {
+                resolve((result[SIDEBAR_ORDER_KEY] as string[]) || []);
+            });
+        });
         setSidebarOrder(savedOrder || []);
         if (savedOrder && savedOrder.length > 0) {
             setActiveView(savedOrder[0]);

@@ -1,19 +1,20 @@
 /**
  * useAppInit Hook
  * Presentation hook that wraps the application initialization logic.
- * Currently wraps the existing App.tsx useEffect initialization for future migration.
+ * Uses repositories directly instead of legacy core/storage.
  */
 
 import { useEffect, useCallback } from "preact/hooks";
 import type { Language } from "../../domain/value-objects/Language.js";
-import { storage } from "../../core/storage.js";
 import { googleSyncService } from "../../services/googleSyncService.js";
 import { checkAndResetRepeatingTasks } from "../../domain/services/TaskService.js";
 import { ChromeStorageTodoRepository } from "../../infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageSyncRepository } from "../../infrastructure/persistence/ChromeStorageSyncRepository.js";
+import { ChromeStorageSettingsRepository } from "../../infrastructure/persistence/ChromeStorageSettingsRepository.js";
 import { GoogleAuthApi } from "../../infrastructure/api/GoogleAuthApi.js";
 import { GoogleTasksApi } from "../../infrastructure/api/GoogleTasksApi.js";
 import { SyncGoogleTasksUseCase } from "../../application/use-cases/sync/SyncGoogleTasksUseCase.js";
+import { LocalToSyncMigration } from "../../infrastructure/persistence/migrations/LocalToSyncMigration.js";
 
 function createSyncPort() {
     const tasksApi = new GoogleTasksApi();
@@ -56,14 +57,19 @@ export interface AppInitCallbacks {
 
 export function useAppInit(callbacks: AppInitCallbacks) {
     const initializeApp = useCallback(async () => {
+        const settingsRepo = new ChromeStorageSettingsRepository();
+        const todoRepo = new ChromeStorageTodoRepository();
+        const syncRepo = new ChromeStorageSyncRepository();
+
         // 1. Run storage migrations
-        await storage.migrateLocalToSync();
+        const migration = new LocalToSyncMigration();
+        await migration.migrate();
 
         // 2. Load configurations
-        const config = await storage.getSettings();
+        const config = await settingsRepo.getSettings();
         callbacks.onSettingsLoaded(config as any);
 
-        const savedOrder = await storage.getSidebarOrder();
+        const savedOrder = await settingsRepo.getSidebarOrder();
         callbacks.onSidebarOrderLoaded(savedOrder || []);
 
         // Apply body class for legacy CSS
@@ -73,24 +79,22 @@ export function useAppInit(callbacks: AppInitCallbacks) {
         );
 
         // 3. Load and clean task items
-        const loadedTodos = await storage.getTodos();
+        const loadedTodos = await todoRepo.getAll();
         const clone = JSON.parse(JSON.stringify(loadedTodos));
         const hasResets = checkAndResetRepeatingTasks(clone as any);
         if (hasResets.modified) {
-            await storage.setTodos(hasResets.todos as any);
+            await todoRepo.saveAll(hasResets.todos as any);
             callbacks.onTodosLoaded(hasResets.todos as any);
         } else {
             callbacks.onTodosLoaded(loadedTodos);
         }
 
         // 4. Trigger background task sync if Google Sync is enabled
-        const syncConfig = await storage.getSyncSettings();
+        const syncConfig = await syncRepo.getSyncSettings();
         callbacks.onSyncSettingsLoaded(syncConfig);
 
         if (syncConfig.enabled) {
             try {
-                const todoRepo = new ChromeStorageTodoRepository();
-                const syncRepo = new ChromeStorageSyncRepository();
                 const syncPort = createSyncPort();
                 const syncUC = new SyncGoogleTasksUseCase(todoRepo, syncRepo, syncPort);
 
