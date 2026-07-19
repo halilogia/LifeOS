@@ -49,6 +49,14 @@ export class RestoreFromDriveUseCase {
     }
 
     private async getAuthToken(): Promise<string> {
-        throw new Error("Auth token retrieval not implemented - connect infrastructure layer");
+        return new Promise((resolve, reject) => {
+            chrome.identity.getAuthToken({ interactive: false }, (token) => {
+                if (chrome.runtime.lastError || !token) {
+                    reject(new Error(chrome.runtime.lastError?.message ?? "No auth token"));
+                } else {
+                    resolve(token as string);
+                }
+            });
+        });
     }
 }
