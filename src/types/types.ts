@@ -1,16 +1,5 @@
-export interface Todo {
-  id?: string; // Google Tasks ID
-  text: string;
-  completed: boolean;
-  status: "todo" | "in-progress" | "done";
-  repeat: "none" | "daily" | "weekly" | "monthly";
-  category: string;
-  lastCompletedDate: string | null;
-  completedDates?: string[];
-  dueDate?: string; // Target date (YYYY-MM-DD)
-  urgent?: boolean;
-  important?: boolean;
-}
+// Re-export domain entity so existing code can still import from types/types.ts
+export type { Todo } from "../domain/entities/Todo.js";
 
 export type Language = "tr" | "en";
 
@@ -82,4 +71,3 @@ export interface PomodoroLog {
   element: "bonsai" | "koi" | "pagoda" | "lantern" | "bamboo" | "pebble";
   position: number;  // 0-24 grid position
 }
-

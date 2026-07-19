@@ -1,9 +1,12 @@
 import { useState, useEffect } from "preact/hooks";
-import { storage, GoogleSyncSettings } from "./core/storage.js";
+import { storage } from "./core/storage.js";
+import type { GoogleSyncSettings } from "./core/storage.js";
 import { googleSyncService } from "./services/googleSyncService.js";
 import { useTodos } from "./presentation/hooks/useTodos.js";
 import { translations } from "./utils/i18n.js";
-import { Language, Todo } from "./types/types.js";
+import type { Language } from "./types/types.js";
+import { Todo } from "./types/types.js";
+import { useTodoRepository, RepositoryProvider } from "./infrastructure/di/RepositoryContext.js";
 
 import { Sidebar } from "./components/Sidebar.js";
 import { ListView } from "./components/ListView.js";
@@ -558,6 +561,9 @@ export function App() {
     triggerCloudBackup();
   };
 
+  // Get the Todo repository from DI context
+  const todoRepository = useTodoRepository();
+
   // useTodos Hook – manages todo state, CRUD, and Google Tasks sync
   const {
     todos,
@@ -571,7 +577,7 @@ export function App() {
     handleUpdateTodoUrgentImportant,
     handleExportBackup,
     handleImportBackup,
-  } = useTodos(syncSettings, triggerCloudBackup, showAlert, t);
+  } = useTodos(todoRepository, syncSettings, triggerCloudBackup, showAlert, t);
 
   // --- Sidebar toggles ---
   const handleSidebarToggle = () => {

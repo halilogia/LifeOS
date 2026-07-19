@@ -5,19 +5,19 @@
  * that were previously in App.tsx. It follows clean architecture
  * by using domain services and infrastructure repositories.
  * 
- * Minimum data loss approach: Accepts external state updaters as parameters
- * so App.tsx doesn't need massive refactoring all at once.
+ * DI approach: Accepts ITodoRepository as a parameter so App.tsx
+ * can inject the repository from RepositoryContext.
  */
 
 import { useState, useCallback } from "preact/hooks";
-import { storage } from "../../core/storage.js";
 import { googleSyncService } from "../../services/googleSyncService.js";
 import {
     checkAndResetRepeatingTasks,
     moveTaskWithStatus,
     getUpdatedStatuses,
 } from "../../domain/services/TaskService.js";
-import type { Todo } from "../../types/types.js";
+import type { ITodoRepository } from "../../domain/repositories/ITodoRepository.js";
+import type { Todo } from "../../domain/entities/Todo.js";
 
 export type GoogleSyncSettings = {
     enabled: boolean;
@@ -28,6 +28,7 @@ export type GoogleSyncSettings = {
 };
 
 export function useTodos(
+    todoRepository: ITodoRepository,
     syncSettings: GoogleSyncSettings,
     triggerCloudBackup: () => Promise<void>,
     showAlert: (message: string, onConfirm?: () => void) => void,
@@ -35,19 +36,19 @@ export function useTodos(
 ) {
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    // --- Initialize todos from storage ---
+    // --- Initialize todos from storage via repository ---
     const initTodos = useCallback(async () => {
-        const loadedTodos = await storage.getTodos();
+        const loadedTodos = await todoRepository.getAll();
         const clone = JSON.parse(JSON.stringify(loadedTodos));
         const hasResets = checkAndResetRepeatingTasks(clone);
         if (hasResets) {
-            await storage.setTodos(clone);
+            await todoRepository.saveAll(clone);
             setTodos(clone);
         } else {
             setTodos(loadedTodos);
         }
         return loadedTodos;
-    }, []);
+    }, [todoRepository]);
 
     // --- Add Todo ---
     const handleAddTodo = useCallback(async (
@@ -61,7 +62,7 @@ export function useTodos(
             repeat,
             status: "todo",
             category: "general",
-            lastCompletedDate: "",
+            lastCompletedDate: null,
             dueDate: dueDate || undefined,
         };
 
@@ -90,10 +91,10 @@ export function useTodos(
         }
 
         const next = [...todos, newTodo];
-        await storage.setTodos(next);
+        await todoRepository.saveAll(next);
         setTodos(next);
         triggerCloudBackup();
-    }, [todos, syncSettings, triggerCloudBackup]);
+    }, [todos, syncSettings, triggerCloudBackup, todoRepository]);
 
     // --- Toggle Todo ---
     const handleToggleTodo = useCallback(async (index: number) => {
@@ -132,10 +133,10 @@ export function useTodos(
             }
         }
 
-        await storage.setTodos(next);
+        await todoRepository.saveAll(next);
         setTodos(next);
         triggerCloudBackup();
-    }, [todos, syncSettings, triggerCloudBackup]);
+    }, [todos, syncSettings, triggerCloudBackup, todoRepository]);
 
     // --- Delete Todo ---
     const handleDeleteTodo = useCallback(async (index: number) => {
@@ -158,10 +159,10 @@ export function useTodos(
         }
 
         const next = todos.filter((_, idx) => idx !== index);
-        await storage.setTodos(next);
+        await todoRepository.saveAll(next);
         setTodos(next);
         triggerCloudBackup();
-    }, [todos, syncSettings, triggerCloudBackup]);
+    }, [todos, syncSettings, triggerCloudBackup, todoRepository]);
 
     // --- Move Task Status ---
     const handleMoveTaskStatus = useCallback(async (index: number, newStatus: Todo["status"]) => {
@@ -188,10 +189,10 @@ export function useTodos(
             }
         }
 
-        await storage.setTodos(next);
+        await todoRepository.saveAll(next);
         setTodos(next);
         triggerCloudBackup();
-    }, [todos, syncSettings, triggerCloudBackup]);
+    }, [todos, syncSettings, triggerCloudBackup, todoRepository]);
 
     // --- Move Task Direction ---
     const handleMoveTaskDirection = useCallback(async (index: number, direction: number) => {
@@ -220,11 +221,11 @@ export function useTodos(
                 }
             }
 
-            await storage.setTodos(next);
+            await todoRepository.saveAll(next);
             setTodos(next);
             triggerCloudBackup();
         }
-    }, [todos, syncSettings, triggerCloudBackup]);
+    }, [todos, syncSettings, triggerCloudBackup, todoRepository]);
 
     // --- Update Urgent/Important ---
     const handleUpdateTodoUrgentImportant = useCallback(async (
@@ -239,12 +240,12 @@ export function useTodos(
             important,
         };
         setTodos(updated);
-        await storage.setTodos(updated);
-    }, [todos]);
+        await todoRepository.saveAll(updated);
+    }, [todos, todoRepository]);
 
     // --- Export Backup ---
     const handleExportBackup = useCallback(async () => {
-        const dataList = await storage.getTodos();
+        const dataList = await todoRepository.getAll();
         const blob = new Blob([JSON.stringify(dataList, null, 2)], {
             type: "application/json",
         });
@@ -254,7 +255,7 @@ export function useTodos(
         a.download = `zentodo-backup-${new Date().toISOString().slice(0, 10)}.json`;
         a.click();
         URL.revokeObjectURL(url);
-    }, []);
+    }, [todoRepository]);
 
     // --- Import Backup ---
     const handleImportBackup = useCallback((e: Event) => {
@@ -268,7 +269,7 @@ export function useTodos(
             try {
                 const parsed = JSON.parse(ev.target?.result as string);
                 if (Array.isArray(parsed)) {
-                    await storage.setTodos(parsed);
+                    await todoRepository.saveAll(parsed);
                     setTodos(parsed);
                     showAlert(t.alert_restore_success);
                 } else {
@@ -283,7 +284,7 @@ export function useTodos(
             input.value = "";
         };
         reader.readAsText(input.files[0]);
-    }, [t, showAlert]);
+    }, [t, showAlert, todoRepository]);
 
     return {
         todos,
