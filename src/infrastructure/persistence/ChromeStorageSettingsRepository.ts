@@ -1,57 +1,96 @@
 /**
  * ChromeStorageSettingsRepository
- * Infrastructure implementation of ISettingsRepository using chrome.storage.sync.
- * Wraps the existing storage functions.
+ * Infrastructure implementation of ISettingsRepository using chrome.storage.sync
+ * directly (not wrapping legacy storage.ts).
  */
 
-import { storage } from "../../core/storage.js";
-import type {
-    ISettingsRepository,
-    AppSettings,
-} from "../../domain/repositories/ISettingsRepository.js";
+import type { ISettingsRepository } from "../../domain/repositories/ISettingsRepository.js";
 import type { Language } from "../../domain/value-objects/Language.js";
 
 export class ChromeStorageSettingsRepository implements ISettingsRepository {
-    async getSettings(): Promise<AppSettings> {
-        const config = await storage.getSettings();
-        return {
-            lang: config.lang,
-            sidebarOpen: config.sidebarOpen ?? true,
-            freeGamesNotificationsEnabled:
-                config.freeGamesNotificationsEnabled ?? true,
-            calendarNotificationsEnabled:
-                config.calendarNotificationsEnabled ?? true,
-            pomoBlockEnabled: config.pomoBlockEnabled ?? true,
-            universalInfoBoxEnabled: config.universalInfoBoxEnabled ?? true,
-            universalInfoBoxHotkey: config.universalInfoBoxHotkey || "none",
-        };
+    async getSettings(): Promise<{
+        lang: Language;
+        sidebarOpen: boolean;
+        freeGamesNotificationsEnabled: boolean;
+        calendarNotificationsEnabled: boolean;
+        pomoBlockEnabled: boolean;
+        universalInfoBoxEnabled: boolean;
+        universalInfoBoxHotkey: string;
+    }> {
+        return new Promise((resolve) => {
+            chrome.storage.sync.get(
+                [
+                    "lang",
+                    "sidebarOpen",
+                    "freeGamesNotificationsEnabled",
+                    "calendarNotificationsEnabled",
+                    "pomoBlockEnabled",
+                    "universalInfoBoxEnabled",
+                    "universalInfoBoxHotkey",
+                ],
+                (result: any) => {
+                    resolve({
+                        lang: (result.lang as Language) || "tr",
+                        sidebarOpen: result.sidebarOpen ?? true,
+                        freeGamesNotificationsEnabled:
+                            result.freeGamesNotificationsEnabled ?? true,
+                        calendarNotificationsEnabled:
+                            result.calendarNotificationsEnabled ?? true,
+                        pomoBlockEnabled: result.pomoBlockEnabled ?? true,
+                        universalInfoBoxEnabled:
+                            result.universalInfoBoxEnabled ?? true,
+                        universalInfoBoxHotkey:
+                            result.universalInfoBoxHotkey || "none",
+                    });
+                },
+            );
+        });
     }
 
     async setLang(lang: Language): Promise<void> {
-        return storage.setLang(lang);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ lang }, resolve);
+        });
     }
 
     async setSidebarOpen(isOpen: boolean): Promise<void> {
-        return storage.setSidebarOpen(isOpen);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ sidebarOpen: isOpen }, resolve);
+        });
     }
 
     async setFreeGamesNotificationsEnabled(enabled: boolean): Promise<void> {
-        return storage.setFreeGamesNotificationsEnabled(enabled);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ freeGamesNotificationsEnabled: enabled }, resolve);
+        });
     }
 
     async setCalendarNotificationsEnabled(enabled: boolean): Promise<void> {
-        return storage.setCalendarNotificationsEnabled(enabled);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ calendarNotificationsEnabled: enabled }, resolve);
+        });
     }
 
     async setPomoBlockEnabled(enabled: boolean): Promise<void> {
-        return storage.setPomoBlockEnabled(enabled);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ pomoBlockEnabled: enabled }, resolve);
+        });
     }
 
     async setUniversalInfoBox(enabled: boolean, hotkey: string): Promise<void> {
-        return storage.setUniversalInfoBox(enabled, hotkey);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set(
+                { universalInfoBoxEnabled: enabled, universalInfoBoxHotkey: hotkey },
+                resolve,
+            );
+        });
     }
 
     async clearAll(lang: Language): Promise<void> {
-        return storage.clearAll(lang);
+        return new Promise((resolve) => {
+            chrome.storage.sync.clear(() => {
+                chrome.storage.sync.set({ lang }, resolve);
+            });
+        });
     }
 }

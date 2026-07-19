@@ -1,10 +1,9 @@
 /**
  * ChromeStorageSyncRepository
- * Infrastructure implementation of ISyncRepository using chrome.storage.sync.
- * Wraps the existing storage.getSyncSettings/setSyncSettings functions.
+ * Infrastructure implementation of ISyncRepository using chrome.storage.sync
+ * directly (not wrapping legacy storage.ts).
  */
 
-import { storage } from "../../core/storage.js";
 import type {
     ISyncRepository,
     GoogleSyncSettings,
@@ -12,17 +11,23 @@ import type {
 
 export class ChromeStorageSyncRepository implements ISyncRepository {
     async getSyncSettings(): Promise<GoogleSyncSettings> {
-        const settings = await storage.getSyncSettings();
-        return {
-            enabled: settings.enabled,
-            tasksEnabled: settings.tasksEnabled,
-            calendarEnabled: settings.calendarEnabled,
-            userEmail: settings.userEmail,
-            lastSyncedBackup: settings.lastSyncedBackup,
-        };
+        return new Promise((resolve) => {
+            chrome.storage.sync.get(["syncSettings"], (result) => {
+                const settings = result.syncSettings as GoogleSyncSettings | undefined;
+                resolve(
+                    settings ?? {
+                        enabled: false,
+                        tasksEnabled: false,
+                        calendarEnabled: false,
+                    },
+                );
+            });
+        });
     }
 
     async setSyncSettings(settings: GoogleSyncSettings): Promise<void> {
-        return storage.setSyncSettings(settings as any);
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ syncSettings: settings }, resolve);
+        });
     }
 }
