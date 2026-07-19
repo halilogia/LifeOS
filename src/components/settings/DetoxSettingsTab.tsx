@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface DetoxSettingsTabProps {
   lang: Language;
@@ -11,11 +12,12 @@ export function DetoxSettingsTab({
   detoxLimits,
   onDetoxLimitsChange,
 }: DetoxSettingsTabProps) {
+  const t = getTranslation(lang);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
         <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
-          {lang === "tr" ? "Sosyal Medya Günlük Limitleri" : "Social Media Daily Limits"}
+          {t.settings_detox_limits_title}
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "16px 14px" }}>
           {[
@@ -34,7 +36,7 @@ export function DetoxSettingsTab({
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
                     {limit === 0
-                      ? (lang === "tr" ? "Sınırsız" : "Unlimited")
+                      ? t.settings_unlimited
                       : `${limit} ${lang === "tr" ? "dk" : "min"}`}
                   </span>
                   <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "26px" }}>

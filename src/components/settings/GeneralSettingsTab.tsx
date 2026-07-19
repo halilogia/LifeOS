@@ -35,7 +35,7 @@ export function GeneralSettingsTab({
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
         <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
-          {lang === "tr" ? "Uygulama Ayarları" : "App Settings"}
+          {t.settings_app_settings_title}
         </h3>
         <div className="settings-actions">
           {/* Language Switch */}
@@ -118,7 +118,7 @@ export function GeneralSettingsTab({
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
-            <span>{lang === "tr" ? "Bugünkü Görevleri Bildir" : "Notify Today's Tasks"}</span>
+            <span>{t.settings_notify_tasks}</span>
             <span
               style={{
                 marginLeft: "auto",
@@ -150,7 +150,7 @@ export function GeneralSettingsTab({
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
-            <span>{lang === "tr" ? "Pomodoro Odak Engelleyici" : "Pomodoro Focus Blocker"}</span>
+            <span>{t.settings_pomo_blocker}</span>
             <span
               style={{
                 marginLeft: "auto",

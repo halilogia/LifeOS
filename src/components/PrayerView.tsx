@@ -1,6 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { prayerService, PrayerTimes } from "../services/prayerService.js";
 import { Language } from "../types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface PrayerViewProps {
   lang: Language;
@@ -113,6 +114,7 @@ const PRAYER_NAMES: Record<string, Record<string, string>> = {
 };
 
 export function PrayerView({ lang, compact = false }: PrayerViewProps) {
+  const t = getTranslation(lang);
   const labels = PRAYER_NAMES[lang] || PRAYER_NAMES.tr;
 
   const [loading, setLoading] = useState(true);
@@ -198,7 +200,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
               animation: "pulse 1.5s infinite",
             }}
           >
-            {lang === "tr" ? "Vakitler alınıyor..." : "Loading prayer times..."}
+            {t.prayer_loading}
           </div>
         </div>
       </div>
@@ -216,9 +218,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
               color: "var(--danger)",
             }}
           >
-            {lang === "tr"
-              ? "Vakitler yüklenirken bir hata oldu."
-              : "An error occurred while loading prayer times."}
+            {t.prayer_error}
           </div>
         </div>
       </div>
@@ -292,7 +292,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
                 }}
                 onClick={() => handleSaveCity(city)}
               >
-                {lang === "tr" ? "Ok" : "Ok"}
+                {t.prayer_ok}
               </button>
             </div>
           </div>
@@ -441,7 +441,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
                     }}
                     onClick={() => handleSaveCity(city)}
                   >
-                    {lang === "tr" ? "Kaydet" : "Save"}
+                    {t.prayer_save}
                   </button>
                 </div>
               </div>

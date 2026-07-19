@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface KpssSettingsTabProps {
   lang: Language;
@@ -19,18 +20,19 @@ export function KpssSettingsTab({
   onKpssTargetNetChange,
   onKpssTargetScoreChange,
 }: KpssSettingsTabProps) {
+  const t = getTranslation(lang);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
         <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
-          {lang === "tr" ? "KPSS Hazırlık Hedefleri" : "KPSS Prep Goal Settings"}
+          {t.settings_kpss_title}
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", background: "rgba(255,255,255,0.01)", border: "1px solid var(--card-border)", borderRadius: "10px", padding: "16px 14px" }}>
           
           {/* Goal Type Pill Selector */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
-              {lang === "tr" ? "Hedef Türü" : "Goal Type"}
+              {t.settings_kpss_goal_type}
             </span>
             <div style={{ display: "flex", gap: "2px", background: "rgba(255, 255, 255, 0.05)", padding: "2px", borderRadius: "6px", border: "1px solid var(--card-border)" }}>
               <button
@@ -48,7 +50,7 @@ export function KpssSettingsTab({
                   transition: "background 0.2s"
                 }}
               >
-                {lang === "tr" ? "Net" : "Net"}
+                {t.settings_kpss_target_net_short}
               </button>
               <button
                 type="button"
@@ -65,7 +67,7 @@ export function KpssSettingsTab({
                   transition: "background 0.2s"
                 }}
               >
-                {lang === "tr" ? "Puan" : "Score"}
+                {t.settings_kpss_target_score_short}
               </button>
             </div>
           </div>
@@ -73,7 +75,7 @@ export function KpssSettingsTab({
           {/* Target Tuning Controls */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
-              {kpssGoalType === "net" ? (lang === "tr" ? "Soru Net Hedefi" : "Net Target") : (lang === "tr" ? "Puan Hedefi" : "Score Target")}
+              {kpssGoalType === "net" ? t.settings_kpss_target_net : t.settings_kpss_target_score}
             </span>
             <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.3)", border: "1px solid var(--card-border)", borderRadius: "8px", overflow: "hidden", height: "30px" }}>
               <button

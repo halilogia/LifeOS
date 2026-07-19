@@ -1,5 +1,6 @@
 import { AlarmItem } from "@/infrastructure/services/PomodoroManagerService.js";
 import { Language } from "../types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 import { useState, useEffect, useRef } from "preact/hooks";
 
 interface PomoSidePanelProps {
@@ -31,6 +32,7 @@ export function PomoSidePanel({
   onToggleAlarm,
   onDeleteAlarm,
 }: PomoSidePanelProps) {
+  const t = getTranslation(lang);
   const [activeSound, setActiveSound] = useState<"none" | "rain" | "wind" | "white_noise" | "lofi">("none");
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
@@ -373,7 +375,7 @@ export function PomoSidePanel({
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
           </svg>
-          <span>{lang === "tr" ? "Kronometre" : "Stopwatch"}</span>
+          <span>{t.pomo_stopwatch}</span>
         </div>
         <div className="mini-tool-content">
           <div id="stopwatch-time" className="mini-time">
@@ -455,7 +457,7 @@ export function PomoSidePanel({
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
-          <span>{lang === "tr" ? "Alarmlar" : "Alarms"}</span>
+          <span>{t.pomo_alarms}</span>
         </div>
 
         <div style={{ display: "flex", gap: "8px", width: "100%" }}>
@@ -471,7 +473,7 @@ export function PomoSidePanel({
           <button
             className="newtab-alarm-add-btn"
             onClick={onAddAlarm}
-            title={lang === "tr" ? "Alarm Ekle" : "Add Alarm"}
+            title={t.pomo_alarms}
           >
             +
           </button>
@@ -498,7 +500,7 @@ export function PomoSidePanel({
                 marginTop: "1rem",
               }}
             >
-              {lang === "tr" ? "Kurulu alarm yok" : "No alarms set"}
+              {t.pomo_no_alarms}
             </div>
           ) : (
             alarms.map((alarm) => (
@@ -639,7 +641,7 @@ export function PomoSidePanel({
             <circle cx="18" cy="16" r="3"></circle>
           </svg>
           <span style={{ fontSize: "0.85rem", fontWeight: "600" }}>
-            {lang === "tr" ? "Odak Müzikleri & Sesleri" : "Focus Sounds & Music"}
+            {t.pomo_focus_music}
           </span>
           
           {/* Pulsing Sound wave visualizer when playing */}
@@ -672,7 +674,7 @@ export function PomoSidePanel({
               transition: "all 0.2s ease"
             }}
           >
-            🌧️ {lang === "tr" ? "Yağmur" : "Rain"}
+            🌧️ {t.pomo_ambient_rain}
           </button>
 
           <button
@@ -694,7 +696,7 @@ export function PomoSidePanel({
               transition: "all 0.2s ease"
             }}
           >
-            🍃 {lang === "tr" ? "Rüzgar" : "Wind"}
+            🍃 {t.pomo_ambient_wind}
           </button>
 
           <button
@@ -716,7 +718,7 @@ export function PomoSidePanel({
               transition: "all 0.2s ease"
             }}
           >
-            💨 {lang === "tr" ? "Saç Kurutma" : "Hairdryer"}
+            💨 {t.pomo_ambient_brown || t.pomo_ambient_hairdryer}
           </button>
 
           <button
@@ -738,7 +740,7 @@ export function PomoSidePanel({
               transition: "all 0.2s ease"
             }}
           >
-            📻 {lang === "tr" ? "Lo-Fi Radyo" : "Lo-Fi Radio"}
+            📻 {t.pomo_ambient_lofi}
           </button>
         </div>
 
