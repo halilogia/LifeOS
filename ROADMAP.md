@@ -45,6 +45,8 @@ Leverage placement quiz history to project real-world exam targets.
 ---
 
 ## ✅ Completed Features Archive (Tamamlanan Özellikler Arşivi)
+- **ÖSYM KPSS Past Exams & Practice Room**: Integrated actual 2009-2021 KPSS exams for practice with dynamic count calculation.
+- **KPSS Soru Sistemi Değişim Milatları (Evolution Guide)**: Localized timeline info button overlay showing critical ÖSYM reform milestones.
 - **Custom Glassmorphic Date Picker**: Replaced the native browser calendar input with a dark glass popover dropdown (`DatePicker.tsx`).
 - **Web Audio API Ambient Sound Synthesis**: Implemented offline wind LFO sweeps, rain droplet pitter-patter click synthesis, and Rhodes lofi piano chords.
 - **KPSS Subject Auto-Scheduling Planner**: Dividing topics into calendars dynamically based on exam date and completion status.

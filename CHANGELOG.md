@@ -4,6 +4,16 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.5.0] - 2026-07-19
+### Eklendi
+- **ÖSYM KPSS Çıkmış Sorular Sınav Salonu**: 2021 yılından 2009 yılına kadar olan KPSS Lisans Genel Yetenek-Genel Kültür (Tarih, Coğrafya, Matematik) çıkmış sorularının yer aldığı sınav salonu eklendi. Kullanıcılar her yılın sınavını veya tüm yıllardan oluşan karma denemeleri çözebilmektedir.
+- **İnteraktif Soru Sistemi Rehberi (Help Icon)**: Sınav çözme ekranına dairesel bir `!` bilgi düğmesi eklenerek ÖSYM'nin 2000'li yıllardan sonra yaptığı kritik sistem reformları (2013: Geçiş/Müfredat denemesi, 2014: Sözel/Sayısal mantığın resmi başlangıcı, 2018: ALES benzeri yeni nesil muhakeme soruları) hakkında bilgilendirme sunuldu.
+- **Dinamik Soru Sayısı Gösterimi**: Dashboard ekranındaki konu ve ders soru sayıları statik değerler yerine sınav veri havuzundan (`KPSS_YEARLY_DATA`) anlık olarak okunup dinamik ve hatasız hesaplanacak şekilde güncellendi.
+- **Temiz Mimari ve Refaktör (Clean Architecture Refactor)**: `KpssView.tsx` içindeki veri importları ve iş mantığı temizlendi:
+  - Bütün sınav verileri `kpssDataRegistry.ts` altında merkezi hale getirildi.
+  - Yapay zeka ile soru üretme ve API çağrısı mantığı `kpssAiService.ts` dosyasına taşındı.
+  - Net puan hesaplama işlevleri `kpssCalculator.ts` modülüne taşınarak bileşenlerin okunabilirliği artırıldı.
+
 ## [3.4.0] - 2026-07-18
 ### Eklendi
 - **Yapay Zeka Ses Sentezleyiciler**: Odak sesleri ve müzikleri (Yağmur, Rüzgar, Lo-Fi) harici mp3 sunucu bağımlılığından kurtarılarak tamamen çevrimdışı çalışabilen Web Audio API fiziksel ses sentezleyicilerine dönüştürüldü. Rüzgar uğultuları için LFO sweep modu, yağmur için stokastik üstel söndürmeli damla vuruşları ve Lo-Fi kanalı için vinyl çıtırtılı warm rhodes akor döngüsü sentezlendi.

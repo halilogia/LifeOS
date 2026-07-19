@@ -19,7 +19,8 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Sürükle-bırak (Drag-and-Drop) ve kolay taşımayı destekleyen modern **Kanban Panosu**.
 - **📚 KPSS Hazırlık Takibi**:
   - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
-  - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri. Sınav sonucuna göre konu durumları otomatik güncellenir 
+  - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri. Sınav sonucuna göre konu durumları otomatik güncellenir.
+  - **Çıkmış Sorular Sınav Salonu**: 2009-2021 yılları arası orijinal ÖSYM çıkmış KPSS Lisans sorularını yıl bazında veya tüm yılların karışımından oluşan karma denemeler halinde çözebilme desteği. Sınav ekranında ÖSYM'nin kritik sınav reformu milatlarını (2013-2014-2018) gösteren dairesel `!` kılavuz butonu.
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
 - **📈 Özel Borsa İstanbul Grafik Paneli**:
   - BIST hisseleri için tamamen kendi geliştirdiğimiz, Yahoo Finance veri altyapısıyla çalışan mum (Candlestick) grafik ekranı. 1M, 3M, 6M, 1Y zaman aralığı filtreleri ve fare takipli crosshair veri çubuğu.
