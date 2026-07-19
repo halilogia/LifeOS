@@ -18,8 +18,10 @@ export interface AppSettings {
 
 export interface ISettingsRepository {
     getSettings(): Promise<AppSettings>;
+    getSidebarOrder(): Promise<string[]>;
     setLang(lang: Language): Promise<void>;
     setSidebarOpen(isOpen: boolean): Promise<void>;
+    setSidebarOrder(order: string[]): Promise<void>;
     setFreeGamesNotificationsEnabled(enabled: boolean): Promise<void>;
     setCalendarNotificationsEnabled(enabled: boolean): Promise<void>;
     setPomoBlockEnabled(enabled: boolean): Promise<void>;

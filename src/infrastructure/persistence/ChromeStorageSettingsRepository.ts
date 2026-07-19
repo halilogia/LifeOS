@@ -47,6 +47,20 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
         });
     }
 
+    async getSidebarOrder(): Promise<string[]> {
+        return new Promise((resolve) => {
+            chrome.storage.sync.get(["sidebarOrder"], (result) => {
+                resolve((result.sidebarOrder as string[]) || []);
+            });
+        });
+    }
+
+    async setSidebarOrder(order: string[]): Promise<void> {
+        return new Promise((resolve) => {
+            chrome.storage.sync.set({ sidebarOrder: order }, resolve);
+        });
+    }
+
     async setLang(lang: Language): Promise<void> {
         return new Promise((resolve) => {
             chrome.storage.sync.set({ lang }, resolve);

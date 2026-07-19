@@ -1,10 +1,46 @@
-import { storage } from "@/core/storage.js";
-import { KpssProgress, KpssDailyStats } from "@/types/types.js";
+/**
+ * kpssService
+ * Service layer for KPSS study tracker functionality.
+ * Uses chrome.storage.sync directly instead of legacy core/storage.
+ */
+
+import type { KpssProgress, KpssDailyStats } from "../types/types.js";
 
 export interface KpssTopic {
   title: string;
   description: string;
   questionsCount: number;
+}
+
+const KPSS_PROGRESS_KEY = "kpssProgress";
+const KPSS_DAILY_STATS_KEY = "kpssDailyStats";
+
+function getKpssProgressFromStorage(): Promise<KpssProgress[]> {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get([KPSS_PROGRESS_KEY], (result) => {
+      resolve((result[KPSS_PROGRESS_KEY] as KpssProgress[]) || []);
+    });
+  });
+}
+
+function setKpssProgressToStorage(progressList: KpssProgress[]): Promise<void> {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set({ [KPSS_PROGRESS_KEY]: progressList }, resolve);
+  });
+}
+
+function getKpssDailyStatsFromStorage(): Promise<KpssDailyStats[]> {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get([KPSS_DAILY_STATS_KEY], (result) => {
+      resolve((result[KPSS_DAILY_STATS_KEY] as KpssDailyStats[]) || []);
+    });
+  });
+}
+
+function setKpssDailyStatsToStorage(stats: KpssDailyStats[]): Promise<void> {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set({ [KPSS_DAILY_STATS_KEY]: stats }, resolve);
+  });
 }
 
 export const kpssData: Record<string, KpssTopic[]> = {
@@ -318,22 +354,22 @@ export const kpssData: Record<string, KpssTopic[]> = {
   ],
   cografya: [
     {
-      title: "Türkiye’nin Coğrafi Konumu",
+      title: "Türkiye'nin Coğrafi Konumu",
       description: "Matematiksel ve özel konum, yerel saat farkları ve kuşak özellikleri.",
       questionsCount: 1.0,
     },
     {
-      title: "Türkiye’nin Fiziki Özellikleri",
+      title: "Türkiye'nin Fiziki Özellikleri",
       description: "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri.",
       questionsCount: 3.0,
     },
     {
-      title: "Türkiye’nin Toprak, Su ve Doğal Varlıkları",
+      title: "Türkiye'nin Toprak, Su ve Doğal Varlıkları",
       description: "Toprak tipleri, akarsu rejimleri, göller, yer altı suları ve doğal çevre özellikleri.",
       questionsCount: 1.0,
     },
     {
-      title: "Türkiye’nin İklimi / Bitki Örtüsü",
+      title: "Türkiye'nin İklimi / Bitki Örtüsü",
       description: "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri.",
       questionsCount: 2.0,
     },
@@ -432,28 +468,28 @@ export const kpssService = {
    * Retrieves user's KPSS topic checkmark progress.
    */
   getKpssProgress(): Promise<KpssProgress[]> {
-    return storage.getKpssProgress();
+    return getKpssProgressFromStorage();
   },
 
   /**
    * Sets the complete list of KPSS topic progress.
    */
   setKpssProgress(progressList: KpssProgress[]): Promise<void> {
-    return storage.setKpssProgress(progressList);
+    return setKpssProgressToStorage(progressList);
   },
 
   /**
    * Retrieves question history records.
    */
   getKpssDailyStats(): Promise<KpssDailyStats[]> {
-    return storage.getKpssDailyStats();
+    return getKpssDailyStatsFromStorage();
   },
 
   /**
    * Sets question history records.
    */
   setKpssDailyStats(stats: KpssDailyStats[]): Promise<void> {
-    return storage.setKpssDailyStats(stats);
+    return setKpssDailyStatsToStorage(stats);
   },
 
   /**
