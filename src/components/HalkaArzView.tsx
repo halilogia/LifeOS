@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { IpoCard } from "@/components/halkaarz/IpoCard.js";
-import { CustomStockChart } from "@/components/halkaarz/CustomStockChart.js";
+import { IpoCard } from "@/components/stock/IpoCard.js";
+import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
 import {
   fetchActiveIPOs,
   fetchIPOHistory,
