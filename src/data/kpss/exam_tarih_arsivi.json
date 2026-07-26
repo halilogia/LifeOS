@@ -29,13 +29,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Aşağıdakilerden hangisi Türk topluluğu değildir?",
-      "options": [
-        "Kıpçaklar",
-        "Vandalİar",
-        "Sabirîer",
-        "Karluklar",
-        "Avarlar"
-      ],
+      "options": ["Kıpçaklar", "Vandalİar", "Sabirîer", "Karluklar", "Avarlar"],
       "correctAnswer": 1,
       "solution": "Vandallar Türk topluluğu değildir"
     },
@@ -81,13 +75,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Türk devletlerinde, önceki dönemlerde ekonomik etkinlikler yalnız hayvancılığa dayanıyordu Daha sonra bu durum değişmiş, tarım önem kazanmıştır Tarım hangi devlet zamanında önem kazanmaya başlamıştır?",
-      "options": [
-        "Göktürkler",
-        "Hazarlar",
-        "Karluklar",
-        "Uygurlar",
-        "Hunlar"
-      ],
+      "options": ["Göktürkler", "Hazarlar", "Karluklar", "Uygurlar", "Hunlar"],
       "correctAnswer": 3,
       "solution": "Türkler yerleşik hayata geçtikten sonra tarım Önemli geçim kaynağı olmuştur. Uygurlar döneminde yerleşik hayata geçildiği için doğru cevap Uygurlar olacaktır"
     },
@@ -107,13 +95,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Türklerin tarih boyunca değişik ülkelerde yerleşmeleri çeşitli alanlarda farklı boyutlarda gelişmeler göstermelerine neden olmuştur Aşağıdaki alanların hangisinde bu farklılığın en az olduğu savunulabilir?",
-      "options": [
-        "Din",
-        "Ekonomi",
-        "Askerlik",
-        "Sosyal yaşam",
-        "Sanat"
-      ],
+      "options": ["Din", "Ekonomi", "Askerlik", "Sosyal yaşam", "Sanat"],
       "correctAnswer": 2,
       "solution": "Türkler Orta Asya da yaşarken de başka yerlere göç ettiklerinde de askerlik konusunda etki altında kalmamış hatta askeri yönden diğer toplumlar! etkilemişlerdir"
     },
@@ -224,13 +206,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Orta Asya Türk devletlerinde sosyal hayatı düzenleyen ve yazılı olmayan kurallara ne ad verilir?",
-      "options": [
-        "Yargu",
-        "Töre",
-        "Kün O) Oğuş 1",
-        "",
-        "Budun 1"
-      ],
+      "options": ["Yargu", "Töre", "Kün O) Oğuş 1", "", "Budun 1"],
       "correctAnswer": 1,
       "solution": "18 Orta Asya Türk devletlerinde sosyal hayatı C düzenleyen ve yazılı olmayan kurallara töre denirdi. r"
     },
@@ -263,13 +239,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "İslamiyet’ten önce Türklerde dini ve milli bakımdan önemli günlerin milletçe kutlanması törenlerine ne ad verilir?",
-      "options": [
-        "Töre",
-        "Şölen",
-        "Buyruk",
-        "Yabgu",
-        "Kurultay"
-      ],
+      "options": ["Töre", "Şölen", "Buyruk", "Yabgu", "Kurultay"],
       "correctAnswer": 1,
       "solution": "B 21 İslamiyet’ten önce Türkferde dini ve mîllî bakımdan önemli günlerin milletçe kutlanması törenlerine şölen adı verilirdi İ il"
     },
@@ -302,13 +272,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Liyguriar döneminde ticari ilişkilerin gelişmesiyle kişiler arasındaki anlaşmalar yazıiı haie getirilmiştir Bu durum aşağıdaki alanlardan hangisiyle ilgili belgelerin oluştuğunu gösterir?",
-      "options": [
-        "Hukuk",
-        "Sanat",
-        "Edebiyat",
-        "Askerlik",
-        "Siyaset"
-      ],
+      "options": ["Hukuk", "Sanat", "Edebiyat", "Askerlik", "Siyaset"],
       "correctAnswer": 0,
       "solution": "24. Orhun Kitabeleri II. Göktürklere ait bir eserdir. Manas Destanı Kırgızlara Karabulgasun Kitabesi ise Uygurlara aittir"
     },
@@ -341,26 +305,14 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Uygurların yerleşik hayata geçmesiyie aşağıdakilerden hangisi uğraşları arasına girmiştir?",
-      "options": [
-        "Heykel",
-        "Mimarlık",
-        "Müzik",
-        "Ticaret",
-        "Resim 8"
-      ],
+      "options": ["Heykel", "Mimarlık", "Müzik", "Ticaret", "Resim 8"],
       "correctAnswer": 0,
       "solution": "27 Türklerin kendilerinden farklı bir inanışa sahip insanlarla bir arada yaşaması o insanların inançlarına saygı duyduklarının"
     },
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Aşağıdaki alfabelerden hangisi Türkiere Özgüdür?",
-      "options": [
-        "Soğd",
-        "Kiril",
-        "Orhon",
-        "Latin",
-        "Sanskrit"
-      ],
+      "options": ["Soğd", "Kiril", "Orhon", "Latin", "Sanskrit"],
       "correctAnswer": 3,
       "solution": "hoşgörülü olduklarının kanıtıdır"
     },
@@ -380,13 +332,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Asya ve Avrupa nın siyasi ve kültürel yapısının değişmesinde I Türgiş II Avar III Hun Devletlerinden hangileri etkili olmuştur?",
-      "options": [
-        "YalnızI",
-        "Yalnız»",
-        "Yainızlll",
-        "İveli",
-        "II ve III 8"
-      ],
+      "options": ["YalnızI", "Yalnız»", "Yainızlll", "İveli", "II ve III 8"],
       "correctAnswer": 2,
       "solution": "29 Türkler tarih boyunca 1 Göktü rk(Orhon) 2 Uygur A 3 Soğd 4 Arap 5 Kiril 6 Latin Alfabelerini kullanmıştır. Bunlardan C Göktürk ve Uygur alfabeleri Türklere özgüdür."
     },
@@ -510,39 +456,21 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "I Turan taktiği I! Hayvan figürleri İli. İkili teşkilat Türk devletferiyle ilgili yukarıdaki kavramların sanatta betimleme, savaş.yöntemi, devlet yönetimi alanlarına göre doğru sıralanış biçim aşağıdakilerden hangisidir?",
-      "options": [
-        "1 II, III",
-        "1, III II",
-        "II 1, II!",
-        "M,III 1",
-        "III 1 II"
-      ],
+      "options": ["1 II, III", "1, III II", "II 1, II!", "M,III 1", "III 1 II"],
       "correctAnswer": 0,
       "solution": "39. Tahtadan yapılmış harfler baskı yapıldığının göstergesidir. Uygurların tahtadan yapılmış harfleri kullanması matbaa ve baskı tekniğinin kullanıldığının göstergesidir"
     },
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Türk Devletlerinde I Taht kavgalarının ortaya çıkması II Toprakların gelirlerine göre bölümlere ayrılması III. Çeşitli dinlere inanılması Durumlarından hangileri “ ülkenin hükümdar ailesinin ortak malı olması ’ töresinin sonuçları arasındadır?",
-      "options": [
-        "Yalnız1",
-        "YalnızII",
-        "YalnızII!",
-        "1 ve III",
-        "1 II veIII"
-      ],
+      "options": ["Yalnız1", "YalnızII", "YalnızII!", "1 ve III", "1 II veIII"],
       "correctAnswer": 2,
       "solution": "1 BOLUM 40. Bulgarlar ve Macarlar Avrupa da kurulduğu için hristiyanlığı benimsemişlerdir. Göktürkier sadece Orta Asya’da egemenlik sürmüşlerdir"
     },
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "ağı o Altaylarda Pazınk kurganlarında bulunan hah » Kazakistan da Alma Ata şehri yakınlarındaki Esik kurganındaki altın elbiseli adam zırhı şı Yukarıdaki buluntular aşağıdakilerden hangisine aittir?",
-      "options": [
-        "Tabgaçlar",
-        "Göktürkler",
-        "Uyguriar",
-        "Hunlar",
-        "Kırgızlar"
-      ],
+      "options": ["Tabgaçlar", "Göktürkler", "Uyguriar", "Hunlar", "Kırgızlar"],
       "correctAnswer": 3,
       "solution": "41 Göktürk Devleti nde, Bilge Kağan ın isteğinin Vezir Tonyukuk tarafından geri çevrilmesi kağanın kararlarının sorgulanabildiğim gösterir. Vezir Tonyukuk Budizm’i benimsemenin Türklerin mücadeleci ruhunu kaybetmelerine neden olacağı düşüncesiyle fikri geri çevirmesi de din değişikliğinin yaşam biçimini etkileyeceği ve Türk toplumuna uygun olmayacağını gösterir"
     },
@@ -601,13 +529,7 @@
     {
       "topic": "İslamiyet Öncesi Türk Tarihi",
       "question": "Aşağıdakilerden hangisi İslamiyet ten önce, Türklerde ölen kişilerin eşyalarıyla birlikte gömüldüğü mezarlara verilen addır?",
-      "options": [
-        "Yuğ",
-        "Şad",
-        "Kurgan ;",
-        "Toy ı",
-        "Tigirı"
-      ],
+      "options": ["Yuğ", "Şad", "Kurgan ;", "Toy ı", "Tigirı"],
       "correctAnswer": 0,
       "solution": "46. Öncülde Asya Hunlartnın evlerini topraktan yaptığı üy Hazarların evleriyse hep ahşaptan olduğu yalnız —5 hakanın sarayı ve kale taştan yapıldığı söylenmiştir Bu durum doğa şartlarının yaşam >— biçimini etkilediğini gösterir. Ancak öncüle bakarak göçebe yaşam ve mimari durumla ilgili bilgiye ulaşılamaz"
     },
@@ -744,13 +666,7 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Anadolu Selçuklularında ikta adı verilen toprak yönetim sistemi OsmanlIlarda geliştirilerek uygulanmıştır. OsmanlIlarda uygulanan bu toprak yönetim sistemi aşağıdakilerden hangisidir?",
-      "options": [
-        "Dirlik",
-        "Aşar",
-        "Yurtluk",
-        "Mutakaa",
-        "Vakıf 1< £2"
-      ],
+      "options": ["Dirlik", "Aşar", "Yurtluk", "Mutakaa", "Vakıf 1< £2"],
       "correctAnswer": 1,
       "solution": "7. Selçuklularda ikta sistemi OsmanlIlarda genişletilmiş ve Dirlik sistemi olarak devam etmişt"
     },
@@ -861,26 +777,14 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Türk İslam dünyasında pozitif bilimler kiminle başlamıştır?",
-      "options": [
-        "Vasiti",
-        "ibn Heysem",
-        "Farabi",
-        "Ömer Hayyam",
-        "İbn Rüşd"
-      ],
+      "options": ["Vasiti", "ibn Heysem", "Farabi", "Ömer Hayyam", "İbn Rüşd"],
       "correctAnswer": 0,
       "solution": "t: D 16. Ahilik teşkilatının temel amacı mesleki dayanışma sağlamaktır ne"
     },
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Anadolu Selçuklularında geliri sosyal kurumlarm giderlerine ayrılan topraklara ne ad verilir?",
-      "options": [
-        "Miri",
-        "Vakıf",
-        "Has",
-        "Mülk",
-        "Mutakaa 15"
-      ],
+      "options": ["Miri", "Vakıf", "Has", "Mülk", "Mutakaa 15"],
       "correctAnswer": 0,
       "solution": "17, Farabt pozitif bilimlerin başlamasında öncülük etmiş bilim adamıdır t: A"
     },
@@ -913,13 +817,7 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Anadolu Selçuklu Devleti nde büyük kervansarayların hemen hepsi XIII yüzyıla aittir Bu durumun I Sanat II Ticaret III. Askerlik alanlarının hangilerinde görülen gereksinimin bir sonucu olduğu savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnızlı",
-        "Yalnız lif",
-        "I ve I!",
-        "II veli!"
-      ],
+      "options": ["Yalnız I", "Yalnızlı", "Yalnız lif", "I ve I!", "II veli!"],
       "correctAnswer": 0,
       "solution": "20 Yeşil Cami Osmanlı Devletine aittir"
     },
@@ -1004,13 +902,7 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Aşağıdakilerden hangisi Türk-İslam devletlerinde toprak yönetimiyle ilgili değildir?",
-      "options": [
-        "ikta",
-        "Ocaklık e",
-        "Zeamet",
-        "Has",
-        "Ulak"
-      ],
+      "options": ["ikta", "Ocaklık e", "Zeamet", "Has", "Ulak"],
       "correctAnswer": 2,
       "solution": "27 Konya KaramanoğuHarı ve Anadolu Selçuklu devletlerine başkentlik yapmıştır"
     },
@@ -1082,13 +974,7 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "UJ<* I Samanoğuiları II Karamanoğuilan III. Büyük Selçuklular Yukarıdaki devletlerden hangilerinin resmî dili Türkçeydi?",
-      "options": [
-        "YalnızI",
-        "Yalnız II",
-        "Yalnız III",
-        "I ve II",
-        "II ve II!"
-      ],
+      "options": ["YalnızI", "Yalnız II", "Yalnız III", "I ve II", "II ve II!"],
       "correctAnswer": 0,
       "solution": "t: Ç eri |I 33 Artukoğutları Batman da kurulmuş ve eserleri- | günümüze kadar gelmiştir"
     },
@@ -1147,13 +1033,7 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Türklerin İslamiyet’e geçmeleriyle aşağıdakilerden hangisi kültürel hayatlarında bir sanat kolu oluşturacak derecede önem kazanmıştır?",
-      "options": [
-        "Hat",
-        "Maden işlemeciliği",
-        "Heykei",
-        "Oyma",
-        "Dokuma"
-      ],
+      "options": ["Hat", "Maden işlemeciliği", "Heykei", "Oyma", "Dokuma"],
       "correctAnswer": 0,
       "solution": "f | 38 Nizamiye Medresesi: Büyük Selçuklu C t Karatay Medresesi: Anadolu Selçuklu I J Çinili köşk: Osmanlı Muradiye Cami: Osmanlı C | İshak Paşa Sarayı: Osmanlı l"
     },
@@ -1199,26 +1079,14 @@
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Aşağıdakilerden hangisi, ilk Müslüman Türk Devletlerinde, hükümdarın çocuk yaşta olması hâlinde devleti yönetme yetkisi verilenin unvanıdır?",
-      "options": [
-        "Atabey",
-        "Naib",
-        "Şahne",
-        "Melik",
-        "Ulak"
-      ],
+      "options": ["Atabey", "Naib", "Şahne", "Melik", "Ulak"],
       "correctAnswer": 4,
       "solution": "42 Veraset sistemi ülkenin yönetim biçimiyle ilgili olup Türk devletlerinde ülke hanedanın ortak matıdır İslam öncesi ve sonrası veraset sisteminde değişme olmamıştır"
     },
     {
       "topic": "İlk Türk İslam Devletleri ve Türkiye Tarihi",
       "question": "Aşağıdakilerden hangisi Anadolu Selçukluları döneminde hastaların tedavi edildiği yere verilen addır?",
-      "options": [
-        "Darüşşifa",
-        "İmaret",
-        "Medrese",
-        "Türbe",
-        "Kümbet"
-      ],
+      "options": ["Darüşşifa", "İmaret", "Medrese", "Türbe", "Kümbet"],
       "correctAnswer": 2,
       "solution": "z^ 43, Kervanların soyulmaması ve tüccarların zarar görmemesi için önlemler alınması ve belli aralıklarla kervansaraylar yapılması ticaretin güvenli yapılması için alınan önlemlerdir"
     },
@@ -1303,13 +1171,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti yönetiminde beili dönemlerde geçerli olmuş ilkelerden bazıları şunlardır: I- Ülke hanedan üyelerinin ortak malıdır < İl- Devlet yönetimi hükümdar ile oğullarına verilmiş İli- Yönetim hanedanın en yaşlı üyesinin hakkıdır Bu ilkeler asağıdakilerden hangisi ile ilgili anlayışı ortaya koymaktadır? AA)l Bağ-ı-m----s--ı--z-ıl-ıık",
-      "options": [
-        "",
-        "Adalet",
-        "Egemenlik ğı",
-        "Haikçılık",
-        "Eşitlik"
-      ],
+      "options": ["", "Adalet", "Egemenlik ğı", "Haikçılık", "Eşitlik"],
       "correctAnswer": 0,
       "solution": "6 OsmanSı da idare: Eyalet-Sancak-Kaza-KÖy şeklindedir"
     },
@@ -1329,13 +1191,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti’nde ürün üzerinden peşin n olarak alman ve giderek köylü üzerinde ağır bir yük haline gelen vergi asağıdakilerden hangisidir?",
-      "options": [
-        "Çift Bozan",
-        "Ağnam",
-        "Aşar",
-        "Avarız",
-        "Cizye"
-      ],
+      "options": ["Çift Bozan", "Ağnam", "Aşar", "Avarız", "Cizye"],
       "correctAnswer": 2,
       "solution": "gemenliğini tanımlar"
     },
@@ -1355,13 +1211,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "ştir Osmanlı Devleti nde toprağını boş bırakan köy lüden alman vergiye ne ad verilirdi?",
-      "options": [
-        "Çiftbozan",
-        "Öşür",
-        "Avarız",
-        "Haraç",
-        "Cizye"
-      ],
+      "options": ["Çiftbozan", "Öşür", "Avarız", "Haraç", "Cizye"],
       "correctAnswer": 2,
       "solution": "9. Osmanlı Devleîi nde ürün üzerinden peşin olarak alınan ve giderek köylü üzerinde ağır bir yük haline gelen vergi aşar vergisidir"
     },
@@ -1394,13 +1244,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "İlk Türk matbaasında bazı kitapların basılması yasaklanmıştır. Bu kitaplar aşağıdaki alanlardan hangisiyle ilgilidir?",
-      "options": [
-        "Din",
-        "Tarih",
-        "Coğrafya r",
-        "Teknik",
-        "Siyaset"
-      ],
+      "options": ["Din", "Tarih", "Coğrafya r", "Teknik", "Siyaset"],
       "correctAnswer": 0,
       "solution": "12 Osmanlı Devleti'nde toprağını boş bırakan köylüden alınan vergiye çiftbozan denirdi"
     },
@@ -1472,13 +1316,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdakilerden hangisi Ahi topluiuğu olarak örgütlenmiştir?",
-      "options": [
-        "Esnaflar",
-        "Asker",
-        "Kadılar",
-        "Müderrisler",
-        "Melikler"
-      ],
+      "options": ["Esnaflar", "Asker", "Kadılar", "Müderrisler", "Melikler"],
       "correctAnswer": 4,
       "solution": "18 Törenler devletin resmi ve Özel günlerinde düzenlenirdi Esnaf grubunun sergisinde tören düzenlenmez"
     },
@@ -1498,13 +1336,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde aşağıdakilerden hangisi yürütmede padişahı doğrudan temsil etmez?",
-      "options": [
-        "Lala",
-        "Kadı",
-        "Voyvoda",
-        "Sadrazam",
-        "Tımarlı sipahi"
-      ],
+      "options": ["Lala", "Kadı", "Voyvoda", "Sadrazam", "Tımarlı sipahi"],
       "correctAnswer": 2,
       "solution": "20 Selçukluların kullandığı paraların üzerinde sultan portreleri ve hayvan resimleri bulunurdu ancak Osmanlt devletinin paralarında böyle bir şey görülmemiştir"
     },
@@ -1602,13 +1434,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Türk İslam sanatında çeşitli amaçlara hizmet eden yapı topluluğuna ne ad verilir?",
-      "options": [
-        "Cami",
-        "Medrese",
-        "Kervansaray",
-        "Han",
-        "Külliye"
-      ],
+      "options": ["Cami", "Medrese", "Kervansaray", "Han", "Külliye"],
       "correctAnswer": 1,
       "solution": "27. Osmanlı devletinde halk inanışlara göre millet sayılmış ırk prensibi dikkate alınmamıştır Millet Müslüman ve gayrimüslim olmak üzere ikiye ayrılmıştır."
     },
@@ -1641,13 +1467,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdaki sarayların hangisi Osmanlı Devleti nin yükselme döneminde yapılmıştır?",
-      "options": [
-        "Dolmabahçe",
-        "Çırağın",
-        "Yıldız",
-        "Beylerbeyi",
-        "Topkapı"
-      ],
+      "options": ["Dolmabahçe", "Çırağın", "Yıldız", "Beylerbeyi", "Topkapı"],
       "correctAnswer": 1,
       "solution": "30,Türkiye de müzecilik 1882 yılında Osman Hamdi Bey ile başlamıştır"
     },
@@ -1680,13 +1500,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinin ünlü sanatçılarından biri olan Levni aşağıdaki sanat dallarından hangisinde yaptığı çalışmalarla tanınmıştır?",
-      "options": [
-        "Minyatür % 8) Çini",
-        "",
-        "Müzik txı<",
-        "Hat",
-        "Mimari"
-      ],
+      "options": ["Minyatür % 8) Çini", "", "Müzik txı<", "Hat", "Mimari"],
       "correctAnswer": 0,
       "solution": "37 Levni minyatür sanatında ün yapmış bir sanatçıd"
     },
@@ -1771,13 +1585,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "OsmanlIlarda tarım ve hayvancılığın gelişmesine ne ad verilir?",
-      "options": [
-        "Tımar",
-        "İltizam",
-        "Lonca",
-        "Müsadere",
-        "Saüyane"
-      ],
+      "options": ["Tımar", "İltizam", "Lonca", "Müsadere", "Saüyane"],
       "correctAnswer": 4,
       "solution": "45. Vitray hat ve çini cami mimarisini süslemede kullanılmışken minyatür süslemede yer almaz"
     },
@@ -1797,26 +1605,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde I Padişahların tahta çıkışı II Padişahların bizzat sefere çıkışı III İç isyanların bastırılması Durumlarından bengilerinde askere bahsis dağıtmak bir gelenek haline gelmiştir ?",
-      "options": [
-        "Yalnız I",
-        "Yalnız H",
-        "Yalnız III",
-        "I ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız H", "Yalnız III", "I ve II", "II ve III"],
       "correctAnswer": 4,
       "solution": "47. Minyatür belge niteliğindedir Çünkü minyatürlerde savaş sahneleri av resimleri sünnet töreni gibi önemli oiaylar işlenmiştir"
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "LU<f OsmanlIlarda aşağıdaki sanatlardan hangilerine ait eserler yapıldığı dönemin sosyal ve siyasi özellikleri hakkında en çok bilgi verir?",
-      "options": [
-        "Çini",
-        "Hat",
-        "Kakma",
-        "Ebru",
-        "Minyatür"
-      ],
+      "options": ["Çini", "Hat", "Kakma", "Ebru", "Minyatür"],
       "correctAnswer": 0,
       "solution": "mayan çe. Avı.yy usmaniı i urk mimarisini en büyük ustası Mimar Sinan'dır"
     },
@@ -1849,13 +1645,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdakiierden hangisi Osmanlı devletinde XVII yy’dan itibaren medreselerde okutulan derslerden biri değildir?",
-      "options": [
-        "Astronomi B> Kelam",
-        "",
-        "Fıkıh",
-        "Tefsir Hadis",
-        ""
-      ],
+      "options": ["Astronomi B> Kelam", "", "Fıkıh", "Tefsir Hadis", ""],
       "correctAnswer": 0,
       "solution": "51. Duraklama döneminden itibaren pozitif bilimler te edilmeye başlanmış medreselerde okutulmamıştır nıt: E Yan 52 Devşirme daha çok askeri alanla ilgilidir Tımar ve lonca doğrudan ekonomiyle ilgilidir st. B e"
     },
@@ -1940,26 +1730,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Külliyeler genellikle aşağıdakilerden hangisinin çevresinde yer alır?",
-      "options": [
-        "Blmarhane",
-        "Medrese",
-        "Mektep",
-        "Han",
-        "Cami"
-      ],
+      "options": ["Blmarhane", "Medrese", "Mektep", "Han", "Cami"],
       "correctAnswer": 2,
       "solution": "60. Osmanlı devlerinde Tanzimat dönemine kadar kadıların vermiş olduğu hükümler gerektiğinde kazaske C tarafından İncelenirdi r."
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devlerinde Tanzimat dönemine kadar kadıların vermiş olduğu hükümler gerektiğinde aşağıdakilerden hangisi tarafından incelenir ve düzeltilirdi?",
-      "options": [
-        "Padişah",
-        "Şeyhülislam",
-        "Kazasker",
-        "Defterdar",
-        "Nişancı"
-      ],
+      "options": ["Padişah", "Şeyhülislam", "Kazasker", "Defterdar", "Nişancı"],
       "correctAnswer": 3,
       "solution": "C 61. Padişah yönetimde doğrudan sorumludur Yeri e geldiğinde bu sorumlulukları sadrazamda kullanabilirdi"
     },
@@ -2031,13 +1809,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdakilerden hangisi padişah imzası anlamındadır?",
-      "options": [
-        "Fetva",
-        "Tuğ",
-        "Ferman",
-        "Tuğra",
-        "Saliyane"
-      ],
+      "options": ["Fetva", "Tuğ", "Ferman", "Tuğra", "Saliyane"],
       "correctAnswer": 1,
       "solution": "ıt: 67 padişahlığın hanedanın en yaşlı üyesine geçmesi erk \"I usulünün uygulanmaya başlamasında güdülen amaç -i Taht kavgasını önlemektir"
     },
@@ -2083,13 +1855,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlt ülkesinde tımar sisteminin aşağıdakilerden hangisinin düzenli biçimde yürütülmesinde doğrudan etkili olduğu savunulamaz?",
-      "options": [
-        "Güvenlik",
-        "Maliye",
-        "Ticaret",
-        "Askeıiik",
-        "Tarım"
-      ],
+      "options": ["Güvenlik", "Maliye", "Ticaret", "Askeıiik", "Tarım"],
       "correctAnswer": 1,
       "solution": "r.Aİl m e *4 71 Osmaniı imparatorluğunda devşirme yönetimiyle toplanan çocuklardan saraya alınanlar Enderun „ D mektebinde eğitim alırlardı"
     },
@@ -2135,13 +1901,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "UJ< İslam hukukuna göre herhangi bir kişinin mülklerinin veya gelirlerinin bir kısmının kamu yar an için süresiz olarak kullanılması sistemi aşağıdakilerden hangisidir?",
-      "options": [
-        "İltizam",
-        "Dirlik",
-        "Vakıf",
-        "Devşirme",
-        "Saliyane"
-      ],
+      "options": ["İltizam", "Dirlik", "Vakıf", "Devşirme", "Saliyane"],
       "correctAnswer": 0,
       "solution": "D 75 . Şehzadenin sancağa gönderilmesine son verilmesi D vs tahta hanedanın en yaşlı üyesinin gelmesi padişahın yetişme biçiminde değişiklik olduğunu gösterir D"
     },
@@ -2265,26 +2025,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "i Osmanlı devletinde I Avrupa mallarının ülkeye girmesi il Ticaret yollarının değişmesi ¡II Esnaf teşkilatının bozulması Durumlarından hangilerinin ekonomiyi olumsuz yönde etkilediği savunulabilir? A) Yalnız l 8) Yalnız II C) Yalnfzill O) ! ve II E) I İl ve İti",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 4,
       "solution": "85,. Avrupa mallarının ülkeye girmesi yerli malı kullanımını azaltmıştır Coğrafi keşiflerle ipek ve baharat yollarının değişmesi buradan alınan vergileri de C azaltmıştır Loncanın bozulmasa da ekonomiyi olumsuz etkilemiştir"
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmaniı devletinde gerekli görüldüğünde herhangi bir yöneticinin mal varlığına el konulabilmesi usulü Tanzimat fermanıyla kaldırılmıştır Btı usulün kaldırılmasıyla yöneticinin I Devlete olan güveni artmıştır İS. ÖzeI mülkiyet hakkında güvence getirilmiştir II! Yöneticilik yetkileri artırılmıştır Yargılarından hangisine ulaşılabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız ti",
-        "I ve II",
-        "I ve ISI",
-        "I! ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız ti", "I ve II", "I ve ISI", "I! ve III"],
       "correctAnswer": 2,
       "solution": "n 86. Devletin gerek gördüğünde mallara el koyması C müsadere sistemidir Müsaderenin kaldırılması özel mülkiyetin istediği gibi kullanılmasını sağlamış böylece halkın devlete olan güveni artmıştır"
     },
@@ -2317,13 +2065,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "I Sakalar Ordunun su ihtiyacını karşılayan sınıf II Takvim-i Vakayı İlk resmî gazete III Tuğra Padişah imzası IV Haraç Gayrimüslimlerden alınan vergile den biri V Koçi Bey Risalesi Kanun kitaplarından biri Yukarıdakilerden hangisinin açıklaması karşısında yanlış olarak verilmiştir?",
-      "options": [
-        "I",
-        "II",
-        "III",
-        "IV",
-        "V"
-      ],
+      "options": ["I", "II", "III", "IV", "V"],
       "correctAnswer": 4,
       "solution": "35 OSMANLI KÜLTÜR MEDENİYETİ 89 Koçi Bey risalesi bir kanun değil tavsiye niteliğinde rapordur"
     },
@@ -2408,26 +2150,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "OsmanlIlarda 19 Yüzyıla kadar aşağıdaki sanat dallarından hangisinde eser verilmemiştir?",
-      "options": [
-        "Hat",
-        "Çini",
-        "Ebru",
-        "Minyatür",
-        "Fotoğraf"
-      ],
+      "options": ["Hat", "Çini", "Ebru", "Minyatür", "Fotoğraf"],
       "correctAnswer": 4,
       "solution": "97. OsmanlIlarda 19 Yüzyıla kadar fotoğraf alanında eser vermemiştir"
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdakilerden hangisi Osmanlı devletinde başkent olan şehirlerden biri değildir ?",
-      "options": [
-        "İstanbul",
-        "Konya",
-        "Bursa",
-        "Edirne",
-        "İznik"
-      ],
+      "options": ["İstanbul", "Konya", "Bursa", "Edirne", "İznik"],
       "correctAnswer": 1,
       "solution": "98 Konya Osmanlı devletine başkentlik yapmamıştır."
     },
@@ -2551,13 +2281,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı İmparatorluğu nda askeri eğitim kurumlarının Batı tarzında teşkilatlandırılması İçin AvrupalI uzmanlardan yararlanılmasına kaçıncı yüzyılda başlanmıştır?",
-      "options": [
-        "XVI",
-        "XVII",
-        "XVII",
-        "XIV",
-        "XX"
-      ],
+      "options": ["XVI", "XVII", "XVII", "XIV", "XX"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -2590,26 +2314,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Hl Selim zamanında yapılan ıslahat hareketlerine karşı olanları I Devlet adamları II Ulema II! Halk Kesimlerinden hangileri yönlendirmiştir?",
-      "options": [
-        "Yalnız l",
-        "Yalnız II",
-        "i ve II",
-        "I ve III",
-        "II ve III"
-      ],
+      "options": ["Yalnız l", "Yalnız II", "i ve II", "I ve III", "II ve III"],
       "correctAnswer": 0,
       "solution": ""
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı mimarisi kaçıncı yüzyıldan itibaren Batının etkisiyle değişmeye ve kendi özgü niteliklerini kaybetmeye başlamıştır?",
-      "options": [
-        "XV",
-        "XVI",
-        "XVII",
-        "XVİII",
-        "XIV"
-      ],
+      "options": ["XV", "XVI", "XVII", "XVİII", "XIV"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -2629,13 +2341,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde ® Herkesin temel haklarının güvence altına alınmas ® Müslümanlar ile Müslüman olmayanların her alanda eşitlik sağlaması ® Şer i mahkemelerin yanında yeni mahkemeler kurulması Kaçıncı yüzyılda gerçekleşmiştir?",
-      "options": [
-        "XVI",
-        "XVII",
-        "XVIII",
-        "XIX",
-        "XX"
-      ],
+      "options": ["XVI", "XVII", "XVIII", "XIX", "XX"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -2668,39 +2374,21 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "■ Oranlı devletinde Tanzimat Fermanı nın ilanı i ıslahat Fermam’mn ilam ı 31 Mart Olayının bastırılması üşmelerinden hangileri mevcut anayasal düzene karşı olanlara bir tepkidir? Yalnız t g) Yalnız III C) I ve t( D} II ve III g) | II ve III",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": ""
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde parlamento kavramı asağıdakilerin hangisiyle gelişmiştir? A) Divan-! Hümayun i g) Kanunname-i Aii Osman C) Saltanat Şurası 0) Karıun-i Esasi E) Vilayet Nizamnamesi i si",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": ""
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde I Nizam-ı Cedit II Sekban-ı Cedit Ut. Asakiri Mansure-i Muhammediye Adlı askeri kuruluşlardan hangileri yeniliklere karşı olan yeniçerilerin ayaklanmalarıyla dağıtılmıştır?",
-      "options": [
-        "Yalnız l",
-        "Yalnızli",
-        "Yalnızli!",
-        "İve il",
-        "i II ve ili"
-      ],
+      "options": ["Yalnız l", "Yalnızli", "Yalnızli!", "İve il", "i II ve ili"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -2772,26 +2460,14 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Avrupa devletlerinin özellikle askerlik alanında ve teknik alandaki üstünlükleri, kaçıncı yüzyıldan itibaren Osmanlı Devleti'nde kabul edilmeye başlanmıştır ?",
-      "options": [
-        "16",
-        "17",
-        "18 n",
-        "19",
-        "20 39"
-      ],
+      "options": ["16", "17", "18 n", "19", "20 39"],
       "correctAnswer": 0,
       "solution": ""
     },
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti gerileme döneminden itibaren I. tarım, II. askerlik li! teknik, IV. yönetim Alanlarının hangilerinde Avrupa’nın üstünlüğünü kabul etmiş vs AvrupalIlardan yararlanmaya başlamıştır?",
-      "options": [
-        "I ve il",
-        "I ve MI",
-        "î ve IV",
-        "II ve lil",
-        "II ve IV"
-      ],
+      "options": ["I ve il", "I ve MI", "î ve IV", "II ve lil", "II ve IV"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -2915,13 +2591,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti nde batılılaşma hareketleri aşağıdaki alanların hangisinde başlamıştır? AA)l TTaarrıımm ­ g) Askerlik 0) Yönetim D) Hukuk ğı E) Sanayi",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3045,13 +2715,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı pazarları XIX yüzyılın ortalarından itibaren Avrupa mallarının istilasına uğramış ve giderek Osmanlı Devleti ham madde satan yapılmış mal alan bir ülke haline gelmiştir Ekonomide görülen bu durum i iş buîma olanağı I! yerii sanayi, III yabancı sermeye etkenlerinden hangilerini olumsuz yönde etkilemiştir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "I ve II",
-        "I ve III",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "I ve II", "I ve III", "II ve III"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3136,13 +2800,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Aşağıdakilerden hangisi Lale Devrinin ünlü şairidir?",
-      "options": [
-        "Nevi",
-        "Nefi",
-        "aki",
-        "Fuzuli",
-        "Nedim"
-      ],
+      "options": ["Nevi", "Nefi", "aki", "Fuzuli", "Nedim"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3162,13 +2820,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti nde eski ve yeni kurumlar işlevlerini bir arada yürütmüştür Bu durum aşağıdaki dönemlerden hangisiyle v başlamıştır?",
-      "options": [
-        "Kuruluş",
-        "Yükselme",
-        "Duraklama",
-        "Tanzimat",
-        "Meşrutiyet"
-      ],
+      "options": ["Kuruluş", "Yükselme", "Duraklama", "Tanzimat", "Meşrutiyet"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3214,13 +2866,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti nde, sarraf geleneğinden bankacılığa kaçıncı yüzyıldan itibaren geçilmiştir?",
-      "options": [
-        "ıe’",
-        "17",
-        "18",
-        "19",
-        "20"
-      ],
+      "options": ["ıe’", "17", "18", "19", "20"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3331,13 +2977,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı Devleti nde, I Tanzimat'ın İlanı II Meşrutiyetin ilanı III Islahat Fermanı'nın İlanı gelişmelerinin hangilerinde Avrupa da görülen",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3448,13 +3088,7 @@
     {
       "topic": "Osmanlı Kültür ve Medeniyeti",
       "question": "Osmanlı devletinde Avrupa daki gelişmelerden yararlanma düşüncesiyle ilk yenilikler aşağıda alanların hangisinde yapılmıştır?",
-      "options": [
-        "Askeri 8) Mali",
-        "",
-        "Siyasi",
-        "Dini",
-        "Kültürel"
-      ],
+      "options": ["Askeri 8) Mali", "", "Siyasi", "Dini", "Kültürel"],
       "correctAnswer": 0,
       "solution": ""
     },
@@ -3526,13 +3160,7 @@
     {
       "topic": "Birinci Dünya Savaşı ve Sonuçları",
       "question": "Yirminci yüzyılın başlarında, Osmanlı İmparatorluğunu destekleme ve kalkındırma görünümü aJtında, Osmanhlar üzerindeki etkisini giderek artıran devlet aşağıdakilerden hangisidir?",
-      "options": [
-        "İngiltere",
-        "İtalya",
-        "Rusya",
-        "Almanya",
-        "Fransa 51"
-      ],
+      "options": ["İngiltere", "İtalya", "Rusya", "Almanya", "Fransa 51"],
       "correctAnswer": 1,
       "solution": "4 Osmanlı Devletinin jeopolitik konumu Ortadoğu'dan Akdeniz'e kadar önemli bir coğrafyayı içine almaktadır Bu da sömürgeci devletlerin bu bölgelere hakim olma konusunda Osmanlı Devleti ile olan ilişkilerini daha önemli bîr hale getirmektedir Özellikle Almanya, hem savaşı daha geniş bir alana yaymak, hem de Osmanlı sayesinde İngiltere nin sömürge yolları ile bağlantısını kesmek için Osmanl Devletinin savaşa girmesini istemiştir"
     },
@@ -3695,13 +3323,7 @@
     {
       "topic": "Birinci Dünya Savaşı ve Sonuçları",
       "question": "İngiltere ve Fransa, i Dünya Savaşı nda Osmanlı başkentini efe geçirmek, Süveyş e ve dolayısıyla Hindistan yoluna yönelik Türk baskısını ortadan kaldırmak amacıyla aşağıdaki cephelerden hangisini açmıştır?",
-      "options": [
-        "Irak",
-        "Sarıkamış",
-        "Çanakkale",
-        "Galiçya",
-        "Makedonya"
-      ],
+      "options": ["Irak", "Sarıkamış", "Çanakkale", "Galiçya", "Makedonya"],
       "correctAnswer": 4,
       "solution": "17. Mondros Ateşkes Antlaşmasının 7.ve 24 maddesine göre \" İtilaf Devletleri güvenliklerini tehdit eden bir durum halinde istedikleri bölgeleri işgal edebileceklerdi ’ Bu maddeler işgallere ortam ha­ zırlamıştır D"
     },
@@ -4371,13 +3993,7 @@
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "i Milis güçlerini destekleme II İstanbul Hükümeti ne açıkça karşı çıkma III Bölgelerin Türklüğünü kanıtlama IV işgal güçlerine karşı direnmeyi amaç edinme Yukarıdakilerden hangileri, Kurtuluş Savaşı nda toplanan kongrelerin ortak özelliklerinden biri değildir?",
-      "options": [
-        "Yalnız 1",
-        "Yalnızlı",
-        "İveli",
-        "II ve IV",
-        "III ve IV"
-      ],
+      "options": ["Yalnız 1", "Yalnızlı", "İveli", "II ve IV", "III ve IV"],
       "correctAnswer": 4,
       "solution": "32.. Üç madde de Ulusal Kurtuluş Savaşı na olan ka­ tılımı artıran gelişmelerdir"
     },
@@ -4397,52 +4013,28 @@
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "Amasya Genelgesi nde Sivas ta bir kongrenin toplanması ve bütün ¡ilerin her sancağından halkın güvenini kazanmış üç delegenin bu kongre ye katılmak üzere hemen yola çıkarılması hükmü yer almıştır Bu hüküm Amasya Genelgesi hin, i. tüm ülkenin temsil edildiği bir kuruluşu öngörme 11. gizli maddeleri olma, II) birlik ve beraberlik çağrısında bulunma özelliklerinden hangileri için bir kanıt sayılabilir?",
-      "options": [
-        "Yalnız l",
-        "Yalnız II",
-        "I ve li",
-        "ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız l", "Yalnız II", "I ve li", "ve II", "II ve III"],
       "correctAnswer": 1,
       "solution": "34 Asker toplamak ve vergi almak ancak devlet gibi bir siyasi organizasyonun yapabileceği bir eylemdir Dolayısıyla bu karar özerk bir siyasi kuruluş gibi ha­ reket edildiğinin kanıtıdır"
     },
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "1 Anadolu ve Rumeli Müdafaa-i Hukuk Cemiyeti nin kurulması II. Manda ve himayenin reddi III Temsilciler Kurulu'nun Ankara'ya gelmesi Yukarıdakilerden hangileri Erzurum Kongresi nde ele alınan konular arasındadır ?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnızlll",
-        "İveli",
-        "1 II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnızlll", "İveli", "1 II ve III"],
       "correctAnswer": 2,
       "solution": "35, Bilecik Görüşmesi Osmanlı Hükümeti ile TBMM Hükümeti’nin anlaşmasını sağlamaya yöneliktir"
     },
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "Amasya Görüşmelerinde I Ali Fuat Cebesoy’un Umum Kuvayı Milliye Komutaniîğı'na atanması, II Mebuslar Meclisi’nin toplanacağı yerin belirlenmesi, III. Temsilciler Kurulu nun oiuşturulması konularından hangileri ele alınmıştır?",
-      "options": [
-        "Yalnız 1",
-        "Yalnız li",
-        "Yalnız III",
-        "İveli",
-        "II ve III"
-      ],
+      "options": ["Yalnız 1", "Yalnız li", "Yalnız III", "İveli", "II ve III"],
       "correctAnswer": 1,
       "solution": "36, Anadolu ve Rumeli Müdafaa-i Hukuk Cemiyetleri Sivas Kongresi nde birleştirilmiştir Erzurum Kongresi kararları arasında yoktur"
     },
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "nS I. Sınırlar II Azınlık Hakları 111. Batı Cephesi nin ikiye ayrılması Son Osmanlı Mebuslar Mecfisi'nde yukarıdakilerden hangileriyle ilgili kararlar alınmıştır?",
-      "options": [
-        "Yalnız 1",
-        "Yalnızlı",
-        "İveli",
-        "II ve II!",
-        "I II ve İl!"
-      ],
+      "options": ["Yalnız 1", "Yalnızlı", "İveli", "II ve II!", "I II ve İl!"],
       "correctAnswer": 0,
       "solution": "37 , İstanbul Hükümeti kendi otoritesini korumak amacıyla kimi zaman Mustafa Kemal'e görevler vermiş kimi zaman görevden almıştır Ancak Damat Ferit Paşa'nın Temsilciler Kurulu'nun isteğiyle görevden alınması bu amaca yönelik değildir"
     },
@@ -4579,13 +4171,7 @@
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "Amasya Genelgesi nde vatanın bütünlüğü ve bağımsızlığının tehlikede olduğu İstanbul Hükümeti nin sorumluluğunu yerine getiremediği ve uîusu yok olmuş duruma düşürdüğü belirtilmiştir Bu sözlerin Kurtuluş Savaşı hakkında aşağıdakilerden hangisiyle ilgili bilgi verdiği savunulabilir?",
-      "options": [
-        "Süresi 8) Nedeni",
-        "",
-        "Programı",
-        "Kadrosu",
-        "Sonucu"
-      ],
+      "options": ["Süresi 8) Nedeni", "", "Programı", "Kadrosu", "Sonucu"],
       "correctAnswer": 2,
       "solution": "50 , Sivas Kongresi nde manda himaye reddedilmiştir Temsilciler Kurulu da Amasya Görüşmeleri’nde dış politikada bu durumun devam etmesini istemiştir"
     },
@@ -4774,13 +4360,7 @@
     {
       "topic": "Kurtuluş Savaşı Hazırlık Dönemi",
       "question": "Temsilciler Kurulunun çalışma yeri olarak Ankara’yı seçmesinde, I savaş alanlarına yakın olması II İstanbul daki siyasi gelişmeleri yakından izleyebilme olanağı vermesi III TBMM hin açılması durumlarmdan hangilerinin etkili olduğu savunulabilir?",
-      "options": [
-        "Yalnız!",
-        "Yalmzll",
-        "Yalnız İli",
-        "İveli",
-        "! II ve III"
-      ],
+      "options": ["Yalnız!", "Yalmzll", "Yalnız İli", "İveli", "! II ve III"],
       "correctAnswer": 1,
       "solution": "65, Amasya Görüşmelerinde İstanbul Hükümeti Mebuslar Meclisi'nin İstanbul'da toplanmasını istiyordu. Ancak Mustafa Kemal işgal altındaki İstanbul'un güvenli olmadığı gerekçesiyle Meclis in İstanbul dışında toplanmasını savunuyordu Gö­ rüşmelerin sonunda Mebuslar Meclisi nin İstanbul'da toplanmasına karar verildi"
     },
@@ -5073,13 +4653,7 @@
     {
       "topic": "TBMM’nin Açılışı",
       "question": "I İtalya'nın işgal ettiği yerlerde halka İyi davranması 5 II Kuvayı Milliye birliklerinin bazı yörelerdeki < disiplinsiz davranışları III Peş peşe girilen savaşlarda yorulan Anadolu insanının yeniden askere çağrılmasına duyacağı tepki İngiliz Muhipfer Cemiyeti ile itilaf ve Hürriyet Partisi, yukaridakilerden hangilerini kullanarak TBMM'ye karşı ayaklanmalar çıkarmıştır?",
-      "options": [
-        "Yalnız I",
-        "Yalnız ll",
-        "Yainız İli",
-        "İveli",
-        "II ve lll"
-      ],
+      "options": ["Yalnız I", "Yalnız ll", "Yainız İli", "İveli", "II ve lll"],
       "correctAnswer": 1,
       "solution": "13.. Güçler birliği (yasama + yürütme + yargı) ilkesi ve seçimlerin iki yılda bir yapılması 1921 Anayasast'nm maddeleri arasındadır"
     },
@@ -5112,13 +4686,7 @@
     {
       "topic": "TBMM’nin Açılışı",
       "question": "İlk TBMM nin yasama ve yürütme güçlerini kendisinde toplamasıyla, I Meclis’te fikir ayrılıklarından kaynaklanacak gruplaşmaların önlenmesi II. Meclis üstünlüğünün sağlanması ¡11 Meclisle üye sayısının artırılması sonuçlarından hangilerine ulaşıldığı savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnız III",
-        "I ve II",
-        "I ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnız III", "I ve II", "I ve III"],
       "correctAnswer": 0,
       "solution": "16. TBMM nin açılmasından sonra ayaklanmaların engellenmesi için Hıyanet-i Vataniye Kanunu çıkarılmıştır Teşkilat-ı Esasiye Kanunu ilk anayasadır."
     },
@@ -5151,13 +4719,7 @@
     {
       "topic": "TBMM’nin Açılışı",
       "question": "I Hıyanet-i Vataniye Kanunu II Ağnam Vergisi'nin artırılması hakkında kanun III Tekâîİf-i Milliye Emirleri (Ulusal Yükümlülükler) Yukandakilerden hangilerini TBMM çıkarmıştır?",
-      "options": [
-        "Yalnız!",
-        "YalnızII",
-        "Yalnız111",
-        "l ve tl",
-        "I II veIII"
-      ],
+      "options": ["Yalnız!", "YalnızII", "Yalnız111", "l ve tl", "I II veIII"],
       "correctAnswer": 3,
       "solution": "82 TBMM’NİN AÇILIŞI 19 TBMM 12 Mart 1921 de İstiklal Marşı'nı kabul etmiştir. 23 Nisan 1921'de verilen önerge ile 23 Nisan Bayram olarak kutlanmıştır Redd-i İlhak İzmir'in İşgalinden sonra kumlan direniş cemiyetidir"
     },
@@ -5203,13 +4765,7 @@
     {
       "topic": "TBMM’nin Açılışı",
       "question": "TBMM’nin açılmasından sonra, I Mecliste gruplaşmaların oluşmaya başlaması II Kuvayımilliye birliklerinin ihtiyaçlarının Milli Savunma Bakanlığınca karşılanması II! Batı ve Güney cephelerinin Genelkurmay Başkanlığına bağlanması gelişmelerinden hangileri askerî gücün belli bir otoriteye bağlı olmasının gerekliliği görüşünün üygufandiğını gösterir? A) Yalnız I 8) Yalnız II C) Yalnız III O) I ve II £) il ve III 79",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "23. Yasama ve yürütme yetkilerinin mecliste toplanması ile meclisin üye sayısının artırılması arasında bir bağlantı yoktur Aynı zamanda bu t güçler birleştirildiği halde meclis içerisinde çeşitli ^ S gruplar oluşmuştur.Dolayısıyla I numaralı \\< cümlenin de bu gelişmelerle ilgisi yoktur Bu durumda II numaralı cümle doğru yanıttır"
     },
@@ -5346,13 +4902,7 @@
     {
       "topic": "TBMM’nin Açılışı",
       "question": "Aşağıdaki kongrelerden hangisinin toplanmasının gerektiği Amasya Genelgesinde Belirtilmiştir?",
-      "options": [
-        "Balıkesir",
-        "Erzurum",
-        "Sivas",
-        "Alaşehir",
-        "Edirne"
-      ],
+      "options": ["Balıkesir", "Erzurum", "Sivas", "Alaşehir", "Edirne"],
       "correctAnswer": 0,
       "solution": "34. Atatürk İlkeleri ( Cumhuriyetçilik Halkçılık Milliyetçilik, Laiklik, inkılapçılık Devletçilik) 5 Şubat 1937 de 1924 Anayasasında yer almıştır"
     },
@@ -5697,13 +5247,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Lozan Barış Antlaşması'nın 48 maddesi Türkiye d azınlıkların şahsi hükümlere ve aile hukukuna alt işlerinin kendi gelenek ve göreneklerine göre çözülmesine uygundu Ancak azınlıklar Lozan Antlaşması ndaki haklarından vazgeçtiklerini kendilerinin de Türk Medeni Kanunu hükümlerine uymak istediklerini bildirmişlerdir. Öğretimin birleştirilmesi yasası ile okullar yanında varlıklarını sürdüren medreseler kapatılmış azınlık okulları ve yabancı okullar Milli Eğitim Bakanlığı na bağlanmıştır Bu iki duruma dayanarak, Türkiye Cumhuriyeti ile ilgüi I. Uygulamalarda birlik sağlanmıştır II. Gelenekler önem kazanmıştır İli Azınlıkların kendi aralarındaki sorunlar gide­ rilememiştir !V Yasalar güvence sağlamıştır V Azınlık okulları sayıca artmıştır yargılarından hangilerine ulaşılır?",
-      "options": [
-        "I ve II",
-        "l ve IV",
-        "II ve İli",
-        "İli ve IV",
-        "IV ve V"
-      ],
+      "options": ["I ve II", "l ve IV", "II ve İli", "İli ve IV", "IV ve V"],
       "correctAnswer": 0,
       "solution": "24. Türk Devleti içerisindeki okulların sorumluluğu ve bu okullarla ilgili karar alma yetkisi sadece Türkiye'ye aittir. Lozan'da bu konuda sergilenen tavır da bu şekildedir. Bu tavırla iç işlerimize mü­ dahalenin önüne geçilmek istenmiştir,"
     },
@@ -5775,13 +5319,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Milli Mücadele döneminde I Ulusal cemiyetler kurulması II TBMM'nin açılması lil Saltanatın kaldırılması IV TBMM yetkilerinin bir süre İçin Mustafa Kemale verilmesi V 1876 Anayasasının yürürlükte kalması konularının hangilerinde görüş ayrılığı n olmuştur?",
-      "options": [
-        "i ve II",
-        "i ve lil",
-        "II ve İli",
-        "III ve IV",
-        "IV ve V"
-      ],
+      "options": ["i ve II", "i ve lil", "II ve İli", "III ve IV", "IV ve V"],
       "correctAnswer": 3,
       "solution": "29. Verilen iki maddenin birincisinde TBMM Londra Konferansı’na gidecek Türk Heyetinin içinde sa­ dece bir temsilci konumundayken II. maddede Lozan'a ayrı bir taraf olarak cJavet edilmiştir Bu durum TBMM nin geçen zaman içerisinde askeri ve siyasi gücünün arttığının göstergesidir"
     },
@@ -5918,13 +5456,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Lozan Konferansı nda diğer katılımcılar Türkterden I Azınlık haklarının verilip verilmediğinin Anlaşma Devletleri tarafından denetlenmesini II. Kapitülasyonların sürdürülmesini j İli Musul sorununun sonraki görüşmelere bıra­ kılmasını IV Suriye sınırının Ankara Antlaşmasıyla belirlenen şekilde kalmasını istemiştir. Bu isteklerden hangileri Türkiye açısından bağımsız devlet anlayışına acrkca aykırıdır?",
-      "options": [
-        "I ve II",
-        "İveli!",
-        "I ve IV",
-        "II ve III",
-        "III ve IV"
-      ],
+      "options": ["I ve II", "İveli!", "I ve IV", "II ve III", "III ve IV"],
       "correctAnswer": 0,
       "solution": "40 Mudanya Ateşkes Antlaşması nın ana konusu Doğu Trakya'nın boşaltılmasıdır Antlaşma maddeleri şu şekildedir. Doğu Trakya 15 gün içinde boşaltılacak (Yunanlılar israfından) bir ay içinde Türklere teslim edilecek TBMM Doğu Trakya'nın güvenliği için 8 bin Jandarma bulundurabilecek"
     },
@@ -5957,13 +5489,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "S Demirci Alayı li Kuvayı Seyyare ¡II Kuvayı inzibatiye Yukandakilerden hangileri ulusat direniş amacıyla kurulmuştur?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnız III",
-        "I ve II",
-        "ive III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnız III", "I ve II", "ive III"],
       "correctAnswer": 2,
       "solution": "43. Batı Trakya, Balkan Savaşlarıhdan sonra kaybedilmiştir Bu nedenfe Büyük Taarruz Zaferi nin ardından başlayan Mudanya görüşmelerinde Batı Trakya ile ilgili karar A bulunmamaktadır"
     },
@@ -6009,26 +5535,14 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "TBMM Hükümeti nin I Anlaşma Devletleri ile Mudanya Anlaşması II Sovyet Rusya ile Moskova Antlaşması III. Fransa île Ankara Antlaşması yapması aşağıdakilerin hangisinde kronolojik olarak sıralanmıştır?",
-      "options": [
-        "ı ıı m",
-        "I, III, II",
-        "tl, III I",
-        "III I, II",
-        "1)1 II 1"
-      ],
+      "options": ["ı ıı m", "I, III, II", "tl, III I", "III I, II", "1)1 II 1"],
       "correctAnswer": 3,
       "solution": "47 Demirci Mehmet Efe Kuva-yi Milliye'yi temsil edenlerden biriydi Kuva-yı Seyyare ise Çerkez Ethem in oluşturduğu birlik idi Dolayısıyla bu ikisi ulusal direniş için kurulmuştur Kuva-yı inzibatiye ise İstanbul Hükümeti tarafından w oluşturulan ve TBMM'nin kapatılmasına 2y yönelik olarak kurulan bir birliktir LU<"
     },
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "I İstanbul Hükümeti nin Lozan Konferansı'na çağrılması II Anlaşma Devletleri nin TBMM Hükümeti ni Londra Konferansı na davet etmesi İli Londra Konferansı nda, İstanbul Hükümetinin söz hakkını TBMM Hükümeti Temsilcisine vermesi Yukarıdaki gelişmelerden hangileri, TBMM Hükümeti'nin güçlendiğini gösterir?",
-      "options": [
-        "Yalnız l",
-        "Yalmz !l",
-        "Yalnız III",
-        "ve II",
-        "II ve İli"
-      ],
+      "options": ["Yalnız l", "Yalmz !l", "Yalnız III", "ve II", "II ve İli"],
       "correctAnswer": 4,
       "solution": "48 TBMM kısmi de olsa başka devletlerin hâkimiyetlerini reddederek bağımsızlıktan taviz vermediğini kanıtlamıştır"
     },
@@ -6113,13 +5627,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Lozan Konferansı görüşmeleri sırasında Türk heyetinin hazırladığı ' Adli İdare Beyannamesin­ de TBMM Hükümeti nin yabancılara Türk mah­ kemelerinde tam bir adalet sağlamayı her ba­ kımdan güvence altına alacak güçte olduğu; bu adaleti, egemenliğini bütünüyle kullanarak ger­ çekleştirebileceği belirtilmiştir Türk heyetinin bu beyannameyle I TBMM Hükümeti’nin yabancıların haklarını korumada kararlı olduğu, II. Türkiye'nin iç işlerine karışılmasını istemediği III Yabancılara verilmiş olan ödünlerde değişiklik yapılması gerektiği görüşlerinden hangilerini vurguladığı savu­ nulabilir? A) Yainız 1 $X Yalnız II 6) Yalnız III D) I ve II E) llvellt",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "55. Türk ordusunun I İnönü Savaşı nı kazanmasının ardından Antlaşma Devletleri TBMM Hükümeti’ni Londra Konferansına davet etmiştir Yapıt: C 56. İsmet Paşa nın Türk Milletinin de bütün medeni milletler gibi hürriyet ve bağımsızlık istemesinin en büyük hakkı olduğunu belirtmesi, onun eşitlik anlayışının ve Türk U Milletinin de özgür yaşamayı hak eden bir > toplum olduğuna oian inancının göstergesidir"
     },
@@ -6438,13 +5946,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Kurtuluş Savaşı nda İtalya hin işgal ettiği yerlerden çekilmesinde, I Anlaşma Devletleri nin 22 Mart 1922 tarihinde Türk ve Yunan devletlerine ateşkes önerisinde bulunması II Sovyet Rusya nın aracılığıyla Kafkas Cumhuriyetleriyle Kars Antlaşmasının imzalanması, III İkinci İnönü Zaferi nin kazanılması gelişmelerinden hangilerinin etkili olduğu y 2 savunulabilir?",
-      "options": [
-        "Yalnızı",
-        "Yalnızlı",
-        "Yalnızlll",
-        "I ve il",
-        "l II ve İli"
-      ],
+      "options": ["Yalnızı", "Yalnızlı", "Yalnızlll", "I ve il", "l II ve İli"],
       "correctAnswer": 4,
       "solution": "80 İtalya ve Fransa’nın Kurtuluş Savaşı na yaklaşımı, İngiltere ve Yunanistan'dan farklı olmuştur. Bu durum Anlaşma Devletleri arasında görüş ayrılığına yoi açmıştır Ancak Anadolu'da ayaklanmaların çıkması bu durumun göstergesi olamaz M"
     },
@@ -6464,13 +5966,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Aşağıdakilerden hangisinin geleceği, Lozan Antiaşması'yla belirlenmemis-tir?",
-      "options": [
-        "İmroz",
-        "Musul",
-        "On iki Ada",
-        "Karaağaç",
-        "Bozcaada 97"
-      ],
+      "options": ["İmroz", "Musul", "On iki Ada", "Karaağaç", "Bozcaada 97"],
       "correctAnswer": 0,
       "solution": "82, Lozan Antlaşması nda Türkiye nin batı sınırı belirlenmiştir. Bozcaada ve Gökçeada dışındaki Ege Adaları Yunanistan'a bırakılmıştır"
     },
@@ -6516,13 +6012,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "! TBMM nin hukukî varlığının anlaşma Devletlerince tanınması II. Ermeni sorununun çözülmesi Ut Misakımillîjorarlannın başta Avrupa ülkeleri olmak üzere dünya kamuoyuna anlatılması",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "86. İtalya İzmir ve çevresinin Yunanistan a verilmesinden duyduğu rahatsızlığı Kurtuluş Savaşı’nın başlarında II İnönü Zaferinin kazanıimasından sonra İşgal ettiği yerlerden çekilerek göstermiştir"
     },
@@ -6646,13 +6136,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Lozan Antlaşması yla, I Boğazlar Komisyonunun kurulması II İstanbul daki Rumlarla Batı Trakya daki Türklerin mübadele dışında bırakılması III Yunanistan’ın savaş tazminatı karşılığı Karaağaçı Türkiye'ye ve rmesi konularından hangileri Türk-Yunan ilişkilerinde uygulamalardan kaynaklanan sorunlara neden olmuştur?",
-      "options": [
-        "Yalnız I",
-        "Yalnızll",
-        "I ve II",
-        "II ve lü",
-        "I II ve Ifl"
-      ],
+      "options": ["Yalnız I", "Yalnızll", "I ve II", "II ve lü", "I II ve Ifl"],
       "correctAnswer": 0,
       "solution": "1 8 BOL UM 96. Anlaşma Devletleri İngiltere Fransa İtalya ve Yunanistan'dır Gürcistan Anlaşma devletlerinden biri değildir"
     },
@@ -6672,13 +6156,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Moskova Antlaşması nda yer alan İki taraftan birinin tanımadığı uluslararası hiçbir antlaşmayı diğeri de tanımayacaktır\" maddesiyle aşağıdaki antlaşmalardan hangisinin kastedildiği sa­ vunulabilir?",
-      "options": [
-        "Ankara",
-        "Sevr",
-        "Kars",
-        "Gümrü",
-        "Brest-Litowsk 1"
-      ],
+      "options": ["Ankara", "Sevr", "Kars", "Gümrü", "Brest-Litowsk 1"],
       "correctAnswer": 1,
       "solution": "98. Sakarya Savaşı nm Sonuçları; İtalya Anadolu'dan çekildi SSCB ile Kars Antlaşması yapıldı. Fransa İle 1921 Ankara Antlaşması yapıldı Mustafa Kemal in Başkomutanlık yetkisi süresiz uzatıldı İtilaf Devletleri barış önerisinde bulundu İngiltere ile Malta tutsakları değiştirildi"
     },
@@ -6711,13 +6189,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Aşağıdaküerden hangisi TBMM Hükümetinin Kurtuluş Savaşı nda savaştığı devletlerden biridir?",
-      "options": [
-        "Almanya",
-        "Avusturya",
-        "Bulgaristan",
-        "Rusya",
-        "İngiltere"
-      ],
+      "options": ["Almanya", "Avusturya", "Bulgaristan", "Rusya", "İngiltere"],
       "correctAnswer": 3,
       "solution": "101, Sovyet Rusya nın Kurtuluş Savaşı sıralısında TBMM'yi desteklemesinin nedenleri; iki devletinde sömürgeciliğe karşı olması ve mücadele etmesi Düşmanın ortak olması ve güç birliğine gidilmesi Sovyet Rusya nın yeni rejimini yayma düşüncesi Sovyet Rusya nm Türk halkının Mitli Mücadelesini haki) görmesi"
     },
@@ -6750,13 +6222,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Kurtuluş Savaşı nda TBMM temsilcilerinin Londra Konferansı na çağrılması ve onların Londra ya götürülmesinde aşağıdaki devletlerden hangisi etkili olmuştur?",
-      "options": [
-        "Sovyet Rusya",
-        "Fransa",
-        "ABD",
-        "İtalya",
-        "İngiltere"
-      ],
+      "options": ["Sovyet Rusya", "Fransa", "ABD", "İtalya", "İngiltere"],
       "correctAnswer": 4,
       "solution": "110 KURTULUŞ SAVAŞI - LOZAN ANTLAŞMASI 104 Milli Mücadele döneminde mücadeleyi i destekleyen basın yayın organları Anadolu Ajansı, İrade-i Milliye ve Hâkimiyet-i Milliyedir Peyam-ı Sabah desteklemeyenler arasındadır"
     },
@@ -6893,13 +6359,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "Sevr anlaşmasının bazı hükümlerini fiilen geçersiz kılan TBMMM hükümetince imzalanan ilk antlaşma aşağıdakilerden hangisidir?",
-      "options": [
-        "Gümrü",
-        "Moskova",
-        "Kars",
-        "Ankara",
-        "Lozan 102"
-      ],
+      "options": ["Gümrü", "Moskova", "Kars", "Ankara", "Lozan 102"],
       "correctAnswer": 0,
       "solution": "115 Fransa nm Ankara antlaşmasını imzalaması TBMM’yi tanıdığını gösterir"
     },
@@ -6958,13 +6418,7 @@
     {
       "topic": "Kurtuluş Savaşı - Lozan Antlaşması",
       "question": "î TBMM hükümetinin imzalandığı ilk antlaşma olması li Batum un Gürcistan a bırakılması Hî Osmanlı Devleti ile Çarlık Rusya'sı arasında yapılmış olan antlaşmaların geçersiz sayılması re Yukandakilerin hangileri Moskova antlaşmasının Özelliklerindendir?",
-      "options": [
-        "Yalnız!",
-        "Yalnız II",
-        "Yalnız III",
-        "iveli",
-        "II ve III"
-      ],
+      "options": ["Yalnız!", "Yalnız II", "Yalnız III", "iveli", "II ve III"],
       "correctAnswer": 4,
       "solution": "120 Gediz taarruzu i İnönü sonrası yapılmamıştır"
     },
@@ -7439,13 +6893,7 @@
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "1. Tek dereceli seçim sistemine geçilmesi I! Mecliste oluşan muhalefetin Fethi Okyar Hükümetini çekilmek zorunda bırakması l!l Serbest Cumhuriyet Partisinin kurulması Yukarıdakilerden hangileri, Cumhuriyet’in ilanına ortam hazırlamıştır?",
-      "options": [
-        "Yalnız I",
-        "Yainızll",
-        "Yalnız III",
-        "İve 11",
-        "11 ve ili"
-      ],
+      "options": ["Yalnız I", "Yainızll", "Yalnız III", "İve 11", "11 ve ili"],
       "correctAnswer": 2,
       "solution": "20 Medreselerin yerine; modem eğitim kurumlan şer’i mahkemeler yerine modern hukuk sistemi iie işleyen mahkemelerin kurutması hicri takvimin yerine çağdaş uygarlıkların kullandıkları miladi takvimin kabul ediimesi modern ölçülerin kabul edilmesi gibi yenilikler farklı uygulamaları ortadan kaldırmaya yönelik adımlardır. Seçim sisteminde yapılan değişiklik herhangi bir farklılığı ortadan kaldırmaya yönelik bir uygulama değildir."
     },
@@ -7504,26 +6952,14 @@
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "TBMM'nin 30 Kasım 1925 tarihinde kabul ettiği b kanunla tekke türbe ve zaviyeler kapatılmış; anc tekke ve zaviyelerden cami ve mescit olanlara dokunulmamıştır. Bu uygulama laiklik ilkesinin , l. bütün dinlere eşil davran ılması II din adına birtakım batıl inançların yayılması karşısında devletin taraflı davranması III ibadet özgürlüğü tanırtması özelliklerinden hangilerini yansıtmaktadır ?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yainız III",
-        "iveli",
-        "II ve İli"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yainız III", "iveli", "II ve İli"],
       "correctAnswer": 2,
       "solution": "25,Türk alfabesinin kabul edilmesi çağdaşlaşmaya yönelik olarak okuma - yazma oranının artırılmasını amaçlayan bir inkılâptır Laikliğe hız kazandırdığı söylenemez"
     },
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "Türkiye'de, 1 milletvekili seçimlerinin yapılma süresinin uzatılması 11. çok partili sisteme geçilmesi III halkın temsilcilerini doğrudan seçmesi gelişmelerinden hangileri için toplumun belli bir siyasal olgunluğa erişmesinin önemli olduğu savunulabilir?",
-      "options": [
-        "Yalnız",
-        "Yalnız!!",
-        "Yalnız III",
-        "1 ve 11",
-        "II ve ili"
-      ],
+      "options": ["Yalnız", "Yalnız!!", "Yalnız III", "1 ve 11", "II ve ili"],
       "correctAnswer": 2,
       "solution": "26 Şer'iyye ve Evkaf vekâleti ile halifelik aynı günde (3 Mart 1924) kaldırılmıştır Bu vekâlet yerine Diyanet İşleri Başkanlığı kurulmuştur Medreseler kapatılmıştır."
     },
@@ -7621,13 +7057,7 @@
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "I Soyadı Kanunu II Öğretim Birliği Kanunu fîf Seçim Kanunu Atatürk Döneminde yukarı dakilerin hangilerinde değişiklik yapılmasının, toplumda kadın-erkek eşitliğini sağlamada katkısı olmuştur?",
-      "options": [
-        "Yalnız!",
-        "Yalnız II",
-        "Yalnız 111",
-        "I ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız!", "Yalnız II", "Yalnız 111", "I ve II", "II ve III"],
       "correctAnswer": 2,
       "solution": "33 1924 Anayasasında yer alan devletin dini İslam'dır\" maddesi laiklik ilkesi gereğince 1928 de Anayasa dan çıkarılmıştır"
     },
@@ -7673,13 +7103,7 @@
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "Atatürk ün 1925 yılında, \" . Artık hükümet ite m arasında geçmişteki ayrılık kalmamıştır Hüküme millettir ve millet hükümettir Artık hükümet ve hü kümet üyeleri kendilerinin milletten ayrı olmadıklarını ve milletin efendi olduğunu anlamışlardır şeklindeki anlatımıyla, I milletin yönetime katıldığı II. millete değerinin verildiği III hükümetlerin demokrasinin önemini kavradığı Durumlarından hangilerine ulaşıldığı savunulabilir?",
-      "options": [
-        "YalnızI",
-        "Yalnız II",
-        "Yalnızlll",
-        "I ve il",
-        "I II ve ül"
-      ],
+      "options": ["YalnızI", "Yalnız II", "Yalnızlll", "I ve il", "I II ve ül"],
       "correctAnswer": 0,
       "solution": "42. 15 Aralık 1934'te çıkarılan kanunla Türk kadınına milletvekili seçme ve seçilme hakkı verilmiştir."
     },
@@ -7777,13 +7201,7 @@
     {
       "topic": "Atatürk İnkılâpları Siyasi",
       "question": "I Menemen olayı İl Atatürk e suikast girişimi ili İslam Teali Cemiyetinin kurulması IV. Anzavur Ayaklanması Ulus egemenliğine dayalı rejime kar şı bir tepki niteliğinde olan yukarıda ki gelişmelerden hangileri^cumhuriyetin ilanından sonra gerçekleşmiştir?",
-      "options": [
-        "İveli",
-        "İve IV",
-        "II ve III",
-        "il! ve IV",
-        "I II ve III"
-      ],
+      "options": ["İveli", "İve IV", "II ve III", "il! ve IV", "I II ve III"],
       "correctAnswer": 0,
       "solution": "49. Atatürk'ün bu anlatımı ile milletin yönetime katıldığı, millete değerinin verildiği ve hükümetlerin demokrasinin önemini kavradığı nıt: C savunulabilir"
     },
@@ -7920,26 +7338,14 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "I Aşar Vergisinin Kaldırılması II Doğu Anadoiu da muhtaç çiftçilere toprak dağıtımına dair kanunun kabul edilmesi III Ziraat Bankasının kurulması Köylüyü rahatlatmak ve üretimi artırmak amacında olan yukarıdaki gelişmelerden hangileri, Atatürk Döneminde gerçekleştirilmiştir?",
-      "options": [
-        "Yalnız",
-        "Yalnız II",
-        "Yalnız III",
-        "I ve II",
-        "II ve İli"
-      ],
+      "options": ["Yalnız", "Yalnız II", "Yalnız III", "I ve II", "II ve İli"],
       "correctAnswer": 0,
       "solution": "ATATÜRK İNKILÂPLARI EKONOMİK 1, Halkın elinde yeterli sermayenin olmaması önemli hizmetlerin devlet tarafından yapılmasm zorunlu kılmıştır Ya 2 Kapitülasyonların kaldırılması ile ekonomik bağımsızlığın sağlanması birbiriyle doğrudan ilgilidir Ya }. Türk vatandaşları d ışında başka ülke vatandaşlarının Türk karasularında ticaret yapamaması, kapitülasyonların kaldırılmasının e önemli sonuçlarından biridir Yan . Teşvik-i Sanayi Kanunu özel girişimi desteklemek için çıkartılmış bir kanundur Buna göre özel girişimciler özel gümrük indirirçjerinden yararlanabilecek bedelsiz olarak hazine arazileri alabilecekler bu kişilere ucuz krediler verilecekti Fakat dünyada ve Türkiye de yaşanan olumsuz gelişmeler bu kanunun istenen sonucu vermesini engellemiştir Bunun üzerine 1933 yılında \"i Beş Yıllık Kalkınma Planı” oluşturulmuştur. Buna göre; devlet eliyle önemli tesisler açılmıştır."
     },
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "Cumhuriyetin ilk yıllarında aşağıdaki alanlardan hangisine ekonomik kalkınmada öncelik verilmemiştir?",
-      "options": [
-        "Tarım",
-        "Ticaret",
-        "Sanayi",
-        "Ulaştırma",
-        "T urizm"
-      ],
+      "options": ["Tarım", "Ticaret", "Sanayi", "Ulaştırma", "T urizm"],
       "correctAnswer": 0,
       "solution": "ğnam vergisi {Hayvan vergisi) bütçe açığını kapatmak amacıyla artırılmıştır Ticaretin geliştirilmesine yönelik olduğu söylenemez"
     },
@@ -8011,13 +7417,7 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "Devlet eliyle temel sanayinin kurulmasını amaçlayan ’ Birinci Beş Yıllık Plan' hangi yılda uygulanmaya başlanmıştır?",
-      "options": [
-        "1931",
-        "1932",
-        "1934",
-        "1935",
-        "1936 126"
-      ],
+      "options": ["1931", "1932", "1934", "1935", "1936 126"],
       "correctAnswer": 0,
       "solution": "10 BÖLÜı 11. Atatürk döneminde özel girişimcilere ticareti canlandırmak amacıyla kredi vermek üzere mı Türkiye İş Bankası kurulmuştur"
     },
@@ -8050,13 +7450,7 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "I. Türkiye İş Bankasının kurulması II. Yabancıların elindeki işletmelerin satın alınması III Demiryollarının yapımına hız verilmesi Yukarıdakiierden hangileri devletçilik politikası uygulamaları arasındadır?",
-      "options": [
-        "Yalnız I",
-        "Yalnızll",
-        "Yalnız III",
-        "I ve II",
-        "II ve İli"
-      ],
+      "options": ["Yalnız I", "Yalnızll", "Yalnız III", "I ve II", "II ve İli"],
       "correctAnswer": 1,
       "solution": "15 . Atatürk döneminde girişimcilere kredi vermek ve ticareti canlandırmak amacıyla iş Bankası kurulmuştur. Osmanlı Bankasının kurulması Atatürk döneminden Önce Köy Enstitülerinin n kapatılması sonradır"
     },
@@ -8089,13 +7483,7 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "I. Devlet eliyle temel sanayinin kurulması II. ilk özel bankanın kurulması III Türkiye'nin Birieşmiş Milletler Teşkilatına üye olması Yukarıdaki gelişmelerden hangileri Atatürk Döneminde gerçekleşmiştir?",
-      "options": [
-        "Yalnız I",
-        "Yalnızll",
-        "Yalnız III",
-        "İve II",
-        "fl ve III"
-      ],
+      "options": ["Yalnız I", "Yalnızll", "Yalnız III", "İve II", "fl ve III"],
       "correctAnswer": 0,
       "solution": "18 . Aşar vergisi Osmanlı döneminde Müslüman çiftçilerden 1/10 oranında ürün üzerinden alınan : D vergidir"
     },
@@ -8141,13 +7529,7 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "İzmir İktisat Kongresi nde alınan kararlardan; I Toprak reformu yapmak II Demiryolları yapmak II) Özel teşebbüse kredi ofanakları sağlamak Hangileri gerçekleştirilememiştir?",
-      "options": [
-        "Yalnız",
-        "Yainız fl",
-        "Yalnız III",
-        "ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız", "Yainız fl", "Yalnız III", "ve II", "II ve III"],
       "correctAnswer": 3,
       "solution": "131 ATATÜRK İNKILÂPLARI EKONOMİK 22 Atatürk döneminde ekonomik kalkınma için devlet eliyle sanayi kurulmuş ve İlk özel banka olan Türkiye iş Bankası kurulmuştur Türkiye Birleşmiş Milletler Teşkilatına 1952 yılında üye olmuştur"
     },
@@ -8167,26 +7549,14 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "9 Aralık 1925 tarihinde yerli kumaştan e!bise giyilmesine dair kanun çıkarılmıştır Bu kanunun uygulamaya konulmasıyla, f dışa bağımlılığın azaltılması il yerli üretimin desteklenmesi III sanayileşmenin çabuklaştırılması durumlarından hangilerine az da olsa katkı sağlandığı savunulabilir?",
-      "options": [
-        "Yalnız i",
-        "Yalnız il",
-        "Yalnızlll",
-        "İveli",
-        "I II ve İÜ"
-      ],
+      "options": ["Yalnız i", "Yalnız il", "Yalnızlll", "İveli", "I II ve İÜ"],
       "correctAnswer": 1,
       "solution": "24 1923 yılında İzmir de Misak-ı iktisadi kabul edilmiştir."
     },
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "I. Koruyucu gümrük politikası uygulanması II Türk parasının değerini korumal? İçin önlemler alınması III Aşar vergisinin kaldırılarak köylünün rahatlatılması Yukandakilerden hangileri, üike ticaretinin Türkiye'nin kontrolü altında bulundurulması !ii 5 amacına yöneliktir? İ —i ^ Yalniz I S<",
-      "options": [
-        "",
-        "Yalnız II",
-        "Yalnız Sil",
-        "İveli j",
-        "II ve ili"
-      ],
+      "options": ["", "Yalnız II", "Yalnız Sil", "İveli j", "II ve ili"],
       "correctAnswer": 0,
       "solution": "25 Türk İş Bankasının kurulması öncelikte özel girişimciye kredi desteği sağlamak amacına z.v LU< yöneliktir. Kredi desteği beraberinde de ulusal > - özel teşebbüsün gelişmesine bir ortam hazırlayacaktır."
     },
@@ -8258,13 +7628,7 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "17 Şubat 1923 tarihinde açılan İktiâat Kongresi nin toplantı yeri olarak İzmir'in seçilmesinde, I Kurtuluş Savaşı nın bitimini noktalayan yer olması II. Türkiye'nin en Önemli ihracat limanlarından biri olması Ut Kongreye heu'çeden sekiz delegenin seçilmesi durumlarından hangilerinin etkili olduğu n 2 savunulabilir? amak \\<",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "İveli",
-        "II ve III",
-        "l II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "İveli", "II ve III", "l II ve III"],
       "correctAnswer": 4,
       "solution": "31. Teşvik-i Sanayi Kanunu İle sanayi kuruluşlarına üretecekleri malların değerine göre % 10 prim verilmesi ve ithal ürünlerinden pahalı da olsa devlet kurumlarında bu ürünleri kullanma zorunluluğu getirilmesi ülke içinde üretimin artırılmak ve ithalatın kısıtlanmak istendiğinin, sermaye birikiminde devlet desteğinin sağlandığının göstergesidir"
     },
@@ -8297,26 +7661,14 @@
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "bunalım baş göstermiş, bu durum Türk Devletinin ekonomisine yeni bir yön vermesini gerektirmiştir Bu gereksinim, ! devletçilik ilkesinin uygulanması II ilk beş yıllık sanayi planının hazırlanması III Teşvik i Sanayi Kanunu'nun çıkarılması gelişmelerinden hangilerini sağlamıştır?",
-      "options": [
-        "Yalnız!",
-        "Yalnız II",
-        "Yalnız III",
-        "I ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız!", "Yalnız II", "Yalnız III", "I ve II", "II ve III"],
       "correctAnswer": 0,
       "solution": "35. İş Bankası; 1924'te Ticaretin geliştirilmesi amacıyla kuruldu. Aşar Vergisi; 1925'te köylüyü büyük bir yükten kurtarmak amacıyla kaldırıldı Sümerbank; 1933’te Sanayi yatırımlarına destek olması amacıyla kuruldu"
     },
     {
       "topic": "Atatürk İnkılâpları Ekonomik",
       "question": "I Tekke ve zaviyelerin kapatılması li. Kabotaj hakkının Türk denizcilerine geçmesi III. Sanayi kuruluşlarının teşvik edilmesi Yukarıdaki gelişmelerden hangileri ticari yasamın düzenlenmesiyle ilgilidir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız If",
-        "Yafmz III",
-        "I ve il",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız If", "Yafmz III", "I ve il", "II ve III"],
       "correctAnswer": 0,
       "solution": "36. İzmir düşmanın denize döküldüğü yer ve önemli b İhracat limanı olduğu İçin Türkiye İktisat Kongresi İzmir’de yapılmıştır."
     },
@@ -8492,13 +7844,7 @@
     {
       "topic": "Atatürk İnkılâpları Eğitim",
       "question": "İ Türkiye’de müzeciliğin başlaması II. Sanayi-i Nefise Mektebi'nin Güzel Sanatlar Akademisine dönüştürülmesi lil Milli Musiki ve Temsil Akademisinin Ankara Konservatuarına dönüştürülmesi Yukandakilerden hangileri Atatürk Dönemi nd gerçekleştirilmiştir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnız M",
-        "İve II",
-        "II ve İli"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnız M", "İve II", "II ve İli"],
       "correctAnswer": 3,
       "solution": "12 Türk Tarih Kurumu'nun açılması milli tarih anlayışı doğrultusundadır Belgelerin tarafsız olarak değerlendirilmesi Tarih Kurumu'nun temel ilkeleri arasındadır"
     },
@@ -8518,13 +7864,7 @@
     {
       "topic": "Atatürk İnkılâpları Eğitim",
       "question": "Atatürk döneminde, I Anadolu tarihinin araştırılması II. Müzeciliğin geliştirilmesi İli Milli Musiki ve Temsil Akademisinin Ankara '-'C Konservatuarı 'na dönüştürülmesi LU< yönünde yapılan çalışmalardan hangilleri en Anadolu uygarlıklarının aydınlatılması amacını taşımaktadır? e",
-      "options": [
-        "Yalnız t",
-        "Yalnızlı",
-        "İve II",
-        "I ve III",
-        "! II ve III"
-      ],
+      "options": ["Yalnız t", "Yalnızlı", "İve II", "I ve III", "! II ve III"],
       "correctAnswer": 3,
       "solution": "14 Söylev (Nutuk) Türkiye Cumhuriyeti nin kuruluş aşamalarını 1919’dan 1927'ye kadar anlatan eserdir"
     },
@@ -8570,13 +7910,7 @@
     {
       "topic": "Atatürk İnkılâpları Eğitim",
       "question": "Cumhuriyet döneminde, i Millet Mekteplerinin açılması (I Medreselerin kapatılması III Türk yasalarına ve okulların bağlı oldukları tüzük ve yönetmeliklere uymayan okulların kapatılması uygulamalarından hangileri eğitimde birlik ve beraberlik sağlamak amacıyla yapılmıştır?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnız III",
-        "! ve II",
-        "II ve il"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnız III", "! ve II", "II ve il"],
       "correctAnswer": 0,
       "solution": "18,Türk Dil Kurumu’nun açılması milli politika doğrultusunda gerçekleşmiştir Bu nedenle yabancı â 5 dil öğrenimini yaygınlaştırmak amaçlanmamıştır. \\ <"
     },
@@ -8804,13 +8138,7 @@
     {
       "topic": "Atatürk İnkılâpları Eğitim",
       "question": "hâlde, harf inkılâbı ancak 1928 yılında gerçekleştirilebilmiştir Bu gecikmede, 1 harf inkılâbına çok önem verilmesi ve başarısının rastlantıya bırakılmak istenmemesi !f daha önce bu konuda yapılmış oian çalışmalar sonuçsuz kalması III Arap alfabesinin harf sayısının sayıca fazla olması durumlarından hangilerinin etkili olduğu savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "I ve II",
-        "i ve II",
-        "I II ve m"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "I ve II", "i ve II", "I II ve m"],
       "correctAnswer": 0,
       "solution": "36. TBMM de Öğretim Birliği Kanunu nun çıkarılmasına ilişkin öneri Halifeliğin kaldırılması ile birlikte görüşülerek yasalaştırılmıştır"
     },
@@ -8947,13 +8275,7 @@
     {
       "topic": "Atatürk'ün İnkılâpları Hukuki",
       "question": "Türkiye de kadınlar, I seçme ve seçilme II mirasta eşit olma III eşlerini seçme ve evlilik birliğini bozma haklarından hangilerini 4 Ekim 1926 tarihinde yürürlüğe giren Medeni Kanunla elde etmişlerdir ?",
-      "options": [
-        "Yalnız l",
-        "Yalnız H",
-        "Yalnız III",
-        "İveli",
-        "II ve III"
-      ],
+      "options": ["Yalnız l", "Yalnız H", "Yalnız III", "İveli", "II ve III"],
       "correctAnswer": 4,
       "solution": "Kadınlar seçme ve seçilme hakkını 1934 te çıkarılan yasa ile elde etmiştir. Mirasta eşit \"olma ve boşanma hakkı Türk kadınlarına 1926da Medeni Kanun ite verilmiştir"
     },
@@ -9142,13 +8464,7 @@
     {
       "topic": "Atatürk İnkılâpları Toplumsal",
       "question": "f Miladi takvimin kabul edilmesi II Kabotaj Kanunu nun kabul edilmesi ili Hafta tatilinin cumadan pazar gününe alınması Yukandakilerin hangilerinde, uluslararası ticari ilişkilerde kolaylık sağlama amacı vardır?",
-      "options": [
-        "Yalnız 1",
-        "Yalnızlı",
-        "Yalnız III",
-        "I ve li",
-        "İve İli"
-      ],
+      "options": ["Yalnız 1", "Yalnızlı", "Yalnız III", "I ve li", "İve İli"],
       "correctAnswer": 3,
       "solution": "ATATÜRK İNKILÂPLAR! TOPLUMSAL 1 3 Kasım 1928 yeni Türk harflerinin kabul edildiği tarihtir"
     },
@@ -9259,13 +8575,7 @@
     {
       "topic": "Atatürk İnkılâpları Toplumsal",
       "question": "Halifeliğin kaldırılmasının; t tekke ve türbelerin kapatılması il medreselerin kapatılması, III Bolu ve Düzce Ayaklanmalanmın çikması olaylarından Hangilerini etkilediği savunulur?",
-      "options": [
-        "Yalmzl",
-        "Yalnızlı",
-        "I ve II",
-        "I ve lil",
-        "I llvelll"
-      ],
+      "options": ["Yalmzl", "Yalnızlı", "I ve II", "I ve lil", "I llvelll"],
       "correctAnswer": 0,
       "solution": "1 13 BÖLÜM 11 Merkez Bankası 1930 yılında kurulmuş, ilk nüfus sayımı 1927 yılında yapılmıştır. Diğer gelişmeler Atatürk dönemiyle ilgili değildir"
     },
@@ -9298,13 +8608,7 @@
     {
       "topic": "Atatürk İnkılâpları Toplumsal",
       "question": "Atatürk Döneminde, I hafta tatilinin cumadan pazar gününe alınması II toplumda ayrıcalık ifade eden sanların kaldırılması III tarım kredi kooperatiflerinin kurulması İnkılâplarından hangilerinin uluslararası siyasi ve ticari ilişkilerde çıkan zorlukları gidermek amacıyla yapıldığı savunulabilir? LU<",
-      "options": [
-        "YalnızI",
-        "YalnızII",
-        "YalnızIII",
-        "İve il",
-        "I II veIII"
-      ],
+      "options": ["YalnızI", "YalnızII", "YalnızIII", "İve il", "I II veIII"],
       "correctAnswer": 1,
       "solution": "14 İnkılâp çağın gereklerine göre yeni kurumlar oluşturmak ve yeniliğe açık olmak demek olsa da, geçmişten bağların tamamen koparılması anlamına gelmemektedir"
     },
@@ -9350,13 +8654,7 @@
     {
       "topic": "Atatürk İnkılâpları Toplumsal",
       "question": "Soyadı kanunuyla tüm vatandaşlara aile ismi olarak öz adiarı yanında soyadı kullanma zorunluluğu getirilmiştir Bu zorunluluğun; ) Sınıf farklılıklarının isim olarak kullanılması li İsim benzerliklerinin bazı karışıklıklara neden olması III Toplumda azınlık olan Türkiye Cumhuriyeti vatandaşlarının bulunması Durumlarından hangilerinden kaynaklandığı savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "I ve II",
-        "I ve III",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "I ve II", "I ve III", "II ve III"],
       "correctAnswer": 2,
       "solution": "18 Halifeliğin Kaldırılması laiklik yolunda önemli bir adımdır. Laiklik doğrultusunda tekke ve türbeler medreseler kapatılmıştır Bolu ve Düzce Ayaklanmaları TBMM'nin açıldığı dönemde gerçekleşmiştir"
     },
@@ -9428,13 +8726,7 @@
     {
       "topic": "Atatürk İnkılâpları Toplumsal",
       "question": "Türk inkılabının I Beli bir ideolojiye bağlı olarak ortaya çıkma II. Başka uluslara ömek olma III, Tek kişinin egemenliğine dayalı ülke idaresini değiştirme Durumlarının hangileri bakımından Rus inkılabından farklı olduğu savunulabilir ?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnızlll",
-        "l ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnızlll", "l ve II", "II ve III"],
       "correctAnswer": 4,
       "solution": "24, Türkiye Cumhuriyetinin laiklik ijkesini uygulamak için gerçekleştirdiği inkılâplardan birisi de Seriye ve Evkaf Vekâletinin kaldırılmasıdır Bu vekâletin kaldırılmasının din işlerinin devlet işlerinden ayrılmasına ve medreselerin kapatılmasına katkısı olmuştur Teşkilatlı Esasiye Kanunu (1921 Anayasası) bu durumla ilgili değildir"
     },
@@ -9649,13 +8941,7 @@
     {
       "topic": "Atatürk İnkılâpları Kronoloji",
       "question": "Türkiye'de, I sanayi planının yapılması 2 li modem anlamda nüfus sayımının yapılması III muhalefet partisi olarak Demokrat Partinin ^ kurulması gelişmelerinden hangileri Atatürk Döneminde gerçekleşmiştir?",
-      "options": [
-        "YalnızI",
-        "YalnızI!",
-        "YalnızIII",
-        "I ve II",
-        "! II veII"
-      ],
+      "options": ["YalnızI", "YalnızI!", "YalnızIII", "I ve II", "! II veII"],
       "correctAnswer": 0,
       "solution": "Çok partili döneme geçiş denemeleri -> 1924 Mirasta eşitlik-> 1926 Seçme - seçilme hakkı -> 1934"
     },
@@ -9766,13 +9052,7 @@
     {
       "topic": "Çok Partili Yaşama Geçiş Denemeleri",
       "question": "değişiklikle, iki dereceli seçim sisteminden tek dereceli seçim sistemine geçilmiştir?",
-      "options": [
-        "1928 8} 1930",
-        "",
-        "1934",
-        "1937",
-        "1946"
-      ],
+      "options": ["1928 8} 1930", "", "1934", "1937", "1946"],
       "correctAnswer": 4,
       "solution": "6.. 1946 yılında siyasal katılımı artırmayı amaçlayan tek dereceli seçim sistemine i geçilmiştir"
     },
@@ -9857,13 +9137,7 @@
     {
       "topic": "Çok Partili Yaşama Geçiş Denemeleri",
       "question": "Şeyh Sait Ayaklanmasından sonra I Firariler II. Takrir-i Sükûn, lil Başkomutanlık kanunlarından hangileriyle hükümete, Cumhuriyet rejimini yerleştirmek amacıyla, gerekli önlemleri alması için özel yetki verilmiştir?",
-      "options": [
-        "YalnızI",
-        "YalnızII",
-        "YalnızIII",
-        "İve II",
-        "I , II veIII"
-      ],
+      "options": ["YalnızI", "YalnızII", "YalnızIII", "İve II", "I , II veIII"],
       "correctAnswer": 1,
       "solution": "13 Şeyh Sait isyanından sonrakimi korumaya ve yerleştirmeye yönelik önlemleri almak amacıyla Takrir-i Sukün Kanunu çıkarılmıştır"
     },
@@ -9909,13 +9183,7 @@
     {
       "topic": "Çok Partili Yaşama Geçiş Denemeleri",
       "question": "I Şeyh Sait Ayaklanması II. Demirci Mehmet Efe Ayaklanması III Çerkez Ethem Ayaklanması Yukarıdaki lerden hangileri laik devlet anlayışın tepkidir?",
-      "options": [
-        "Yalnız I",
-        "Yalnızll",
-        "Yalnız III",
-        "I ve II",
-        "II ve İli"
-      ],
+      "options": ["Yalnız I", "Yalnızll", "Yalnız III", "I ve II", "II ve İli"],
       "correctAnswer": 1,
       "solution": "17. Tek dereceli seçim sisteminde halk, vekillerini doğrudan seçme hakkına sahip olmuştur"
     },
@@ -9961,13 +9229,7 @@
     {
       "topic": "Çok Partili Yaşama Geçiş Denemeleri",
       "question": "Atatürk Döneminde çok partili hayata geçiş amacıyla kurulan partilerden Serbest Cumhuriyet Partisinin programında na I. Cumhuriyetçilik İL Devletçilik III Laiklik İlkelerinden hangileri yer almıştır?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "Yalnızlll",
-        "l ve II",
-        "I ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "Yalnızlll", "l ve II", "I ve III"],
       "correctAnswer": 2,
       "solution": "21 Serbest Cumhuriyet Fırkası Terakkiperver Cumhuriyet Fırkasının kapatılmasından sonra kurulmuş ve ekonomide liberalizmi savunmuştur Başkanlığını Kazım Karabekir değil Fethi Okyar yapmıştır"
     },
@@ -10312,13 +9574,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Ekonomik kalkınmada yabancı sermayeden yararlanma girişimlerinin 1950 yılma kadar gecikmesinde f Kapitülasyonların doğurmuş olduğu güvensizlik İl. Köylünün üretim imkânlarının artması III Kamu yararını ilgilendiren büyük girişimler için devletçi ekonomi politikasının uygulanması gelişmelerinden hangileri etkili olmuştur ?",
-      "options": [
-        "Yalnız l",
-        "Yalnız II",
-        "Yalnız III",
-        "İve il",
-        "İve III"
-      ],
+      "options": ["Yalnız l", "Yalnız II", "Yalnız III", "İve il", "İve III"],
       "correctAnswer": 4,
       "solution": "26 Ekonomik kalkınmada yabancıların yayılmacı ve sömürgeci anlayışlarından doğan güvensizlik milli iktisat ve devletçi politikanın takip edilmesiyle 1950 yılına kadar yabancı sermaye yatırımlarına çok sıcak bakılmamıştır C"
     },
@@ -10468,39 +9724,21 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Ulusçuluk il. Devletçilik llî özerklik Halifeliğin kaldırılması yukarıdakiler-den hangilerinin doğrudan gereğidir?",
-      "options": [
-        "Yainız I",
-        "Yalnız II",
-        "Yalmzlll",
-        "I ve lil",
-        "II ve lil"
-      ],
+      "options": ["Yainız I", "Yalnız II", "Yalmzlll", "I ve lil", "II ve lil"],
       "correctAnswer": 0,
       "solution": "38 Halifeliğin Kaldırılması İslamcılık (ümmetçilik) ilkesinin yerine ulusçuluk (milliyetçilik) ilkesinin önem kazanmasında etkili olmuştur"
     },
     {
       "topic": "Atatürk İlkeleri",
       "question": "KPSS Cumhuriyet in ilk yıllarında kaldırılan Aşar Vergisinin, I belli bir oran üzerinden alınması II. ürünün az olduğu yıllarda da alınması III mültezimlerin bu vergiyi kendi masraflarını da katarak toplamaları özelliklerinden hangilerinin halkçılık' ilkesiyle bağdaşmadığı savunulur?",
-      "options": [
-        "Yalnız !",
-        "Yalnız II",
-        "Yalmzlll",
-        "I ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız !", "Yalnız II", "Yalmzlll", "I ve II", "II ve III"],
       "correctAnswer": 4,
       "solution": "39 Halkçılık ilkesi halkın refahını sağlanmaya yöneliktir Ürünün az olduğu yıllarda da alınması halka yük olur Mültezimlerin kendi çıkarlarını ön planda tutması da hakçılığa aykırıdır"
     },
     {
       "topic": "Atatürk İlkeleri",
       "question": "Türk Medeni Kanunu'nun kabulüyle yapılan inkılâp hem laiklik ve hukuk sisteminin kurulması hem de toplumsal yaşayışın düzenlenmesiyle ilgilidir Bu durum, Atatürk ilkelerinin, I anayasal haklara uygun olma II toplumun gereksinimlerine cevap verme lil evrensel nitelikte olma özelliklerinden hangilerine kanıttır?",
-      "options": [
-        "YalnızI",
-        "YainızII",
-        "Yainızlil",
-        "I ve II",
-        "I II veIII"
-      ],
+      "options": ["YalnızI", "YainızII", "Yainızlil", "I ve II", "I II veIII"],
       "correctAnswer": 3,
       "solution": "40, Türk Medeni Kanunu nun kabulü anayasal hakları koruyan toplumun gereksinimlerine cevap veren bir inkılâptır"
     },
@@ -10533,13 +9771,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Atatürk İlkelerinden devletçilik, hangi yılda devletin temel ilkelerinden biri olarak Anayasa'da yer almıştır?",
-      "options": [
-        "1921",
-        "1924",
-        "1937",
-        "1938",
-        "1946"
-      ],
+      "options": ["1921", "1924", "1937", "1938", "1946"],
       "correctAnswer": 2,
       "solution": "43. Devletçilik, diğer Atatürk ilkeleriyle birlikte 1937 yılında Anayasa'ya girmiştir"
     },
@@ -10585,13 +9817,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Cumhuriyet döneminde, yabancıların elindeki demiryollarının tümünün satın afmması ve bütünüyle yabancı sermayeye dayanan sanayileşme modeli yerine devlet tarafından öz kaynakları temel alan bir sistemin uygulanması, I Milliyetçilik II Laiklik, III Devletçilik ilkelerinden hangileriyle doğrudan ilgilidir?",
-      "options": [
-        "Yalnız l",
-        "Yalnız II",
-        "İveli",
-        "İve III",
-        "II ve III 167"
-      ],
+      "options": ["Yalnız l", "Yalnız II", "İveli", "İve III", "II ve III 167"],
       "correctAnswer": 0,
       "solution": "47. Halkçılık, halkın kendi kendini yönetme-İsini, kanun önünde eşit olmasını öngörür, Bu nedenle Cumhuriyetçilik ilkesiyle birbirlerini bütünler"
     },
@@ -10611,13 +9837,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "I Yasalar önünde eşitlik II Vatandaşların sosyal ve siyasi alanda etkileşimini arttırma III. Ekonomide Özel girişimciliğe karşı çıkma Yukarıdakilerden hangilerinin halkçılık ilkesinin amaçlan arasında olduğu savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "i ve II",
-        "İveli!",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "i ve II", "İveli!", "II ve III"],
       "correctAnswer": 2,
       "solution": "49,. Aşar vergisinin kaldırılması halkın üzerindeki büyük bir yükün kaldırıldığını gösterir Okuma- yazma seferberliği de halkın yararınadır. Amacı halkı kültür ve bilgi seviyesini yükseltmektir Bu iki yenilik de halk İçin ve halkın yararına yeniliklerdir Hicri takvim yerine, miladi takvimin kabul edilmesi batılılaşma çabasının bir sonucudur. Bu durumda I ve II numaralı maddeler doğru yanıttır"
     },
@@ -10689,26 +9909,14 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "I. Türkiye Devleti nin cumhuriyet olduğunun belirtilmesi II Azınlıkların Türk vatandaşı sayılması III Laiklik ilkesi Yukarıdakilerden hangileri, 1937 yılında anayasada ilk kez yer almıştır ?",
-      "options": [
-        "Yalnız!",
-        "Yalnız II",
-        "Yalnız ili",
-        "1 ve 11",
-        "II ve III"
-      ],
+      "options": ["Yalnız!", "Yalnız II", "Yalnız ili", "1 ve 11", "II ve III"],
       "correctAnswer": 4,
       "solution": "55 Halkçılık ilkesinin temelinde eşitlik ilkesi vardır Burun karşısında olan ayrıcalık ve sınıf kavgası halkçılıkla bağdaşmaz"
     },
     {
       "topic": "Atatürk İlkeleri",
       "question": "Yabancılara verilen ekonomik ve siyasi ayrıcalıkların kaldırılmasının, I. Ulusçuluk II. Devletçilik III Laiklik ilkelerinden hangileriyle doğrudan ilgili olduğu savunulabilir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız i",
-        "Yalnızlil",
-        "l ve II",
-        "II ve ISI"
-      ],
+      "options": ["Yalnız I", "Yalnız i", "Yalnızlil", "l ve II", "II ve ISI"],
       "correctAnswer": 2,
       "solution": "56. 1937 yılında Atatürk ilkelerinin tamamı ve laiklik ilkesi anayasaya alınmıştır"
     },
@@ -10780,13 +9988,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Halkçılık ilkesinin demokratik olma özelliğini, I ayrıcalıklara karşı olması. II egemenliğin halkın bir kesimine ait olması III herkesin kanun önünde eşit kabul ediimesi durumlarından hangileri destekler?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "I ve il",
-        "İve Mi",
-        "il ve lil"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "I ve il", "İve Mi", "il ve lil"],
       "correctAnswer": 0,
       "solution": "62 Atatürkçü milliyetçilik anlayışının laik olduğu yargısını vatandaşların istedikleri dini ve mezhebi seçmesi desteklemektedir Çünkü B laikliğin temel amaçlarından biri de din ve vicdan özgürlüğü sağlamaktır"
     },
@@ -10897,13 +10099,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Devletçilik ilkesi, I Özel girişimciliğe yer verilmesi II yabancı sermayeden yararlanılması III mülkiyet hakkının ulusun yararlarına aykırı biçimde kullanılması durumlarından hangilerine karşıdır ?",
-      "options": [
-        "Yalnız I",
-        "Yalnız il",
-        "Yalnızlll",
-        "I ve il",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız il", "Yalnızlll", "I ve il", "II ve III"],
       "correctAnswer": 4,
       "solution": "71. Halkçılık ilkesinin temelinde kanun eşitliği bulunmaktadır Bu nedenle herkesin mülkiyet hakkı, herkesin yönetime katılması ve ayrıcalıklara son verilmesi bu ilkenin temel hedeflerindendir"
     },
@@ -10975,13 +10171,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "t. Toplumda fırsat eşitliğinin olması II. Şeyh ağa gibi lakapların kullanılması ili Toplumda iş bölümünün sağlanması Halkçılık İlkesinin yukarıdakilerden hangilerine karşı olduğu savunulabilir?",
-      "options": [
-        "YalnızI",
-        "Yalnızil",
-        "YalntzII!",
-        "! ve II",
-        "I II ve MI"
-      ],
+      "options": ["YalnızI", "Yalnızil", "YalntzII!", "! ve II", "I II ve MI"],
       "correctAnswer": 0,
       "solution": "77 İnsanları milli bir bilinç ve ortak bir ülkü etrafında toplamak Atatürk'ün Milliyetçilik ilkesi ile alakalıdır"
     },
@@ -11001,13 +10191,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "I Türk Tarih Kurumunun kurulması il Türk Dil Kurumunun açılması ili Şapka giyilmesi hakkında kanun çıkarılması Yukarıdaki gelişmelerden hangilerinin, Atatürk milliyetçiliğinin gelişmesinde ve hızlanmasında etkili olduğu savunulabilir?",
-      "options": [
-        "YalnızI",
-        "YalnızII",
-        "Yalnızili",
-        "i ve II",
-        "I II veIII"
-      ],
+      "options": ["YalnızI", "YalnızII", "Yalnızili", "i ve II", "I II veIII"],
       "correctAnswer": 2,
       "solution": "79 Türkiye Cumhuriyeti uluslararası ilişkilerde bağımsızlığı ve barışseverliği esas almıştır. Devletçilik ülke ekonomisinde uygulanmıştır."
     },
@@ -11040,13 +10224,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "Kanun önünde hem ayrı dinlere hem de ayrı dinin fariı mezheplerine mensup olanların eşitliğini sağlanmasının I Devîetçilik II Laiklik III Halkçılık İlkelerinden hangileriyle ilgili olduğu savunulabilir?",
-      "options": [
-        "Yalnız l",
-        "Yalnızlı",
-        "Yalnız üt",
-        "I ve il",
-        "II ve III"
-      ],
+      "options": ["Yalnız l", "Yalnızlı", "Yalnız üt", "I ve il", "II ve III"],
       "correctAnswer": 4,
       "solution": "82 Hiç kimseye ayrıcalık tanınmaması halkçılık ilkesiyle dorudan ilgilidir"
     },
@@ -11105,13 +10283,7 @@
     {
       "topic": "Atatürk İlkeleri",
       "question": "i Kuzey Atlantik Paktı il. Varşova Paktı II) Keilog Paktı IV Lokamo Paktı Yukarıdaki paktlardan hangileri, birbirine karsı olan iki savunma sistemi şeklinde kurulmuştur?",
-      "options": [
-        "I ve II",
-        "İve III",
-        "I ve IV",
-        "II ve İli",
-        "İli ve İV"
-      ],
+      "options": ["I ve II", "İve III", "I ve IV", "II ve İli", "İli ve İV"],
       "correctAnswer": 0,
       "solution": "78"
     },
@@ -11287,13 +10459,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "Türkiye'nin, I. Balkan Paktı kurucu üyelerinden olması II. Bağdat Paktina üye olması III Kore Savaşına girmesi gelişmelerinden hangileri Atatürk dönemiyle ilgilidir?",
-      "options": [
-        "Yalnız I",
-        "Yalnız fi",
-        "Yalnız İÜ",
-        "i ve II",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnız fi", "Yalnız İÜ", "i ve II", "II ve III"],
       "correctAnswer": 0,
       "solution": "10 Ankara Antlaşması ile; Musul Irak'a bırakılmış, Musul petrollerinin gelirinden %10'unun 25 yıl süreyle Türkiye'ye verilmesi kararlaştırılmıştır (Daha sonra bu petrol gelirinin tutarı nakit para olarak ödenmiştir) Türklerin korunmasına yönelik bir madde yoktur"
     },
@@ -11326,13 +10492,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "I Batılı devletler üzerinde etkili olmak II. Demokratik ülkeler yanında yer almak III Sovyet Rusya’yla ABD arasında güvensizlik yaratmak Yukandakilerden hangilerinin, Türkiye hin Lozan görüşmeleri sırasında ABD ile ikili ilişkilere önem vermesinde etkisi yoktur ?",
-      "options": [
-        "Yalnız I",
-        "Yalnızll",
-        "Yalnız III",
-        "ive li",
-        "II ve III"
-      ],
+      "options": ["Yalnız I", "Yalnızll", "Yalnız III", "ive li", "II ve III"],
       "correctAnswer": 1,
       "solution": "13. Şahı Rıza Pehlevi Türkiye deki demokratik gelişmelerden etkilenmesi rağmen devletinin içinde bulunduğu durumun buna müsait olmadığını ifade etmiştir"
     },
@@ -11365,13 +10525,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "I İki dereceli seçim sistemi II. Tek dereceli seçim sistemi III. Referandum",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "16. İngiltere ile İmzalanan Ankara Antlaşması ile Musul Irak'a bırakılmış petrolün yıllık gelirinin %10'unun 25 yıl süreyle Türkiye'ye verilmesi kararlaştırılmıştır"
     },
@@ -11482,13 +10636,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "Atatürk ün ' Milli sînıriarîmiz içinde her şeyden önce kendi gücümüze dayanarak varlığımızı sürdürmek milletin ve ülkenin gerçek mutluluğuna kalkınmasına çalışmak gelişi güze! büyük hayaller peşinde milleti uğraştırmamak harcamamak uygarlık dünyasından insanca karşılıklı ve dostluk görmeyi beklemek r sözleriyle ifade ettiği hedefler dış politikada I. yalnız uygar milletlerle ilişki kurma, M. uluslararası ilişkilerde saygınlığını koruma lil içişlerine karışmama ve karıştırmama ilkelerinden hangilerini benimsediğinin göstergesidir?",
-      "options": [
-        "Yalnız f",
-        "Yalnız II",
-        "Yalnız İÜ",
-        "I ve II",
-        "li ve İH"
-      ],
+      "options": ["Yalnız f", "Yalnız II", "Yalnız İÜ", "I ve II", "li ve İH"],
       "correctAnswer": 2,
       "solution": "25 1926 yılında Türkiye ve İngiltere arasında imzalanan Ankara Antlaşmasına göre Musul Irak'a bırakılmış ve bu şekilde çözüme kavuşturulmuştur"
     },
@@ -11573,13 +10721,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "Atatürk ün doğumunun 100. yılının tüm ülkelerde kutlanması kararı aşağıdakilerden hangisinde alınmıştır?",
-      "options": [
-        "UNESCO",
-        "AB",
-        "İLO",
-        "NATO",
-        "FAO"
-      ],
+      "options": ["UNESCO", "AB", "İLO", "NATO", "FAO"],
       "correctAnswer": 4,
       "solution": "32. Atatürk'ün takip ettiği dış politikada uluslararası ilişkilerde saygınlığın korunması, içişlerine karışılmaması ve barışın korunması amaçlanmıştır Bu politika yalnız uygar milletlere karşı takip edilmemiştir"
     },
@@ -11729,13 +10871,7 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "I Yabancı okullar sorununun çözülmesi II. Batı Trakya nın Yunanistan a bırakılması III Türkiye'nin Kore Savaşı na katılması Yukarıdakilerden hangileri Atatürk Dönemi gelişmeleri arasındadır?",
-      "options": [
-        "Yalnız 1",
-        "Yalnız II",
-        "I ve II",
-        "i ve III",
-        "II ve III"
-      ],
+      "options": ["Yalnız 1", "Yalnız II", "I ve II", "i ve III", "II ve III"],
       "correctAnswer": 3,
       "solution": "190 17.BÖLÜM 44 İtaiya mn işgalci ve yayılmacı siyaseti Sadabad Paktının kurulmasına (1937) ve Boğazlar'ın Türk egemenliğine geçmesine ortam (1936) haz’.riam ıştır"
     },
@@ -11794,26 +10930,14 @@
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "I Atatürk ilkelerinin Türkiye Devletinin temel nitelikleri olarak kabul edilmesi II Milletvekili yeminlerinin \"Vallahi : yerine ' Namusum üzerine söz veriyorum ” şeklinde değiştirilmesi II! Anayasa Mahkemesinin kurulması Yukarıdakilerden hangileri Atatürk Dönemi gelişmeleri arasındadır?",
-      "options": [
-        "Yalnız I",
-        "Yalnız II",
-        "I ve I!",
-        "İve III",
-        "i II ve II!"
-      ],
+      "options": ["Yalnız I", "Yalnız II", "I ve I!", "İve III", "i II ve II!"],
       "correctAnswer": 2,
       "solution": "49 Gümrük vergisinin yükseltilmesi ve ülkeye girecek eşyanın tespiti Türkiye'ye girecek mallan sınırlandırarak yerli sanayi geliştirme amacı taşımaktadır Uluslararası sergilere katılarak yerli ürünlerin tanıtılması ihracatı artırma amaçlıdır Yar»t: E 50, Bozkurt - Lotus Olayı Türk hukuk kuralılarının geçerliliğinin uluslararası alanda kabul edildiğinin bir göstergesidir Yanır: A 51,1926 Ankara Antlaşması iie Musul sınırlarımız dışında kalmıştır."
     },
     {
       "topic": "Dış Politika ve Atatürk Sonrası Gelişmeler",
       "question": "Balkan Devletleri arasında yakınlaşma başlaması ve Balkan Paktı nın kurulmasında aşağıdaküerden hangisinin etkisi olduğu savunulamaz? A) Birleşmiş Milletler Teşkilatının kurulmuş olması 3) İtalya'nın Doğu Akdeniz e egemen olmak istemesi C) Almanya da Nazi Partisinin iktidara gelmesi D) Silahlanma yarışının hızlanması t) İtalya'da faşizmin güçlenmesi",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "52. Sadabat Paktı 1937 de Türkiye İran Irak. Afganistan arasında yapılmıştır Üye devietler 2 Dünya Savaşı belirtileri üzerine kendi sınırlarını korumayı ve bölgesel barışı korumayı amaçlamışlardır"
     },

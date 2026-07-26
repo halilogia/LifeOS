@@ -12,10 +12,7 @@ export function HifizYeterlikModal({
   onClose,
 }: HifizYeterlikModalProps) {
   return (
-    <div
-      className="settings-panel active"
-      onClick={onClose}
-    >
+    <div className="settings-panel active" onClick={onClose}>
       <div
         className="settings-content"
         style={{ maxWidth: "500px" }}
@@ -23,10 +20,7 @@ export function HifizYeterlikModal({
       >
         <header className="settings-header">
           <h3 id="yeterlik-modal-title">{activeYeterlik.title}</h3>
-          <button
-            className="close-btn"
-            onClick={onClose}
-          >
+          <button className="close-btn" onClick={onClose}>
             &times;
           </button>
         </header>

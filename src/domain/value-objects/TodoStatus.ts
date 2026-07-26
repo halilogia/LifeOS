@@ -9,14 +9,14 @@ export type TodoStatus = "todo" | "in-progress" | "done";
 const VALID_STATUSES: TodoStatus[] = ["todo", "in-progress", "done"];
 
 export function createTodoStatus(value: string): TodoStatus {
-    if (!VALID_STATUSES.includes(value as TodoStatus)) {
-        return "todo";
-    }
-    return value as TodoStatus;
+  if (!VALID_STATUSES.includes(value as TodoStatus)) {
+    return "todo";
+  }
+  return value as TodoStatus;
 }
 
 export function isValidTodoStatus(value: string): boolean {
-    return VALID_STATUSES.includes(value as TodoStatus);
+  return VALID_STATUSES.includes(value as TodoStatus);
 }
 
 /**
@@ -25,20 +25,20 @@ export function isValidTodoStatus(value: string): boolean {
  * Returns null if the transition is not possible.
  */
 export function getNextStatus(
-    current: TodoStatus,
-    direction: 1 | -1,
+  current: TodoStatus,
+  direction: 1 | -1,
 ): TodoStatus | null {
-    const idx = VALID_STATUSES.indexOf(current);
-    const nextIdx = idx + direction;
-    if (nextIdx >= 0 && nextIdx < VALID_STATUSES.length) {
-        return VALID_STATUSES[nextIdx];
-    }
-    return null;
+  const idx = VALID_STATUSES.indexOf(current);
+  const nextIdx = idx + direction;
+  if (nextIdx >= 0 && nextIdx < VALID_STATUSES.length) {
+    return VALID_STATUSES[nextIdx];
+  }
+  return null;
 }
 
 /**
  * Returns true if the status represents a completed state.
  */
 export function isCompleted(status: TodoStatus): boolean {
-    return status === "done";
+  return status === "done";
 }

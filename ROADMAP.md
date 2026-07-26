@@ -45,6 +45,10 @@ Leverage placement quiz history to project real-world exam targets.
 ---
 
 ## ✅ Completed Features Archive (Tamamlanan Özellikler Arşivi)
+- **Universal Extension-wide Localization**: Full translation dictionary support for English and Turkish across all sub-panels, charts, and settings.
+- **Extensible Fallback Proxy Localization**: Automatic fallback to English dictionary translation keys using ES6 Proxy architecture.
+- **Clean Architecture & Layout Assembly Refactoring for Popup Module**: Isolated presentation layouts from logic via `usePopup.ts` hooks and split popup views into dedicated sub-components (`PopupPomoTab.tsx` and `PopupDetoxTab.tsx`).
+- **Zero compile and lint error tolerance hardening**: Fixed all TypeScript and ESLint problems to ensure the codebase runs with absolute 0 compiler errors and 0 linter violations.
 - **ÖSYM KPSS Past Exams & Practice Room**: Integrated actual 2009-2021 KPSS exams for practice with dynamic count calculation.
 - **KPSS Soru Sistemi Değişim Milatları (Evolution Guide)**: Localized timeline info button overlay showing critical ÖSYM reform milestones.
 - **Custom Glassmorphic Date Picker**: Replaced the native browser calendar input with a dark glass popover dropdown (`DatePicker.tsx`).

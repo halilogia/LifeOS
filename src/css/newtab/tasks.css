@@ -547,7 +547,7 @@ body.sidebar-open .top-header {
 
 .datepicker-trigger.has-val {
   color: var(--text-primary);
-  border-color: rgba(139, 92, 246, 0.20);
+  border-color: rgba(139, 92, 246, 0.2);
 }
 
 .datepicker-trigger:hover {
@@ -740,7 +740,9 @@ body.sidebar-open .top-header {
   margin: 0 auto 16px;
   max-width: 460px;
   width: 100%;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.02), 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -782,7 +784,9 @@ body.sidebar-open .top-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow:
+    0 0 10px rgba(139, 92, 246, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.5);
   animation: mapPinPulse 2s infinite ease-in-out;
 }
 
@@ -815,5 +819,7 @@ body.sidebar-open .top-header {
 }
 
 @keyframes kpssSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

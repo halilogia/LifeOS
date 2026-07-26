@@ -1,4 +1,7 @@
-import { PomoState, AlarmItem } from "../../infrastructure/services/PomodoroManagerService.js";
+import {
+  PomoState,
+  AlarmItem,
+} from "../../infrastructure/services/PomodoroManagerService.js";
 
 interface PopupPomoTabProps {
   t: Record<string, string>;
@@ -87,12 +90,9 @@ export function PopupPomoTab({
               style={{
                 flex: 1,
                 background:
-                  pomoState.mode === m
-                    ? "var(--accent-color)"
-                    : "transparent",
+                  pomoState.mode === m ? "var(--accent-color)" : "transparent",
                 border: "none",
-                color:
-                  pomoState.mode === m ? "white" : "var(--text-secondary)",
+                color: pomoState.mode === m ? "white" : "var(--text-secondary)",
                 borderRadius: "6px",
                 fontSize: "0.65rem",
                 padding: "4px 0",
@@ -165,7 +165,11 @@ export function PopupPomoTab({
                 textTransform: "uppercase",
               }}
             >
-              {pomoState.mode === "focus" ? t.focus : pomoState.mode === "short" ? t.short : t.long}
+              {pomoState.mode === "focus"
+                ? t.focus
+                : pomoState.mode === "short"
+                  ? t.short
+                  : t.long}
             </span>
           </div>
         </div>
@@ -223,12 +227,7 @@ export function PopupPomoTab({
               cursor: "pointer",
             }}
           >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
               <rect x="4" y="4" width="16" height="16" rx="2" />
             </svg>
           </button>
@@ -361,15 +360,20 @@ export function PopupPomoTab({
         </span>
 
         {/* Quick entry form */}
-        <div style={{ display: "flex", gap: "6px", alignItems: "center", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "6px",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
           <input
             type="time"
             className="mini-alarm-input"
             style={{ flex: 1 }}
             value={alarmInput}
-            onInput={(e) =>
-              setAlarmInput((e.target as HTMLInputElement).value)
-            }
+            onInput={(e) => setAlarmInput((e.target as HTMLInputElement).value)}
           />
           <button
             className="popup-alarm-add-btn"
@@ -400,7 +404,9 @@ export function PopupPomoTab({
                 padding: "10px 0",
               }}
             >
-              {t.pomo_tab_alarms === "Alarms" ? "No alarms set" : "Kurulu alarm yok"}
+              {t.pomo_tab_alarms === "Alarms"
+                ? "No alarms set"
+                : "Kurulu alarm yok"}
             </div>
           ) : (
             alarms.map((alarm) => (
@@ -421,9 +427,7 @@ export function PopupPomoTab({
                   style={{
                     fontSize: "1rem",
                     fontWeight: "700",
-                    color: alarm.enabled
-                      ? "white"
-                      : "var(--text-secondary)",
+                    color: alarm.enabled ? "white" : "var(--text-secondary)",
                   }}
                 >
                   {alarm.time}

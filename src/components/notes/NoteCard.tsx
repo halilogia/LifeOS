@@ -50,15 +50,25 @@ export function NoteCard({
         minHeight: "180px",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
       }}
     >
       {isInlineEditing ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }} onClick={(e) => e.stopPropagation()}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            width: "100%",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <input
             type="text"
             value={inlineTitle}
-            onInput={(e) => setInlineTitle((e.target as HTMLInputElement).value)}
+            onInput={(e) =>
+              setInlineTitle((e.target as HTMLInputElement).value)
+            }
             style={{
               width: "100%",
               background: "rgba(0,0,0,0.3)",
@@ -68,17 +78,25 @@ export function NoteCard({
               borderRadius: "8px",
               fontSize: "0.85rem",
               fontWeight: "bold",
-              outline: "none"
+              outline: "none",
             }}
             placeholder={lang === "tr" ? "Başlık..." : "Title..."}
           />
-          
+
           {currentType === "cornell" ? (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "8px",
+                }}
+              >
                 <textarea
                   value={inlineCues}
-                  onInput={(e) => setInlineCues((e.target as HTMLTextAreaElement).value)}
+                  onInput={(e) =>
+                    setInlineCues((e.target as HTMLTextAreaElement).value)
+                  }
                   style={{
                     width: "100%",
                     background: "rgba(0,0,0,0.3)",
@@ -89,13 +107,17 @@ export function NoteCard({
                     fontSize: "0.8rem",
                     height: "100px",
                     resize: "none",
-                    outline: "none"
+                    outline: "none",
                   }}
-                  placeholder={lang === "tr" ? "Anahtar Kelimeler..." : "Cues..."}
+                  placeholder={
+                    lang === "tr" ? "Anahtar Kelimeler..." : "Cues..."
+                  }
                 />
                 <textarea
                   value={inlineContent}
-                  onInput={(e) => setInlineContent((e.target as HTMLTextAreaElement).value)}
+                  onInput={(e) =>
+                    setInlineContent((e.target as HTMLTextAreaElement).value)
+                  }
                   style={{
                     width: "100%",
                     background: "rgba(0,0,0,0.3)",
@@ -106,14 +128,20 @@ export function NoteCard({
                     fontSize: "0.8rem",
                     height: "100px",
                     resize: "none",
-                    outline: "none"
+                    outline: "none",
                   }}
-                  placeholder={lang === "tr" ? "Notlar (Markdown)..." : "Notes (Markdown)..."}
+                  placeholder={
+                    lang === "tr"
+                      ? "Notlar (Markdown)..."
+                      : "Notes (Markdown)..."
+                  }
                 />
               </div>
               <textarea
                 value={inlineSummary}
-                onInput={(e) => setInlineSummary((e.target as HTMLTextAreaElement).value)}
+                onInput={(e) =>
+                  setInlineSummary((e.target as HTMLTextAreaElement).value)
+                }
                 style={{
                   width: "100%",
                   background: "rgba(0,0,0,0.3)",
@@ -124,7 +152,7 @@ export function NoteCard({
                   fontSize: "0.8rem",
                   height: "60px",
                   resize: "none",
-                  outline: "none"
+                  outline: "none",
                 }}
                 placeholder={lang === "tr" ? "Özet..." : "Summary..."}
               />
@@ -132,7 +160,9 @@ export function NoteCard({
           ) : (
             <textarea
               value={inlineContent}
-              onInput={(e) => setInlineContent((e.target as HTMLTextAreaElement).value)}
+              onInput={(e) =>
+                setInlineContent((e.target as HTMLTextAreaElement).value)
+              }
               style={{
                 width: "100%",
                 background: "rgba(0,0,0,0.3)",
@@ -143,13 +173,24 @@ export function NoteCard({
                 fontSize: "0.82rem",
                 height: "120px",
                 resize: "none",
-                outline: "none"
+                outline: "none",
               }}
-              placeholder={lang === "tr" ? "Not içeriği (Markdown)..." : "Content (Markdown)..."}
+              placeholder={
+                lang === "tr"
+                  ? "Not içeriği (Markdown)..."
+                  : "Content (Markdown)..."
+              }
             />
           )}
 
-          <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "4px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              justifyContent: "flex-end",
+              marginTop: "4px",
+            }}
+          >
             <button
               type="button"
               onClick={onCancelInlineEdit}
@@ -161,7 +202,7 @@ export function NoteCard({
                 borderRadius: "6px",
                 fontSize: "0.72rem",
                 fontWeight: "600",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               {lang === "tr" ? "İptal" : "Cancel"}
@@ -177,7 +218,7 @@ export function NoteCard({
                 borderRadius: "6px",
                 fontSize: "0.72rem",
                 fontWeight: "600",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               {lang === "tr" ? "Kaydet" : "Save"}
@@ -187,13 +228,26 @@ export function NoteCard({
       ) : (
         <>
           <div className="note-card-header" style={{ width: "100%" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px", maxWidth: "80%" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+                maxWidth: "80%",
+              }}
+            >
               <span className={`note-type-badge ${currentType}`}>
-                {currentType === "diary" 
-                  ? (lang === "tr" ? "Günlük" : "Diary") 
-                  : currentType === "cornell" 
-                    ? (lang === "tr" ? "Cornell Notu" : "Cornell Note") 
-                    : (lang === "tr" ? "Not" : "Note")}
+                {currentType === "diary"
+                  ? lang === "tr"
+                    ? "Günlük"
+                    : "Diary"
+                  : currentType === "cornell"
+                    ? lang === "tr"
+                      ? "Cornell Notu"
+                      : "Cornell Note"
+                    : lang === "tr"
+                      ? "Not"
+                      : "Note"}
               </span>
               <h3 className="note-card-title">{title}</h3>
             </div>
@@ -217,28 +271,103 @@ export function NoteCard({
               </svg>
             </button>
           </div>
-          
+
           {currentType === "cornell" ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1, overflow: "hidden", width: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                flex: 1,
+                overflow: "hidden",
+                width: "100%",
+              }}
+            >
               <div className="cornell-mini-grid" style={{ gap: "10px" }}>
                 <div className="cornell-mini-column" title="Cues/Keywords">
-                  <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "İpuçları:" : "Cues:"}</strong>
-                  <div style={{ marginTop: "4px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.cues || "") }} />
+                  <strong
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--accent-color)",
+                    }}
+                  >
+                    {lang === "tr" ? "İpuçları:" : "Cues:"}
+                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontSize: "0.8rem",
+                      opacity: 0.8,
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: renderMarkdown(note.cues || ""),
+                    }}
+                  />
                 </div>
                 <div className="cornell-mini-column" title="Notlar:">
-                  <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "Notlar:" : "Notes:"}</strong>
-                  <div style={{ marginTop: "4px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.content || "") }} />
+                  <strong
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--accent-color)",
+                    }}
+                  >
+                    {lang === "tr" ? "Notlar:" : "Notes:"}
+                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontSize: "0.8rem",
+                      opacity: 0.8,
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: renderMarkdown(note.content || ""),
+                    }}
+                  />
                 </div>
               </div>
               {note.summary && (
-                <div className="cornell-mini-summary" title="Summary" style={{ borderTop: "1px dashed var(--card-border)", paddingTop: "6px" }}>
-                  <strong style={{ fontSize: "0.75rem", color: "var(--accent-color)" }}>{lang === "tr" ? "Özet:" : "Summary:"}</strong>
-                  <div style={{ marginTop: "2px", fontSize: "0.8rem", opacity: 0.8 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.summary || "") }} />
+                <div
+                  className="cornell-mini-summary"
+                  title="Summary"
+                  style={{
+                    borderTop: "1px dashed var(--card-border)",
+                    paddingTop: "6px",
+                  }}
+                >
+                  <strong
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--accent-color)",
+                    }}
+                  >
+                    {lang === "tr" ? "Özet:" : "Summary:"}
+                  </strong>
+                  <div
+                    style={{
+                      marginTop: "2px",
+                      fontSize: "0.8rem",
+                      opacity: 0.8,
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: renderMarkdown(note.summary || ""),
+                    }}
+                  />
                 </div>
               )}
             </div>
           ) : (
-            <div className="note-card-content" style={{ flex: 1, width: "100%", overflow: "hidden", textOverflow: "ellipsis" }} dangerouslySetInnerHTML={{ __html: renderMarkdown(note.content || "") }} />
+            <div
+              className="note-card-content"
+              style={{
+                flex: 1,
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(note.content || ""),
+              }}
+            />
           )}
 
           <div className="note-card-footer" style={{ width: "100%" }}>

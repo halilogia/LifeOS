@@ -5,7 +5,12 @@ interface AiSettingsTabProps {
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
-  onUpdateAIConfig: (provider: string, key: string, model: string, endpoint?: string) => void;
+  onUpdateAIConfig: (
+    provider: string,
+    key: string,
+    model: string,
+    endpoint?: string,
+  ) => void;
   aiShowThinking: boolean;
   onUpdateAIShowThinking: (val: boolean) => void;
 }
@@ -28,15 +33,16 @@ export function AiSettingsTab({
     setLoadingModels(true);
     setModelError("");
     try {
-      const baseUrl = aiEndpoint && aiEndpoint.trim() 
-        ? aiEndpoint.trim().replace(/\/$/, "") 
-        : "https://openrouter.ai/api/v1";
+      const baseUrl =
+        aiEndpoint && aiEndpoint.trim()
+          ? aiEndpoint.trim().replace(/\/$/, "")
+          : "https://openrouter.ai/api/v1";
       const url = `${baseUrl}/models`;
       const headers: Record<string, string> = {};
       if (aiApiKey && aiApiKey.trim()) {
         headers["Authorization"] = `Bearer ${aiApiKey}`;
       }
-      
+
       const res = await fetch(url, { headers });
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
@@ -63,21 +69,21 @@ export function AiSettingsTab({
   const [filterText, setFilterText] = useState("");
 
   const filteredModels = models.filter((modelId) =>
-    modelId.toLowerCase().includes(filterText.toLowerCase())
+    modelId.toLowerCase().includes(filterText.toLowerCase()),
   );
 
   const prefixMap: Record<string, string> = {
-    "oc": "OpenCode (OC)",
-    "cx": "OpenAI Codex (CX)",
-    "gc": "GitHub Copilot (GC)",
-    "mc": "MiMo Code (MC)",
-    "kc": "Kilo Code (KC)",
-    "openrouter": "OpenRouter",
-    "ollama": "Ollama",
-    "gemini": "Google Gemini",
-    "gcli": "Gemini CLI",
-    "other": t.settings_ai_combos,
-    "Other": t.settings_ai_combos
+    oc: "OpenCode (OC)",
+    cx: "OpenAI Codex (CX)",
+    gc: "GitHub Copilot (GC)",
+    mc: "MiMo Code (MC)",
+    kc: "Kilo Code (KC)",
+    openrouter: "OpenRouter",
+    ollama: "Ollama",
+    gemini: "Google Gemini",
+    gcli: "Gemini CLI",
+    other: t.settings_ai_combos,
+    Other: t.settings_ai_combos,
   };
 
   const groupedModels: Record<string, { id: string; name: string }[]> = {};
@@ -90,7 +96,9 @@ export function AiSettingsTab({
       name = parts.slice(1).join("/");
     }
     const providerKey = provider.toLowerCase();
-    const providerLabel = prefixMap[providerKey] || (provider.charAt(0).toUpperCase() + provider.slice(1));
+    const providerLabel =
+      prefixMap[providerKey] ||
+      provider.charAt(0).toUpperCase() + provider.slice(1);
     if (!groupedModels[providerLabel]) {
       groupedModels[providerLabel] = [];
     }
@@ -101,19 +109,62 @@ export function AiSettingsTab({
     <div className="settings-group">
       <h3>{t.settings_ai_title}</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_provider}:</label>
-          <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--accent-color)" }}>9Router Proxy (OpenAI Uyumlu)</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <label
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+            }}
+          >
+            {t.settings_ai_provider}:
+          </label>
+          <span
+            style={{
+              fontSize: "0.85rem",
+              fontWeight: "600",
+              color: "var(--accent-color)",
+            }}
+          >
+            9Router Proxy (OpenAI Uyumlu)
+          </span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>{t.settings_ai_key}:</label>
-          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+          <label
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+            }}
+          >
+            {t.settings_ai_key}:
+          </label>
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <input
               type={showKey ? "text" : "password"}
               value={aiApiKey}
               placeholder="9Router API Key (Örn: sk-72l... veya bos bırakın)"
-              onInput={(e) => onUpdateAIConfig("openrouter", (e.target as HTMLInputElement).value, aiModel, aiEndpoint)}
+              onInput={(e) =>
+                onUpdateAIConfig(
+                  "openrouter",
+                  (e.target as HTMLInputElement).value,
+                  aiModel,
+                  aiEndpoint,
+                )
+              }
               style={{
                 background: "rgba(0, 0, 0, 0.2)",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -123,7 +174,7 @@ export function AiSettingsTab({
                 fontSize: "0.85rem",
                 outline: "none",
                 width: "100%",
-                boxSizing: "border-box"
+                boxSizing: "border-box",
               }}
             />
             <button
@@ -140,19 +191,41 @@ export function AiSettingsTab({
                 alignItems: "center",
                 padding: "4px",
                 opacity: 0.7,
-                transition: "opacity 0.2s"
+                transition: "opacity 0.2s",
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.7")}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.opacity = "1")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.opacity = "0.7")
+              }
               title={showKey ? t.settings_ai_hide : t.settings_ai_show}
             >
               {showKey ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                   <line x1="1" y1="1" x2="23" y2="23"></line>
                 </svg>
               ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
                 </svg>
@@ -162,14 +235,27 @@ export function AiSettingsTab({
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+          <label
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+            }}
+          >
             {t.settings_ai_endpoint}
           </label>
           <input
             type="text"
             value={aiEndpoint}
             placeholder="http://localhost:20128/v1"
-            onInput={(e) => onUpdateAIConfig("openrouter", aiApiKey, aiModel, (e.target as HTMLInputElement).value)}
+            onInput={(e) =>
+              onUpdateAIConfig(
+                "openrouter",
+                aiApiKey,
+                aiModel,
+                (e.target as HTMLInputElement).value,
+              )
+            }
             style={{
               background: "rgba(0, 0, 0, 0.2)",
               border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -177,17 +263,35 @@ export function AiSettingsTab({
               padding: "8px 12px",
               color: "#f1f5f9",
               fontSize: "0.85rem",
-              outline: "none"
+              outline: "none",
             }}
           />
-          <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
+          <span
+            style={{
+              fontSize: "0.72rem",
+              color: "var(--text-secondary)",
+              opacity: 0.6,
+            }}
+          >
             {t.settings_ai_endpoint_desc}
           </span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <label
+              style={{
+                fontSize: "0.85rem",
+                color: "var(--text-secondary)",
+                fontWeight: 500,
+              }}
+            >
               {t.settings_ai_select_model}
             </label>
             <button
@@ -202,10 +306,12 @@ export function AiSettingsTab({
                 color: "var(--accent-color)",
                 fontSize: "0.72rem",
                 cursor: "pointer",
-                outline: "none"
+                outline: "none",
               }}
             >
-              {loadingModels ? t.settings_ai_loading : t.settings_ai_fetch_models}
+              {loadingModels
+                ? t.settings_ai_loading
+                : t.settings_ai_fetch_models}
             </button>
           </div>
 
@@ -214,7 +320,9 @@ export function AiSettingsTab({
               type="text"
               value={filterText}
               placeholder={t.settings_ai_search_model}
-              onInput={(e) => setFilterText((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                setFilterText((e.target as HTMLInputElement).value)
+              }
               style={{
                 background: "rgba(0, 0, 0, 0.25)",
                 border: "1px solid rgba(255, 255, 255, 0.06)",
@@ -223,7 +331,7 @@ export function AiSettingsTab({
                 color: "#f1f5f9",
                 fontSize: "0.8rem",
                 outline: "none",
-                marginBottom: "4px"
+                marginBottom: "4px",
               }}
             />
           )}
@@ -245,14 +353,27 @@ export function AiSettingsTab({
                 color: "#f1f5f9",
                 fontSize: "0.85rem",
                 outline: "none",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
-              <option value="">-- {t.settings_ai_select_model_placeholder} --</option>
+              <option value="">
+                -- {t.settings_ai_select_model_placeholder} --
+              </option>
               {Object.keys(groupedModels).map((provider) => (
-                <optgroup key={provider} label={provider} style={{ background: "#1e1e2e", color: "var(--accent-color)" }}>
+                <optgroup
+                  key={provider}
+                  label={provider}
+                  style={{
+                    background: "#1e1e2e",
+                    color: "var(--accent-color)",
+                  }}
+                >
                   {groupedModels[provider].map((m) => (
-                    <option key={m.id} value={m.id} style={{ color: "#f1f5f9" }}>
+                    <option
+                      key={m.id}
+                      value={m.id}
+                      style={{ color: "#f1f5f9" }}
+                    >
                       {m.name}
                     </option>
                   ))}
@@ -260,19 +381,40 @@ export function AiSettingsTab({
               ))}
             </select>
           ) : (
-            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontStyle: "italic", opacity: 0.7 }}>
+            <span
+              style={{
+                fontSize: "0.75rem",
+                color: "var(--text-secondary)",
+                fontStyle: "italic",
+                opacity: 0.7,
+              }}
+            >
               {modelError || t.settings_ai_models_auto_list}
             </span>
           )}
 
-          <label style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500, marginTop: "6px" }}>
+          <label
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+              marginTop: "6px",
+            }}
+          >
             {t.settings_ai_active_id}
           </label>
           <input
             type="text"
             value={aiModel}
             placeholder="free"
-            onInput={(e) => onUpdateAIConfig("openrouter", aiApiKey, (e.target as HTMLInputElement).value, aiEndpoint)}
+            onInput={(e) =>
+              onUpdateAIConfig(
+                "openrouter",
+                aiApiKey,
+                (e.target as HTMLInputElement).value,
+                aiEndpoint,
+              )
+            }
             style={{
               background: "rgba(0, 0, 0, 0.2)",
               border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -280,17 +422,38 @@ export function AiSettingsTab({
               padding: "8px 12px",
               color: "#f1f5f9",
               fontSize: "0.85rem",
-              outline: "none"
+              outline: "none",
             }}
           />
-          <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", opacity: 0.6 }}>
+          <span
+            style={{
+              fontSize: "0.72rem",
+              color: "var(--text-secondary)",
+              opacity: 0.6,
+            }}
+          >
             {t.settings_ai_active_id_desc}
           </span>
         </div>
 
         {/* Toggle Show Thinking Process */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
-          <label style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "8px",
+            paddingTop: "8px",
+            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+          }}
+        >
+          <label
+            style={{
+              fontSize: "0.85rem",
+              color: "var(--text-secondary)",
+              fontWeight: 500,
+            }}
+          >
             {t.settings_ai_show_thinking}
           </label>
           <button
@@ -301,9 +464,11 @@ export function AiSettingsTab({
               border: "none",
               cursor: "pointer",
               fontWeight: 700,
-              color: aiShowThinking ? "var(--accent-color)" : "var(--text-secondary)",
+              color: aiShowThinking
+                ? "var(--accent-color)"
+                : "var(--text-secondary)",
               fontSize: "0.85rem",
-              padding: "4px 8px"
+              padding: "4px 8px",
             }}
           >
             {aiShowThinking ? t.enabled : t.disabled}

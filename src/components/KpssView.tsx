@@ -1,15 +1,34 @@
 import { useState, useEffect } from "preact/hooks";
-import { kpssService, kpssData, kpssDummyFlashcards } from "@/services/kpssService.js";
+import {
+  kpssService,
+  kpssData,
+  kpssDummyFlashcards,
+} from "@/services/kpssService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
-import { calculateSM2, prepareSRSQueue, createInitialSRSWord, type SRSWordWithInfo } from "@/domain/services/SrsService.js";
-import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
-import { calculateKpssCountdown, calculateEstimatedCompletionTime } from "@/domain/services/KpssCalculatorService.js";
+import {
+  calculateSM2,
+  prepareSRSQueue,
+  createInitialSRSWord,
+  type SRSWordWithInfo,
+} from "@/domain/services/SrsService.js";
+import {
+  type ReviewQuality,
+  type WordReviewData,
+} from "@/domain/services/SrsService.js";
+import {
+  calculateKpssCountdown,
+  calculateEstimatedCompletionTime,
+} from "@/domain/services/KpssCalculatorService.js";
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
-import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service, QuizQuestion } from "@/services/kpssAiService.js";
-import { getSubjectNets as getSubjectNets_logic, getOverallNets as getOverallNets_logic } from "@/domain/services/KpssCalculatorService.js";
-
-
+import {
+  fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
+  QuizQuestion,
+} from "@/services/kpssAiService.js";
+import {
+  getSubjectNets as getSubjectNets_logic,
+  getOverallNets as getOverallNets_logic,
+} from "@/domain/services/KpssCalculatorService.js";
 
 // Extracted Presentational Sub-components
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
@@ -32,9 +51,10 @@ interface KpssViewProps {
   targetScore: number;
 }
 
-
-
-const getLocalQuestionsForTopic = (subjectKey: string, topicName: string): QuizQuestion[] => {
+const getLocalQuestionsForTopic = (
+  subjectKey: string,
+  topicName: string,
+): QuizQuestion[] => {
   const aggregated: QuizQuestion[] = [];
   Object.values(KPSS_YEARLY_DATA).forEach((yearData) => {
     const list = yearData[subjectKey];
@@ -90,12 +110,23 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
     stat_subject: "Subject",
     save: "Save",
     reset: "Reset",
-    reset_confirm: "All your KPSS study statistics will be deleted. Are you sure?",
+    reset_confirm:
+      "All your KPSS study statistics will be deleted. Are you sure?",
     details_title: "Topic Detail",
   },
 };
 
-export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, aiEndpoint, goalType, targetNet, targetScore }: KpssViewProps) {
+export function KpssView({
+  lang,
+  onShowConfirm,
+  aiProvider,
+  aiApiKey,
+  aiModel,
+  aiEndpoint,
+  goalType,
+  targetNet,
+  targetScore,
+}: KpssViewProps) {
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -116,7 +147,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
   // Quiz States
   const [activeQuizTopic, setActiveQuizTopic] = useState<string | null>(null);
-  const [quizStep, setQuizStep] = useState<"intro" | "questions" | "result">("intro");
+  const [quizStep, setQuizStep] = useState<"intro" | "questions" | "result">(
+    "intro",
+  );
   const [selectedQuizCount, setSelectedQuizCount] = useState(5);
   const [quizLoading, setQuizLoading] = useState(false);
   const [isBackgroundLoading, setIsBackgroundLoading] = useState(false);
@@ -125,7 +158,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [quizResultScore, setQuizResultScore] = useState(0);
   const [quizError, setQuizError] = useState<string | null>(null);
-  const [pastQuizzes, setPastQuizzes] = useState<Record<string, KpssPastQuiz>>({});
+  const [pastQuizzes, setPastQuizzes] = useState<Record<string, KpssPastQuiz>>(
+    {},
+  );
 
   // Countdown Banners States
   const [kpssTimeLeft, setKpssTimeLeft] = useState("");
@@ -133,10 +168,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [remainingCount, setRemainingCount] = useState(0);
 
   // Active sub-tab
-  const [activeTab, setActiveTab] = useState<"progress" | "srs" | "past-exams">("progress");
+  const [activeTab, setActiveTab] = useState<"progress" | "srs" | "past-exams">(
+    "progress",
+  );
 
   // Sorting state for topic lists
-  const [sortBy, setSortBy] = useState<"default" | "questions" | "status">("default");
+  const [sortBy, setSortBy] = useState<"default" | "questions" | "status">(
+    "default",
+  );
 
   // KPSS Hedef ve Grafik Sistemleri
   const [chartType, setChartType] = useState<"line" | "bar">("line");
@@ -146,9 +185,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const [srsQueue, setSrsQueue] = useState<WordReviewData[]>([]);
   const [srsIndex, setSrsIndex] = useState(0);
   const [srsFlipped, setSrsFlipped] = useState(false);
-  const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">("normal");
-
-
+  const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">(
+    "normal",
+  );
 
   // Target date: September 6, 2026 10:15
   const kpssTargetDate = new Date("2026-09-06T10:15:00").getTime();
@@ -158,14 +197,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     try {
       const progress: any[] = await new Promise((r) =>
         chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
-          r((res.kpssSrsProgress as any[]) || [])
-        )
+          r((res.kpssSrsProgress as any[]) || []),
+        ),
       );
       const progressMap = new Map<string, WordReviewData>();
       progress.forEach((p) => progressMap.set(p.wordId, p));
 
       const srsUniverse: SRSWordWithInfo[] = kpssDummyFlashcards.map((w) => {
-        const p = progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+        const p =
+          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
         return {
           ...p,
           level: w.category,
@@ -208,18 +248,20 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
     const outcome = calculateSM2(reviewData, quality, new Date());
 
-      const progress: any[] = await new Promise((r) =>
-        chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
-          r((res.kpssSrsProgress as any[]) || [])
-        )
-      );
-      const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
-      if (idx >= 0) {
-        progress[idx] = outcome;
-      } else {
-        progress.push(outcome);
-      }
-      await new Promise<void>((r) => chrome.storage.sync.set({ kpssSrsProgress: progress }, r));
+    const progress: any[] = await new Promise((r) =>
+      chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
+        r((res.kpssSrsProgress as any[]) || []),
+      ),
+    );
+    const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
+    if (idx >= 0) {
+      progress[idx] = outcome;
+    } else {
+      progress.push(outcome);
+    }
+    await new Promise<void>((r) =>
+      chrome.storage.sync.set({ kpssSrsProgress: progress }, r),
+    );
 
     // Fade animation transition
     setSrsFadeState("slide-out");
@@ -241,10 +283,10 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     const stats = await kpssService.getKpssDailyStats();
     const cType: "line" | "bar" = await new Promise((r) =>
       chrome.storage.sync.get(["kpssChartType"], (res) =>
-        r((res.kpssChartType as "line" | "bar") || "line")
-      )
+        r((res.kpssChartType as "line" | "bar") || "line"),
+      ),
     );
-    
+
     setKpssProgress(progress);
     setDailyStats(stats);
     setChartType(cType);
@@ -269,19 +311,22 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     loadKpssData();
   }, [currentSubject]);
 
-
-
   // Real-time Countdown timer intervals
   useEffect(() => {
-    const totalCount = Object.values(kpssData).reduce((acc, list) => acc + list.length, 0);
-    const finishedCount = kpssProgress.filter(p => p.status === 2).length;
+    const totalCount = Object.values(kpssData).reduce(
+      (acc, list) => acc + list.length,
+      0,
+    );
+    const finishedCount = kpssProgress.filter((p) => p.status === 2).length;
     const remaining = totalCount - finishedCount;
     setRemainingCount(remaining);
 
     const updateCountdown = () => {
       const now = Date.now();
       setKpssTimeLeft(calculateKpssCountdown(kpssTargetDate, now, lang));
-      setEstimatedTimeLeft(calculateEstimatedCompletionTime(remaining, now, lang));
+      setEstimatedTimeLeft(
+        calculateEstimatedCompletionTime(remaining, now, lang),
+      );
     };
 
     updateCountdown();
@@ -296,7 +341,7 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     topicName: string,
     count: number,
     excludeQuestions: QuizQuestion[] = [],
-    fewShotExamples: QuizQuestion[] = []
+    fewShotExamples: QuizQuestion[] = [],
   ): Promise<QuizQuestion[]> => {
     return fetchQuestionsSubsetFromAI_service(
       subjectKey,
@@ -304,11 +349,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       count,
       { aiProvider, aiModel, aiApiKey, aiEndpoint, lang, SUBJECT_NAMES },
       excludeQuestions,
-      fewShotExamples
+      fewShotExamples,
     );
   };
 
-  const fetchQuizFromAI = async (subjectKey: string, topicName: string, count: number) => {
+  const fetchQuizFromAI = async (
+    subjectKey: string,
+    topicName: string,
+    count: number,
+  ) => {
     setQuizLoading(true);
     setIsBackgroundLoading(false);
     setQuizError(null);
@@ -327,7 +376,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           setSelectedAnswers(new Array(count).fill(-1));
           setQuizLoading(false);
           setIsBackgroundLoading(false);
-          console.log(`[KPSS Question Bank] Loaded ${count} questions instantly from local bank.`);
+          console.log(
+            `[KPSS Question Bank] Loaded ${count} questions instantly from local bank.`,
+          );
         } else {
           // Case 2: We have some local questions, load them and fetch the rest in background
           setQuizQuestions(localQuestions);
@@ -337,9 +388,17 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           setIsBackgroundLoading(true);
 
           const neededCount = count - localQuestions.length;
-          console.log(`[KPSS Question Bank] Loaded ${localQuestions.length} questions instantly. Fetching remaining ${neededCount} from AI.`);
+          console.log(
+            `[KPSS Question Bank] Loaded ${localQuestions.length} questions instantly. Fetching remaining ${neededCount} from AI.`,
+          );
 
-          fetchQuestionsSubsetFromAI(subjectKey, topicName, neededCount, localQuestions, localQuestions)
+          fetchQuestionsSubsetFromAI(
+            subjectKey,
+            topicName,
+            neededCount,
+            localQuestions,
+            localQuestions,
+          )
             .then((remainingQuestions) => {
               if (remainingQuestions.length > 0) {
                 setQuizQuestions((prev) => {
@@ -358,7 +417,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       } else {
         // Case 3: No local questions available, generate all via AI
         // 1. Get first question immediately
-        const firstList = await fetchQuestionsSubsetFromAI(subjectKey, topicName, 1);
+        const firstList = await fetchQuestionsSubsetFromAI(
+          subjectKey,
+          topicName,
+          1,
+        );
         if (firstList.length === 0) {
           throw new Error("Soru üretilemedi.");
         }
@@ -372,7 +435,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         // 2. Pre-fetch remaining count - 1 questions in the background
         if (count > 1) {
           setIsBackgroundLoading(true);
-          fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [firstQuestion])
+          fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [
+            firstQuestion,
+          ])
             .then((remainingQuestions) => {
               if (remainingQuestions.length > 0) {
                 setQuizQuestions((prev) => {
@@ -393,7 +458,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       }
     } catch (err: any) {
       console.error("AI quiz generation error:", err);
-      setQuizError(lang === "tr" ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin." : "AI failed to generate quiz questions. Please try again.");
+      setQuizError(
+        lang === "tr"
+          ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin."
+          : "AI failed to generate quiz questions. Please try again.",
+      );
       setQuizLoading(false);
       setIsBackgroundLoading(false);
     }
@@ -407,7 +476,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       }
     });
 
-    const scorePercentage = Math.round((correctCount / quizQuestions.length) * 100);
+    const scorePercentage = Math.round(
+      (correctCount / quizQuestions.length) * 100,
+    );
     setQuizResultScore(scorePercentage);
     setQuizStep("result");
 
@@ -422,13 +493,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
 
     try {
-      const isRegularTopic = (kpssData[currentSubject] || []).some((t) => t.title === activeQuizTopic);
+      const isRegularTopic = (kpssData[currentSubject] || []).some(
+        (t) => t.title === activeQuizTopic,
+      );
       if (isRegularTopic) {
         await kpssService.updateTopicStatus(
           currentSubject,
           activeQuizTopic!,
           newStatus,
-          scorePercentage
+          scorePercentage,
         );
       }
 
@@ -440,22 +513,29 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         score: scorePercentage,
         questions: quizQuestions,
         selectedAnswers: selectedAnswers,
-        date: new Date().toISOString().split("T")[0]
+        date: new Date().toISOString().split("T")[0],
       };
 
       const updatedPast = {
         ...pastQuizzes,
-        [quizKey]: newQuizRecord
+        [quizKey]: newQuizRecord,
       };
       setPastQuizzes(updatedPast);
       chrome.storage.local.set({ kpss_past_quizzes: updatedPast });
 
       // Automatically add solved test questions count to progress chart
-      await kpssService.saveKpssDailyStats(quizQuestions.length, 0, currentSubject);
+      await kpssService.saveKpssDailyStats(
+        quizQuestions.length,
+        0,
+        currentSubject,
+      );
 
       await loadKpssData();
     } catch (err) {
-      console.error("Failed to update status and save stats on quiz completion:", err);
+      console.error(
+        "Failed to update status and save stats on quiz completion:",
+        err,
+      );
     }
   };
 
@@ -491,11 +571,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         if (subject === "all") {
           // Add all subjects
           Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) {questions.push(...list);}
+            if (Array.isArray(list)) {
+              questions.push(...list);
+            }
           });
         } else {
           const list = yearData[subject];
-          if (Array.isArray(list)) {questions.push(...list);}
+          if (Array.isArray(list)) {
+            questions.push(...list);
+          }
         }
       });
       // Shuffle the aggregated questions
@@ -506,7 +590,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
       if (yearData) {
         if (subject === "all") {
           Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) {questions.push(...list);}
+            if (Array.isArray(list)) {
+              questions.push(...list);
+            }
           });
         } else {
           questions = yearData[subject] || [];
@@ -515,7 +601,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
 
     if (questions.length === 0) {
-      setQuizError(lang === "tr" ? "Bu kategori için çıkmış soru bulunamadı." : "No past questions found for this category.");
+      setQuizError(
+        lang === "tr"
+          ? "Bu kategori için çıkmış soru bulunamadı."
+          : "No past questions found for this category.",
+      );
       setQuizStep("questions");
       setActiveQuizTopic(lang === "tr" ? "Hata" : "Error");
       return;
@@ -527,15 +617,33 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     setSelectedQuizCount(questions.length);
     setQuizStep("questions");
 
-    const subjectName = subject === "all" 
-      ? (lang === "tr" ? "GY-GK Karma" : "GY-GK Mixed")
-      : (subject === "cografya" ? (lang === "tr" ? "Coğrafya" : "Geography") : (subject === "tarih" ? (lang === "tr" ? "Tarih" : "History") : "Matematik"));
-    
-    const yearName = year === "karma" 
-      ? (lang === "tr" ? "Karma Yıllar" : "Mixed Years")
-      : year;
+    const subjectName =
+      subject === "all"
+        ? lang === "tr"
+          ? "GY-GK Karma"
+          : "GY-GK Mixed"
+        : subject === "cografya"
+          ? lang === "tr"
+            ? "Coğrafya"
+            : "Geography"
+          : subject === "tarih"
+            ? lang === "tr"
+              ? "Tarih"
+              : "History"
+            : "Matematik";
 
-    setActiveQuizTopic(lang === "tr" ? `${yearName} KPSS Çıkmış Sorular (${subjectName})` : `${yearName} KPSS Past Questions (${subjectName})`);
+    const yearName =
+      year === "karma"
+        ? lang === "tr"
+          ? "Karma Yıllar"
+          : "Mixed Years"
+        : year;
+
+    setActiveQuizTopic(
+      lang === "tr"
+        ? `${yearName} KPSS Çıkmış Sorular (${subjectName})`
+        : `${yearName} KPSS Past Questions (${subjectName})`,
+    );
     setQuizLoading(false);
     setIsBackgroundLoading(false);
   };
@@ -575,8 +683,14 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
     }
     if (sortBy === "status") {
       return rawTopics.sort((a, b) => {
-        const statusA = kpssProgress.find((p) => p.subject === currentSubject && p.topic === a.title)?.status || 0;
-        const statusB = kpssProgress.find((p) => p.subject === currentSubject && p.topic === b.title)?.status || 0;
+        const statusA =
+          kpssProgress.find(
+            (p) => p.subject === currentSubject && p.topic === a.title,
+          )?.status || 0;
+        const statusB =
+          kpssProgress.find(
+            (p) => p.subject === currentSubject && p.topic === b.title,
+          )?.status || 0;
         return statusB - statusA;
       });
     }
@@ -596,9 +710,11 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
   const totalTopics = (kpssData[currentSubject] || []).length;
   const progressPercentage =
     totalTopics > 0
-      ? Math.round(((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) * 100)
+      ? Math.round(
+          ((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) *
+            100,
+        )
       : 0;
-
 
   const overallNetObj = getOverallNets();
   const overallNet = overallNetObj.net;
@@ -613,7 +729,15 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         </header>
 
         {/* Sub-Tab Navigation Header */}
-        <div className="pomodoro-tab-header" style={{ marginBottom: "24px", display: "flex", justifyContent: "flex-start", gap: "10px" }}>
+        <div
+          className="pomodoro-tab-header"
+          style={{
+            marginBottom: "24px",
+            display: "flex",
+            justifyContent: "flex-start",
+            gap: "10px",
+          }}
+        >
           <button
             className={`pomo-tab-link ${activeTab === "progress" ? "active" : ""}`}
             onClick={() => setActiveTab("progress")}
@@ -624,7 +748,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             className={`pomo-tab-link ${activeTab === "srs" ? "active" : ""}`}
             onClick={() => setActiveTab("srs")}
           >
-            {lang === "tr" ? "Aralıklı Tekrar (Kartlar)" : "Spaced Repetition (Cards)"}
+            {lang === "tr"
+              ? "Aralıklı Tekrar (Kartlar)"
+              : "Spaced Repetition (Cards)"}
           </button>
           <button
             className={`pomo-tab-link ${activeTab === "past-exams" ? "active" : ""}`}
@@ -686,8 +812,23 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
               kpssTargetDate={kpssTargetDate}
             />
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%", marginTop: "32px", marginBottom: "16px" }}>
-              <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "var(--text-primary)" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                width: "100%",
+                marginTop: "32px",
+                marginBottom: "16px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.95rem",
+                  fontWeight: "700",
+                  color: "var(--text-primary)",
+                }}
+              >
                 {lang === "tr" ? "Ders Seçimi:" : "Select Subject:"}
               </div>
               <nav className="kpss-subject-nav">
@@ -717,7 +858,9 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
             {/* Progress tracker metrics */}
             <div className="kpss-progress-bar-container">
               <div className="kpss-progress-info">
-                <span id="kpss-subject-title">{labels[currentSubject] || currentSubject}</span>
+                <span id="kpss-subject-title">
+                  {labels[currentSubject] || currentSubject}
+                </span>
                 <span id="kpss-progress-text">
                   %{progressPercentage} {labels.progress_text}
                 </span>
@@ -734,7 +877,16 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
         )}
 
         {activeTab === "srs" && (
-          <div className="kpss-srs-deck-container" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0" }}>
+          <div
+            className="kpss-srs-deck-container"
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "20px 0",
+            }}
+          >
             <KpssSrsCard
               lang={lang}
               srsLoading={srsLoading}
@@ -760,7 +912,10 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
 
       {/* Details Description Modal */}
       {activeTopic && (
-        <div className="settings-panel active" onClick={() => setActiveTopic(null)}>
+        <div
+          className="settings-panel active"
+          onClick={() => setActiveTopic(null)}
+        >
           <div
             className="settings-content"
             style={{ maxWidth: "500px" }}
@@ -768,7 +923,10 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           >
             <header className="settings-header">
               <h3>{labels.details_title}</h3>
-              <button className="close-btn" onClick={() => setActiveTopic(null)}>
+              <button
+                className="close-btn"
+                onClick={() => setActiveTopic(null)}
+              >
                 &times;
               </button>
             </header>
@@ -830,13 +988,17 @@ export function KpssView({ lang, onShowConfirm, aiProvider, aiApiKey, aiModel, a
           setQuizError(null);
         }}
         onSetSelectedQuizCount={setSelectedQuizCount}
-        onStartQuiz={() => fetchQuizFromAI(currentSubject, activeQuizTopic!, selectedQuizCount)}
+        onStartQuiz={() =>
+          fetchQuizFromAI(currentSubject, activeQuizTopic!, selectedQuizCount)
+        }
         onSelectAnswer={(oIdx) => {
           const nextAnswers = [...selectedAnswers];
           nextAnswers[currentQuestionIndex] = oIdx;
           setSelectedAnswers(nextAnswers);
         }}
-        onPreviousQuestion={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}
+        onPreviousQuestion={() =>
+          setCurrentQuestionIndex(currentQuestionIndex - 1)
+        }
         onNextQuestion={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
         onFinishQuiz={handleFinishQuiz}
         onRetakeQuiz={() => {

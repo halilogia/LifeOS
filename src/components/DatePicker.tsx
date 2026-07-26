@@ -30,7 +30,10 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
   // Click outside listener
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -43,12 +46,32 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
   }, [isOpen]);
 
   const monthsTr = [
-    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+    "Ocak",
+    "Şubat",
+    "Mart",
+    "Nisan",
+    "Mayıs",
+    "Haziran",
+    "Temmuz",
+    "Ağustos",
+    "Eylül",
+    "Ekim",
+    "Kasım",
+    "Aralık",
   ];
   const monthsEn = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const weekdaysTr = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pa"];
@@ -93,7 +116,12 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
   const startDay = new Date(currentYear, currentMonth, 1).getDay(); // 0 = Sunday
   const paddingDays = startDay === 0 ? 6 : startDay - 1; // convert to Monday=0
 
-  const days: { day: number; month: number; year: number; isCurrentMonth: boolean }[] = [];
+  const days: {
+    day: number;
+    month: number;
+    year: number;
+    isCurrentMonth: boolean;
+  }[] = [];
 
   const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
@@ -103,7 +131,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
       day: prevDaysCount - i,
       month: prevMonth,
       year: prevYear,
-      isCurrentMonth: false
+      isCurrentMonth: false,
     });
   }
 
@@ -113,7 +141,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
       day: i,
       month: currentMonth,
       year: currentYear,
-      isCurrentMonth: true
+      isCurrentMonth: true,
     });
   }
 
@@ -125,26 +153,37 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
       day: i,
       month: nextMonth,
       year: nextYear,
-      isCurrentMonth: false
+      isCurrentMonth: false,
     });
   }
 
   // Format label for trigger button
   const formatDateLabel = (dateStr: string) => {
-    if (!dateStr) {return lang === "tr" ? "Son Tarih" : "Due Date";}
+    if (!dateStr) {
+      return lang === "tr" ? "Son Tarih" : "Due Date";
+    }
     const [y, m, d] = dateStr.split("-").map(Number);
-    const mName = lang === "tr" ? monthsTr[m - 1].substring(0, 3) : monthsEn[m - 1].substring(0, 3);
+    const mName =
+      lang === "tr"
+        ? monthsTr[m - 1].substring(0, 3)
+        : monthsEn[m - 1].substring(0, 3);
     return lang === "tr" ? `${d} ${mName} ${y}` : `${mName} ${d}, ${y}`;
   };
 
   const isSelected = (y: number, m: number, d: number) => {
-    if (!value) {return false;}
+    if (!value) {
+      return false;
+    }
     const [vy, vm, vd] = value.split("-").map(Number);
     return vy === y && vm === m + 1 && vd === d;
   };
 
   const isToday = (y: number, m: number, d: number) => {
-    return today.getFullYear() === y && today.getMonth() === m && today.getDate() === d;
+    return (
+      today.getFullYear() === y &&
+      today.getMonth() === m &&
+      today.getDate() === d
+    );
   };
 
   return (
@@ -176,16 +215,44 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
       {isOpen && (
         <div className="datepicker-dropdown">
           <div className="datepicker-header">
-            <button type="button" className="datepicker-nav-btn" onClick={handlePrevMonth}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <button
+              type="button"
+              className="datepicker-nav-btn"
+              onClick={handlePrevMonth}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
             <span className="datepicker-title">
-              {lang === "tr" ? `${monthsTr[currentMonth]} ${currentYear}` : `${monthsEn[currentMonth]} ${currentYear}`}
+              {lang === "tr"
+                ? `${monthsTr[currentMonth]} ${currentYear}`
+                : `${monthsEn[currentMonth]} ${currentYear}`}
             </span>
-            <button type="button" className="datepicker-nav-btn" onClick={handleNextMonth}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <button
+              type="button"
+              className="datepicker-nav-btn"
+              onClick={handleNextMonth}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -193,7 +260,9 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
 
           <div className="datepicker-weekdays">
             {(lang === "tr" ? weekdaysTr : weekdaysEn).map((day) => (
-              <span key={day} className="datepicker-weekday">{day}</span>
+              <span key={day} className="datepicker-weekday">
+                {day}
+              </span>
             ))}
           </div>
 
@@ -215,10 +284,18 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
           </div>
 
           <div className="datepicker-footer">
-            <button type="button" className="datepicker-footer-btn today-btn" onClick={handleToday}>
+            <button
+              type="button"
+              className="datepicker-footer-btn today-btn"
+              onClick={handleToday}
+            >
               {lang === "tr" ? "Bugün" : "Today"}
             </button>
-            <button type="button" className="datepicker-footer-btn clear-btn" onClick={handleClear}>
+            <button
+              type="button"
+              className="datepicker-footer-btn clear-btn"
+              onClick={handleClear}
+            >
               {lang === "tr" ? "Temizle" : "Clear"}
             </button>
           </div>

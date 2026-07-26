@@ -133,7 +133,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
     setError(false);
     try {
       const res = await new Promise<any>((resolve) =>
-        chrome.storage.sync.get(["prayerCity"], (r) => resolve(r))
+        chrome.storage.sync.get(["prayerCity"], (r) => resolve(r)),
       );
       const activeCity = targetCity || (res.prayerCity as string) || "Istanbul";
       setCity(activeCity);

@@ -33,7 +33,9 @@ export function PomoSidePanel({
   onDeleteAlarm,
 }: PomoSidePanelProps) {
   const t = getTranslation(lang);
-  const [activeSound, setActiveSound] = useState<"none" | "rain" | "wind" | "white_noise" | "lofi">("none");
+  const [activeSound, setActiveSound] = useState<
+    "none" | "rain" | "wind" | "white_noise" | "lofi"
+  >("none");
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
 
@@ -84,7 +86,8 @@ export function PomoSidePanel({
   const playHairdryer = () => {
     stopAllSounds();
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef.current = ctx;
 
@@ -94,7 +97,7 @@ export function PomoSidePanel({
       let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        output[i] = (lastOut + 0.02 * white) / 1.02;
         lastOut = output[i];
         output[i] *= 3.5;
       }
@@ -135,7 +138,8 @@ export function PomoSidePanel({
   const playRain = () => {
     stopAllSounds();
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef.current = ctx;
 
@@ -147,7 +151,7 @@ export function PomoSidePanel({
       let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        output[i] = (lastOut + 0.02 * white) / 1.02;
         lastOut = output[i];
         output[i] *= 0.18; // soft background volume
       }
@@ -157,11 +161,12 @@ export function PomoSidePanel({
         if (Math.random() > 0.9996) {
           const clickAmp = Math.random() * 0.15 + 0.05;
           const decayLen = Math.floor(Math.random() * 400 + 150);
-          for (let j = 0; j < decayLen && (i + j) < bufferSize; j++) {
+          for (let j = 0; j < decayLen && i + j < bufferSize; j++) {
             const t = j / ctx.sampleRate;
             const freq = Math.random() * 1400 + 1800;
             const envelope = Math.exp(-j / (decayLen / 4.5));
-            output[i + j] += Math.sin(2 * Math.PI * freq * t) * clickAmp * envelope;
+            output[i + j] +=
+              Math.sin(2 * Math.PI * freq * t) * clickAmp * envelope;
           }
         }
       }
@@ -197,7 +202,8 @@ export function PomoSidePanel({
   const playWind = () => {
     stopAllSounds();
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef.current = ctx;
 
@@ -207,7 +213,7 @@ export function PomoSidePanel({
       let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        output[i] = (lastOut + 0.02 * white) / 1.02;
         lastOut = output[i];
         output[i] *= 1.8;
       }
@@ -255,7 +261,8 @@ export function PomoSidePanel({
   const playLofi = () => {
     stopAllSounds();
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef.current = ctx;
 
@@ -264,7 +271,8 @@ export function PomoSidePanel({
       const output = noiseBuffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
         const hiss = (Math.random() * 2 - 1) * 0.015;
-        const crackle = Math.random() > 0.9995 ? (Math.random() * 2 - 1) * 0.4 : 0;
+        const crackle =
+          Math.random() > 0.9995 ? (Math.random() * 2 - 1) * 0.4 : 0;
         output[i] = hiss + crackle;
       }
 
@@ -287,16 +295,21 @@ export function PomoSidePanel({
       whiteNoiseSourceRef.current = crackleSource as any;
 
       const chords = [
-        [130.81, 164.81, 196.00, 246.94], // Cmaj7
-        [110.00, 130.81, 164.81, 196.00], // Am7
-        [87.31, 110.00, 130.81, 164.81],  // Fmaj7
-        [98.00, 123.47, 146.83, 174.61]   // G7
+        [130.81, 164.81, 196.0, 246.94], // Cmaj7
+        [110.0, 130.81, 164.81, 196.0], // Am7
+        [87.31, 110.0, 130.81, 164.81], // Fmaj7
+        [98.0, 123.47, 146.83, 174.61], // G7
       ];
 
       let chordIdx = 0;
 
       const playNextChord = () => {
-        if (!audioContextRef.current || audioContextRef.current.state === "closed") {return;}
+        if (
+          !audioContextRef.current ||
+          audioContextRef.current.state === "closed"
+        ) {
+          return;
+        }
         const now = ctx.currentTime;
         const chordNotes = chords[chordIdx];
         chordIdx = (chordIdx + 1) % chords.length;
@@ -466,9 +479,7 @@ export function PomoSidePanel({
             className="mini-alarm-input"
             style={{ flex: 1 }}
             value={alarmInput}
-            onInput={(e) =>
-              onAlarmInput((e.target as HTMLInputElement).value)
-            }
+            onInput={(e) => onAlarmInput((e.target as HTMLInputElement).value)}
           />
           <button
             className="newtab-alarm-add-btn"
@@ -624,7 +635,11 @@ export function PomoSidePanel({
       </div>
 
       {/* Ambient Sounds Player Mini Card */}
-      <div className="mini-tool-card" id="ambient-player-mini" style={{ marginTop: "16px" }}>
+      <div
+        className="mini-tool-card"
+        id="ambient-player-mini"
+        style={{ marginTop: "16px" }}
+      >
         <div className="mini-tool-header">
           <svg
             width="16"
@@ -643,10 +658,19 @@ export function PomoSidePanel({
           <span style={{ fontSize: "0.85rem", fontWeight: "600" }}>
             {t.pomo_focus_music}
           </span>
-          
+
           {/* Pulsing Sound wave visualizer when playing */}
           {isPlaying && (
-            <div className="sound-visualizer" style={{ display: "flex", gap: "2px", marginLeft: "auto", alignItems: "flex-end", height: "12px" }}>
+            <div
+              className="sound-visualizer"
+              style={{
+                display: "flex",
+                gap: "2px",
+                marginLeft: "auto",
+                alignItems: "flex-end",
+                height: "12px",
+              }}
+            >
               <span className="sound-bar bar-1"></span>
               <span className="sound-bar bar-2"></span>
               <span className="sound-bar bar-3"></span>
@@ -654,16 +678,33 @@ export function PomoSidePanel({
           )}
         </div>
 
-        <div className="ambient-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "12px" }}>
+        <div
+          className="ambient-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "8px",
+            marginTop: "12px",
+          }}
+        >
           <button
             className={`ambient-btn ${activeSound === "rain" && isPlaying ? "active" : ""}`}
             onClick={() => handleSoundToggle("rain")}
             style={{
               padding: "10px 8px",
-              background: activeSound === "rain" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
-              border: activeSound === "rain" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              background:
+                activeSound === "rain" && isPlaying
+                  ? "rgba(139, 92, 246, 0.15)"
+                  : "rgba(255, 255, 255, 0.02)",
+              border:
+                activeSound === "rain" && isPlaying
+                  ? "1px solid var(--accent-color)"
+                  : "1px solid var(--card-border)",
               borderRadius: "10px",
-              color: activeSound === "rain" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              color:
+                activeSound === "rain" && isPlaying
+                  ? "var(--text-primary)"
+                  : "var(--text-secondary)",
               fontSize: "0.75rem",
               fontWeight: "600",
               cursor: "pointer",
@@ -671,7 +712,7 @@ export function PomoSidePanel({
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
           >
             🌧️ {t.pomo_ambient_rain}
@@ -682,10 +723,19 @@ export function PomoSidePanel({
             onClick={() => handleSoundToggle("wind")}
             style={{
               padding: "10px 8px",
-              background: activeSound === "wind" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
-              border: activeSound === "wind" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              background:
+                activeSound === "wind" && isPlaying
+                  ? "rgba(139, 92, 246, 0.15)"
+                  : "rgba(255, 255, 255, 0.02)",
+              border:
+                activeSound === "wind" && isPlaying
+                  ? "1px solid var(--accent-color)"
+                  : "1px solid var(--card-border)",
               borderRadius: "10px",
-              color: activeSound === "wind" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              color:
+                activeSound === "wind" && isPlaying
+                  ? "var(--text-primary)"
+                  : "var(--text-secondary)",
               fontSize: "0.75rem",
               fontWeight: "600",
               cursor: "pointer",
@@ -693,7 +743,7 @@ export function PomoSidePanel({
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
           >
             🍃 {t.pomo_ambient_wind}
@@ -704,10 +754,19 @@ export function PomoSidePanel({
             onClick={() => handleSoundToggle("white_noise")}
             style={{
               padding: "10px 8px",
-              background: activeSound === "white_noise" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
-              border: activeSound === "white_noise" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              background:
+                activeSound === "white_noise" && isPlaying
+                  ? "rgba(139, 92, 246, 0.15)"
+                  : "rgba(255, 255, 255, 0.02)",
+              border:
+                activeSound === "white_noise" && isPlaying
+                  ? "1px solid var(--accent-color)"
+                  : "1px solid var(--card-border)",
               borderRadius: "10px",
-              color: activeSound === "white_noise" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              color:
+                activeSound === "white_noise" && isPlaying
+                  ? "var(--text-primary)"
+                  : "var(--text-secondary)",
               fontSize: "0.75rem",
               fontWeight: "600",
               cursor: "pointer",
@@ -715,7 +774,7 @@ export function PomoSidePanel({
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
           >
             💨 {t.pomo_ambient_brown || t.pomo_ambient_hairdryer}
@@ -726,10 +785,19 @@ export function PomoSidePanel({
             onClick={() => handleSoundToggle("lofi")}
             style={{
               padding: "10px 8px",
-              background: activeSound === "lofi" && isPlaying ? "rgba(139, 92, 246, 0.15)" : "rgba(255, 255, 255, 0.02)",
-              border: activeSound === "lofi" && isPlaying ? "1px solid var(--accent-color)" : "1px solid var(--card-border)",
+              background:
+                activeSound === "lofi" && isPlaying
+                  ? "rgba(139, 92, 246, 0.15)"
+                  : "rgba(255, 255, 255, 0.02)",
+              border:
+                activeSound === "lofi" && isPlaying
+                  ? "1px solid var(--accent-color)"
+                  : "1px solid var(--card-border)",
               borderRadius: "10px",
-              color: activeSound === "lofi" && isPlaying ? "var(--text-primary)" : "var(--text-secondary)",
+              color:
+                activeSound === "lofi" && isPlaying
+                  ? "var(--text-primary)"
+                  : "var(--text-secondary)",
               fontSize: "0.75rem",
               fontWeight: "600",
               cursor: "pointer",
@@ -737,7 +805,7 @@ export function PomoSidePanel({
               alignItems: "center",
               justifyContent: "center",
               gap: "6px",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
           >
             📻 {t.pomo_ambient_lofi}
@@ -745,7 +813,17 @@ export function PomoSidePanel({
         </div>
 
         {/* Volume Slider Controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px", background: "rgba(0,0,0,0.15)", padding: "6px 10px", borderRadius: "8px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginTop: "12px",
+            background: "rgba(0,0,0,0.15)",
+            padding: "6px 10px",
+            borderRadius: "8px",
+          }}
+        >
           <svg
             width="12"
             height="12"
@@ -764,7 +842,9 @@ export function PomoSidePanel({
             max="1"
             step="0.05"
             value={volume}
-            onChange={(e) => setVolume(parseFloat((e.target as HTMLInputElement).value))}
+            onChange={(e) =>
+              setVolume(parseFloat((e.target as HTMLInputElement).value))
+            }
             style={{
               flex: 1,
               height: "4px",
@@ -772,10 +852,17 @@ export function PomoSidePanel({
               background: "rgba(255, 255, 255, 0.1)",
               outline: "none",
               cursor: "pointer",
-              WebkitAppearance: "none"
+              WebkitAppearance: "none",
             }}
           />
-          <span style={{ fontSize: "0.68rem", color: "var(--text-secondary)", minWidth: "22px", textAlign: "right" }}>
+          <span
+            style={{
+              fontSize: "0.68rem",
+              color: "var(--text-secondary)",
+              minWidth: "22px",
+              textAlign: "right",
+            }}
+          >
             {Math.round(volume * 100)}%
           </span>
         </div>

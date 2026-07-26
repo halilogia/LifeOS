@@ -1,0 +1,168 @@
+/**
+ * StockAiAnalysisModal.tsx
+ * Hisseler için AI yorum ve analiz görüntüleme modali.
+ */
+
+import { useState, useEffect } from "preact/hooks";
+import { analyzeStockWithAI } from "@/services/stockAiService.js";
+import type { StockQuote } from "@/services/bistService.js";
+
+interface StockAiAnalysisModalProps {
+  symbol: string;
+  quote?: StockQuote;
+  onClose: () => void;
+}
+
+function IconX() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function IconSparkles() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+    </svg>
+  );
+}
+
+export function StockAiAnalysisModal({
+  symbol,
+  quote,
+  onClose,
+}: StockAiAnalysisModalProps) {
+  const [analysisText, setAnalysisText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    analyzeStockWithAI({ symbol, quote }).then((res) => {
+      if (isMounted) {
+        setAnalysisText(res);
+        setLoading(false);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [symbol, quote]);
+
+  return (
+    <div className="stock-modal-overlay" onClick={onClose}>
+      <div
+        className="stock-modal-content"
+        style={{ maxWidth: "580px" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="stock-modal-header">
+          <div
+            className="stock-modal-title"
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
+            <IconSparkles />
+            <span>AI Borsa Analizi — {symbol.toUpperCase()}</span>
+          </div>
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              color: "#94a3b8",
+              cursor: "pointer",
+            }}
+            onClick={onClose}
+          >
+            <IconX />
+          </button>
+        </div>
+
+        <div
+          style={{
+            minHeight: "160px",
+            maxHeight: "400px",
+            overflowY: "auto",
+            padding: "10px 0",
+          }}
+        >
+          {loading ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "40px 0",
+                gap: "12px",
+                color: "#94a3b8",
+              }}
+            >
+              <div
+                style={{
+                  animation: "spin 1s linear infinite",
+                  width: "24px",
+                  height: "24px",
+                  border: "3px solid rgba(255,255,255,0.2)",
+                  borderTopColor: "#818cf8",
+                  borderRadius: "50%",
+                }}
+              />
+              <span>
+                Yapay zeka {symbol} hissesini ve canlı piyasa verilerini analiz
+                ediyor...
+              </span>
+            </div>
+          ) : (
+            <div
+              style={{
+                fontSize: "0.92rem",
+                lineHeight: "1.6",
+                color: "#e2e8f0",
+                whiteSpace: "pre-wrap",
+                background: "rgba(15, 23, 42, 0.6)",
+                padding: "16px",
+                borderRadius: "12px",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+              }}
+            >
+              {analysisText}
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "10px",
+          }}
+        >
+          <button className="stock-btn stock-btn-primary" onClick={onClose}>
+            Tamam
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

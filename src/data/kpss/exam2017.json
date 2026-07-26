@@ -382,13 +382,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "İstanbul ve Çanakkale Boğazları konumlarından dolayı tarih boyunca uluslararası ilişkilerde ve su yolu taşımacılığında büyük bir öneme sahip olmuştur. Bu boğazlar, Karadeniz'e kıyısı olan ülkelerin Akdeniz'e oradan da okyanuslara çıkış kapıları durumundadır. Aşağıdakilerden hangisi bu ülkelerden biri değildir?",
-      "options": [
-        "",
-        "Azerbaycan Rusya",
-        "",
-        "Romanya Ukrayna",
-        "Gürcistan"
-      ],
+      "options": ["", "Azerbaycan Rusya", "", "Romanya Ukrayna", "Gürcistan"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (32. Soru)."
     },
@@ -447,13 +441,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Aşağıdaki illerin coğrafi özellikleri dikkate alındığında hangisinde jeotermal enerji potansiyeli daha düşüktür?",
-      "options": [
-        "",
-        "",
-        "Denizli Çanakkale Aydın",
-        "",
-        "Antalya Manisa"
-      ],
+      "options": ["", "", "Denizli Çanakkale Aydın", "", "Antalya Manisa"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (40. Soru)."
     },
@@ -527,39 +515,21 @@
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 9 12 16 20"
-      ],
+      "options": ["", "", "", "", "4 9 12 16 20"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 2"
-      ],
+      "options": ["", "", "", "", "1 2"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
@@ -579,65 +549,35 @@
     {
       "topic": "Genel Matematik",
       "question": "A, B ve C birer rakam olmak üzere, ÖSYM olduğuna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "8 10 11 13 15"
-      ],
+      "options": ["", "", "", "", "8 10 11 13 15"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x gerçel sayısı için olduğuna göre, x kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a ve b birbirinden farklı gerçel sayılar olmak üzere, eşitlikleri veriliyor. Buna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 7 9 12 15"
-      ],
+      "options": ["", "", "", "", "6 7 9 12 15"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 3 4 6 8 Diğer sayfaya geçiniz. 12"
-      ],
+      "options": ["", "", "", "", "1 3 4 6 8 Diğer sayfaya geçiniz. 12"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x ve y tam sayıları için, ÖSYM eşitliği sağlandığına göre, çarpımının alabileceği en büyük değer kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3 4 6 8 9"
-      ],
+      "options": ["", "", "", "", "3 4 6 8 9"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
@@ -657,26 +597,14 @@
     {
       "topic": "Genel Matematik",
       "question": "Sıfırdan farklı gerçel sayılar kümesi üzerinde tanımlı işlemi, her x ve y için eşitliğini sağlıyor. Buna göre, işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3 4 6 9 12"
-      ],
+      "options": ["", "", "", "", "3 4 6 9 12"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Tam sayılar kümesi üzerinde tanımlı f ve g fonksiyonları, her x tam sayısı için eşitliklerini sağlıyor. olduğuna göre, değeri kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 6 7 8 9 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "5 6 7 8 9 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
@@ -696,52 +624,28 @@
     {
       "topic": "Genel Matematik",
       "question": "Bir doğal sayıda kullanılan her rakam kendi sayı değeri kadar tekrar ediyorsa bu sayıya “âlim sayı” denir. Örneğin; 41444 ve 312323 sayıları âlim sayılardır. Buna göre, altı basamaklı kaç farklı âlim sayı vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "82 80 78 76 74"
-      ],
+      "options": ["", "", "", "", "82 80 78 76 74"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Düz bir zemin üzerine yerleştirilmiş küp şeklindeki özdeş iki depodan A deposu boş, B deposu ise tamamen suyla doludur. A deposunu sabit hızla doldurmaya başlayan bir musluk açıldığı anda başka bir musluk B deposunu sabit hızla boşaltmaya başlıyor. İki depodaki su seviyeleri eşitlendiği andan itibaren A deposu 9 saatte tamamen doluyor, B deposu ise 4 saatte tamamen boşalıyor. ÖSYM Buna göre, A deposu toplam kaç saatte dolmuştur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "15 16 17 18 19"
-      ],
+      "options": ["", "", "", "", "15 16 17 18 19"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir fabrikada üretilen havlu sayıları üç gün boyunca incelenmiştir. Bu fabrikada, ikinci gün birinci güne göre % 50 fazla, üçüncü gün de ikinci güne göre % 50 fazla havlu üretimi yapılmıştır. İlk iki gün üretilen toplam havlu sayısı üçüncü gün üretilen havlu sayısının 2 katı olsaydı toplam 320 havlu daha fazla üretilecekti. Buna göre, fabrikada üç gün boyunca toplam kaç havlu üretilmiştir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "720 740 760 780 800"
-      ],
+      "options": ["", "", "", "", "720 740 760 780 800"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Emir ile babası arasındaki yaş farkı, Emir’in dedesi ile babası arasındaki yaş farkından bir fazladır. Emir 20 yaşındayken Emir’in dedesi 69 yaşında olduğuna göre, Emir ile babası arasındaki yaş farkı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "20 23 25 28 30"
-      ],
+      "options": ["", "", "", "", "20 23 25 28 30"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
@@ -761,104 +665,56 @@
     {
       "topic": "Genel Matematik",
       "question": "Alper, her ay 50 TL ödeyerek arkadaşına olan borcunun tamamını bitirmeyi planlıyor. İlk 5 ay boyunca her ay 40 TL, sonraki her ay ise 160 TL ödeyerek borcunun tamamını planladığı sürenin yarısında bitiriyor. ÖSYM Buna göre, Alper’in arkadaşına olan toplam borcu kaç TL’dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "400 600 800 1000 1200"
-      ],
+      "options": ["", "", "", "", "400 600 800 1000 1200"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Üç basamaklı ABC doğal sayısı, iki basamaklı BC doğal sayısının 26 katıdır. Buna göre, bu koşulu sağlayan en büyük ABC doğal sayısının rakamları toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "15 18 20 21 24"
-      ],
+      "options": ["", "", "", "", "15 18 20 21 24"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Aslı, hafta içi bir gün ve hafta sonu bir gün olmak üzere haftada 2 gün tiyatroya gidiyor. Buna göre, Aslı’nın herhangi bir haftada salı ve pazar günlerinde tiyatroya gitme olasılığı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 16"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 16"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "İki basamaklı en küçük 3-sel sayı ile iki basamaklı en büyük 5-sel sayının toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "110 105 100 95 90"
-      ],
+      "options": ["", "", "", "", "110 105 100 95 90"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "doğal sayısı bir 3-sel sayı olduğuna göre, n’nin alabileceği tam sayı değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "72 80 88 92 96"
-      ],
+      "options": ["", "", "", "", "72 80 88 92 96"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Oyun 7. adım sonunda bittiğine göre, oyuncular toplam kaç kere 1 tane top çekmişlerdir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 2 3 4 5"
-      ],
+      "options": ["", "", "", "", "1 2 3 4 5"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Oyunun ilk ve son adımında Sevim 6’şar tane top çekmiş ve oyun bitmiştir. Buna göre, oyun kaç adımda bitmiştir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 7 9 10 11"
-      ],
+      "options": ["", "", "", "", "5 7 9 10 11"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Sevim her adımda eşit sayıda top çekmiştir, Tuğba da her adımda eşit sayıda top çekmiştir. Sevim ve Tuğba’nın çektikleri top sayıları birbirinden farklıdır. Tuğba top çektikten sonra oyun bittiğine göre, oyun kaç adımda bitmiştir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 8 10 12 14 Diğer sayfaya geçiniz. 18"
-      ],
+      "options": ["", "", "", "", "6 8 10 12 14 Diğer sayfaya geçiniz. 18"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
     }

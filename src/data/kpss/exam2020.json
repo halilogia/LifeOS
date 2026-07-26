@@ -68,13 +68,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Osmanlı Devleti’nde yerleşim merkezlerini birbirine bağlayan yollar üzerinde bulunan ve hem askerî hem de ticari amaçla kullanılan yapı türü aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "Bedesten Kervansaray",
-        "",
-        "Arasta İmaret",
-        "Kapan"
-      ],
+      "options": ["", "Bedesten Kervansaray", "", "Arasta İmaret", "Kapan"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (6. Soru)."
     },
@@ -198,13 +192,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Aşağıdakilerden hangisi, Millî Mücadele Dönemi’nde Batı Cephesi’ne cephane taşımak için oluşturulan ve “İstiklal Yolu” olarak adlandırılan güzergâh üzerinde yer almaz?",
-      "options": [
-        "",
-        "",
-        "Çankırı İnebolu Kastamonu",
-        "",
-        "Ilgaz Eskişehir"
-      ],
+      "options": ["", "", "Çankırı İnebolu Kastamonu", "", "Ilgaz Eskişehir"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (17. Soru)."
     },
@@ -369,13 +357,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Aşağıdaki illerin hangisinde jips karstına ait yer şekilleri daha yaygındır?",
-      "options": [
-        "",
-        "",
-        "Yozgat Diyarbakır Giresun",
-        "",
-        "Kastamonu Sivas"
-      ],
+      "options": ["", "", "Yozgat Diyarbakır Giresun", "", "Kastamonu Sivas"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (33. Soru)."
     },
@@ -447,13 +429,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Türkiye’de pamuk üretiminin coğrafi dağılışı üzerinde aşağıdakilerden hangisinin etkisi daha fazladır?",
-      "options": [
-        "",
-        "",
-        "Sıcaklık Nüfus Ulaştırma",
-        "",
-        "Yükselti Sanayi"
-      ],
+      "options": ["", "", "Sıcaklık Nüfus Ulaştırma", "", "Yükselti Sanayi"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (41. Soru)."
     },
@@ -473,13 +449,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Aşağıdaki yerleşmelerden hangisi Türkiye’nin önemli taş kömürü yataklarının bulunduğu alanda yer alır?",
-      "options": [
-        "",
-        "",
-        "Soma Elbistan Kozlu",
-        "",
-        "Tunçbilek Yatağan"
-      ],
+      "options": ["", "", "Soma Elbistan Kozlu", "", "Tunçbilek Yatağan"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (45. Soru)."
     }
@@ -488,182 +458,98 @@
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "27 32 36 45 50"
-      ],
+      "options": ["", "", "", "", "27 32 36 45 50"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 3 4 5 6"
-      ],
+      "options": ["", "", "", "", "2 3 4 5 6"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "28 32 36 40 44 Diğer sayfaya geçiniz. 11"
-      ],
+      "options": ["", "", "", "", "28 32 36 40 44 Diğer sayfaya geçiniz. 11"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "120 150 180 210 240"
-      ],
+      "options": ["", "", "", "", "120 150 180 210 240"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a pozitif bir tam sayı olmak üzere, ifadesi bir tek doğal sayıya eşittir. Buna göre, bu koşulu sağlayan a değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "20 22 24 26 28"
-      ],
+      "options": ["", "", "", "", "20 22 24 26 28"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x gerçel sayısı için olduğuna göre, ifadesinin alabileceği tam sayı değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "27 29 31 33 35 Diğer sayfaya geçiniz. 12"
-      ],
+      "options": ["", "", "", "", "27 29 31 33 35 Diğer sayfaya geçiniz. 12"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x ve y gerçel sayıları için olduğuna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3 4 6 9 12"
-      ],
+      "options": ["", "", "", "", "3 4 6 9 12"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Birbirinden farklı pozitif x ve y gerçel sayıları için olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "9 10 12 14 15"
-      ],
+      "options": ["", "", "", "", "9 10 12 14 15"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x bir tam sayı olmak üzere, eşitsizliğini sağlayan x değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x bir tam sayı olmak üzere, ifadesi bir asal sayıya eşittir. Buna göre, x’in alabileceği değerlerin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 4 6 8 10 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "2 4 6 8 10 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Gerçel sayılar kümesi üzerinde bir f fonksiyonu biçiminde tanımlanıyor. olduğuna göre, a gerçel sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "İki basamaklı AB doğal sayısı için aşağıdaki dört maddeden üçünün doğru birinin yanlış olduğu biliniyor. Asal bölen sayısı 2’dir. 15’e kalansız olarak bölünür. 39 katının asal bölenlerinin sayısı 4’tür. 40 katının asal bölenlerinin sayısı 4’tür. Buna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "11 12 13 14 15"
-      ],
+      "options": ["", "", "", "", "11 12 13 14 15"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
@@ -683,143 +569,77 @@
     {
       "topic": "Genel Matematik",
       "question": "Üniversite sınavına hazırlanan Kadir, geçmiş yılların sınavlarını bir dosyada toplayıp bu dosyayı içi boş olan 4 GB’lik belleğine kaydediyor. Yakup, Kadir’den bu dosyayı alıp % 25’i dolu olan 16 GB’lik belleğine attığında belleğinin toplamda % 40’ı doluyor. Buna göre, Kadir kendi belleğine dosyayı kaydettikten sonra belleğinin yüzde kaçı dolmuştur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "55 60 65 70 75"
-      ],
+      "options": ["", "", "", "", "55 60 65 70 75"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A kentinden C kentine tam dolu depoyla sabit hızla yola çıkan bir araç yol üzerindeki B kentine geldiğinde araç bilgisayarı; yakıt deposunun % 50’sinin dolu ve aracın A ve B kentleri arasında 100 km’deki ortalama yakıt tüketiminin 6 litre, araç C kentine vardığındaysa deponun % 25’inin dolu ve aracın A ve C kentleri arasında 100 km’deki ortalama yakıt tüketiminin 5 litre olduğunu gösteriyor. Buna göre, aracın B ve C kentleri arasında 100 km’deki ortalama yakıt tüketimi kaç litredir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3 3,25 3,5 3,75 4"
-      ],
+      "options": ["", "", "", "", "3 3,25 3,5 3,75 4"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir şirkette çalışan 75 yaşındaki Metin Bey ve diğer çalışanların yaşlarının ortalaması 1 Ocak 2019 tarihinde 45 olarak hesaplanmıştır. Metin Bey, 2019 yılının sonunda emekli olup işten ayrıldıktan sonra bu şirkette çalışanların yaş ortalaması 1 Ocak 2020 tarihinde yine 45 olarak hesaplanmıştır. Metin Bey’den başka işten ayrılan veya işe yeni alınan biri olmadığına göre, 1 Ocak 2019 tarihinde bu şirketteki toplam çalışan sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "25 28 31 34 37"
-      ],
+      "options": ["", "", "", "", "25 28 31 34 37"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir telefon uygulaması üzerinden sipariş alan bir restoranda yalnızca pide çeşitleri, kebap çeşitleri ve içecek servisi yapılmaktadır. Bu uygulama üzerinden bir gün boyunca birer kez sipariş veren toplam 125 kişinin 47’sinin siparişinde pide ve içecek, 74’ünün siparişinde kebap ve içecek bulunmaktadır. Ayrıca, yalnızca içecek siparişi veren kimsenin olmadığı ve pideyle beraber kebap da sipariş eden herkesin içecek de sipariş ettiği bilinmektedir. Yalnızca pide veya yalnızca kebap sipariş eden toplam 34 kişi olduğuna göre, hem pide hem kebap sipariş eden toplam kaç kişi vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "30 32 34 35 37 Diğer sayfaya geçiniz. 15"
-      ],
+      "options": ["", "", "", "", "30 32 34 35 37 Diğer sayfaya geçiniz. 15"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir öğretmen, yapacağı final sınavını anlattığı 10 konudan rastgele 2’sini seçerek hazırlayacağını sınıfına söylemiştir. Bu sınıftaki öğrencilerden biri olan Figen, yeterli zamanı olmadığından bu 10 konudan 7’sine çalışmıştır. Figen, sınava girmeden önce arkadaşlarına en büyük korkusunun sınavdaki tüm soruların çalışmadığı yerlerden gelmesi olduğunu söylemiştir. Buna göre, Figen’in korktuğunun başına gelmesi olasılığı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Toplar çekildikten sonra kâğıda 252332252 sayısı yazıldığına göre, çekilen topların numaraları toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "80 84 88 92 96"
-      ],
+      "options": ["", "", "", "", "80 84 88 92 96"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Toplar çekildikten sonra kâğıda 12222253AB2 sayısı yazılıyor. olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "0 7 12 15 16 Diğer sayfaya geçiniz. 16"
-      ],
+      "options": ["", "", "", "", "0 7 12 15 16 Diğer sayfaya geçiniz. 16"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "6147 sayısı sıkıştırıldığında aşağıdaki sayılardan hangisi elde edilir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "14 17 24 27 31"
-      ],
+      "options": ["", "", "", "", "14 17 24 27 31"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Üç basamaklı 2A9 sayısı sıkıştırıldığında iki basamaklı 4A sayısı elde ediliyor. Buna göre, A kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 6 7 8 9"
-      ],
+      "options": ["", "", "", "", "5 6 7 8 9"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Sıkıştırıldığında 21 elde edilen kaç tane üç basamaklı doğal sayı vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "8 10 12 15 16 Diğer sayfaya geçiniz. 17"
-      ],
+      "options": ["", "", "", "", "8 10 12 15 16 Diğer sayfaya geçiniz. 17"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, x kaç birimdir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
     }

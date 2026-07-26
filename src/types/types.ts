@@ -1,5 +1,11 @@
 // Re-export domain entity so existing code can still import from types/types.ts
 export type { Todo } from "../domain/entities/Todo.js";
+export type {
+  StockPortfolioItem,
+  StockRule,
+  StockAlertLog,
+  StockRuleType,
+} from "./stock.js";
 
 export type Language = "tr" | "en";
 
@@ -64,10 +70,10 @@ export interface WillpowerStreak {
 export interface PomodoroLog {
   id: string;
   startTime: string; // ISO date
-  endTime: string;   // ISO date
-  duration: number;  // in seconds
+  endTime: string; // ISO date
+  duration: number; // in seconds
   mode: "focus" | "short" | "long";
   note?: string;
   element: "bonsai" | "koi" | "pagoda" | "lantern" | "bamboo" | "pebble";
-  position: number;  // 0-24 grid position
+  position: number; // 0-24 grid position
 }

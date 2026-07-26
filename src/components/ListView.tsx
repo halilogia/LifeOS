@@ -4,16 +4,35 @@ import { translations } from "../utils/i18n.js";
 function formatDueDate(dateStr: string, lang: Language): string {
   try {
     const parts = dateStr.split("-");
-    if (parts.length !== 3) {return dateStr;}
+    if (parts.length !== 3) {
+      return dateStr;
+    }
     const y = parseInt(parts[0], 10);
     const m = parseInt(parts[1], 10) - 1;
     const d = parseInt(parts[2], 10);
     const dateObj = new Date(y, m, d);
     if (lang === "tr") {
-      const months = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+      const months = [
+        "Oca",
+        "Şub",
+        "Mar",
+        "Nis",
+        "May",
+        "Haz",
+        "Tem",
+        "Ağu",
+        "Eyl",
+        "Eki",
+        "Kas",
+        "Ara",
+      ];
       return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
     } else {
-      return dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      return dateObj.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
     }
   } catch {
     return dateStr;
@@ -64,7 +83,9 @@ export function ListView({
         {googleSyncActive && (
           <div className="tasks-sync-bar">
             <div className="tasks-sync-info">
-              <span className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}></span>
+              <span
+                className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}
+              ></span>
               <span>
                 {isSyncing
                   ? lang === "tr"
@@ -155,7 +176,16 @@ export function ListView({
                     >
                       <span className="todo-text">{todo.text}</span>
                       {todo.dueDate && (
-                        <div className="todo-date-badge" style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+                        <div
+                          className="todo-date-badge"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            fontSize: "0.75rem",
+                            color: "var(--text-secondary)",
+                          }}
+                        >
                           <svg
                             width="12"
                             height="12"
@@ -166,7 +196,14 @@ export function ListView({
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           >
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <rect
+                              x="3"
+                              y="4"
+                              width="18"
+                              height="18"
+                              rx="2"
+                              ry="2"
+                            />
                             <line x1="16" y1="2" x2="16" y2="6" />
                             <line x1="8" y1="2" x2="8" y2="6" />
                             <line x1="3" y1="10" x2="21" y2="10" />
@@ -253,7 +290,16 @@ export function ListView({
                         >
                           <span className="repeat-badge">{repeatLabel}</span>
                           {todo.dueDate && (
-                            <span className="todo-date-badge" style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+                            <span
+                              className="todo-date-badge"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                fontSize: "0.75rem",
+                                color: "var(--text-secondary)",
+                              }}
+                            >
                               <svg
                                 width="12"
                                 height="12"
@@ -264,7 +310,14 @@ export function ListView({
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                               >
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <rect
+                                  x="3"
+                                  y="4"
+                                  width="18"
+                                  height="18"
+                                  rx="2"
+                                  ry="2"
+                                />
                                 <line x1="16" y1="2" x2="16" y2="6" />
                                 <line x1="8" y1="2" x2="8" y2="6" />
                                 <line x1="3" y1="10" x2="21" y2="10" />

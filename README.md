@@ -47,6 +47,9 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 - **🛡️ Güvenlik Hardening**:
   - **DOM XSS Koruması**: Detoks bloke ekranına basılan metinlerin DOM XSS oluşturmaması için güvenli `escapeHtml` filtreleri.
   - **Zod Şema Doğrulaması**: Veri yedeklerini geri yüklerken zararlı kod enjeksiyonunu engellemek amacıyla Zod kütüphanesi ile veri şeması kontrolü.
+- **🌐 Evrensel Dil Desteği & Temiz Mimari**:
+  - **Proxy Fallback Yerelleştirme**: Tüm eklenti panelleri (KPSS, Pomodoro, Detoks, SRS vb.) Türkçe ve İngilizce dillerini destekler. ES6 Proxy altyapısı sayesinde çevirisi eksik kalan anahtarlar otomatik olarak İngilizce'ye fallback yapar.
+  - **Clean Architecture Modüler Pop-up**: Pop-up ekranı (`popup.tsx`) katmanlı mimariye kavuşturularak zamanlayıcı ve storage mantığı `usePopup` hook'una, görsel sekmeler ise prop tabanlı alt bileşenlere ayrılmıştır.
 - **✨ Premium Tasarım**:
   - Gri sistem pencereleri (`confirm()`) yerine tasarlanmış, mor gradientli glassmorphic **ConfirmModal** onay kutusu.
   - Glassmorphism (buzlu cam) estetiği, yanıp sönen durum ışıkları, yumuşak hover efektleri ve eklentiye özel marka logosu.

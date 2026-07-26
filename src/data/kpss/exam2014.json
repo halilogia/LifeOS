@@ -120,13 +120,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Aşağıdakilerden hangisi, vezirlerle devlet adamlarının ve seferde ordunun atlarına bakmak ve sair zamanlarda Has ahır ve çayır hizmetinde kullanılmak üzere gayrimüslimlerden tertip olunan ve özellikle Bulgaristan, Sırbistan, Makedonya ve Tesalya’da istihdam edilen askerî zümredir?",
-      "options": [
-        "",
-        "",
-        "Ulah Martolos Voynuk",
-        "",
-        "Levent Miralay"
-      ],
+      "options": ["", "", "Ulah Martolos Voynuk", "", "Levent Miralay"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (10. Soru)."
     },
@@ -185,13 +179,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Misak-ı Millî aşağıdaki Avrupa devletlerinden hangisi tarafından ilk kez kabul edilmiştir?",
-      "options": [
-        "",
-        "",
-        "Yunanistan İngiltere Fransa",
-        "",
-        "Rusya İtalya"
-      ],
+      "options": ["", "", "Yunanistan İngiltere Fransa", "", "Rusya İtalya"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (15. Soru)."
     },
@@ -289,13 +277,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Aşağıdakilerden hangisi Kurtuluş Savaşı Dönemi’nde Anadolu’nun dışa açılan en önemli ikmal limanı olmuştur?",
-      "options": [
-        "",
-        "",
-        "İzmir Trabzon Samsun",
-        "",
-        "İnebolu Antalya"
-      ],
+      "options": ["", "", "İzmir Trabzon Samsun", "", "İnebolu Antalya"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (23. Soru)."
     },
@@ -341,13 +323,7 @@
     {
       "topic": "Genel Tarih",
       "question": "1992 yılında Türkiye’nin öncülüğünde İstanbul’da kurulan ve üyeleri arasında ekonomik, teknolojik ve sosyal ilişkileri geliştirmeyi amaçlayan uluslararası örgüt aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "TÜRKSOY D8 AGİT",
-        "",
-        "KEİ BDT"
-      ],
+      "options": ["", "", "TÜRKSOY D8 AGİT", "", "KEİ BDT"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (27. Soru)."
     },
@@ -579,286 +555,154 @@
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, x kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 9"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 9"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM ifadesinin sadeleştirilmiş biçimi aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Gerçel sayılar kümesi üzerinde işlemi biçiminde tanımlanıyor. Buna göre, eşitliklerini sağlayan a ve b değerleri için farkı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "X ve Y kümelerinin simetrik farkı biçiminde tanımlanır. Buna göre, boş kümeden ve birbirinden farklı K, L kümeleri için ifadesi aşağıdakilerden hangisine eşittir?",
-      "options": [
-        "",
-        "",
-        "K L",
-        "",
-        ""
-      ],
+      "options": ["", "", "K L", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Üç basamaklı ABC doğal sayısı iki basamaklı BC doğal sayısının 21 katına eşittir. Buna göre, bu koşula uyan en büyük ABC sayısının rakamları toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "15 16 17 18 19 Diğer sayfaya geçiniz. 10"
-      ],
+      "options": ["", "", "", "", "15 16 17 18 19 Diğer sayfaya geçiniz. 10"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x ve y pozitif tam sayılar olmak üzere, ÖSYM eşitliğini sağlayan x değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "9 11 13 15 17"
-      ],
+      "options": ["", "", "", "", "9 11 13 15 17"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, ifadesinin değeri kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "80 90 120 125 135"
-      ],
+      "options": ["", "", "", "", "80 90 120 125 135"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "eşitsizliklerini sağlayan a, b ve c gerçel sayıları için aşağıdakilerden hangisi doğrudur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a, b gerçel sayılar ve olduğuna göre, kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 12 14 16 18 Diğer sayfaya geçiniz. 11"
-      ],
+      "options": ["", "", "", "", "10 12 14 16 18 Diğer sayfaya geçiniz. 11"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir pazarcı elindeki patateslerin ’ünü 4 kilogramı 3 TL’den, kalanları ise 3 kilogramı 2 TL’den satıp toplam 500 TL elde ediyor. ÖSYM Buna göre, pazarcı kaç kilogram patates satmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "720 735 750 765 780"
-      ],
+      "options": ["", "", "", "", "720 735 750 765 780"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir yıl önce 300 gram ekmek 60 kuruşa satılırken bugün 250 gram ekmek 60 kuruşa satılmaktadır. Buna göre, ekmeğin gram fiyatı bir yıl öncesine göre yüzde kaç artmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "15 20 25 32 35"
-      ],
+      "options": ["", "", "", "", "15 20 25 32 35"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Ardışık 8 tam sayının ilk 5’i ile son 3’ünün toplamı eşittir. Buna göre, sayıların en küçüğü ile en büyüğünün toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "11 13 15 17 19"
-      ],
+      "options": ["", "", "", "", "11 13 15 17 19"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Başak, girdiği sınavda başarılı olabilmek için tüm soruların en az % 80’ini doğru cevaplamalıdır. Bu sınavda başarılı olan Başak, ilk 15 sorunun 8’ini doğru cevaplamıştır. Buna göre, sınavda en az kaç soru sorulmuştur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "32 35 38 40 42 Diğer sayfaya geçiniz. 12"
-      ],
+      "options": ["", "", "", "", "32 35 38 40 42 Diğer sayfaya geçiniz. 12"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Kiraz ve elma ağaçlarının dikili olduğu bir bahçede toplam 50 adet ağaç vardır. Kiraz ağaçlarının ortalama 8 kg, elma ağaçlarının ise ortalama 15 kg meyve verdiği bir yılda bu bahçeden toplam 610 kg ürün alınmıştır. ÖSYM Buna göre, bahçedeki elma ağaçlarının sayısı kiraz ağaçlarının sayısından kaç fazladır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 8 10 12 15"
-      ],
+      "options": ["", "", "", "", "5 8 10 12 15"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir evde, enerji tüketimleri eşit olan 6 ampul 10 saatte 3 kilovat enerji tüketiyor. Bu ampuller % 20 daha az enerji tüketen tasarruflu ampullerle değiştiriliyor. Buna göre, evdeki 4 tasarruflu ampul 25 saatte kaç kilovat enerji tüketir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 2 3 4 5"
-      ],
+      "options": ["", "", "", "", "1 2 3 4 5"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir kutuda 1’den 7’ye kadar numaralanmış yedi adet kart bulunmaktadır. Cihan, bu kutudan üç kart seçtikten sonra Sercan, kalan kartlardan ikisini seçiyor. Cihan, seçtiği kartlara bakarak “Sercan’ın seçmiş olduğu kartların numaralarının toplamı kesinlikle çifttir.” diyor. Buna göre, Cihan’ın seçmiş olduğu kartların numaralarının toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 7 9 12 15 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "6 7 9 12 15 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir hava yolu şirketi, yolcularına bagaj ağırlığı için kişi başı bir sınır koymuştur. Ağırlığı bu sınıra kadar olan bagajları ücretsiz taşıyan şirket, sınırı aşan yolculardan ise sınırı aşan her bir kilogram için ücret almaktadır. ÖSYM Bu şirket ile seyahat eden  bir kişi 60 kilogram ağırlığındaki bagajı için 105 TL,  her ikisinin de bagaj ağırlığı sınırı geçen ve bagaj ağırlıklarının toplamı 60 kilogram olan iki kişi toplam 30 TL ücret ödemiştir. Buna göre şirketin, bagaj ağırlığı için koyduğu sınır kaç kilogramdır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 15 20 25 30"
-      ],
+      "options": ["", "", "", "", "10 15 20 25 30"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Hilesiz bir zar 3 defa atıldığında zarın üst yüzüne gelen sayıların toplamının 16 olma olasılığı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bu yapının onuncu katında kaç küp vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "19 22 25 28 31"
-      ],
+      "options": ["", "", "", "", "19 22 25 28 31"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
@@ -878,52 +722,28 @@
     {
       "topic": "Genel Matematik",
       "question": "Bu okul arazisinde yeşil alan için ayrılan bölge, oyun alanı için ayrılan bölgeden 720 daha büyük olduğuna göre, spor alanı için ayrılan bölge kaç dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "960 1080 1120 1200 1240"
-      ],
+      "options": ["", "", "", "", "960 1080 1120 1200 1240"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Spor alanının ’u ve oyun alanının ’i kullanılarak kapalı spor salonu binası yapıldığında; binaların toplam alanı, okul arazisinin yüzde kaçını oluşturur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "25 30 35 40 45"
-      ],
+      "options": ["", "", "", "", "25 30 35 40 45"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ABCD bir dikdörtgen Yukarıdaki verilere göre, oranı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 15"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 15"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Dik koordinat düzleminde verilen ve doğruları noktasında kesişmektedir. doğrusu x-eksenini noktasında kestiğine göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (60. Soru)."
     }

@@ -331,7 +331,11 @@
 
 /* Premium New Tab Add Alarm Button */
 .newtab-alarm-add-btn {
-  background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--accent-color) 0%,
+    #6d28d9 100%
+  ) !important;
   border: none !important;
   color: white !important;
   cursor: pointer !important;
@@ -349,7 +353,11 @@
 }
 
 .newtab-alarm-add-btn:hover {
-  background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--accent-hover) 0%,
+    #5b21b6 100%
+  ) !important;
   transform: translateY(-1px) scale(1.04) !important;
   box-shadow: 0 6px 14px rgba(139, 92, 246, 0.3) !important;
 }
@@ -437,12 +445,12 @@
   width: 100%;
   max-width: 500px;
   aspect-ratio: 1;
-  background: 
+  background:
     repeating-linear-gradient(
-      45deg, 
-      rgba(255, 255, 255, 0.01) 0px, 
-      rgba(255, 255, 255, 0.01) 8px, 
-      rgba(255, 255, 255, 0.025) 8px, 
+      45deg,
+      rgba(255, 255, 255, 0.01) 0px,
+      rgba(255, 255, 255, 0.01) 8px,
+      rgba(255, 255, 255, 0.025) 8px,
       rgba(255, 255, 255, 0.025) 16px
     ),
     radial-gradient(
@@ -492,17 +500,35 @@
   animation: float-zen 4s ease-in-out infinite;
 }
 
-.zen-element-wrapper.bonsai   { animation-delay: 0.1s; }
-.zen-element-wrapper.koi      { animation-delay: 0.5s; }
-.zen-element-wrapper.pagoda   { animation-delay: 0.9s; }
-.zen-element-wrapper.lantern  { animation-delay: 1.3s; }
-.zen-element-wrapper.bamboo   { animation-delay: 1.7s; }
-.zen-element-wrapper.pebble   { animation-delay: 2.1s; }
+.zen-element-wrapper.bonsai {
+  animation-delay: 0.1s;
+}
+.zen-element-wrapper.koi {
+  animation-delay: 0.5s;
+}
+.zen-element-wrapper.pagoda {
+  animation-delay: 0.9s;
+}
+.zen-element-wrapper.lantern {
+  animation-delay: 1.3s;
+}
+.zen-element-wrapper.bamboo {
+  animation-delay: 1.7s;
+}
+.zen-element-wrapper.pebble {
+  animation-delay: 2.1s;
+}
 
 @keyframes float-zen {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-4px) rotate(1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
 }
 
 /* Tooltip style */
@@ -523,7 +549,7 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -602,7 +628,7 @@
 .zen-history-table-wrapper {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .zen-history-table {
@@ -615,11 +641,11 @@
 .zen-history-table th,
 .zen-history-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .zen-history-table th {
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
   color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
@@ -628,7 +654,7 @@
 }
 
 .zen-history-table tr:hover td {
-  background: rgba(255,255,255,0.01);
+  background: rgba(255, 255, 255, 0.01);
 }
 
 .zen-history-table td.empty-state {
@@ -770,8 +796,14 @@
 }
 
 @keyframes scaleUp {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Sound Equalizer Visualizer */
@@ -782,13 +814,26 @@
   border-radius: 3px;
   animation: pulse-bar 1s infinite alternate;
 }
-.sound-bar.bar-1 { height: 10px; animation-delay: 0.1s; }
-.sound-bar.bar-2 { height: 14px; animation-delay: 0.4s; }
-.sound-bar.bar-3 { height: 8px; animation-delay: 0.2s; }
+.sound-bar.bar-1 {
+  height: 10px;
+  animation-delay: 0.1s;
+}
+.sound-bar.bar-2 {
+  height: 14px;
+  animation-delay: 0.4s;
+}
+.sound-bar.bar-3 {
+  height: 8px;
+  animation-delay: 0.2s;
+}
 
 @keyframes pulse-bar {
-  0% { height: 4px; }
-  100% { height: 14px; }
+  0% {
+    height: 4px;
+  }
+  100% {
+    height: 14px;
+  }
 }
 
 .ambient-btn:hover {
@@ -799,4 +844,3 @@
   background: rgba(139, 92, 246, 0.25) !important;
   border-color: var(--accent-color) !important;
 }
-

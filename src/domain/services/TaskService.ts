@@ -13,12 +13,12 @@ import { isRepeating } from "../value-objects/RepeatType.js";
  * Returns the start of the current week (Monday 00:00:00).
  */
 function getStartOfWeek(date: Date): Date {
-    const d = new Date(date);
-    const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-    d.setDate(diff);
-    d.setHours(0, 0, 0, 0);
-    return d;
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
 /**
@@ -27,49 +27,44 @@ function getStartOfWeek(date: Date): Date {
  * Returns a new array if modified, or the original array if no changes.
  */
 export function checkAndResetRepeatingTasks(todos: readonly Todo[]): {
-    modified: boolean;
-    todos: Todo[];
+  modified: boolean;
+  todos: Todo[];
 } {
-    const now = new Date();
-    const nowStr = now.toDateString();
-    let modified = false;
+  const now = new Date();
+  const nowStr = now.toDateString();
+  let modified = false;
 
-    const updated = todos.map((todo) => {
+  const updated = todos.map((todo) => {
+    if (isRepeating(todo.repeat) && todo.completed && todo.lastCompletedDate) {
+      const lastDate = new Date(todo.lastCompletedDate);
+      let shouldReset = false;
+
+      if (todo.repeat === "daily" && nowStr !== lastDate.toDateString()) {
+        shouldReset = true;
+      } else if (todo.repeat === "weekly") {
         if (
-            isRepeating(todo.repeat) &&
-            todo.completed &&
-            todo.lastCompletedDate
+          getStartOfWeek(now).getTime() > getStartOfWeek(lastDate).getTime()
         ) {
-            const lastDate = new Date(todo.lastCompletedDate);
-            let shouldReset = false;
-
-            if (todo.repeat === "daily" && nowStr !== lastDate.toDateString()) {
-                shouldReset = true;
-            } else if (todo.repeat === "weekly") {
-                if (
-                    getStartOfWeek(now).getTime() >
-                    getStartOfWeek(lastDate).getTime()
-                ) {
-                    shouldReset = true;
-                }
-            } else if (todo.repeat === "monthly") {
-                if (
-                    now.getMonth() !== lastDate.getMonth() ||
-                    now.getFullYear() !== lastDate.getFullYear()
-                ) {
-                    shouldReset = true;
-                }
-            }
-
-            if (shouldReset) {
-                modified = true;
-                return updateTodoStatus(todo, "todo");
-            }
+          shouldReset = true;
         }
-        return todo;
-    });
+      } else if (todo.repeat === "monthly") {
+        if (
+          now.getMonth() !== lastDate.getMonth() ||
+          now.getFullYear() !== lastDate.getFullYear()
+        ) {
+          shouldReset = true;
+        }
+      }
 
-    return { modified, todos: updated };
+      if (shouldReset) {
+        modified = true;
+        return updateTodoStatus(todo, "todo");
+      }
+    }
+    return todo;
+  });
+
+  return { modified, todos: updated };
 }
 
 /**
@@ -77,16 +72,20 @@ export function checkAndResetRepeatingTasks(todos: readonly Todo[]): {
  * Returns a new array with the updated task.
  */
 export function moveTaskWithStatus(
-    todos: readonly Todo[],
-    index: number,
-    newStatus: Todo["status"],
+  todos: readonly Todo[],
+  index: number,
+  newStatus: Todo["status"],
 ): Todo[] {
-    if (index < 0 || index >= todos.length) {return [...todos];}
-    if (todos[index].status === newStatus) {return [...todos];}
+  if (index < 0 || index >= todos.length) {
+    return [...todos];
+  }
+  if (todos[index].status === newStatus) {
+    return [...todos];
+  }
 
-    const updated = [...todos];
-    updated[index] = updateTodoStatus(updated[index], newStatus);
-    return updated;
+  const updated = [...todos];
+  updated[index] = updateTodoStatus(updated[index], newStatus);
+  return updated;
 }
 
 /**
@@ -95,18 +94,20 @@ export function moveTaskWithStatus(
  * Returns null if the transition is not possible.
  */
 export function getUpdatedStatuses(
-    todos: readonly Todo[],
-    index: number,
-    direction: 1 | -1,
+  todos: readonly Todo[],
+  index: number,
+  direction: 1 | -1,
 ): Todo["status"] | null {
-    if (index < 0 || index >= todos.length) {return null;}
-
-    const statuses: Todo["status"][] = ["todo", "in-progress", "done"];
-    const nextIdx = statuses.indexOf(todos[index].status) + direction;
-    if (nextIdx >= 0 && nextIdx < statuses.length) {
-        return statuses[nextIdx];
-    }
+  if (index < 0 || index >= todos.length) {
     return null;
+  }
+
+  const statuses: Todo["status"][] = ["todo", "in-progress", "done"];
+  const nextIdx = statuses.indexOf(todos[index].status) + direction;
+  if (nextIdx >= 0 && nextIdx < statuses.length) {
+    return statuses[nextIdx];
+  }
+  return null;
 }
 
 /**
@@ -114,7 +115,9 @@ export function getUpdatedStatuses(
  * Expected format: [repeat:daily] or [repeat:weekly] etc.
  */
 export function parseRepeatFromNotes(notes?: string): RepeatType {
-    if (!notes) {return "none";}
-    const match = notes.match(/\[repeat:(none|daily|weekly|monthly)\]/);
-    return match ? (match[1] as RepeatType) : "none";
+  if (!notes) {
+    return "none";
+  }
+  const match = notes.match(/\[repeat:(none|daily|weekly|monthly)\]/);
+  return match ? (match[1] as RepeatType) : "none";
 }

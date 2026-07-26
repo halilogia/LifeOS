@@ -307,66 +307,116 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
             </header>
 
             {/* Quick Claim Shortcuts Bar */}
-            <div 
-              className="free-games-shortcuts" 
-              style={{ 
-                display: "flex", 
-                gap: "10px", 
-                marginBottom: "20px", 
+            <div
+              className="free-games-shortcuts"
+              style={{
+                display: "flex",
+                gap: "10px",
+                marginBottom: "20px",
                 flexWrap: "wrap",
                 background: "rgba(255, 255, 255, 0.02)",
                 border: "1px solid var(--card-border)",
                 borderRadius: "12px",
                 padding: "12px 16px",
                 alignItems: "center",
-                width: "100%"
+                width: "100%",
               }}
             >
-              <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--text-secondary)", marginRight: "10px" }}>
-                {lang === "tr" ? "Hızlı Talep Sayfaları:" : "Quick Claim Pages:"}
+              <span
+                style={{
+                  fontSize: "0.85rem",
+                  fontWeight: "600",
+                  color: "var(--text-secondary)",
+                  marginRight: "10px",
+                }}
+              >
+                {lang === "tr"
+                  ? "Hızlı Talep Sayfaları:"
+                  : "Quick Claim Pages:"}
               </span>
-              <a 
-                href="https://store.epicgames.com/free-games" 
-                target="_blank" 
+              <a
+                href="https://store.epicgames.com/free-games"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="add-note-action-btn secondary"
-                style={{ padding: "6px 14px", fontSize: "0.8rem", height: "auto", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  height: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
               >
                 Epic Games
               </a>
-              <a 
-                href="https://gaming.amazon.com/" 
-                target="_blank" 
+              <a
+                href="https://gaming.amazon.com/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="add-note-action-btn secondary"
-                style={{ padding: "6px 14px", fontSize: "0.8rem", height: "auto", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  height: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
               >
                 Prime Gaming
               </a>
-              <a 
-                href="https://luna.amazon.com/claims/home?g=s" 
-                target="_blank" 
+              <a
+                href="https://luna.amazon.com/claims/home?g=s"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="add-note-action-btn secondary"
-                style={{ padding: "6px 14px", fontSize: "0.8rem", height: "auto", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none", borderColor: "var(--accent-color)" }}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  height: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                  borderColor: "var(--accent-color)",
+                }}
               >
                 Amazon Luna
               </a>
-              <a 
-                href="https://store.steampowered.com/genre/Free%20to%20Play/" 
-                target="_blank" 
+              <a
+                href="https://store.steampowered.com/genre/Free%20to%20Play/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="add-note-action-btn secondary"
-                style={{ padding: "6px 14px", fontSize: "0.8rem", height: "auto", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  height: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
               >
                 Steam Free
               </a>
-              <a 
-                href="https://www.gog.com/partner/free_games" 
-                target="_blank" 
+              <a
+                href="https://www.gog.com/partner/free_games"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="add-note-action-btn secondary"
-                style={{ padding: "6px 14px", fontSize: "0.8rem", height: "auto", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  height: "auto",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                }}
               >
                 GOG Free
               </a>

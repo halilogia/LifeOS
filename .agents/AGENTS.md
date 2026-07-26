@@ -98,3 +98,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 5.3 Immutable State Management
 * Do not mutate Preact states or arrays directly (e.g. `state.push()` or `state[0] = val`). Always enforce immutable update patterns (like mapping, filtering, or spreading arrays: `[...prev, item]`) to guarantee correct reactive updates.
+
+### 5.4 Localization System Fallback Proxy
+* When referencing interface strings using localized keys, always import and use `getTranslation(lang)` which returns a Proxy. This Proxy provides safe fallback lookup to English strings if translation keys are missing in the selected language.
+

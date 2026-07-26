@@ -74,14 +74,22 @@ export function KpssQuizModal({
   onRetakeQuiz,
   subjectNames,
 }: KpssQuizModalProps) {
-  if (!activeQuizTopic) {return null;}
+  if (!activeQuizTopic) {
+    return null;
+  }
 
   const [showInfo, setShowInfo] = useState(false);
-  const totalQuizLength = isBackgroundLoading ? selectedQuizCount : quizQuestions.length;
+  const totalQuizLength = isBackgroundLoading
+    ? selectedQuizCount
+    : quizQuestions.length;
 
   return (
     <div className="settings-panel active" onClick={onClose}>
-      <div className="settings-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "600px", width: "95%" }}>
+      <div
+        className="settings-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: "600px", width: "95%" }}
+      >
         <div className="settings-header">
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <h3>{activeQuizTopic}</h3>
@@ -101,9 +109,13 @@ export function KpssQuizModal({
                   cursor: "pointer",
                   fontWeight: "bold",
                   fontSize: "0.85rem",
-                  transition: "all 0.2s ease"
+                  transition: "all 0.2s ease",
                 }}
-                title={lang === "tr" ? "KPSS Yeni Nesil Bilgilendirmesi" : "KPSS New Generation Info"}
+                title={
+                  lang === "tr"
+                    ? "KPSS Yeni Nesil Bilgilendirmesi"
+                    : "KPSS New Generation Info"
+                }
                 className="kpss-info-toggle-btn"
               >
                 !
@@ -111,7 +123,16 @@ export function KpssQuizModal({
             )}
           </div>
           <button className="close-btn" onClick={onClose}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -119,71 +140,166 @@ export function KpssQuizModal({
         </div>
 
         {showInfo && (
-          <div className="settings-panel active" style={{ zIndex: 1100 }} onClick={() => setShowInfo(false)}>
-            <div 
-              className="settings-content" 
-              onClick={(e) => e.stopPropagation()} 
-              style={{ maxWidth: "500px", width: "90%", background: "rgba(20, 20, 25, 0.95)", border: "1px solid rgba(139, 92, 246, 0.2)" }}
+          <div
+            className="settings-panel active"
+            style={{ zIndex: 1100 }}
+            onClick={() => setShowInfo(false)}
+          >
+            <div
+              className="settings-content"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                maxWidth: "500px",
+                width: "90%",
+                background: "rgba(20, 20, 25, 0.95)",
+                border: "1px solid rgba(139, 92, 246, 0.2)",
+              }}
             >
               <div className="settings-header">
-                <h3>{lang === "tr" ? "KPSS Soru Sistemi Değişim Milatları" : "KPSS Question System Evolution"}</h3>
-                <button className="close-btn" onClick={() => setShowInfo(false)}>
+                <h3>
+                  {lang === "tr"
+                    ? "KPSS Soru Sistemi Değişim Milatları"
+                    : "KPSS Question System Evolution"}
+                </h3>
+                <button
+                  className="close-btn"
+                  onClick={() => setShowInfo(false)}
+                >
                   &times;
                 </button>
               </div>
-              <div className="settings-body" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "16px", lineHeight: "1.5", fontSize: "0.9rem" }}>
-                <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "12px" }}>
-                  <p style={{ opacity: 0.8, fontSize: "0.85rem", marginBottom: "8px" }}>
-                    {lang === "tr" 
-                      ? "ÖSYM çıkmış sorularını çözerken hazırlık stratejinizi aşağıdaki reform yıllarına göre belirleyebilirsiniz:" 
+              <div
+                className="settings-body"
+                style={{
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                  lineHeight: "1.5",
+                  fontSize: "0.9rem",
+                }}
+              >
+                <div
+                  style={{
+                    borderBottom: "1px solid rgba(255,255,255,0.08)",
+                    paddingBottom: "12px",
+                  }}
+                >
+                  <p
+                    style={{
+                      opacity: 0.8,
+                      fontSize: "0.85rem",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {lang === "tr"
+                      ? "ÖSYM çıkmış sorularını çözerken hazırlık stratejinizi aşağıdaki reform yıllarına göre belirleyebilirsiniz:"
                       : "When practicing past exam questions, customize your strategy based on these key reform milestones:"}
                   </p>
                 </div>
-                
-                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                  <div style={{ fontWeight: "700", color: "var(--accent-color)", minWidth: "45px" }}>2013</div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: "700",
+                      color: "var(--accent-color)",
+                      minWidth: "45px",
+                    }}
+                  >
+                    2013
+                  </div>
                   <div>
-                    <strong style={{ display: "block", color: "var(--text-primary)" }}>
-                      {lang === "tr" ? "Geçiş / Deneme Dönemi" : "Transition / Pilot Era"}
+                    <strong
+                      style={{ display: "block", color: "var(--text-primary)" }}
+                    >
+                      {lang === "tr"
+                        ? "Geçiş / Deneme Dönemi"
+                        : "Transition / Pilot Era"}
                     </strong>
                     <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                      {lang === "tr" 
-                        ? "İlk kez Lisans sınavında yorumsal, öncüllü sorular ve Çağdaş Türk ve Dünya Tarihi müfredata girdi." 
+                      {lang === "tr"
+                        ? "İlk kez Lisans sınavında yorumsal, öncüllü sorular ve Çağdaş Türk ve Dünya Tarihi müfredata girdi."
                         : "Interpretation-based questions and Contemporary Turkish/World History introduced first time for Undergraduate."}
                     </span>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                  <div style={{ fontWeight: "700", color: "var(--accent-color)", minWidth: "45px" }}>2014</div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: "700",
+                      color: "var(--accent-color)",
+                      minWidth: "45px",
+                    }}
+                  >
+                    2014
+                  </div>
                   <div>
-                    <strong style={{ display: "block", color: "var(--text-primary)" }}>
-                      {lang === "tr" ? "Resmi Başlangıç / Standartlaşma" : "Official Launch / Standardization"}
+                    <strong
+                      style={{ display: "block", color: "var(--text-primary)" }}
+                    >
+                      {lang === "tr"
+                        ? "Resmi Başlangıç / Standartlaşma"
+                        : "Official Launch / Standardization"}
                     </strong>
                     <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                      {lang === "tr" 
-                        ? "Tüm düzeylerde (Lisans, Önlisans, Ortaöğretim) Sözel/Sayısal Mantık resmileşti ve bugünkü 120 soruluk şablon kalıcı hale geldi." 
+                      {lang === "tr"
+                        ? "Tüm düzeylerde (Lisans, Önlisans, Ortaöğretim) Sözel/Sayısal Mantık resmileşti ve bugünkü 120 soruluk şablon kalıcı hale geldi."
                         : "Verbal/Numerical Logic standardized across all levels; the modern 120-question template became permanent."}
                     </span>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                  <div style={{ fontWeight: "700", color: "var(--accent-color)", minWidth: "45px" }}>2018+</div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: "700",
+                      color: "var(--accent-color)",
+                      minWidth: "45px",
+                    }}
+                  >
+                    2018+
+                  </div>
                   <div>
-                    <strong style={{ display: "block", color: "var(--text-primary)" }}>
-                      {lang === "tr" ? "Nihai Dönem / Yeni Nesil Çağı" : "Final Era / New Generation"}
+                    <strong
+                      style={{ display: "block", color: "var(--text-primary)" }}
+                    >
+                      {lang === "tr"
+                        ? "Nihai Dönem / Yeni Nesil Çağı"
+                        : "Final Era / New Generation"}
                     </strong>
                     <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                      {lang === "tr" 
-                        ? "ÖSYM soru havuzu tamamen YKS/ALES paralelinde uzun paragraflara, günlük hayat senaryolarına ve yoğun muhakemeye evrildi." 
+                      {lang === "tr"
+                        ? "ÖSYM soru havuzu tamamen YKS/ALES paralelinde uzun paragraflara, günlük hayat senaryolarına ve yoğun muhakemeye evrildi."
                         : "Question database evolved fully parallel to YKS/ALES, shifting toward long reading passages and intense reasoning."}
                     </span>
                   </div>
                 </div>
               </div>
               <div className="settings-footer">
-                <button className="settings-add-btn" style={{ width: "auto", padding: "0 24px" }} onClick={() => setShowInfo(false)}>
+                <button
+                  className="settings-add-btn"
+                  style={{ width: "auto", padding: "0 24px" }}
+                  onClick={() => setShowInfo(false)}
+                >
                   {lang === "tr" ? "Anladım" : "Got it"}
                 </button>
               </div>
@@ -194,7 +310,9 @@ export function KpssQuizModal({
         <div className="settings-body" style={{ padding: "20px" }}>
           {quizStep === "intro" && (
             <div style={{ textAlign: "center", padding: "12px" }}>
-              <h4 style={{ color: "var(--accent-color)", marginBottom: "12px" }}>
+              <h4
+                style={{ color: "var(--accent-color)", marginBottom: "12px" }}
+              >
                 {lang === "tr" ? "Seviye Tespit Sınavı" : "Proficiency Quiz"}
               </h4>
               <p style={{ fontSize: "0.95rem", opacity: 0.8, lineHeight: 1.5 }}>
@@ -215,9 +333,31 @@ export function KpssQuizModal({
                 ))}
               </div>
 
-              {!(aiApiKey || (aiEndpoint && (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1")))) && (
-                <div className="halka-arz-fallback-notice" style={{ marginTop: "16px", background: "rgba(239, 68, 68, 0.12)", border: "1px solid rgba(239, 68, 68, 0.3)", color: "#ef4444" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {!(
+                aiApiKey ||
+                (aiEndpoint &&
+                  (aiEndpoint.includes("localhost") ||
+                    aiEndpoint.includes("127.0.0.1")))
+              ) && (
+                <div
+                  className="halka-arz-fallback-notice"
+                  style={{
+                    marginTop: "16px",
+                    background: "rgba(239, 68, 68, 0.12)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                    color: "#ef4444",
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
                     <line x1="12" y1="9" x2="12" y2="13" />
                     <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -228,11 +368,21 @@ export function KpssQuizModal({
                 </div>
               )}
 
-              <div className="settings-footer" style={{ padding: "16px 0 0 0", marginTop: "24px" }}>
+              <div
+                className="settings-footer"
+                style={{ padding: "16px 0 0 0", marginTop: "24px" }}
+              >
                 <button
                   className="settings-add-btn"
                   style={{ width: "100%" }}
-                  disabled={!(aiApiKey || (aiEndpoint && (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1"))))}
+                  disabled={
+                    !(
+                      aiApiKey ||
+                      (aiEndpoint &&
+                        (aiEndpoint.includes("localhost") ||
+                          aiEndpoint.includes("127.0.0.1")))
+                    )
+                  }
                   onClick={onStartQuiz}
                 >
                   {lang === "tr" ? "Sınavı Başlat" : "Start Test"}
@@ -261,192 +411,334 @@ export function KpssQuizModal({
             </div>
           )}
 
-          {quizStep === "questions" && !quizLoading && !quizError && quizQuestions.length > 0 && (
-            <div>
-              <div className="kpss-quiz-progress-bar-container">
+          {quizStep === "questions" &&
+            !quizLoading &&
+            !quizError &&
+            quizQuestions.length > 0 && (
+              <div>
+                <div className="kpss-quiz-progress-bar-container">
+                  <div
+                    className="kpss-quiz-progress-fill"
+                    style={{
+                      width: `${((currentQuestionIndex + 1) / totalQuizLength) * 100}%`,
+                    }}
+                  />
+                </div>
+
                 <div
-                  className="kpss-quiz-progress-fill"
-                  style={{ width: `${((currentQuestionIndex + 1) / totalQuizLength) * 100}%` }}
-                />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", opacity: 0.6, marginBottom: "8px" }}>
-                <span>{lang === "tr" ? `Soru ${currentQuestionIndex + 1} / ${totalQuizLength}` : `Question ${currentQuestionIndex + 1} / ${totalQuizLength}`}</span>
-              </div>
-
-              {quizQuestions[currentQuestionIndex].chart && (
-                <KpssQuestionCanvas chart={quizQuestions[currentQuestionIndex].chart} />
-              )}
-
-              {quizQuestions[currentQuestionIndex].map && (
-                <KpssQuestionMap map={quizQuestions[currentQuestionIndex].map} />
-              )}
-
-              <div className="kpss-quiz-question-container">
-                <div className="kpss-quiz-question-text">
-                  <MathRenderer text={quizQuestions[currentQuestionIndex].question} />
-                </div>
-              </div>
-
-              <div className="kpss-quiz-options-grid">
-                {quizQuestions[currentQuestionIndex].options.map((opt, oIdx) => {
-                  const letter = ["A", "B", "C", "D", "E"][oIdx];
-                  const isAnswered = selectedAnswers[currentQuestionIndex] !== -1;
-                  const isSelected = selectedAnswers[currentQuestionIndex] === oIdx;
-                  const isCorrect = oIdx === quizQuestions[currentQuestionIndex].correctAnswer;
-                  
-                  let cardStyle: any = {
-                    transition: "all 0.2s ease",
-                  };
-                  
-                  if (isAnswered) {
-                    if (isCorrect) {
-                      cardStyle = {
-                        ...cardStyle,
-                        border: "1px solid rgba(16, 185, 129, 0.4)",
-                        background: "rgba(16, 185, 129, 0.08)",
-                        color: "#34d399",
-                        cursor: "default"
-                      };
-                    } else if (isSelected) {
-                      cardStyle = {
-                        ...cardStyle,
-                        border: "1px solid rgba(239, 68, 68, 0.4)",
-                        background: "rgba(239, 68, 68, 0.08)",
-                        color: "#f87171",
-                        cursor: "default"
-                      };
-                    } else {
-                      cardStyle = {
-                        ...cardStyle,
-                        opacity: 0.4,
-                        cursor: "default"
-                      };
-                    }
-                  }
-
-                  return (
-                    <div
-                      key={oIdx}
-                      className={`kpss-quiz-option-card ${isSelected && !isAnswered ? "selected" : ""}`}
-                      style={cardStyle}
-                      onClick={() => onSelectAnswer(oIdx)}
-                    >
-                      <div
-                        className="kpss-quiz-option-letter"
-                        style={isAnswered && isCorrect ? { background: "#10b981", color: "white" } : (isAnswered && isSelected ? { background: "#ef4444", color: "white" } : {})}
-                      >
-                        {letter}
-                      </div>
-                      <span><MathRenderer text={opt} /></span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Solution display box */}
-              {selectedAnswers[currentQuestionIndex] !== -1 && (
-                <div style={{
-                  marginTop: "16px",
-                  padding: "12px 16px",
-                  background: "rgba(255, 255, 255, 0.03)",
-                  borderLeft: "4px solid var(--accent-color)",
-                  borderRadius: "8px",
-                  fontSize: "0.82rem",
-                  lineHeight: 1.5,
-                  color: "rgba(255, 255, 255, 0.7)",
-                  textAlign: "left"
-                }}>
-                  <div style={{ fontWeight: "700", color: "var(--accent-color)", marginBottom: "4px" }}>
-                    {lang === "tr" ? "Çözüm Açıklaması:" : "Solution & Explanation:"}
-                  </div>
-                  <MathRenderer text={quizQuestions[currentQuestionIndex].solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")} />
-                </div>
-              )}
-
-              <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-                <button
-                  className="kpss-qcount-btn"
-                  style={{ flex: 1 }}
-                  disabled={currentQuestionIndex === 0}
-                  onClick={onPreviousQuestion}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.85rem",
+                    opacity: 0.6,
+                    marginBottom: "8px",
+                  }}
                 >
-                  {lang === "tr" ? "Önceki" : "Previous"}
-                </button>
-                {currentQuestionIndex < totalQuizLength - 1 ? (
-                  <button
-                    className={`settings-add-btn ${currentQuestionIndex >= quizQuestions.length - 1 ? "loading" : ""}`}
-                    style={{ flex: 1, padding: 0 }}
-                    disabled={selectedAnswers[currentQuestionIndex] === -1 || currentQuestionIndex >= quizQuestions.length - 1}
-                    onClick={onNextQuestion}
-                  >
-                    {currentQuestionIndex >= quizQuestions.length - 1 ? (
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-                        <span className="kpss-btn-loader" />
-                        {lang === "tr" ? "Sonraki (Yükleniyor...)" : "Next (Loading...)"}
-                      </span>
-                    ) : (
-                      lang === "tr" ? "Sonraki" : "Next"
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    className="settings-add-btn"
-                    style={{ flex: 1, padding: 0 }}
-                    disabled={selectedAnswers[currentQuestionIndex] === -1}
-                    onClick={onFinishQuiz}
-                  >
-                    {lang === "tr" ? "Sınavı Bitir" : "Finish Quiz"}
-                  </button>
+                  <span>
+                    {lang === "tr"
+                      ? `Soru ${currentQuestionIndex + 1} / ${totalQuizLength}`
+                      : `Question ${currentQuestionIndex + 1} / ${totalQuizLength}`}
+                  </span>
+                </div>
+
+                {quizQuestions[currentQuestionIndex].chart && (
+                  <KpssQuestionCanvas
+                    chart={quizQuestions[currentQuestionIndex].chart}
+                  />
                 )}
+
+                {quizQuestions[currentQuestionIndex].map && (
+                  <KpssQuestionMap
+                    map={quizQuestions[currentQuestionIndex].map}
+                  />
+                )}
+
+                <div className="kpss-quiz-question-container">
+                  <div className="kpss-quiz-question-text">
+                    <MathRenderer
+                      text={quizQuestions[currentQuestionIndex].question}
+                    />
+                  </div>
+                </div>
+
+                <div className="kpss-quiz-options-grid">
+                  {quizQuestions[currentQuestionIndex].options.map(
+                    (opt, oIdx) => {
+                      const letter = ["A", "B", "C", "D", "E"][oIdx];
+                      const isAnswered =
+                        selectedAnswers[currentQuestionIndex] !== -1;
+                      const isSelected =
+                        selectedAnswers[currentQuestionIndex] === oIdx;
+                      const isCorrect =
+                        oIdx ===
+                        quizQuestions[currentQuestionIndex].correctAnswer;
+
+                      let cardStyle: any = {
+                        transition: "all 0.2s ease",
+                      };
+
+                      if (isAnswered) {
+                        if (isCorrect) {
+                          cardStyle = {
+                            ...cardStyle,
+                            border: "1px solid rgba(16, 185, 129, 0.4)",
+                            background: "rgba(16, 185, 129, 0.08)",
+                            color: "#34d399",
+                            cursor: "default",
+                          };
+                        } else if (isSelected) {
+                          cardStyle = {
+                            ...cardStyle,
+                            border: "1px solid rgba(239, 68, 68, 0.4)",
+                            background: "rgba(239, 68, 68, 0.08)",
+                            color: "#f87171",
+                            cursor: "default",
+                          };
+                        } else {
+                          cardStyle = {
+                            ...cardStyle,
+                            opacity: 0.4,
+                            cursor: "default",
+                          };
+                        }
+                      }
+
+                      return (
+                        <div
+                          key={oIdx}
+                          className={`kpss-quiz-option-card ${isSelected && !isAnswered ? "selected" : ""}`}
+                          style={cardStyle}
+                          onClick={() => onSelectAnswer(oIdx)}
+                        >
+                          <div
+                            className="kpss-quiz-option-letter"
+                            style={
+                              isAnswered && isCorrect
+                                ? { background: "#10b981", color: "white" }
+                                : isAnswered && isSelected
+                                  ? { background: "#ef4444", color: "white" }
+                                  : {}
+                            }
+                          >
+                            {letter}
+                          </div>
+                          <span>
+                            <MathRenderer text={opt} />
+                          </span>
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
+
+                {/* Solution display box */}
+                {selectedAnswers[currentQuestionIndex] !== -1 && (
+                  <div
+                    style={{
+                      marginTop: "16px",
+                      padding: "12px 16px",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      borderLeft: "4px solid var(--accent-color)",
+                      borderRadius: "8px",
+                      fontSize: "0.82rem",
+                      lineHeight: 1.5,
+                      color: "rgba(255, 255, 255, 0.7)",
+                      textAlign: "left",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "700",
+                        color: "var(--accent-color)",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {lang === "tr"
+                        ? "Çözüm Açıklaması:"
+                        : "Solution & Explanation:"}
+                    </div>
+                    <MathRenderer
+                      text={
+                        quizQuestions[currentQuestionIndex].solution ||
+                        (lang === "tr"
+                          ? "Çözüm bilgisi bulunmuyor."
+                          : "No solution provided.")
+                      }
+                    />
+                  </div>
+                )}
+
+                <div
+                  style={{ display: "flex", gap: "12px", marginTop: "24px" }}
+                >
+                  <button
+                    className="kpss-qcount-btn"
+                    style={{ flex: 1 }}
+                    disabled={currentQuestionIndex === 0}
+                    onClick={onPreviousQuestion}
+                  >
+                    {lang === "tr" ? "Önceki" : "Previous"}
+                  </button>
+                  {currentQuestionIndex < totalQuizLength - 1 ? (
+                    <button
+                      className={`settings-add-btn ${currentQuestionIndex >= quizQuestions.length - 1 ? "loading" : ""}`}
+                      style={{ flex: 1, padding: 0 }}
+                      disabled={
+                        selectedAnswers[currentQuestionIndex] === -1 ||
+                        currentQuestionIndex >= quizQuestions.length - 1
+                      }
+                      onClick={onNextQuestion}
+                    >
+                      {currentQuestionIndex >= quizQuestions.length - 1 ? (
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "6px",
+                          }}
+                        >
+                          <span className="kpss-btn-loader" />
+                          {lang === "tr"
+                            ? "Sonraki (Yükleniyor...)"
+                            : "Next (Loading...)"}
+                        </span>
+                      ) : lang === "tr" ? (
+                        "Sonraki"
+                      ) : (
+                        "Next"
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      className="settings-add-btn"
+                      style={{ flex: 1, padding: 0 }}
+                      disabled={selectedAnswers[currentQuestionIndex] === -1}
+                      onClick={onFinishQuiz}
+                    >
+                      {lang === "tr" ? "Sınavı Bitir" : "Finish Quiz"}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {quizStep === "result" && (
             <div style={{ textAlign: "center", padding: "12px" }}>
-              <h4 style={{ color: "var(--accent-color)", fontSize: "1.4rem", marginBottom: "16px" }}>
+              <h4
+                style={{
+                  color: "var(--accent-color)",
+                  fontSize: "1.4rem",
+                  marginBottom: "16px",
+                }}
+              >
                 {lang === "tr" ? "Sınav Tamamlandı!" : "Quiz Completed!"}
               </h4>
-              <div style={{ fontSize: "3.5rem", fontWeight: 800, color: quizResultScore >= 80 ? "#10b981" : quizResultScore >= 40 ? "#ffc107" : "#ef4444", marginBottom: "12px" }}>
+              <div
+                style={{
+                  fontSize: "3.5rem",
+                  fontWeight: 800,
+                  color:
+                    quizResultScore >= 80
+                      ? "#10b981"
+                      : quizResultScore >= 40
+                        ? "#ffc107"
+                        : "#ef4444",
+                  marginBottom: "12px",
+                }}
+              >
                 %{quizResultScore}
               </div>
-              <p style={{ opacity: 0.8, fontSize: "0.95rem", lineHeight: 1.5, marginBottom: "20px" }}>
+              <p
+                style={{
+                  opacity: 0.8,
+                  fontSize: "0.95rem",
+                  lineHeight: 1.5,
+                  marginBottom: "20px",
+                }}
+              >
                 {lang === "tr"
                   ? `Bu konuda %${quizResultScore} oranında yetkinlik gösterdiniz.`
                   : `You demonstrated a %${quizResultScore} proficiency in this topic.`}
                 <br />
-                <span style={{ fontSize: "0.85rem", opacity: 0.6, marginTop: "8px", display: "inline-block" }}>
+                <span
+                  style={{
+                    fontSize: "0.85rem",
+                    opacity: 0.6,
+                    marginTop: "8px",
+                    display: "inline-block",
+                  }}
+                >
                   {quizResultScore >= 80
-                    ? (lang === "tr" ? "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi." : "Congratulations! Topic successfully marked as 'Completed'.")
+                    ? lang === "tr"
+                      ? "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi."
+                      : "Congratulations! Topic successfully marked as 'Completed'."
                     : quizResultScore >= 40
-                      ? (lang === "tr" ? "Konu 'Çalışılıyor' durumuna getirildi." : "Topic set to 'Working' status.")
-                      : (lang === "tr" ? "Konu 'Çalışılmadı' olarak sıfırlandı." : "Topic reset to 'Not Started'.")}
+                      ? lang === "tr"
+                        ? "Konu 'Çalışılıyor' durumuna getirildi."
+                        : "Topic set to 'Working' status."
+                      : lang === "tr"
+                        ? "Konu 'Çalışılmadı' olarak sıfırlandı."
+                        : "Topic reset to 'Not Started'."}
                 </span>
               </p>
 
               {/* Scrollable Questions Review list */}
-              <div style={{
-                maxHeight: "220px",
-                overflowY: "auto",
-                textAlign: "left",
-                marginBottom: "24px",
-                background: "rgba(0, 0, 0, 0.2)",
-                borderRadius: "12px",
-                padding: "12px",
-                border: "1px solid rgba(255, 255, 255, 0.05)"
-              }}>
-                <h5 style={{ margin: "0 0 12px 0", fontSize: "0.88rem", color: "var(--accent-color)", fontWeight: "600" }}>
+              <div
+                style={{
+                  maxHeight: "220px",
+                  overflowY: "auto",
+                  textAlign: "left",
+                  marginBottom: "24px",
+                  background: "rgba(0, 0, 0, 0.2)",
+                  borderRadius: "12px",
+                  padding: "12px",
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                <h5
+                  style={{
+                    margin: "0 0 12px 0",
+                    fontSize: "0.88rem",
+                    color: "var(--accent-color)",
+                    fontWeight: "600",
+                  }}
+                >
                   {lang === "tr" ? "Soruları İncele:" : "Review Questions:"}
                 </h5>
                 {quizQuestions.map((q, qIdx) => {
                   const userAns = selectedAnswers[qIdx];
                   return (
-                    <div key={qIdx} style={{ paddingBottom: "12px", marginBottom: "12px", borderBottom: qIdx < quizQuestions.length - 1 ? "1px solid rgba(255, 255, 255, 0.05)" : "none" }}>
-                      <p style={{ margin: "0 0 8px 0", fontWeight: "600", fontSize: "0.82rem", color: "#ffffff" }}>
+                    <div
+                      key={qIdx}
+                      style={{
+                        paddingBottom: "12px",
+                        marginBottom: "12px",
+                        borderBottom:
+                          qIdx < quizQuestions.length - 1
+                            ? "1px solid rgba(255, 255, 255, 0.05)"
+                            : "none",
+                      }}
+                    >
+                      <p
+                        style={{
+                          margin: "0 0 8px 0",
+                          fontWeight: "600",
+                          fontSize: "0.82rem",
+                          color: "#ffffff",
+                        }}
+                      >
                         {qIdx + 1}. <MathRenderer text={q.question} />
                       </p>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingLeft: "8px", marginBottom: "8px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "4px",
+                          paddingLeft: "8px",
+                          marginBottom: "8px",
+                        }}
+                      >
                         {q.options.map((opt, oIdx) => {
                           const letter = ["A", "B", "C", "D", "E"][oIdx];
                           const isCorrectOpt = oIdx === q.correctAnswer;
@@ -461,21 +753,63 @@ export function KpssQuizModal({
                             weight = "600";
                           }
                           return (
-                            <span key={oIdx} style={{ fontSize: "0.78rem", color, fontWeight: weight }}>
-                              {letter}) <MathRenderer text={opt} /> {isSelectedOpt && (lang === "tr" ? " (Sizin Cevabınız)" : " (Your Answer)")} {isCorrectOpt && (lang === "tr" ? " (Doğru Cevap)" : " (Correct Answer)")}
+                            <span
+                              key={oIdx}
+                              style={{
+                                fontSize: "0.78rem",
+                                color,
+                                fontWeight: weight,
+                              }}
+                            >
+                              {letter}) <MathRenderer text={opt} />{" "}
+                              {isSelectedOpt &&
+                                (lang === "tr"
+                                  ? " (Sizin Cevabınız)"
+                                  : " (Your Answer)")}{" "}
+                              {isCorrectOpt &&
+                                (lang === "tr"
+                                  ? " (Doğru Cevap)"
+                                  : " (Correct Answer)")}
                             </span>
                           );
                         })}
                       </div>
-                      <div style={{ fontSize: "0.78rem", color: "rgba(255, 255, 255, 0.65)", background: "rgba(255, 255, 255, 0.02)", padding: "8px", borderRadius: "6px", borderLeft: "3px solid var(--accent-color)" }}>
-                        <strong>{lang === "tr" ? "Çözüm: " : "Solution: "}</strong> <MathRenderer text={q.solution || (lang === "tr" ? "Çözüm bilgisi bulunmuyor." : "No solution provided.")} />
+                      <div
+                        style={{
+                          fontSize: "0.78rem",
+                          color: "rgba(255, 255, 255, 0.65)",
+                          background: "rgba(255, 255, 255, 0.02)",
+                          padding: "8px",
+                          borderRadius: "6px",
+                          borderLeft: "3px solid var(--accent-color)",
+                        }}
+                      >
+                        <strong>
+                          {lang === "tr" ? "Çözüm: " : "Solution: "}
+                        </strong>{" "}
+                        <MathRenderer
+                          text={
+                            q.solution ||
+                            (lang === "tr"
+                              ? "Çözüm bilgisi bulunmuyor."
+                              : "No solution provided.")
+                          }
+                        />
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="settings-footer" style={{ padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
+              <div
+                className="settings-footer"
+                style={{
+                  padding: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
                 <div style={{ display: "flex", gap: "10px", width: "100%" }}>
                   <button
                     className="kpss-qcount-btn"
@@ -499,7 +833,7 @@ export function KpssQuizModal({
                         const userAnsIdx = selectedAnswers[idx];
                         const correctAnsIdx = q.correctAnswer;
                         const letters = ["A", "B", "C", "D", "E"];
-                        
+
                         text += `Soru ${idx + 1}: ${q.question}\n`;
                         q.options.forEach((opt, oIdx) => {
                           text += `${letters[oIdx]}) ${opt}\n`;
@@ -511,7 +845,9 @@ export function KpssQuizModal({
                         text += `=========================================\n\n`;
                       });
 
-                      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+                      const blob = new Blob([text], {
+                        type: "text/plain;charset=utf-8",
+                      });
                       const url = URL.createObjectURL(blob);
                       const link = document.createElement("a");
                       link.href = url;
@@ -523,7 +859,11 @@ export function KpssQuizModal({
                     {lang === "tr" ? "Dışarı Aktar" : "Export"}
                   </button>
                 </div>
-                <button className="settings-add-btn" style={{ width: "100%", padding: 0 }} onClick={onClose}>
+                <button
+                  className="settings-add-btn"
+                  style={{ width: "100%", padding: 0 }}
+                  onClick={onClose}
+                >
                   {lang === "tr" ? "Kapat" : "Close"}
                 </button>
               </div>

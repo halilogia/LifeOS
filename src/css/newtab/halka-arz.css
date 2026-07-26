@@ -102,7 +102,11 @@
 }
 
 .ha-tab-btn.active {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.18) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.22) 0%,
+    rgba(5, 150, 105, 0.18) 100%
+  );
   color: #10b981;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
@@ -149,7 +153,9 @@
 }
 
 @keyframes ha-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Loading & Error states ──────────────────────────────── */
@@ -222,7 +228,10 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
   position: relative;
   overflow: hidden;
 }
@@ -235,7 +244,7 @@
   right: 0;
   height: 3px;
   border-radius: 16px 16px 0 0;
-  background: var(--ipo-accent, rgba(255,255,255,0.08));
+  background: var(--ipo-accent, rgba(255, 255, 255, 0.08));
 }
 
 .ipo-card.status-active {
@@ -354,8 +363,15 @@
 }
 
 @keyframes ha-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.8); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
 }
 
 /* IPO card details */
@@ -468,7 +484,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -625,8 +644,14 @@
 }
 
 /* Arrow indicators */
-.stock-arrow-up::before { content: "▲ "; font-size: 0.65em; }
-.stock-arrow-down::before { content: "▼ "; font-size: 0.65em; }
+.stock-arrow-up::before {
+  content: "▲ ";
+  font-size: 0.65em;
+}
+.stock-arrow-down::before {
+  content: "▼ ";
+  font-size: 0.65em;
+}
 
 .stock-card {
   cursor: pointer;

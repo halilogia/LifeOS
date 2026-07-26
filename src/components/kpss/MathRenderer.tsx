@@ -7,7 +7,9 @@ interface MathRendererProps {
 }
 
 export function MathRenderer({ text, style }: MathRendererProps) {
-  if (!text) {return null;}
+  if (!text) {
+    return null;
+  }
 
   // Split by block math ($$...$$) first, then inline math ($...$)
   // We use a regex that captures both, maintaining the correct order.
@@ -19,16 +21,30 @@ export function MathRenderer({ text, style }: MathRendererProps) {
         if (part.startsWith("$$") && part.endsWith("$$")) {
           const math = part.slice(2, -2);
           try {
-            const html = katex.renderToString(math, { displayMode: true, throwOnError: false });
-            return <div key={idx} dangerouslySetInnerHTML={{ __html: html }} style={{ margin: "10px 0" }} />;
+            const html = katex.renderToString(math, {
+              displayMode: true,
+              throwOnError: false,
+            });
+            return (
+              <div
+                key={idx}
+                dangerouslySetInnerHTML={{ __html: html }}
+                style={{ margin: "10px 0" }}
+              />
+            );
           } catch {
             return <span key={idx}>{part}</span>;
           }
         } else if (part.startsWith("$") && part.endsWith("$")) {
           const math = part.slice(1, -1);
           try {
-            const html = katex.renderToString(math, { displayMode: false, throwOnError: false });
-            return <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />;
+            const html = katex.renderToString(math, {
+              displayMode: false,
+              throwOnError: false,
+            });
+            return (
+              <span key={idx} dangerouslySetInnerHTML={{ __html: html }} />
+            );
           } catch {
             return <span key={idx}>{part}</span>;
           }

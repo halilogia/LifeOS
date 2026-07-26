@@ -12,97 +12,103 @@ import { parseRepeatFromNotes } from "../../../domain/services/TaskService.js";
 import type { Todo } from "../../../domain/entities/Todo.js";
 
 export interface SyncResult {
-    todos: Todo[];
-    error?: string;
+  todos: Todo[];
+  error?: string;
 }
 
 export class SyncGoogleTasksUseCase {
-    constructor(
-        private todoRepository: ITodoRepository,
-        private syncRepository: ISyncRepository,
-        private syncPort: ITodoSyncPort,
-    ) {}
+  constructor(
+    private todoRepository: ITodoRepository,
+    private syncRepository: ISyncRepository,
+    private syncPort: ITodoSyncPort,
+  ) {}
 
-    async execute(): Promise<SyncResult> {
-        const syncSettings = await this.syncRepository.getSyncSettings();
-        if (!syncSettings.enabled || !syncSettings.tasksEnabled) {
-            return { todos: await this.todoRepository.getAll() };
-        }
-
-        try {
-            const token = await this.syncPort.getAuthToken(false);
-
-            const focusListId = await this.syncPort.getOrCreateTaskList(token, "Life OS - Focus");
-            const routinesListId = await this.syncPort.getOrCreateTaskList(
-                token,
-                "Life OS - Routines",
-            );
-
-            const [remoteFocusTasks, remoteRoutinesTasks, localTodos] = await Promise.all([
-                this.syncPort.getTasks(token, focusListId),
-                this.syncPort.getTasks(token, routinesListId),
-                this.todoRepository.getAll(),
-            ]);
-
-            const mappedFocus: Todo[] = remoteFocusTasks.map((t: any) => {
-                const status: "done" | "todo" = t.status === "completed" ? "done" : "todo";
-                return {
-                    id: t.id,
-                    text: t.title,
-                    completed: t.status === "completed",
-                    status,
-                    repeat: "none" as const,
-                    category: "general",
-                    lastCompletedDate: t.completed || null,
-                    dueDate: t.due ? t.due.split("T")[0] : undefined,
-                };
-            });
-
-            const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
-                const repeat = parseRepeatFromNotes(t.notes);
-                const status: "done" | "todo" = t.status === "completed" ? "done" : "todo";
-                return {
-                    id: t.id,
-                    text: t.title,
-                    completed: t.status === "completed",
-                    status,
-                    repeat: repeat === "none" ? "daily" : repeat,
-                    category: "general",
-                    lastCompletedDate: t.completed || null,
-                    dueDate: t.due ? t.due.split("T")[0] : undefined,
-                };
-            });
-
-            const mergedTodos = [...mappedFocus, ...mappedRoutines];
-
-            // Upload unsynced local tasks
-            const unSyncedLocal = localTodos.filter((t) => !t.id);
-            for (const localTodo of unSyncedLocal) {
-                const isRoutine = localTodo.repeat !== "none";
-                const listId = isRoutine ? routinesListId : focusListId;
-                const notes = `[repeat:${localTodo.repeat}]`;
-                try {
-                    const createdRemote = await this.syncPort.createTask(token, listId, {
-                        title: localTodo.text,
-                        notes,
-                        status: localTodo.completed ? "completed" : "needsAction",
-                        due: localTodo.dueDate
-                            ? `${localTodo.dueDate}T00:00:00.000Z`
-                            : undefined,
-                    });
-                    localTodo.id = createdRemote.id;
-                    mergedTodos.push(localTodo);
-                } catch (err) {
-                    console.error("Failed to upload offline task:", err);
-                }
-            }
-
-            await this.todoRepository.saveAll(mergedTodos);
-            return { todos: mergedTodos };
-        } catch (err) {
-            console.warn("SyncGoogleTasksUseCase failed:", err);
-            const localTodos = await this.todoRepository.getAll();
-            return { todos: localTodos, error: String(err) };
-        }
+  async execute(): Promise<SyncResult> {
+    const syncSettings = await this.syncRepository.getSyncSettings();
+    if (!syncSettings.enabled || !syncSettings.tasksEnabled) {
+      return { todos: await this.todoRepository.getAll() };
     }
+
+    try {
+      const token = await this.syncPort.getAuthToken(false);
+
+      const focusListId = await this.syncPort.getOrCreateTaskList(
+        token,
+        "Life OS - Focus",
+      );
+      const routinesListId = await this.syncPort.getOrCreateTaskList(
+        token,
+        "Life OS - Routines",
+      );
+
+      const [remoteFocusTasks, remoteRoutinesTasks, localTodos] =
+        await Promise.all([
+          this.syncPort.getTasks(token, focusListId),
+          this.syncPort.getTasks(token, routinesListId),
+          this.todoRepository.getAll(),
+        ]);
+
+      const mappedFocus: Todo[] = remoteFocusTasks.map((t: any) => {
+        const status: "done" | "todo" =
+          t.status === "completed" ? "done" : "todo";
+        return {
+          id: t.id,
+          text: t.title,
+          completed: t.status === "completed",
+          status,
+          repeat: "none" as const,
+          category: "general",
+          lastCompletedDate: t.completed || null,
+          dueDate: t.due ? t.due.split("T")[0] : undefined,
+        };
+      });
+
+      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
+        const repeat = parseRepeatFromNotes(t.notes);
+        const status: "done" | "todo" =
+          t.status === "completed" ? "done" : "todo";
+        return {
+          id: t.id,
+          text: t.title,
+          completed: t.status === "completed",
+          status,
+          repeat: repeat === "none" ? "daily" : repeat,
+          category: "general",
+          lastCompletedDate: t.completed || null,
+          dueDate: t.due ? t.due.split("T")[0] : undefined,
+        };
+      });
+
+      const mergedTodos = [...mappedFocus, ...mappedRoutines];
+
+      // Upload unsynced local tasks
+      const unSyncedLocal = localTodos.filter((t) => !t.id);
+      for (const localTodo of unSyncedLocal) {
+        const isRoutine = localTodo.repeat !== "none";
+        const listId = isRoutine ? routinesListId : focusListId;
+        const notes = `[repeat:${localTodo.repeat}]`;
+        try {
+          const createdRemote = await this.syncPort.createTask(token, listId, {
+            title: localTodo.text,
+            notes,
+            status: localTodo.completed ? "completed" : "needsAction",
+            due: localTodo.dueDate
+              ? `${localTodo.dueDate}T00:00:00.000Z`
+              : undefined,
+          });
+          localTodo.id = createdRemote.id;
+          mergedTodos.push(localTodo);
+        } catch (err) {
+          console.error("Failed to upload offline task:", err);
+        }
+      }
+
+      await this.todoRepository.saveAll(mergedTodos);
+      return { todos: mergedTodos };
+    } catch (err) {
+      console.warn("SyncGoogleTasksUseCase failed:", err);
+      const localTodos = await this.todoRepository.getAll();
+      return { todos: localTodos, error: String(err) };
+    }
+  }
 }

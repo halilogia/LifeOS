@@ -100,7 +100,9 @@ const FALLBACK_IPOS: IPOEntry[] = [
 function isWithinLastDays(dateStr: string, days: number): boolean {
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) {return true;} // Geçersiz tarih formatında son günlerdeymiş gibi gösterelim
+    if (isNaN(d.getTime())) {
+      return true;
+    } // Geçersiz tarih formatında son günlerdeymiş gibi gösterelim
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
     return d >= cutoff && d <= new Date();
@@ -109,18 +111,38 @@ function isWithinLastDays(dateStr: string, days: number): boolean {
   }
 }
 
-function parseHalkarzDate(dateStr: string): { start: Date | null; end: Date | null; status: IPOEntry["status"] } {
-  if (!dateStr || dateStr.includes("Hazırlanıyor") || dateStr.includes("Taslak")) {
+function parseHalkarzDate(dateStr: string): {
+  start: Date | null;
+  end: Date | null;
+  status: IPOEntry["status"];
+} {
+  if (
+    !dateStr ||
+    dateStr.includes("Hazırlanıyor") ||
+    dateStr.includes("Taslak")
+  ) {
     return { start: null, end: null, status: "upcoming" };
   }
 
   // Example: "8-9-10 Temmuz 2026" or "1-2 Temmuz 2026" or "30 Haziran, 1 Temmuz 2026"
   const yearMatch = dateStr.match(/\d{4}/);
-  const year = yearMatch ? parseInt(yearMatch[0], 10) : new Date().getFullYear();
+  const year = yearMatch
+    ? parseInt(yearMatch[0], 10)
+    : new Date().getFullYear();
 
   const monthsTr: Record<string, number> = {
-    ocak: 0, şubat: 1, mart: 2, nisan: 3, mayıs: 4, haziran: 5,
-    temmuz: 6, ağustos: 7, eylül: 8, ekim: 9, kasım: 10, aralık: 11
+    ocak: 0,
+    şubat: 1,
+    mart: 2,
+    nisan: 3,
+    mayıs: 4,
+    haziran: 5,
+    temmuz: 6,
+    ağustos: 7,
+    eylül: 8,
+    ekim: 9,
+    kasım: 10,
+    aralık: 11,
   };
 
   let monthIndex = 0;
@@ -136,7 +158,9 @@ function parseHalkarzDate(dateStr: string): { start: Date | null; end: Date | nu
     return { start: null, end: null, status: "completed" };
   }
 
-  const days = numbers.map(n => parseInt(n, 10)).filter(n => n !== year && n < 32);
+  const days = numbers
+    .map((n) => parseInt(n, 10))
+    .filter((n) => n !== year && n < 32);
   if (days.length === 0) {
     return { start: null, end: null, status: "completed" };
   }
@@ -182,24 +206,37 @@ export async function fetchAllIPOs(): Promise<{
         const content = match[1];
 
         // Extract Company Name
-        const nameMatch = content.match(/<h3 class="il-halka-arz-sirket"><a href="[^"]*" title="([^"]*)">/i);
-        const name = nameMatch ? nameMatch[1] : '';
-        if (!name) {continue;}
+        const nameMatch = content.match(
+          /<h3 class="il-halka-arz-sirket"><a href="[^"]*" title="([^"]*)">/i,
+        );
+        const name = nameMatch ? nameMatch[1] : "";
+        if (!name) {
+          continue;
+        }
 
         // Extract Url
         const urlMatch = content.match(/href="([^"]*)"/i);
-        const url = urlMatch ? urlMatch[1] : 'https://halkarz.com';
+        const url = urlMatch ? urlMatch[1] : "https://halkarz.com";
 
         // Extract Ticker / Code
-        const tickerMatch = content.match(/<span class="il-bist-kod">([\s\S]*?)<\/span>/i);
-        const ticker = tickerMatch ? tickerMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+        const tickerMatch = content.match(
+          /<span class="il-bist-kod">([\s\S]*?)<\/span>/i,
+        );
+        const ticker = tickerMatch
+          ? tickerMatch[1].replace(/<[^>]*>/g, "").trim()
+          : "";
 
         // Extract Dates
-        const dateMatch = content.match(/<time datetime="[^"]*" title="([^"]*)"/i) || content.match(/<time[^>]*>([\s\S]*?)<\/time>/i);
-        const dateRaw = dateMatch ? dateMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+        const dateMatch =
+          content.match(/<time datetime="[^"]*" title="([^"]*)"/i) ||
+          content.match(/<time[^>]*>([\s\S]*?)<\/time>/i);
+        const dateRaw = dateMatch
+          ? dateMatch[1].replace(/<[^>]*>/g, "").trim()
+          : "";
 
         const parsedDate = parseHalkarzDate(dateRaw);
-        const formatDateStr = (d: Date | null) => d ? d.toISOString().split('T')[0] : '';
+        const formatDateStr = (d: Date | null) =>
+          d ? d.toISOString().split("T")[0] : "";
 
         parsed.push({
           id: `ha-${ticker || index}`,
@@ -252,9 +289,7 @@ export async function fetchIPOHistory(days = 30): Promise<{
 }> {
   const result = await fetchAllIPOs();
   const history = result.data.filter(
-    (ipo) =>
-      ipo.status === "completed" &&
-      isWithinLastDays(ipo.endDate, days),
+    (ipo) => ipo.status === "completed" && isWithinLastDays(ipo.endDate, days),
   );
   return { data: history, isFallback: result.isFallback };
 }

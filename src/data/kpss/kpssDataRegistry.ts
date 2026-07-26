@@ -25,5 +25,5 @@ export const KPSS_YEARLY_DATA: Record<string, any> = {
   "2011": exam2011,
   "2010": exam2010,
   "2009": exam2009,
-  "tarih_arsivi": examTarihArsivi
+  tarih_arsivi: examTarihArsivi,
 };
