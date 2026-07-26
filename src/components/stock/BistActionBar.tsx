@@ -1,0 +1,183 @@
+/**
+ * BistActionBar.tsx
+ * BIST Dashboard sekmeleri ve aksiyon butonları (KAP Haberleri, + Hisse Ekle, Alarmlar, Yenile).
+ */
+
+export type BistTabId = "portfolio" | "ai-report" | "chart";
+
+interface BistActionBarProps {
+  activeTab: BistTabId;
+  alertLogsCount: number;
+  onTabChange: (tab: BistTabId) => void;
+  onOpenKapNewsModal: () => void;
+  onOpenAddModal: () => void;
+  onOpenLogsModal: () => void;
+  onRefreshData: () => void;
+}
+
+function IconPlus() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
+function IconBell() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  );
+}
+
+function IconRefresh() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="23 4 23 10 17 10" />
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+    </svg>
+  );
+}
+
+function IconNewspaper() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 1-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+      <path d="M18 14h-8" />
+      <path d="M18 18h-8" />
+      <path d="M10 6h8v4h-8V6Z" />
+    </svg>
+  );
+}
+
+function IconSparkles() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+    </svg>
+  );
+}
+
+export function BistActionBar({
+  activeTab,
+  alertLogsCount,
+  onTabChange,
+  onOpenKapNewsModal,
+  onOpenAddModal,
+  onOpenLogsModal,
+  onRefreshData,
+}: BistActionBarProps) {
+  return (
+    <div className="stock-action-bar">
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <button
+          className={`stock-btn ${
+            activeTab === "portfolio"
+              ? "stock-btn-primary"
+              : "stock-btn-secondary"
+          }`}
+          onClick={() => onTabChange("portfolio")}
+        >
+          BIST Portföy & Takip Listem
+        </button>
+        <button
+          className={`stock-btn ${
+            activeTab === "ai-report"
+              ? "stock-btn-primary"
+              : "stock-btn-secondary"
+          }`}
+          onClick={() => onTabChange("ai-report")}
+        >
+          <IconSparkles />
+          <span>AI Borsa Özeti & Danışman</span>
+        </button>
+      </div>
+
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <button
+          className="stock-btn stock-btn-secondary"
+          onClick={onOpenKapNewsModal}
+        >
+          <IconNewspaper />
+          <span>KAP Haberleri</span>
+        </button>
+        <button
+          className="stock-btn stock-btn-primary"
+          onClick={onOpenAddModal}
+        >
+          <IconPlus />
+          <span>+ Hisse Ekle</span>
+        </button>
+        <button
+          className="stock-btn stock-btn-secondary"
+          onClick={onOpenLogsModal}
+        >
+          <IconBell />
+          <span>Alarmlar ({alertLogsCount})</span>
+        </button>
+        <button
+          className="stock-btn stock-btn-secondary"
+          onClick={onRefreshData}
+          title="Canlı Verileri Yenile"
+        >
+          <IconRefresh />
+        </button>
+      </div>
+    </div>
+  );
+}
