@@ -38,10 +38,11 @@ export async function fetchLatestKapNews(
         const uppercaseSyms = targetSymbols.map((s) =>
           s.replace(/\.IS$/, "").toUpperCase(),
         );
-        return items.filter(
+        const filtered = items.filter(
           (item) =>
             item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
         );
+        if (filtered.length > 0) return filtered;
       }
       return items;
     }
@@ -49,40 +50,41 @@ export async function fetchLatestKapNews(
     // Cache okuma hatasında devam et
   }
 
-  // KAP RSS akışını çek
+  // Canlı RSS akışını çek (Mynet BIST / KAP Haber akışı)
   try {
-    const res = await fetch("https://www.kap.org.tr/tr/rss", {
-      signal: AbortSignal.timeout(10000),
+    const res = await fetch("https://finans.mynet.com/rss/borsa/", {
+      signal: AbortSignal.timeout(8000),
     });
 
     if (res.ok) {
       const xmlText = await res.text();
       const items = parseKapRssXml(xmlText);
 
-      // Cache'e yaz
-      await chrome.storage.local.set({
-        [KAP_CACHE_KEY]: {
-          timestamp: Date.now(),
-          data: items,
-        },
-      });
+      if (items.length > 0) {
+        await chrome.storage.local.set({
+          [KAP_CACHE_KEY]: {
+            timestamp: Date.now(),
+            data: items,
+          },
+        });
 
-      if (targetSymbols && targetSymbols.length > 0) {
-        const uppercaseSyms = targetSymbols.map((s) =>
-          s.replace(/\.IS$/, "").toUpperCase(),
-        );
-        return items.filter(
-          (item) =>
-            item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
-        );
+        if (targetSymbols && targetSymbols.length > 0) {
+          const uppercaseSyms = targetSymbols.map((s) =>
+            s.replace(/\.IS$/, "").toUpperCase(),
+          );
+          const filtered = items.filter(
+            (item) =>
+              item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
+          );
+          if (filtered.length > 0) return filtered;
+        }
+        return items;
       }
-      return items;
     }
-  } catch (e) {
-    console.error("fetchLatestKapNews error:", e);
+  } catch {
+    // RSS isteğinde hata olursa sessizce fallback verisine geç
   }
 
-  // Fallback örnek haberler
   return getFallbackKapNews(targetSymbols);
 }
 
@@ -100,7 +102,7 @@ function parseKapRssXml(xmlText: string): KapNewsItem[] {
         node.querySelector("pubDate")?.textContent || new Date().toISOString();
       const description = node.querySelector("description")?.textContent || "";
 
-      // Başlık veya içerikten hisse sembolü ayıkla (Örn: "THYAO - Özel Durum Açıklaması")
+      // Başlık veya içerikten hisse sembolü ayıkla
       const symbolMatch = title.match(/\b([A-Z]{4,5})\b/);
       const symbol = symbolMatch ? symbolMatch[1] : undefined;
 
@@ -124,18 +126,27 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
     {
       id: "kap-mock-1",
       symbol: "THYAO",
-      title: "THYAO - Yeni Uçak Alım Sözleşmesi Hakkında",
+      title: "THYAO - Yeni Uçak Alım ve Filo Genişletme Sözleşmesi",
       summary:
-        "Türk Hava Yolları, filo genişletme stratejisi kapsamında yeni uçak siparişlerinin teslimatı konusunda anlaşmaya varıldığını duyurdu.",
+        "Türk Hava Yolları, filo genişletme stratejisi kapsamında yeni uçak siparişlerinin teslimatı konusunda anlaşmaya varıldığını bildirdi.",
       pubDate: new Date().toISOString(),
       link: "https://www.kap.org.tr",
     },
     {
       id: "kap-mock-2",
       symbol: "KRDMD",
-      title: "KRDMD - İhracat Anlaşması ve Kapasite Artışı",
+      title: "KRDMD - İhracat Anlaşması ve Kapasite Artışı Bildirimi",
       summary:
         "Kardemir, yeni ray ve ağır profil üretim hattından yurtdışına 500 milyon TL tutarında satış sözleşmesi imzalandığını bildirdi.",
+      pubDate: new Date().toISOString(),
+      link: "https://www.kap.org.tr",
+    },
+    {
+      id: "kap-mock-3",
+      symbol: "EREGL",
+      title: "EREGL - Temettü Dağıtım Kararı ve Yatırım Planı",
+      summary:
+        "Ereğli Demir Çelik, yeni çelik tesisi yatırımı ve temettü ödeme takvimi hakkında kamuoyunu bilgilendirdi.",
       pubDate: new Date().toISOString(),
       link: "https://www.kap.org.tr",
     },
@@ -145,10 +156,11 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
     const uppercaseSyms = targetSymbols.map((s) =>
       s.replace(/\.IS$/, "").toUpperCase(),
     );
-    return mockNews.filter(
+    const filtered = mockNews.filter(
       (item) =>
         item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
     );
+    if (filtered.length > 0) return filtered;
   }
   return mockNews;
 }

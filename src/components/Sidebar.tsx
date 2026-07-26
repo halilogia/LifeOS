@@ -15,6 +15,8 @@ interface SidebarProps {
 }
 
 const DEFAULT_ORDER = [
+  "bist",
+  "halka-arz",
   "free-games",
   "ai-chat",
   "list",
@@ -27,7 +29,6 @@ const DEFAULT_ORDER = [
   "calendar",
   "prayer",
   "kpss",
-  "halka-arz",
   "detox",
 ];
 
@@ -76,21 +77,28 @@ export function Sidebar({
     e.dataTransfer.dropEffect = "move";
   };
 
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+  };
+
   const handleDrop = async (e: any, targetId: string) => {
     e.preventDefault();
-    if (!draggedItem || draggedItem === targetId) {
+    const currentItem = draggedItem;
+    setDraggedItem(null);
+    if (!currentItem || currentItem === targetId) {
       return;
     }
 
     const nextOrder = [...order];
-    const draggedIdx = nextOrder.indexOf(draggedItem);
+    const draggedIdx = nextOrder.indexOf(currentItem);
     const targetIdx = nextOrder.indexOf(targetId);
 
+    if (draggedIdx === -1 || targetIdx === -1) return;
+
     nextOrder.splice(draggedIdx, 1);
-    nextOrder.splice(targetIdx, 0, draggedItem);
+    nextOrder.splice(targetIdx, 0, currentItem);
 
     setOrder(nextOrder);
-    setDraggedItem(null);
     chrome.storage.sync.set({ sidebarOrder: nextOrder });
     if (onOrderChange) {
       onOrderChange(nextOrder);
@@ -139,6 +147,7 @@ export function Sidebar({
                     onClick={() => onViewChange("free-games")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -167,6 +176,7 @@ export function Sidebar({
                     onClick={() => onViewChange("ai-chat")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -197,6 +207,7 @@ export function Sidebar({
                     }}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -229,6 +240,7 @@ export function Sidebar({
                     onClick={() => onViewChange("willpower")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -256,6 +268,7 @@ export function Sidebar({
                     onClick={() => onViewChange("pomodoro")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -285,6 +298,7 @@ export function Sidebar({
                     onClick={() => onViewChange("eisenhower")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -315,6 +329,7 @@ export function Sidebar({
                     onClick={() => onViewChange("hifiz")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -343,6 +358,7 @@ export function Sidebar({
                     onClick={() => onViewChange("notes")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -374,6 +390,7 @@ export function Sidebar({
                     onClick={() => onViewChange("srs")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -401,6 +418,7 @@ export function Sidebar({
                     onClick={() => onViewChange("calendar")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -438,6 +456,7 @@ export function Sidebar({
                     onClick={() => onViewChange("prayer")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -466,6 +485,7 @@ export function Sidebar({
                     onClick={() => onViewChange("kpss")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -487,6 +507,36 @@ export function Sidebar({
                     <span>{t.view_kpss}</span>
                   </button>
                 );
+              case "bist":
+                return (
+                  <button
+                    key={key}
+                    id="view-bist-btn"
+                    className={itemClass}
+                    onClick={() => onViewChange("bist")}
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => handleDragOver(e, key)}
+                    onDrop={(e) => handleDrop(e, key)}
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <line x1="12" y1="20" x2="12" y2="10" />
+                      <line x1="18" y1="20" x2="18" y2="4" />
+                      <line x1="6" y1="20" x2="6" y2="16" />
+                    </svg>
+                    <span>BIST Borsa OS</span>
+                  </button>
+                );
               case "halka-arz":
                 return (
                   <button
@@ -496,6 +546,7 @@ export function Sidebar({
                     onClick={() => onViewChange("halka-arz")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
@@ -524,6 +575,7 @@ export function Sidebar({
                     onClick={() => onViewChange("detox")}
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, key)}
+                    onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, key)}
                     onDrop={(e) => handleDrop(e, key)}
                   >
