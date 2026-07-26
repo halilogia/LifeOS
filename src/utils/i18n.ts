@@ -180,8 +180,10 @@ export const translations = {
     google_sync_status_synced: "Google ile Senkronize",
     google_sync_status_offline: "Çevrimdışı (Yerel Kayıt)",
     google_sync_last_synced: "Son yedekleme:",
-    google_sync_success_backup: "Verileriniz Google Drive'a başarıyla yedeklendi!",
-    google_sync_success_restore: "Verileriniz Google Drive'dan başarıyla yüklendi! Sayfa yenileniyor...",
+    google_sync_success_backup:
+      "Verileriniz Google Drive'a başarıyla yedeklendi!",
+    google_sync_success_restore:
+      "Verileriniz Google Drive'dan başarıyla yüklendi! Sayfa yenileniyor...",
     google_sync_error: "Google senkronizasyon hatası!",
     google_sync_no_backup: "Google Drive üzerinde kayıtlı yedek bulunamadı.",
     pomo_tab_timer: "Zamanlayıcı",
@@ -189,10 +191,12 @@ export const translations = {
     pomo_tab_alarms: "Alarmlar",
     pomo_tab_zen: "Zen Bahçesi & Geçmiş",
     zen_garden_title: "Zen Bahçeniz",
-    zen_garden_subtitle: "Odaklanma seanslarınızla bahçenizi yeşertin ve genişletin.",
+    zen_garden_subtitle:
+      "Odaklanma seanslarınızla bahçenizi yeşertin ve genişletin.",
     zen_modal_title: "Tebrikler! Seans Tamamlandı",
     zen_modal_question: "Bugün ne üzerine çalıştınız?",
-    zen_modal_placeholder: "Çalışma konusunu yazın... (Örn: Matematik, Kodlama)",
+    zen_modal_placeholder:
+      "Çalışma konusunu yazın... (Örn: Matematik, Kodlama)",
     zen_modal_select: "Ekmek istediğiniz Zen Elemanını seçin:",
     zen_modal_plant: "Bahçeye Yerleştir",
     zen_elem_bonsai: "Bonsai Ağacı",
@@ -216,7 +220,8 @@ export const translations = {
     ipo_loading: "Halka arz verileri yükleniyor...",
     ipo_error: "Veriler alınamadı. Lütfen tekrar deneyin.",
     ipo_empty_active: "Şu an aktif halka arz başvurusu bulunmuyor.",
-    ipo_empty_upcoming: "Yakın zamanda planlanan halka arz başvurusu bulunmuyor.",
+    ipo_empty_upcoming:
+      "Yakın zamanda planlanan halka arz başvurusu bulunmuyor.",
     ipo_empty_history: "Son 30 gün içinde tamamlanan halka arz bulunamadı.",
     ipo_fallback_notice: "Canlı veri alınamadı — örnek veri gösteriliyor.",
     ipo_tab_upcoming: "Yakında / Taslak",
@@ -243,15 +248,19 @@ export const translations = {
     stock_cache_note: "Son güncelleme:",
     view_ai_chat: "AI Asistan",
     ai_chat_title: "Life OS Yapay Zeka Asistanı",
-    ai_chat_placeholder: "Bir mesaj yazın (Örn: ayın 20'sine görev oluştur: Kimya çalış)...",
+    ai_chat_placeholder:
+      "Bir mesaj yazın (Örn: ayın 20'sine görev oluştur: Kimya çalış)...",
     ai_chat_key_title: "Gemini API Anahtarı",
     ai_chat_key_placeholder: "API Anahtarını buraya yapıştırın...",
     ai_chat_key_save: "Kaydet",
     ai_chat_key_saved: "Anahtar Kaydedildi ✓",
-    ai_chat_key_info: "Hizmeti kullanabilmek için bir Gemini API Anahtarı girebilirsiniz. Anahtarınız tarayıcınızda güvenle saklanır.",
-    ai_chat_no_key_warning: "API anahtarı bulunamadı. Yerel Akıllı Komut modu aktif. (Kullanılabilir: ayın X'ine görev oluştur: [Metin], vb.)",
+    ai_chat_key_info:
+      "Hizmeti kullanabilmek için bir Gemini API Anahtarı girebilirsiniz. Anahtarınız tarayıcınızda güvenle saklanır.",
+    ai_chat_no_key_warning:
+      "API anahtarı bulunamadı. Yerel Akıllı Komut modu aktif. (Kullanılabilir: ayın X'ine görev oluştur: [Metin], vb.)",
     ai_chat_send: "Gönder",
-    ai_chat_welcome: "Merhaba! Ben Life OS asistanınız. Size görevlerinizi yönetmede ve takviminizi güncellemede yardımcı olabilirim. Ne yapmak istersiniz?",
+    ai_chat_welcome:
+      "Merhaba! Ben Life OS asistanınız. Size görevlerinizi yönetmede ve takviminizi güncellemede yardımcı olabilirim. Ne yapmak istersiniz?",
     ai_chat_suggestion_1: "ayın 20sine görev oluştur: Kimya Çalış",
     ai_chat_suggestion_2: "yarın fizik sınavı için hatırlatıcı ekle",
     ai_chat_suggestion_3: "25 Temmuz için görev oluştur: Dişçi Randevusu",
@@ -259,7 +268,8 @@ export const translations = {
     settings_ai_provider: "AI Sağlayıcısı",
     settings_ai_key: "API Anahtarı",
     settings_ai_model: "Model Adı",
-    settings_ai_model_desc: "Boş bırakılırsa varsayılan model kullanılır. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+    settings_ai_model_desc:
+      "Boş bırakılırsa varsayılan model kullanılır. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
     settings_tab_general: "Genel",
     settings_tab_kpss: "KPSS",
     settings_tab_detox: "Detoks",
@@ -297,12 +307,14 @@ export const translations = {
     settings_ai_select_model_placeholder: "Bir model seçin",
     settings_ai_models_auto_list: "Mevcut modeller otomatik listelenecektir.",
     settings_ai_active_id: "Aktif / Özel Model Kimliği:",
-    settings_ai_active_id_desc: "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz.",
+    settings_ai_active_id_desc:
+      "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz.",
     settings_ai_show_thinking: "Düşünme Sürecini (Thinking) Göster:",
     settings_ai_combos: "9Router Kombinasyonları (Combos)",
     settings_ai_hide: "Gizle",
     settings_ai_show: "Göster",
-    settings_ai_endpoint_desc: "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)",
+    settings_ai_endpoint_desc:
+      "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)",
     settings_ai_loading: "Yükleniyor...",
     settings_ai_fetch_models: "Modelleri Getir",
     settings_sync_data_manual: "Veri Yönetimi (Manuel)",
@@ -509,8 +521,10 @@ export const translations = {
     google_sync_status_synced: "Synced with Google",
     google_sync_status_offline: "Offline (Local mode)",
     google_sync_last_synced: "Last backup:",
-    google_sync_success_backup: "Your data has been successfully backed up to Google Drive!",
-    google_sync_success_restore: "Your data has been successfully restored from Google Drive! Reloading...",
+    google_sync_success_backup:
+      "Your data has been successfully backed up to Google Drive!",
+    google_sync_success_restore:
+      "Your data has been successfully restored from Google Drive! Reloading...",
     google_sync_error: "Google sync error!",
     google_sync_no_backup: "No backup file found on your Google Drive.",
     pomo_tab_timer: "Timer",
@@ -518,7 +532,8 @@ export const translations = {
     pomo_tab_alarms: "Alarms",
     pomo_tab_zen: "Zen Garden & History",
     zen_garden_title: "Your Zen Garden",
-    zen_garden_subtitle: "Grow and populate your garden with your focus sessions.",
+    zen_garden_subtitle:
+      "Grow and populate your garden with your focus sessions.",
     zen_modal_title: "Congratulations! Session Completed",
     zen_modal_question: "What did you focus on today?",
     zen_modal_placeholder: "Write your focus topic... (e.g. Math, Coding)",
@@ -572,15 +587,19 @@ export const translations = {
     stock_cache_note: "Last updated:",
     view_ai_chat: "AI Assistant",
     ai_chat_title: "Life OS AI Assistant",
-    ai_chat_placeholder: "Type a message (e.g.: create task for 20th of the month: Study Chemistry)...",
+    ai_chat_placeholder:
+      "Type a message (e.g.: create task for 20th of the month: Study Chemistry)...",
     ai_chat_key_title: "Gemini API Key",
     ai_chat_key_placeholder: "Paste API Key here...",
     ai_chat_key_save: "Save",
     ai_chat_key_saved: "Key Saved ✓",
-    ai_chat_key_info: "Enter your Gemini API Key to enable conversational AI. Your key is stored securely in your sync storage.",
-    ai_chat_no_key_warning: "No API Key found. Local Smart Command mode is active. (Available: create task for the Xth: [Text], etc.)",
+    ai_chat_key_info:
+      "Enter your Gemini API Key to enable conversational AI. Your key is stored securely in your sync storage.",
+    ai_chat_no_key_warning:
+      "No API Key found. Local Smart Command mode is active. (Available: create task for the Xth: [Text], etc.)",
     ai_chat_send: "Send",
-    ai_chat_welcome: "Hello! I am your Life OS assistant. I can help you manage your tasks and update your calendar. What would you like to do?",
+    ai_chat_welcome:
+      "Hello! I am your Life OS assistant. I can help you manage your tasks and update your calendar. What would you like to do?",
     ai_chat_suggestion_1: "create task for the 20th: Study Chemistry",
     ai_chat_suggestion_2: "add a task for tomorrow: Physics Exam",
     ai_chat_suggestion_3: "create task for July 25: Dentist Appointment",
@@ -588,7 +607,8 @@ export const translations = {
     settings_ai_provider: "AI Provider",
     settings_ai_key: "API Key",
     settings_ai_model: "Model Name",
-    settings_ai_model_desc: "If left empty, default is used. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+    settings_ai_model_desc:
+      "If left empty, default is used. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
     settings_tab_general: "General",
     settings_tab_kpss: "KPSS",
     settings_tab_detox: "Detox",
@@ -605,7 +625,8 @@ export const translations = {
     srs_easy: "Easy",
     srs_preparing: "Preparing vocabulary pool...",
     srs_error_loading: "An error occurred while loading the vocabulary pool.",
-    srs_finished_message: "You've finished all your vocabulary reviews for today.",
+    srs_finished_message:
+      "You've finished all your vocabulary reviews for today.",
     srs_click_to_see: "Click to see translation",
     settings_detox_limits_title: "Social Media Daily Limits",
     settings_unlimited: "Unlimited",
@@ -624,14 +645,17 @@ export const translations = {
     settings_ai_select_model: "Select Model:",
     settings_ai_search_model: "Search model (e.g. deepseek)...",
     settings_ai_select_model_placeholder: "Select a model",
-    settings_ai_models_auto_list: "Available models will be listed automatically.",
+    settings_ai_models_auto_list:
+      "Available models will be listed automatically.",
     settings_ai_active_id: "Active / Custom Model ID:",
-    settings_ai_active_id_desc: "You can select from the list above or manually type the full model ID here.",
+    settings_ai_active_id_desc:
+      "You can select from the list above or manually type the full model ID here.",
     settings_ai_show_thinking: "Show Thinking Process:",
     settings_ai_combos: "9Router Combos",
     settings_ai_hide: "Hide",
     settings_ai_show: "Show",
-    settings_ai_endpoint_desc: "e.g. http://localhost:20128/v1 (9Router default address)",
+    settings_ai_endpoint_desc:
+      "e.g. http://localhost:20128/v1 (9Router default address)",
     settings_ai_loading: "Loading...",
     settings_ai_fetch_models: "Fetch Models",
     settings_sync_data_manual: "Data Management (Manual)",
@@ -703,7 +727,7 @@ export function getTranslation(lang: Language): Record<string, string> {
         return (translations.en as any)[prop];
       }
       return prop;
-    }
+    },
   };
   const activeMap = translations[lang] || translations.en;
   return new Proxy(activeMap, handler) as Record<string, string>;

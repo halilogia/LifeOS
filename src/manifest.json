@@ -6,13 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": [
-    "storage",
-    "notifications",
-    "tabs",
-    "alarms",
-    "identity"
-  ],
+  "permissions": ["storage", "notifications", "tabs", "alarms", "identity"],
   "host_permissions": [
     "https://www.gamerpower.com/*",
     "https://query2.finance.yahoo.com/*",
@@ -42,12 +36,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
       "run_at": "document_start"
     }
   ],

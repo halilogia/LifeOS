@@ -3,13 +3,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Eski Türk devletlerinde hükümdara, yönetme yetkisinin Tanrı tarafından verildiğine inanılmıştır. Aşağıdakilerden hangisi, İslamiyet’ten önce kurulan Türk devletlerinde bu yetkiye verilen addır?",
-      "options": [
-        "",
-        "",
-        "Şad Kut Tekin",
-        "",
-        "Toy Balbal"
-      ],
+      "options": ["", "", "Şad Kut Tekin", "", "Toy Balbal"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (1. Soru)."
     },
@@ -538,13 +532,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Aşağıda verilen termik santrallerde kullanılan enerji kaynakları göz önüne alındığında hangisinin, hava kirliliği üzerindeki etkisinin daha az olması bek- lenir?",
-      "options": [
-        "",
-        "",
-        "Soma Yatağan Çatalağzı",
-        "",
-        "Ambarlı Seyitömer"
-      ],
+      "options": ["", "", "Soma Yatağan Çatalağzı", "", "Ambarlı Seyitömer"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (42. Soru)."
     },
@@ -592,78 +580,42 @@
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "84 80 72 64 60 Diğer sayfaya geçiniz. 9"
-      ],
+      "options": ["", "", "", "", "84 80 72 64 60 Diğer sayfaya geçiniz. 9"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Sayı doğrusu üzerinde, 2 noktasına eşit uzaklıkta olan iki farklı sayının çarpımı olduğuna göre, büyük sayı küçük sayıdan kaç fazladır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
@@ -683,195 +635,105 @@
     {
       "topic": "Genel Matematik",
       "question": "Z tam sayılar kümesi olmak üzere, kümeleri veriliyor. Buna göre, fark kümesinin eleman sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 5 6 7 8 Diğer sayfaya geçiniz. 10"
-      ],
+      "options": ["", "", "", "", "4 5 6 7 8 Diğer sayfaya geçiniz. 10"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, ifadesinin değeri kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 4 5 6 8"
-      ],
+      "options": ["", "", "", "", "2 4 5 6 8"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x, y ve z ardışık çift doğal sayıları koşullarını sağlamaktadır. Buna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "30 36 48 54 60"
-      ],
+      "options": ["", "", "", "", "30 36 48 54 60"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "15 18 20 24 27"
-      ],
+      "options": ["", "", "", "", "15 18 20 24 27"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Gerçel sayılar kümesi üzerinde bir f fonksiyonu biçiminde tanımlanıyor. Buna göre, eşitliğini sağlayan a değeri kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 11"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 11"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Ahmet x yılında, Mehmet ise y yılında doğmuştur. Ahmet’in yaşı Mehmet’in yaşının 2 katı olduğuna göre, bu iki kişinin yaşları toplamının x ve y türünden ifadesi aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir iş yerinde, beşer kişinin çalıştığı A ve B odaları vardır. Her bir odanın yaş ortalaması 36’dır. A odasında çalışan Tolga, B odasına taşındığında; A odasının yaş ortalaması, B odasının yaş ortalamasından 5 fazla oluyor. Buna göre, Tolga’nın yaşı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "24 25 26 28 30"
-      ],
+      "options": ["", "", "", "", "24 25 26 28 30"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Meşrubat satan bir büfeci; elinde bulunan bir miktar portakal suyunun yarısını 0,5 litrelik, kalan yarısını ise 1 litrelik şişelere doldurmuştur. Büfeci toplam 48 şişeyi tam doldurduğuna göre, başlangıçta büfecinin elinde kaç litre portakal suyu vardı?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "24 28 30 32 36"
-      ],
+      "options": ["", "", "", "", "24 28 30 32 36"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Emre, maaşının % 70’ini harcadığında kalan maaşı aylık ev kirasının % 80’ini karşılamaktadır. Evin aylık kirası ¨600 olduğuna göre, Emre’nin maaşı kaç TL’dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1600 1800 2000 2100 2400"
-      ],
+      "options": ["", "", "", "", "1600 1800 2000 2100 2400"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir sinyalizasyon sisteminde; A lambası , B lambası ve C lambası dakikalık aralıklarla yanmaktadır. Bu üç lamba, birlikte yandıktan kaç dakika sonra ilk kez tekrar birlikte yanar?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 3 4 5 6"
-      ],
+      "options": ["", "", "", "", "2 3 4 5 6"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A kentinden yola çıkan bir kurye, saatte 60 km hızla giderek 9 saatte B kentine ulaşmayı hedeflemektedir. Bu hızla 4 saat yol alan kurye, yol çalışması nedeniyle 2 saat boyunca yolda beklemek zorunda kalmıştır. Buna göre kurye, hedeflediği zamanda B kentine ulaşmak için yolun kalan kısmında saatte kaç km hızla gitmelidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "75 90 100 105 120"
-      ],
+      "options": ["", "", "", "", "75 90 100 105 120"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir sinema salonunda bulunan 50 koltuğun bir kısmı mavi, kalan kısmı ise kırmızı renktedir. Boş salona gelen 10 kişilik bir seyirci grubunun yarısı mavi, yarısı kırmızı koltuklara oturduğunda boş olan mavi koltuk sayısı, boş olan kırmızı koltuk sayısının 4 katı oluyor. Buna göre, bu salonda kaç tane mavi koltuk vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "33 34 37 38 40 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "33 34 37 38 40 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "direksiyon dersleri için belirlediği ücret tarifesi verilmiştir. Dersler A sürücü kursu B sürücü kursu Teorik Toplam ¨420 Toplam ¨250 Direksiyon İlk 10 saat ücretsiz Sonraki her saat için ¨10 Saati ¨15 Teorik dersleri almanın zorunlu olduğu bu iki sürücü kursundan A kursuna giden Ayhan ile B kursuna giden Burcu eşit süre direksiyon dersi almış ve kurslara teorik ve direksiyon dersleri için toplamda aynı miktar ücret ödemişlerdir. Buna göre, bu iki kursiyer kaçar saat direksiyon dersi almıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "11 13 14 16 17 Diğer sayfaya geçiniz. 14"
-      ],
+      "options": ["", "", "", "", "11 13 14 16 17 Diğer sayfaya geçiniz. 14"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir oto galerisinde çalışanlar, sattıkları her bir otomobil için sabit bir prim almaktadır. Ocak ayında; bu galeri çalışanlarından Cenk, Barış’ın 3 katı kadar otomobil satmış ve bu iki çalışan toplam ¨2400 prim almıştır. Barış aynı ay içerisinde 6 otomobil daha satmış olsaydı Cenk ile aynı miktarda prim alacaktı. Bu galeride çalışanlar, sattıkları her bir otomobil için kaç TL prim almaktadır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "300 270 240 200 150"
-      ],
+      "options": ["", "", "", "", "300 270 240 200 150"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, oranı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 15"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 15"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
@@ -891,13 +753,7 @@
     {
       "topic": "Genel Matematik",
       "question": "2010 yılında C sınıfındaki öğrenci sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "25 30 35 40 45"
-      ],
+      "options": ["", "", "", "", "25 30 35 40 45"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     },

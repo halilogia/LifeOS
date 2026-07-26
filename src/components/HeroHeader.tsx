@@ -1,4 +1,3 @@
-
 interface HeroHeaderProps {
   clockText: string;
   dateText: string;

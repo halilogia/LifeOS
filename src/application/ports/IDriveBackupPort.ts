@@ -5,6 +5,9 @@
  */
 
 export interface IDriveBackupPort {
-    backupToDrive(token: string, backupData: Record<string, unknown>): Promise<boolean>;
-    restoreFromDrive(token: string): Promise<Record<string, unknown> | null>;
+  backupToDrive(
+    token: string,
+    backupData: Record<string, unknown>,
+  ): Promise<boolean>;
+  restoreFromDrive(token: string): Promise<Record<string, unknown> | null>;
 }

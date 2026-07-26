@@ -34,7 +34,16 @@ export function GeneralSettingsTab({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
-        <h3 style={{ margin: "0 0 12px 0", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-secondary)", opacity: 0.8 }}>
+        <h3
+          style={{
+            margin: "0 0 12px 0",
+            fontSize: "0.85rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            color: "var(--text-secondary)",
+            opacity: 0.8,
+          }}
+        >
           {t.settings_app_settings_title}
         </h3>
         <div className="settings-actions">
@@ -133,10 +142,7 @@ export function GeneralSettingsTab({
           </button>
 
           {/* Pomodoro Focus Block Toggle */}
-          <button
-            className="settings-action-btn"
-            onClick={onTogglePomoBlock}
-          >
+          <button className="settings-action-btn" onClick={onTogglePomoBlock}>
             <svg
               width="18"
               height="18"
@@ -165,7 +171,10 @@ export function GeneralSettingsTab({
           </button>
 
           {/* Universal Info Box Toggle */}
-          <button className="settings-action-btn" onClick={onToggleUniversalInfoBox}>
+          <button
+            className="settings-action-btn"
+            onClick={onToggleUniversalInfoBox}
+          >
             <svg
               width="18"
               height="18"

@@ -16,13 +16,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Türklerin İslamiyet’e geçmeleriyle aşağıdakiler- den hangisi kültürel hayatlarında bir sanat kolu oluşturacak derecede önem kazanmıştır?",
-      "options": [
-        "Hat",
-        "Maden işçiliği",
-        "Heykel",
-        "Oyma",
-        "Dokuma"
-      ],
+      "options": ["Hat", "Maden işçiliği", "Heykel", "Oyma", "Dokuma"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (2. Soru)."
     },
@@ -553,338 +547,182 @@
     {
       "topic": "Genel Matematik",
       "question": "+ + = x 1 x 1 3 9 1 9 27 olduğuna göre, x kaçtır?",
-      "options": [
-        "3",
-        "2",
-        "1",
-        "1 −",
-        "2 −"
-      ],
+      "options": ["3", "2", "1", "1 −", "2 −"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "5 21 − ifadesi aşağıdakilerden hangisine eşittir?",
-      "options": [
-        "− 7 3 2",
-        "− 5 3 2",
-        "− 7 5 3",
-        "+ 5 3 3",
-        "+ 5 7 3"
-      ],
+      "options": ["− 7 3 2", "− 5 3 2", "− 7 5 3", "+ 5 3 3", "+ 5 7 3"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "2 2 a b 16 − = 1 1 17 a b a b 16 + = + − olduğuna göre, a kaçtır?",
-      "options": [
-        "13 2",
-        "15 2",
-        "17 2",
-        "19 4",
-        "21 4"
-      ],
+      "options": ["13 2", "15 2", "17 2", "19 4", "21 4"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "3 x 3 3 − = x y 2 3 x 2 2 2 + + x xy y olduğuna göre, x y kaçtır?",
-      "options": [
-        "3 −",
-        "2 −",
-        "1",
-        "2",
-        "3"
-      ],
+      "options": ["3 −", "2 −", "1", "2", "3"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "+ − = 2 x 4x 7 0 denkleminin bir kökü a olduğuna göre, ( )( )( )( ) a 1 a 1 a 3 a 5 − + + + çarpımı kaçtır?",
-      "options": [
-        "12",
-        "14",
-        "15",
-        "18",
-        "20 Diğer sayfaya geçiniz. 8"
-      ],
+      "options": ["12", "14", "15", "18", "20 Diğer sayfaya geçiniz. 8"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "1 x R ve x 4 < ∈ olmak üzere, 3x x 1 2 − − − ifadesinin eşiti aşağıdakilerden hangisidir?",
-      "options": [
-        "4x 3 − −",
-        "4x 1 − −",
-        "4x 3 −",
-        "4x 1 +",
-        "4x 3 +"
-      ],
+      "options": ["4x 3 − −", "4x 1 − −", "4x 3 −", "4x 1 +", "4x 3 +"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a ve k pozitif tam sayılar olmak üzere, k 6 2 a ! • = eşitliğinde k en büyük değerini aldığında a kaç olur?",
-      "options": [
-        "15",
-        "25",
-        "30",
-        "45",
-        "60"
-      ],
+      "options": ["15", "25", "30", "45", "60"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a ve b birer pozitif tam sayı olmak üzere, ( ) 2 ekok a, b 2 3 • = olacak biçimde kaç farklı ( ) a, b sıralı ikilisi vardır?",
-      "options": [
-        "6",
-        "12",
-        "13",
-        "14",
-        "15 9"
-      ],
+      "options": ["6", "12", "13", "14", "15 9"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "− − + 2x 1 x 5 0 x 3 ≥ − eşitsizliğinin çözüm kümesi, I. ≤1 x 2 II. ≤ ≤ 1 x 3 2 III. 3 x 5 < ≤ IV. x 5 ≥ kümelerinin hangilerinin birleşimiyle oluşmuştur?",
-      "options": [
-        "Yalnız II",
-        "Yalnız III",
-        "I ve III",
-        "I ve IV",
-        "II ve IV"
-      ],
+      "options": ["Yalnız II", "Yalnız III", "I ve III", "I ve IV", "II ve IV"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "2 ( ) + x y = 2 x y 3 2 2 + = olduğuna göre, x y • çarpımı kaçtır? 2",
-      "options": [
-        "0",
-        "−1",
-        "1",
-        "1 2",
-        "−1 Diğer sayfaya geçiniz."
-      ],
+      "options": ["0", "−1", "1", "1 2", "−1 Diğer sayfaya geçiniz."],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a bir gerçel sayı olmak üzere, ( )( ) − + + = − 2 2 2 a a a 2 2 2 8 olduğuna göre, a kaçtır?",
-      "options": [
-        "−2",
-        "−1",
-        "0",
-        "1",
-        "2"
-      ],
+      "options": ["−2", "−1", "0", "1", "2"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "k bir doğal sayı olmak üzere, 1 den k ye kadar olan sayıların toplamı a, 9 dan k ye kadar olan sayıların toplamı ise b ile gösteriliyor. a b 4254 + = olduğuna göre, a kaçtır?",
-      "options": [
-        "2145",
-        "2146",
-        "2148",
-        "2150",
-        "2154 10"
-      ],
+      "options": ["2145", "2146", "2148", "2150", "2154 10"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A a, b, c, d, e = kümesi aşağıda verilen ∗ işlemi ile bir değişmeli grup oluşturmaktadır. ∗ a b c d e a d e a b c b c e a b c d a b c d e d b c d e a e c d e a b Her ∈ x A için xf fonksiyonu ( ) 1 xf y x− = ∗y ; y A ∈ biçiminde tanımlanıyor. Buna göre, ( ) ( ) e b f f e aşağıdakilerden hangisine eşittir?",
-      "options": [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e"
-      ],
+      "options": ["a", "b", "c", "d", "e"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "32 kişinin katıldığı bir sınavda her bir öğrenci mate- matik ya da fen testlerinden en az birini yapmıştır. Yalnız matematik testini yapan öğrenci sayısı fen testini yapan öğrenci sayısının 2 katından 4 eksiktir. Buna göre, yalnız matematik testini yapan öğrenci sayısı kaçtır?",
-      "options": [
-        "12",
-        "14",
-        "16",
-        "18",
-        "20 Diğer sayfaya geçiniz."
-      ],
+      "options": ["12", "14", "16", "18", "20 Diğer sayfaya geçiniz."],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x sayıda işçinin günde 10 saat çalışmasıyla 15 günde bitirilebilen bir iş, işçi sayısı artırılarak ve günde 8 sa- at çalışılarak 12 günde bitirilebiliyor. Buna göre, x aşağıdakilerden hangisi olabilir?",
-      "options": [
-        "10",
-        "12",
-        "18",
-        "24",
-        "32"
-      ],
+      "options": ["10", "12", "18", "24", "32"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Adnan, arkadaşına ‘‘5 yıl sonra yaşım, doğum yılı- mın rakamları toplamına eşit olacak.’’ diyor. Bu konuşma 2000 yılında geçtiğine göre, Adnan hangi yıl doğmuştur?",
-      "options": [
-        "1964",
-        "1973",
-        "1975",
-        "1979",
-        "1980"
-      ],
+      "options": ["1964", "1973", "1975", "1979", "1980"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Sıfırdan büyük a, b, c sayıları sırasıyla 2, 4, 6 sayı- ları ile orantılı ve 2 b a c = + olduğuna göre, a b c + + toplamı kaçtır?",
-      "options": [
-        "5",
-        "6",
-        "7",
-        "8",
-        "10 11"
-      ],
+      "options": ["5", "6", "7", "8", "10 11"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir deniz motoru AB yolunu saatte ( ) v 20 + km hızla 24 dakikada, aynı yolu saatte ( ) v 6 − km hızla 32 dakikada alıyor. Buna göre, AB yolu kaç km dir?",
-      "options": [
-        "40,2",
-        "40,8",
-        "41,2",
-        "41,6",
-        "41,8"
-      ],
+      "options": ["40,2", "40,8", "41,2", "41,6", "41,8"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Belirli bir yükseklikten bırakılan bir top, yere vuruşun- dan sonra bir önceki yüksekliğinin 3 8 i kadar yük- selmektedir. Top yere ikinci vuruşundan sonra 108 cm yüksel- diğine göre, birinci vuruşundan sonra kaç cm yükselmiştir?",
-      "options": [
-        "160",
-        "162",
-        "168",
-        "204",
-        "288 Diğer sayfaya geçiniz."
-      ],
+      "options": ["160", "162", "168", "204", "288 Diğer sayfaya geçiniz."],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir satıcı etiket fiyatı 300 TL olan bir ürüne önce % 20, sonra indirimli fiyat üzerinden % x indirim yapıyor. Satıcı ürünü ikinci indirimden sonra 168 TL ye sattığına göre, x kaçtır?",
-      "options": [
-        "20",
-        "25",
-        "30",
-        "35",
-        "40"
-      ],
+      "options": ["20", "25", "30", "35", "40"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "3 ü kız 4 ü erkek olan bir grup yan yana oturacaktır. Bu oturumda 3 kız öğrencinin yan yana bulunma olasılığı kaçtır? 7",
-      "options": [
-        "3",
-        "1 7",
-        "2 7 7",
-        "5",
-        "4 7 Diğer sayfaya geçiniz."
-      ],
+      "options": ["3", "1 7", "2 7 7", "5", "4 7 Diğer sayfaya geçiniz."],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Tuz oranı % 20 olan tuzlu sudan 30 litre su buhar- laştırılırsa yeni tuz oranı % 30 oluyor. Buna göre, başlangıçtaki tuzlu su miktarı kaç litredir?",
-      "options": [
-        "120",
-        "100",
-        "90",
-        "80",
-        "60"
-      ],
+      "options": ["120", "100", "90", "80", "60"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ABCD bir kare D C 60 [ ] [ ] EF AD ⊥ F ] x E ° = m(ECB) 60 ] ° = m(ABE) 60 60 = AB 4 cm A B 4 = EF x Yukarıdaki verilere göre x kaç cm dir?",
-      "options": [
-        "4 3 −",
-        "3 2 −",
-        "2 3 +",
-        "2 2 +",
-        "1 3 +"
-      ],
+      "options": ["4 3 −", "3 2 −", "2 3 +", "2 2 +", "1 3 +"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "y b K 3 x O a 4 Yukarıdaki dik koordinat sisteminde ( ) K 4, 3 nokta- sından geçen doğru x eksenini apsisi a olan, y ekse- nini de ordinatı b olan noktalarda kesmektedir. Buna göre, ( )( ) a 4 b 3 − − çarpımının değeri kaçtır?",
-      "options": [
-        "8",
-        "12",
-        "14",
-        "16",
-        "18 Diğer sayfaya geçiniz."
-      ],
+      "options": ["8", "12", "14", "16", "18 Diğer sayfaya geçiniz."],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "2005 yılında yapılan toplam ihracat x bin TL fazla, 2007 yılında yapılan toplam ihracat x bin TL az olsaydı iki yılda yapılan ihracat tutarları eşit olacaktı. Buna göre x kaçtır?",
-      "options": [
-        "150",
-        "200",
-        "250",
-        "300",
-        "350 14"
-      ],
+      "options": ["150", "200", "250", "300", "350 14"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Şirketin 2008 yılındaki gıda ihracatı 2004 yılına göre yüzde kaç azalmıştır?",
-      "options": [
-        "52,5",
-        "55",
-        "60",
-        "62,5",
-        "65"
-      ],
+      "options": ["52,5", "55", "60", "62,5", "65"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     },

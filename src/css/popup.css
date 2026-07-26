@@ -373,7 +373,11 @@ select option,
 
 /* Add alarm button */
 .popup-alarm-add-btn {
-  background: linear-gradient(135deg, var(--accent-color) 0%, #6d28d9 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--accent-color) 0%,
+    #6d28d9 100%
+  ) !important;
   border: none !important;
   color: white !important;
   cursor: pointer !important;
@@ -390,7 +394,11 @@ select option,
 }
 
 .popup-alarm-add-btn:hover {
-  background: linear-gradient(135deg, var(--accent-hover) 0%, #5b21b6 100%) !important;
+  background: linear-gradient(
+    135deg,
+    var(--accent-hover) 0%,
+    #5b21b6 100%
+  ) !important;
   transform: translateY(-1px) scale(1.04) !important;
   box-shadow: 0 6px 14px rgba(139, 92, 246, 0.3) !important;
 }
@@ -421,7 +429,7 @@ select option,
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.08);
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -434,7 +442,7 @@ select option,
   left: 3px;
   bottom: 3px;
   background-color: #94a3b8;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50%;
 }
 

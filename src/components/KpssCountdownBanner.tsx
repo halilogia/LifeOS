@@ -17,14 +17,18 @@ export function KpssCountdownBanner({
     <div className="kpss-countdowns-banner">
       <div className="kpss-countdown-card">
         <span className="kpss-countdown-title">
-          {lang === "tr" ? "KPSS Lisans Sınavına Kalan Süre" : "Time to KPSS Exam"}
+          {lang === "tr"
+            ? "KPSS Lisans Sınavına Kalan Süre"
+            : "Time to KPSS Exam"}
         </span>
         <span className="kpss-countdown-time">{kpssTimeLeft}</span>
         <span className="kpss-countdown-subtitle">6 Eylül 2026 - 10:15</span>
       </div>
       <div className="kpss-countdown-card">
         <span className="kpss-countdown-title">
-          {lang === "tr" ? "Tahmini Konuların Bitme Süresi" : "Estimated Study Completion Time"}
+          {lang === "tr"
+            ? "Tahmini Konuların Bitme Süresi"
+            : "Estimated Study Completion Time"}
         </span>
         <span className="kpss-countdown-time">{estimatedTimeLeft}</span>
         <span className="kpss-countdown-subtitle">

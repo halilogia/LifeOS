@@ -94,13 +94,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Osmanlı Devleti ilk daimî elçiliğini aşağıdaki Avrupa başkentlerinin hangisinde açmıştır?",
-      "options": [
-        "",
-        "",
-        "Berlin Viyana Paris",
-        "",
-        "Londra Moskova"
-      ],
+      "options": ["", "", "Berlin Viyana Paris", "", "Londra Moskova"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (8. Soru)."
     },
@@ -146,13 +140,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Birinci Dünya Savaşı sonunda toplanan Paris Barış Konferansı’na katılarak Osmanlı Devleti’nden ayrılma isteklerini belirten Müslüman ve gayrimüslim unsurların temsilcileri, Willson İlkeleri’ne dayanarak bağımsızlık taleplerini aşağıdaki etkenlerden hangisi üzerine inşa etmişlerdir?",
-      "options": [
-        "",
-        "",
-        "Din Nüfus Ekonomi",
-        "",
-        "Sosyal sınıf Rejim"
-      ],
+      "options": ["", "", "Din Nüfus Ekonomi", "", "Sosyal sınıf Rejim"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (12. Soru)."
     },
@@ -354,13 +342,7 @@
     {
       "topic": "Genel Tarih",
       "question": "nesil olarak adlandırılan ilk Türk sondaj gemisinin adı aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "Fatih Yavuz Kıbrıs",
-        "",
-        "Atak Göktürk"
-      ],
+      "options": ["", "", "Fatih Yavuz Kıbrıs", "", "Atak Göktürk"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (6. Soru)."
     }
@@ -499,13 +481,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Türkiye’de son yıllarda gelişme gösteren turizm türlerinden biri de kongre turizmidir. Kongre turizminin geliştiği yerlerin en önemli özelliği konaklama olanaklarının bolluğu, çeşitliliği ve turistik çekiciliklerin varlığıdır. Buna göre aşağıdaki illerin hangisinde kongre turizmi daha fazla gelişmiştir?",
-      "options": [
-        "",
-        "",
-        "Antalya Balıkesir Sinop",
-        "",
-        "Rize Mersin"
-      ],
+      "options": ["", "", "Antalya Balıkesir Sinop", "", "Rize Mersin"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (43. Soru)."
     },
@@ -525,13 +501,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Aşağıdaki illerden hangisinin komşu ülkelerle sınırı yoktur?",
-      "options": [
-        "",
-        "",
-        "Edirne Artvin Kars",
-        "",
-        "Mardin Siirt"
-      ],
+      "options": ["", "", "Edirne Artvin Kars", "", "Mardin Siirt"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (45. Soru)."
     }
@@ -540,65 +510,35 @@
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 5 6 7 8"
-      ],
+      "options": ["", "", "", "", "4 5 6 7 8"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 3 4"
-      ],
+      "options": ["", "", "", "", "2 3 4"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A ve B birer rakam olmak üzere, olduğuna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 7 8 9 10 Diğer sayfaya geçiniz. 10"
-      ],
+      "options": ["", "", "", "", "6 7 8 9 10 Diğer sayfaya geçiniz. 10"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a, b ve c gerçel sayıları için olduğuna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
@@ -618,247 +558,133 @@
     {
       "topic": "Genel Matematik",
       "question": "x ve y gerçel sayıları için olduğuna göre, oranı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a, b ve c tam sayıları için eşitliği sağlandığına göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "7 8 9 10 11 Diğer sayfaya geçiniz. 11"
-      ],
+      "options": ["", "", "", "", "7 8 9 10 11 Diğer sayfaya geçiniz. 11"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a, b ve c pozitif tam sayıları için eşitlikleri veriliyor. Buna göre, c sayısının alabileceği farklı değerlerin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "14 15 16 17 18"
-      ],
+      "options": ["", "", "", "", "14 15 16 17 18"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Tam sayılar kümesi üzerinde işlemleri biçiminde tanımlanıyor. Buna göre, işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 2 3 4 5"
-      ],
+      "options": ["", "", "", "", "1 2 3 4 5"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Tam sayılar kümesi üzerinde f fonksiyonu biçiminde tanımlanıyor. Buna göre, eşitliğini sağlayan en küçük n pozitif tam sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 4 6 8 10"
-      ],
+      "options": ["", "", "", "", "2 4 6 8 10"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "AAA üç basamaklı bir doğal sayı ve n bir pozitif tam sayı olmak üzere, eşitliğini sağlayan n sayısının rakamları toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 7 9 11 13 Diğer sayfaya geçiniz. 12"
-      ],
+      "options": ["", "", "", "", "5 7 9 11 13 Diğer sayfaya geçiniz. 12"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "AAB üç basamaklı doğal sayısı 5’e, ABA üç basamaklı doğal sayısı 11’e tam bölünebilmektedir. Buna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 11 12 13 14"
-      ],
+      "options": ["", "", "", "", "10 11 12 13 14"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir düğün salonunda her bir masa etrafında 5 ya da 6 sandalye bulunmaktadır. Başlangıçta, 6 sandalyeli masa sayısı 5 sandalyeli masa sayısının 2 katıdır. 5 sandalyeli masalardan iki tanesinin kırık olduğu fark edilince bu iki masa salondan çıkarılıyor. Bu iki masanın sandalyeleri, bazı 5 sandalyeli masaların etrafına her bir masaya bir sandalye eklenecek biçimde yerleştiriliyor. Son durumda, salondaki 6 sandalyeli masa sayısı 5 sandalyeli masa sayısının 3 katı oluyor. Buna göre, başlangıçta salonda toplam kaç masa vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "130 134 138 144 150"
-      ],
+      "options": ["", "", "", "", "130 134 138 144 150"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir okulda düzenlenen yıl sonu gösterisi için tüm öğrencilere gösteri kıyafeti alınmıştır. Bir erkek öğrenci için alınan kıyafetin fiyatı, bir kız öğrenci için alınan kıyafetin fiyatının ’i kadardır. Alınan kıyafetler için toplam 5740 TL ödenmiştir. Kız öğrencilerin sayısı, erkek öğrencilerin sayısının 2 katı olduğuna göre, kız öğrencilerin kıyafetleri için toplam kaç TL ödenmiştir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4000 4050 4100 4150 4200"
-      ],
+      "options": ["", "", "", "", "4000 4050 4100 4150 4200"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Ali, bir haftanın ilk 6 gününde bilgisayara karşı oynadığı 75 satranç oyununun % 48’ini kazanmış, geri kalan oyunları ise kaybetmiş ya da berabere bitirmiştir. Ali, bu haftanın son gününde belirli sayıda oyun oynayarak bu haftada kazanma oranını % 50’ye çıkarmıştır. Ali’nin bu haftanın son gününde berabere bitirdiği oyun sayısı 2’dir. Buna göre Ali’nin; bu haftanın son gününde kazandığı oyun sayısı, bu haftanın son gününde kaybettiği oyun sayısından kaç fazladır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 7 9 11 13 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "5 7 9 11 13 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir giyim firmasının A, B ve C şehirlerindeki mağaza sayıları sırasıyla 4, 5 ve 6 sayılarıyla doğru orantılıdır. Bu firma, mağazasının bulunmadığı başka bir şehre bu üç şehirde bulunan kendi mağazalarının toplam sayısı kadar mağaza açıyor. Son durumda, firmanın bu dört şehir için şehir başına düşen mağaza sayısı 60 oluyor. Buna göre, bu firmanın B şehrindeki mağazalarının sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "20 25 30 35 40"
-      ],
+      "options": ["", "", "", "", "20 25 30 35 40"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Elemanları doğal sayılardan oluşan bir kümenin birbirinden farklı her iki elemanı arasındaki farkın mutlak değeri, o kümenin bir elemanı ise bu kümeye “farklı küme” denir. Buna göre, kümesinin en az iki elemanlı alt kümelerinden kaç tanesi farklı kümedir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 7 9 10 12"
-      ],
+      "options": ["", "", "", "", "5 7 9 10 12"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Başlangıçta üretilen bu ürünlerin tamamının satışından 184 TL gelir elde edilmiştir. Buna göre, başlangıçta üretilen poğaça sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "40 48 50 56 60"
-      ],
+      "options": ["", "", "", "", "40 48 50 56 60"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bu gün içinde, belirli sayıda daha simit üretildikten sonra tüm simitlerin satışından elde edilen gelir, başlangıçta üretilen kurabiye ve poğaçaların satışından elde edilen gelirin toplamına eşittir. Buna göre, başlangıçta üretilen simitlerin sayısının sonradan üretilen simitlerin sayısına oranı kaçtır? 1 2 3",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 16"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 16"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki şekle göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "13 14 15 16 17"
-      ],
+      "options": ["", "", "", "", "13 14 15 16 17"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki şekle göre, a kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 7 8 9 10"
-      ],
+      "options": ["", "", "", "", "4 7 8 9 10"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki şekle göre, b’nin alabileceği farklı değerlerin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "17 18 20 22 23 Diğer sayfaya geçiniz. 17"
-      ],
+      "options": ["", "", "", "", "17 18 20 22 23 Diğer sayfaya geçiniz. 17"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, x kaç derecedir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 12 15 16 18"
-      ],
+      "options": ["", "", "", "", "10 12 15 16 18"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "B, C ve F noktaları doğrusal ve ABCD dikdörtgeninin alanı 48 birimkaredir. Buna göre, BEFH karesinin alanı kaç birimkaredir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "18 20 24 28 32"
-      ],
+      "options": ["", "", "", "", "18 20 24 28 32"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
     },

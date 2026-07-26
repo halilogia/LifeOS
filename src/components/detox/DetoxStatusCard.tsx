@@ -96,10 +96,7 @@ export function DetoxStatusCard({
                 "Odaklanma oturumunuz boyunca seçilen sosyal medya kanalları tamamen engellenmiştir."}
             </p>
 
-            <button
-              className="detox-btn danger"
-              onClick={onDisableDetox}
-            >
+            <button className="detox-btn danger" onClick={onDisableDetox}>
               {t.detox_btn_disable || "Detoksu Sonlandır"}
             </button>
           </div>
@@ -108,9 +105,7 @@ export function DetoxStatusCard({
         // Configure Detox Settings Form
         <div className="detox-setup-form">
           <div className="setup-section">
-            <h3>
-              {t.detox_select_sites || "Engellenecek Platformları Seçin"}
-            </h3>
+            <h3>{t.detox_select_sites || "Engellenecek Platformları Seçin"}</h3>
             <div className="platforms-grid">
               {SUPPORTED_SITES.map((site) => {
                 const isChecked = blockedSites.includes(site.domains[0]);
@@ -156,9 +151,7 @@ export function DetoxStatusCard({
                 ? "Özel Adres Engelle (Manuel)"
                 : "Block Custom Address (Manual)"}
             </h3>
-            <div
-              style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}
-            >
+            <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}>
               <input
                 type="text"
                 className="free-games-select detox-select"
@@ -241,8 +234,7 @@ export function DetoxStatusCard({
                         (e.currentTarget.style.color = "var(--danger)")
                       }
                       onMouseOut={(e) =>
-                        (e.currentTarget.style.color =
-                          "var(--text-secondary)")
+                        (e.currentTarget.style.color = "var(--text-secondary)")
                       }
                     >
                       &times;

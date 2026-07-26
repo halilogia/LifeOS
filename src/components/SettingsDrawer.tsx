@@ -29,7 +29,12 @@ export interface SettingsDrawerProps {
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
-  onUpdateAIConfig: (provider: string, key: string, model: string, endpoint?: string) => void;
+  onUpdateAIConfig: (
+    provider: string,
+    key: string,
+    model: string,
+    endpoint?: string,
+  ) => void;
   aiShowThinking: boolean;
   onUpdateAIShowThinking: (val: boolean) => void;
   googleUserEmail: string;
@@ -92,7 +97,9 @@ export function SettingsDrawer({
   initialTab,
 }: SettingsDrawerProps) {
   const t = translations[lang];
-  const [settingsTab, setSettingsTab] = useState<"general" | "kpss" | "detox" | "ai" | "sync">("general");
+  const [settingsTab, setSettingsTab] = useState<
+    "general" | "kpss" | "detox" | "ai" | "sync"
+  >("general");
 
   useEffect(() => {
     if (isOpen && initialTab) {
@@ -100,7 +107,9 @@ export function SettingsDrawer({
     }
   }, [isOpen, initialTab]);
 
-  if (!isOpen) {return null;}
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="settings-panel active" onClick={onClose}>

@@ -28,9 +28,7 @@ export function HifizYeterliklerCard({
           <span>
             {lang === "tr" ? "Müfredat İlerlemesi" : "Checklist Progress"}
           </span>
-          <span id="yeterlikler-overall-percent">
-            {yeterliklerPercent}%
-          </span>
+          <span id="yeterlikler-overall-percent">{yeterliklerPercent}%</span>
         </div>
         <div className="hifiz-overall-bar">
           <div

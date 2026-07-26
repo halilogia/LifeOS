@@ -6,7 +6,7 @@
  */
 
 export interface StockQuote {
-  symbol: string;   // THYAO.IS
+  symbol: string; // THYAO.IS
   shortName: string; // Türk Hava Yolları
   price: number;
   previousClose: number;
@@ -21,18 +21,26 @@ export interface StockQuote {
 }
 
 // ── Popüler BIST hisseleri ──────────────────────────────────────────────────
-export const POPULAR_BIST_STOCKS: { symbol: string; displayName: string; sector: string }[] = [
+export const POPULAR_BIST_STOCKS: {
+  symbol: string;
+  displayName: string;
+  sector: string;
+}[] = [
   { symbol: "THYAO.IS", displayName: "Türk Hava Yolları", sector: "Havacılık" },
   { symbol: "AKBNK.IS", displayName: "Akbank", sector: "Bankacılık" },
   { symbol: "GARAN.IS", displayName: "Garanti BBVA", sector: "Bankacılık" },
   { symbol: "EREGL.IS", displayName: "Ereğli Demir Çelik", sector: "Metal" },
   { symbol: "KCHOL.IS", displayName: "Koç Holding", sector: "Holding" },
-  { symbol: "SASA.IS",  displayName: "Sasa Polyester", sector: "Kimya" },
+  { symbol: "SASA.IS", displayName: "Sasa Polyester", sector: "Kimya" },
   { symbol: "TUPRS.IS", displayName: "Tüpraş", sector: "Enerji" },
   { symbol: "BIMAS.IS", displayName: "BİM Mağazalar", sector: "Perakende" },
   { symbol: "ASELS.IS", displayName: "Aselsan", sector: "Savunma" },
   { symbol: "FROTO.IS", displayName: "Ford Otosan", sector: "Otomotiv" },
-  { symbol: "PGSUS.IS", displayName: "Pegasus Hava Yolları", sector: "Havacılık" },
+  {
+    symbol: "PGSUS.IS",
+    displayName: "Pegasus Hava Yolları",
+    sector: "Havacılık",
+  },
   { symbol: "ISCTR.IS", displayName: "İş Bankası C", sector: "Bankacılık" },
   { symbol: "SAHOL.IS", displayName: "Sabancı Holding", sector: "Holding" },
   { symbol: "TCELL.IS", displayName: "Turkcell", sector: "Telekom" },
@@ -53,8 +61,12 @@ async function getCached(): Promise<StockQuote[] | null> {
   try {
     const result = await chrome.storage.local.get(CACHE_KEY);
     const cached = result[CACHE_KEY] as StockCache | undefined;
-    if (!cached) {return null;}
-    if (Date.now() - cached.timestamp > CACHE_TTL_MS) {return null;}
+    if (!cached) {
+      return null;
+    }
+    if (Date.now() - cached.timestamp > CACHE_TTL_MS) {
+      return null;
+    }
     return cached.data;
   } catch {
     return null;
@@ -86,11 +98,15 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) {throw new Error(`HTTP ${res.status}`);}
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
 
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
-    if (!meta) {throw new Error("No meta data");}
+    if (!meta) {
+      throw new Error("No meta data");
+    }
 
     const price: number = meta.regularMarketPrice ?? 0;
     const prev: number = meta.previousClose ?? meta.chartPreviousClose ?? price;
@@ -130,6 +146,17 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
+ * Tek bir hisse kodu için fiyat verisi çeker.
+ * ".IS" soneki yoksa otomatik ekler.
+ */
+export async function fetchStockQuote(symbol: string): Promise<StockQuote> {
+  const fullSymbol = symbol.toUpperCase().endsWith(".IS")
+    ? symbol.toUpperCase()
+    : `${symbol.toUpperCase()}.IS`;
+  return fetchSingleQuote(fullSymbol);
+}
+
+/**
  * Popüler BIST hisselerinin fiyatlarını çeker.
  * Cache geçerliyse doğrudan cache'den döner.
  */
@@ -141,7 +168,9 @@ export async function fetchStockPrices(
   // Cache kontrolü (sadece tam liste için)
   if (!symbols) {
     const cached = await getCached();
-    if (cached) {return cached;}
+    if (cached) {
+      return cached;
+    }
   }
 
   // Paralel fetch (her hisse ayrı istek — rate limit riski az)
@@ -170,23 +199,39 @@ export async function refreshStockPrices(): Promise<StockQuote[]> {
 // ── Format helpers (UI tarafında da kullanılabilir) ────────────────────────────
 
 export function formatPrice(price: number, currency = "TRY"): string {
-  if (price === 0) {return "—";}
+  if (price === 0) {
+    return "—";
+  }
   const symbol = currency === "TRY" ? "₺" : currency;
   return `${price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
 }
 
 export function formatVolume(vol: number): string {
-  if (vol === 0) {return "—";}
-  if (vol >= 1_000_000_000) {return `${(vol / 1_000_000_000).toFixed(2)}B`;}
-  if (vol >= 1_000_000) {return `${(vol / 1_000_000).toFixed(2)}M`;}
-  if (vol >= 1_000) {return `${(vol / 1_000).toFixed(1)}K`;}
+  if (vol === 0) {
+    return "—";
+  }
+  if (vol >= 1_000_000_000) {
+    return `${(vol / 1_000_000_000).toFixed(2)}B`;
+  }
+  if (vol >= 1_000_000) {
+    return `${(vol / 1_000_000).toFixed(2)}M`;
+  }
+  if (vol >= 1_000) {
+    return `${(vol / 1_000).toFixed(1)}K`;
+  }
   return vol.toLocaleString("tr-TR");
 }
 
 export function formatMarketCap(mc?: number): string {
-  if (!mc) {return "—";}
-  if (mc >= 1_000_000_000) {return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;}
-  if (mc >= 1_000_000) {return `${(mc / 1_000_000).toFixed(2)}M ₺`;}
+  if (!mc) {
+    return "—";
+  }
+  if (mc >= 1_000_000_000) {
+    return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;
+  }
+  if (mc >= 1_000_000) {
+    return `${(mc / 1_000_000).toFixed(2)}M ₺`;
+  }
   return `${mc.toLocaleString("tr-TR")} ₺`;
 }
 
@@ -202,7 +247,7 @@ export interface StockHistoryItem {
 export async function fetchStockHistory(
   symbol: string,
   range: string = "1mo",
-  interval: string = "1d"
+  interval: string = "1d",
 ): Promise<StockHistoryItem[]> {
   const fullSymbol = symbol.endsWith(".IS") ? symbol : `${symbol}.IS`;
   try {
@@ -215,11 +260,15 @@ export async function fetchStockHistory(
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) {throw new Error(`HTTP ${res.status}`);}
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
 
     const json = await res.json();
     const result = json?.chart?.result?.[0];
-    if (!result) {throw new Error("No chart result");}
+    if (!result) {
+      throw new Error("No chart result");
+    }
 
     const timestamps: number[] = result.timestamp || [];
     const quotes = result.indicators?.quote?.[0] || {};
@@ -232,8 +281,10 @@ export async function fetchStockHistory(
     const history: StockHistoryItem[] = [];
     for (let i = 0; i < timestamps.length; i++) {
       if (
-        opens[i] !== undefined && opens[i] !== null &&
-        closes[i] !== undefined && closes[i] !== null
+        opens[i] !== undefined &&
+        opens[i] !== null &&
+        closes[i] !== undefined &&
+        closes[i] !== null
       ) {
         history.push({
           timestamp: timestamps[i] * 1000,

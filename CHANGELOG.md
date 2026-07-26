@@ -4,6 +4,14 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.6.0] - 2026-07-19
+### Eklendi
+- **Eklenti Genelinde İngilizce Dil Desteği**: `i18n.ts` altyapısı genişletilerek eklentideki tüm ayar sekmeleri, aralık tekrar ekranları, namaz vakitleri, KPSS detayları ve motivasyon alanları İngilizce ve Türkçe olarak yerelleştirildi.
+- **Dinamik Dil Fallback Proxy Altyapısı**: ES6 Proxy mimarisi kullanılarak, gelecekte eklenecek yeni dillerde bir çeviri anahtarı eksik olduğunda sistemin çökmeden doğrudan İngilizce (`en`) karşılığına fallback yapması sağlandı.
+- **Sağ Üst Popup Temiz Mimari Geçişi**: `popup.tsx` dosyası Layout Assembly modeline göre bölündü. `usePopup` hook'u ile durum/zamanlayıcı iş mantığı soyutlandı; Pomodoro (`PopupPomoTab.tsx`) ve Detoks (`PopupDetoxTab.tsx`) arayüzleri prop tabanlı alt bileşenlere taşınarak popup ana dosyası 100 satırın altına düşürüldü.
+- **Güvenlik ve Ahlaka Aykırı İçerik Taraması**: Eklenti genelinde küfür ve ahlaka aykırı kelimeler taranıp temizlendi. Kelime ezber veri tabanındaki (`phrasal.json`) uygunsuz örnek cümleler tamamen güvenli ve genel ahlaka uygun olanlarla değiştirildi.
+- **ESLint & TypeScript Hata Sıfırlama**: Kod tabanındaki tüm kullanılmayan import'lar, yanlış regex kaçış karakterleri, boş catch blokları ve gereksiz değişken tanımlamaları düzeltilerek projedeki linter (`eslint`) hataları tamamen sıfıra düşürüldü.
+
 ## [3.5.0] - 2026-07-19
 ### Eklendi
 - **ÖSYM KPSS Çıkmış Sorular Sınav Salonu**: 2021 yılından 2009 yılına kadar olan KPSS Lisans Genel Yetenek-Genel Kültür (Tarih, Coğrafya, Matematik) çıkmış sorularının yer aldığı sınav salonu eklendi. Kullanıcılar her yılın sınavını veya tüm yıllardan oluşan karma denemeleri çözebilmektedir.

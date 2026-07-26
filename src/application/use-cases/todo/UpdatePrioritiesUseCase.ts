@@ -8,37 +8,34 @@ import type { Todo } from "../../../domain/entities/Todo.js";
 import { updateTodoPriorities } from "../../../domain/entities/Todo.js";
 
 export interface UpdatePrioritiesRequest {
-    readonly originalIndex: number;
-    readonly urgent: boolean;
-    readonly important: boolean;
+  readonly originalIndex: number;
+  readonly urgent: boolean;
+  readonly important: boolean;
 }
 
 export interface UpdatePrioritiesResponse {
-    readonly todos: readonly Todo[];
+  readonly todos: readonly Todo[];
 }
 
 export class UpdatePrioritiesUseCase {
-    constructor(private todoRepo: ITodoRepository) { }
+  constructor(private todoRepo: ITodoRepository) {}
 
-    async execute(
-        request: UpdatePrioritiesRequest,
-    ): Promise<UpdatePrioritiesResponse> {
-        const allTodos = await this.todoRepo.getAll();
-        if (
-            request.originalIndex < 0 ||
-            request.originalIndex >= allTodos.length
-        ) {
-            return { todos: allTodos };
-        }
-
-        const updated = [...allTodos];
-        updated[request.originalIndex] = updateTodoPriorities(
-            updated[request.originalIndex],
-            request.urgent,
-            request.important,
-        );
-
-        await this.todoRepo.saveAll(updated);
-        return { todos: updated };
+  async execute(
+    request: UpdatePrioritiesRequest,
+  ): Promise<UpdatePrioritiesResponse> {
+    const allTodos = await this.todoRepo.getAll();
+    if (request.originalIndex < 0 || request.originalIndex >= allTodos.length) {
+      return { todos: allTodos };
     }
+
+    const updated = [...allTodos];
+    updated[request.originalIndex] = updateTodoPriorities(
+      updated[request.originalIndex],
+      request.urgent,
+      request.important,
+    );
+
+    await this.todoRepo.saveAll(updated);
+    return { todos: updated };
+  }
 }

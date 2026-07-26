@@ -145,8 +145,7 @@ export function HifizMemorizationCard({
             t[`hifiz_status_${itemProgress.status}` as keyof typeof t] ||
             itemProgress.status;
           const catLabel =
-            t[`hifiz_cat_${item.category}` as keyof typeof t] ||
-            item.category;
+            t[`hifiz_cat_${item.category}` as keyof typeof t] || item.category;
 
           return (
             <div

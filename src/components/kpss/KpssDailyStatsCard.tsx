@@ -59,7 +59,9 @@ export function KpssDailyStatsCard({
 
     tList.forEach((t) => {
       totalQuestions += t.questionsCount;
-      const prog = kpssProgress.find((p) => p.subject === subKey && p.topic === t.title);
+      const prog = kpssProgress.find(
+        (p) => p.subject === subKey && p.topic === t.title,
+      );
       if (prog) {
         if (prog.score !== undefined) {
           totalNet += (prog.score / 100) * t.questionsCount;
@@ -86,10 +88,14 @@ export function KpssDailyStatsCard({
 
   const drawChart = () => {
     const canvas = canvasRef.current;
-    if (!canvas) {return;}
+    if (!canvas) {
+      return;
+    }
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) {return;}
+    if (!ctx) {
+      return;
+    }
 
     const rect = canvas.getBoundingClientRect();
     if (rect.width === 0) {
@@ -128,7 +134,10 @@ export function KpssDailyStatsCard({
     const overallNetObj = getOverallNets();
     const overallNet = overallNetObj.net;
     const estimatedScore = Math.round((40 + overallNet * 0.5) * 10) / 10;
-    const daysRemaining = Math.max(1, Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24)));
+    const daysRemaining = Math.max(
+      1,
+      Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24)),
+    );
 
     let remainingQuestions: number;
     let remainingVideos: number;
@@ -143,14 +152,30 @@ export function KpssDailyStatsCard({
       remainingVideos = scoreDiff * 3.0;
     }
 
-    const dailyQuestionsTarget = Math.max(10, Math.round(remainingQuestions / daysRemaining));
-    const dailyVideosTarget = Math.max(1, Math.round(remainingVideos / daysRemaining));
+    const dailyQuestionsTarget = Math.max(
+      10,
+      Math.round(remainingQuestions / daysRemaining),
+    );
+    const dailyVideosTarget = Math.max(
+      1,
+      Math.round(remainingVideos / daysRemaining),
+    );
 
-    const maxQuestions = Math.max(...lastNDays.map((s) => s.questions), dailyQuestionsTarget, 10);
-    const maxVideos = Math.max(...lastNDays.map((s) => s.videos || 0), dailyVideosTarget, 1);
+    const maxQuestions = Math.max(
+      ...lastNDays.map((s) => s.questions),
+      dailyQuestionsTarget,
+      10,
+    );
+    const maxVideos = Math.max(
+      ...lastNDays.map((s) => s.videos || 0),
+      dailyVideosTarget,
+      1,
+    );
 
     const getX = (index: number, count: number) => {
-      if (count === 1) {return padding + chartWidth / 2;}
+      if (count === 1) {
+        return padding + chartWidth / 2;
+      }
       return padding + (index / (count - 1)) * chartWidth;
     };
 
@@ -187,12 +212,20 @@ export function KpssDailyStatsCard({
 
       ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
       ctx.font = "bold 9px Inter";
-      
+
       ctx.textAlign = "left";
-      ctx.fillText(`${lang === "tr" ? "Hedef Soru" : "Target Q"}: ${dailyQuestionsTarget}`, padding + 4, yTargetQ - 4);
-      
+      ctx.fillText(
+        `${lang === "tr" ? "Hedef Soru" : "Target Q"}: ${dailyQuestionsTarget}`,
+        padding + 4,
+        yTargetQ - 4,
+      );
+
       ctx.textAlign = "right";
-      ctx.fillText(`${lang === "tr" ? "Hedef Video" : "Target V"}: ${dailyVideosTarget}`, width - padding - 4, yTargetV - 4);
+      ctx.fillText(
+        `${lang === "tr" ? "Hedef Video" : "Target V"}: ${dailyVideosTarget}`,
+        width - padding - 4,
+        yTargetV - 4,
+      );
     };
 
     // --- CASE A: EMPTY STATE ---
@@ -228,13 +261,25 @@ export function KpssDailyStatsCard({
         ctx.fillStyle = "white";
         ctx.font = "bold 13px Inter";
         ctx.textAlign = "center";
-        ctx.fillText(`${dailyQuestionsTarget} Soru`, xQ + barWidth / 2, yQ - 10);
+        ctx.fillText(
+          `${dailyQuestionsTarget} Soru`,
+          xQ + barWidth / 2,
+          yQ - 10,
+        );
         ctx.fillText(`${dailyVideosTarget} Video`, xV + barWidth / 2, yV - 10);
 
         ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         ctx.font = "600 10px Inter";
-        ctx.fillText(lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target", xQ + barWidth / 2, height - padding + 18);
-        ctx.fillText(lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target", xV + barWidth / 2, height - padding + 18);
+        ctx.fillText(
+          lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target",
+          xQ + barWidth / 2,
+          height - padding + 18,
+        );
+        ctx.fillText(
+          lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target",
+          xV + barWidth / 2,
+          height - padding + 18,
+        );
       } else {
         const yTargetQ = getYQ(dailyQuestionsTarget);
         const yTargetV = getYV(dailyVideosTarget);
@@ -259,10 +304,18 @@ export function KpssDailyStatsCard({
         ctx.fillStyle = "white";
         ctx.font = "bold 10px Inter";
         ctx.textAlign = "left";
-        ctx.fillText(`${lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target"}: ${dailyQuestionsTarget} Soru`, padding + 10, yTargetQ - 6);
-        
+        ctx.fillText(
+          `${lang === "tr" ? "Günlük Soru Hedefi" : "Daily Questions Target"}: ${dailyQuestionsTarget} Soru`,
+          padding + 10,
+          yTargetQ - 6,
+        );
+
         ctx.textAlign = "right";
-        ctx.fillText(`${lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target"}: ${dailyVideosTarget} Video`, width - padding - 10, yTargetV - 6);
+        ctx.fillText(
+          `${lang === "tr" ? "Günlük Video Hedefi" : "Daily Videos Target"}: ${dailyVideosTarget} Video`,
+          width - padding - 10,
+          yTargetV - 6,
+        );
 
         for (let i = 0; i < chartDays; i++) {
           if (chartDays <= 7 || i % 5 === 0) {
@@ -281,11 +334,11 @@ export function KpssDailyStatsCard({
       ctx.font = "bold 11px Inter";
       ctx.textAlign = "center";
       ctx.fillText(
-        lang === "tr" 
+        lang === "tr"
           ? `Kalan Süreye Göre Günlük Çalışma Hedefiniz (${daysRemaining} Gün Kaldı)`
           : `Daily Study Target by Remaining Days (${daysRemaining} Days Left)`,
         padding + chartWidth / 2,
-        padding - 12
+        padding - 12,
       );
       return;
     }
@@ -303,7 +356,7 @@ export function KpssDailyStatsCard({
         const xV = xQ + barWidth + barGap;
 
         const hQ = (stat.questions / maxQuestions) * (chartHeight - 30);
-        const hV = (((stat.videos || 0) / maxVideos) * (chartHeight - 30));
+        const hV = ((stat.videos || 0) / maxVideos) * (chartHeight - 30);
 
         const yQ = height - padding - Math.max(hQ, 0);
         const yV = height - padding - Math.max(hV, 0);
@@ -340,7 +393,11 @@ export function KpssDailyStatsCard({
             ctx.fillText(stat.questions.toString(), xQ + barWidth / 2, yQ - 6);
           }
           if ((stat.videos || 0) > 0) {
-            ctx.fillText((stat.videos || 0).toString(), xV + barWidth / 2, yV - 6);
+            ctx.fillText(
+              (stat.videos || 0).toString(),
+              xV + barWidth / 2,
+              yV - 6,
+            );
           }
         }
 
@@ -365,7 +422,10 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         ctx.lineTo(getX(i, lastNDays.length), getYQ(lastNDays[i].questions));
       }
-      ctx.lineTo(getX(lastNDays.length - 1, lastNDays.length), height - padding);
+      ctx.lineTo(
+        getX(lastNDays.length - 1, lastNDays.length),
+        height - padding,
+      );
       ctx.closePath();
       const gradQ = ctx.createLinearGradient(0, padding, 0, height - padding);
       gradQ.addColorStop(0, "rgba(16, 185, 129, 0.15)");
@@ -378,7 +438,10 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         ctx.lineTo(getX(i, lastNDays.length), getYV(lastNDays[i].videos || 0));
       }
-      ctx.lineTo(getX(lastNDays.length - 1, lastNDays.length), height - padding);
+      ctx.lineTo(
+        getX(lastNDays.length - 1, lastNDays.length),
+        height - padding,
+      );
       ctx.closePath();
       const gradV = ctx.createLinearGradient(0, padding, 0, height - padding);
       gradV.addColorStop(0, "rgba(59, 130, 246, 0.15)");
@@ -392,8 +455,11 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYQ(lastNDays[i].questions);
-        if (i === 0) {ctx.moveTo(x, y);}
-        else {ctx.lineTo(x, y);}
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
       ctx.stroke();
 
@@ -403,8 +469,11 @@ export function KpssDailyStatsCard({
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYV(lastNDays[i].videos || 0);
-        if (i === 0) {ctx.moveTo(x, y);}
-        else {ctx.lineTo(x, y);}
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
       ctx.stroke();
     }
@@ -455,7 +524,15 @@ export function KpssDailyStatsCard({
 
   useEffect(() => {
     drawChart();
-  }, [dailyStats, chartDays, chartType, goalType, targetNet, targetScore, kpssProgress]);
+  }, [
+    dailyStats,
+    chartDays,
+    chartType,
+    goalType,
+    targetNet,
+    targetScore,
+    kpssProgress,
+  ]);
 
   return (
     <div className="kpss-daily-stats-section" style={{ marginTop: "28px" }}>
@@ -468,18 +545,24 @@ export function KpssDailyStatsCard({
               type="number"
               id="kpss-questions-input"
               value={questionsInput}
-              onInput={(e) => onQuestionsInputChange((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                onQuestionsInputChange((e.target as HTMLInputElement).value)
+              }
               placeholder="0"
               min="0"
             />
           </div>
           <div className="kpss-input-group">
-            <label for="kpss-videos-input">{lang === "tr" ? "İzlenen Video" : "Videos Watched"}</label>
+            <label for="kpss-videos-input">
+              {lang === "tr" ? "İzlenen Video" : "Videos Watched"}
+            </label>
             <input
               type="number"
               id="kpss-videos-input"
               value={videosInput}
-              onInput={(e) => onVideosInputChange((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                onVideosInputChange((e.target as HTMLInputElement).value)
+              }
               placeholder="0"
               min="0"
             />
@@ -489,7 +572,9 @@ export function KpssDailyStatsCard({
             <select
               id="kpss-subject-select"
               value={subjectInput}
-              onChange={(e) => onSubjectInputChange((e.target as HTMLSelectElement).value)}
+              onChange={(e) =>
+                onSubjectInputChange((e.target as HTMLSelectElement).value)
+              }
             >
               {subjectsList.map((subKey) => (
                 <option key={subKey} value={subKey}>
@@ -502,17 +587,49 @@ export function KpssDailyStatsCard({
             <button id="kpss-save-stats-btn" onClick={onSaveStats}>
               {labels.save}
             </button>
-            <button id="kpss-reset-stats-btn" className="secondary" onClick={onResetStats}>
+            <button
+              id="kpss-reset-stats-btn"
+              className="secondary"
+              onClick={onResetStats}
+            >
               {labels.reset}
             </button>
           </div>
         </div>
       </div>
 
-      <div className="kpss-chart-container" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <div
+        className="kpss-chart-container"
+        style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "4px",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "0.8rem",
+              color: "var(--text-secondary)",
+              fontWeight: "600",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--accent-color)"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <line x1="18" y1="20" x2="18" y2="10"></line>
               <line x1="12" y1="20" x2="12" y2="4"></line>
               <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -523,7 +640,8 @@ export function KpssDailyStatsCard({
             <button
               onClick={() => onChartDaysChange(7)}
               style={{
-                background: chartDays === 7 ? "var(--accent-color)" : "transparent",
+                background:
+                  chartDays === 7 ? "var(--accent-color)" : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -531,7 +649,7 @@ export function KpssDailyStatsCard({
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
-                transition: "background 0.2s"
+                transition: "background 0.2s",
               }}
             >
               7 G
@@ -539,7 +657,8 @@ export function KpssDailyStatsCard({
             <button
               onClick={() => onChartDaysChange(30)}
               style={{
-                background: chartDays === 30 ? "var(--accent-color)" : "transparent",
+                background:
+                  chartDays === 30 ? "var(--accent-color)" : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -547,7 +666,7 @@ export function KpssDailyStatsCard({
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
-                transition: "background 0.2s"
+                transition: "background 0.2s",
               }}
             >
               30 G
@@ -555,7 +674,8 @@ export function KpssDailyStatsCard({
             <button
               onClick={() => onChartTypeChange("line")}
               style={{
-                background: chartType === "line" ? "var(--accent-color)" : "transparent",
+                background:
+                  chartType === "line" ? "var(--accent-color)" : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -563,7 +683,7 @@ export function KpssDailyStatsCard({
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
-                transition: "background 0.2s"
+                transition: "background 0.2s",
               }}
             >
               {lang === "tr" ? "Çizgi" : "Line"}
@@ -571,7 +691,8 @@ export function KpssDailyStatsCard({
             <button
               onClick={() => onChartTypeChange("bar")}
               style={{
-                background: chartType === "bar" ? "var(--accent-color)" : "transparent",
+                background:
+                  chartType === "bar" ? "var(--accent-color)" : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -579,7 +700,7 @@ export function KpssDailyStatsCard({
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontWeight: "600",
-                transition: "background 0.2s"
+                transition: "background 0.2s",
               }}
             >
               {lang === "tr" ? "Sütun" : "Bar"}

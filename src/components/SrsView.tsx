@@ -38,8 +38,8 @@ export function SrsView({ lang }: SrsViewProps) {
       setWordsData(data);
       const progress: any[] = await new Promise((resolve) =>
         chrome.storage.sync.get(["srsProgress"], (res) =>
-          resolve((res.srsProgress as any[]) || [])
-        )
+          resolve((res.srsProgress as any[]) || []),
+        ),
       );
 
       const progressMap = new Map<string, WordReviewData>();
@@ -91,11 +91,11 @@ export function SrsView({ lang }: SrsViewProps) {
 
     const outcome = calculateSM2(reviewData, quality, new Date());
 
-      const progress: any[] = await new Promise((resolve) =>
-        chrome.storage.sync.get(["srsProgress"], (res) =>
-          resolve((res.srsProgress as any[]) || [])
-        )
-      );
+    const progress: any[] = await new Promise((resolve) =>
+      chrome.storage.sync.get(["srsProgress"], (res) =>
+        resolve((res.srsProgress as any[]) || []),
+      ),
+    );
 
     const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
     if (idx >= 0) {
@@ -104,7 +104,7 @@ export function SrsView({ lang }: SrsViewProps) {
       progress.push(outcome);
     }
     await new Promise<void>((resolve) =>
-      chrome.storage.sync.set({ srsProgress: progress }, resolve)
+      chrome.storage.sync.set({ srsProgress: progress }, resolve),
     );
     setFadeState("slide-out");
     setTimeout(() => {
@@ -118,9 +118,7 @@ export function SrsView({ lang }: SrsViewProps) {
     return (
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
-          <div className="srs-preparing">
-            {t.srs_preparing}
-          </div>
+          <div className="srs-preparing">{t.srs_preparing}</div>
         </div>
       </div>
     );
@@ -130,9 +128,7 @@ export function SrsView({ lang }: SrsViewProps) {
     return (
       <div id="srs-view" className="view-content active">
         <div className="srs-container">
-          <div className="srs-error">
-            {t.srs_error_loading}
-          </div>
+          <div className="srs-error">{t.srs_error_loading}</div>
         </div>
       </div>
     );

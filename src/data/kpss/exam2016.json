@@ -5,156 +5,84 @@
     {
       "topic": "Genel Matematik",
       "question": "Ardışık beş pozitif tam sayının toplamı biçiminde yazılabilen bir sayıya “beşli sayı” deniliyor. Buna göre, iki basamaklı kaç tane beşli sayı vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "13 15 17 19 21 ÖSYM"
-      ],
+      "options": ["", "", "", "", "13 15 17 19 21 ÖSYM"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Toplam 29 kişiden oluşan bir turist kafilesi boş olan A ve B araçlarına biniyor. Bu durumda A aracındaki turistlerin yaşlarının ortalaması 40, B aracındaki turistlerin yaşlarının ortalaması ise 50 oluyor. Daha sonra A aracından 3, B aracından 2 turist iniyor. A aracından inenler B aracına, B aracından inenler de A aracına biniyor. Son durumda, A ve B araçlarındaki turistlerin yaşlarının ortalaması sırasıyla 41 ve 48 oluyor. Buna göre, başlangıçta A aracına kaç turist binmiştir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "13 14 15 16 17"
-      ],
+      "options": ["", "", "", "", "13 14 15 16 17"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Ferhan, gideceği yolun beşte ikisini sabit bir hızla 10 dakikada yürüyor. Kalan yolu ise başlangıçtaki hızının dörtte üçüne eşit bir hızla katediyor. Ferhan’ın yavaş yürüdüğü mesafe hızlı yürüdüğü mesafeden 480 metre fazla olduğuna göre, Ferhan yavaş yürüme hızıyla bir dakikada kaç metre yol almıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "72 76 80 84 88"
-      ],
+      "options": ["", "", "", "", "72 76 80 84 88"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir kasap 50 kilogram tavuk etini % 20, 10 kilogram dana etini ise % 50 kârla satarak her iki satıştan da eşit miktarda kâr elde etmiştir. Buna göre, tavuk etinin kilogram satış fiyatının dana etinin kilogram satış fiyatına oranı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 12"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 12"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A ve B kamyonları bir inşaat alanına her seferinde sırasıyla 12 ve 16 ton kum taşımaktadır. Bu inşaat alanına A kamyonunun taşıdığı kumun toplam ağırlığı, B kamyonunun taşıdığı kumun toplam ağırlığının iki katıdır. ÖSYM Bu iki kamyon inşaat alanına toplam 44 sefer yaptığına göre, A kamyonunun yaptığı sefer sayısı B kamyonunun yaptığı sefer sayısından kaç fazladır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "12 14 16 18 20"
-      ],
+      "options": ["", "", "", "", "12 14 16 18 20"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yalnızca mavi ve kırmızı topların bulunduğu bir kutudaki kırmızı topların sayısı, mavi topların sayısının ’ine eşittir. Bu kutuya 1 tane mavi ve 3 tane kırmızı top ekleniyor. Bu durumda, kutudaki kırmızı topların sayısı tüm topların sayısının ’üne eşit oluyor. Buna göre, başlangıçta kutuda kaç top vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "14 35 56 77 98"
-      ],
+      "options": ["", "", "", "", "14 35 56 77 98"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Kerem’in yaşı; Mecnun’un yaşının 2 katına, Leyla’nın yaşının ise 3 katına eşittir. Kerem’in yaşı, Leyla’nın yaşının 2 katı olduğunda Mecnun 15 yaşında olacaktır. Buna göre, Leyla’nın bugünkü yaşı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3 4 5 6 8"
-      ],
+      "options": ["", "", "", "", "3 4 5 6 8"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Her öğrencinin piyano, keman veya gitar enstrümanlarından en az birini çalabildiği bir sınıfta 24 öğrenci vardır. Bu sınıfta keman çalabilen öğrencilerin sayısı, yalnızca gitar çalabilen öğrencilerin sayısının 2 katına eşittir. Bu sınıfta piyano çalabilen fakat keman çalamayan öğrenci sayısı 9 olduğuna göre, keman çalabilen öğrenci sayısı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "9 10 11 12 13"
-      ],
+      "options": ["", "", "", "", "9 10 11 12 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "kümesinin elemanları kullanılarak rakamları birbirinden farklı 3 basamaklı doğal sayılar yazılıyor. Buna göre, bu sayılardan kaç tanesi 3 ile tam bölünür?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "12 18 24 30 36 Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "12 18 24 30 36 Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, Nevzat’ın oluşturduğu bir grupta en fazla kaç sayı bulunabilir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 5 6 7 8"
-      ],
+      "options": ["", "", "", "", "4 5 6 7 8"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Nevzat bu sayıları, her birinde en fazla iki sayı bulunan sekiz gruba ayırıyor. Buna göre, 2 sayısı ile aynı grupta bulunan diğer sayı aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 6 8 10 12"
-      ],
+      "options": ["", "", "", "", "4 6 8 10 12"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bu şirketin toplam 192 aracı vardır. Buna göre, şirketin B marka araçlarının sayısı A marka araçlarının sayısından kaç fazladır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "32 36 40 42 48"
-      ],
+      "options": ["", "", "", "", "32 36 40 42 48"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
@@ -174,13 +102,7 @@
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, x kaç birimdir?",
-      "options": [
-        "",
-        "",
-        "4 5",
-        "",
-        ""
-      ],
+      "options": ["", "", "4 5", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     },

@@ -19,7 +19,12 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeModalData, setActiveModalData] = useState<{
     title: string;
-    items: { type: "task" | "event"; text: string; completed?: boolean; time?: string }[];
+    items: {
+      type: "task" | "event";
+      text: string;
+      completed?: boolean;
+      time?: string;
+    }[];
   } | null>(null);
 
   const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
@@ -71,7 +76,8 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   // Group tasks by date key: YYYY-MM-DD
-  const tasksByDate: Record<string, { text: string; completed: boolean }[]> = {};
+  const tasksByDate: Record<string, { text: string; completed: boolean }[]> =
+    {};
   todos.forEach((todo) => {
     // 1. Completed dates
     const dates =
@@ -83,7 +89,9 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
       if (!tasksByDate[dateKey]) {
         tasksByDate[dateKey] = [];
       }
-      if (!tasksByDate[dateKey].some(t => t.text === todo.text && t.completed)) {
+      if (
+        !tasksByDate[dateKey].some((t) => t.text === todo.text && t.completed)
+      ) {
         tasksByDate[dateKey].push({ text: todo.text, completed: true });
       }
     });
@@ -99,8 +107,11 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
         if (!tasksByDate[dateKey]) {
           tasksByDate[dateKey] = [];
         }
-        if (!tasksByDate[dateKey].some(t => t.text === todo.text)) {
-          tasksByDate[dateKey].push({ text: todo.text, completed: todo.completed });
+        if (!tasksByDate[dateKey].some((t) => t.text === todo.text)) {
+          tasksByDate[dateKey].push({
+            text: todo.text,
+            completed: todo.completed,
+          });
         }
       }
     }
@@ -110,7 +121,9 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     let isMounted = true;
     const fetchCalendar = async () => {
       const syncData = await new Promise<any>((resolve) =>
-        chrome.storage.sync.get(["syncEnabled", "syncCalendarEnabled"], (res) => resolve(res))
+        chrome.storage.sync.get(["syncEnabled", "syncCalendarEnabled"], (res) =>
+          resolve(res),
+        ),
       );
       const syncEnabled = syncData.syncEnabled === true;
       const calendarEnabled = syncData.syncCalendarEnabled === true;
@@ -119,7 +132,11 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
           const token = await _authApi.getAuthToken(false);
           const startStr = new Date(year, month, 1, 0, 0, 0).toISOString();
           const endStr = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-          const items = await _calendarApi.getCalendarEvents(token, startStr, endStr);
+          const items = await _calendarApi.getCalendarEvents(
+            token,
+            startStr,
+            endStr,
+          );
           if (isMounted) {
             setCalendarEvents(items);
           }
@@ -141,9 +158,13 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   // Group events by date key: YYYY-MM-DD
   const eventsByDate: Record<string, any[]> = {};
   calendarEvents.forEach((event) => {
-    if (!event.start) {return;}
+    if (!event.start) {
+      return;
+    }
     const dateStr = event.start.dateTime || event.start.date;
-    if (!dateStr) {return;}
+    if (!dateStr) {
+      return;
+    }
     let dateKey = "";
     if (event.start.date) {
       const parts = event.start.date.split("-");
@@ -187,16 +208,32 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     const hasEvents = dayEvents.length > 0;
     const hasItems = hasTasks || hasEvents;
 
-    const modalItems: { type: "task" | "event"; text: string; completed?: boolean; time?: string }[] = [
-      ...dayTasks.map(t => ({ type: "task" as const, text: t.text, completed: t.completed })),
-      ...dayEvents.map(ev => {
+    const modalItems: {
+      type: "task" | "event";
+      text: string;
+      completed?: boolean;
+      time?: string;
+    }[] = [
+      ...dayTasks.map((t) => ({
+        type: "task" as const,
+        text: t.text,
+        completed: t.completed,
+      })),
+      ...dayEvents.map((ev) => {
         const timeStr = ev.start.dateTime
-          ? new Date(ev.start.dateTime).toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })
+          ? new Date(ev.start.dateTime).toLocaleTimeString(
+              lang === "tr" ? "tr-TR" : "en-US",
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              },
+            )
           : undefined;
-        return { type: "event" as const, text: ev.summary || "", time: timeStr };
+        return {
+          type: "event" as const,
+          text: ev.summary || "",
+          time: timeStr,
+        };
       }),
     ];
 
@@ -215,20 +252,36 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
         {hasItems && (
           <ul className="calendar-task-list">
             {dayTasks.map((t, idx) => (
-              <li key={`task-${idx}`} className={`calendar-task-item ${t.completed ? "completed" : "pending"}`} style={{ textDecoration: t.completed ? "line-through" : "none", opacity: t.completed ? 0.6 : 1 }}>
-                <span style={{ marginRight: "4px" }}>{t.completed ? "✓" : "○"}</span>
+              <li
+                key={`task-${idx}`}
+                className={`calendar-task-item ${t.completed ? "completed" : "pending"}`}
+                style={{
+                  textDecoration: t.completed ? "line-through" : "none",
+                  opacity: t.completed ? 0.6 : 1,
+                }}
+              >
+                <span style={{ marginRight: "4px" }}>
+                  {t.completed ? "✓" : "○"}
+                </span>
                 {t.text}
               </li>
             ))}
             {dayEvents.map((ev, idx) => {
               const timeStr = ev.start.dateTime
-                ? new Date(ev.start.dateTime).toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                ? new Date(ev.start.dateTime).toLocaleTimeString(
+                    lang === "tr" ? "tr-TR" : "en-US",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    },
+                  )
                 : "";
               return (
-                <li key={`ev-${idx}`} className="calendar-event-item" title={ev.summary}>
+                <li
+                  key={`ev-${idx}`}
+                  className="calendar-event-item"
+                  title={ev.summary}
+                >
                   {timeStr && <span className="event-time">{timeStr}</span>}
                   {ev.summary}
                 </li>
@@ -318,13 +371,25 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
                   activeModalData.items.map((item, idx) => {
                     if (item.type === "task") {
                       return (
-                        <li key={idx} style={{ textDecoration: item.completed ? "line-through" : "none", opacity: item.completed ? 0.6 : 1 }}>
+                        <li
+                          key={idx}
+                          style={{
+                            textDecoration: item.completed
+                              ? "line-through"
+                              : "none",
+                            opacity: item.completed ? 0.6 : 1,
+                          }}
+                        >
                           <svg
                             width="20"
                             height="20"
                             viewBox="0 0 24 24"
                             fill="none"
-                            stroke={item.completed ? "var(--success)" : "var(--text-secondary)"}
+                            stroke={
+                              item.completed
+                                ? "var(--success)"
+                                : "var(--text-secondary)"
+                            }
                             stroke-width="2.5"
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -358,7 +423,9 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
                           </svg>
                           <span>
                             {item.time && (
-                              <strong style={{ color: "#c084fc", marginRight: "8px" }}>
+                              <strong
+                                style={{ color: "#c084fc", marginRight: "8px" }}
+                              >
                                 {item.time}
                               </strong>
                             )}

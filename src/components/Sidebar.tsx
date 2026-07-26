@@ -28,7 +28,7 @@ const DEFAULT_ORDER = [
   "prayer",
   "kpss",
   "halka-arz",
-  "detox"
+  "detox",
 ];
 
 export function Sidebar({
@@ -49,8 +49,8 @@ export function Sidebar({
   useEffect(() => {
     new Promise<string[]>((resolve) =>
       chrome.storage.sync.get(["sidebarOrder"], (res) =>
-        resolve((res.sidebarOrder as string[]) || [])
-      )
+        resolve((res.sidebarOrder as string[]) || []),
+      ),
     ).then((saved) => {
       let finalOrder = DEFAULT_ORDER;
       if (saved && saved.length > 0) {
@@ -78,7 +78,9 @@ export function Sidebar({
 
   const handleDrop = async (e: any, targetId: string) => {
     e.preventDefault();
-    if (!draggedItem || draggedItem === targetId) {return;}
+    if (!draggedItem || draggedItem === targetId) {
+      return;
+    }
 
     const nextOrder = [...order];
     const draggedIdx = nextOrder.indexOf(draggedItem);
@@ -412,7 +414,14 @@ export function Sidebar({
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     >
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="18"
+                        rx="2"
+                        ry="2"
+                      ></rect>
                       <line x1="16" y1="2" x2="16" y2="6"></line>
                       <line x1="8" y1="2" x2="8" y2="6"></line>
                       <line x1="3" y1="10" x2="21" y2="10"></line>

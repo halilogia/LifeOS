@@ -3,13 +3,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Aşağıdakilerden hangisi İslamiyetten önce, Türkler- de ölen kişinin eşyalarıyla birlikte gömüldüğü meza- ra verilen addır?",
-      "options": [
-        "",
-        "",
-        "Yuğ Şad Kurgan",
-        "",
-        "Toy Tigin"
-      ],
+      "options": ["", "", "Yuğ Şad Kurgan", "", "Toy Tigin"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (1. Soru)."
     },
@@ -42,13 +36,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Aşağıdakilerden hangisi, Türk-İslam devletlerinde pazarlarda fiyatları, tartı ve ölçü aletlerini, üretilen ve satılan malların kalitesini denetleyen görevlidir?",
-      "options": [
-        "",
-        "",
-        "Ulak Silahtar İğdişbaşı",
-        "",
-        "Muhtesip Câmedâr"
-      ],
+      "options": ["", "", "Ulak Silahtar İğdişbaşı", "", "Muhtesip Câmedâr"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (4. Soru)."
     },
@@ -94,13 +82,7 @@
     {
       "topic": "Genel Tarih",
       "question": "",
-      "options": [
-        "",
-        "",
-        "Mısır Kıbrıs Rodos",
-        "",
-        "Meis Kırım"
-      ],
+      "options": ["", "", "Mısır Kıbrıs Rodos", "", "Meis Kırım"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (8. Soru)."
     },
@@ -447,13 +429,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "I. Bolu’da kümes hayvancılığının yaygınlaşması II. Kars’ta kış turizminin gelişmesi III. Elazığ’da Keban Barajı’nın işletmeye açılması IV. Eskişehir’in bir üniversite ve kültür kenti olması V. Burdur’da İnsuyu Mağarası’nın turizme açılması Buna göre, yukarıdaki illere ait beşerî ve ekonomik özelliklerden hangisi, o ilin sosyoekonomik yapısın- da diğerlerine göre daha büyük değişime neden olmuştur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "I II III IV V 23 Diğer sayfaya geçiniz."
-      ],
+      "options": ["", "", "", "", "I II III IV V 23 Diğer sayfaya geçiniz."],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (36. Soru)."
     },
@@ -579,65 +555,35 @@
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "8 Diğer sayfaya geçiniz."
-      ],
+      "options": ["", "", "", "", "8 Diğer sayfaya geçiniz."],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 10 20 25 45"
-      ],
+      "options": ["", "", "", "", "5 10 20 25 45"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "2 4",
-        "",
-        ""
-      ],
+      "options": ["", "", "2 4", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, x kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 5 6 7 8"
-      ],
+      "options": ["", "", "", "", "4 5 6 7 8"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 8 10 12 14"
-      ],
+      "options": ["", "", "", "", "6 8 10 12 14"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
@@ -657,39 +603,21 @@
     {
       "topic": "Genel Matematik",
       "question": "ifadesinin sadeleştirilmiş biçimi aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "1",
-        "",
-        "a"
-      ],
+      "options": ["", "", "1", "", "a"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "denklemini sağlayan x değerlerinin toplamı kaçtır? 1 2",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Gerçel sayılar kümesi üzerinde işlemi"
-      ],
+      "options": ["", "", "", "", "Gerçel sayılar kümesi üzerinde işlemi"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "biçiminde tanımlanıyor. Buna göre, işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 Diğer sayfaya geçiniz."
-      ],
+      "options": ["", "", "", "", "10 Diğer sayfaya geçiniz."],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (40. Soru)."
     },
@@ -709,13 +637,7 @@
     {
       "topic": "Genel Matematik",
       "question": "",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "21 22 23 24 25"
-      ],
+      "options": ["", "", "", "", "21 22 23 24 25"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
@@ -774,13 +696,7 @@
     {
       "topic": "Genel Matematik",
       "question": "Siyah saçlı kız öğrencilerin sayısı, siyah saçlı erkek öğrencilerin sayısından 20 fazla olduğuna göre, bu okulda toplam kaç öğrenci vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "450 500 520 600 640"
-      ],
+      "options": ["", "", "", "", "450 500 520 600 640"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
@@ -800,13 +716,7 @@
     {
       "topic": "Genel Matematik",
       "question": "",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "18 20 24 30 36 12 Diğer sayfaya geçiniz."
-      ],
+      "options": ["", "", "", "", "18 20 24 30 36 12 Diğer sayfaya geçiniz."],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
@@ -826,52 +736,28 @@
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, bu firmanın 2004 yılında ürettiği buzdo- labı sayısı kaç milyondur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "3,5 3,6 3,8 3,9 4"
-      ],
+      "options": ["", "", "", "", "3,5 3,6 3,8 3,9 4"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, başlangıçta bu grupta kaç işçi vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "9 10 12 14 15 13 Diğer sayfaya geçiniz."
-      ],
+      "options": ["", "", "", "", "9 10 12 14 15 13 Diğer sayfaya geçiniz."],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM Yukarıdaki verilere göre, a, b ve c arasındaki sırala- ma aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, ABCD yamuğunun alanı kaç dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
@@ -891,13 +777,7 @@
     {
       "topic": "Genel Matematik",
       "question": "",
-      "options": [
-        "",
-        "",
-        "2600 2750 2800",
-        "",
-        "3000 3200"
-      ],
+      "options": ["", "", "2600 2750 2800", "", "3000 3200"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     },

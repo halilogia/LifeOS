@@ -7,7 +7,7 @@
 import type { Todo } from "../entities/Todo.js";
 
 export interface ITodoRepository {
-    getAll(): Promise<Todo[]>;
-    saveAll(todos: Todo[]): Promise<void>;
-    getById(id: string): Promise<Todo | undefined>;
+  getAll(): Promise<Todo[]>;
+  saveAll(todos: Todo[]): Promise<void>;
+  getById(id: string): Promise<Todo | undefined>;
 }

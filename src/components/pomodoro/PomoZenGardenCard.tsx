@@ -31,9 +31,7 @@ export function PomoZenGardenCard({
           <h3>{t.zen_garden_title}</h3>
           <p>{t.zen_garden_subtitle}</p>
         </header>
-        <div className="zen-sandbox-canvas">
-          {gridCells}
-        </div>
+        <div className="zen-sandbox-canvas">{gridCells}</div>
       </div>
 
       {/* Zen Log Plant Modal Overlay */}
@@ -41,7 +39,7 @@ export function PomoZenGardenCard({
         <div className="zen-plant-modal-overlay">
           <div className="zen-plant-modal">
             <h3>{t.zen_modal_title}</h3>
-            
+
             <div className="zen-plant-modal-field">
               <label>{t.zen_modal_question}</label>
               <input
@@ -49,7 +47,9 @@ export function PomoZenGardenCard({
                 className="zen-plant-input"
                 placeholder={t.zen_modal_placeholder}
                 value={focusNote}
-                onInput={(e) => onSetFocusNote((e.target as HTMLInputElement).value)}
+                onInput={(e) =>
+                  onSetFocusNote((e.target as HTMLInputElement).value)
+                }
                 autofocus
               />
             </div>
@@ -57,7 +57,16 @@ export function PomoZenGardenCard({
             <div className="zen-plant-modal-field">
               <label>{t.zen_modal_select}</label>
               <div className="zen-element-grid">
-                {(["bonsai", "koi", "pagoda", "lantern", "bamboo", "pebble"] as const).map((el) => (
+                {(
+                  [
+                    "bonsai",
+                    "koi",
+                    "pagoda",
+                    "lantern",
+                    "bamboo",
+                    "pebble",
+                  ] as const
+                ).map((el) => (
                   <div
                     key={el}
                     className={`zen-element-select-card ${selectedElement === el ? "selected" : ""}`}

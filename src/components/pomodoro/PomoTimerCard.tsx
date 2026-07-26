@@ -97,12 +97,7 @@ export function PomoTimerCard({
             className="pomodoro-action-btn primary play-btn"
             onClick={onPomoStart}
           >
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
               <path d="M8 5v14l11-7z" />
             </svg>
           </button>
@@ -112,12 +107,7 @@ export function PomoTimerCard({
             className="pomodoro-action-btn primary pause-btn"
             onClick={onPomoPause}
           >
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
             </svg>
           </button>
@@ -148,49 +138,174 @@ export function PomoTimerCard({
       </div>
 
       {/* Pomodoro Duration Editor */}
-      <div style={{ display: "flex", gap: "10px", marginTop: "16px", background: "rgba(255, 255, 255, 0.02)", border: "1px solid var(--card-border)", borderRadius: "12px", padding: "10px 14px", alignItems: "center", width: "100%" }}>
-        <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style={{ color: "var(--accent-color)" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginTop: "16px",
+          background: "rgba(255, 255, 255, 0.02)",
+          border: "1px solid var(--card-border)",
+          borderRadius: "12px",
+          padding: "10px 14px",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "0.75rem",
+            color: "var(--text-secondary)",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style={{ color: "var(--accent-color)" }}
+          >
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
           {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}
         </span>
-        
-        <div style={{ display: "flex", gap: "10px", alignItems: "center", marginLeft: "auto" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-            <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Odak" : "Focus"}</span>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+            marginLeft: "auto",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2px",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.6rem",
+                color: "var(--text-secondary)",
+                fontWeight: "600",
+              }}
+            >
+              {lang === "tr" ? "Odak" : "Focus"}
+            </span>
             <input
               type="number"
               min="1"
               max="120"
               value={Math.round(customTimes.focus / 60)}
-              onChange={(e) => onCustomTimeChange("focus", parseInt((e.target as HTMLInputElement).value, 10))}
-              style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+              onChange={(e) =>
+                onCustomTimeChange(
+                  "focus",
+                  parseInt((e.target as HTMLInputElement).value, 10),
+                )
+              }
+              style={{
+                width: "45px",
+                background: "rgba(0,0,0,0.2)",
+                border: "1px solid var(--card-border)",
+                borderRadius: "6px",
+                color: "white",
+                fontSize: "0.75rem",
+                padding: "2px 4px",
+                textAlign: "center",
+              }}
             />
           </div>
-          
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-            <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Kısa" : "Short"}</span>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2px",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.6rem",
+                color: "var(--text-secondary)",
+                fontWeight: "600",
+              }}
+            >
+              {lang === "tr" ? "Kısa" : "Short"}
+            </span>
             <input
               type="number"
               min="1"
               max="60"
               value={Math.round(customTimes.short / 60)}
-              onChange={(e) => onCustomTimeChange("short", parseInt((e.target as HTMLInputElement).value, 10))}
-              style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+              onChange={(e) =>
+                onCustomTimeChange(
+                  "short",
+                  parseInt((e.target as HTMLInputElement).value, 10),
+                )
+              }
+              style={{
+                width: "45px",
+                background: "rgba(0,0,0,0.2)",
+                border: "1px solid var(--card-border)",
+                borderRadius: "6px",
+                color: "white",
+                fontSize: "0.75rem",
+                padding: "2px 4px",
+                textAlign: "center",
+              }}
             />
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
-            <span style={{ fontSize: "0.6rem", color: "var(--text-secondary)", fontWeight: "600" }}>{lang === "tr" ? "Uzun" : "Long"}</span>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2px",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.6rem",
+                color: "var(--text-secondary)",
+                fontWeight: "600",
+              }}
+            >
+              {lang === "tr" ? "Uzun" : "Long"}
+            </span>
             <input
               type="number"
               min="1"
               max="60"
               value={Math.round(customTimes.long / 60)}
-              onChange={(e) => onCustomTimeChange("long", parseInt((e.target as HTMLInputElement).value, 10))}
-              style={{ width: "45px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--card-border)", borderRadius: "6px", color: "white", fontSize: "0.75rem", padding: "2px 4px", textAlign: "center" }}
+              onChange={(e) =>
+                onCustomTimeChange(
+                  "long",
+                  parseInt((e.target as HTMLInputElement).value, 10),
+                )
+              }
+              style={{
+                width: "45px",
+                background: "rgba(0,0,0,0.2)",
+                border: "1px solid var(--card-border)",
+                borderRadius: "6px",
+                color: "white",
+                fontSize: "0.75rem",
+                padding: "2px 4px",
+                textAlign: "center",
+              }}
             />
           </div>
         </div>

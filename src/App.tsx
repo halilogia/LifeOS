@@ -135,7 +135,13 @@ export function App() {
     handleUpdateTodoUrgentImportant,
     handleExportBackup,
     handleImportBackup,
-  } = useTodos(todoRepository, syncSettings, triggerCloudBackup, showAlert, t as Record<string, string>);
+  } = useTodos(
+    todoRepository,
+    syncSettings,
+    triggerCloudBackup,
+    showAlert,
+    t as Record<string, string>,
+  );
 
   // ─── App Init ─────────────────────────────────────────────────────────────
   useAppInit({
@@ -233,11 +239,15 @@ export function App() {
           />
         );
       case "notes":
-        return <NotesView lang={lang as Language} onShowConfirm={showConfirm} />;
+        return (
+          <NotesView lang={lang as Language} onShowConfirm={showConfirm} />
+        );
       case "pomodoro":
         return <PomodoroView lang={lang as Language} />;
       case "willpower":
-        return <WillpowerView lang={lang as Language} onShowConfirm={showConfirm} />;
+        return (
+          <WillpowerView lang={lang as Language} onShowConfirm={showConfirm} />
+        );
       case "hifiz":
         return <HifizView lang={lang as Language} />;
       case "srs":
@@ -319,7 +329,9 @@ export function App() {
                 type="text"
                 id="todo-input"
                 value={todoText}
-                onInput={(e) => setTodoText((e.target as HTMLInputElement).value)}
+                onInput={(e) =>
+                  setTodoText((e.target as HTMLInputElement).value)
+                }
                 onKeyPress={(e) => {
                   if (e.key === "Enter" && todoText.trim()) {
                     handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
@@ -330,13 +342,18 @@ export function App() {
                 placeholder={t.todo_placeholder}
                 autocomplete="off"
               />
-              <DatePicker value={todoDueDate} onChange={setTodoDueDate} lang={lang as Language} />
+              <DatePicker
+                value={todoDueDate}
+                onChange={setTodoDueDate}
+                lang={lang as Language}
+              />
               <select
                 id="repeat-select"
                 className="repeat-select"
                 value={todoRepeat}
                 onChange={(e) => {
-                  const val = (e.target as HTMLSelectElement).value as Todo["repeat"];
+                  const val = (e.target as HTMLSelectElement)
+                    .value as Todo["repeat"];
                   setTodoRepeat(val);
                   setActiveTab(val === "none" ? "focus" : "routines");
                 }}
@@ -357,7 +374,16 @@ export function App() {
                 }}
                 aria-label="Add Task"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -427,7 +453,9 @@ export function App() {
         message={confirmDialog.message}
         lang={lang as Language}
         onConfirm={confirmDialog.onConfirm}
-        onCancel={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+        onCancel={() =>
+          setConfirmDialog((prev) => ({ ...prev, isOpen: false }))
+        }
       />
 
       {/* Alert Modal */}
@@ -436,7 +464,9 @@ export function App() {
         message={alertDialog.message}
         lang={lang as Language}
         onConfirm={() => {
-          if (alertDialog.onConfirm) {alertDialog.onConfirm();}
+          if (alertDialog.onConfirm) {
+            alertDialog.onConfirm();
+          }
           setAlertDialog({ isOpen: false, message: "" });
         }}
         isAlert={true}

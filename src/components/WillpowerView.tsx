@@ -32,7 +32,9 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
 
   const loadData = async () => {
     const result = await new Promise<any>((resolve) =>
-      chrome.storage.sync.get(["willpowerStreak"], (res) => resolve(res.willpowerStreak))
+      chrome.storage.sync.get(["willpowerStreak"], (res) =>
+        resolve(res.willpowerStreak),
+      ),
     );
     let streakData = result;
     if (!streakData) {
@@ -98,7 +100,7 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
       };
 
       await new Promise<void>((resolve) =>
-        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve)
+        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve),
       );
       setNote("");
       setData(updatedData);

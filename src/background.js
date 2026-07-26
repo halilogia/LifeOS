@@ -197,37 +197,44 @@ async function checkCalendarTasks() {
 
       // sv locale returns YYYY-MM-DD format reliably
       const todayStr = new Date().toLocaleDateString("sv");
-      const dueToday = todos.filter((t) => !t.completed && t.dueDate === todayStr);
+      const dueToday = todos.filter(
+        (t) => !t.completed && t.dueDate === todayStr,
+      );
 
       if (dueToday.length === 0) {
         return;
       }
 
-      chrome.storage.local.get(["last_calendar_notification_date"], (localRes) => {
-        const lastDate = localRes.last_calendar_notification_date;
-        if (lastDate === todayStr) {
-          return;
-        }
+      chrome.storage.local.get(
+        ["last_calendar_notification_date"],
+        (localRes) => {
+          const lastDate = localRes.last_calendar_notification_date;
+          if (lastDate === todayStr) {
+            return;
+          }
 
-        const title =
-          lang === "tr"
-            ? "Bugün Yapılacak Görevleriniz Var"
-            : "You Have Tasks Due Today";
-        const message =
-          lang === "tr"
-            ? `Bugün tamamlamanız gereken ${dueToday.length} adet görev bulunuyor. Görmek için tıklayın!`
-            : `You have ${dueToday.length} tasks to complete today. Click to view!`;
+          const title =
+            lang === "tr"
+              ? "Bugün Yapılacak Görevleriniz Var"
+              : "You Have Tasks Due Today";
+          const message =
+            lang === "tr"
+              ? `Bugün tamamlamanız gereken ${dueToday.length} adet görev bulunuyor. Görmek için tıklayın!`
+              : `You have ${dueToday.length} tasks to complete today. Click to view!`;
 
-        chrome.notifications.create("calendar_tasks_due_today", {
-          type: "basic",
-          iconUrl: "icons/icon-128.png",
-          title: title,
-          message: message,
-          priority: 2,
-        });
+          chrome.notifications.create("calendar_tasks_due_today", {
+            type: "basic",
+            iconUrl: "icons/icon-128.png",
+            title: title,
+            message: message,
+            priority: 2,
+          });
 
-        chrome.storage.local.set({ last_calendar_notification_date: todayStr });
-      });
+          chrome.storage.local.set({
+            last_calendar_notification_date: todayStr,
+          });
+        },
+      );
     },
   );
 }
@@ -238,22 +245,71 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     checkFreeGames();
   } else if (alarm.name === "check_calendar_tasks") {
     checkCalendarTasks();
+  } else if (alarm.name === "check_bist_stock_rules") {
+    checkBistStockRules();
   }
 });
 
-// Register Alarms on installation and browser startup
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
-  chrome.alarms.create("check_calendar_tasks", { periodInMinutes: 30 });
-  checkFreeGames();
-  checkCalendarTasks();
-});
+async function checkBistStockRules() {
+  chrome.storage.sync.get(["stockPortfolio", "stockRules"], async (res) => {
+    const portfolio = res.stockPortfolio || [];
+    const rules = res.stockRules || [];
+    if (portfolio.length === 0 || rules.length === 0) return;
 
-chrome.runtime.onStartup.addListener(() => {
-  chrome.alarms.create("check_free_games", { periodInMinutes: 60 });
-  chrome.alarms.create("check_calendar_tasks", { periodInMinutes: 30 });
-  checkCalendarTasks();
-});
+    const symbols = Array.from(new Set(portfolio.map((p) => p.symbol)));
+    for (const sym of symbols) {
+      try {
+        const fullSymbol = sym.toUpperCase().endsWith(".IS")
+          ? sym.toUpperCase()
+          : `${sym.toUpperCase()}.IS`;
+        const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=1d&range=1d`;
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const json = await resp.json();
+        const meta = json?.chart?.result?.[0]?.meta;
+        if (!meta) continue;
+
+        const price = meta.regularMarketPrice ?? 0;
+        const prev = meta.previousClose ?? price;
+        const changePct = prev !== 0 ? ((price - prev) / prev) * 100 : 0;
+        const normSym = fullSymbol.replace(/\.IS$/, "");
+
+        const activeRules = rules.filter(
+          (r) =>
+            r.symbol.replace(/\.IS$/, "").toUpperCase() === normSym &&
+            r.isActive,
+        );
+        for (const r of activeRules) {
+          let triggered = false;
+          let title = "BIST Alarm Uyarısı";
+          let message = "";
+
+          if (r.ruleType === "RED_CANDLE" && changePct < 0) {
+            triggered = true;
+            title = `🔴 ${normSym} Kırmızı Mum!`;
+            message = `${normSym} günü eksiye geçti (%${changePct.toFixed(2)}). Anlık fiyat: ₺${price.toFixed(2)}`;
+          } else if (r.ruleType === "TAVAN_BREAK" && changePct < 8.5) {
+            triggered = true;
+            title = `⚡ ${normSym} Tavan Bozdu!`;
+            message = `${normSym} tavan serisini bozdu. Günlük değişim: %${changePct.toFixed(2)}`;
+          }
+
+          if (triggered) {
+            chrome.notifications.create(`bist-${normSym}-${Date.now()}`, {
+              type: "basic",
+              iconUrl: "icons/icon128.png",
+              title: title,
+              message: message,
+              priority: 2,
+            });
+          }
+        }
+      } catch (e) {
+        // ignore background fetch errors
+      }
+    }
+  });
+}
 
 // Listen for notification clicks to open the giveaway claim links or newtab page
 chrome.notifications.onClicked.addListener((notificationId) => {

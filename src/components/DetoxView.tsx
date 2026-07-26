@@ -226,7 +226,8 @@ export function DetoxView({ lang }: DetoxViewProps) {
   const defaultDomains = SUPPORTED_SITES.flatMap((s) => s.domains);
   const customBlockedSites = blockedSites.filter(
     (site) => !defaultDomains.includes(site),
-  );  return (
+  );
+  return (
     <div id="detox-view" className="view-content active">
       <div className="detox-container">
         <DetoxUsageCard

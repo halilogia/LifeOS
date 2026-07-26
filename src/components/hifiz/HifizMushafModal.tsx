@@ -17,10 +17,7 @@ export function HifizMushafModal({
 }: HifizMushafModalProps) {
   return (
     <div className="settings-panel active" onClick={onCloseMushaf}>
-      <div
-        className="hifiz-modal-content"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="hifiz-modal-content" onClick={(e) => e.stopPropagation()}>
         <header className="settings-header">
           <h3 id="hifiz-image-title">{activeMushafItem.title}</h3>
           <div
@@ -42,7 +39,8 @@ export function HifizMushafModal({
                 borderRadius: "8px",
               }}
             >
-              {currentPageIndex + 1} / {activeMushafItem.pages ? activeMushafItem.pages.length : 0}
+              {currentPageIndex + 1} /{" "}
+              {activeMushafItem.pages ? activeMushafItem.pages.length : 0}
             </span>
             <button
               className="close-btn"
@@ -75,7 +73,8 @@ export function HifizMushafModal({
             id="hifiz-next-page"
             className="hifiz-nav-btn"
             disabled={
-              !activeMushafItem.pages || currentPageIndex === activeMushafItem.pages.length - 1
+              !activeMushafItem.pages ||
+              currentPageIndex === activeMushafItem.pages.length - 1
             }
             onClick={onNextPage}
           >

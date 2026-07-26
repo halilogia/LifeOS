@@ -16,26 +16,14 @@
     {
       "topic": "Genel Tarih",
       "question": "Türk-İslam devletlerinin ilk dönemlerinde başkent olan ve Timur Dönemi’nde “şehirlerin şahı” unvanıyla bilinen stratejik öneme sahip şehir aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "İsfahan Semerkant Taşkent",
-        "",
-        "Buhara Kaşgar"
-      ],
+      "options": ["", "", "İsfahan Semerkant Taşkent", "", "Buhara Kaşgar"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (2. Soru)."
     },
     {
       "topic": "Genel Tarih",
       "question": "Kaşgarlı Mahmut’un “Türk’ün kanadıdır.” diye nitelendirdiği savaş aracı aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "At Ok Yay",
-        "",
-        "Mızrak Kalkan"
-      ],
+      "options": ["", "", "At Ok Yay", "", "Mızrak Kalkan"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (3. Soru)."
     },
@@ -159,13 +147,7 @@
     {
       "topic": "Genel Tarih",
       "question": "Mustafa Kemal’in ilk görev yaptığı, Vatan ve Hürriyet Cemiyeti’ni kurduğu yer aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "İstanbul Selanik Manastır",
-        "",
-        "Şam Trablusgarp"
-      ],
+      "options": ["", "", "İstanbul Selanik Manastır", "", "Şam Trablusgarp"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (13. Soru)."
     },
@@ -434,13 +416,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Türkiye, geçici kırsal yerleşmeler bakımından çeşitlilik göstermektedir. Bu yerleşmelerdeki temel ekonomik faaliyet türü; hayvancılık, bazen de tarım olmaktadır. Aşağıdakilerden hangisi bu tür yerleşmelerden biri değildir? ÖSYM",
-      "options": [
-        "",
-        "",
-        "Yayla Oba Kom",
-        "",
-        "Ağıl Mahalle"
-      ],
+      "options": ["", "", "Yayla Oba Kom", "", "Ağıl Mahalle"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (36. Soru)."
     },
@@ -499,13 +475,7 @@
     {
       "topic": "Genel Coğrafya",
       "question": "Türkiye’de sanayi faaliyetleri bakımından ön planda olan kentler aynı zamanda nüfus yoğunluğunun fazla olduğu yerlerdir. Buna göre aşağıdaki kentlerin hangisinde nüfus yoğunluğu fazla olmasına karşın sanayi faaliyetleri diğerleri kadar gelişmemiştir?",
-      "options": [
-        "",
-        "",
-        "Eskişehir Gaziantep Yalova",
-        "",
-        "Kayseri İzmir"
-      ],
+      "options": ["", "", "Eskişehir Gaziantep Yalova", "", "Kayseri İzmir"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Coğrafya Sorusu (44. Soru)."
     },
@@ -527,78 +497,42 @@
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 3 6 8 9"
-      ],
+      "options": ["", "", "", "", "2 3 6 8 9"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "24 32 40 48 56 Diğer sayfaya geçiniz. 8"
-      ],
+      "options": ["", "", "", "", "24 32 40 48 56 Diğer sayfaya geçiniz. 8"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ÖSYM Yukarıdaki çarpma işlemine göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "18 19 20 21 22"
-      ],
+      "options": ["", "", "", "", "18 19 20 21 22"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "x, y gerçel sayılar ve olduğuna göre, ifadesi aşağıdakilerden hangisine eşittir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "1 x y"
-      ],
+      "options": ["", "", "", "", "1 x y"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
@@ -618,26 +552,14 @@
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, x kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 9"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 9"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "a ve b gerçel sayıları için ÖSYM olduğuna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
@@ -657,208 +579,112 @@
     {
       "topic": "Genel Matematik",
       "question": "Bir tam sayının karesine eşit olan bir sayıya tam kare sayı denir. Eğer bir tam kare sayının rakamları toplamı yine bir tam kare sayı ise bu sayıya çiftekare sayı denir. Buna göre, iki basamaklı çiftekare sayıların toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "93 101 109 117 125"
-      ],
+      "options": ["", "", "", "", "93 101 109 117 125"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Gerçel sayılar kümesi üzerinde tanımlı bir f fonksiyonu için olduğuna göre, değeri kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 10"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 10"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (42. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "m ve n pozitif tam sayılar olmak üzere, ÖSYM eşitliği veriliyor. m’nin n’ye bölümünden elde edilen kalan 3 olduğuna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "126 144 156 162 178"
-      ],
+      "options": ["", "", "", "", "126 144 156 162 178"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir tiyatroda satılan öğrenci biletleri, normal biletlerden % 30 daha ucuzdur. Ayrıca 10 biletten fazla olan toplu alımlarda toplam bedel üzerinden % 10 indirim yapılmaktadır. Bu tiyatrodan; 50 öğrenci bileti ve 20 normal bilet alan bir grup toplam 990 TL ödediğine göre, bir normal biletin indirimsiz satış bedeli kaç TL’dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 16 20 24 30"
-      ],
+      "options": ["", "", "", "", "10 16 20 24 30"],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (44. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Ali, üç basamaklı rakamlarının ikisi aynı diğeri ise 7 olan bir doğal sayı seçiyor. Bu sayının rakamlarının yerlerini değiştirerek bir sayı elde ediyor ve elde ettiği bu sayının seçtiği sayıdan 27 fazla olduğunu görüyor. Buna göre, Ali’nin seçtiği sayının rakamları çarpımı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "63 112 128 175 196"
-      ],
+      "options": ["", "", "", "", "63 112 128 175 196"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (45. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Aralarında 60 km mesafe bulunan A ve B araçları sabit hızlarla birbirlerine doğru harekete başladıktan 20 dakika sonra karşılaşıyor. A aracı karşılaştıkları noktada dururken B aracı aynı hızla yoluna devam ediyor ve araçlar karşılaştıktan 45 dakika sonra aralarındaki mesafe yine 60 km oluyor. ÖSYM Buna göre, A aracının başlangıçtaki hızı saatte kaç km’dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "90 100 105 110 120"
-      ],
+      "options": ["", "", "", "", "90 100 105 110 120"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (47. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir bakkalda satılan bir şişe meyve suyunun fiyatı bir şişe maden suyunun fiyatının iki katı, bir şişe maden suyunun fiyatı ise bir şişe suyun fiyatının iki katı kadardır. Bir gün içerisinde bu içeceklerden; 60 şişe su, 40 şişe maden suyu ve bir miktar meyve suyu satan bakkal elde ettiği gelirin % 30’unu su satışından sağlamıştır. Buna göre, bakkal gün içerisinde kaç şişe meyve suyu satmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 15 20 25 30"
-      ],
+      "options": ["", "", "", "", "10 15 20 25 30"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Üç matematik sınavına giren Ayşe’nin bu sınavlardan aldığı puanların ortalaması 77’dir. Eğer Ayşe, ilk sınavdan 59 alsaydı ortalaması 2 puan azalacaktı; son sınavdan 94 alsaydı ortalaması 1 puan artacaktı. Buna göre, Ayşe ikinci sınavdan kaç puan almıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "65 69 72 75 78"
-      ],
+      "options": ["", "", "", "", "65 69 72 75 78"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (49. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir bakkalda bir kilogram kuru üzümün satış fiyatı 8 TL’dir. Bu bakkal terazisinin yanlış tartması sonucunda, gerçekte 4 kilogram olan kuru üzümü 20 TL’ye satmıştır. ÖSYM Buna göre, terazi bir kilogramda kaç gram eksik tartmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "325 350 375 400 425"
-      ],
+      "options": ["", "", "", "", "325 350 375 400 425"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Tabanı 10 cm × 10 cm boyutlarında kare olan boş bir kutunun tabanına yarıçapı 1 cm olan 25 adet özdeş küre bilye yerleştirilmiş ve aşağıdaki görünüm elde edilmiştir. Daha sonra bu bilyelerin üzerine; ikinci ve daha üst kattaki bilyelerin her biri, bir alt kattaki bilyelerden 4 tanesine değecek biçimde, tabandaki bilyelerle özdeş yeni bilyeler ekleniyor. Buna göre, eklenen yeni bilye sayısı en fazla kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "25 30 35 40 45"
-      ],
+      "options": ["", "", "", "", "25 30 35 40 45"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Bir spor salonunda bulunan üç top sepetinin her birinde 8 basketbol ve 4 futbol topu vardır. Bu üç sepetten rastgele alınan birer topun hepsinin aynı türden olma olasılığı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 13"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 13"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "A, B ve C köylerinde kişi başına düşen tarımsal alanlar sırasıyla TA, TB ve TC ile gösteriliyor. Buna göre, aşağıdaki sıralamalardan hangisi doğrudur?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (54. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "B köyünden C köyüne 40 kişi taşınıyor ve böylece B ve C köylerinde kişi başına düşen tarımsal alan eşit oluyor. Buna göre, A köyünün nüfusu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "75 80 100 105 120"
-      ],
+      "options": ["", "", "", "", "75 80 100 105 120"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (55. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, 3 sayısı hangi hücrededir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "a b c d e"
-      ],
+      "options": ["", "", "", "", "a b c d e"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, b ve f hücrelerindeki sayıların toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "4 5 6 7 8 Diğer sayfaya geçiniz. 14"
-      ],
+      "options": ["", "", "", "", "4 5 6 7 8 Diğer sayfaya geçiniz. 14"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Dik koordinat düzleminde; A(2, 5) noktasına doğrusu üzerinde bulunan noktalardan en yakın olanı B(3, 3) noktasıdır. Buna göre, toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "2 3 4 5 6"
-      ],
+      "options": ["", "", "", "", "2 3 4 5 6"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     }

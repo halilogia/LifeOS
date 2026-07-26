@@ -17,18 +17,37 @@ export function KpssQuestionMap({ map }: KpssQuestionMapProps) {
   const highlightRegions = map.highlightRegions || [];
   const markers = map.markers || [];
 
-  const isHighlighted = (regionName: string) => highlightRegions.includes(regionName);
+  const isHighlighted = (regionName: string) =>
+    highlightRegions.includes(regionName);
 
   return (
-    <div className="kpss-map-container" style={{ position: "relative", width: "100%", maxWidth: "460px", margin: "0 auto 16px" }}>
+    <div
+      className="kpss-map-container"
+      style={{
+        position: "relative",
+        width: "100%",
+        maxWidth: "460px",
+        margin: "0 auto 16px",
+      }}
+    >
       {/* SVG Stylized Turkey Outline with 7 Regions */}
       <svg
         viewBox="0 0 400 180"
         width="100%"
         height="auto"
-        style={{ display: "block", background: "rgba(0, 0, 0, 0.2)", borderRadius: "12px", border: "1px solid rgba(255, 255, 255, 0.08)", padding: "10px" }}
+        style={{
+          display: "block",
+          background: "rgba(0, 0, 0, 0.2)",
+          borderRadius: "12px",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          padding: "10px",
+        }}
       >
-        <g stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="rgba(255,255,255,0.03)">
+        <g
+          stroke="rgba(255,255,255,0.15)"
+          stroke-width="1.5"
+          fill="rgba(255,255,255,0.03)"
+        >
           {/* 1. Marmara */}
           <polygon
             points="10,20 100,20 120,45 105,80 50,85 10,55"
@@ -74,15 +93,37 @@ export function KpssQuestionMap({ map }: KpssQuestionMapProps) {
         </g>
 
         {/* Region Labels */}
-        <g fill="rgba(255, 255, 255, 0.45)" font-size="7" font-weight="bold" font-family="sans-serif" text-anchor="middle">
-          <text x="50" y="45">MARMARA</text>
-          <text x="50" y="115">EGE</text>
-          <text x="160" y="130">AKDENİZ</text>
-          <text x="165" y="70">İÇ ANADOLU</text>
-          <text x="260" y="52">KARADENİZ</text>
-          <text x="310" y="110">DOĞU</text>
-          <text x="310" y="120">ANADOLU</text>
-          <text x="300" y="150">GÜNEYDOĞU ANADOLU</text>
+        <g
+          fill="rgba(255, 255, 255, 0.45)"
+          font-size="7"
+          font-weight="bold"
+          font-family="sans-serif"
+          text-anchor="middle"
+        >
+          <text x="50" y="45">
+            MARMARA
+          </text>
+          <text x="50" y="115">
+            EGE
+          </text>
+          <text x="160" y="130">
+            AKDENİZ
+          </text>
+          <text x="165" y="70">
+            İÇ ANADOLU
+          </text>
+          <text x="260" y="52">
+            KARADENİZ
+          </text>
+          <text x="310" y="110">
+            DOĞU
+          </text>
+          <text x="310" y="120">
+            ANADOLU
+          </text>
+          <text x="300" y="150">
+            GÜNEYDOĞU ANADOLU
+          </text>
         </g>
       </svg>
 

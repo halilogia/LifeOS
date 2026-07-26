@@ -172,13 +172,7 @@
     {
       "topic": "Genel Tarih",
       "question": " Mustafa Kemal ve Kongre liderlerinin tutuklanması için Ali Galip’in görevlendirilmesi  İngilizlerin, Anadolu’da kendileri için tehlikeli gördükleri stratejik mevkileri işgal etmesi  Ankara Valisi Muhittin Paşa’nın, Kongreyi engellemek ve Mustafa Kemal ile arkadaşlarını tutuklamakla görevlendirilmesi Damat Ferit Hükûmeti, bu önlemleri aşağıdaki kongrelerden hangisini engellemek amacıyla uygulamaya koymuştur?",
-      "options": [
-        "",
-        "",
-        "Erzurum Pozantı Alaşehir",
-        "",
-        "Balıkesir Sivas"
-      ],
+      "options": ["", "", "Erzurum Pozantı Alaşehir", "", "Balıkesir Sivas"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (14. Soru)."
     },
@@ -341,13 +335,7 @@
     {
       "topic": "Genel Tarih",
       "question": "1950’li yılların başlarında Kıbrıs'ın Yunanistan'a bağlanması amacı ile Yorgo Grivas liderliğinde kurulmuş Rum örgütü aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "EOKA IMRO Mavri Mira",
-        "",
-        "Etniki Eterya Pontus"
-      ],
+      "options": ["", "", "EOKA IMRO Mavri Mira", "", "Etniki Eterya Pontus"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Tarih Sorusu (27. Soru)."
     },
@@ -566,117 +554,63 @@
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (31. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (32. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (33. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "işleminin sonucu kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 10"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 10"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (34. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "eşitliğini sağlayan x değerlerinin toplamı kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "6 4 2"
-      ],
+      "options": ["", "", "", "", "6 4 2"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (35. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ifadesinin sadeleştirilmiş biçimi aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (36. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Pozitif gerçel sayılar kümesi üzerinde ve işlemleri biçiminde tanımlanıyor. olduğuna göre, a kaçtır?",
-      "options": [
-        "",
-        "",
-        "1",
-        "",
-        "2 3"
-      ],
+      "options": ["", "", "1", "", "2 3"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (37. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "İki gerçel sayının çarpımı, bu sayılardan birine 2 eklenip diğerinden 2 çıkarılmasıyla elde edilen sayıların çarpımından 6 fazladır. Buna göre, sayı doğrusu üzerinde bu iki sayı arasındaki uzaklık kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "5 4 3 2 1 Diğer sayfaya geçiniz. 11"
-      ],
+      "options": ["", "", "", "", "5 4 3 2 1 Diğer sayfaya geçiniz. 11"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (38. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Pozitif tamsayılarla yapılan bir bölme işleminde bölen, bölümün iki katından bir fazladır. Bu bölme işleminde kalan 11 olduğuna göre, bölünen sayı en az kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "89 87 85 83 81"
-      ],
+      "options": ["", "", "", "", "89 87 85 83 81"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (39. Soru)."
     },
@@ -696,26 +630,14 @@
     {
       "topic": "Genel Matematik",
       "question": "olduğuna göre, x kaçtır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (41. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "X ve Y sıvılarından oluşan bir karışımın bulunduğu bir kaptan, sadece X sıvısını hacim kaybı olmadan ayrıştırarak başka bir kaba aktaran bir düzenek kuruluyor. Bu düzenek sabit hızla 2 dakikada 10 mililitre Bir kumbarada; birisi küçük, diğeri büyük boyutlu madenî paralar için hazırlanmış iki adet bozuk para atma bölümü bulunmaktadır. Bu kumbarayla ilgili olarak aşağıdakiler bilinmektedir. Küçük bölüme atılan her bir para için 1 bip sesi, büyük bölüme atılan her bir büyük boyutlu para için 2 bip sesi duyuluyor. Küçük bölüme atılması gereken bir para büyük bölüme atılırsa bip sesi duyulmuyor. Kumbaraya toplam 30 adet bozuk para atılıyor ve 23 kez bip sesi duyuluyor. Buna göre, bu kumbaraya bip sesi duyulmadan en çok kaç adet bozuk para atılmış olabilir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 12 14 16 18"
-      ],
+      "options": ["", "", "", "", "10 12 14 16 18"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (43. Soru)."
     },
@@ -735,26 +657,14 @@
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, başlangıçta havuzda kaç litre su vardır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "150 156 158 160 164"
-      ],
+      "options": ["", "", "", "", "150 156 158 160 164"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (46. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Aşağıda etkinlik düzenlenen bir binadaki dört salon ve bu salonlara giden yollar gösterilmiştir. Binanın girişinden itibaren salonlara giden yolların takip edilebilmesi için önceden belirlenmiş 6 farklı renk arasından seçim yapılarak her bir yol farklı bir renge boyanacaktır. Bu boyama işlemi kaç farklı biçimde yapılabilir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "120 180 240 320 360"
-      ],
+      "options": ["", "", "", "", "120 180 240 320 360"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (48. Soru)."
     },
@@ -774,52 +684,28 @@
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, 20. tur sonunda kaç koltuk sadece bir kez yan yatmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "10 9 7 6 5"
-      ],
+      "options": ["", "", "", "", "10 9 7 6 5"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (50. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Buna göre, 18 ve 24 numaralı koltuklar kaç turda aynı anda yan yatmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "7 6 5 4 3"
-      ],
+      "options": ["", "", "", "", "7 6 5 4 3"],
       "correctAnswer": 4,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (51. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Aşağıda numarası verilmiş olan koltuklardan hangisi, 20. tur sonunda, sayıca diğerlerinden daha fazla yan yatmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "45 42 40 36 30 Diğer sayfaya geçiniz. 16"
-      ],
+      "options": ["", "", "", "", "45 42 40 36 30 Diğer sayfaya geçiniz. 16"],
       "correctAnswer": 3,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (52. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Levent, 15 metre derinlikte iken oksijen tüpünün yüzde kaçını kullanmıştır?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "22 20 18 16 14"
-      ],
+      "options": ["", "", "", "", "22 20 18 16 14"],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (53. Soru)."
     },
@@ -839,52 +725,28 @@
     {
       "topic": "Genel Matematik",
       "question": "Kesilen parçalar çıkarıldıktan sonra kâğıt, konumu değiştirilmeden katlandığı yerlerden tamamen açılıyor ve aşağıdaki görünüm elde ediliyor. Buna göre, kâğıdın açılmadan önceki biçimi aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 2,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (56. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "İkinci adımdan sonra kâğıt, konumu değiştirilmeden aşağıdaki gibi kesiliyor. Buna göre, kesildikten sonra konumu değiştirilmeden katlandığı yerlerden tamamen açılan bu kâğıdın görünümü aşağıdakilerden hangisidir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
+      "options": ["", "", "", "", ""],
       "correctAnswer": 1,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (57. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "Yukarıdaki verilere göre, x kaç birimdir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "Diğer sayfaya geçiniz. 18"
-      ],
+      "options": ["", "", "", "", "Diğer sayfaya geçiniz. 18"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (58. Soru)."
     },
     {
       "topic": "Genel Matematik",
       "question": "ABCDE düzgün beşgen Kenar uzunlukları 2 cm ve 3 cm olan ABCD dikdörtgeninde A noktasının B noktasına göre simetriği alınarak noktası B noktasının C noktasına göre simetriği alınarak noktası C noktasının D noktasına göre simetriği alınarak noktası D noktasının A noktasına göre simetriği alınarak noktası elde ediliyor. noktalarının birleştirilmesiyle dörtgeni oluşturuluyor. Buna göre, dörtgeninin alanı kaç dir?",
-      "options": [
-        "",
-        "",
-        "",
-        "",
-        "30 28 24 18 16"
-      ],
+      "options": ["", "", "", "", "30 28 24 18 16"],
       "correctAnswer": 0,
       "solution": "ÖSYM Çıkmış Matematik Sorusu (59. Soru)."
     },
