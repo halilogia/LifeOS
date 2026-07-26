@@ -103,3 +103,9 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 5.4 Localization System Fallback Proxy
 * When referencing interface strings using localized keys, always import and use `getTranslation(lang)` which returns a Proxy. This Proxy provides safe fallback lookup to English strings if translation keys are missing in the selected language.
 
+### 5.5 Sıfır Kayıp Refactoring Protokolü (Zero-Loss Refactoring Protocol)
+* **Özellik & Mantık Koruması (Zero Feature Loss)**: Refactoring işlemlerinde mevcut kodun tüm işlevleri, doğal dil komut ayrıştırıcıları (parsers), API istek akışları, hata sarmalayıcıları (try-catch) ve yan etkileri (side-effects) %100 aynen korunmalıdır. Kenar durumlar (edge cases) silinemez veya basitleştirilemez.
+* **Veri & Parametre Koruması**: Fonksiyon imzaları, dışarıdan gelen prop tipleri, veri yapıları ve state isimleri değiştirilmez; veri akışının bozulmaması garanti edilir.
+* **Eksiksiz Kod Çıktısı (No Lazy Code)**: Kod yazarken hiçbir zaman `// ... eski kodlar buraya gelecek` veya `// mantık aynı kalıyor` şeklinde kısaltma yapılamaz. Tüm kod ve alt bileşenler baştan sona tam ve çalışır halde sunulmalıdır.
+* **Tam Değişiklik İptali & İnceleme**: Refactoring sonrasında `npx tsc --noEmit` ve `npm run build` ile %100 sorunsuz derlendiği doğrulanmalı ve yapılan parçalama işlemlerinin özeti sunulmalıdır.
+
