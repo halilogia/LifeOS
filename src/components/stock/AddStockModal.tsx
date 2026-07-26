@@ -8,6 +8,7 @@ import { POPULAR_BIST_STOCKS } from "@/services/bistService.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 
 interface AddStockModalProps {
+  initialSymbol?: string;
   onSave: (item: Omit<StockPortfolioItem, "id">) => void;
   onClose: () => void;
 }
@@ -30,11 +31,15 @@ function IconX() {
   );
 }
 
-export function AddStockModal({ onSave, onClose }: AddStockModalProps) {
+export function AddStockModal({
+  initialSymbol,
+  onSave,
+  onClose,
+}: AddStockModalProps) {
   const [selectedStock, setSelectedStock] = useState<string>("THYAO.IS");
-  const [customSymbol, setCustomSymbol] = useState<string>("");
-  const [useCustom, setUseCustom] = useState<boolean>(false);
-  const [displayName, setDisplayName] = useState<string>("");
+  const [customSymbol, setCustomSymbol] = useState<string>(initialSymbol || "");
+  const [useCustom, setUseCustom] = useState<boolean>(Boolean(initialSymbol));
+  const [displayName, setDisplayName] = useState<string>(initialSymbol || "");
   const [buyPrice, setBuyPrice] = useState<number>(0);
   const [lotCount, setLotCount] = useState<number>(0);
   const [note, setNote] = useState<string>("");

@@ -107,7 +107,16 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
       }
     }
   } catch (e) {
-    console.error("stockAiService error:", e);
+    console.error("stockAiService fetch error:", e);
+    const isLocal =
+      endpoint.includes("localhost") || endpoint.includes("127.0.0.1");
+    if (isLocal) {
+      return (
+        `⚠️ 9Router / Yerel AI sunucusuna (${endpoint}) bağlanılamadı.\n\n` +
+        `Lütfen bilgisayarınızda 9Router uygulamasının açık olduğundan veya Ayarlar sekmesindeki port adresinin doğru olduğundan emin olun.` +
+        YTD_DISCLAIMER
+      );
+    }
   }
 
   // Fallback if network/API fails

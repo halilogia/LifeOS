@@ -21,6 +21,7 @@ import { KpssView } from "@/components/KpssView.js";
 import { FreeGamesView } from "@/components/FreeGamesView.js";
 import { DetoxView } from "@/components/DetoxView.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
+import { BistView } from "@/components/BistView.js";
 import { AIChatView } from "@/components/AIChatView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
 import { EisenhowerView } from "@/components/EisenhowerView.js";
@@ -274,6 +275,8 @@ export function App() {
         return <FreeGamesView lang={lang as Language} />;
       case "detox":
         return <DetoxView lang={lang as Language} />;
+      case "bist":
+        return <BistView lang={lang as Language} />;
       case "halka-arz":
         return <HalkaArzView lang={lang as Language} />;
       case "ai-chat":
