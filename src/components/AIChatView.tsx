@@ -2,6 +2,13 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import { Todo, Language } from "../types/types.js";
 import { translations } from "../utils/i18n.js";
 
+import { AiChatHeaderBar } from "./aichat/AiChatHeaderBar.js";
+import {
+  AiChatMessageItem,
+  MessageItemData,
+} from "./aichat/AiChatMessageItem.js";
+import { AiChatInputToolbar } from "./aichat/AiChatInputToolbar.js";
+
 interface AIChatViewProps {
   lang: Language;
   todos: Todo[];
@@ -19,13 +26,6 @@ interface AIChatViewProps {
   aiEndpoint: string;
   aiShowThinking?: boolean;
   onSettingsOpen: () => void;
-}
-
-interface Message {
-  sender: "user" | "bot";
-  text: string;
-  time: string;
-  thinking?: string;
 }
 
 const monthsMap: Record<string, number> = {
@@ -83,7 +83,7 @@ export function AIChatView({
   const t = translations[lang];
 
   // Component States
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageItemData[]>([]);
   const [inputVal, setInputVal] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [openThinkingIndexes, setOpenThinkingIndexes] = useState<
@@ -92,9 +92,8 @@ export function AIChatView({
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize
+  // Initialize welcome message
   useEffect(() => {
-    // Add initial welcome message
     setMessages([
       {
         sender: "bot",
@@ -315,8 +314,8 @@ export function AIChatView({
 
     // 2. Normalize smart quotes and typical invalid characters
     cleaned = cleaned
-      .replace(/[\u201C\u201D]/g, '"') // smart double quotes
-      .replace(/[\u2018\u2019]/g, "'"); // smart single quotes
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2018\u2019]/g, "'");
 
     // 3. Find first brace or bracket
     const firstBrace = cleaned.indexOf("{");
@@ -337,7 +336,6 @@ export function AIChatView({
     }
 
     if (startIdx === -1) {
-      // No JSON container found, attempt to parse directly or return as a reply string
       return { reply: cleaned, action: "none", params: null };
     }
 
@@ -383,20 +381,16 @@ export function AIChatView({
     try {
       return JSON.parse(cleaned);
     } catch {
-      // Extremely robust fallback: if JSON parsing fails after substring extraction,
-      // scan if there is a simpler conversational markdown block, or try to clean JSON syntax
       try {
-        // Try fixing missing commas or trailing commas which models commonly output
         const patched = cleaned
-          .replace(/,\s*([\]}])/g, "$1") // remove trailing commas before closing braces/brackets
-          .replace(/(["\d])\s*\n\s*"/g, '$1,\n"'); // add missing commas between adjacent keys
+          .replace(/,\s*([\]}])/g, "$1")
+          .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
         return JSON.parse(patched);
       } catch {
         console.warn(
           "[cleanAndParseJSON Fallback] JSON parsing failed twice. Raw text was:",
           text,
         );
-        // Return a safe object instead of throwing, so the UI never crashes or gives alerts
         return {
           reply: text.replace(/<think>[\s\S]*?<\/think>/gi, "").trim(),
           action: "none",
@@ -409,7 +403,6 @@ export function AIChatView({
   const parseAIResponse = (rawText: string) => {
     let thinking = "";
 
-    // Case-insensitive think match with optional whitespaces
     const thinkRegex = /<think>([\s\S]*?)<\/think>/i;
     const thinkMatch = rawText.match(thinkRegex);
     if (thinkMatch) {
@@ -425,7 +418,6 @@ export function AIChatView({
         thinking,
       };
     } catch {
-      // Fallback: clean out the think block and use raw response as conversational reply
       const reply = rawText.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
       return {
         reply,
@@ -847,130 +839,40 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     }
   };
 
+  const handleToggleThinking = (idx: number) => {
+    setOpenThinkingIndexes((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
+  };
+
   return (
     <div id="ai-chat-view" className="view-content active">
       <div className="ai-chat-container">
-        {/* Header */}
-        <header className="ai-chat-header">
-          <div className="header-title-section">
-            <h2>{t.ai_chat_title}</h2>
-            {!aiApiKey && (
-              <span
-                className="local-mode-badge"
-                title={t.ai_chat_no_key_warning}
-              >
-                {lang === "tr"
-                  ? "Çevrimdışı/Komut Modu"
-                  : "Offline Command Mode"}
-              </span>
-            )}
-          </div>
-          <button
-            className={`key-panel-toggle-btn ${aiApiKey ? "configured" : ""}`}
-            onClick={onSettingsOpen}
-            title={t.settings_title}
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span>{aiApiKey ? t.ai_chat_key_saved : t.ai_chat_key_title}</span>
-          </button>
-        </header>
+        {/* Header Bar */}
+        <AiChatHeaderBar
+          title={t.ai_chat_title}
+          aiApiKey={aiApiKey}
+          lang={lang}
+          noKeyWarning={t.ai_chat_no_key_warning}
+          keySavedText={t.ai_chat_key_saved}
+          keyTitleText={t.ai_chat_key_title}
+          settingsTitle={t.settings_title}
+          onSettingsOpen={onSettingsOpen}
+        />
 
         {/* Messages List Area */}
         <div className="chat-messages-area">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`message-bubble-wrapper ${msg.sender}`}>
-              <div className="avatar">
-                {msg.sender === "user" ? "👤" : "🤖"}
-              </div>
-              <div className="message-bubble">
-                {msg.thinking && aiShowThinking && (
-                  <div
-                    style={{
-                      background: "rgba(255, 255, 255, 0.03)",
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      borderRadius: "6px",
-                      padding: "8px 10px",
-                      marginBottom: "8px",
-                      fontSize: "0.78rem",
-                    }}
-                  >
-                    <div
-                      onClick={() => {
-                        setOpenThinkingIndexes((prev) => ({
-                          ...prev,
-                          [idx]: !prev[idx],
-                        }));
-                      }}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        color: "var(--text-secondary)",
-                        userSelect: "none",
-                      }}
-                    >
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                        }}
-                      >
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="12" y1="16" x2="12" y2="12"></line>
-                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                        {lang === "tr" ? "Düşünme Süreci" : "Thinking Process"}
-                      </span>
-                      <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>
-                        {openThinkingIndexes[idx] !== false ? "▲" : "▼"}
-                      </span>
-                    </div>
-                    {openThinkingIndexes[idx] !== false && (
-                      <div
-                        style={{
-                          marginTop: "6px",
-                          lineHeight: 1.4,
-                          color: "rgba(255, 255, 255, 0.6)",
-                          whiteSpace: "pre-wrap",
-                          borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-                          paddingTop: "6px",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        {msg.thinking}
-                      </div>
-                    )}
-                  </div>
-                )}
-                <p className="msg-text">{msg.text}</p>
-                <span className="msg-time">{msg.time}</span>
-              </div>
-            </div>
+            <AiChatMessageItem
+              key={idx}
+              message={msg}
+              index={idx}
+              aiShowThinking={aiShowThinking}
+              isThinkingOpen={openThinkingIndexes[idx] !== false}
+              lang={lang}
+              onToggleThinking={handleToggleThinking}
+            />
           ))}
           {isBotTyping && (
             <div className="message-bubble-wrapper bot">
@@ -985,61 +887,17 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           <div ref={chatEndRef} />
         </div>
 
-        {/* Chat Control Input Panel */}
-        <div className="chat-input-panel">
-          {/* Quick Suggestions Chips */}
-          <div className="suggestion-chips-container">
-            <button
-              className="chip-btn"
-              onClick={() => handleSendMessage(t.ai_chat_suggestion_1)}
-            >
-              💡 {t.ai_chat_suggestion_1}
-            </button>
-            <button
-              className="chip-btn"
-              onClick={() => handleSendMessage(t.ai_chat_suggestion_2)}
-            >
-              💡 {t.ai_chat_suggestion_2}
-            </button>
-            <button
-              className="chip-btn"
-              onClick={() => handleSendMessage(t.ai_chat_suggestion_3)}
-            >
-              💡 {t.ai_chat_suggestion_3}
-            </button>
-          </div>
-
-          {/* Main prompt input */}
-          <div className="main-input-bar">
-            <input
-              type="text"
-              className="chat-prompt-input"
-              value={inputVal}
-              onInput={(e) => setInputVal((e.target as HTMLInputElement).value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder={t.ai_chat_placeholder}
-            />
-            <button
-              className="send-message-btn"
-              onClick={() => handleSendMessage()}
-            >
-              <span>{t.ai_chat_send}</span>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </div>
-        </div>
+        {/* Chat Input Panel & Suggestions */}
+        <AiChatInputToolbar
+          inputVal={inputVal}
+          placeholder={t.ai_chat_placeholder}
+          sendLabel={t.ai_chat_send}
+          suggestion1={t.ai_chat_suggestion_1}
+          suggestion2={t.ai_chat_suggestion_2}
+          suggestion3={t.ai_chat_suggestion_3}
+          onInputChange={setInputVal}
+          onSendMessage={handleSendMessage}
+        />
       </div>
     </div>
   );
