@@ -38,6 +38,24 @@ Leverage placement quiz history to project real-world exam targets.
 
 ---
 
+## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
+
+### 1. 🔔 KAP Haber Taraması & AI Duygu Analizi (KAP News & AI Sentiment)
+Takipteki BIST hisselerinin Kamuyu Aydınlatma Platformu (KAP) duyurularını anlık tarama ve yapay zeka ile analiz etme.
+- [ ] **KAP Canlı Akış Servisi**: Takip edilen hisselerin yeni KAP bildirimi düştüğünde arkaplanda masaüstü uyarısı verme.
+- [ ] **AI Haber Puanlaması**: AI'ın KAP haberini okuyup (Örn: Yeni İş Anlaşması, Bedelsiz Sermaye Artırımı) haber için "Olumlu (+2)", "Nötr" veya "Olumsuz (-2)" puan çıkarması.
+
+### 2. 📊 Teknik İndikatör Sinyal Motoru (RSI, EMA 20/50, MACD)
+Gelişmiş teknik indikatör kuralları tanımlama.
+- [ ] **RSI Aşırı Alım/Satım Alarmları**: RSI 14 periyodu 30 altına inince "Aşırı Satım (Alım Fırsatı)", 70 üstüne çıkınca "Aşırı Alım (Kar Al)" uyarısı.
+- [ ] **Golden Cross / Death Cross Sinyalleri**: EMA 20 hareketli ortalamanın EMA 50 ortalamasını yukarı kesmesi durumunda yükseliş sinyali üretme.
+
+### 3. 📈 Hacim Sıçraması ve Ani Volatilite Tespiti (Volume & Spike Detector)
+- [ ] **Hacim Sıçraması:** Dakikalık hacim ortalamanın 3 katına çıktığında balina hareketi uyarısı atma.
+- [ ] **Sektörel Portföy Gruplama:** Hisseleri "Halka Arzlar", "Temettü Hisseleri", "Teknoloji" şeklinde kategorilere ayırma.
+
+---
+
 ## 📈 Long-Term Backlog (Uzun Vadeli Planlar)
 - [ ] **Visual Theme Engine**: Custom wallpaper uploads and glassmorphic blur opacity sliders.
 - [ ] **Cloud Sync Adapters**: WebDAV or Google Drive remote sync options in addition to `chrome.storage.sync`.
@@ -45,6 +63,7 @@ Leverage placement quiz history to project real-world exam targets.
 ---
 
 ## ✅ Completed Features Archive (Tamamlanan Özellikler Arşivi)
+- **BIST Automated Stock Management & Strategy Engine**: Full BIST & IPO portfolio monitoring, red candle alerts, tavan break rules, stop-loss, take-profit, trailing stop, background chrome alarms, desktop notifications, and Ollama/OpenRouter AI market advisor.
 - **Universal Extension-wide Localization**: Full translation dictionary support for English and Turkish across all sub-panels, charts, and settings.
 - **Extensible Fallback Proxy Localization**: Automatic fallback to English dictionary translation keys using ES6 Proxy architecture.
 - **Clean Architecture & Layout Assembly Refactoring for Popup Module**: Isolated presentation layouts from logic via `usePopup.ts` hooks and split popup views into dedicated sub-components (`PopupPomoTab.tsx` and `PopupDetoxTab.tsx`).

@@ -4,6 +4,18 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.7.0] - 2026-07-26
+### Eklendi
+- **Tüm Borsa İstanbul (BIST) İçin Otomatik Borsa Yönetim & Strateji Sistemi**: Halka arzlar ve tüm BIST hisseleri (`THYAO`, `GARAN`, `KRDMD`, `SASA`, `EREGL` vb.) için canlı fiyat akışı, portföy takibi, kar/zarar hesaplamaları ve otomatik kural motoru eklendi.
+- **Esnek Otomatik Kural Motoru (`stockRuleEngine.ts`)**:
+  - 🔴 **Kırmızı Mum:** Günü eksiye geçen hisselerde anlık uyarı sinyali.
+  - ⚡ **Tavan Bozdu:** %10 tavan serisinden sarkma olduğunda otomatik uyarı.
+  - 📉 **Stop-Loss & 📈 Kar-Al:** Belirlenen yüzdesel maliyet marjlarına ulaşıldığında uyarı.
+  - 🎯 **İzleyen Stop (Trailing Stop):** Görülen en yüksek zirve fiyatın % X altına düşüldüğünde karı korumak için alarm tetikleme.
+- **Arka Plan Otomatik Fiyat Taraması & Masaüstü Alarmları**: `background.js` içinde `check_bist_stock_rules` periyodik alarmı tanımlanarak 3 dakikada bir fiyatlar taranır ve kural eşleşmelerinde Chrome Masaüstü Bildirimi (`chrome.notifications`) çıkarılır.
+- **Yapay Zeka (Ollama / OpenRouter / Gemini) Borsa Danışmanı**: Seçilen BIST hissesi veya portföyün genel durumu için canlı teknik/temel yapay zeka analizi sunan `StockAiAnalysisModal` entegre edildi.
+- **Clean Architecture & Layout Assembly Refactoring**: Borsa verileri `ChromeStorageStockRepository` depolama katmanına taşındı; `PortfolioSummaryCard`, `StockWatchlistTable`, `RuleBuilderModal`, `AddStockModal` ve `StockAlertHistoryModal` prop tabanlı alt bileşenlere ayrıştırıldı.
+
 ## [3.6.0] - 2026-07-19
 ### Eklendi
 - **Eklenti Genelinde İngilizce Dil Desteği**: `i18n.ts` altyapısı genişletilerek eklentideki tüm ayar sekmeleri, aralık tekrar ekranları, namaz vakitleri, KPSS detayları ve motivasyon alanları İngilizce ve Türkçe olarak yerelleştirildi.

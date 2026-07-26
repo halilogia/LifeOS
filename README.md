@@ -22,8 +22,12 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri. Sınav sonucuna göre konu durumları otomatik güncellenir.
   - **Çıkmış Sorular Sınav Salonu**: 2009-2021 yılları arası orijinal ÖSYM çıkmış KPSS Lisans sorularını yıl bazında veya tüm yılların karışımından oluşan karma denemeler halinde çözebilme desteği. Sınav ekranında ÖSYM'nin kritik sınav reformu milatlarını (2013-2014-2018) gösteren dairesel `!` kılavuz butonu.
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
-- **📈 Özel Borsa İstanbul Grafik Paneli**:
-  - BIST hisseleri için tamamen kendi geliştirdiğimiz, Yahoo Finance veri altyapısıyla çalışan mum (Candlestick) grafik ekranı. 1M, 3M, 6M, 1Y zaman aralığı filtreleri ve fare takipli crosshair veri çubuğu.
+- **📈 Otomatik Borsa İstanbul (BIST) Yönetim & Strateji Sistemi**:
+  - **Canlı Takip & Portföy Metrikleri**: Tüm BIST hisseleri ve Halka Arzlar için canlı fiyat akışı, maliyet, lot adedi, toplam portföy değeri ve anlık Kar/Zarar göstergesi.
+  - **Otomatik Satış & Alarm Motoru (`stockRuleEngine.ts`)**: Kırmızı Mum (Değişim < %0), Tavan Bozma (%10 seriden sarkma), Stop-Loss %, Kar-Al % ve İzleyen Stop (Trailing Stop - Zirveden % düşüş) kuralları.
+  - **Masaüstü Alarmları**: Arka plan servisi (`background.js`) üzerinden 3 dakikada bir otomatik fiyat kontrolü ve `chrome.notifications` masaüstü alarm uyarısı.
+  - **Yapay Zeka (Ollama / OpenRouter / Gemini) Borsa Danışmanı**: Seçilen BIST hisseleri için canlı teknik/temel yapay zeka analiz ekranı.
+  - **Özel Mum (Candlestick) Grafiği**: BIST hisseleri için 1M, 3M, 6M, 1Y zaman aralığı filtreli ve fare takipli crosshair mum grafik ekranı.
 - **🕌 Namaz Vakitleri**:
   - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
