@@ -11,7 +11,6 @@ import {
 import {
   fetchStockPrices,
   fetchStockQuote,
-  refreshStockPrices,
   StockQuote,
 } from "@/services/bistService.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
@@ -28,12 +27,14 @@ import { AddStockModal } from "@/components/stock/AddStockModal.js";
 import { RuleBuilderModal } from "@/components/stock/RuleBuilderModal.js";
 import { StockAlertHistoryModal } from "@/components/stock/StockAlertHistoryModal.js";
 import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js";
+import { StockAiReportTab } from "@/components/stock/StockAiReportTab.js";
+import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 
 interface HalkaArzViewProps {
   lang: Language;
 }
 
-type TabId = "stocks" | "active" | "history" | "chart";
+type TabId = "stocks" | "ai-report" | "active" | "history" | "chart";
 
 const stockRepository = new ChromeStorageStockRepository();
 
@@ -91,6 +92,43 @@ function IconRefresh() {
   );
 }
 
+function IconNewspaper() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+      <path d="M18 14h-8" />
+      <path d="M18 18h-8" />
+      <path d="M10 6h8v4h-8V6Z" />
+    </svg>
+  );
+}
+
+function IconSparkles() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+    </svg>
+  );
+}
+
 export function HalkaArzView({ lang }: HalkaArzViewProps) {
   const t = getTranslation(lang);
 
@@ -101,16 +139,17 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   const [rules, setRules] = useState<StockRule[]>([]);
   const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
 
   // Modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [ruleModalSymbol, setRuleModalSymbol] = useState<string | null>(null);
   const [showLogsModal, setShowLogsModal] = useState(false);
+  const [showKapNewsModal, setShowKapNewsModal] = useState(false);
   const [aiModalSymbol, setAiModalSymbol] = useState<string | null>(null);
-  const [selectedChartSymbol, setSelectedChartSymbol] = useState<string | null>(
-    null,
-  );
+  const [selectedChartSymbol, _setSelectedChartSymbol] = useState<
+    string | null
+  >(null);
 
   // IPO states
   const [activeIPOs, setActiveIPOs] = useState<IPOEntry[]>([]);
@@ -132,7 +171,6 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
       setRules(savedRules);
       setAlertLogs(savedLogs);
 
-      // Portföydeki tüm hisselerin sembollerini al
       const customSymbols = savedPortfolio.map((p) => p.symbol);
       let allQuotes = [...popularQuotes];
 
@@ -149,7 +187,6 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
 
       setQuotes(allQuotes);
 
-      // Kuralları değerlendir
       if (savedPortfolio.length > 0 && savedRules.length > 0) {
         const evalResult = evaluateStockRules(
           allQuotes,
@@ -173,12 +210,10 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
 
   useEffect(() => {
     loadData();
-    // 30 saniyede bir canlı akış yenileme
     const interval = setInterval(loadData, 30000);
     return () => clearInterval(interval);
   }, [loadData]);
 
-  // Load IPOs
   useEffect(() => {
     Promise.all([fetchActiveIPOs(), fetchIPOHistory(30)]).then(
       ([act, hist]) => {
@@ -255,12 +290,26 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
     <div className="stock-dashboard">
       {/* Üst Sekme ve Buton Barı */}
       <div className="stock-action-bar">
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <button
             className={`stock-btn ${activeTab === "stocks" ? "stock-btn-primary" : "stock-btn-secondary"}`}
             onClick={() => setActiveTab("stocks")}
           >
-            BIST Portföy & Strateji
+            BIST Portföy & Takip
+          </button>
+          <button
+            className={`stock-btn ${activeTab === "ai-report" ? "stock-btn-primary" : "stock-btn-secondary"}`}
+            onClick={() => setActiveTab("ai-report")}
+          >
+            <IconSparkles />
+            <span>AI Borsa Raporu & Danışman</span>
           </button>
           <button
             className={`stock-btn ${activeTab === "active" ? "stock-btn-primary" : "stock-btn-secondary"}`}
@@ -277,6 +326,13 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
         </div>
 
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <button
+            className="stock-btn stock-btn-secondary"
+            onClick={() => setShowKapNewsModal(true)}
+          >
+            <IconNewspaper />
+            <span>KAP Haberleri</span>
+          </button>
           {activeTab === "stocks" && (
             <>
               <button
@@ -328,6 +384,10 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
             onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
           />
         </>
+      )}
+
+      {activeTab === "ai-report" && (
+        <StockAiReportTab portfolio={portfolio} quotes={quotes} />
       )}
 
       {activeTab === "active" && (
@@ -384,6 +444,13 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
           logs={alertLogs}
           onClearLogs={handleClearAlertLogs}
           onClose={() => setShowLogsModal(false)}
+        />
+      )}
+
+      {showKapNewsModal && (
+        <StockKapNewsModal
+          symbols={portfolio.map((p) => p.symbol.replace(/\.IS$/, ""))}
+          onClose={() => setShowKapNewsModal(false)}
         />
       )}
 

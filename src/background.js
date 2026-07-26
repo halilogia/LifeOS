@@ -250,7 +250,22 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
+function isBistMarketOpen() {
+  const date = new Date();
+  const utcOffset = date.getTimezoneOffset() * 60000;
+  const trtDate = new Date(date.getTime() + utcOffset + 3 * 3600000);
+  const day = trtDate.getDay();
+  if (day === 0 || day === 6) return false; // Hafta sonu kapalı
+  const timeInMinutes = trtDate.getHours() * 60 + trtDate.getMinutes();
+  return timeInMinutes >= 9 * 60 + 55 && timeInMinutes <= 18 * 60 + 15;
+}
+
 async function checkBistStockRules() {
+  if (!isBistMarketOpen()) {
+    // Piyasa kapalıyken tarama yapma — batarya ve network tasarrufu
+    return;
+  }
+
   chrome.storage.sync.get(["stockPortfolio", "stockRules"], async (res) => {
     const portfolio = res.stockPortfolio || [];
     const rules = res.stockRules || [];
@@ -284,10 +299,11 @@ async function checkBistStockRules() {
           let title = "BIST Alarm Uyarısı";
           let message = "";
 
-          if (r.ruleType === "RED_CANDLE" && changePct < 0) {
+          // Sessiz Kriz Alarmları (%4+ sert düşüş veya Tavan bozma)
+          if (r.ruleType === "RED_CANDLE" && changePct <= -4.0) {
             triggered = true;
-            title = `🔴 ${normSym} Kırmızı Mum!`;
-            message = `${normSym} günü eksiye geçti (%${changePct.toFixed(2)}). Anlık fiyat: ₺${price.toFixed(2)}`;
+            title = `⚠️ KRİZ UYARISI: ${normSym} Sert Düşüşte!`;
+            message = `${normSym} %${changePct.toFixed(2)} düşüş yaşadı. Anlık fiyat: ₺${price.toFixed(2)}`;
           } else if (r.ruleType === "TAVAN_BREAK" && changePct < 8.5) {
             triggered = true;
             title = `⚡ ${normSym} Tavan Bozdu!`;
