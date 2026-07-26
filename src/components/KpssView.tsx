@@ -31,6 +31,8 @@ import {
 } from "@/domain/services/KpssCalculatorService.js";
 
 // Extracted Presentational Sub-components
+import { KpssHeaderBar } from "@/components/kpss/KpssHeaderBar.js";
+import { KpssTopicDetailModal } from "@/components/kpss/KpssTopicDetailModal.js";
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
 import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
 import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
@@ -115,6 +117,15 @@ const SUBJECT_NAMES: Record<string, Record<string, string>> = {
     details_title: "Topic Detail",
   },
 };
+
+const subjectsList = [
+  "turkce",
+  "matematik",
+  "geometri",
+  "tarih",
+  "cografya",
+  "vatandaslik",
+];
 
 export function KpssView({
   lang,
@@ -335,7 +346,7 @@ export function KpssView({
     return () => clearInterval(interval);
   }, [kpssProgress, lang]);
 
-  // Dynamic AI Fetcher with pre-fetch (1st question immediately, others in background)
+  // Dynamic AI Fetcher with pre-fetch
   const fetchQuestionsSubsetFromAI = (
     subjectKey: string,
     topicName: string,
@@ -365,32 +376,23 @@ export function KpssView({
     setQuizQuestions([]);
 
     try {
-      // Check if we have verified questions in our local question bank
       const localQuestions = getLocalQuestionsForTopic(subjectKey, topicName);
 
       if (localQuestions.length > 0) {
         if (localQuestions.length >= count) {
-          // Case 1: We have enough local questions, load all instantly!
           setQuizQuestions(localQuestions.slice(0, count));
           setCurrentQuestionIndex(0);
           setSelectedAnswers(new Array(count).fill(-1));
           setQuizLoading(false);
           setIsBackgroundLoading(false);
-          console.log(
-            `[KPSS Question Bank] Loaded ${count} questions instantly from local bank.`,
-          );
         } else {
-          // Case 2: We have some local questions, load them and fetch the rest in background
           setQuizQuestions(localQuestions);
           setCurrentQuestionIndex(0);
           setSelectedAnswers(new Array(count).fill(-1));
-          setQuizLoading(false); // Let user start immediately!
+          setQuizLoading(false);
           setIsBackgroundLoading(true);
 
           const neededCount = count - localQuestions.length;
-          console.log(
-            `[KPSS Question Bank] Loaded ${localQuestions.length} questions instantly. Fetching remaining ${neededCount} from AI.`,
-          );
 
           fetchQuestionsSubsetFromAI(
             subjectKey,
@@ -415,8 +417,6 @@ export function KpssView({
             });
         }
       } else {
-        // Case 3: No local questions available, generate all via AI
-        // 1. Get first question immediately
         const firstList = await fetchQuestionsSubsetFromAI(
           subjectKey,
           topicName,
@@ -430,9 +430,8 @@ export function KpssView({
         setQuizQuestions([firstQuestion]);
         setCurrentQuestionIndex(0);
         setSelectedAnswers(new Array(count).fill(-1));
-        setQuizLoading(false); // First question loaded, let user start!
+        setQuizLoading(false);
 
-        // 2. Pre-fetch remaining count - 1 questions in the background
         if (count > 1) {
           setIsBackgroundLoading(true);
           fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [
@@ -482,14 +481,13 @@ export function KpssView({
     setQuizResultScore(scorePercentage);
     setQuizStep("result");
 
-    // Automatically map score to checklist status
     let newStatus: 0 | 1 | 2;
     if (scorePercentage >= 80) {
-      newStatus = 2; // Finished
+      newStatus = 2;
     } else if (scorePercentage >= 40) {
-      newStatus = 1; // Working
+      newStatus = 1;
     } else {
-      newStatus = 0; // Not Started
+      newStatus = 0;
     }
 
     try {
@@ -505,7 +503,6 @@ export function KpssView({
         );
       }
 
-      // Save past quiz results
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
       const newQuizRecord: KpssPastQuiz = {
         subject: currentSubject,
@@ -523,7 +520,6 @@ export function KpssView({
       setPastQuizzes(updatedPast);
       chrome.storage.local.set({ kpss_past_quizzes: updatedPast });
 
-      // Automatically add solved test questions count to progress chart
       await kpssService.saveKpssDailyStats(
         quizQuestions.length,
         0,
@@ -565,11 +561,9 @@ export function KpssView({
     let questions: QuizQuestion[] = [];
 
     if (year === "karma") {
-      // Aggregate questions from all years
       Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
         const yearData = KPSS_YEARLY_DATA[y];
         if (subject === "all") {
-          // Add all subjects
           Object.values(yearData).forEach((list: any) => {
             if (Array.isArray(list)) {
               questions.push(...list);
@@ -582,10 +576,8 @@ export function KpssView({
           }
         }
       });
-      // Shuffle the aggregated questions
       questions = [...questions].sort(() => Math.random() - 0.5);
     } else {
-      // Load specific year
       const yearData = KPSS_YEARLY_DATA[year];
       if (yearData) {
         if (subject === "all") {
@@ -648,7 +640,6 @@ export function KpssView({
     setIsBackgroundLoading(false);
   };
 
-  // Add daily studies count
   const handleSaveStats = async () => {
     const questions = parseInt(questionsInput, 10) || 0;
     const videos = parseInt(videosInput, 10) || 0;
@@ -660,7 +651,6 @@ export function KpssView({
     }
   };
 
-  // Clear study history stats
   const handleResetStats = () => {
     onShowConfirm(labels.reset_confirm, async () => {
       await kpssService.setKpssDailyStats([]);
@@ -699,7 +689,6 @@ export function KpssView({
 
   const topics = getSortedTopics();
 
-  // Subject progress percentage
   const completedTopicsCount = kpssProgress.filter(
     (p) => p.subject === currentSubject && p.status === 2,
   ).length;
@@ -708,14 +697,6 @@ export function KpssView({
   ).length;
 
   const totalTopics = (kpssData[currentSubject] || []).length;
-  const progressPercentage =
-    totalTopics > 0
-      ? Math.round(
-          ((completedTopicsCount + inProgressTopicsCount * 0.5) / totalTopics) *
-            100,
-        )
-      : 0;
-
   const overallNetObj = getOverallNets();
   const overallNet = overallNetObj.net;
   const maxNet = overallNetObj.max;
@@ -724,55 +705,21 @@ export function KpssView({
   return (
     <div id="kpss-view" className="view-content active">
       <div className="kpss-container">
-        <header className="kpss-header">
-          <h2>KPSS Hazırlık</h2>
-        </header>
+        {/* Header & Sub-Tab Navigation */}
+        <KpssHeaderBar
+          title="KPSS Hazırlık"
+          activeTab={activeTab}
+          lang={lang}
+          onTabChange={setActiveTab}
+        />
 
-        {/* Sub-Tab Navigation Header */}
-        <div
-          className="pomodoro-tab-header"
-          style={{
-            marginBottom: "24px",
-            display: "flex",
-            justifyContent: "flex-start",
-            gap: "10px",
-          }}
-        >
-          <button
-            className={`pomo-tab-link ${activeTab === "progress" ? "active" : ""}`}
-            onClick={() => setActiveTab("progress")}
-          >
-            {lang === "tr" ? "Konular & İlerleme" : "Topics & Progress"}
-          </button>
-          <button
-            className={`pomo-tab-link ${activeTab === "srs" ? "active" : ""}`}
-            onClick={() => setActiveTab("srs")}
-          >
-            {lang === "tr"
-              ? "Aralıklı Tekrar (Kartlar)"
-              : "Spaced Repetition (Cards)"}
-          </button>
-          <button
-            className={`pomo-tab-link ${activeTab === "past-exams" ? "active" : ""}`}
-            onClick={() => setActiveTab("past-exams")}
-          >
-            {lang === "tr" ? "Çıkmış Sorular (ÖSYM)" : "Past Exams (ÖSYM)"}
-          </button>
-        </div>
-        {activeTab === "progress" && (
+        {activeTab === "progress" ? (
           <>
             <KpssCountdownBanner
               lang={lang}
               kpssTimeLeft={kpssTimeLeft}
               estimatedTimeLeft={estimatedTimeLeft}
               remainingCount={remainingCount}
-            />
-
-            <KpssAutoPlannerCard
-              lang={lang}
-              kpssProgress={kpssProgress}
-              onStartQuiz={handleStartQuiz}
-              labels={labels}
             />
 
             <KpssNetEstimationCard
@@ -785,7 +732,27 @@ export function KpssView({
               estimatedScore={estimatedScore}
               getSubjectNets={getSubjectNets}
               labels={labels}
-              subjectsList={Object.keys(kpssData)}
+              subjectsList={subjectsList}
+            />
+
+            <KpssTopicList
+              lang={lang}
+              topics={topics}
+              kpssProgress={kpssProgress}
+              currentSubject={currentSubject}
+              sortBy={sortBy}
+              onSortByChange={setSortBy}
+              onStartQuiz={(topic) => handleStartQuiz(topic)}
+              onShowDetail={(topic) => setActiveTopic(topic)}
+            />
+
+            <KpssAutoPlannerCard
+              lang={lang}
+              kpssProgress={kpssProgress}
+              onStartQuiz={(subject, topicTitle) =>
+                handleStartQuiz(topicTitle, subject)
+              }
+              labels={labels}
             />
 
             <KpssDailyStatsCard
@@ -803,7 +770,7 @@ export function KpssView({
               onChartDaysChange={setChartDays}
               onChartTypeChange={handleChartTypeChange}
               labels={labels}
-              subjectsList={Object.keys(kpssData)}
+              subjectsList={subjectsList}
               dailyStats={dailyStats}
               goalType={goalType}
               targetNet={targetNet}
@@ -811,98 +778,21 @@ export function KpssView({
               kpssProgress={kpssProgress}
               kpssTargetDate={kpssTargetDate}
             />
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                width: "100%",
-                marginTop: "32px",
-                marginBottom: "16px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.95rem",
-                  fontWeight: "700",
-                  color: "var(--text-primary)",
-                }}
-              >
-                {lang === "tr" ? "Ders Seçimi:" : "Select Subject:"}
-              </div>
-              <nav className="kpss-subject-nav">
-                {Object.keys(kpssData).map((subKey) => (
-                  <button
-                    key={subKey}
-                    className={`kpss-subject-btn ${currentSubject === subKey ? "active" : ""}`}
-                    onClick={() => setCurrentSubject(subKey)}
-                  >
-                    {labels[subKey] || subKey}
-                  </button>
-                ))}
-              </nav>
-            </div>
-
-            <KpssTopicList
-              lang={lang}
-              topics={topics}
-              kpssProgress={kpssProgress}
-              currentSubject={currentSubject}
-              sortBy={sortBy}
-              onSortByChange={setSortBy}
-              onStartQuiz={handleStartQuiz}
-              onShowDetail={setActiveTopic}
-            />
-
-            {/* Progress tracker metrics */}
-            <div className="kpss-progress-bar-container">
-              <div className="kpss-progress-info">
-                <span id="kpss-subject-title">
-                  {labels[currentSubject] || currentSubject}
-                </span>
-                <span id="kpss-progress-text">
-                  %{progressPercentage} {labels.progress_text}
-                </span>
-              </div>
-              <div className="kpss-progress-track">
-                <div
-                  id="kpss-progress-fill"
-                  className="kpss-progress-fill"
-                  style={{ width: `${progressPercentage}%` }}
-                ></div>
-              </div>
-            </div>
           </>
-        )}
-
-        {activeTab === "srs" && (
-          <div
-            className="kpss-srs-deck-container"
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "20px 0",
-            }}
-          >
-            <KpssSrsCard
-              lang={lang}
-              srsLoading={srsLoading}
-              srsQueue={srsQueue}
-              srsIndex={srsIndex}
-              srsFlipped={srsFlipped}
-              srsFadeState={srsFadeState}
-              onFlipChange={setSrsFlipped}
-              onReviewQuality={handleKpssSrsReview}
-              kpssDummyFlashcards={kpssDummyFlashcards}
-              onReloadQueue={loadKpssSrsQueue}
-            />
-          </div>
-        )}
-
-        {activeTab === "past-exams" && (
+        ) : activeTab === "srs" ? (
+          <KpssSrsCard
+            lang={lang}
+            srsLoading={srsLoading}
+            srsQueue={srsQueue}
+            srsIndex={srsIndex}
+            srsFlipped={srsFlipped}
+            srsFadeState={srsFadeState}
+            onFlipChange={(flipped) => setSrsFlipped(flipped)}
+            onReviewQuality={handleKpssSrsReview}
+            kpssDummyFlashcards={kpssDummyFlashcards}
+            onReloadQueue={loadKpssSrsQueue}
+          />
+        ) : (
           <KpssPastExamsDashboard
             lang={lang}
             onStartPastExam={handleStartPastExam}
@@ -910,60 +800,14 @@ export function KpssView({
         )}
       </div>
 
-      {/* Details Description Modal */}
       {activeTopic && (
-        <div
-          className="settings-panel active"
-          onClick={() => setActiveTopic(null)}
-        >
-          <div
-            className="settings-content"
-            style={{ maxWidth: "500px" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <header className="settings-header">
-              <h3>{labels.details_title}</h3>
-              <button
-                className="close-btn"
-                onClick={() => setActiveTopic(null)}
-              >
-                &times;
-              </button>
-            </header>
-            <div className="note-editor-body" style={{ padding: "24px" }}>
-              <h4
-                style={{
-                  fontSize: "1.2rem",
-                  color: "var(--accent-color)",
-                  marginBottom: "10px",
-                }}
-              >
-                {activeTopic.title}
-              </h4>
-              <p
-                style={{
-                  fontSize: "1.1rem",
-                  lineHeight: 1.6,
-                  color: "var(--text-primary)",
-                }}
-              >
-                {activeTopic.description}
-              </p>
-            </div>
-            <div className="settings-footer">
-              <button
-                className="settings-add-btn"
-                style={{ width: "auto", padding: "0 30px" }}
-                onClick={() => setActiveTopic(null)}
-              >
-                {lang === "tr" ? "Anladım" : "Got it"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <KpssTopicDetailModal
+          topic={activeTopic}
+          detailsTitle={labels.details_title}
+          onClose={() => setActiveTopic(null)}
+        />
       )}
 
-      {/* Interactive Quiz Modal */}
       <KpssQuizModal
         lang={lang}
         currentSubject={currentSubject}
