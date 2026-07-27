@@ -1,0 +1,276 @@
+/**
+ * KpssQuizQuestionsStep.tsx
+ * KPSS Sınavı sorularının gösterim ekranı (İlerleme çubuğu, Canvas, Harita, Şıklar, Çözüm kutusu ve Navigasyon).
+ */
+
+import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
+import { KpssQuestionMap } from "@/components/kpss/KpssQuestionMap.js";
+import { MathRenderer } from "@/components/kpss/MathRenderer.js";
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  solution: string;
+  chart?: {
+    type: "bar" | "line" | "geometry";
+    title?: string;
+    labels?: string[];
+    values?: (number | string)[];
+    shape?: "triangle" | "circle" | "parallel_lines";
+    angles?: Record<string, string>;
+    sides?: Record<string, string>;
+  };
+  map?: {
+    highlightRegions?: string[];
+    markers?: Array<{ x: number; y: number; label: string }>;
+  };
+}
+
+interface KpssQuizQuestionsStepProps {
+  lang: string;
+  quizLoading: boolean;
+  quizError: string | null;
+  quizQuestions: QuizQuestion[];
+  currentQuestionIndex: number;
+  selectedAnswers: number[];
+  totalQuizLength: number;
+  onStartQuiz: () => void;
+  onSelectAnswer: (oIdx: number) => void;
+  onPreviousQuestion: () => void;
+  onNextQuestion: () => void;
+  onFinishQuiz: () => void;
+}
+
+export function KpssQuizQuestionsStep({
+  lang,
+  quizLoading,
+  quizError,
+  quizQuestions,
+  currentQuestionIndex,
+  selectedAnswers,
+  totalQuizLength,
+  onStartQuiz,
+  onSelectAnswer,
+  onPreviousQuestion,
+  onNextQuestion,
+  onFinishQuiz,
+}: KpssQuizQuestionsStepProps) {
+  if (quizLoading) {
+    return (
+      <div className="ha-loading" style={{ minHeight: "200px" }}>
+        <div className="ha-spinner" />
+        <span style={{ fontSize: "0.95rem" }}>
+          {lang === "tr"
+            ? "Yapay Zekâ seviye tespit sorularını oluşturuyor. Lütfen bekleyin..."
+            : "AI is generating proficiency questions. Please wait..."}
+        </span>
+      </div>
+    );
+  }
+
+  if (quizError) {
+    return (
+      <div className="ha-error" style={{ minHeight: "200px" }}>
+        <span>{quizError}</span>
+        <button className="ha-retry-btn" onClick={onStartQuiz}>
+          {lang === "tr" ? "Tekrar Dene" : "Retry"}
+        </button>
+      </div>
+    );
+  }
+
+  if (quizQuestions.length === 0) {
+    return null;
+  }
+
+  const currentQ = quizQuestions[currentQuestionIndex];
+  const isAnswered = selectedAnswers[currentQuestionIndex] !== -1;
+
+  return (
+    <div>
+      <div className="kpss-quiz-progress-bar-container">
+        <div
+          className="kpss-quiz-progress-fill"
+          style={{
+            width: `${((currentQuestionIndex + 1) / totalQuizLength) * 100}%`,
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: "0.85rem",
+          opacity: 0.6,
+          marginBottom: "8px",
+        }}
+      >
+        <span>
+          {lang === "tr"
+            ? `Soru ${currentQuestionIndex + 1} / ${totalQuizLength}`
+            : `Question ${currentQuestionIndex + 1} / ${totalQuizLength}`}
+        </span>
+      </div>
+
+      {currentQ.chart && <KpssQuestionCanvas chart={currentQ.chart} />}
+      {currentQ.map && <KpssQuestionMap map={currentQ.map} />}
+
+      <div className="kpss-quiz-question-container">
+        <div className="kpss-quiz-question-text">
+          <MathRenderer text={currentQ.question} />
+        </div>
+      </div>
+
+      <div className="kpss-quiz-options-grid">
+        {currentQ.options.map((opt, oIdx) => {
+          const letter = ["A", "B", "C", "D", "E"][oIdx];
+          const isSelected = selectedAnswers[currentQuestionIndex] === oIdx;
+          const isCorrect = oIdx === currentQ.correctAnswer;
+
+          let cardStyle: any = {
+            transition: "all 0.2s ease",
+          };
+
+          if (isAnswered) {
+            if (isCorrect) {
+              cardStyle = {
+                ...cardStyle,
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+                background: "rgba(16, 185, 129, 0.08)",
+                color: "#34d399",
+                cursor: "default",
+              };
+            } else if (isSelected) {
+              cardStyle = {
+                ...cardStyle,
+                border: "1px solid rgba(239, 68, 68, 0.4)",
+                background: "rgba(239, 68, 68, 0.08)",
+                color: "#f87171",
+                cursor: "default",
+              };
+            } else {
+              cardStyle = {
+                ...cardStyle,
+                opacity: 0.4,
+                cursor: "default",
+              };
+            }
+          }
+
+          return (
+            <div
+              key={oIdx}
+              className={`kpss-quiz-option-card ${isSelected && !isAnswered ? "selected" : ""}`}
+              style={cardStyle}
+              onClick={() => onSelectAnswer(oIdx)}
+            >
+              <div
+                className="kpss-quiz-option-letter"
+                style={
+                  isAnswered && isCorrect
+                    ? { background: "#10b981", color: "white" }
+                    : isAnswered && isSelected
+                      ? { background: "#ef4444", color: "white" }
+                      : {}
+                }
+              >
+                {letter}
+              </div>
+              <span>
+                <MathRenderer text={opt} />
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Solution display box */}
+      {isAnswered && (
+        <div
+          style={{
+            marginTop: "16px",
+            padding: "12px 16px",
+            background: "rgba(255, 255, 255, 0.03)",
+            borderLeft: "4px solid var(--accent-color)",
+            borderRadius: "8px",
+            fontSize: "0.82rem",
+            lineHeight: 1.5,
+            color: "rgba(255, 255, 255, 0.7)",
+            textAlign: "left",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: "700",
+              color: "var(--accent-color)",
+              marginBottom: "4px",
+            }}
+          >
+            {lang === "tr" ? "Çözüm Açıklaması:" : "Solution & Explanation:"}
+          </div>
+          <MathRenderer
+            text={
+              currentQ.solution ||
+              (lang === "tr"
+                ? "Çözüm bilgisi bulunmuyor."
+                : "No solution provided.")
+            }
+          />
+        </div>
+      )}
+
+      <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
+        <button
+          className="kpss-qcount-btn"
+          style={{ flex: 1 }}
+          disabled={currentQuestionIndex === 0}
+          onClick={onPreviousQuestion}
+        >
+          {lang === "tr" ? "Önceki" : "Previous"}
+        </button>
+        {currentQuestionIndex < totalQuizLength - 1 ? (
+          <button
+            className={`settings-add-btn ${currentQuestionIndex >= quizQuestions.length - 1 ? "loading" : ""}`}
+            style={{ flex: 1, padding: 0 }}
+            disabled={
+              selectedAnswers[currentQuestionIndex] === -1 ||
+              currentQuestionIndex >= quizQuestions.length - 1
+            }
+            onClick={onNextQuestion}
+          >
+            {currentQuestionIndex >= quizQuestions.length - 1 ? (
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                }}
+              >
+                <span className="kpss-btn-loader" />
+                {lang === "tr"
+                  ? "Sonraki (Yükleniyor...)"
+                  : "Next (Loading...)"}
+              </span>
+            ) : lang === "tr" ? (
+              "Sonraki"
+            ) : (
+              "Next"
+            )}
+          </button>
+        ) : (
+          <button
+            className="settings-add-btn"
+            style={{ flex: 1, padding: 0 }}
+            disabled={selectedAnswers[currentQuestionIndex] === -1}
+            onClick={onFinishQuiz}
+          >
+            {lang === "tr" ? "Sınavı Bitir" : "Finish Quiz"}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
