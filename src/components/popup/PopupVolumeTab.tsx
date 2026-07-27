@@ -36,10 +36,17 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
       chrome.storage.local.set({ [storageKey]: newLevel });
 
       const multiplier = newLevel / 100;
-      chrome.tabs.sendMessage(activeTabId, {
+      chrome.runtime.sendMessage({
         type: "set_volume_boost",
+        tabId: activeTabId,
         volumeLevel: multiplier,
       });
+
+      chrome.tabs.sendMessage(activeTabId, {
+        type: "set_volume_boost",
+        tabId: activeTabId,
+        volumeLevel: multiplier,
+      }).catch(() => {});
     }
   };
 

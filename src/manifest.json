@@ -6,7 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel", "tabGroups", "contextMenus"],
+  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel", "tabGroups", "contextMenus", "tabCapture", "offscreen", "scripting"],
   "side_panel": {
     "default_path": "sidepanel.html"
   },
