@@ -8,11 +8,13 @@
 @import "./css/newtab/ambient.css";
 @import "./css/newtab/willpower.css";
 @import "./css/newtab/hifiz.css";
+@import "./css/newtab/mushaf.css";
 @import "./css/newtab/srs.css";
 @import "./css/newtab/calendar.css";
 @import "./css/newtab/prayer.css";
 @import "./css/newtab/kpss.css";
 @import "./css/newtab/free-games.css";
+@import "./css/newtab/game-history.css";
 @import "./css/newtab/detox.css";
 @import "./css/newtab/halka-arz.css";
 @import "./css/newtab/ai-chat.css";

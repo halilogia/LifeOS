@@ -63,6 +63,11 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 2.7 Confirm Dialog Deprecation
 * **No browser confirmations**: Do not invoke native browser `confirm()` or alert popups. Always trigger the custom declarative `<ConfirmModal />` component to obtain confirmation actions.
 
+### 2.8 English Naming & Codebase Language Standard (İngilizce Kod ve İsimlendirme Standartı)
+* **English Codebase Standard**: All file names (e.g. `ipo.css`, `aiCommandParser.ts`), variable names, function signatures, type interfaces, and CSS class names MUST be written in English to guarantee OS path compatibility, strict Linter/TSC compliance, and clean code standards.
+* **Domain-Specific Name Exceptions**: Local Turkish domain-specific terms (such as `kpss` for exam modules and `hifiz` for memorization modules) are permitted as specialized domain names.
+* **UI Localization Separation**: User-facing UI text, button titles, modal headers, and notifications MUST be managed dynamically in Turkish & English using the `i18n.ts` localization system (`translations[lang]`).
+
 ---
 
 ## 3. Architecture Philosophy
