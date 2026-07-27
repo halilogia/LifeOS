@@ -23,6 +23,8 @@ export interface SettingsDrawerProps {
   onToggleUniversalInfoBox: () => void;
   universalInfoBoxHotkey: string;
   onUniversalInfoBoxHotkeyChange: (hotkey: string) => void;
+  autoGroupTabsEnabled?: boolean;
+  onToggleAutoGroupTabs?: () => void;
   onExportBackup: () => void;
   onImportBackup: (e: any) => void;
   onClearAllData: () => void;
@@ -71,6 +73,8 @@ export function SettingsDrawer({
   onToggleUniversalInfoBox,
   universalInfoBoxHotkey,
   onUniversalInfoBoxHotkeyChange,
+  autoGroupTabsEnabled,
+  onToggleAutoGroupTabs,
   onExportBackup,
   onImportBackup,
   onClearAllData,
@@ -173,6 +177,8 @@ export function SettingsDrawer({
             onToggleUniversalInfoBox={onToggleUniversalInfoBox}
             universalInfoBoxHotkey={universalInfoBoxHotkey}
             onUniversalInfoBoxHotkeyChange={onUniversalInfoBoxHotkeyChange}
+            autoGroupTabsEnabled={autoGroupTabsEnabled}
+            onToggleAutoGroupTabs={onToggleAutoGroupTabs}
           />
         )}
 

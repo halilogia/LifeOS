@@ -34,6 +34,7 @@ export function useSettings() {
     useState(true);
   const [universalInfoBoxHotkey, setUniversalInfoBoxHotkeyState] =
     useState("none");
+  const [autoGroupTabsEnabled, setAutoGroupTabsEnabledState] = useState(true);
 
   // --- AI settings ---
   const [aiProvider, setAiProvider] = useState<string>("openrouter");
@@ -96,6 +97,12 @@ export function useSettings() {
     // Detox settings
     const detox = await syncGet<Record<string, number>>(["detoxLimits"]);
     setDetoxLimitsState((detox.detoxLimits as Record<string, number>) || {});
+
+    // Auto Tab Grouping settings
+    const autoGroup = await syncGet<boolean>(["autoGroupTabs"]);
+    setAutoGroupTabsEnabledState(
+      (autoGroup.autoGroupTabs as boolean | undefined) !== false,
+    );
   }, []);
 
   // --- Base setting handlers ---
@@ -202,6 +209,12 @@ export function useSettings() {
     [],
   );
 
+  const handleToggleAutoGroupTabs = useCallback(async () => {
+    const nextVal = !autoGroupTabsEnabled;
+    setAutoGroupTabsEnabledState(nextVal);
+    await syncSet({ autoGroupTabs: nextVal });
+  }, [autoGroupTabsEnabled]);
+
   return {
     // State
     lang,
@@ -213,6 +226,7 @@ export function useSettings() {
     pomoBlockEnabled,
     universalInfoBoxEnabled,
     universalInfoBoxHotkey,
+    autoGroupTabsEnabled,
     aiProvider,
     aiApiKey,
     aiModel,
@@ -231,6 +245,7 @@ export function useSettings() {
     handleTogglePomoBlock,
     handleToggleUniversalInfoBox,
     handleUniversalInfoBoxHotkeyChange,
+    handleToggleAutoGroupTabs,
     handleClearAllData,
     handleUpdateAIConfig,
     handleUpdateAIShowThinking,

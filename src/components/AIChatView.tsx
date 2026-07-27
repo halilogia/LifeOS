@@ -13,6 +13,8 @@ import {
   callAIConfigured,
   handleAddNoteFromAI,
 } from "@/services/aiChatService.js";
+import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
+import type { StockPortfolioItem } from "@/types/stock.js";
 
 interface AIChatViewProps {
   lang: Language;
@@ -189,6 +191,29 @@ export function AIChatView({
                 lang === "tr"
                   ? `Tamamdır! "${localParsed.text}" görevini${dueDateFormatted} takviminize ekledim. ✓`
                   : `Sure! I have added "${localParsed.text}" to your tasks list${dueDateFormatted}. ✓`;
+            } else if (
+              localParsed.action === "add_stock" &&
+              localParsed.stock
+            ) {
+              const { symbol, displayName, buyPrice, lotCount } =
+                localParsed.stock;
+              const stockRepo = new ChromeStorageStockRepository();
+              const currentPortfolio = await stockRepo.getPortfolio();
+              const newStock: StockPortfolioItem = {
+                id: `stock-${Date.now()}`,
+                symbol,
+                displayName,
+                buyPrice,
+                lotCount,
+                buyDate: new Date().toISOString().split("T")[0],
+              };
+              const updatedPortfolio = [...currentPortfolio, newStock];
+              await stockRepo.savePortfolio(updatedPortfolio);
+
+              replyText =
+                lang === "tr"
+                  ? `📈 Harika! ${lotCount} lot ${displayName} (${symbol.replace(".IS", "")}) ₺${buyPrice.toFixed(2)} fiyattan BIST portföyünüze başarıyla eklendi! ✓`
+                  : `📈 Great! Added ${lotCount} shares of ${displayName} (${symbol.replace(".IS", "")}) @ ₺${buyPrice.toFixed(2)} to your BIST portfolio! ✓`;
             }
           } else {
             replyText =

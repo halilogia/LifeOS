@@ -74,13 +74,12 @@ export function SidePanelApp() {
     } catch {
       setAgentStatus(null);
     }
-  };
 
-  const handleGroupTab = () => {
-    chrome.runtime.sendMessage({ type: "group_active_tab" }, (res) => {
-      if (res && res.success) {
-        setAgentStatus(lang === "tr" ? "Sekme gruplandı (🤖 Life OS Agent)" : "Tab grouped (🤖 Life OS Agent)");
-        setTimeout(() => setAgentStatus(null), 2500);
+    // Auto-group tab if setting is enabled
+    chrome.storage.sync.get(["autoGroupTabs"], (res) => {
+      const isAutoGroupEnabled = res.autoGroupTabs !== false;
+      if (isAutoGroupEnabled) {
+        chrome.runtime.sendMessage({ type: "group_active_tab" });
       }
     });
   };
@@ -343,32 +342,6 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           <span>Life OS Web Copilot</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <button
-            onClick={handleGroupTab}
-            title={lang === "tr" ? "Bu sekmeyi Life OS Agent grubuna ekle" : "Group tab under Life OS Agent"}
-            style={{
-              background: "rgba(139, 92, 246, 0.15)",
-              border: "1px solid rgba(139, 92, 246, 0.3)",
-              borderRadius: "6px",
-              color: "white",
-              fontSize: "0.7rem",
-              fontWeight: "600",
-              padding: "3px 8px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              transition: "all 0.2s ease",
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            </svg>
-            <span>{lang === "tr" ? "Grupla" : "Group"}</span>
-          </button>
           <span className="sidepanel-header-badge">AI Agent</span>
         </div>
       </header>

@@ -1,9 +1,9 @@
 /**
  * BistActionBar.tsx
- * BIST Dashboard sekmeleri ve aksiyon butonları (BIST Portföy, Halka Arz Takvimi, KAP Haberleri, + Hisse Ekle, Alarmlar, Yenile).
+ * BIST Dashboard sekmeleri ve aksiyon butonları (BIST Portföy, Halka Arz Takvimi, KAP Haberleri, Hisse Ara / Keşfet, + Hisse Ekle, Alarmlar, Yenile).
  */
 
-export type BistTabId = "portfolio" | "halka-arz" | "ai-report" | "chart";
+export type BistTabId = "portfolio" | "halka-arz" | "ai-report" | "kesfet" | "chart";
 
 interface BistActionBarProps {
   activeTab: BistTabId;
@@ -23,9 +23,9 @@ function IconPlus() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <line x1="12" y1="5" x2="12" y2="19" />
       <line x1="5" y1="12" x2="19" y2="12" />
@@ -41,9 +41,9 @@ function IconBell() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
       <path d="M13.73 21a2 2 0 0 1-3.46 0" />
@@ -59,9 +59,9 @@ function IconRefresh() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <polyline points="23 4 23 10 17 10" />
       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
@@ -77,9 +77,9 @@ function IconNewspaper() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 1-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
       <path d="M18 14h-8" />
@@ -97,9 +97,9 @@ function IconSparkles() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
     </svg>
@@ -114,12 +114,30 @@ function IconRocket() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L4.5 16.5z" />
       <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-3.05 11a22.35 22.35 0 0 1-3.95 2L12 15z" />
+    </svg>
+  );
+}
+
+function IconSearch() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
   );
 }
@@ -152,6 +170,17 @@ export function BistActionBar({
           onClick={() => onTabChange("portfolio")}
         >
           BIST Portföy & Takip Listem
+        </button>
+        <button
+          className={`stock-btn ${
+            activeTab === "kesfet"
+              ? "stock-btn-primary"
+              : "stock-btn-secondary"
+          }`}
+          onClick={() => onTabChange("kesfet")}
+        >
+          <IconSearch />
+          <span>Keşfet & Hisse Ara</span>
         </button>
         <button
           className={`stock-btn ${
