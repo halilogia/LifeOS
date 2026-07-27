@@ -7,7 +7,7 @@ interface CustomStockChartProps {
   lang: Language;
 }
 
-export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
+export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps) {
   const [range, setRange] = useState<"1mo" | "3mo" | "6mo" | "1y" | any>("1mo");
   const [history, setHistory] = useState<StockHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -28,10 +28,10 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   }, [symbol, range]);
 
   useEffect(() => {
-    if (!canvasRef.current || history.length === 0) return;
+    if (!canvasRef.current || history.length === 0) {return;}
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -147,7 +147,7 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   }, [history, hoveredPoint]);
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!canvasRef.current || history.length === 0) return;
+    if (!canvasRef.current || history.length === 0) {return;}
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
 
