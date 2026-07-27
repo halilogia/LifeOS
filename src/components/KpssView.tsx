@@ -725,17 +725,8 @@ export function KpssView({
               getSubjectNets={getSubjectNets}
               labels={labels}
               subjectsList={subjectsList}
-            />
-
-            <KpssTopicList
-              lang={lang}
-              topics={topics}
-              kpssProgress={kpssProgress}
-              currentSubject={currentSubject}
-              sortBy={sortBy}
-              onSortByChange={setSortBy}
-              onStartQuiz={(topic) => handleStartQuiz(topic)}
-              onShowDetail={(topic) => setActiveTopic(topic)}
+              selectedSubject={currentSubject}
+              onSelectSubject={setCurrentSubject}
             />
 
             <KpssAutoPlannerCard
@@ -769,6 +760,17 @@ export function KpssView({
               targetScore={targetScore}
               kpssProgress={kpssProgress}
               kpssTargetDate={kpssTargetDate}
+            />
+
+            <KpssTopicList
+              lang={lang}
+              topics={topics}
+              kpssProgress={kpssProgress}
+              currentSubject={currentSubject}
+              sortBy={sortBy}
+              onSortByChange={setSortBy}
+              onStartQuiz={(topic) => handleStartQuiz(topic)}
+              onShowDetail={(topic) => setActiveTopic(topic)}
             />
           </>
         ) : activeTab === "srs" ? (

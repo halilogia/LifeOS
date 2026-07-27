@@ -30,6 +30,7 @@ export function KpssTopicList({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          marginTop: "24px",
           marginBottom: "12px",
           background: "rgba(255,255,255,0.01)",
           border: "1px solid var(--card-border)",
