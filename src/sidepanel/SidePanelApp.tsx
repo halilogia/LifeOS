@@ -314,10 +314,12 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
 
   const isYoutube = pageContext?.url?.includes("youtube.com/watch");
 
-  const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract" | "yt_summarize") => {
+  const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract" | "yt_summarize" | "yt_quiz") => {
     let prompt = "";
     if (type === "yt_summarize") {
       prompt = lang === "tr" ? "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar." : "Summarize this YouTube video transcript and extract key timestamps.";
+    } else if (type === "yt_quiz") {
+      prompt = lang === "tr" ? "Bu YouTube videosunun içeriğini/transkriptini incele. Konuyu pekiştirmek için video içeriğinden 5 soruluk çoktan seçmeli (A, B, C, D seçenekli) soru testi oluştur ve en alt kısımda cevap anahtarı ile açıklamalarını ver." : "Create a 5-question multiple choice quiz with answer key based on this video.";
     } else if (type === "summarize") {
       prompt = lang === "tr" ? "Bu sayfayı 3 ana maddede özetle." : "Summarize this page in 3 key bullet points.";
     } else if (type === "key_takeaways") {
@@ -373,18 +375,32 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
       {/* Quick Action Chips with SVG Icons */}
       <div className="sidepanel-chips">
         {isYoutube && (
-          <button
-            className="sidepanel-chip"
-            onClick={() => handleChipClick("yt_summarize")}
-            style={{
-              background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
-              color: "#ffffff",
-              borderColor: "#8b5cf6",
-            }}
-          >
-            <span>🎬</span>
-            <span>{lang === "tr" ? "Videoyu Özetle" : "Summarize Video"}</span>
-          </button>
+          <>
+            <button
+              className="sidepanel-chip"
+              onClick={() => handleChipClick("yt_summarize")}
+              style={{
+                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                color: "#ffffff",
+                borderColor: "#8b5cf6",
+              }}
+            >
+              <span>🎬</span>
+              <span>{lang === "tr" ? "Videoyu Özetle" : "Summarize Video"}</span>
+            </button>
+            <button
+              className="sidepanel-chip"
+              onClick={() => handleChipClick("yt_quiz")}
+              style={{
+                background: "rgba(139, 92, 246, 0.15)",
+                color: "#c084fc",
+                borderColor: "rgba(139, 92, 246, 0.4)",
+              }}
+            >
+              <span>📝</span>
+              <span>{lang === "tr" ? "5 Soruluk Test" : "5-Q Video Quiz"}</span>
+            </button>
+          </>
         )}
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("summarize")}>

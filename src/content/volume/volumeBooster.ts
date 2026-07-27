@@ -1,109 +1,89 @@
 /**
  * volumeBooster.ts
- * Tab-specific, CORS-free Web Audio API Volume Booster.
+ * Tab-specific, CSP-compliant Web Audio API Volume Booster.
  * Clean Architecture - Content Script Module.
- * Connects GainNode to active media elements in main-world.
+ * Safely applies volume gain without injecting inline script strings.
  */
 
-function injectMainWorldVolumeBooster(): void {
-  if (document.getElementById("lifeos-volume-booster-script")) return;
+let contentAudioCtx: AudioContext | null = null;
+let contentGainNode: GainNode | null = null;
+let currentMultiplier = 1.0;
+const connectedMediaSet = new WeakSet<HTMLMediaElement>();
 
-  const script = document.createElement("script");
-  script.id = "lifeos-volume-booster-script";
-  script.textContent = `
-    (function() {
-      if (window._lifeosVolumeBoosterInitialized) return;
-      window._lifeosVolumeBoosterInitialized = true;
+function getOrCreateContentAudioContext(): AudioContext | null {
+  if (!contentAudioCtx) {
+    const AudioCtxClass =
+      window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtxClass) return null;
+    contentAudioCtx = new AudioCtxClass();
+    contentGainNode = contentAudioCtx.createGain();
+    contentGainNode.connect(contentAudioCtx.destination);
+  }
+  if (contentAudioCtx && contentAudioCtx.state === "suspended") {
+    contentAudioCtx.resume().catch(() => {});
+  }
+  return contentAudioCtx;
+}
 
-      let audioCtx = null;
-      let gainNode = null;
-      let currentBoostMultiplier = 1.0;
-      const connectedElements = new WeakSet();
+function attachContentGainToElement(el: HTMLMediaElement): void {
+  if (!el || connectedMediaSet.has(el)) return;
+  const ctx = getOrCreateContentAudioContext();
+  if (!ctx || !contentGainNode) return;
 
-      function getOrCreateAudioContext() {
-        if (!audioCtx) {
-          const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-          if (!AudioCtxClass) return null;
-          audioCtx = new AudioCtxClass();
-          gainNode = audioCtx.createGain();
-          gainNode.connect(audioCtx.destination);
-        }
-        if (audioCtx && audioCtx.state === "suspended") {
-          audioCtx.resume().catch(() => {});
-        }
-        return audioCtx;
-      }
+  try {
+    const source = ctx.createMediaElementSource(el);
+    source.connect(contentGainNode);
+    connectedMediaSet.add(el);
+  } catch (e) {
+    // Ignore if already connected or restricted
+  }
 
-      function attachGainToElement(el) {
-        if (!el || connectedElements.has(el)) return;
-        const ctx = getOrCreateAudioContext();
-        if (!ctx || !gainNode) return;
-
-        try {
-          const source = ctx.createMediaElementSource(el);
-          source.connect(gainNode);
-          connectedElements.add(el);
-        } catch(e) {
-          // If already connected or restricted, ignore
-        }
-      }
-
-      function setBoostLevel(multiplier) {
-        currentBoostMultiplier = multiplier;
-        getOrCreateAudioContext();
-
-        const mediaEls = document.querySelectorAll("video, audio");
-        mediaEls.forEach(el => attachGainToElement(el));
-
-        if (gainNode) {
-          gainNode.gain.value = multiplier;
-        }
-      }
-
-      window.addEventListener("message", (e) => {
-        if (e && e.data && e.data.type === "LIFEOS_SET_VOLUME_BOOST") {
-          setBoostLevel(e.data.volumeLevel);
-        }
-      });
-
-      // Observe video play/timeupdate events to automatically connect new videos (e.g. YouTube video change)
-      const handleMediaEvent = (e) => {
-        const target = e.target;
-        if (target && (target.tagName === "VIDEO" || target.tagName === "AUDIO")) {
-          attachGainToElement(target);
-          if (gainNode) {
-            gainNode.gain.value = currentBoostMultiplier;
-          }
-        }
-      };
-
-      document.addEventListener("play", handleMediaEvent, true);
-      document.addEventListener("playing", handleMediaEvent, true);
-      document.addEventListener("loadedmetadata", handleMediaEvent, true);
-    })();
-  `;
-
-  (document.head || document.documentElement).appendChild(script);
+  try {
+    if (contentGainNode) {
+      contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
+    }
+  } catch (e) {}
 }
 
 export function setVolumeBoostLevel(boostMultiplier: number): void {
-  injectMainWorldVolumeBooster();
-  window.postMessage({ type: "LIFEOS_SET_VOLUME_BOOST", volumeLevel: boostMultiplier }, "*");
+  currentMultiplier = Number(boostMultiplier) || 1.0;
+  const ctx = getOrCreateContentAudioContext();
+
+  const mediaEls = Array.from(
+    document.querySelectorAll("video, audio"),
+  ) as HTMLMediaElement[];
+
+  mediaEls.forEach((el) => {
+    attachContentGainToElement(el);
+  });
+
+  if (contentGainNode && ctx) {
+    try {
+      contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
+    } catch (e) {}
+  }
 }
 
 export function initVolumeBoosterListener(): void {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", injectMainWorldVolumeBooster);
-  } else {
-    injectMainWorldVolumeBooster();
-  }
-
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === "set_volume_boost") {
-      const level = typeof message.volumeLevel === "number" ? message.volumeLevel : 1.0;
+      const level =
+        typeof message.volumeLevel === "number" ? message.volumeLevel : 1.0;
       setVolumeBoostLevel(level);
       sendResponse({ success: true, volumeLevel: level });
       return true;
     }
   });
+
+  // Attach listeners to media play events
+  const handleMediaEvent = (e: Event) => {
+    const target = e.target as HTMLMediaElement;
+    if (target && (target.tagName === "VIDEO" || target.tagName === "AUDIO")) {
+      attachContentGainToElement(target);
+    }
+  };
+
+  document.addEventListener("play", handleMediaEvent, true);
+  document.addEventListener("playing", handleMediaEvent, true);
+  document.addEventListener("loadedmetadata", handleMediaEvent, true);
 }

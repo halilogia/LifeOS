@@ -74,6 +74,7 @@ export const fetchQuestionsSubsetFromAI = async (
         { role: "user", content: userPrompt },
       ],
       stream: false,
+      format: "json",
       options: {
         temperature: 0.2,
       },
@@ -141,6 +142,7 @@ export const fetchQuestionsSubsetFromAI = async (
       ],
       stream: false,
       temperature: 0.2,
+      response_format: { type: "json_object" },
     };
 
     const res = await fetch(url, {
