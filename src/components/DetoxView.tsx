@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 import { DetoxUsageCard } from "@/components/detox/DetoxUsageCard.js";
 import { DetoxStatusCard } from "@/components/detox/DetoxStatusCard.js";
 

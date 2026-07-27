@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { Todo, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { Todo, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 import { AiChatHeaderBar } from "./aichat/AiChatHeaderBar.js";
 import {

@@ -4,17 +4,17 @@
  * Supports both direct status change and directional movement.
  */
 
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort } from "../../ports/ITodoSyncPort.js";
-import type { Todo } from "../../../domain/entities/Todo.js";
-import type { TodoStatus } from "../../../domain/value-objects/TodoStatus.js";
-import { isRepeating } from "../../../domain/value-objects/RepeatType.js";
-import { isCompleted } from "../../../domain/value-objects/TodoStatus.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import type { TodoStatus } from "@/domain/value-objects/TodoStatus.js";
+import { isRepeating } from "@/domain/value-objects/RepeatType.js";
+import { isCompleted } from "@/domain/value-objects/TodoStatus.js";
 import {
   moveTaskWithStatus,
   getUpdatedStatuses,
-} from "../../../domain/services/TaskService.js";
+} from "@/domain/services/TaskService.js";
 
 export interface MoveTaskStatusRequest {
   readonly index: number;

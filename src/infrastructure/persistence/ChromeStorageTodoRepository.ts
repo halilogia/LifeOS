@@ -4,8 +4,8 @@
  * directly (not wrapping legacy storage.ts).
  */
 
-import type { ITodoRepository } from "../../domain/repositories/ITodoRepository.js";
-import type { Todo } from "../../domain/entities/Todo.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
 
 export class ChromeStorageTodoRepository implements ITodoRepository {
   async getAll(): Promise<Todo[]> {

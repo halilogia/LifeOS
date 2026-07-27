@@ -5,9 +5,9 @@
  */
 
 import { useState, useCallback } from "preact/hooks";
-import type { Language } from "../../domain/value-objects/Language.js";
-import { translations } from "../../utils/i18n.js";
-import type { CustomQuote } from "../../types/types.js";
+import type { Language } from "@/domain/value-objects/Language.js";
+import { translations } from "@/utils/i18n.js";
+import type { CustomQuote } from "@/types/types.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 

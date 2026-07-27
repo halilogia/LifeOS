@@ -1,4 +1,4 @@
-import { HistoricalEpicGame } from "../services/gamesService.js";
+import { HistoricalEpicGame } from "@/services/gamesService.js";
 
 interface HistoryCardProps {
   game: HistoricalEpicGame;

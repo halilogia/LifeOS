@@ -3,9 +3,9 @@
  * Application use case for updating Eisenhower matrix priorities (urgent/important).
  */
 
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { Todo } from "../../../domain/entities/Todo.js";
-import { updateTodoPriorities } from "../../../domain/entities/Todo.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import { updateTodoPriorities } from "@/domain/entities/Todo.js";
 
 export interface UpdatePrioritiesRequest {
   readonly originalIndex: number;

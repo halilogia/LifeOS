@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { WillpowerStreak, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { WillpowerStreak, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 interface WillpowerViewProps {
   lang: Language;

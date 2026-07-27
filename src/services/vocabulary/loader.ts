@@ -1,4 +1,4 @@
-import { Word } from "../../types/word.js";
+import { Word } from "@/types/word.js";
 
 export const DEFAULT_ICON = "book";
 export const DEFAULT_DESC = "Basic vocabulary";

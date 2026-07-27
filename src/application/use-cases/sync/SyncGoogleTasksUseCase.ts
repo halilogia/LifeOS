@@ -5,11 +5,11 @@
  * Orchestrates the domain layer (Todo entity) with infrastructure (Google Tasks API).
  */
 
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort } from "../../ports/ITodoSyncPort.js";
-import { parseRepeatFromNotes } from "../../../domain/services/TaskService.js";
-import type { Todo } from "../../../domain/entities/Todo.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import { parseRepeatFromNotes } from "@/domain/services/TaskService.js";
+import type { Todo } from "@/domain/entities/Todo.js";
 
 export interface SyncResult {
   todos: Todo[];

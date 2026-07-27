@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { Todo, Language } from "../types/types.js";
+import { Todo, Language } from "@/types/types.js";
 import { KanbanView } from "./KanbanView.js";
 
 interface EisenhowerViewProps {

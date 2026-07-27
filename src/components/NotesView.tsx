@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { Note, CustomQuote, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { Note, CustomQuote, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 import { renderMarkdown } from "@/utils/markdownRenderer.js";
 
 // Extracted Sub-components

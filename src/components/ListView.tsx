@@ -1,5 +1,5 @@
-import { Todo, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { Todo, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 function formatDueDate(dateStr: string, lang: Language): string {
   try {

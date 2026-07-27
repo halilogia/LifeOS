@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { Language } from "../types/types.js";
-import { getTranslation } from "../utils/i18n.js";
+import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 import { SidebarNavItem } from "./sidebar/SidebarNavItem.js";
 import { SidebarIcon } from "./sidebar/SidebarIcons.js";
 

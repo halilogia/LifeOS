@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { Todo, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { Todo, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
 import { GoogleCalendarApi } from "@/infrastructure/api/GoogleCalendarApi.js";
 

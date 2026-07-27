@@ -4,12 +4,12 @@
  * Orchestrates domain entities, repositories, and external sync.
  */
 
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort } from "../../ports/ITodoSyncPort.js";
-import type { Todo } from "../../../domain/entities/Todo.js";
-import { toggleTodo } from "../../../domain/entities/Todo.js";
-import { isRepeating } from "../../../domain/value-objects/RepeatType.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import { toggleTodo } from "@/domain/entities/Todo.js";
+import { isRepeating } from "@/domain/value-objects/RepeatType.js";
 
 export interface ToggleTodoRequest {
   readonly index: number;

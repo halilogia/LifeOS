@@ -3,10 +3,10 @@
  * Application use case for restoring all data from Google Drive backup.
  */
 
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { IDriveBackupPort } from "../../ports/IDriveBackupPort.js";
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { INoteRepository } from "../../../domain/repositories/INoteRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { INoteRepository } from "@/domain/repositories/INoteRepository.js";
 
 export interface RestoreResult {
   readonly restored: boolean;

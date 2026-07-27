@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { Language } from "../types/types.js";
+import { Language } from "@/types/types.js";
 
 interface DatePickerProps {
   value: string; // "YYYY-MM-DD"
