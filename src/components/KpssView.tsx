@@ -4,26 +4,18 @@ import {
   kpssData,
   kpssDummyFlashcards,
 } from "@/services/kpssService.js";
+import { kpssSrsService } from "@/services/kpssSrsService.js";
+import { kpssQuizFlowService } from "@/services/kpssQuizFlowService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
-import {
-  calculateSM2,
-  prepareSRSQueue,
-  createInitialSRSWord,
-  type SRSWordWithInfo,
-  type ReviewQuality,
-  type WordReviewData,
-} from "@/domain/services/SrsService.js";
+import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
 import {
   calculateKpssCountdown,
   calculateEstimatedCompletionTime,
   getSubjectNets as getSubjectNets_logic,
   getOverallNets as getOverallNets_logic,
 } from "@/domain/services/KpssCalculatorService.js";
-import {
-  fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
-  QuizQuestion,
-} from "@/services/kpssAiService.js";
+import { QuizQuestion } from "@/services/kpssAiService.js";
 
 // Domain Constants & Quiz Service
 import {
@@ -136,42 +128,7 @@ export function KpssView({
   const loadKpssSrsQueue = async () => {
     setSrsLoading(true);
     try {
-      const progress: any[] = await new Promise((r) =>
-        chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
-          r((res.kpssSrsProgress as any[]) || []),
-        ),
-      );
-      const progressMap = new Map<string, WordReviewData>();
-      progress.forEach((p) => progressMap.set(p.wordId, p));
-
-      const srsUniverse: SRSWordWithInfo[] = kpssDummyFlashcards.map((w) => {
-        const p =
-          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
-        return {
-          ...p,
-          level: w.category,
-          listType: "kpss",
-          freq: 0,
-        };
-      });
-
-      const enrichedProgress: SRSWordWithInfo[] = progress.map((p) => {
-        const wInfo = kpssDummyFlashcards.find((w) => w.id === p.wordId);
-        return {
-          ...p,
-          level: wInfo?.category || "Tarih",
-          listType: "kpss",
-          freq: 0,
-        };
-      });
-
-      const queue = prepareSRSQueue(enrichedProgress, {
-        dailyGoal: 10,
-        isCustomMode: true,
-        filters: { listType: "kpss", levels: [] },
-        universe: srsUniverse,
-      });
-
+      const queue = await kpssSrsService.loadSrsQueue();
       setSrsQueue(queue);
       setSrsIndex(0);
       setSrsLoading(false);
@@ -185,22 +142,7 @@ export function KpssView({
     const reviewData = srsQueue[srsIndex];
     if (!reviewData) return;
 
-    const outcome = calculateSM2(reviewData, quality, new Date());
-
-    const progress: any[] = await new Promise((r) =>
-      chrome.storage.sync.get(["kpssSrsProgress"], (res) =>
-        r((res.kpssSrsProgress as any[]) || []),
-      ),
-    );
-    const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
-    if (idx >= 0) {
-      progress[idx] = outcome;
-    } else {
-      progress.push(outcome);
-    }
-    await new Promise<void>((r) =>
-      chrome.storage.sync.set({ kpssSrsProgress: progress }, r),
-    );
+    await kpssSrsService.saveSrsReview(reviewData, quality);
 
     setSrsFadeState("slide-out");
     setTimeout(() => {
@@ -273,23 +215,7 @@ export function KpssView({
     return () => clearInterval(interval);
   }, [kpssProgress, lang]);
 
-  // Dynamic AI Fetcher with pre-fetch
-  const fetchQuestionsSubsetFromAI = (
-    subjectKey: string,
-    topicName: string,
-    count: number,
-    excludeQuestions: QuizQuestion[] = [],
-    fewShotExamples: QuizQuestion[] = [],
-  ): Promise<QuizQuestion[]> => {
-    return fetchQuestionsSubsetFromAI_service(
-      subjectKey,
-      topicName,
-      count,
-      { aiProvider, aiModel, aiApiKey, aiEndpoint, lang, SUBJECT_NAMES },
-      excludeQuestions,
-      fewShotExamples,
-    );
-  };
+  const aiConfig = { aiProvider, aiModel, aiApiKey, aiEndpoint, lang };
 
   const fetchQuizFromAI = async (
     subjectKey: string,
@@ -321,13 +247,15 @@ export function KpssView({
 
           const neededCount = count - localQuestions.length;
 
-          fetchQuestionsSubsetFromAI(
-            subjectKey,
-            topicName,
-            neededCount,
-            localQuestions,
-            localQuestions,
-          )
+          kpssQuizFlowService
+            .fetchQuestionsSubsetFromAI(
+              subjectKey,
+              topicName,
+              neededCount,
+              aiConfig,
+              localQuestions,
+              localQuestions,
+            )
             .then((remainingQuestions) => {
               if (remainingQuestions.length > 0) {
                 setQuizQuestions((prev) => {
@@ -344,10 +272,11 @@ export function KpssView({
             });
         }
       } else {
-        const firstList = await fetchQuestionsSubsetFromAI(
+        const firstList = await kpssQuizFlowService.fetchQuestionsSubsetFromAI(
           subjectKey,
           topicName,
           1,
+          aiConfig,
         );
         if (firstList.length === 0) {
           throw new Error("Soru üretilemedi.");
@@ -361,9 +290,14 @@ export function KpssView({
 
         if (count > 1) {
           setIsBackgroundLoading(true);
-          fetchQuestionsSubsetFromAI(subjectKey, topicName, count - 1, [
-            firstQuestion,
-          ])
+          kpssQuizFlowService
+            .fetchQuestionsSubsetFromAI(
+              subjectKey,
+              topicName,
+              count - 1,
+              aiConfig,
+              [firstQuestion],
+            )
             .then((remainingQuestions) => {
               if (remainingQuestions.length > 0) {
                 setQuizQuestions((prev) => {
@@ -395,64 +329,19 @@ export function KpssView({
   };
 
   const handleFinishQuiz = async () => {
-    let correctCount = 0;
-    quizQuestions.forEach((q, idx) => {
-      if (selectedAnswers[idx] === q.correctAnswer) {
-        correctCount++;
-      }
-    });
-
-    const scorePercentage = Math.round(
-      (correctCount / quizQuestions.length) * 100,
-    );
-    setQuizResultScore(scorePercentage);
-    setQuizStep("result");
-
-    let newStatus: 0 | 1 | 2;
-    if (scorePercentage >= 80) {
-      newStatus = 2;
-    } else if (scorePercentage >= 40) {
-      newStatus = 1;
-    } else {
-      newStatus = 0;
-    }
-
     try {
-      const isRegularTopic = (kpssData[currentSubject] || []).some(
-        (t) => t.title === activeQuizTopic,
-      );
-      if (isRegularTopic) {
-        await kpssService.updateTopicStatus(
+      const { scorePercentage, updatedPastQuizzes } =
+        await kpssQuizFlowService.evaluateAndSaveQuizResult({
           currentSubject,
-          activeQuizTopic!,
-          newStatus,
-          scorePercentage,
-        );
-      }
+          activeQuizTopic: activeQuizTopic!,
+          quizQuestions,
+          selectedAnswers,
+          pastQuizzes,
+        });
 
-      const quizKey = `${currentSubject}_${activeQuizTopic}`;
-      const newQuizRecord: KpssPastQuiz = {
-        subject: currentSubject,
-        topic: activeQuizTopic!,
-        score: scorePercentage,
-        questions: quizQuestions,
-        selectedAnswers: selectedAnswers,
-        date: new Date().toISOString().split("T")[0],
-      };
-
-      const updatedPast = {
-        ...pastQuizzes,
-        [quizKey]: newQuizRecord,
-      };
-      setPastQuizzes(updatedPast);
-      chrome.storage.local.set({ kpss_past_quizzes: updatedPast });
-
-      await kpssService.saveKpssDailyStats(
-        quizQuestions.length,
-        0,
-        currentSubject,
-      );
-
+      setQuizResultScore(scorePercentage);
+      setQuizStep("result");
+      setPastQuizzes(updatedPastQuizzes);
       await loadKpssData();
     } catch (err) {
       console.error(
