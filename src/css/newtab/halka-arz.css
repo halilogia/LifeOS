@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   halka-arz.css  —  Halka Arz & BIST Hisse Takibi paneli
+   halka-arz.css  —  Halka Arz (IPO) Dashboard Stilleri
    ═══════════════════════════════════════════════════════ */
 
 /* ── Container ─────────────────────────────────────────── */
@@ -32,8 +32,8 @@
 .halka-arz-icon {
   width: 42px;
   height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: var(--radius-md, 12px);
+  background: linear-gradient(135deg, var(--stock-up, #10b981) 0%, #059669 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,7 +65,7 @@
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 10px;
   font-size: 0.8rem;
-  color: #f59e0b;
+  color: var(--warning, #f59e0b);
   margin-bottom: 4px;
 }
 
@@ -73,8 +73,8 @@
 .halka-arz-tabs {
   display: flex;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 5px;
   width: fit-content;
@@ -97,7 +97,7 @@
 }
 
 .ha-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--card-bg-hover);
   color: var(--text-primary);
 }
 
@@ -107,14 +107,14 @@
     rgba(16, 185, 129, 0.22) 0%,
     rgba(5, 150, 105, 0.18) 100%
   );
-  color: #10b981;
+  color: var(--stock-up, #10b981);
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
 }
 
 .ha-tab-badge {
   background: rgba(16, 185, 129, 0.25);
-  color: #10b981;
+  color: var(--stock-up, #10b981);
   font-size: 0.7rem;
   font-weight: 700;
   padding: 1px 6px;
@@ -132,7 +132,7 @@
   border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 10px;
   background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: var(--stock-up, #10b981);
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
@@ -176,7 +176,7 @@
   width: 38px;
   height: 38px;
   border: 3px solid rgba(16, 185, 129, 0.2);
-  border-top-color: #10b981;
+  border-top-color: var(--stock-up, #10b981);
   border-radius: 50%;
   animation: ha-spin 0.9s linear infinite;
 }
@@ -186,7 +186,7 @@
   border-radius: 10px;
   border: 1px solid rgba(16, 185, 129, 0.4);
   background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
+  color: var(--stock-up, #10b981);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -221,9 +221,9 @@
 }
 
 .ipo-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg, 16px);
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
@@ -249,24 +249,25 @@
 
 .ipo-card.status-active {
   --ipo-accent: linear-gradient(90deg, #10b981, #059669);
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 .ipo-card.status-upcoming {
   --ipo-accent: linear-gradient(90deg, #f59e0b, #d97706);
-  border-color: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.25);
 }
 .ipo-card.status-completed {
   --ipo-accent: linear-gradient(90deg, #6366f1, #4f46e5);
-  border-color: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.2);
 }
 .ipo-card.status-cancelled {
   --ipo-accent: linear-gradient(90deg, #ef4444, #dc2626);
-  border-color: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .ipo-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: var(--card-bg-hover);
 }
 
 /* IPO card header */
@@ -300,7 +301,7 @@
   display: inline-block;
   font-size: 0.72rem;
   font-weight: 700;
-  font-family: "Courier New", monospace;
+  font-family: var(--font-mono, monospace);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
   padding: 2px 8px;
@@ -330,25 +331,25 @@
 
 .ipo-status-badge.status-active {
   background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  color: var(--stock-up, #10b981);
 }
 .ipo-status-badge.status-active .ipo-status-dot {
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
+  background: var(--stock-up, #10b981);
+  box-shadow: 0 0 6px var(--stock-up, #10b981);
   animation: ha-pulse 1.5s ease-in-out infinite;
 }
 
 .ipo-status-badge.status-upcoming {
   background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: var(--warning, #f59e0b);
 }
 .ipo-status-badge.status-upcoming .ipo-status-dot {
-  background: #f59e0b;
+  background: var(--warning, #f59e0b);
 }
 
 .ipo-status-badge.status-completed {
-  background: rgba(99, 102, 241, 0.15);
-  color: #818cf8;
+  background: var(--stock-badge-bg, rgba(99, 102, 241, 0.15));
+  color: var(--stock-accent, #818cf8);
 }
 .ipo-status-badge.status-completed .ipo-status-dot {
   background: #6366f1;
@@ -356,10 +357,10 @@
 
 .ipo-status-badge.status-cancelled {
   background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
+  color: var(--stock-down, #f87171);
 }
 .ipo-status-badge.status-cancelled .ipo-status-dot {
-  background: #ef4444;
+  background: var(--danger, #ef4444);
 }
 
 @keyframes ha-pulse {
@@ -427,9 +428,9 @@
   align-items: center;
   gap: 5px;
   padding: 7px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
   background: rgba(99, 102, 241, 0.12);
-  color: #818cf8;
+  color: var(--stock-accent, #818cf8);
   text-decoration: none;
   font-size: 0.78rem;
   font-weight: 500;
@@ -440,289 +441,4 @@
 .ipo-kap-link:hover {
   background: rgba(99, 102, 241, 0.22);
   transform: translateY(-1px);
-}
-
-/* ═══════════════════════════════════════════════════════
-   Stock Quote Cards
-   ═══════════════════════════════════════════════════════ */
-
-.stock-grid-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.stock-delay-note {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  opacity: 0.65;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.stock-last-updated {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  opacity: 0.6;
-}
-
-.stock-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-
-.stock-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
-  cursor: default;
-  position: relative;
-  overflow: hidden;
-}
-
-.stock-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.stock-card.positive {
-  border-color: rgba(16, 185, 129, 0.2);
-}
-.stock-card.negative {
-  border-color: rgba(239, 68, 68, 0.2);
-}
-.stock-card.neutral {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-.stock-card.error-card {
-  opacity: 0.55;
-}
-
-/* Stock header */
-.stock-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 6px;
-}
-
-.stock-symbol-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-}
-
-.stock-symbol {
-  font-size: 0.88rem;
-  font-weight: 800;
-  font-family: "Courier New", monospace;
-  color: var(--text-primary);
-  letter-spacing: 0.04em;
-}
-
-.stock-company-name {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.stock-sector-tag {
-  font-size: 0.66rem;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-secondary);
-  padding: 2px 6px;
-  border-radius: 5px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* Price display */
-.stock-price-block {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.stock-price {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.stock-price.error-price {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  opacity: 0.5;
-}
-
-.stock-change-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.stock-change-value {
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.stock-change-pct {
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 6px;
-}
-
-.stock-card.positive .stock-change-value,
-.stock-card.positive .stock-change-pct {
-  color: #10b981;
-}
-.stock-card.positive .stock-change-pct {
-  background: rgba(16, 185, 129, 0.15);
-}
-
-.stock-card.negative .stock-change-value,
-.stock-card.negative .stock-change-pct {
-  color: #ef4444;
-}
-.stock-card.negative .stock-change-pct {
-  background: rgba(239, 68, 68, 0.12);
-}
-
-.stock-card.neutral .stock-change-value,
-.stock-card.neutral .stock-change-pct {
-  color: var(--text-secondary);
-}
-.stock-card.neutral .stock-change-pct {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-/* Stock meta row (high/low/volume) */
-.stock-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.stock-meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.73rem;
-}
-
-.stock-meta-label {
-  color: var(--text-secondary);
-  opacity: 0.75;
-}
-
-.stock-meta-value {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-/* Arrow indicators */
-.stock-arrow-up::before {
-  content: "▲ ";
-  font-size: 0.65em;
-}
-.stock-arrow-down::before {
-  content: "▼ ";
-  font-size: 0.65em;
-}
-
-.stock-card {
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.stock-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 24px -10px rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.3);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* Chart Modal Overlay */
-.chart-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  animation: fadeIn 0.25s ease;
-}
-
-.chart-modal-content {
-  background: rgba(15, 15, 22, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 900px;
-  padding: 24px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.chart-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chart-modal-header h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.chart-close-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chart-close-btn:hover {
-  background: var(--danger);
-  color: white;
-  border-color: transparent;
 }
