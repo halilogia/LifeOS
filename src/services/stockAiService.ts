@@ -63,9 +63,27 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
   }
 
   const systemPrompt =
-    "Sen uzman bir Borsa İstanbul (BIST) finans ve portföy asistanısın. Yatırımcıya karmaşık grafik terimleri kullanmadan tamamen sade, net ve anlaşılır Türkçe ile tavsiyesiz durum analizi sunarsın.";
+    `Sen uzman, son derece disiplinli bir Borsa İstanbul (BIST) finans ve borsa verisi asistanısın.
+
+KURALLAR VE İLKELER:
+1. YALNIZCA sağlanan gerçek verileri (Fiyat, % Değişim, Yüksek/Düşük, Halka Arz Sezonu, KAP Metni) kullan.
+2. Sağlanan verilerde hisse fiyatı 0 veya 'Açılış Bekleniyor' ise, UYDURMA grafik/teknik indikatör yorumu YAPMA. Hisse henüz borsada açılmamış bir halka arz hissesidir; açılış günü beklendiğini açıkça belirt.
+3. Asla UYDURMA (hallucination) fiyat veya grafik desteği uydurma.
+4. Yanıtı maksimum 3 net, sade ve anlaşılır Türkçe maddede sun.
+5. Yasal uyarı içerikli finansal danışmanlık terimleri kullanma; durum özeti çıkar.
+
+ÖRNEN YANIT YAPISI (Açık Hisse):
+1. Günün Seyri: THYAO %2.40 yükselişle ₺312.50 seviyesinde.
+2. Volatilite: Günün bandı ₺308 - ₺315 aralığında.
+3. Risk: Kâr-al ve stop alarmlarınızı güncel tutun.
+
+ÖRNEN YANIT YAPISI (Halka Arz / Henüz İşleme Başlamamış Hisse):
+1. Borsa Durumu: MASFN henüz BİST'te açılmamıştır (Açılış günü bekleniyor).
+2. Takip: Alış maliyetiniz üzerinden portföyde izlenmektedir.
+3. Strateji: İlk seans günlerinde tavan serisi oynaklığına karşı alarmlarınızı hazırlayın.`;
+
   const userPrompt = req.userQuestion
-    ? `Aşağıdaki verileri ve soruyu değerlendirip kısa ve net yanıtla:\n${contextPrompt}\n\nSoru: ${req.userQuestion}`
+    ? `Aşağıdaki BIST verisini değerlendir:\n${contextPrompt}\n\nAnaliz İsteği: ${req.userQuestion}`
     : `Aşağıdaki BIST verilerini değerlendirerek Türkçe kısa, net 3 maddelik durum ve risk özeti çıkar:\n\n${contextPrompt}`;
 
   try {
@@ -138,20 +156,40 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
     );
   }
 
-  if (req.quote) {
-    const isTavan = req.quote.changePercent >= 9.5;
-    const isRed = req.quote.changePercent < 0;
+  if (req.symbol) {
+    const cleanSym = req.symbol.replace(/\.IS$/, "").toUpperCase();
+    const hasLivePrice = Boolean(req.quote && req.quote.price > 0);
+
+    if (!hasLivePrice) {
+      return (
+        `### 🚀 ${cleanSym} Halka Arz & Açılış Öncesi Durum Analizi\n\n` +
+        `1. **Borsa İşlem Durumu:** ${cleanSym} hissesi henüz Borsa İstanbul'da ilk işlem gününe başlamamıştır (Açılış bekleniyor).\n` +
+        `2. **Takip & Maliyet:** Portföyünüze kaydettiğiniz alış fiyatı üzerinden takip edilmektedir. Hisse tahtası borsada açıldığı an canlı fiyat, derinlik ve grafik verileri otomatik güncellenecektir.\n` +
+        `3. **Açılış Stratejisi:** Yeni halka arzlarda ilk günlerde tavan serisi ve yüksek volatilite yaşanabileceğinden hedef fiyat alarmlarınızı hazır tutmanız önerilir.` +
+        YTD_DISCLAIMER
+      );
+    }
+
+    const isTavan = req.quote!.changePercent >= 9.5;
+    const isRed = req.quote!.changePercent < 0;
+    const priceText = `₺${req.quote!.price.toFixed(2)}`;
+    const changeText = `%${req.quote!.changePercent.toFixed(2)}`;
+
     return (
-      `### 🤖 ${req.symbol} Durum & Risk Analizi\n\n` +
-      `1. **Günün Seyri:** Hisse bugün %${req.quote.changePercent.toFixed(2)} değişim gösterdi. ${
+      `### 🤖 ${cleanSym} Yapay Zeka Hisse & Risk Analizi\n\n` +
+      `1. **Günün Seyri & Trend:** ${cleanSym} hissesi son BİST seansında ${changeText} (${priceText}) ile hareket ediyor. ${
         isTavan
           ? "Hisse tavan serisinde güçlü alım baskısıyla ilerliyor."
           : isRed
             ? "Mum kırmızıda; belirlediğiniz stop-loss ve alarm seviyelerini gözden geçirin."
-            : "Pozitif yükseliş eğilimi korunuyor."
+            : "Teknik açıdan ana destek ve direnç seviyeleri üzerinde pozitif görünüm korunuyor."
       }\n` +
-      `2. **Oynaklık (Volatilite):** Günün en yükseği ₺${req.quote.dayHigh}, en düşüğü ₺${req.quote.dayLow}.\n` +
-      `3. **Risk Uyarısı:** Dalgalı piyasalarda fiyat alarmları ve stop kurallarını aktif tutmanız önerilir.` +
+      `2. **Oynaklık (Volatilite) & Hacim:** Gün içi işlemler ${
+        req.quote!.dayHigh > 0
+          ? `₺${req.quote!.dayLow} - ₺${req.quote!.dayHigh}`
+          : "direnç aralığında"
+      } seyretmekte olup takas hacimleri takip edilmektedir.\n` +
+      `3. **Risk Uyarısı & Strateji:** BİST dalgalanmalarına karşı kâr-al (Take Profit) ve stop-loss alarmlarınızı aktif tutmanız önerilir.` +
       YTD_DISCLAIMER
     );
   }

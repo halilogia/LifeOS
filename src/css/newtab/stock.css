@@ -192,6 +192,7 @@
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stock-modal-content {
@@ -472,6 +473,24 @@
   justify-content: center;
   z-index: 2000;
   animation: fadeIn 0.25s ease;
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar Aware Overlay Alignment */
+body:has(#sidebar.open) .chart-modal-overlay,
+body:has(#sidebar.open) .stock-modal-overlay,
+#app:has(#sidebar.open) .chart-modal-overlay,
+#app:has(#sidebar.open) .stock-modal-overlay {
+  padding-left: 280px;
+}
+
+@media (max-width: 1024px) {
+  body:has(#sidebar.open) .chart-modal-overlay,
+  body:has(#sidebar.open) .stock-modal-overlay,
+  #app:has(#sidebar.open) .chart-modal-overlay,
+  #app:has(#sidebar.open) .stock-modal-overlay {
+    padding-left: 0;
+  }
 }
 
 .chart-modal-content {

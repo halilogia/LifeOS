@@ -95,7 +95,8 @@ export function PortfolioSummaryCard({
   triggeredAlertsCount,
 }: PortfolioSummaryCardProps) {
   const totalProfit = totalValue - totalCost;
-  const isPositive = totalProfit >= 0;
+  const isZeroProfit = Math.abs(totalProfit) < 0.001;
+  const isPositive = totalProfit > 0;
   const isDailyPositive = dailyProfitLoss >= 0;
 
   return (
@@ -109,16 +110,25 @@ export function PortfolioSummaryCard({
           <IconWallet />
           <span>Toplam Portföy Değeri</span>
         </div>
-        <div className="stock-card-value">{formatPrice(totalValue)}</div>
+        <div className="stock-card-value">
+          {totalValue > 0 ? formatPrice(totalValue) : "0,00 ₺"}
+        </div>
         <div
-          className={`stock-card-badge ${isPositive ? "stock-badge-positive" : "stock-badge-negative"}`}
+          className={`stock-card-badge ${
+            isZeroProfit
+              ? "stock-badge-neutral"
+              : isPositive
+                ? "stock-badge-positive"
+                : "stock-badge-negative"
+          }`}
         >
-          {isPositive ? "+" : ""}
-          {formatPrice(totalProfit)} (
-          {totalCost > 0
-            ? ((totalProfit / totalCost) * 100).toFixed(2)
-            : "0.00"}
-          %)
+          {isZeroProfit
+            ? "0,00 ₺ (0.00%)"
+            : `${isPositive ? "+" : ""}${formatPrice(totalProfit)} (${
+                totalCost > 0
+                  ? ((totalProfit / totalCost) * 100).toFixed(2)
+                  : "0.00"
+              }%)`}
         </div>
       </div>
 
@@ -140,35 +150,35 @@ export function PortfolioSummaryCard({
         </div>
       </div>
 
-      {/* Aktif Alarmlar */}
+      {/* Kurulu Alarm Kuralları */}
       <div className="stock-summary-card">
         <div
           className="stock-card-label"
           style={{ display: "flex", alignItems: "center", gap: "6px" }}
         >
           <IconShield />
-          <span>Aktif Alarmlar</span>
+          <span>Kurulu Alarmlar</span>
         </div>
-        <div className="stock-card-value">{activeRulesCount} Alarm</div>
+        <div className="stock-card-value">{activeRulesCount} Kural</div>
         <div className="stock-card-badge stock-badge-neutral">
-          7/24 Koruma & Alarm Aktif
+          7/24 Fiyat Takibi
         </div>
       </div>
 
-      {/* Tetiklenen Alarmlar */}
+      {/* Tetiklenen Alarm Geçmişi */}
       <div className="stock-summary-card">
         <div
           className="stock-card-label"
           style={{ display: "flex", alignItems: "center", gap: "6px" }}
         >
           <IconBell />
-          <span>Son Alarmlar</span>
+          <span>Alarm Geçmişi</span>
         </div>
         <div className="stock-card-value">{triggeredAlertsCount} Bildirim</div>
         <div
-          className={`stock-card-badge ${triggeredAlertsCount > 0 ? "stock-badge-negative" : "stock-badge-positive"}`}
+          className={`stock-card-badge ${triggeredAlertsCount > 0 ? "stock-badge-negative" : "stock-badge-neutral"}`}
         >
-          {triggeredAlertsCount > 0 ? "Dikkat Gerekiyor" : "Risk Yok"}
+          {triggeredAlertsCount > 0 ? "Tetiklenen Var" : "Risk Yok"}
         </div>
       </div>
     </div>
