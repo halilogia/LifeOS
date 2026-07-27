@@ -21,16 +21,27 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
   const settings = await new Promise<any>((resolve) => {
     chrome.storage.sync.get(
       ["aiProvider", "aiApiKey", "aiModel", "aiEndpoint"],
-      (res) => {
-        resolve(res || {});
+      (syncRes) => {
+        chrome.storage.local.get(
+          ["aiProvider", "aiApiKey", "aiModel", "aiEndpoint"],
+          (localRes) => {
+            resolve({ ...(localRes || {}), ...(syncRes || {}) });
+          },
+        );
       },
     );
   });
 
   const provider = settings.aiProvider || "openrouter";
   const apiKey = settings.aiApiKey || "";
-  const model = settings.aiModel || "google/gemini-flash-1.5";
-  const endpoint = settings.aiEndpoint || "https://openrouter.ai/api/v1";
+  const model =
+    settings.aiModel && settings.aiModel !== "free"
+      ? settings.aiModel
+      : "google/gemini-2.5-flash";
+  const endpoint =
+    settings.aiEndpoint && settings.aiEndpoint.trim()
+      ? settings.aiEndpoint.trim()
+      : "http://localhost:20128/v1";
 
   let contextPrompt = "";
   if (req.symbol && req.quote) {

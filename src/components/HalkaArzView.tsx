@@ -1,7 +1,7 @@
 /**
  * HalkaArzView.tsx
  * Halka Arz (IPO) Takip Paneli.
- * Aktif halka arzlar ve Halka arz geçmişi takibi.
+ * Aktif, Yaklaşan ve Geçmiş Halka Arz Takibi Filtreleme.
  */
 
 import { useState, useEffect } from "preact/hooks";
@@ -19,6 +19,7 @@ interface HalkaArzViewProps {
 }
 
 type HalkaTabId = "active" | "history";
+type ActiveSubFilter = "all" | "active_only" | "upcoming_only";
 
 function IconRefresh() {
   return (
@@ -28,9 +29,9 @@ function IconRefresh() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <polyline points="23 4 23 10 17 10" />
       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
@@ -41,6 +42,7 @@ function IconRefresh() {
 export function HalkaArzView({ lang }: HalkaArzViewProps) {
   const t = getTranslation(lang);
   const [activeTab, setActiveTab] = useState<HalkaTabId>("active");
+  const [subFilter, setSubFilter] = useState<ActiveSubFilter>("active_only");
   const [activeIPOs, setActiveIPOs] = useState<IPOEntry[]>([]);
   const [historyIPOs, setHistoryIPOs] = useState<IPOEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -58,6 +60,20 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   useEffect(() => {
     loadIPOs();
   }, []);
+
+  // Compute counts for active vs upcoming
+  const activeOnlyCount = activeIPOs.filter(
+    (item) => item.status === "active",
+  ).length;
+  const upcomingOnlyCount = activeIPOs.filter(
+    (item) => item.status === "upcoming",
+  ).length;
+
+  const displayedActiveList = activeIPOs.filter((item) => {
+    if (subFilter === "active_only") return item.status === "active";
+    if (subFilter === "upcoming_only") return item.status === "upcoming";
+    return true;
+  });
 
   return (
     <div className="stock-dashboard">
@@ -88,6 +104,83 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
         </button>
       </div>
 
+      {/* Aktif vs Yakında Filtreleme Hapları (İlki Aktif, Tümü En Sağa) */}
+      {activeTab === "active" && !loading && (
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            alignItems: "center",
+            marginTop: "-6px",
+            marginBottom: "6px",
+          }}
+        >
+          <button
+            onClick={() => setSubFilter("active_only")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              border:
+                subFilter === "active_only"
+                  ? "1px solid #10b981"
+                  : "1px solid rgba(255, 255, 255, 0.08)",
+              background:
+                subFilter === "active_only"
+                  ? "rgba(16, 185, 129, 0.2)"
+                  : "rgba(255, 255, 255, 0.03)",
+              color: subFilter === "active_only" ? "#34d399" : "#94a3b8",
+            }}
+          >
+            🟢 Talep Toplayanlar / Aktif ({activeOnlyCount})
+          </button>
+          <button
+            onClick={() => setSubFilter("upcoming_only")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              border:
+                subFilter === "upcoming_only"
+                  ? "1px solid #f59e0b"
+                  : "1px solid rgba(255, 255, 255, 0.08)",
+              background:
+                subFilter === "upcoming_only"
+                  ? "rgba(245, 158, 11, 0.2)"
+                  : "rgba(255, 255, 255, 0.03)",
+              color: subFilter === "upcoming_only" ? "#fbbf24" : "#94a3b8",
+            }}
+          >
+            ⏳ Yakında Başlayacaklar ({upcomingOnlyCount})
+          </button>
+          <button
+            onClick={() => setSubFilter("all")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "20px",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              border:
+                subFilter === "all"
+                  ? "1px solid var(--accent-color)"
+                  : "1px solid rgba(255, 255, 255, 0.08)",
+              background:
+                subFilter === "all"
+                  ? "rgba(139, 92, 246, 0.2)"
+                  : "rgba(255, 255, 255, 0.03)",
+              color: subFilter === "all" ? "#c084fc" : "#94a3b8",
+            }}
+          >
+            Tümü ({activeIPOs.length})
+          </button>
+        </div>
+      )}
+
       {/* Grid List */}
       {loading ? (
         <div
@@ -96,11 +189,11 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
           <span>Halka arz verileri çekiliyor...</span>
         </div>
       ) : activeTab === "active" ? (
-        activeIPOs.length === 0 ? (
+        displayedActiveList.length === 0 ? (
           <div
             style={{ textAlign: "center", padding: "60px 0", color: "#64748b" }}
           >
-            Şu anda aktif veya talep toplayan halka arz bulunmuyor.
+            Seçilen filtrede gösterilecek halka arz bulunmuyor.
           </div>
         ) : (
           <div
@@ -110,7 +203,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               gap: "16px",
             }}
           >
-            {activeIPOs.map((ipo) => (
+            {displayedActiveList.map((ipo) => (
               <IpoCard key={ipo.id} ipo={ipo} lang={lang} t={t} />
             ))}
           </div>

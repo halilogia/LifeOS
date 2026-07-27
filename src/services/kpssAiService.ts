@@ -131,7 +131,7 @@ export const fetchQuestionsSubsetFromAI = async (
     if (!isLocal) {
       headers["HTTP-Referer"] =
         "https://github.com/halilogia/chrome-extension-todo";
-      headers["X-Title"] = "ZenTodo Life OS Dashboard";
+      headers["X-Title"] = "Life OS Dashboard";
     }
 
     const payload = {

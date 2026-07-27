@@ -116,6 +116,24 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
     });
   };
 
+  const handleClearHistory = () => {
+    if (!data) return;
+    const confirmMsg =
+      lang === "tr"
+        ? "Süreç geçmişini tamamen temizlemek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+        : "Are you sure you want to clear your streak history? This cannot be undone.";
+    onShowConfirm(confirmMsg, async () => {
+      const updatedData: WillpowerStreak = {
+        ...data,
+        history: [],
+      };
+      await new Promise<void>((resolve) =>
+        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve),
+      );
+      setData(updatedData);
+    });
+  };
+
   // Determine Rank Metadata
   let rankKey: string;
   if (days < 3) {
@@ -266,7 +284,55 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
 
         {/* History Section */}
         <div className="willpower-card history-card">
-          <h3 className="history-title">{t.willpower_history}</h3>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "12px",
+            }}
+          >
+            <h3 className="history-title" style={{ margin: 0 }}>
+              {t.willpower_history}
+            </h3>
+            {historyList.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                style={{
+                  background: "rgba(239, 68, 68, 0.15)",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                  color: "#f87171",
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  fontSize: "0.75rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "all 0.2s ease",
+                }}
+                title="Süreç Geçmişini Temizle"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                <span>Temizle</span>
+              </button>
+            )}
+          </div>
           <div id="willpower-history-list" className="history-list">
             {historyList.length === 0 ? (
               <div className="history-empty">{t.willpower_history_empty}</div>
