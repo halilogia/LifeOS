@@ -9,7 +9,7 @@ import type { Language } from "@/domain/value-objects/Language.js";
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 
 export function usePopup() {
-  const [popupTab, setPopupTab] = useState<"pomo" | "detox">("pomo");
+  const [popupTab, setPopupTab] = useState<"pomo" | "detox" | "volume">("pomo");
   const [lang, setLang] = useState<Language>("en");
 
   // --- Pomodoro Sync States ---

@@ -405,20 +405,51 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === "get_active_tab_context") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (!tabs || !tabs[0] || !tabs[0].id) {
-        sendResponse({ success: false, error: "No active tab" });
+        sendResponse({
+          success: false,
+          context: {
+            title: "Aktif Sayfa",
+            url: "",
+            domain: "",
+            selectedText: "",
+            pageText: "",
+            interactiveElements: [],
+          },
+        });
         return;
       }
+
+      const tabUrl = tabs[0].url || "";
+      if (
+        tabUrl.startsWith("chrome://") ||
+        tabUrl.startsWith("edge://") ||
+        tabUrl.startsWith("chrome-extension://") ||
+        tabUrl.startsWith("about:")
+      ) {
+        sendResponse({
+          success: true,
+          context: {
+            title: tabs[0].title || "Sistem Sayfası",
+            url: tabUrl,
+            domain: "chrome",
+            selectedText: "",
+            pageText: `[Sistem Sayfası] ${tabs[0].title || "Chrome Sayfası"}. Güvenlik sebebiyle sistem sayfalarının içerik taranması kısıtlıdır.`,
+            interactiveElements: [],
+          },
+        });
+        return;
+      }
+
       chrome.tabs.sendMessage(tabs[0].id, { type: "agent_get_context" }, (res) => {
         if (chrome.runtime.lastError || !res) {
           sendResponse({
-            success: false,
-            error: "Could not connect to active page content script.",
+            success: true,
             context: {
-              title: tabs[0].title || "Active Page",
-              url: tabs[0].url || "",
+              title: tabs[0].title || "Aktif Sayfa",
+              url: tabUrl,
               domain: "",
               selectedText: "",
-              pageText: "Page content could not be read directly. Please refresh page.",
+              pageText: `${tabs[0].title || "Aktif Sayfa"}. İçerik taranıyor veya sayfa yenilenmesi gerekebilir.`,
               interactiveElements: [],
             },
           });
@@ -445,5 +476,97 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       });
     });
     return true;
+  }
+
+  if (message.type === "group_active_tab") {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs && tabs[0] && tabs[0].id) {
+        const tabId = tabs[0].id;
+        chrome.tabs.group({ tabIds: [tabId] }, (groupId) => {
+          if (chrome.runtime.lastError) {
+            sendResponse({ success: false, error: chrome.runtime.lastError.message });
+            return;
+          }
+          chrome.tabGroups.update(groupId, {
+            title: "🤖 Life OS Agent",
+            color: "purple",
+          }, () => {
+            sendResponse({ success: true, groupId });
+          });
+        });
+      } else {
+        sendResponse({ success: false, error: "No active tab" });
+      }
+    });
+    return true;
+  }
+});
+
+// Setup Right-Click Context Menus
+function setupContextMenus(): void {
+  if (!chrome.contextMenus) return;
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "lifeos_copilot_root",
+      title: "🤖 Life OS Copilot",
+      contexts: ["page", "selection"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_open_copilot",
+      parentId: "lifeos_copilot_root",
+      title: "🚀 Life OS Yan Panelini Aç",
+      contexts: ["page", "selection"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_summarize_page",
+      parentId: "lifeos_copilot_root",
+      title: "📝 Sayfayı Özetle",
+      contexts: ["page"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_translate_page",
+      parentId: "lifeos_copilot_root",
+      title: "🔤 Sayfayı Türkçe'ye Çevir",
+      contexts: ["page"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_analyze_selection",
+      parentId: "lifeos_copilot_root",
+      title: "💬 Seçili Metni Analiz Et / Çevir",
+      contexts: ["selection"],
+    });
+  });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  setupContextMenus();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  setupContextMenus();
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (tab && tab.id) {
+    chrome.sidePanel.open({ tabId: tab.id });
+
+    let autoPrompt = "";
+    if (info.menuItemId === "lifeos_summarize_page") {
+      autoPrompt = "Bu sayfayı 3 ana maddede özetle.";
+    } else if (info.menuItemId === "lifeos_translate_page") {
+      autoPrompt = "Bu sayfanın içeriğini Türkçe'ye çevir ve anlaşılır bir özet sun.";
+    } else if (info.menuItemId === "lifeos_analyze_selection" && info.selectionText) {
+      autoPrompt = `Şu seçili metni analiz et ve anlaşılır Türkçe açıklamasını yap:\n"${info.selectionText}"`;
+    }
+
+    if (autoPrompt) {
+      setTimeout(() => {
+        chrome.runtime.sendMessage({ type: "copilot_auto_prompt", prompt: autoPrompt });
+      }, 600);
+    }
   }
 });

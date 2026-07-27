@@ -6,7 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel"],
+  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel", "tabGroups", "contextMenus"],
   "side_panel": {
     "default_path": "sidepanel.html"
   },
@@ -38,10 +38,19 @@
     "default_popup": "popup.html",
     "default_title": "Life OS - Pomodoro"
   },
+  "commands": {
+    "_execute_side_panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Life OS Web Copilot Yan Panelini Aç/Kapat"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js", "youtubeCompanion.js"],
+      "js": ["content.js"],
       "run_at": "document_start"
     }
   ],

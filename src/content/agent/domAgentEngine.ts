@@ -221,4 +221,24 @@ export function initDomAgentEngine(): void {
       return true;
     }
   });
+
+  // Global webpage shortcut listener for Alt+S or Ctrl+Shift+E
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
+    const isAltS = e.altKey && (e.key === "s" || e.key === "S" || e.key === "ş" || e.key === "Ş");
+    const isCtrlShiftE = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "e" || e.key === "E");
+
+    if (isAltS || isCtrlShiftE) {
+      const activeEl = document.activeElement;
+      // Do not trigger if user is typing in an input or textarea
+      if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA" || (activeEl as HTMLElement).isContentEditable)) {
+        return;
+      }
+      try {
+        if (!chrome.runtime?.id) return;
+        chrome.runtime.sendMessage({ type: "open_sidepanel" });
+      } catch {
+        // Extension context invalidated on extension reload
+      }
+    }
+  });
 }

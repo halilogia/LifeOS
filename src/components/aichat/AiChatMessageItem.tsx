@@ -3,6 +3,8 @@
  * AI sohbet mesaj balonu ve katlanabilir düşünme süreci (Thinking Process) bileşeni.
  */
 
+import { useState } from "preact/hooks";
+
 export interface MessageItemData {
   sender: "user" | "bot";
   text: string;
@@ -38,6 +40,23 @@ function IconInfoCircle() {
   );
 }
 
+function IconCopy() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  );
+}
+
+function IconCheck() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
 export function AiChatMessageItem({
   message,
   index,
@@ -47,6 +66,14 @@ export function AiChatMessageItem({
   onToggleThinking,
 }: AiChatMessageItemProps) {
   const isUser = message.sender === "user";
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!message.text) return;
+    navigator.clipboard.writeText(message.text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className={`message-bubble-wrapper ${message.sender}`}>
@@ -103,7 +130,34 @@ export function AiChatMessageItem({
           </div>
         )}
         <p className="msg-text">{message.text}</p>
-        <span className="msg-time">{message.time}</span>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginTop: "4px" }}>
+          <span className="msg-time">{message.time}</span>
+          {!isUser && (
+            <button
+              onClick={handleCopy}
+              title={copied ? (lang === "tr" ? "Kopyalandı!" : "Copied!") : (lang === "tr" ? "Kopyala" : "Copy")}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: copied ? "#10b981" : "var(--text-secondary)",
+                cursor: "pointer",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                fontSize: "0.7rem",
+                opacity: 0.8,
+                transition: "all 0.2s ease",
+              }}
+            >
+              {copied ? <IconCheck /> : <IconCopy />}
+              <span style={{ fontSize: "0.68rem" }}>
+                {copied ? (lang === "tr" ? "Kopyalandı" : "Copied") : (lang === "tr" ? "Kopyala" : "Copy")}
+              </span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
