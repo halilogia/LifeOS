@@ -31,7 +31,6 @@ const DEFAULT_ORDER = [
   "detox",
   "free-games",
   "bist",
-  "halka-arz",
 ];
 
 export function Sidebar({
@@ -173,7 +172,7 @@ export function Sidebar({
           (lang === "tr" ? "Ücretsiz Oyunlar" : "Free Games")
         );
       case "bist":
-        return "BIST Borsa OS";
+        return lang === "tr" ? "BIST & Halka Arz OS" : "BIST & IPOs OS";
       case "halka-arz":
         return (
           t.view_halka_arz ||

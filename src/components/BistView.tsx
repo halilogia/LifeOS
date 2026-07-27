@@ -1,7 +1,7 @@
 /**
  * BistView.tsx
- * Midas Tarzı BIST Borsa OS ve Portföy Yönetim Ekranı.
- * Canlı Hisse Arama, Portföy Takibi, Kural Motoru, AI Özeti ve KAP Bildirimleri.
+ * Midas Tarzı BIST Borsa OS, Halka Arz Takvimi ve Portföy Yönetim Ekranı.
+ * Canlı Hisse Arama, Halka Arz Takibi, Portföy Takibi, Kural Motoru, AI Özeti ve KAP Bildirimleri.
  */
 
 import { useState, useEffect, useCallback } from "preact/hooks";
@@ -32,6 +32,7 @@ import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js
 import { StockAiReportTab } from "@/components/stock/StockAiReportTab.js";
 import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
+import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {
   lang: Language;
@@ -39,7 +40,7 @@ interface BistViewProps {
 
 const stockRepository = new ChromeStorageStockRepository();
 
-export function BistView({ lang: _lang }: BistViewProps) {
+export function BistView({ lang }: BistViewProps) {
   const [activeTab, setActiveTab] = useState<BistTabId>("portfolio");
 
   // Portfolio & Rules states
@@ -102,15 +103,13 @@ export function BistView({ lang: _lang }: BistViewProps) {
           savedRules,
         );
         if (evalResult.alerts.length > 0) {
-          for (const alert of evalResult.alerts) {
-            await stockRepository.addAlertLog(alert);
-          }
-          const updatedLogs = await stockRepository.getAlertLogs();
+          const updatedLogs = [...evalResult.alerts, ...savedLogs];
           setAlertLogs(updatedLogs);
+          await stockRepository.saveAlertLogs(updatedLogs);
         }
       }
-    } catch (e) {
-      console.error("BistView load error:", e);
+    } catch (err) {
+      console.error("BistView loadData error:", err);
     } finally {
       setLoading(false);
     }
@@ -118,64 +117,82 @@ export function BistView({ lang: _lang }: BistViewProps) {
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 30000);
+    const interval = setInterval(loadData, 30000); // 30s live quote polling
     return () => clearInterval(interval);
   }, [loadData]);
 
   // Handlers
-  const handleSaveStock = async (item: Omit<StockPortfolioItem, "id">) => {
-    const newItem: StockPortfolioItem = {
-      ...item,
-      id: `stock-${Date.now()}`,
+  const handleSaveStock = async (itemData: Omit<StockPortfolioItem, "id">) => {
+    const fullItem: StockPortfolioItem = {
+      id: (itemData as any).id || `stock-${Date.now()}`,
+      ...itemData,
     };
-    const updated = [newItem, ...portfolio];
+    const existingIdx = portfolio.findIndex(
+      (p) => p.symbol.toUpperCase() === fullItem.symbol.toUpperCase(),
+    );
+    let updated: StockPortfolioItem[];
+    if (existingIdx >= 0) {
+      updated = [...portfolio];
+      updated[existingIdx] = fullItem;
+    } else {
+      updated = [...portfolio, fullItem];
+    }
     setPortfolio(updated);
     await stockRepository.savePortfolio(updated);
+    setShowAddModal(false);
     loadData();
   };
 
-  const handleDeleteStock = async (id: string) => {
-    const updated = portfolio.filter((p) => p.id !== id);
+  const handleDeleteStock = async (symbol: string) => {
+    const updated = portfolio.filter(
+      (p) => p.symbol.toUpperCase() !== symbol.toUpperCase(),
+    );
     setPortfolio(updated);
     await stockRepository.savePortfolio(updated);
   };
 
-  const handleSaveRule = async (rule: Omit<StockRule, "id" | "createdAt">) => {
-    const newRule: StockRule = {
-      ...rule,
-      id: `rule-${Date.now()}`,
-      createdAt: new Date().toISOString(),
+  const handleSaveRule = async (
+    ruleData: Omit<StockRule, "id" | "createdAt">,
+  ) => {
+    const fullRule: StockRule = {
+      id: (ruleData as any).id || `rule-${Date.now()}`,
+      createdAt: (ruleData as any).createdAt || new Date().toISOString(),
+      ...ruleData,
     };
-    const updated = [newRule, ...rules];
+    const existingIdx = rules.findIndex((r) => r.id === fullRule.id);
+    let updated: StockRule[];
+    if (existingIdx >= 0) {
+      updated = [...rules];
+      updated[existingIdx] = fullRule;
+    } else {
+      updated = [...rules, fullRule];
+    }
     setRules(updated);
     await stockRepository.saveRules(updated);
+    setRuleModalSymbol(null);
   };
 
   const handleClearAlertLogs = async () => {
-    await stockRepository.saveAlertLogs([]);
     setAlertLogs([]);
+    await stockRepository.saveAlertLogs([]);
   };
 
-  // Quick add from search results
-  const handleQuickAddStock = (symbolClean: string) => {
-    setAddModalPrefill(symbolClean);
+  const handleQuickAddStock = (symbol: string) => {
+    setAddModalPrefill(symbol);
     setShowAddModal(true);
   };
 
-  // Build quote map for calculations
-  const quoteMap = new Map<string, StockQuote>();
-  for (const q of quotes) {
-    quoteMap.set(q.symbol.replace(/\.IS$/, "").toUpperCase(), q);
-  }
+  const quoteMap = new Map<string, StockQuote>(
+    quotes.map((q) => [q.symbol.toUpperCase(), q]),
+  );
 
-  // Metrics
+  // Portfolio Total calculations
   let totalPortfolioValue = 0;
   let totalPortfolioCost = 0;
   let dailyProfitLossTotal = 0;
 
   for (const item of portfolio) {
-    const sym = item.symbol.replace(/\.IS$/, "").toUpperCase();
-    const q = quoteMap.get(sym);
+    const q = quoteMap.get(item.symbol.toUpperCase());
     const price = q ? q.price : item.buyPrice;
     const itemVal = price * item.lotCount;
     const itemCost = item.buyPrice * item.lotCount;
@@ -243,6 +260,8 @@ export function BistView({ lang: _lang }: BistViewProps) {
           />
         </>
       )}
+
+      {activeTab === "halka-arz" && <HalkaArzView lang={lang} />}
 
       {activeTab === "ai-report" && (
         <StockAiReportTab portfolio={portfolio} quotes={quotes} />

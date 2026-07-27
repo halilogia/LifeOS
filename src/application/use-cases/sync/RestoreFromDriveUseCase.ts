@@ -1,6 +1,6 @@
 /**
  * RestoreFromDriveUseCase
- * Application use case for restoring all data from Google Drive backup.
+ * Application use case for restoring all data (including sidebarOrder) from Google Drive backup.
  */
 
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
@@ -34,6 +34,11 @@ export class RestoreFromDriveUseCase {
       if (!restored) {
         return { restored: false };
       }
+
+      // Save all restored keys (including sidebarOrder) directly to chrome.storage.sync
+      await new Promise<void>((resolve) => {
+        chrome.storage.sync.set(restored, () => resolve());
+      });
 
       // Restore data to repositories if available
       if (restored.todos && this.todoRepo) {

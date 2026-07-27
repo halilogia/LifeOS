@@ -1,6 +1,6 @@
 /**
  * ExportImportUseCase
- * Application use case for exporting and importing todo data as JSON.
+ * Application use case for exporting and importing complete Life OS data (including sidebarOrder) as JSON.
  */
 
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
@@ -20,35 +20,47 @@ export class ExportImportUseCase {
   constructor(private todoRepo: ITodoRepository) {}
 
   async exportBackup(): Promise<ExportResult> {
-    const dataList = await this.todoRepo.getAll();
-    const json = JSON.stringify(dataList, null, 2);
+    const syncData = await new Promise<Record<string, unknown>>((resolve) => {
+      chrome.storage.sync.get(null, (res) => resolve(res || {}));
+    });
+    const json = JSON.stringify(syncData, null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const dateStr = new Date().toISOString().slice(0, 10);
     return {
       blob,
-      filename: `zentodo-backup-${dateStr}.json`,
+      filename: `lifeos-full-backup-${dateStr}.json`,
     };
   }
 
   async importBackup(jsonString: string): Promise<ImportResult> {
     try {
       const parsed = JSON.parse(jsonString);
-      if (!Array.isArray(parsed)) {
-        return { success: false, error: "Invalid format: expected an array" };
+
+      // 1. Support legacy array format (just list of todos)
+      if (Array.isArray(parsed)) {
+        const valid = parsed.every(
+          (item: unknown) =>
+            typeof item === "object" && item !== null && "text" in item,
+        );
+        if (!valid) {
+          return { success: false, error: "Invalid todo format" };
+        }
+        await this.todoRepo.saveAll(parsed as Todo[]);
+        return { success: true };
       }
 
-      // Basic validation: each item should have at least a text field
-      const valid = parsed.every(
-        (item: unknown) =>
-          typeof item === "object" && item !== null && "text" in item,
-      );
-
-      if (!valid) {
-        return { success: false, error: "Invalid todo format" };
+      // 2. Support full object backup format (including sidebarOrder & settings)
+      if (typeof parsed === "object" && parsed !== null) {
+        await new Promise<void>((resolve) => {
+          chrome.storage.sync.set(parsed, () => resolve());
+        });
+        if (parsed.todos && Array.isArray(parsed.todos)) {
+          await this.todoRepo.saveAll(parsed.todos as Todo[]);
+        }
+        return { success: true };
       }
 
-      await this.todoRepo.saveAll(parsed as Todo[]);
-      return { success: true };
+      return { success: false, error: "Invalid backup file format" };
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
       return { success: false, error: errMsg };
