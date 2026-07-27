@@ -11,6 +11,8 @@ interface KpssNetEstimationCardProps {
   getSubjectNets: (subKey: string) => { net: number; max: number };
   labels: Record<string, string>;
   subjectsList: string[];
+  selectedSubject?: string;
+  onSelectSubject?: (subKey: string) => void;
 }
 
 export function KpssNetEstimationCard({
@@ -24,6 +26,8 @@ export function KpssNetEstimationCard({
   getSubjectNets,
   labels,
   subjectsList,
+  selectedSubject,
+  onSelectSubject,
 }: KpssNetEstimationCardProps) {
   const isNetMode = goalType === "net";
   const activeTarget = isNetMode ? targetNet : targetScore;
@@ -216,10 +220,10 @@ export function KpssNetEstimationCard({
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 >
-                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                  <polyline points="17 6 23 6 23 12"></polyline>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
-                {lang === "tr" ? "Tahmini P3 Puanı:" : "Estimated P3 Score:"}
+                {lang === "tr" ? "Tahmini KPSS Puanı:" : "Estimated Score:"}
               </span>
               <span
                 style={{
@@ -228,20 +232,20 @@ export function KpssNetEstimationCard({
                   color: isTargetAchieved ? "#10b981" : "white",
                 }}
               >
-                {estimatedScore} Puan {isTargetAchieved && "👑"}
+                ~{estimatedScore} Puan {isTargetAchieved && "👑"}
               </span>
             </>
           )}
         </div>
 
-        {/* Target Progress Bar */}
+        {/* Progress Bar Container */}
         <div
           style={{
-            flex: 1,
+            flex: "1",
+            minWidth: "220px",
             display: "flex",
             flexDirection: "column",
             gap: "6px",
-            minWidth: "200px",
             marginLeft: "auto",
           }}
         >
@@ -250,11 +254,11 @@ export function KpssNetEstimationCard({
               display: "flex",
               justifyContent: "space-between",
               fontSize: "0.75rem",
-              fontWeight: "600",
+              fontWeight: "700",
             }}
           >
             <span style={{ color: "var(--text-secondary)" }}>
-              {lang === "tr" ? "Hedef İlerleme" : "Target Progress"}
+              {lang === "tr" ? "Hedef İlerleme" : "Goal Progress"}
             </span>
             <span
               style={{
@@ -301,7 +305,7 @@ export function KpssNetEstimationCard({
         </div>
       </div>
 
-      {/* Subject level breakdown */}
+      {/* Subject level breakdown (Clickable Subject Cards) */}
       <div
         style={{
           display: "grid",
@@ -312,28 +316,53 @@ export function KpssNetEstimationCard({
       >
         {subjectsList.map((subKey) => {
           const { net, max } = getSubjectNets(subKey);
-          const percentage = max > 0 ? Math.round((net / max) * 100) : 0;
+          const percent = max > 0 ? Math.round((net / max) * 100) : 0;
+          const isSelected = selectedSubject === subKey;
+
           return (
             <div
               key={subKey}
+              onClick={() => onSelectSubject?.(subKey)}
+              title={
+                lang === "tr"
+                  ? `${labels[subKey] || subKey} dersinin konularını aşağıda göster`
+                  : `Show topics for ${labels[subKey] || subKey}`
+              }
               style={{
-                background: "rgba(255, 255, 255, 0.02)",
-                border: "1px solid var(--card-border)",
+                background: isSelected
+                  ? "rgba(124, 58, 237, 0.14)"
+                  : "rgba(255, 255, 255, 0.02)",
+                border: isSelected
+                  ? "1.5px solid var(--accent-color)"
+                  : "1px solid var(--card-border)",
+                boxShadow: isSelected
+                  ? "0 0 14px rgba(124, 58, 237, 0.3)"
+                  : "none",
                 borderRadius: "10px",
                 padding: "10px 12px",
                 display: "flex",
                 flexDirection: "column",
                 gap: "6px",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
               }}
             >
               <span
                 style={{
                   fontSize: "0.75rem",
-                  color: "var(--text-secondary)",
-                  fontWeight: "600",
+                  color: isSelected ? "white" : "var(--text-secondary)",
+                  fontWeight: isSelected ? "700" : "600",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                {labels[subKey] || subKey}
+                <span>{labels[subKey] || subKey}</span>
+                {isSelected && (
+                  <span style={{ fontSize: "0.65rem", color: "var(--accent-color)", fontWeight: "800" }}>
+                    ✓ Seçili
+                  </span>
+                )}
               </span>
               <div
                 style={{
@@ -367,7 +396,7 @@ export function KpssNetEstimationCard({
                     fontWeight: "700",
                   }}
                 >
-                  %{percentage}
+                  %{percent}
                 </span>
               </div>
               <div
@@ -381,7 +410,7 @@ export function KpssNetEstimationCard({
                 <div
                   style={{
                     height: "100%",
-                    width: `${percentage}%`,
+                    width: `${percent}%`,
                     background: "var(--accent-color)",
                     borderRadius: "2px",
                   }}

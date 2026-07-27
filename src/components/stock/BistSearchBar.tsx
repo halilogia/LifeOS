@@ -82,11 +82,11 @@ export function BistSearchBar({
   const qClean = searchQuery.trim().toLowerCase();
   const searchResults = qClean
     ? POPULAR_BIST_STOCKS.filter(
-        (s) =>
-          s.symbol.toLowerCase().includes(qClean) ||
-          s.displayName.toLowerCase().includes(qClean) ||
-          s.sector.toLowerCase().includes(qClean),
-      )
+      (s) =>
+        s.symbol.toLowerCase().includes(qClean) ||
+        s.displayName.toLowerCase().includes(qClean) ||
+        s.sector.toLowerCase().includes(qClean),
+    )
     : [];
 
   return (
@@ -123,7 +123,7 @@ export function BistSearchBar({
             fontSize: "0.98rem",
             padding: "10px 14px",
           }}
-          placeholder="🔍 Tüm BIST Hisselerini Ara... (Örn: THYAO, Garanti, Aselsan, Şişecam)"
+          placeholder="Tüm BIST Hisselerini Ara..."
           value={searchQuery}
           onInput={(e) =>
             onSearchQueryChange((e.target as HTMLInputElement).value)
