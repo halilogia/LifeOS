@@ -11,24 +11,31 @@ import {
   prepareSRSQueue,
   createInitialSRSWord,
   type SRSWordWithInfo,
-} from "@/domain/services/SrsService.js";
-import {
   type ReviewQuality,
   type WordReviewData,
 } from "@/domain/services/SrsService.js";
 import {
   calculateKpssCountdown,
   calculateEstimatedCompletionTime,
+  getSubjectNets as getSubjectNets_logic,
+  getOverallNets as getOverallNets_logic,
 } from "@/domain/services/KpssCalculatorService.js";
-import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 import {
   fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
   QuizQuestion,
 } from "@/services/kpssAiService.js";
+
+// Domain Constants & Quiz Service
 import {
-  getSubjectNets as getSubjectNets_logic,
-  getOverallNets as getOverallNets_logic,
-} from "@/domain/services/KpssCalculatorService.js";
+  SUBJECT_NAMES,
+  subjectsList,
+  KPSS_TARGET_DATE,
+} from "@/domain/constants/kpssConstants.js";
+import {
+  getLocalQuestionsForTopic,
+  getPastExamQuestions,
+  KpssPastQuiz,
+} from "@/services/kpssQuizService.js";
 
 // Extracted Presentational Sub-components
 import { KpssHeaderBar } from "@/components/kpss/KpssHeaderBar.js";
@@ -52,80 +59,6 @@ interface KpssViewProps {
   targetNet: number;
   targetScore: number;
 }
-
-const getLocalQuestionsForTopic = (
-  subjectKey: string,
-  topicName: string,
-): QuizQuestion[] => {
-  const aggregated: QuizQuestion[] = [];
-  Object.values(KPSS_YEARLY_DATA).forEach((yearData) => {
-    const list = yearData[subjectKey];
-    if (Array.isArray(list)) {
-      list.forEach((q: any) => {
-        if (q.topic === topicName) {
-          aggregated.push(q);
-        }
-      });
-    }
-  });
-  return aggregated;
-};
-
-interface KpssPastQuiz {
-  subject: string;
-  topic: string;
-  score: number;
-  questions: QuizQuestion[];
-  selectedAnswers: number[];
-  date: string;
-}
-
-const SUBJECT_NAMES: Record<string, Record<string, string>> = {
-  tr: {
-    turkce: "Türkçe",
-    matematik: "Matematik",
-    geometri: "Geometri",
-    tarih: "Tarih",
-    cografya: "Coğrafya",
-    vatandaslik: "Vatandaşlık",
-    progress_text: "tamamlandı",
-    chart_empty: "Henüz veri yok",
-    stats_title: "Günlük İlerleme",
-    stat_questions: "Soru Sayısı",
-    stat_subject: "Ders",
-    save: "Kaydet",
-    reset: "Sıfırla",
-    reset_confirm: "Tüm KPSS çalışma verileriniz silinecektir. Emin misiniz?",
-    details_title: "Konu Detayı",
-  },
-  en: {
-    turkce: "Turkish",
-    matematik: "Mathematics",
-    geometri: "Geometry",
-    tarih: "History",
-    cografya: "Geography",
-    vatandaslik: "Citizenship",
-    progress_text: "completed",
-    chart_empty: "No data yet",
-    stats_title: "Daily Progress",
-    stat_questions: "Question Count",
-    stat_subject: "Subject",
-    save: "Save",
-    reset: "Reset",
-    reset_confirm:
-      "All your KPSS study statistics will be deleted. Are you sure?",
-    details_title: "Topic Detail",
-  },
-};
-
-const subjectsList = [
-  "turkce",
-  "matematik",
-  "geometri",
-  "tarih",
-  "cografya",
-  "vatandaslik",
-];
 
 export function KpssView({
   lang,
@@ -200,9 +133,6 @@ export function KpssView({
     "normal",
   );
 
-  // Target date: September 6, 2026 10:15
-  const kpssTargetDate = new Date("2026-09-06T10:15:00").getTime();
-
   const loadKpssSrsQueue = async () => {
     setSrsLoading(true);
     try {
@@ -253,9 +183,7 @@ export function KpssView({
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
     const reviewData = srsQueue[srsIndex];
-    if (!reviewData) {
-      return;
-    }
+    if (!reviewData) return;
 
     const outcome = calculateSM2(reviewData, quality, new Date());
 
@@ -274,7 +202,6 @@ export function KpssView({
       chrome.storage.sync.set({ kpssSrsProgress: progress }, r),
     );
 
-    // Fade animation transition
     setSrsFadeState("slide-out");
     setTimeout(() => {
       setSrsIndex((prev) => prev + 1);
@@ -334,7 +261,7 @@ export function KpssView({
 
     const updateCountdown = () => {
       const now = Date.now();
-      setKpssTimeLeft(calculateKpssCountdown(kpssTargetDate, now, lang));
+      setKpssTimeLeft(calculateKpssCountdown(KPSS_TARGET_DATE, now, lang));
       setEstimatedTimeLeft(
         calculateEstimatedCompletionTime(remaining, now, lang),
       );
@@ -558,39 +485,7 @@ export function KpssView({
   };
 
   const handleStartPastExam = (year: string, subject: string) => {
-    let questions: QuizQuestion[] = [];
-
-    if (year === "karma") {
-      Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
-        const yearData = KPSS_YEARLY_DATA[y];
-        if (subject === "all") {
-          Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) {
-              questions.push(...list);
-            }
-          });
-        } else {
-          const list = yearData[subject];
-          if (Array.isArray(list)) {
-            questions.push(...list);
-          }
-        }
-      });
-      questions = [...questions].sort(() => Math.random() - 0.5);
-    } else {
-      const yearData = KPSS_YEARLY_DATA[year];
-      if (yearData) {
-        if (subject === "all") {
-          Object.values(yearData).forEach((list: any) => {
-            if (Array.isArray(list)) {
-              questions.push(...list);
-            }
-          });
-        } else {
-          questions = yearData[subject] || [];
-        }
-      }
-    }
+    const questions = getPastExamQuestions(year, subject);
 
     if (questions.length === 0) {
       setQuizError(
@@ -744,7 +639,7 @@ export function KpssView({
               targetNet={targetNet}
               targetScore={targetScore}
               kpssProgress={kpssProgress}
-              kpssTargetDate={kpssTargetDate}
+              kpssTargetDate={KPSS_TARGET_DATE}
             />
 
             <KpssNetEstimationCard
