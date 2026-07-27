@@ -20,69 +20,111 @@ export interface StockQuote {
   error?: boolean;
 }
 
-// ── Popüler BIST hisseleri ──────────────────────────────────────────────────
-export const POPULAR_BIST_STOCKS: {
+export interface BISTSearchResult {
   symbol: string;
-  displayName: string;
-  sector: string;
-}[] = [
-  { symbol: "THYAO.IS", displayName: "Türk Hava Yolları", sector: "Havacılık" },
-  { symbol: "AKBNK.IS", displayName: "Akbank", sector: "Bankacılık" },
-  { symbol: "GARAN.IS", displayName: "Garanti BBVA", sector: "Bankacılık" },
-  { symbol: "EREGL.IS", displayName: "Ereğli Demir Çelik", sector: "Metal" },
-  { symbol: "KCHOL.IS", displayName: "Koç Holding", sector: "Holding" },
-  { symbol: "SASA.IS", displayName: "Sasa Polyester", sector: "Kimya" },
-  { symbol: "TUPRS.IS", displayName: "Tüpraş", sector: "Enerji" },
-  { symbol: "BIMAS.IS", displayName: "BİM Mağazalar", sector: "Perakende" },
-  { symbol: "ASELS.IS", displayName: "Aselsan", sector: "Savunma" },
-  { symbol: "FROTO.IS", displayName: "Ford Otosan", sector: "Otomotiv" },
-  {
-    symbol: "PGSUS.IS",
-    displayName: "Pegasus Hava Yolları",
-    sector: "Havacılık",
-  },
-  { symbol: "ISCTR.IS", displayName: "İş Bankası C", sector: "Bankacılık" },
-  { symbol: "SAHOL.IS", displayName: "Sabancı Holding", sector: "Holding" },
-  { symbol: "TCELL.IS", displayName: "Turkcell", sector: "Telekom" },
-  { symbol: "SISE.IS", displayName: "Şişecam", sector: "Cam & Sanayi" },
-  {
-    symbol: "YKBNK.IS",
-    displayName: "Yapı Kredi Bankası",
-    sector: "Bankacılık",
-  },
-  { symbol: "HEKTS.IS", displayName: "Hektaş", sector: "Tarım & Kimya" },
-  { symbol: "SOKM.IS", displayName: "Şok Marketler", sector: "Perakende" },
-  { symbol: "VAKBN.IS", displayName: "VakıfBank", sector: "Bankacılık" },
-  { symbol: "HALKB.IS", displayName: "Halkbank", sector: "Bankacılık" },
-  { symbol: "DOAS.IS", displayName: "Doğuş Otomotiv", sector: "Otomotiv" },
-  { symbol: "ENKAI.IS", displayName: "Enka İnşaat", sector: "İnşaat" },
-  { symbol: "GUBRF.IS", displayName: "Gübre Fabrikaları", sector: "Kimya" },
-  { symbol: "OYAKC.IS", displayName: "Oyak Çimento", sector: "Çimento" },
-  { symbol: "KORDS.IS", displayName: "Kordsa Teknik", sector: "Tekstil" },
-  { symbol: "ALARK.IS", displayName: "Alarko Holding", sector: "Holding" },
-  { symbol: "ASTOR.IS", displayName: "Astor Enerji", sector: "Enerji" },
-  {
-    symbol: "KONTR.IS",
-    displayName: "Kontrolmatik Teknoloji",
-    sector: "Teknoloji",
-  },
-  { symbol: "REEDR.IS", displayName: "Reeder Teknoloji", sector: "Teknoloji" },
-  { symbol: "ODAS.IS", displayName: "Odaş Elektrik", sector: "Enerji" },
-  { symbol: "PETKM.IS", displayName: "Petkim", sector: "Petrokimya" },
-  { symbol: "MAVI.IS", displayName: "Mavi Giyim", sector: "Perakende" },
-  { symbol: "TAVHL.IS", displayName: "TAV Havalimanları", sector: "Havacılık" },
-  { symbol: "TOASO.IS", displayName: "Tofaş Oto", sector: "Otomotiv" },
-  { symbol: "EUPWR.IS", displayName: "Europower Enerji", sector: "Enerji" },
-  { symbol: "SMRTG.IS", displayName: "Smart Güneş Enerjisi", sector: "Enerji" },
-  { symbol: "MIATK.IS", displayName: "Mia Teknoloji", sector: "Teknoloji" },
-  { symbol: "BRSAN.IS", displayName: "Borusan Mannesmann", sector: "Metal" },
-  { symbol: "MHRGY.IS", displayName: "MHR Gayrimenkul", sector: "GYO" },
-  { symbol: "TABGD.IS", displayName: "TAB Gıda", sector: "Gıda" },
-  { symbol: "TARKM.IS", displayName: "Tarkim Bitki Koruma", sector: "Tarım" },
-  { symbol: "ENJSA.IS", displayName: "Enerjisa Enerji", sector: "Enerji" },
-  { symbol: "KCAER.IS", displayName: "Kocaer Çelik", sector: "Metal" },
-  { symbol: "TURSG.IS", displayName: "Türkiye Sigorta", sector: "Sigorta" },
+  cleanSymbol: string;
+  shortName: string;
+  longName: string;
+  sector?: string;
+  exchange: string;
+}
+
+// ── Default BIST Ticker symbols for live discovery (NO hardcoded names) ───
+export const POPULAR_BIST_TICKERS: string[] = [
+  "THYAO.IS",
+  "AKBNK.IS",
+  "GARAN.IS",
+  "EREGL.IS",
+  "KCHOL.IS",
+  "SASA.IS",
+  "TUPRS.IS",
+  "BIMAS.IS",
+  "ASELS.IS",
+  "FROTO.IS",
+  "PGSUS.IS",
+  "ISCTR.IS",
+  "SAHOL.IS",
+  "TCELL.IS",
+  "SISE.IS",
+  "YKBNK.IS",
+  "HEKTS.IS",
+  "SOKM.IS",
+  "VAKBN.IS",
+  "HALKB.IS",
+  "DOAS.IS",
+  "KRDMD.IS",
+  "ASTOR.IS",
+  "KONTR.IS",
+  "REEDR.IS",
+  "ODAS.IS",
+  "PETKM.IS",
+  "MAVI.IS",
+  "TAVHL.IS",
+  "TOASO.IS",
+  "EUPWR.IS",
+  "SMRTG.IS",
+  "MIATK.IS",
+  "BRSAN.IS",
+  "ENJSA.IS",
+  "KCAER.IS",
 ];
+
+/**
+ * Yahoo Finance Canlı Arama API'si.
+ * Hiçbir hisse adı veya bilgisi manuel yazılmaz, doğrudan Borsa İstanbul / Yahoo veritabanından çekilir.
+ */
+export async function searchBistStocks(query: string): Promise<BISTSearchResult[]> {
+  if (!query || query.trim().length === 0) return [];
+
+  try {
+    const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query.trim())}&quotesCount=15&newsCount=0`;
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        Accept: "application/json",
+      },
+      signal: AbortSignal.timeout(6000),
+    });
+
+    if (!res.ok) return [];
+
+    const json = await res.json();
+    const quotes = (json?.quotes as Array<{
+      symbol?: string;
+      shortname?: string;
+      longname?: string;
+      exchange?: string;
+      sector?: string;
+      industry?: string;
+    }>) || [];
+
+    // BIST (Borsa İstanbul - IST exchange veya .IS uzantılı) filtreleme
+    const bistQuotes = quotes.filter(
+      (q) =>
+        q.symbol &&
+        (q.exchange === "IST" ||
+          q.symbol.toUpperCase().endsWith(".IS") ||
+          q.exchange === "SE" ||
+          q.exchange === "TUR")
+    );
+
+    return bistQuotes.map((q) => {
+      const sym = (q.symbol || "").toUpperCase();
+      const cleanSym = sym.replace(/\.IS$/i, "");
+      return {
+        symbol: sym.endsWith(".IS") ? sym : `${sym}.IS`,
+        cleanSymbol: cleanSym,
+        shortName: q.shortname || q.longname || cleanSym,
+        longName: q.longname || q.shortname || cleanSym,
+        sector: q.sector || q.industry || "BIST",
+        exchange: q.exchange || "IST",
+      };
+    });
+  } catch (err) {
+    console.error("searchBistStocks error:", err);
+    return [];
+  }
+}
 
 const CACHE_KEY = "bistStockCache";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 dakika
@@ -122,8 +164,7 @@ async function setCache(data: StockQuote[]): Promise<void> {
 // ── Fetch single quote ────────────────────────────────────────────────────────
 
 async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
-  const displayMeta = POPULAR_BIST_STOCKS.find((s) => s.symbol === symbol);
-  const fallbackName = displayMeta?.displayName ?? symbol.replace(".IS", "");
+  const fallbackName = symbol.replace(".IS", "");
 
   try {
     const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d&includePrePost=false`;
@@ -200,7 +241,7 @@ export async function fetchStockQuote(symbol: string): Promise<StockQuote> {
 export async function fetchStockPrices(
   symbols?: string[],
 ): Promise<StockQuote[]> {
-  const targetSymbols = symbols ?? POPULAR_BIST_STOCKS.map((s) => s.symbol);
+  const targetSymbols = symbols ?? POPULAR_BIST_TICKERS;
 
   // Cache kontrolü (sadece tam liste için)
   if (!symbols) {

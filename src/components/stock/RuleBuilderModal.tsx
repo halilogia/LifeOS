@@ -38,8 +38,8 @@ export function RuleBuilderModal({
   onClose,
 }: RuleBuilderModalProps) {
   const [symbol, setSymbol] = useState<string>(initialSymbol.toUpperCase());
-  const [ruleType, setRuleType] = useState<StockRuleType>("RED_CANDLE");
-  const [targetValue, setTargetValue] = useState<number>(3);
+  const [ruleType, setRuleType] = useState<StockRuleType>("PRICE_ABOVE");
+  const [targetValue, setTargetValue] = useState<number>(100);
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
@@ -49,9 +49,13 @@ export function RuleBuilderModal({
     onSave({
       symbol: symbol.trim().toUpperCase(),
       ruleType,
-      targetValue: ["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(
-        ruleType,
-      )
+      targetValue: [
+        "PRICE_ABOVE",
+        "PRICE_BELOW",
+        "STOP_LOSS",
+        "TAKE_PROFIT",
+        "TRAILING_STOP",
+      ].includes(ruleType)
         ? targetValue
         : undefined,
       isActive: true,
@@ -63,7 +67,7 @@ export function RuleBuilderModal({
     <div className="stock-modal-overlay" onClick={onClose}>
       <div className="stock-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="stock-modal-header">
-          <div className="stock-modal-title">Otomatik Kural Ekle</div>
+          <div className="stock-modal-title">Fiyat Alarmı Ekle</div>
           <button
             style={{
               background: "none",
@@ -110,21 +114,25 @@ export function RuleBuilderModal({
           </div>
 
           <div className="stock-form-group">
-            <label className="stock-form-label">Kural Tipi</label>
+            <label className="stock-form-label">Alarm / Kural Tipi</label>
             <select
               className="stock-select"
               value={ruleType}
-              onChange={(e) =>
-                setRuleType(
-                  (e.target as HTMLSelectElement).value as StockRuleType,
-                )
-              }
+              onChange={(e) => {
+                const nextType = (e.target as HTMLSelectElement).value as StockRuleType;
+                setRuleType(nextType);
+                if (["PRICE_ABOVE", "PRICE_BELOW"].includes(nextType)) {
+                  setTargetValue(100);
+                } else if (["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(nextType)) {
+                  setTargetValue(5);
+                }
+              }}
             >
-              <option value="RED_CANDLE">
-                🔴 Kırmızı Mum (Günü Eksiye Geçerse Uyar)
+              <option value="PRICE_ABOVE">
+                🟢 Fiyat Belirtilen TL Üstüne Çıkınca Bildir (Örn: 100 TL Üstü)
               </option>
-              <option value="TAVAN_BREAK">
-                ⚡ Tavan Bozdu (%10 Altına Düşerse Uyar)
+              <option value="PRICE_BELOW">
+                🔻 Fiyat Belirtilen TL Altına İnince Bildir (Örn: 80 TL Altı)
               </option>
               <option value="STOP_LOSS">
                 📉 Stop-Loss (Maliyetin % X Altına Düşerse Uyar)
@@ -132,13 +140,37 @@ export function RuleBuilderModal({
               <option value="TAKE_PROFIT">
                 📈 Kar-Al (Maliyetin % X Üstüne Çıkarsa Uyar)
               </option>
+              <option value="RED_CANDLE">
+                🔴 Kırmızı Mum (Günü Eksiye Geçerse Uyar)
+              </option>
+              <option value="TAVAN_BREAK">
+                ⚡ Tavan Bozdu (%10 Altına Düşerse Uyar)
+              </option>
               <option value="TRAILING_STOP">
                 🎯 İzleyen Stop (Zirveden % X Düşüşte Uyar)
               </option>
             </select>
           </div>
 
-          {["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(ruleType) && (
+          {["PRICE_ABOVE", "PRICE_BELOW"].includes(ruleType) ? (
+            <div className="stock-form-group">
+              <label className="stock-form-label">Hedef Fiyat (TL)</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0.01"
+                className="stock-input"
+                placeholder="Örn: 150.00"
+                value={targetValue}
+                onInput={(e) =>
+                  setTargetValue(
+                    parseFloat((e.target as HTMLInputElement).value) || 0,
+                  )
+                }
+                required
+              />
+            </div>
+          ) : ["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(ruleType) ? (
             <div className="stock-form-group">
               <label className="stock-form-label">Yüzde Oranı (%)</label>
               <input
@@ -156,7 +188,7 @@ export function RuleBuilderModal({
                 required
               />
             </div>
-          )}
+          ) : null}
 
           <div
             style={{
@@ -174,7 +206,7 @@ export function RuleBuilderModal({
               İptal
             </button>
             <button type="submit" className="stock-btn stock-btn-primary">
-              Kuralı Kaydet
+              Alarmı Kaydet
             </button>
           </div>
         </form>

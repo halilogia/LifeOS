@@ -68,6 +68,38 @@ export function evaluateStockRules(
     const displayName = quote.shortName || sym;
 
     switch (rule.ruleType) {
+      case "PRICE_ABOVE": {
+        const targetPrice = rule.targetValue ?? 0;
+        if (targetPrice > 0 && quote.price >= targetPrice) {
+          alerts.push({
+            id: `alert-above-${sym}-${Date.now()}`,
+            symbol: sym,
+            ruleType: "PRICE_ABOVE",
+            triggerValue: quote.price,
+            message: `${displayName} (${sym}) hedef fiyatın üstüne çıktı! Hedef: ₺${targetPrice.toFixed(2)} | Anlık Fiyat: ₺${quote.price.toFixed(2)}`,
+            timestamp: nowIso,
+            isRead: false,
+          });
+        }
+        break;
+      }
+
+      case "PRICE_BELOW": {
+        const targetPrice = rule.targetValue ?? 0;
+        if (targetPrice > 0 && quote.price <= targetPrice) {
+          alerts.push({
+            id: `alert-below-${sym}-${Date.now()}`,
+            symbol: sym,
+            ruleType: "PRICE_BELOW",
+            triggerValue: quote.price,
+            message: `${displayName} (${sym}) hedef fiyatın altına indi! Hedef: ₺${targetPrice.toFixed(2)} | Anlık Fiyat: ₺${quote.price.toFixed(2)}`,
+            timestamp: nowIso,
+            isRead: false,
+          });
+        }
+        break;
+      }
+
       case "RED_CANDLE": {
         if (quote.changePercent < 0) {
           alerts.push({

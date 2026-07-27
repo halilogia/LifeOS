@@ -4,8 +4,6 @@
  * Clean Architecture - Utility Module.
  */
 
-import { POPULAR_BIST_STOCKS } from "@/services/bistService.js";
-
 export const monthsMap: Record<string, number> = {
   ocak: 1,
   şubat: 2,
@@ -59,15 +57,13 @@ export const BIST_ALIASES: Record<string, { symbol: string; displayName: string 
   işbank: { symbol: "ISCTR.IS", displayName: "İş Bankası C" },
 };
 
-// Dynamically populate aliases from POPULAR_BIST_STOCKS
-POPULAR_BIST_STOCKS.forEach((item) => {
-  const cleanSymbol = item.symbol.replace(".IS", "").toLowerCase();
-  const lowerName = item.displayName.toLowerCase();
+import { POPULAR_BIST_TICKERS } from "@/services/bistService.js";
+
+// Dynamically populate aliases from POPULAR_BIST_TICKERS
+POPULAR_BIST_TICKERS.forEach((ticker) => {
+  const cleanSymbol = ticker.replace(".IS", "").toLowerCase();
   if (!BIST_ALIASES[cleanSymbol]) {
-    BIST_ALIASES[cleanSymbol] = { symbol: item.symbol, displayName: item.displayName };
-  }
-  if (!BIST_ALIASES[lowerName]) {
-    BIST_ALIASES[lowerName] = { symbol: item.symbol, displayName: item.displayName };
+    BIST_ALIASES[cleanSymbol] = { symbol: ticker, displayName: cleanSymbol.toUpperCase() };
   }
 });
 

@@ -140,18 +140,18 @@ export function PortfolioSummaryCard({
         </div>
       </div>
 
-      {/* Aktif Otomatik Kurallar */}
+      {/* Aktif Alarmlar */}
       <div className="stock-summary-card">
         <div
           className="stock-card-label"
           style={{ display: "flex", alignItems: "center", gap: "6px" }}
         >
           <IconShield />
-          <span>Aktif Otomatik Kurallar</span>
+          <span>Aktif Alarmlar</span>
         </div>
-        <div className="stock-card-value">{activeRulesCount} Kural</div>
+        <div className="stock-card-value">{activeRulesCount} Alarm</div>
         <div className="stock-card-badge stock-badge-neutral">
-          7/24 Koruma Aktif
+          7/24 Koruma & Alarm Aktif
         </div>
       </div>
 

@@ -4,7 +4,7 @@
  */
 
 import { useState } from "preact/hooks";
-import { POPULAR_BIST_STOCKS } from "@/services/bistService.js";
+import { POPULAR_BIST_TICKERS } from "@/services/bistService.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 
 interface AddStockModalProps {
@@ -21,9 +21,9 @@ function IconX() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
@@ -57,12 +57,8 @@ export function AddStockModal({
       fullSym += ".IS";
     }
 
-    const matchedPopular = POPULAR_BIST_STOCKS.find(
-      (s) => s.symbol === fullSym,
-    );
     const finalName =
       displayName.trim() ||
-      matchedPopular?.displayName ||
       fullSym.replace(".IS", "");
 
     onSave({
@@ -109,9 +105,9 @@ export function AddStockModal({
                   setSelectedStock((e.target as HTMLSelectElement).value)
                 }
               >
-                {POPULAR_BIST_STOCKS.map((s) => (
-                  <option key={s.symbol} value={s.symbol}>
-                    {s.symbol.replace(".IS", "")} - {s.displayName} ({s.sector})
+                {POPULAR_BIST_TICKERS.map((sym) => (
+                  <option key={sym} value={sym}>
+                    {sym.replace(".IS", "")}
                   </option>
                 ))}
               </select>

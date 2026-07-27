@@ -5,7 +5,7 @@
  */
 
 import { useState } from "preact/hooks";
-import { POPULAR_BIST_STOCKS, StockQuote } from "@/services/bistService.js";
+import { POPULAR_BIST_TICKERS, StockQuote } from "@/services/bistService.js";
 import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
 
 interface BistKesfetTabProps {
@@ -16,18 +16,6 @@ interface BistKesfetTabProps {
   onOpenChart: (symbol: string) => void;
   onOpenAiModal: (symbol: string) => void;
 }
-
-const CATEGORIES = [
-  "Tümü",
-  "Havacılık",
-  "Bankacılık",
-  "Enerji",
-  "Teknoloji",
-  "Metal",
-  "Perakende",
-  "Holding",
-  "Savunma",
-];
 
 function IconPlus() {
   return (
@@ -89,22 +77,10 @@ export function BistKesfetTab({
   onOpenChart,
   onOpenAiModal,
 }: BistKesfetTabProps) {
-  const [selectedCategory, setSelectedCategory] = useState("Tümü");
-
-  const filteredStocks = POPULAR_BIST_STOCKS.filter((item) => {
-    const cleanSym = item.symbol.replace(".IS", "").toLowerCase();
-    const cleanName = item.displayName.toLowerCase();
+  const filteredTickers = POPULAR_BIST_TICKERS.filter((sym) => {
+    const cleanSym = sym.replace(".IS", "").toLowerCase();
     const queryLower = searchQuery.toLowerCase().trim();
-
-    const matchesQuery =
-      !queryLower ||
-      cleanSym.includes(queryLower) ||
-      cleanName.includes(queryLower);
-
-    const matchesCat =
-      selectedCategory === "Tümü" || item.sector === selectedCategory;
-
-    return matchesQuery && matchesCat;
+    return !queryLower || cleanSym.includes(queryLower);
   });
 
   return (
@@ -119,43 +95,6 @@ export function BistKesfetTab({
         onOpenAiModal={onOpenAiModal}
       />
 
-      {/* Sektör / Kategori Filtre Hapları */}
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          overflowX: "auto",
-          paddingBottom: "4px",
-        }}
-      >
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            style={{
-              padding: "6px 14px",
-              borderRadius: "20px",
-              fontSize: "0.78rem",
-              fontWeight: 600,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              border:
-                selectedCategory === cat
-                  ? "1px solid var(--accent-color)"
-                  : "1px solid rgba(255, 255, 255, 0.08)",
-              background:
-                selectedCategory === cat
-                  ? "rgba(139, 92, 246, 0.2)"
-                  : "rgba(255, 255, 255, 0.03)",
-              color: selectedCategory === cat ? "#c084fc" : "#94a3b8",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
       {/* Popüler Hisseler Izgara Görünümü */}
       <div
         style={{
@@ -164,17 +103,18 @@ export function BistKesfetTab({
           gap: "12px",
         }}
       >
-        {filteredStocks.map((stock) => {
-          const symClean = stock.symbol.replace(".IS", "");
-          const quote = quoteMap.get(stock.symbol.toUpperCase());
+        {filteredTickers.map((fullSym) => {
+          const symClean = fullSym.replace(".IS", "");
+          const quote = quoteMap.get(symClean) || quoteMap.get(fullSym);
 
           const price = quote ? quote.price : null;
           const changePercent = quote ? quote.changePercent : 0;
           const isUp = changePercent >= 0;
+          const companyName = quote?.shortName || `${symClean} Hissesi`;
 
           return (
             <div
-              key={stock.symbol}
+              key={fullSym}
               style={{
                 background: "rgba(15, 23, 42, 0.6)",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -221,7 +161,7 @@ export function BistKesfetTab({
                         borderRadius: "4px",
                       }}
                     >
-                      {stock.sector}
+                      BIST
                     </span>
                   </div>
                   <div
@@ -231,7 +171,7 @@ export function BistKesfetTab({
                       marginTop: "2px",
                     }}
                   >
-                    {stock.displayName}
+                    {companyName}
                   </div>
                 </div>
 

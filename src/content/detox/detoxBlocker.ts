@@ -180,7 +180,7 @@ export function initDetoxBlocker(): void {
       lastUrl = location.href;
       checkScreenTimeLimits();
     }
-  }, 500);
+  }, 2000);
 }
 
 function showTopWarningBanner(minutesLeft: number, lang: string, domain: string): void {

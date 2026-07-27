@@ -1,6 +1,5 @@
 import {
   StockQuote,
-  POPULAR_BIST_STOCKS,
   formatPrice,
   formatVolume,
   formatMarketCap,
@@ -13,9 +12,6 @@ interface StockCardProps {
 }
 
 export function StockCard({ quote, t: _t, onClick }: StockCardProps) {
-  const meta = POPULAR_BIST_STOCKS.find((s) => s.symbol === quote.symbol);
-  const sector = meta?.sector ?? "";
-
   const isPositive = quote.changePercent >= 0;
 
   return (
@@ -57,11 +53,6 @@ export function StockCard({ quote, t: _t, onClick }: StockCardProps) {
           <h4 style={{ margin: "6px 0 0", fontSize: "1rem", color: "#f8fafc" }}>
             {quote.shortName}
           </h4>
-          {sector && (
-            <div style={{ fontSize: "0.75rem", color: "#94a3b8" }}>
-              {sector}
-            </div>
-          )}
         </div>
         <span
           className={`stock-card-badge ${isPositive ? "stock-badge-positive" : "stock-badge-negative"}`}

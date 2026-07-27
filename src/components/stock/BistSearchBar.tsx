@@ -3,8 +3,10 @@
  * Midas tarzı canlı BIST hisse arama çubuğu ve arama sonuç kartları.
  */
 
+import { useState, useEffect } from "preact/hooks";
 import {
-  POPULAR_BIST_STOCKS,
+  searchBistStocks,
+  BISTSearchResult,
   StockQuote,
   formatPrice,
 } from "@/services/bistService.js";
@@ -26,9 +28,9 @@ function IconSearch() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <circle cx="11" cy="11" r="8" />
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -44,9 +46,9 @@ function IconPlus() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <line x1="12" y1="5" x2="12" y2="19" />
       <line x1="5" y1="12" x2="19" y2="12" />
@@ -62,9 +64,9 @@ function IconSparkles() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
     </svg>
@@ -79,15 +81,26 @@ export function BistSearchBar({
   onOpenChart,
   onOpenAiModal,
 }: BistSearchBarProps) {
-  const qClean = searchQuery.trim().toLowerCase();
-  const searchResults = qClean
-    ? POPULAR_BIST_STOCKS.filter(
-      (s) =>
-        s.symbol.toLowerCase().includes(qClean) ||
-        s.displayName.toLowerCase().includes(qClean) ||
-        s.sector.toLowerCase().includes(qClean),
-    )
-    : [];
+  const [liveResults, setLiveResults] = useState<BISTSearchResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const q = searchQuery.trim();
+    if (!q) {
+      setLiveResults([]);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      const res = await searchBistStocks(q);
+      setLiveResults(res);
+      setIsLoading(false);
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   return (
     <div
@@ -165,23 +178,126 @@ export function BistSearchBar({
               marginBottom: "4px",
             }}
           >
-            BIST HİSSE ARAMA SONUÇLARI ({searchResults.length})
+            CANLI BİST ARAMA SONUÇLARI ({liveResults.length})
           </div>
 
-          {searchResults.length === 0 ? (
+          {isLoading ? (
             <div
               style={{
-                color: "var(--text-muted, #64748b)",
-                padding: "12px",
+                color: "#818cf8",
+                padding: "16px",
                 textAlign: "center",
                 fontSize: "0.88rem",
               }}
             >
-              "{searchQuery}" aramanızla eşleşen BIST hissesi bulunamadı.
+              Borsa İstanbul canlı verileri aranıyor...
             </div>
+          ) : liveResults.length === 0 ? (
+            (() => {
+              const customSym = searchQuery.trim().toUpperCase();
+              const isValidTicker = /^[A-Z0-9]{3,7}$/.test(customSym);
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    padding: "12px",
+                    textAlign: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "var(--text-muted, #94a3b8)",
+                      fontSize: "0.88rem",
+                    }}
+                  >
+                    "{searchQuery}" aramasıyla eşleşen canlı BİST hissesi bulunamadı.
+                  </div>
+                  {isValidTicker && (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "10px 14px",
+                        borderRadius: "10px",
+                        background: "rgba(99, 102, 241, 0.08)",
+                        border: "1px dashed rgba(99, 102, 241, 0.4)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: "0.85rem",
+                            fontWeight: 800,
+                            padding: "4px 8px",
+                            borderRadius: "6px",
+                            background: "rgba(99, 102, 241, 0.25)",
+                            color: "#c084fc",
+                          }}
+                        >
+                          {customSym}
+                        </span>
+                        <div style={{ textAlign: "left" }}>
+                          <div
+                            style={{
+                              fontWeight: 700,
+                              color: "white",
+                              fontSize: "0.9rem",
+                            }}
+                          >
+                            {customSym} BIST Hissesi
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#94a3b8",
+                            }}
+                          >
+                            Borsa İstanbul
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", gap: "6px" }}>
+                        <button
+                          className="stock-btn stock-btn-primary"
+                          style={{ padding: "6px 12px", fontSize: "0.78rem" }}
+                          onClick={() => onQuickAddStock(customSym)}
+                        >
+                          <IconPlus />
+                          <span>+ Portföye Ekle</span>
+                        </button>
+                        <button
+                          className="stock-btn stock-btn-secondary"
+                          style={{ padding: "6px 10px", fontSize: "0.78rem" }}
+                          onClick={() => onOpenChart(customSym)}
+                        >
+                          Grafik
+                        </button>
+                        <button
+                          className="stock-btn stock-btn-ai"
+                          style={{ padding: "6px 10px", fontSize: "0.78rem" }}
+                          onClick={() => onOpenAiModal(customSym)}
+                        >
+                          <IconSparkles />
+                          <span>AI</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })()
           ) : (
-            searchResults.map((item) => {
-              const symClean = item.symbol.replace(/\.IS$/, "");
+            liveResults.map((item) => {
+              const symClean = item.cleanSymbol;
               const liveQ = quoteMap.get(symClean);
               const isPos = liveQ ? liveQ.changePercent >= 0 : true;
 
@@ -219,7 +335,7 @@ export function BistSearchBar({
                     >
                       {symClean}
                     </span>
-                    <div>
+                    <div style={{ textAlign: "left" }}>
                       <div
                         style={{
                           fontWeight: 600,
@@ -227,7 +343,7 @@ export function BistSearchBar({
                           fontSize: "0.92rem",
                         }}
                       >
-                        {item.displayName}
+                        {item.shortName}
                       </div>
                       <div
                         style={{
@@ -235,7 +351,7 @@ export function BistSearchBar({
                           color: "var(--text-secondary, #94a3b8)",
                         }}
                       >
-                        {item.sector}
+                        {item.sector || "BIST"}
                       </div>
                     </div>
                   </div>
