@@ -40,7 +40,7 @@ export const en = {
   calendar_title: "Calendar",
   view_prayer: "Prayer Times",
   view_todos: "My Focus (Task List)",
-  view_eisenhower: "Eisenhower Matrix",
+  view_eisenhower: "Kanban Board",
   day_mon: "Mon",
   day_tue: "Tue",
   day_wed: "Wed",

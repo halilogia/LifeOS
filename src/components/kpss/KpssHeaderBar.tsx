@@ -26,7 +26,7 @@ export function KpssHeaderBar({
       <div
         className="pomodoro-tab-header"
         style={{
-          marginBottom: "24px",
+          marginBottom: "0",
           display: "flex",
           justifyContent: "flex-start",
           gap: "10px",

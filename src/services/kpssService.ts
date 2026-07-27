@@ -635,6 +635,28 @@ export const kpssService = {
       ? Math.round((subjectProgress.length / totalTopics) * 100)
       : 0;
   },
+
+  /**
+   * Resets all KPSS related user statistics, progress, SRS data, and past quiz records.
+   */
+  async resetAllKpssData(): Promise<void> {
+    await new Promise<void>((resolve) => {
+      chrome.storage.sync.remove(
+        [
+          KPSS_PROGRESS_KEY,
+          KPSS_DAILY_STATS_KEY,
+          "kpssSrsProgress",
+          "kpssGoalType",
+          "kpssTargetNet",
+          "kpssTargetScore",
+        ],
+        () => resolve(),
+      );
+    });
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.remove(["kpss_past_quizzes"], () => resolve());
+    });
+  },
 };
 
 export interface KpssFlashcard {

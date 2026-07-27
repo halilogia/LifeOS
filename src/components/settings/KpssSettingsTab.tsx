@@ -9,6 +9,7 @@ interface KpssSettingsTabProps {
   onKpssGoalTypeChange: (type: "net" | "score") => void;
   onKpssTargetNetChange: (val: number) => void;
   onKpssTargetScoreChange: (val: number) => void;
+  onResetKpssData?: () => void;
 }
 
 export function KpssSettingsTab({
@@ -19,6 +20,7 @@ export function KpssSettingsTab({
   onKpssGoalTypeChange,
   onKpssTargetNetChange,
   onKpssTargetScoreChange,
+  onResetKpssData,
 }: KpssSettingsTabProps) {
   const t = getTranslation(lang);
   return (
@@ -243,6 +245,78 @@ export function KpssSettingsTab({
                 : "To score 80 Points in KPSS GK-GY, achieving around 70-75 Nets can be sufficient depending on average difficulty. Score and Net are not 1-to-1 equal due to standard deviation."}
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* Reset KPSS Data Section */}
+      <div className="settings-group">
+        <h3
+          style={{
+            margin: "0 0 12px 0",
+            fontSize: "0.85rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            color: "var(--text-secondary)",
+            opacity: 0.8,
+          }}
+        >
+          {lang === "tr" ? "Veri Sıfırlama" : "Data Reset"}
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            background: "rgba(255,255,255,0.01)",
+            border: "1px solid var(--card-border)",
+            borderRadius: "10px",
+            padding: "16px 14px",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "0.8rem",
+              color: "var(--text-secondary)",
+              margin: 0,
+              lineHeight: 1.4,
+            }}
+          >
+            {lang === "tr"
+              ? "Tüm KPSS konu tamamlama verilerinizi, günlük soru/video istatistiklerinizi, SRS tekrar kartlarınızı ve çıkmış sınav test geçmişinizi sıfırlar."
+              : "Resets all your KPSS topic progress, daily question/video stats, SRS flashcards, and past test quiz records."}
+          </p>
+          <button
+            type="button"
+            onClick={onResetKpssData}
+            style={{
+              alignSelf: "flex-start",
+              padding: "10px 16px",
+              background: "rgba(239, 68, 68, 0.12)",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
+              borderRadius: "8px",
+              color: "#ef4444",
+              fontWeight: "600",
+              fontSize: "0.82rem",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background =
+                "rgba(239, 68, 68, 0.25)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor =
+                "rgba(239, 68, 68, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background =
+                "rgba(239, 68, 68, 0.12)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor =
+                "rgba(239, 68, 68, 0.3)";
+            }}
+          >
+            {lang === "tr"
+              ? "Tüm KPSS Verilerini Sıfırla"
+              : "Reset All KPSS Data"}
+          </button>
         </div>
       </div>
     </div>

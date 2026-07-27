@@ -136,7 +136,7 @@ export function Sidebar({
       case "eisenhower":
         return (
           t.view_eisenhower ||
-          (lang === "tr" ? "Kanban Matrisi" : "Kanban Board")
+          (lang === "tr" ? "Kanban" : "Kanban Board")
         );
       case "ai-chat":
         return (

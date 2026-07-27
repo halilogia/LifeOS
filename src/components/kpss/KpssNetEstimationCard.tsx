@@ -42,7 +42,6 @@ export function KpssNetEstimationCard({
     <div
       className="mini-tool-card"
       style={{
-        marginTop: "16px",
         padding: "20px",
         display: "flex",
         flexDirection: "column",

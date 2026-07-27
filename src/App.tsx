@@ -7,6 +7,7 @@ import { useSettings } from "@/presentation/hooks/useSettings.js";
 import { useUI } from "@/presentation/hooks/useUI.js";
 import { useAppInit } from "@/presentation/hooks/useAppInit.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
+import { kpssService } from "@/services/kpssService.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
 import { ListView } from "@/components/ListView.js";
@@ -207,6 +208,21 @@ export function App() {
     showConfirm(confirmMsg, async () => {
       await handleClearAllData();
       window.location.reload();
+    });
+  };
+
+  const handleResetKpssDataConfirm = () => {
+    const confirmMsg =
+      lang === "tr"
+        ? "Tüm KPSS çalışma verileriniz, test sonuçlarınız ve istatistikleriniz sıfırlanacaktır. Emin misiniz?"
+        : "All your KPSS study progress, test results, and statistics will be reset. Are you sure?";
+    showConfirm(confirmMsg, async () => {
+      await kpssService.resetAllKpssData();
+      showAlert(
+        lang === "tr"
+          ? "KPSS verileri başarıyla sıfırlandı!"
+          : "KPSS data has been successfully reset!",
+      );
     });
   };
 
@@ -435,6 +451,7 @@ export function App() {
         onKpssGoalTypeChange={handleKpssGoalTypeChange}
         onKpssTargetNetChange={handleKpssTargetNetChange}
         onKpssTargetScoreChange={handleKpssTargetScoreChange}
+        onResetKpssData={handleResetKpssDataConfirm}
         detoxLimits={detoxLimits}
         onDetoxLimitsChange={handleDetoxLimitsChange}
       />

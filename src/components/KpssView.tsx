@@ -714,21 +714,6 @@ export function KpssView({
               remainingCount={remainingCount}
             />
 
-            <KpssNetEstimationCard
-              lang={lang}
-              goalType={goalType}
-              targetNet={targetNet}
-              targetScore={targetScore}
-              overallNet={overallNet}
-              maxNet={maxNet}
-              estimatedScore={estimatedScore}
-              getSubjectNets={getSubjectNets}
-              labels={labels}
-              subjectsList={subjectsList}
-              selectedSubject={currentSubject}
-              onSelectSubject={setCurrentSubject}
-            />
-
             <KpssAutoPlannerCard
               lang={lang}
               kpssProgress={kpssProgress}
@@ -760,6 +745,21 @@ export function KpssView({
               targetScore={targetScore}
               kpssProgress={kpssProgress}
               kpssTargetDate={kpssTargetDate}
+            />
+
+            <KpssNetEstimationCard
+              lang={lang}
+              goalType={goalType}
+              targetNet={targetNet}
+              targetScore={targetScore}
+              overallNet={overallNet}
+              maxNet={maxNet}
+              estimatedScore={estimatedScore}
+              getSubjectNets={getSubjectNets}
+              labels={labels}
+              subjectsList={subjectsList}
+              selectedSubject={currentSubject}
+              onSelectSubject={setCurrentSubject}
             />
 
             <KpssTopicList

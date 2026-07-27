@@ -535,7 +535,7 @@ export function KpssDailyStatsCard({
   ]);
 
   return (
-    <div className="kpss-daily-stats-section" style={{ marginTop: "28px" }}>
+    <div className="kpss-daily-stats-section">
       <div className="kpss-daily-input">
         <h3>{labels.stats_title}</h3>
         <div className="kpss-stats-inputs">
