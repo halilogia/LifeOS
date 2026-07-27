@@ -65,7 +65,6 @@ export function useSettings() {
     setFreeGamesNotificationsEnabledState(config.freeGamesNotificationsEnabled);
     setCalendarNotificationsEnabledState(config.calendarNotificationsEnabled);
     setPomoBlockEnabledState(config.pomoBlockEnabled);
-    setUniversalInfoBoxEnabledState(config.universalInfoBoxEnabled);
     setUniversalInfoBoxHotkeyState(config.universalInfoBoxHotkey);
 
     // AI settings

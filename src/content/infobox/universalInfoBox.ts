@@ -49,14 +49,20 @@ function handleTextSelection(e: MouseEvent, hotkey: string): void {
       return;
     }
 
-    chrome.runtime.sendMessage(
-      { type: "translate_text", text: text },
-      (response: { translation?: string }) => {
-        if (response && response.translation) {
-          showTranslationBubble(response.translation, selection);
-        }
-      },
-    );
+    try {
+      if (!chrome.runtime?.id) return;
+      chrome.runtime.sendMessage(
+        { type: "translate_text", text: text },
+        (response: { translation?: string }) => {
+          if (chrome.runtime.lastError) return;
+          if (response && response.translation) {
+            showTranslationBubble(response.translation, selection);
+          }
+        },
+      );
+    } catch {
+      // Extension context invalidated on extension reload
+    }
   }, 10);
 }
 

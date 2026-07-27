@@ -29,11 +29,29 @@ export function SidePanelApp() {
 
     refreshPageContext();
 
-    // Listen for tab activation changes to refresh context
-    const tabListener = () => refreshPageContext();
-    chrome.tabs.onActivated.addListener(tabListener);
+    // Listen for tab activation and URL update changes to auto-sync context
+    const tabActivatedListener = () => refreshPageContext();
+    const tabUpdatedListener = (_tabId: number, changeInfo: { status?: string; title?: string; url?: string }) => {
+      if (changeInfo.status === "complete" || changeInfo.title || changeInfo.url) {
+        refreshPageContext();
+      }
+    };
+
+    chrome.tabs.onActivated.addListener(tabActivatedListener);
+    chrome.tabs.onUpdated.addListener(tabUpdatedListener);
+
+    // Listen for automatic prompts from right-click context menus
+    const copilotAutoPromptListener = (msg: any) => {
+      if (msg && msg.type === "copilot_auto_prompt" && msg.prompt) {
+        handleSendMessage(msg.prompt);
+      }
+    };
+    chrome.runtime.onMessage.addListener(copilotAutoPromptListener);
+
     return () => {
-      chrome.tabs.onActivated.removeListener(tabListener);
+      chrome.tabs.onActivated.removeListener(tabActivatedListener);
+      chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
+      chrome.runtime.onMessage.removeListener(copilotAutoPromptListener);
     };
   }, []);
 
@@ -42,23 +60,72 @@ export function SidePanelApp() {
   }, [messages, agentStatus]);
 
   const refreshPageContext = () => {
-    setAgentStatus(lang === "tr" ? "Sayfa taranıyor..." : "Reading page...");
-    chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (response) => {
+    setAgentStatus(lang === "tr" ? "Sayfa taranıyor..." : "Scanning page...");
+    try {
+      chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (response) => {
+        setAgentStatus(null);
+        if (chrome.runtime.lastError || !response) {
+          return;
+        }
+        if (response.context) {
+          setPageContext(response.context);
+        }
+      });
+    } catch {
       setAgentStatus(null);
-      if (response && response.context) {
-        setPageContext(response.context);
-      } else {
-        setPageContext({
-          title: "Aktif Sayfa",
-          url: "",
-          domain: "",
-          selectedText: "",
-          pageText: "",
-          interactiveElements: [],
-        });
+    }
+  };
+
+  const handleGroupTab = () => {
+    chrome.runtime.sendMessage({ type: "group_active_tab" }, (res) => {
+      if (res && res.success) {
+        setAgentStatus(lang === "tr" ? "Sekme gruplandı (🤖 Life OS Agent)" : "Tab grouped (🤖 Life OS Agent)");
+        setTimeout(() => setAgentStatus(null), 2500);
       }
     });
   };
+
+function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      title={copied ? (lang === "tr" ? "Kopyalandı!" : "Copied!") : (lang === "tr" ? "Metni Kopyala" : "Copy text")}
+      style={{
+        background: "transparent",
+        border: "none",
+        color: copied ? "#10b981" : "rgba(255, 255, 255, 0.5)",
+        cursor: "pointer",
+        padding: "2px 4px",
+        borderRadius: "4px",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "4px",
+        fontSize: "0.68rem",
+        transition: "all 0.2s ease",
+      }}
+    >
+      {copied ? (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ) : (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+      )}
+      <span>{copied ? (lang === "tr" ? "Kopyalandı" : "Copied") : (lang === "tr" ? "Kopyala" : "Copy")}</span>
+    </button>
+  );
+}
 
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
@@ -74,27 +141,42 @@ export function SidePanelApp() {
     setMessages((prev) => [...prev, userMsg]);
     if (!promptOverride) setInputText("");
     setIsProcessing(true);
-    setAgentStatus(lang === "tr" ? "Yapay zeka yanıtlıyor..." : "AI Copilot is thinking...");
+    setAgentStatus(lang === "tr" ? "Yapay zeka yanıtlıyor..." : "AI Copilot thinking...");
+
+    // On-the-fly fetch active tab context if empty
+    let activeCtx = pageContext;
+    if (!activeCtx || !activeCtx.pageText || activeCtx.pageText.length === 0) {
+      activeCtx = await new Promise((resolve) => {
+        chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (res) => {
+          if (res && res.context) {
+            setPageContext(res.context);
+            resolve(res.context);
+          } else {
+            resolve(pageContext);
+          }
+        });
+      });
+    }
 
     // Fetch AI config settings
     chrome.storage.sync.get(
-      ["aiApiKey", "aiProvider", "aiModel", "aiEndpoint"],
+      ["geminiApiKey", "aiApiKey", "aiProvider", "aiModel", "aiEndpoint"],
       async (syncRes) => {
-        const apiKey = (syncRes.aiApiKey as string) || "";
+        const apiKey = (syncRes.geminiApiKey as string) || (syncRes.aiApiKey as string) || "";
         const provider = (syncRes.aiProvider as string) || "gemini";
-        const model = (syncRes.aiModel as string) || (provider === "gemini" ? "gemini-1.5-flash" : "google/gemini-2.5-flash");
-        const endpoint = (syncRes.aiEndpoint as string) || "https://generativelanguage.googleapis.com/v1beta";
+        const model = (syncRes.aiModel as string) || (provider === "gemini" ? "gemini-1.5-flash" : "free");
+        const rawEndpoint = (syncRes.aiEndpoint as string) || "http://localhost:20128/v1";
 
-        const currentContextText = pageContext ? pageContext.pageText : "";
-        const currentTitle = pageContext ? pageContext.title : "";
-        const currentUrl = pageContext ? pageContext.url : "";
+        const currentContextText = activeCtx ? activeCtx.pageText : "";
+        const currentTitle = activeCtx ? activeCtx.title : "";
+        const currentUrl = activeCtx ? activeCtx.url : "";
 
-        const systemPrompt = `You are Life OS Web Agent & Copilot. You are embedded in Chrome Side Panel for active tab:
+        const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
 Title: "${currentTitle}"
 URL: "${currentUrl}"
 
-Active Page Main Text Excerpt:
-"${currentContextText.slice(0, 3000)}"
+Active Page Content Excerpt:
+"${currentContextText.slice(0, 5000)}"
 
 If the user asks an action like "click button", "fill form", or "scroll", return your final JSON action code block at the end in this format:
 \`\`\`json
@@ -111,7 +193,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
         try {
           let responseText = "";
 
-          if (provider === "gemini" || !provider) {
+          if (provider === "gemini") {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
             const reqBody = {
               contents: [
@@ -138,14 +220,20 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             const data = await resp.json();
             responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
           } else {
-            // OpenRouter or custom endpoint
-            const targetEndpoint = endpoint.endsWith("/") ? `${endpoint}chat/completions` : `${endpoint}/chat/completions`;
+            // 9Router, OpenRouter, Custom OpenAI-compatible endpoints
+            const baseUrl = rawEndpoint.replace(/\/+$/, "");
+            const targetEndpoint = baseUrl.endsWith("/chat/completions") ? baseUrl : `${baseUrl}/chat/completions`;
+            
+            const reqHeaders: Record<string, string> = {
+              "Content-Type": "application/json",
+            };
+            if (apiKey) {
+              reqHeaders["Authorization"] = `Bearer ${apiKey}`;
+            }
+
             const resp = await fetch(targetEndpoint, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${apiKey}`,
-              },
+              headers: reqHeaders,
               body: JSON.stringify({
                 model: model,
                 messages: [
@@ -159,8 +247,26 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
               throw new Error(`API returned status ${resp.status}`);
             }
 
-            const data = await resp.json();
-            responseText = data.choices?.[0]?.message?.content || "No response received.";
+            const rawBody = await resp.text();
+            let data: any = {};
+            try {
+              data = JSON.parse(rawBody);
+            } catch {
+              const jsonBlockMatch = rawBody.match(/\{[\s\S]*\}/);
+              if (jsonBlockMatch) {
+                try {
+                  data = JSON.parse(jsonBlockMatch[0]);
+                } catch {
+                  data = {};
+                }
+              }
+            }
+
+            responseText =
+              data.choices?.[0]?.message?.content ||
+              data.choices?.[0]?.text ||
+              (typeof data === "string" ? data : rawBody.slice(0, 2000)) ||
+              "No response received.";
           }
 
           // Check for JSON action code block in response
@@ -173,7 +279,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
               chrome.runtime.sendMessage({ type: "execute_agent_action", payload: actionPayload }, (actRes) => {
                 setAgentStatus(null);
                 if (actRes && actRes.success) {
-                  responseText += `\n\n✅ *${lang === "tr" ? "Aksiyon başarıyla gerçekleştirildi" : "Action executed successfully"} (${actionPayload.actionType})*`;
+                  responseText += `\n\n✓ *${lang === "tr" ? "Aksiyon başarıyla gerçekleştirildi" : "Action executed successfully"} (${actionPayload.actionType})*`;
                 }
               });
             } catch {
@@ -207,14 +313,18 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
     );
   };
 
-  const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract") => {
+  const isYoutube = pageContext?.url?.includes("youtube.com/watch");
+
+  const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract" | "yt_summarize") => {
     let prompt = "";
-    if (type === "summarize") {
+    if (type === "yt_summarize") {
+      prompt = lang === "tr" ? "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar." : "Summarize this YouTube video transcript and extract key timestamps.";
+    } else if (type === "summarize") {
       prompt = lang === "tr" ? "Bu sayfayı 3 ana maddede özetle." : "Summarize this page in 3 key bullet points.";
     } else if (type === "key_takeaways") {
       prompt = lang === "tr" ? "Bu sayfadaki en önemli çıkarımları ve eylem maddelerini yaz." : "Extract key takeaways and action items from this page.";
     } else if (type === "ask") {
-      prompt = lang === "tr" ? "Bu sayfa ne anlatıyor ve kimin için faydalı?" : "What is this page about and who is it for?";
+      prompt = lang === "tr" ? "Bu sayfa ne anlatıyor ve ne amaçla yazılmıştır?" : "What is this page about and what is its goal?";
     } else if (type === "extract") {
       prompt = lang === "tr" ? "Bu sayfadaki önemli veri veya listeleri çıkar." : "Extract important structured data or lists from this page.";
     }
@@ -226,11 +336,40 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
       {/* Header Bar */}
       <header className="sidepanel-header">
         <div className="sidepanel-header-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="9" y1="3" x2="9" y2="21"></line>
           </svg>
           <span>Life OS Web Copilot</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <button
+            onClick={handleGroupTab}
+            title={lang === "tr" ? "Bu sekmeyi Life OS Agent grubuna ekle" : "Group tab under Life OS Agent"}
+            style={{
+              background: "rgba(139, 92, 246, 0.15)",
+              border: "1px solid rgba(139, 92, 246, 0.3)",
+              borderRadius: "6px",
+              color: "white",
+              fontSize: "0.7rem",
+              fontWeight: "600",
+              padding: "3px 8px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span>{lang === "tr" ? "Grupla" : "Group"}</span>
+          </button>
+          <span className="sidepanel-header-badge">AI Agent</span>
         </div>
       </header>
 
@@ -238,7 +377,13 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
       <div className="sidepanel-tab-status">
         <div className="sidepanel-tab-info">
           <span className="sidepanel-tab-title">{pageContext?.title || (lang === "tr" ? "Sayfa Yükleniyor..." : "Loading page...")}</span>
-          <span className="sidepanel-tab-url">{pageContext?.domain || pageContext?.url || ""}</span>
+          <span className="sidepanel-tab-url">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+            </svg>
+            {pageContext?.domain || pageContext?.url || ""}
+          </span>
         </div>
         <button
           className="sidepanel-refresh-btn"
@@ -252,35 +397,85 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
         </button>
       </div>
 
-      {/* Quick Action Chips */}
+      {/* Quick Action Chips with SVG Icons */}
       <div className="sidepanel-chips">
+        {isYoutube && (
+          <button
+            className="sidepanel-chip"
+            onClick={() => handleChipClick("yt_summarize")}
+            style={{
+              background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+              color: "#ffffff",
+              borderColor: "#8b5cf6",
+            }}
+          >
+            <span>🎬</span>
+            <span>{lang === "tr" ? "Videoyu Özetle" : "Summarize Video"}</span>
+          </button>
+        )}
+
         <button className="sidepanel-chip" onClick={() => handleChipClick("summarize")}>
-          📝 {lang === "tr" ? "Özetle" : "Summarize"}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>{lang === "tr" ? "Özetle" : "Summarize"}</span>
         </button>
+
         <button className="sidepanel-chip" onClick={() => handleChipClick("key_takeaways")}>
-          💡 {lang === "tr" ? "Ana Fikirler" : "Key Takeaways"}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+          <span>{lang === "tr" ? "Ana Fikirler" : "Key Takeaways"}</span>
         </button>
+
         <button className="sidepanel-chip" onClick={() => handleChipClick("extract")}>
-          📊 {lang === "tr" ? "Veri Çıkar" : "Extract Data"}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>{lang === "tr" ? "Veri Çıkar" : "Extract Data"}</span>
         </button>
+
         <button className="sidepanel-chip" onClick={() => handleChipClick("ask")}>
-          ❓ {lang === "tr" ? "Soru Sor" : "Ask"}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>{lang === "tr" ? "Soru Sor" : "Ask"}</span>
         </button>
       </div>
 
       {/* Messages Feed */}
       <div className="sidepanel-messages">
         {messages.length === 0 ? (
-          <div style={{ padding: "20px 10px", textAlign: "center", color: "var(--text-secondary)", fontSize: "0.82rem" }}>
-            🤖 {lang === "tr" ? "Web Copilot aktif. Sayfayı özetlemek veya aksiyon almak için üstteki butonları kullanın veya soru yazın." : "Web Copilot is ready. Use action chips or type a prompt to interact with this page."}
+          <div style={{ padding: "24px 12px", textAlign: "center", color: "var(--text-secondary)", fontSize: "0.8rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.8">
+              <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"></path>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+            <span>{lang === "tr" ? "Web Copilot aktif. Sayfayı özetlemek veya soru sormak için butonları kullanın." : "Web Copilot is ready. Use action buttons or ask questions about this page."}</span>
           </div>
         ) : (
           messages.map((msg) => (
             <div key={msg.id} className={`sidepanel-msg ${msg.role}`}>
-              <div>{msg.content}</div>
-              <span style={{ fontSize: "0.65rem", opacity: 0.6, alignSelf: msg.role === "user" ? "flex-end" : "flex-start", marginTop: "4px" }}>
-                {msg.timestamp}
-              </span>
+              <div style={{ whiteSpace: "pre-wrap" }}>{msg.content}</div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginTop: "4px" }}>
+                <span style={{ fontSize: "0.62rem", opacity: 0.6 }}>
+                  {msg.timestamp}
+                </span>
+                {msg.role === "assistant" && (
+                  <SidePanelCopyBtn text={msg.content} lang={lang} />
+                )}
+              </div>
             </div>
           ))
         )}
@@ -306,7 +501,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage();
           }}
-          placeholder={lang === "tr" ? "Sayfa hakkında soru yazın veya aksiyon isteyin..." : "Ask a question about this page..."}
+          placeholder={lang === "tr" ? "Sayfa hakkında soru yazın..." : "Ask a question..."}
           disabled={isProcessing}
         />
         <button className="sidepanel-send-btn" onClick={() => handleSendMessage()} disabled={isProcessing}>
