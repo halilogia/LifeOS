@@ -50,6 +50,7 @@ export interface SettingsDrawerProps {
   onKpssGoalTypeChange: (type: "net" | "score") => void;
   onKpssTargetNetChange: (val: number) => void;
   onKpssTargetScoreChange: (val: number) => void;
+  onResetKpssData?: () => void;
   detoxLimits: Record<string, number>;
   onDetoxLimitsChange: (limits: Record<string, number>) => void;
   initialTab?: "general" | "kpss" | "detox" | "ai" | "sync";
@@ -92,6 +93,7 @@ export function SettingsDrawer({
   onKpssGoalTypeChange,
   onKpssTargetNetChange,
   onKpssTargetScoreChange,
+  onResetKpssData,
   detoxLimits,
   onDetoxLimitsChange,
   initialTab,
@@ -184,6 +186,7 @@ export function SettingsDrawer({
             onKpssGoalTypeChange={onKpssGoalTypeChange}
             onKpssTargetNetChange={onKpssTargetNetChange}
             onKpssTargetScoreChange={onKpssTargetScoreChange}
+            onResetKpssData={onResetKpssData}
           />
         )}
 

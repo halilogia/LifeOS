@@ -40,7 +40,7 @@ export const tr = {
   calendar_title: "Takvim",
   view_prayer: "Namaz Vakitleri",
   view_todos: "Odağım (Görev Listesi)",
-  view_eisenhower: "Eisenhower Matrisi",
+  view_eisenhower: "Kanban",
   day_mon: "Pzt",
   day_tue: "Sal",
   day_wed: "Çar",
