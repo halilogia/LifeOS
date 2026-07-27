@@ -4,6 +4,8 @@
  */
 
 export type StockRuleType =
+  | "PRICE_ABOVE" // Fiyat Belirtilen TL Üstüne Çıkınca
+  | "PRICE_BELOW" // Fiyat Belirtilen TL Altına İnince
   | "RED_CANDLE" // Mum kırmızıya döndüğünde (Değişim % < 0)
   | "TAVAN_BREAK" // Tavan bozulduğunda (%10 altına sarkma)
   | "STOP_LOSS" // Sabit Zarar Durdur (Örn: Maliyetin %3 altı)

@@ -194,12 +194,12 @@ export function BistView({ lang }: BistViewProps) {
 
   for (const item of portfolio) {
     const q = quoteMap.get(item.symbol.toUpperCase());
-    const price = q ? q.price : item.buyPrice;
+    const price = q && q.price > 0 ? q.price : item.buyPrice;
     const itemVal = price * item.lotCount;
     const itemCost = item.buyPrice * item.lotCount;
     totalPortfolioValue += itemVal;
     totalPortfolioCost += itemCost;
-    if (q) {
+    if (q && q.price > 0) {
       dailyProfitLossTotal += q.change * item.lotCount;
     }
   }
@@ -245,6 +245,7 @@ export function BistView({ lang }: BistViewProps) {
             onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
             onDeleteItem={handleDeleteStock}
             onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
+            onOpenChart={(sym) => setSelectedChartSymbol(sym)}
           />
         </>
       )}
