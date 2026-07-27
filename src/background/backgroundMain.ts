@@ -1,20 +1,24 @@
-let currentDomain = null;
-let domainStartTime = Date.now();
-let screenTimeBuffer = {};
+/**
+ * backgroundMain.ts
+ * Background Service Worker for Life OS Chrome Extension.
+ * Clean Architecture - Service Worker Domain Entry Point.
+ */
 
-function saveBufferToStorage() {
+let currentDomain: string | null = null;
+let domainStartTime: number = Date.now();
+let screenTimeBuffer: Record<string, number> = {};
+
+function saveBufferToStorage(): void {
   const activeDomain = currentDomain;
   const now = Date.now();
 
-  // Save current active domain elapsed seconds since startTime
   if (activeDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
     if (elapsed > 0) {
-      // Capped to a maximum of 12 seconds to filter out periods when computer is in sleep or locked
       const normalElapsed = Math.min(elapsed, 12);
       screenTimeBuffer[activeDomain] =
         (screenTimeBuffer[activeDomain] || 0) + normalElapsed;
-      domainStartTime = now; // reset start time to prevent double counting
+      domainStartTime = now;
     }
   }
 
@@ -22,11 +26,10 @@ function saveBufferToStorage() {
     return;
   }
 
-  // Svenska (sv) locale returns YYYY-MM-DD format reliably
   const todayStr = new Date().toLocaleDateString("sv");
 
   chrome.storage.local.get(["screen_time_stats"], (res) => {
-    const stats = res.screen_time_stats || {};
+    const stats = (res.screen_time_stats as Record<string, Record<string, number>>) || {};
     if (!stats[todayStr]) {
       stats[todayStr] = {};
     }
@@ -39,13 +42,12 @@ function saveBufferToStorage() {
     }
 
     chrome.storage.local.set({ screen_time_stats: stats }, () => {
-      // Clear buffered values on success
       screenTimeBuffer = {};
     });
   });
 }
 
-function handleDomainChange(newDomain) {
+function handleDomainChange(newDomain: string | null): void {
   const now = Date.now();
   if (currentDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
@@ -60,7 +62,7 @@ function handleDomainChange(newDomain) {
   domainStartTime = now;
 }
 
-function updateActiveTab() {
+function updateActiveTab(): void {
   chrome.windows.getLastFocused({ populate: false }, (window) => {
     if (!window.focused) {
       handleDomainChange(null);
@@ -101,17 +103,17 @@ chrome.windows.onFocusChanged.addListener(updateActiveTab);
 setInterval(saveBufferToStorage, 10000);
 
 // --- Steam, Epic Games, GOG Free Giveaway Checking System ---
-async function checkFreeGames() {
+async function checkFreeGames(): Promise<void> {
   chrome.storage.sync.get(
     ["freeGamesNotificationsEnabled", "lang"],
     async (syncRes) => {
       const notificationsEnabled =
-        syncRes.freeGamesNotificationsEnabled ?? true;
+        (syncRes.freeGamesNotificationsEnabled as boolean) ?? true;
       if (!notificationsEnabled) {
         return;
       }
 
-      const lang = syncRes.lang || "tr";
+      const lang = (syncRes.lang as string) || "tr";
 
       try {
         const response = await fetch(
@@ -125,7 +127,6 @@ async function checkFreeGames() {
           return;
         }
 
-        // Filter for Steam, Epic Games, GOG only
         const targetPlatforms = ["steam", "epic games store", "gog"];
         const filtered = giveaways.filter((item) => {
           if (!item.platforms) {
@@ -140,17 +141,16 @@ async function checkFreeGames() {
         }
 
         chrome.storage.local.get(["notified_giveaway_ids"], (localRes) => {
-          const notifiedIds = localRes.notified_giveaway_ids || [];
+          const notifiedIds = (localRes.notified_giveaway_ids as number[]) || [];
           const newGiveaways = filtered.filter(
-            (item) => !notifiedIds.includes(item.id),
+            (item: { id: number }) => !notifiedIds.includes(item.id),
           );
 
           if (newGiveaways.length === 0) {
             return;
           }
 
-          // Notify user for each new giveaway
-          newGiveaways.forEach((item) => {
+          newGiveaways.forEach((item: { id: number; title: string; worth: string }) => {
             const title =
               lang === "tr"
                 ? `Ücretsiz Oyun: ${item.title}`
@@ -169,10 +169,9 @@ async function checkFreeGames() {
             });
           });
 
-          // Save updated notified IDs list
           const updatedIds = [
             ...notifiedIds,
-            ...newGiveaways.map((item) => item.id),
+            ...newGiveaways.map((item: { id: number }) => item.id),
           ];
           chrome.storage.local.set({ notified_giveaway_ids: updatedIds });
         });
@@ -183,19 +182,18 @@ async function checkFreeGames() {
   );
 }
 
-async function checkCalendarTasks() {
+async function checkCalendarTasks(): Promise<void> {
   chrome.storage.sync.get(
     ["calendarNotificationsEnabled", "lang", "todos"],
     (syncRes) => {
-      const notificationsEnabled = syncRes.calendarNotificationsEnabled ?? true;
+      const notificationsEnabled = (syncRes.calendarNotificationsEnabled as boolean) ?? true;
       if (!notificationsEnabled) {
         return;
       }
 
-      const lang = syncRes.lang || "tr";
-      const todos = syncRes.todos || [];
+      const lang = (syncRes.lang as string) || "tr";
+      const todos = (syncRes.todos as Array<{ completed: boolean; dueDate?: string }>) || [];
 
-      // sv locale returns YYYY-MM-DD format reliably
       const todayStr = new Date().toLocaleDateString("sv");
       const dueToday = todos.filter(
         (t) => !t.completed && t.dueDate === todayStr,
@@ -250,26 +248,29 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-function isBistMarketOpen() {
+function isBistMarketOpen(): boolean {
   const date = new Date();
   const utcOffset = date.getTimezoneOffset() * 60000;
   const trtDate = new Date(date.getTime() + utcOffset + 3 * 3600000);
   const day = trtDate.getDay();
-  if (day === 0 || day === 6) {return false;} // Hafta sonu kapalı
+  if (day === 0 || day === 6) {
+    return false;
+  }
   const timeInMinutes = trtDate.getHours() * 60 + trtDate.getMinutes();
   return timeInMinutes >= 9 * 60 + 55 && timeInMinutes <= 18 * 60 + 15;
 }
 
-async function checkBistStockRules() {
+async function checkBistStockRules(): Promise<void> {
   if (!isBistMarketOpen()) {
-    // Piyasa kapalıyken tarama yapma — batarya ve network tasarrufu
     return;
   }
 
   chrome.storage.sync.get(["stockPortfolio", "stockRules"], async (res) => {
-    const portfolio = res.stockPortfolio || [];
-    const rules = res.stockRules || [];
-    if (portfolio.length === 0 || rules.length === 0) {return;}
+    const portfolio = (res.stockPortfolio as Array<{ symbol: string }>) || [];
+    const rules = (res.stockRules as Array<{ symbol: string; isActive: boolean; ruleType: string }>) || [];
+    if (portfolio.length === 0 || rules.length === 0) {
+      return;
+    }
 
     const symbols = Array.from(new Set(portfolio.map((p) => p.symbol)));
     for (const sym of symbols) {
@@ -279,10 +280,14 @@ async function checkBistStockRules() {
           : `${sym.toUpperCase()}.IS`;
         const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=1d&range=1d`;
         const resp = await fetch(url);
-        if (!resp.ok) {continue;}
+        if (!resp.ok) {
+          continue;
+        }
         const json = await resp.json();
         const meta = json?.chart?.result?.[0]?.meta;
-        if (!meta) {continue;}
+        if (!meta) {
+          continue;
+        }
 
         const price = meta.regularMarketPrice ?? 0;
         const prev = meta.previousClose ?? price;
@@ -299,7 +304,6 @@ async function checkBistStockRules() {
           let title = "BIST Alarm Uyarısı";
           let message = "";
 
-          // Sessiz Kriz Alarmları (%4+ sert düşüş veya Tavan bozma)
           if (r.ruleType === "RED_CANDLE" && changePct <= -4.0) {
             triggered = true;
             title = `⚠️ KRİZ UYARISI: ${normSym} Sert Düşüşte!`;
@@ -327,7 +331,6 @@ async function checkBistStockRules() {
   });
 }
 
-// Listen for notification clicks to open the giveaway claim links or newtab page
 chrome.notifications.onClicked.addListener((notificationId) => {
   if (notificationId === "calendar_tasks_due_today") {
     chrome.tabs.create({ url: "chrome://newtab" });
@@ -342,7 +345,7 @@ chrome.notifications.onClicked.addListener((notificationId) => {
 });
 
 // Translation Relay Service
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === "translate_text") {
     chrome.storage.sync.get(["lang"], async (res) => {
       const targetLang = res.lang === "tr" ? "tr" : "en";
@@ -358,7 +361,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         let data = await response.json();
         if (data && data[0]) {
           const detectedLang = data[2];
-          // Auto-swap target language if input language matches target language
           if (detectedLang === targetLang) {
             const swappedLang = targetLang === "tr" ? "en" : "tr";
             url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
@@ -371,7 +373,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           }
 
           if (data && data[0]) {
-            const translated = data[0].map((item) => item[0]).join("");
+            const translated = data[0].map((item: string[]) => item[0]).join("");
             sendResponse({ translation: translated });
           } else {
             sendResponse({ error: "Invalid translation response" });
@@ -379,11 +381,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         } else {
           sendResponse({ error: "Invalid translation response" });
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Translation query failed:", err);
-        sendResponse({ error: err.message });
+        sendResponse({ error: err?.message || "Error" });
       }
     });
-    return true; // Keeps the message channel open for asynchronous sendResponse
+    return true;
   }
 });
