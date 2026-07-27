@@ -1,7 +1,13 @@
+import { useState, useEffect, useRef } from "preact/hooks";
 import {
   PomoState,
   AlarmItem,
 } from "../../infrastructure/services/PomodoroManagerService.js";
+import {
+  createAmbientAudioEngine,
+  AmbientSoundType,
+} from "../../services/ambientAudioService.js";
+import { PomoAmbientPlayerCard } from "../pomodoro/PomoAmbientPlayerCard.js";
 
 interface PopupPomoTabProps {
   t: Record<string, string>;
@@ -40,6 +46,50 @@ export function PopupPomoTab({
   handleToggleAlarm,
   handleDeleteAlarm,
 }: PopupPomoTabProps) {
+  const [activeSound, setActiveSound] = useState<AmbientSoundType>("none");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5);
+
+  const audioEngineRef = useRef<ReturnType<
+    typeof createAmbientAudioEngine
+  > | null>(null);
+
+  if (!audioEngineRef.current) {
+    audioEngineRef.current = createAmbientAudioEngine();
+  }
+
+  useEffect(() => {
+    audioEngineRef.current?.setVolume(volume);
+  }, [volume]);
+
+  useEffect(() => {
+    return () => {
+      audioEngineRef.current?.stopAllSounds();
+    };
+  }, []);
+
+  const handleSoundToggle = (soundType: AmbientSoundType) => {
+    const engine = audioEngineRef.current;
+    if (!engine) return;
+
+    if (activeSound === soundType && isPlaying) {
+      engine.stopAllSounds();
+      setIsPlaying(false);
+    } else {
+      setActiveSound(soundType);
+      setIsPlaying(true);
+      if (soundType === "white_noise") {
+        engine.playHairdryer(volume);
+      } else if (soundType === "rain") {
+        engine.playRain(volume);
+      } else if (soundType === "wind") {
+        engine.playWind(volume);
+      } else if (soundType === "lofi") {
+        engine.playLofi(volume);
+      }
+    }
+  };
+
   // Format Helper MM:SS
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60)
@@ -477,6 +527,20 @@ export function PopupPomoTab({
           )}
         </div>
       </div>
+
+      {/* Odak Müzikleri & Sesleri Mini Kartı */}
+      <PomoAmbientPlayerCard
+        title={t.pomo_focus_music || "Odak Müzikleri & Sesleri"}
+        rainLabel={t.pomo_ambient_rain || "Yağmur"}
+        windLabel={t.pomo_ambient_wind || "Rüzgar"}
+        brownLabel={t.pomo_ambient_brown || "Kahverengi Gürültü"}
+        lofiLabel={t.pomo_ambient_lofi || "Lo-Fi Radyo"}
+        activeSound={activeSound}
+        isPlaying={isPlaying}
+        volume={volume}
+        onSoundToggle={handleSoundToggle}
+        onVolumeChange={setVolume}
+      />
     </div>
   );
 }

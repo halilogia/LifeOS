@@ -204,7 +204,7 @@ export function useSettings() {
   const handleDetoxLimitsChange = useCallback(
     async (limits: Record<string, number>) => {
       setDetoxLimitsState(limits);
-      await syncSet({ detoxLimits: limits });
+      await syncSet({ detoxLimits: limits, detox_limits: limits });
     },
     [],
   );

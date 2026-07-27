@@ -116,30 +116,54 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       audioContextRef = ctx;
 
       const bufferSize = 4 * ctx.sampleRate;
-      const rainBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = rainBuffer.getChannelData(0);
+      const rainBuffer = ctx.createBuffer(2, bufferSize, ctx.sampleRate);
+      const left = rainBuffer.getChannelData(0);
+      const right = rainBuffer.getChannelData(1);
 
-      // 1. Background soft brown noise (rain hum)
-      let lastOut = 0.0;
+      // 1. Continuous pink/brown background rain shower on asphalt
+      let b0L = 0, b1L = 0, b2L = 0, b3L = 0, b4L = 0, b5L = 0, b6L = 0;
+      let b0R = 0, b1R = 0, b2R = 0, b3R = 0, b4R = 0, b5R = 0, b6R = 0;
+
       for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = output[i];
-        output[i] *= 0.18;
+        const whiteL = Math.random() * 2 - 1;
+        const whiteR = Math.random() * 2 - 1;
+
+        b0L = 0.99886 * b0L + whiteL * 0.0555179;
+        b1L = 0.99332 * b1L + whiteL * 0.0750759;
+        b2L = 0.96900 * b2L + whiteL * 0.1538520;
+        b3L = 0.86650 * b3L + whiteL * 0.3104856;
+        b4L = 0.55000 * b4L + whiteL * 0.5329522;
+        b5L = -0.7616 * b5L - whiteL * 0.0168980;
+        left[i] = (b0L + b1L + b2L + b3L + b4L + b5L + b6L + whiteL * 0.5362) * 0.04;
+        b6L = whiteL * 0.115926;
+
+        b0R = 0.99886 * b0R + whiteR * 0.0555179;
+        b1R = 0.99332 * b1R + whiteR * 0.0750759;
+        b2R = 0.96900 * b2R + whiteR * 0.1538520;
+        b3R = 0.86650 * b3R + whiteR * 0.3104856;
+        b4R = 0.55000 * b4R + whiteR * 0.5329522;
+        b5R = -0.7616 * b5R - whiteR * 0.0168980;
+        right[i] = (b0R + b1R + b2R + b3R + b4R + b5R + b6R + whiteR * 0.5362) * 0.04;
+        b6R = whiteR * 0.115926;
       }
 
-      // 2. Individual transient raindrop patters
-      for (let i = 0; i < bufferSize; i++) {
-        if (Math.random() > 0.9996) {
-          const clickAmp = Math.random() * 0.15 + 0.05;
-          const decayLen = Math.floor(Math.random() * 400 + 150);
-          for (let j = 0; j < decayLen && i + j < bufferSize; j++) {
-            const t = j / ctx.sampleRate;
-            const freq = Math.random() * 1400 + 1800;
-            const envelope = Math.exp(-j / (decayLen / 4.5));
-            output[i + j] +=
-              Math.sin(2 * Math.PI * freq * t) * clickAmp * envelope;
-          }
+      // 2. Crisp asphalt raindrop patters (warm acoustic impact transients)
+      const numDrops = Math.floor(bufferSize / 350);
+      for (let d = 0; d < numDrops; d++) {
+        const dropStart = Math.floor(Math.random() * (bufferSize - 1000));
+        const dropFreq = Math.random() * 500 + 350; // Warm asphalt droplet frequency
+        const dropAmp = Math.random() * 0.08 + 0.02;
+        const decaySamples = Math.floor(Math.random() * 300 + 120);
+
+        for (let s = 0; s < decaySamples; s++) {
+          const idx = dropStart + s;
+          if (idx >= bufferSize) break;
+          const t = s / ctx.sampleRate;
+          const env = Math.exp(-s / (decaySamples / 4.0));
+          const dropSample = Math.sin(2 * Math.PI * dropFreq * t) * dropAmp * env;
+
+          left[idx] += dropSample * 0.7;
+          right[idx] += dropSample * 0.7;
         }
       }
 
@@ -149,14 +173,14 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
       const lowpass = ctx.createBiquadFilter();
       lowpass.type = "lowpass";
-      lowpass.frequency.value = 1600;
+      lowpass.frequency.value = 1100;
 
       const highpass = ctx.createBiquadFilter();
       highpass.type = "highpass";
-      highpass.frequency.value = 120;
+      highpass.frequency.value = 140;
 
       const gainNode = ctx.createGain();
-      gainNode.gain.value = volume * 0.8;
+      gainNode.gain.value = volume * 0.95;
       whiteNoiseGainRef = gainNode;
 
       noiseSource.connect(lowpass);

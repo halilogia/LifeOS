@@ -22,6 +22,7 @@ import type {
 
 // Extracted Sub-components
 import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
+import { BistKesfetTab } from "@/components/stock/BistKesfetTab.js";
 import { BistActionBar, BistTabId } from "@/components/stock/BistActionBar.js";
 import { PortfolioSummaryCard } from "@/components/stock/PortfolioSummaryCard.js";
 import { StockWatchlistTable } from "@/components/stock/StockWatchlistTable.js";
@@ -248,21 +249,19 @@ export function BistView({ lang }: BistViewProps) {
         </>
       )}
 
-      {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search) */}
+      {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search Grid) */}
       {activeTab === "kesfet" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <BistSearchBar
-            searchQuery={searchQuery}
-            quoteMap={quoteMap}
-            onSearchQueryChange={setSearchQuery}
-            onQuickAddStock={handleQuickAddStock}
-            onOpenChart={(symClean) => {
-              setSelectedChartSymbol(symClean);
-              setActiveTab("chart");
-            }}
-            onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
-          />
-        </div>
+        <BistKesfetTab
+          searchQuery={searchQuery}
+          quoteMap={quoteMap}
+          onSearchQueryChange={setSearchQuery}
+          onQuickAddStock={handleQuickAddStock}
+          onOpenChart={(symClean) => {
+            setSelectedChartSymbol(symClean);
+            setActiveTab("chart");
+          }}
+          onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
+        />
       )}
 
       {activeTab === "halka-arz" && <HalkaArzView lang={lang} />}

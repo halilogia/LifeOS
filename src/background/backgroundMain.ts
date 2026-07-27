@@ -15,7 +15,7 @@ function saveBufferToStorage(): void {
   if (activeDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
     if (elapsed > 0) {
-      const normalElapsed = Math.min(elapsed, 12);
+      const normalElapsed = Math.min(elapsed, 60);
       screenTimeBuffer[activeDomain] =
         (screenTimeBuffer[activeDomain] || 0) + normalElapsed;
       domainStartTime = now;
@@ -52,7 +52,7 @@ function handleDomainChange(newDomain: string | null): void {
   if (currentDomain) {
     const elapsed = Math.round((now - domainStartTime) / 1000);
     if (elapsed > 0) {
-      const normalElapsed = Math.min(elapsed, 12);
+      const normalElapsed = Math.min(elapsed, 60);
       screenTimeBuffer[currentDomain] =
         (screenTimeBuffer[currentDomain] || 0) + normalElapsed;
     }
@@ -544,10 +544,22 @@ function setupContextMenus(): void {
 
 chrome.runtime.onInstalled.addListener(() => {
   setupContextMenus();
+  if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => {});
+  }
 });
 
 chrome.runtime.onStartup.addListener(() => {
   setupContextMenus();
+  if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch(() => {});
+  }
+});
+
+chrome.commands.onCommand.addListener((command, tab) => {
+  if (command === "_execute_side_panel" && tab?.id) {
+    chrome.sidePanel.open({ tabId: tab.id });
+  }
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -572,7 +584,21 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 // Handle Volume Booster via Chrome Scripting API (MAIN World - Zero CSP Violations)
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "open_sidepanel") {
+    if (sender.tab?.id) {
+      chrome.sidePanel.open({ tabId: sender.tab.id });
+    } else {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]?.id) {
+          chrome.sidePanel.open({ tabId: tabs[0].id });
+        }
+      });
+    }
+    sendResponse({ success: true });
+    return true;
+  }
+
   if (message.type === "set_volume_boost" && message.tabId) {
     const targetTabId = message.tabId;
     const multiplier = Number(message.volumeLevel) || 1.0;

@@ -215,13 +215,6 @@ export function BistActionBar({
           <span>KAP Haberleri</span>
         </button>
         <button
-          className="stock-btn stock-btn-primary"
-          onClick={onOpenAddModal}
-        >
-          <IconPlus />
-          <span>+ Hisse Ekle</span>
-        </button>
-        <button
           className="stock-btn stock-btn-secondary"
           onClick={onOpenLogsModal}
         >

@@ -15,60 +15,73 @@ export function initDetoxBlocker(): void {
   }
 
   function checkScreenTimeLimits(): void {
-    chrome.storage.sync.get(
-      [
-        "detox_enabled",
-        "detox_blocked_sites",
-        "detox_end_time",
-        "custom_quotes",
-        "lang",
-        "pomoBlockEnabled",
-        "detox_limits",
-      ],
-      (settings) => {
-        chrome.storage.local.get(
-          ["pomodoro_timer_state", "screen_time_stats"],
-          (localRes) => {
-            const enabled = (settings.detox_enabled as boolean) || false;
-            const blockedSites = (settings.detox_blocked_sites as string[]) || [];
-            const endTime = (settings.detox_end_time as number) || 0;
-            const lang = (settings.lang as string) || "tr";
-            const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
-            const pomoState = (localRes.pomodoro_timer_state as {
-              running?: boolean;
-              mode?: string;
-              endTime?: number;
-            }) || {};
+    try {
+      if (!chrome.runtime?.id) return;
 
-            const isBlockedHost = blockedSites.some((site) =>
-              currentHost.includes(site),
-            );
+      chrome.storage.sync.get(
+        [
+          "detox_enabled",
+          "detox_blocked_sites",
+          "detox_end_time",
+          "custom_quotes",
+          "lang",
+          "pomoBlockEnabled",
+          "detox_limits",
+          "detoxLimits",
+        ],
+        (settings) => {
+          if (chrome.runtime.lastError || !chrome.runtime?.id) return;
 
-            const defaultSites = [
-              "instagram.com",
-              "facebook.com",
-              "youtube.com",
-              "tiktok.com",
-              "x.com",
-              "twitter.com",
-            ];
-            const isPomoBlockedHost =
-              blockedSites.some((site) => currentHost.includes(site)) ||
-              defaultSites.some((site) => currentHost.includes(site));
+          chrome.storage.local.get(
+            ["pomodoro_timer_state", "screen_time_stats"],
+            (localRes) => {
+              if (chrome.runtime.lastError || !chrome.runtime?.id) return;
 
-            const isTimeActive = endTime === -1 || endTime > Date.now();
+              const enabled = (settings.detox_enabled as boolean) || false;
+              const blockedSites = (settings.detox_blocked_sites as string[]) || [];
+              const endTime = (settings.detox_end_time as number) || 0;
+              const lang = (settings.lang as string) || "tr";
+              const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
+              const pomoState = (localRes.pomodoro_timer_state as {
+                running?: boolean;
+                mode?: string;
+                endTime?: number;
+              }) || {};
 
-            const isDetoxActive = enabled && isBlockedHost && isTimeActive;
-            const isPomoActive =
-              pomoBlockEnabled &&
-              isPomoBlockedHost &&
-              pomoState.running &&
-              pomoState.mode === "focus";
+              const isBlockedHost = blockedSites.some((site) =>
+                currentHost.includes(site),
+              );
 
-            const detoxLimits = (settings.detox_limits as Record<string, number>) || {};
-            const limitDomain = Object.keys(detoxLimits).find((domain) =>
-              currentHost.includes(domain),
-            );
+              const defaultSites = [
+                "instagram.com",
+                "facebook.com",
+                "youtube.com",
+                "tiktok.com",
+                "x.com",
+                "twitter.com",
+              ];
+              const isPomoBlockedHost =
+                blockedSites.some((site) => currentHost.includes(site)) ||
+                defaultSites.some((site) => currentHost.includes(site));
+
+              const isTimeActive = endTime === -1 || endTime > Date.now();
+
+              const isDetoxActive = enabled && isBlockedHost && isTimeActive;
+              const isPomoActive =
+                pomoBlockEnabled &&
+                isPomoBlockedHost &&
+                pomoState.running &&
+                pomoState.mode === "focus";
+
+              const detoxLimits =
+                (settings.detoxLimits as Record<string, number>) ||
+                (settings.detox_limits as Record<string, number>) ||
+                {};
+            const cleanHost = currentHost.replace("www.", "");
+            const limitDomain = Object.keys(detoxLimits).find((domain) => {
+              const cleanDomain = domain.replace("www.", "");
+              return cleanHost.includes(cleanDomain) || cleanDomain.includes(cleanHost);
+            });
             const activeLimitMinutes = limitDomain
               ? detoxLimits[limitDomain]
               : 0;
@@ -78,7 +91,16 @@ export function initDetoxBlocker(): void {
             if (activeLimitMinutes > 0 && limitDomain) {
               const todayStr = new Date().toLocaleDateString("sv");
               const dailyStats = localRes.screen_time_stats?.[todayStr] || {};
-              const spentSeconds = dailyStats[limitDomain] || 0;
+              const cleanLimitDomain = limitDomain.replace("www.", "");
+              
+              let spentSeconds = 0;
+              for (const statDomain in dailyStats) {
+                const cleanStatDomain = statDomain.replace("www.", "");
+                if (cleanStatDomain.includes(cleanLimitDomain) || cleanLimitDomain.includes(cleanStatDomain)) {
+                  spentSeconds += dailyStats[statDomain];
+                }
+              }
+
               const limitSeconds = activeLimitMinutes * 60;
               isLimitExceeded = spentSeconds >= limitSeconds;
               remainingSeconds = limitSeconds - spentSeconds;
@@ -121,10 +143,13 @@ export function initDetoxBlocker(): void {
                 removeWarningBanner();
               }
             }
-          },
+          }
         );
-      },
+      }
     );
+    } catch {
+      // Ignore extension context invalidation on extension reload
+    }
   }
 
   // Real-time listener for Pomodoro timer start/stop, screen time, or settings changes
