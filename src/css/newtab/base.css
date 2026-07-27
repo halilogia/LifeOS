@@ -3,6 +3,7 @@
   --bg-color: #0d0d12;
   --card-bg: rgba(255, 255, 255, 0.05);
   --card-bg-hover: rgba(255, 255, 255, 0.08);
+  --card-bg-subtle: rgba(255, 255, 255, 0.02);
   --card-border: rgba(255, 255, 255, 0.1);
   --glass-blur: 16px;
 
@@ -10,6 +11,7 @@
   --accent-color: #8b5cf6;
   --accent-color-rgb: 139, 92, 246;
   --accent-hover: #7c3aed;
+  --accent-glow: rgba(139, 92, 246, 0.35);
 
   /* ── Typography & Text Tokens ─────────────────────────────────────── */
   --font-main:
