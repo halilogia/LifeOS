@@ -15,6 +15,7 @@ export default defineConfig({
       input: {
         newtab: path.resolve(__dirname, 'newtab.html'),
         popup: path.resolve(__dirname, 'popup.html'),
+        sidepanel: path.resolve(__dirname, 'sidepanel.html'),
         content: path.resolve(__dirname, 'src/content/contentMain.ts'),
         youtubeCompanion: path.resolve(__dirname, 'src/content/youtubeMain.ts'),
         background: path.resolve(__dirname, 'src/background/backgroundMain.ts'),
