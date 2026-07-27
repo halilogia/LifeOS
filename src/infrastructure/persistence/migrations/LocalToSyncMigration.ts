@@ -39,6 +39,10 @@ const SYNC_KEYS = [
   "sidebarOrder",
   "detox_limits",
   "aiShowThinking",
+  "stockPortfolio",
+  "stockRules",
+  "stockAlertLogs",
+  "alarms",
 ];
 
 export class LocalToSyncMigration {
