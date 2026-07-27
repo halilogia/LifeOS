@@ -7,6 +7,7 @@
     "clean": "rm -rf dist",
     "dev": "vite",
     "build": "vite build && node postbuild.js",
+    "count-lines": "node scripts/countLines.js",
     "lint": "eslint src --ext .ts,.tsx"
   },
   "repository": {
