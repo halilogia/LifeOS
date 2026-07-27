@@ -17,21 +17,21 @@ interface SidebarProps {
 }
 
 const DEFAULT_ORDER = [
-  "bist",
-  "halka-arz",
-  "free-games",
-  "ai-chat",
   "list",
   "willpower",
   "pomodoro",
   "eisenhower",
-  "hifiz",
+  "ai-chat",
   "notes",
-  "srs",
   "calendar",
+  "srs",
+  "hifiz",
   "prayer",
   "kpss",
   "detox",
+  "free-games",
+  "bist",
+  "halka-arz",
 ];
 
 export function Sidebar({
@@ -48,6 +48,7 @@ export function Sidebar({
   const t = getTranslation(lang);
   const [order, setOrder] = useState<string[]>(DEFAULT_ORDER);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
+  const [dragOverItem, setDragOverItem] = useState<string | null>(null);
 
   useEffect(() => {
     new Promise<string[]>((resolve) =>
@@ -74,19 +75,30 @@ export function Sidebar({
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragOver = (e: any, _id: string) => {
+  const handleDragOver = (e: any, id: string) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
+    if (dragOverItem !== id) {
+      setDragOverItem(id);
+    }
+  };
+
+  const handleDragLeave = (id: string) => {
+    if (dragOverItem === id) {
+      setDragOverItem(null);
+    }
   };
 
   const handleDragEnd = () => {
     setDraggedItem(null);
+    setDragOverItem(null);
   };
 
   const handleDrop = async (e: any, targetId: string) => {
     e.preventDefault();
     const currentItem = draggedItem;
     setDraggedItem(null);
+    setDragOverItem(null);
     if (!currentItem || currentItem === targetId) {
       return;
     }
@@ -111,36 +123,62 @@ export function Sidebar({
 
   const getItemLabel = (key: string): string => {
     switch (key) {
+      case "list":
+        return (
+          t.view_todos ||
+          (lang === "tr" ? "Odağım (Görev Listesi)" : "My Focus")
+        );
+      case "willpower":
+        return (
+          t.view_willpower || (lang === "tr" ? "Kişisel Disiplin" : "Willpower")
+        );
+      case "pomodoro":
+        return t.view_pomodoro || "Pomodoro";
+      case "eisenhower":
+        return (
+          t.view_eisenhower ||
+          (lang === "tr" ? "Eisenhower Matrisi" : "Eisenhower Matrix")
+        );
+      case "ai-chat":
+        return (
+          t.view_ai_chat || (lang === "tr" ? "AI Asistan" : "AI Assistant")
+        );
+      case "notes":
+        return t.view_notes || (lang === "tr" ? "Günlüğüm" : "My Diary");
+      case "calendar":
+        return t.view_calendar || (lang === "tr" ? "Takvim" : "Calendar");
+      case "srs":
+        return (
+          t.view_srs ||
+          (lang === "tr" ? "Aralıklı Tekrar" : "Spaced Repetition")
+        );
+      case "hifiz":
+        return (
+          t.view_hifiz ||
+          (lang === "tr" ? "Aday Din Görevlisi Yeterlilikleri" : "Competencies")
+        );
+      case "prayer":
+        return (
+          t.view_prayer || (lang === "tr" ? "Namaz Vakitleri" : "Prayer Times")
+        );
+      case "kpss":
+        return t.view_kpss || (lang === "tr" ? "KPSS Ders Takip" : "KPSS Prep");
+      case "detox":
+        return (
+          t.view_detox || (lang === "tr" ? "Dijital Detoks" : "Digital Detox")
+        );
+      case "free-games":
+        return (
+          t.view_free_games ||
+          (lang === "tr" ? "Ücretsiz Oyunlar" : "Free Games")
+        );
       case "bist":
         return "BIST Borsa OS";
       case "halka-arz":
-        return t.view_halka_arz;
-      case "free-games":
-        return t.view_free_games;
-      case "ai-chat":
-        return t.view_ai_chat;
-      case "list":
-        return t.view_todos;
-      case "willpower":
-        return t.view_willpower;
-      case "pomodoro":
-        return t.view_pomodoro;
-      case "eisenhower":
-        return t.view_eisenhower;
-      case "hifiz":
-        return t.view_hifiz;
-      case "notes":
-        return t.view_notes;
-      case "srs":
-        return t.view_srs;
-      case "calendar":
-        return t.view_calendar;
-      case "prayer":
-        return t.view_prayer;
-      case "kpss":
-        return t.view_kpss;
-      case "detox":
-        return t.view_detox;
+        return (
+          t.view_halka_arz ||
+          (lang === "tr" ? "Halka Arz & Hisse" : "IPOs & Stocks")
+        );
       default:
         return key;
     }
@@ -181,10 +219,12 @@ export function Sidebar({
               label={getItemLabel(key)}
               active={activeView === key}
               isDragging={draggedItem === key}
+              isDragOver={dragOverItem === key}
               onClick={() => onViewChange(key)}
               onDragStart={(e) => handleDragStart(e, key)}
               onDragEnd={handleDragEnd}
               onDragOver={(e) => handleDragOver(e, key)}
+              onDragLeave={() => handleDragLeave(key)}
               onDrop={(e) => handleDrop(e, key)}
             />
           ))}

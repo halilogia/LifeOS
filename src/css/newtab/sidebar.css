@@ -114,3 +114,10 @@ body.sidebar-open .sidebar {
   background: rgba(255, 255, 255, 0.05);
   border: 1px dashed var(--accent-color);
 }
+
+.sidebar-btn.drag-over {
+  border-top: 3px solid var(--accent-color);
+  background: rgba(139, 92, 246, 0.18);
+  box-shadow: 0 -4px 12px rgba(139, 92, 246, 0.35);
+  transform: translateY(2px);
+}
