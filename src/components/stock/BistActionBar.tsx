@@ -193,17 +193,6 @@ export function BistActionBar({
           <IconRocket />
           <span>Halka Arz Takvimi</span>
         </button>
-        <button
-          className={`stock-btn ${
-            activeTab === "ai-report"
-              ? "stock-btn-primary"
-              : "stock-btn-secondary"
-          }`}
-          onClick={() => onTabChange("ai-report")}
-        >
-          <IconSparkles />
-          <span>AI Borsa Özeti & Danışman</span>
-        </button>
       </div>
 
       <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>

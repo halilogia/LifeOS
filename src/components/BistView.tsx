@@ -267,10 +267,6 @@ export function BistView({ lang }: BistViewProps) {
 
       {activeTab === "halka-arz" && <HalkaArzView lang={lang} />}
 
-      {activeTab === "ai-report" && (
-        <StockAiReportTab portfolio={portfolio} quotes={quotes} />
-      )}
-
       {activeTab === "chart" && selectedChartSymbol && (
         <CustomStockChart symbol={selectedChartSymbol} lang="tr" />
       )}
@@ -311,9 +307,36 @@ export function BistView({ lang }: BistViewProps) {
       {aiModalSymbol && (
         <StockAiAnalysisModal
           symbol={aiModalSymbol}
-          quote={quoteMap.get(aiModalSymbol.toUpperCase())}
+          quote={
+            quoteMap.get(aiModalSymbol.toUpperCase()) ||
+            quoteMap.get(`${aiModalSymbol.toUpperCase()}.IS`)
+          }
           onClose={() => setAiModalSymbol(null)}
         />
+      )}
+
+      {/* Interactive Stock Chart Modal Overlay */}
+      {selectedChartSymbol && (
+        <div
+          className="chart-modal-overlay"
+          onClick={() => setSelectedChartSymbol(null)}
+        >
+          <div
+            className="chart-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="chart-modal-header">
+              <h2>📈 {selectedChartSymbol.toUpperCase()} Canlı BİST Grafiği</h2>
+              <button
+                className="chart-close-btn"
+                onClick={() => setSelectedChartSymbol(null)}
+              >
+                Kapat
+              </button>
+            </div>
+            <CustomStockChart symbol={selectedChartSymbol} lang="tr" />
+          </div>
+        </div>
       )}
     </div>
   );

@@ -292,7 +292,7 @@ export function StockWatchlistTable({
                         style={{ padding: "6px 10px" }}
                       >
                         <IconPlus />
-                        <span style={{ fontSize: "0.75rem" }}>+ Alarm</span>
+                        <span style={{ fontSize: "0.75rem" }}>Alarm</span>
                       </button>
                       <button
                         className="stock-btn stock-btn-ai"

@@ -244,7 +244,7 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
       </div>
 
       <div style={{ position: "relative", width: "100%", height: "260px" }}>
-        {loading && (
+        {loading ? (
           <div
             style={{
               position: "absolute",
@@ -257,9 +257,34 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
               color: "#94a3b8",
             }}
           >
-            <span>Grafik yükleniyor...</span>
+            <span>Grafik verisi çekiliyor...</span>
           </div>
-        )}
+        ) : history.length === 0 ? (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(15, 23, 42, 0.8)",
+              zIndex: 10,
+              color: "#94a3b8",
+              gap: "8px",
+              textAlign: "center",
+              padding: "20px",
+              borderRadius: "12px",
+            }}
+          >
+            <div style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc" }}>
+              {symbol.toUpperCase()} Grafik Verisi Henüz Oluşmadı
+            </div>
+            <div style={{ fontSize: "0.82rem", color: "#94a3b8", maxWidth: "420px" }}>
+              Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır.
+            </div>
+          </div>
+        ) : null}
         <canvas
           ref={canvasRef}
           style={{ width: "100%", height: "100%" }}
