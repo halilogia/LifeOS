@@ -47,6 +47,7 @@ export function App() {
     pomoBlockEnabled,
     universalInfoBoxEnabled,
     universalInfoBoxHotkey,
+    autoGroupTabsEnabled,
     aiProvider,
     aiApiKey,
     aiModel,
@@ -64,6 +65,7 @@ export function App() {
     handleTogglePomoBlock,
     handleToggleUniversalInfoBox,
     handleUniversalInfoBoxHotkeyChange,
+    handleToggleAutoGroupTabs,
     handleClearAllData,
     handleUpdateAIConfig,
     handleUpdateAIShowThinking,
@@ -429,6 +431,8 @@ export function App() {
         onToggleUniversalInfoBox={handleToggleUniversalInfoBox}
         universalInfoBoxHotkey={universalInfoBoxHotkey}
         onUniversalInfoBoxHotkeyChange={handleUniversalInfoBoxHotkeyChange}
+        autoGroupTabsEnabled={autoGroupTabsEnabled}
+        onToggleAutoGroupTabs={handleToggleAutoGroupTabs}
         onExportBackup={handleExportBackup}
         onImportBackup={handleImportBackup}
         onClearAllData={handleClearAllDataConfirm}

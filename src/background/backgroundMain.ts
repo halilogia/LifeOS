@@ -488,7 +488,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             return;
           }
           chrome.tabGroups.update(groupId, {
-            title: "🤖 Life OS Agent",
+            title: "Life OS Agent",
             color: "purple",
           }, () => {
             sendResponse({ success: true, groupId });
@@ -508,7 +508,7 @@ function setupContextMenus(): void {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: "lifeos_copilot_root",
-      title: "🤖 Life OS Copilot",
+      title: "Life OS Copilot",
       contexts: ["page", "selection"],
     });
 

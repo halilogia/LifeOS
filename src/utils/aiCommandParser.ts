@@ -4,6 +4,8 @@
  * Clean Architecture - Utility Module.
  */
 
+import { POPULAR_BIST_STOCKS } from "@/services/bistService.js";
+
 export const monthsMap: Record<string, number> = {
   ocak: 1,
   şubat: 2,
@@ -42,13 +44,46 @@ export const monthsMap: Record<string, number> = {
   dec: 12,
 };
 
+// Build comprehensive BIST Aliases dictionary dynamically from popular stocks dataset
+export const BIST_ALIASES: Record<string, { symbol: string; displayName: string }> = {
+  kardemir: { symbol: "KRDMD.IS", displayName: "Kardemir D" },
+  "kardemir d": { symbol: "KRDMD.IS", displayName: "Kardemir D" },
+  krdmd: { symbol: "KRDMD.IS", displayName: "Kardemir D" },
+  thy: { symbol: "THYAO.IS", displayName: "Türk Hava Yolları" },
+  "türk hava yolları": { symbol: "THYAO.IS", displayName: "Türk Hava Yolları" },
+  ereğli: { symbol: "EREGL.IS", displayName: "Ereğli Demir Çelik" },
+  aselsan: { symbol: "ASELS.IS", displayName: "Aselsan" },
+  tüpraş: { symbol: "TUPRS.IS", displayName: "Tüpraş" },
+  ford: { symbol: "FROTO.IS", displayName: "Ford Otosan" },
+  garanti: { symbol: "GARAN.IS", displayName: "Garanti BBVA" },
+  işbank: { symbol: "ISCTR.IS", displayName: "İş Bankası C" },
+};
+
+// Dynamically populate aliases from POPULAR_BIST_STOCKS
+POPULAR_BIST_STOCKS.forEach((item) => {
+  const cleanSymbol = item.symbol.replace(".IS", "").toLowerCase();
+  const lowerName = item.displayName.toLowerCase();
+  if (!BIST_ALIASES[cleanSymbol]) {
+    BIST_ALIASES[cleanSymbol] = { symbol: item.symbol, displayName: item.displayName };
+  }
+  if (!BIST_ALIASES[lowerName]) {
+    BIST_ALIASES[lowerName] = { symbol: item.symbol, displayName: item.displayName };
+  }
+});
+
 export interface LocalParsedResult {
   parsed: boolean;
-  action?: "create_task" | "add_note";
+  action?: "create_task" | "add_note" | "add_stock";
   text?: string;
   date?: string;
   note_type?: "note" | "diary" | "cornell";
   content?: string;
+  stock?: {
+    symbol: string;
+    displayName: string;
+    buyPrice: number;
+    lotCount: number;
+  };
 }
 
 /**
@@ -57,6 +92,56 @@ export interface LocalParsedResult {
 export function parseLocalCommand(query: string): LocalParsedResult {
   const textLower = query.toLowerCase().trim();
   const today = new Date();
+
+  // 0. Dynamic Stock Buy Command (e.g. "20 lot Kardemir 28.50 TL'den aldım" or "100 lot MIATK 45 TL'den aldım")
+  if (
+    textLower.includes("lot") ||
+    textLower.includes("hisse") ||
+    textLower.includes("portföye ekle")
+  ) {
+    const lotMatch = textLower.match(/(\d+)\s*lot/);
+    const priceMatch = textLower.match(/(\d+(?:[\.,]\d+)?)\s*(?:tl|₺|lira)/);
+
+    let foundSymbol: string | null = null;
+    let foundDisplayName: string | null = null;
+
+    // Check alias dictionary
+    for (const key of Object.keys(BIST_ALIASES)) {
+      if (textLower.includes(key)) {
+        foundSymbol = BIST_ALIASES[key].symbol;
+        foundDisplayName = BIST_ALIASES[key].displayName;
+        break;
+      }
+    }
+
+    // Dynamic uppercase BIST ticker extraction (e.g. MIATK, REEDR, ASTOR, KONTR)
+    if (!foundSymbol) {
+      const tickerMatch = query.match(/\b([A-ZÇĞİÖŞÜ]{3,6})\b/i);
+      if (tickerMatch) {
+        const potentialTicker = tickerMatch[1].toUpperCase();
+        foundSymbol = potentialTicker + ".IS";
+        foundDisplayName = potentialTicker;
+      }
+    }
+
+    if (foundSymbol && (lotMatch || priceMatch)) {
+      const lotCount = lotMatch ? parseInt(lotMatch[1], 10) : 1;
+      const buyPrice = priceMatch
+        ? parseFloat(priceMatch[1].replace(",", "."))
+        : 0;
+
+      return {
+        parsed: true,
+        action: "add_stock",
+        stock: {
+          symbol: foundSymbol,
+          displayName: foundDisplayName || foundSymbol.replace(".IS", ""),
+          buyPrice,
+          lotCount,
+        },
+      };
+    }
+  }
 
   // Check notes first
   if (

@@ -143,3 +143,21 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
     YTD_DISCLAIMER
   );
 }
+
+export async function analyzeKapNewsWithAI(news: {
+  symbol?: string;
+  title: string;
+  summary: string;
+}): Promise<string> {
+  const userQuestion = `Şu KAP Bildirimini / Haberini analiz et:
+Şirket/Hisse: ${news.symbol || "BIST"}
+Başlık: ${news.title}
+Özet: ${news.summary}
+
+Bu haberin şirket ve hisse üzerindeki olası etkisini (Olumlu / Nötr / Olumsuz), temel gerekçesini ve yatırımcı için ne anlama geldiğini maksimum 3 net, sade cümle ile özetle.`;
+
+  return analyzeStockWithAI({
+    symbol: news.symbol,
+    userQuestion,
+  });
+}

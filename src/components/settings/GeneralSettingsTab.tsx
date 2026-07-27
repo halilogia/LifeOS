@@ -14,6 +14,8 @@ interface GeneralSettingsTabProps {
   onToggleUniversalInfoBox: () => void;
   universalInfoBoxHotkey: string;
   onUniversalInfoBoxHotkeyChange: (hotkey: string) => void;
+  autoGroupTabsEnabled?: boolean;
+  onToggleAutoGroupTabs?: () => void;
 }
 
 export function GeneralSettingsTab({
@@ -30,6 +32,8 @@ export function GeneralSettingsTab({
   onToggleUniversalInfoBox,
   universalInfoBoxHotkey,
   onUniversalInfoBoxHotkeyChange,
+  autoGroupTabsEnabled = true,
+  onToggleAutoGroupTabs,
 }: GeneralSettingsTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -202,6 +206,46 @@ export function GeneralSettingsTab({
               {universalInfoBoxEnabled ? t.enabled : t.disabled}
             </span>
           </button>
+
+          {/* Auto Tab Grouping Toggle */}
+          {onToggleAutoGroupTabs && (
+            <button
+              className="settings-action-btn"
+              onClick={onToggleAutoGroupTabs}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              <span>
+                {lang === "tr"
+                  ? "Yan Panel Açıldığında Sekmeyi Otomatik Grupla"
+                  : "Auto-group Active Tab on Side Panel Open"}
+              </span>
+              <span
+                style={{
+                  marginLeft: "auto",
+                  fontWeight: 700,
+                  color: autoGroupTabsEnabled
+                    ? "var(--accent-color)"
+                    : "var(--text-secondary)",
+                }}
+              >
+                {autoGroupTabsEnabled ? t.enabled : t.disabled}
+              </span>
+            </button>
+          )}
 
           {/* Universal Info Box Hotkey Selection */}
           {universalInfoBoxEnabled && (

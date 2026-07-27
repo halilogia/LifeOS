@@ -50,7 +50,7 @@ export function BistView({ lang }: BistViewProps) {
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
   const [, setLoading] = useState(false);
 
-  // Search states (Midas-style search bar)
+  // Search states (Midas-style search bar inside Keşfet tab)
   const [searchQuery, setSearchQuery] = useState("");
 
   // Modals
@@ -211,19 +211,6 @@ export function BistView({ lang }: BistViewProps) {
 
   return (
     <div className="stock-dashboard">
-      {/* 🟢 Midas Tarzı Canlı BIST Hisse Arama Çubuğu */}
-      <BistSearchBar
-        searchQuery={searchQuery}
-        quoteMap={quoteMap}
-        onSearchQueryChange={setSearchQuery}
-        onQuickAddStock={handleQuickAddStock}
-        onOpenChart={(symClean) => {
-          setSelectedChartSymbol(symClean);
-          setActiveTab("chart");
-        }}
-        onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
-      />
-
       {/* Action & Nav Bar */}
       <BistActionBar
         activeTab={activeTab}
@@ -238,7 +225,7 @@ export function BistView({ lang }: BistViewProps) {
         onRefreshData={loadData}
       />
 
-      {/* Main Tab Content */}
+      {/* TAB 1: MAIN PORTFOLIO (Clean Midas-style view without search bar clutter) */}
       {activeTab === "portfolio" && (
         <>
           <PortfolioSummaryCard
@@ -259,6 +246,23 @@ export function BistView({ lang }: BistViewProps) {
             onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
           />
         </>
+      )}
+
+      {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search) */}
+      {activeTab === "kesfet" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <BistSearchBar
+            searchQuery={searchQuery}
+            quoteMap={quoteMap}
+            onSearchQueryChange={setSearchQuery}
+            onQuickAddStock={handleQuickAddStock}
+            onOpenChart={(symClean) => {
+              setSelectedChartSymbol(symClean);
+              setActiveTab("chart");
+            }}
+            onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
+          />
+        </div>
       )}
 
       {activeTab === "halka-arz" && <HalkaArzView lang={lang} />}
