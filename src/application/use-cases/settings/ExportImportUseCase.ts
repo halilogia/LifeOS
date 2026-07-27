@@ -3,8 +3,8 @@
  * Application use case for exporting and importing todo data as JSON.
  */
 
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
-import type { Todo } from "../../../domain/entities/Todo.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
 
 export interface ExportResult {
   readonly blob: Blob;

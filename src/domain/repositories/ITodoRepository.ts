@@ -4,7 +4,7 @@
  * Domain layer - no external dependencies, pure interface.
  */
 
-import type { Todo } from "../entities/Todo.js";
+import type { Todo } from "@/domain/entities/Todo.js";
 
 export interface ITodoRepository {
   getAll(): Promise<Todo[]>;

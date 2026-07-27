@@ -7,8 +7,8 @@
 import type {
   ISettingsRepository,
   AppSettings,
-} from "../../../domain/repositories/ISettingsRepository.js";
-import type { Language } from "../../../domain/value-objects/Language.js";
+} from "@/domain/repositories/ISettingsRepository.js";
+import type { Language } from "@/domain/value-objects/Language.js";
 
 export class UpdateSettingsUseCase {
   constructor(private settingsRepo: ISettingsRepository) {}

@@ -5,9 +5,9 @@
  * Collects data from repositories and delegates upload to the drive port.
  */
 
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { IDriveBackupPort } from "../../ports/IDriveBackupPort.js";
-import type { ITodoRepository } from "../../../domain/repositories/ITodoRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 
 export class BackupToDriveUseCase {
   constructor(

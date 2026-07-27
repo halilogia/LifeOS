@@ -1,5 +1,5 @@
 import { AlarmItem } from "@/infrastructure/services/PomodoroManagerService.js";
-import { Language } from "../types/types.js";
+import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { useState, useEffect, useRef } from "preact/hooks";
 

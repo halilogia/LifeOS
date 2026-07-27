@@ -8,9 +8,9 @@
  * Immutable helpers (createTodo, toggleTodo, etc.) are provided for new code.
  */
 
-import type { RepeatType } from "../value-objects/RepeatType.js";
-import type { TodoStatus } from "../value-objects/TodoStatus.js";
-import { isCompleted } from "../value-objects/TodoStatus.js";
+import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
+import type { TodoStatus } from "@/domain/value-objects/TodoStatus.js";
+import { isCompleted } from "@/domain/value-objects/TodoStatus.js";
 
 export interface Todo {
   id?: string; // Google Tasks ID

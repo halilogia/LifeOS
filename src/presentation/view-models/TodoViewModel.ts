@@ -4,9 +4,9 @@
  * Handles filtering, sorting, and grouping logic for the UI layer.
  */
 
-import type { Todo } from "../../domain/entities/Todo.js";
-import type { TodoStatus } from "../../domain/value-objects/TodoStatus.js";
-import type { RepeatType } from "../../domain/value-objects/RepeatType.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import type { TodoStatus } from "@/domain/value-objects/TodoStatus.js";
+import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
 
 export interface TodoGroup {
   readonly label: string;

@@ -5,15 +5,15 @@
  */
 
 import { useEffect, useCallback } from "preact/hooks";
-import type { Language } from "../../domain/value-objects/Language.js";
-import { checkAndResetRepeatingTasks } from "../../domain/services/TaskService.js";
-import { ChromeStorageTodoRepository } from "../../infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { ChromeStorageSyncRepository } from "../../infrastructure/persistence/ChromeStorageSyncRepository.js";
-import { ChromeStorageSettingsRepository } from "../../infrastructure/persistence/ChromeStorageSettingsRepository.js";
-import { GoogleAuthApi } from "../../infrastructure/api/GoogleAuthApi.js";
-import { GoogleTasksApi } from "../../infrastructure/api/GoogleTasksApi.js";
-import { SyncGoogleTasksUseCase } from "../../application/use-cases/sync/SyncGoogleTasksUseCase.js";
-import { LocalToSyncMigration } from "../../infrastructure/persistence/migrations/LocalToSyncMigration.js";
+import type { Language } from "@/domain/value-objects/Language.js";
+import { checkAndResetRepeatingTasks } from "@/domain/services/TaskService.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
+import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
+import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
+import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
+import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
 
 function createSyncPort() {
   const tasksApi = new GoogleTasksApi();

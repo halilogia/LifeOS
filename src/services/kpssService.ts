@@ -4,7 +4,7 @@
  * Uses chrome.storage.sync directly instead of legacy core/storage.
  */
 
-import type { KpssProgress, KpssDailyStats } from "../types/types.js";
+import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
 
 export interface KpssTopic {
   title: string;

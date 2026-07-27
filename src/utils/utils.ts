@@ -1,4 +1,4 @@
-import type { Language } from "../types/types.js";
+import type { Language } from "@/types/types.js";
 
 export function updateTime(
   clockElement: HTMLDivElement,

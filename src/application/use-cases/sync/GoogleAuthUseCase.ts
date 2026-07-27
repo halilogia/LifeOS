@@ -4,9 +4,9 @@
  * Handles login, logout, and user info retrieval.
  */
 
-import type { ISyncRepository } from "../../../domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort } from "../../ports/ITodoSyncPort.js";
-import type { GoogleSyncSettings } from "../../../domain/repositories/ISyncRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 
 export interface GoogleAuthResponse {
   readonly success: boolean;

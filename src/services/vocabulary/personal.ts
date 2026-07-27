@@ -1,4 +1,4 @@
-import { Word, WordCategory } from "../../types/word.js";
+import { Word, WordCategory } from "@/types/word.js";
 import { byFreqDesc, getWordTextMap } from "./loader.js";
 
 export const getPersonalVocabulary = async (

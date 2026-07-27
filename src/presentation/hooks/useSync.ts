@@ -5,16 +5,16 @@
  */
 
 import { useState, useCallback } from "preact/hooks";
-import type { GoogleSyncSettings } from "../../domain/repositories/ISyncRepository.js";
-import { ChromeStorageSyncRepository } from "../../infrastructure/persistence/ChromeStorageSyncRepository.js";
-import { GoogleAuthApi } from "../../infrastructure/api/GoogleAuthApi.js";
-import { GoogleTasksApi } from "../../infrastructure/api/GoogleTasksApi.js";
-import { GoogleDriveApi } from "../../infrastructure/api/GoogleDriveApi.js";
-import { ChromeStorageTodoRepository } from "../../infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { GoogleAuthUseCase } from "../../application/use-cases/sync/GoogleAuthUseCase.js";
-import { SyncGoogleTasksUseCase } from "../../application/use-cases/sync/SyncGoogleTasksUseCase.js";
-import { BackupToDriveUseCase } from "../../application/use-cases/sync/BackupToDriveUseCase.js";
-import { RestoreFromDriveUseCase } from "../../application/use-cases/sync/RestoreFromDriveUseCase.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
+import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
+import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+import { GoogleDriveApi } from "@/infrastructure/api/GoogleDriveApi.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
+import { GoogleAuthUseCase } from "@/application/use-cases/sync/GoogleAuthUseCase.js";
+import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
+import { BackupToDriveUseCase } from "@/application/use-cases/sync/BackupToDriveUseCase.js";
+import { RestoreFromDriveUseCase } from "@/application/use-cases/sync/RestoreFromDriveUseCase.js";
 
 function createSyncPort() {
   const tasksApi = new GoogleTasksApi();

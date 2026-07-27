@@ -7,9 +7,9 @@ import {
   type WordReviewData,
   type ReviewQuality,
 } from "@/domain/services/SrsService.js";
-import { getAllWords } from "../services/vocabularyService.js";
-import { Word } from "../types/word.js";
-import { Language } from "../types/types.js";
+import { getAllWords } from "@/services/vocabularyService.js";
+import { Word } from "@/types/word.js";
+import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 
 interface SrsViewProps {

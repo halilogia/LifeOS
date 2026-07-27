@@ -4,7 +4,7 @@
  * Domain layer - no external dependencies, pure interface.
  */
 
-import type { Language } from "../value-objects/Language.js";
+import type { Language } from "@/domain/value-objects/Language.js";
 
 export interface AppSettings {
   readonly lang: Language;

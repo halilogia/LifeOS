@@ -4,10 +4,10 @@
  * Pure functions - no external dependencies.
  */
 
-import type { Todo } from "../entities/Todo.js";
-import { updateTodoStatus } from "../entities/Todo.js";
-import type { RepeatType } from "../value-objects/RepeatType.js";
-import { isRepeating } from "../value-objects/RepeatType.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import { updateTodoStatus } from "@/domain/entities/Todo.js";
+import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
+import { isRepeating } from "@/domain/value-objects/RepeatType.js";
 
 /**
  * Returns the start of the current week (Monday 00:00:00).

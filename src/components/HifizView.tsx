@@ -4,8 +4,8 @@ import {
   YETERLIKLER_DATA,
 } from "@/domain/data/hifizData.js";
 
-import { HifizProgress, HifizItem, Language } from "../types/types.js";
-import { translations } from "../utils/i18n.js";
+import { HifizProgress, HifizItem, Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 import { HifizMemorizationCard } from "@/components/hifiz/HifizMemorizationCard.js";
 import { HifizYeterliklerCard } from "@/components/hifiz/HifizYeterliklerCard.js";
 import { HifizMushafModal } from "@/components/hifiz/HifizMushafModal.js";

@@ -4,8 +4,8 @@
  * directly (not wrapping legacy storage.ts).
  */
 
-import type { ISettingsRepository } from "../../domain/repositories/ISettingsRepository.js";
-import type { Language } from "../../domain/value-objects/Language.js";
+import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
+import type { Language } from "@/domain/value-objects/Language.js";
 
 export class ChromeStorageSettingsRepository implements ISettingsRepository {
   async getSettings(): Promise<{

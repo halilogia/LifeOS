@@ -5,7 +5,7 @@
  * Implements the IDriveBackupPort interface.
  */
 
-import type { IDriveBackupPort } from "../../application/ports/IDriveBackupPort.js";
+import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
 
 export class GoogleDriveApi implements IDriveBackupPort {
   async backupToDrive(

@@ -1,4 +1,4 @@
-import { Word, WordCategory } from "../../types/word.js";
+import { Word, WordCategory } from "@/types/word.js";
 import { DEFAULT_ICON, DEFAULT_DESC, LevelKey, buildLevel } from "./loader.js";
 
 let CACHED_FULL: WordCategory[] | null = null;

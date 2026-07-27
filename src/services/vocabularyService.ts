@@ -1,4 +1,4 @@
-import { Word, WordCategory } from "../types/word.js";
+import { Word, WordCategory } from "@/types/word.js";
 import { buildLevel, buildAllWords } from "./vocabulary/loader.js";
 import {
   getCoreVocabulary,

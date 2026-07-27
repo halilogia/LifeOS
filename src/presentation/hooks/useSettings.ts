@@ -5,9 +5,9 @@
  */
 
 import { useState, useCallback } from "preact/hooks";
-import type { Language } from "../../domain/value-objects/Language.js";
-import { ChromeStorageSettingsRepository } from "../../infrastructure/persistence/ChromeStorageSettingsRepository.js";
-import { UpdateSettingsUseCase } from "../../application/use-cases/settings/UpdateSettingsUseCase.js";
+import type { Language } from "@/domain/value-objects/Language.js";
+import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
+import { UpdateSettingsUseCase } from "@/application/use-cases/settings/UpdateSettingsUseCase.js";
 
 // Helper for simple chrome.storage.sync get/set
 function syncGet<T>(keys: string[]): Promise<Record<string, T>> {

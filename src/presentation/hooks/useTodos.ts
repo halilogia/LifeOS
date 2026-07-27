@@ -20,9 +20,9 @@ import {
   checkAndResetRepeatingTasks,
   moveTaskWithStatus,
   getUpdatedStatuses,
-} from "../../domain/services/TaskService.js";
-import type { ITodoRepository } from "../../domain/repositories/ITodoRepository.js";
-import type { Todo } from "../../domain/entities/Todo.js";
+} from "@/domain/services/TaskService.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
 
 export type GoogleSyncSettings = {
   enabled: boolean;

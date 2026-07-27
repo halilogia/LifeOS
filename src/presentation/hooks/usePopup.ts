@@ -3,8 +3,8 @@ import {
   pomodoroManager,
   PomoState,
   AlarmItem,
-} from "../../infrastructure/services/PomodoroManagerService.js";
-import type { Language } from "../../domain/value-objects/Language.js";
+} from "@/infrastructure/services/PomodoroManagerService.js";
+import type { Language } from "@/domain/value-objects/Language.js";
 
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 
