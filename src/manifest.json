@@ -14,6 +14,7 @@
     "https://openrouter.ai/*",
     "https://generativelanguage.googleapis.com/*",
     "https://halkarz.com/*",
+    "https://www.youtube.com/*",
     "http://localhost/*",
     "http://127.0.0.1/*"
   ],
@@ -37,7 +38,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": ["content.js", "youtubeCompanion.js"],
       "run_at": "document_start"
     }
   ],
