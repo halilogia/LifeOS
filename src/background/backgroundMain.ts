@@ -388,4 +388,62 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     });
     return true;
   }
+
+  // SidePanel & Web Agent Relay Service
+  if (message.type === "open_sidepanel") {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs && tabs[0] && tabs[0].id) {
+        chrome.sidePanel.open({ tabId: tabs[0].id });
+        sendResponse({ success: true });
+      } else {
+        sendResponse({ success: false, error: "No active tab found" });
+      }
+    });
+    return true;
+  }
+
+  if (message.type === "get_active_tab_context") {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs || !tabs[0] || !tabs[0].id) {
+        sendResponse({ success: false, error: "No active tab" });
+        return;
+      }
+      chrome.tabs.sendMessage(tabs[0].id, { type: "agent_get_context" }, (res) => {
+        if (chrome.runtime.lastError || !res) {
+          sendResponse({
+            success: false,
+            error: "Could not connect to active page content script.",
+            context: {
+              title: tabs[0].title || "Active Page",
+              url: tabs[0].url || "",
+              domain: "",
+              selectedText: "",
+              pageText: "Page content could not be read directly. Please refresh page.",
+              interactiveElements: [],
+            },
+          });
+        } else {
+          sendResponse(res);
+        }
+      });
+    });
+    return true;
+  }
+
+  if (message.type === "execute_agent_action") {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs || !tabs[0] || !tabs[0].id) {
+        sendResponse({ success: false, error: "No active tab" });
+        return;
+      }
+      chrome.tabs.sendMessage(tabs[0].id, { type: "agent_execute_action", payload: message.payload }, (res) => {
+        if (chrome.runtime.lastError || !res) {
+          sendResponse({ success: false, message: "Failed to communicate with page." });
+        } else {
+          sendResponse(res);
+        }
+      });
+    });
+    return true;
+  }
 });

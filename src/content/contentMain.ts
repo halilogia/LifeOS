@@ -6,8 +6,10 @@
 
 import { initDetoxBlocker } from "./detox/detoxBlocker.js";
 import { initUniversalInfoBox } from "./infobox/universalInfoBox.js";
+import { initDomAgentEngine } from "./agent/domAgentEngine.js";
 
 (function () {
   initDetoxBlocker();
   initUniversalInfoBox();
+  initDomAgentEngine();
 })();

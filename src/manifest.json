@@ -6,7 +6,10 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications", "tabs", "alarms", "identity"],
+  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
   "host_permissions": [
     "https://www.gamerpower.com/*",
     "https://query2.finance.yahoo.com/*",

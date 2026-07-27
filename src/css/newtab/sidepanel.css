@@ -1,0 +1,211 @@
+/* Side Panel Web Agent Copilot Styles */
+.sidepanel-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #0d0d12;
+  color: var(--text-primary);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sidepanel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+}
+
+.sidepanel-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.sidepanel-tab-status {
+  padding: 10px 16px;
+  background: rgba(139, 92, 246, 0.06);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sidepanel-tab-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.sidepanel-tab-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidepanel-tab-url {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidepanel-refresh-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.sidepanel-refresh-btn:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.sidepanel-chips {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--card-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sidepanel-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.sidepanel-chip:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+.sidepanel-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidepanel-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 88%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.sidepanel-msg.user {
+  align-self: flex-end;
+  background: var(--accent-color);
+  color: white;
+  border-bottom-right-radius: 2px;
+}
+
+.sidepanel-msg.assistant {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  border-bottom-left-radius: 2px;
+}
+
+.sidepanel-agent-status {
+  padding: 8px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 8px;
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidepanel-input-container {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sidepanel-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: white;
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.sidepanel-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.sidepanel-send-btn {
+  background: var(--accent-color);
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidepanel-send-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.04);
+}

@@ -47,19 +47,49 @@ function PopupApp() {
         gap: "1rem",
       }}
     >
-      {/* Header with App Tab Switchers */}
-      <div className="popup-tabs">
+      {/* Header with App Tab Switchers & Side Panel Trigger */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="popup-tabs" style={{ flex: 1 }}>
+          <button
+            className={`popup-tab-btn ${popupTab === "pomo" ? "active" : ""}`}
+            onClick={() => setPopupTab("pomo")}
+          >
+            {t.popup_pomo_alarms_title}
+          </button>
+          <button
+            className={`popup-tab-btn ${popupTab === "detox" ? "active" : ""}`}
+            onClick={() => setPopupTab("detox")}
+          >
+            {t.popup_detox_tab_title}
+          </button>
+        </div>
         <button
-          className={`popup-tab-btn ${popupTab === "pomo" ? "active" : ""}`}
-          onClick={() => setPopupTab("pomo")}
+          onClick={() => {
+            chrome.runtime.sendMessage({ type: "open_sidepanel" });
+            window.close();
+          }}
+          title={lang === "tr" ? "Web AI Yan Panelini Aç" : "Open Web AI Side Panel"}
+          style={{
+            background: "rgba(139, 92, 246, 0.15)",
+            border: "1px solid var(--accent-color)",
+            color: "white",
+            borderRadius: "8px",
+            padding: "6px 10px",
+            fontSize: "0.72rem",
+            fontWeight: "700",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            marginLeft: "8px",
+            transition: "all 0.2s ease",
+          }}
         >
-          {t.popup_pomo_alarms_title}
-        </button>
-        <button
-          className={`popup-tab-btn ${popupTab === "detox" ? "active" : ""}`}
-          onClick={() => setPopupTab("detox")}
-        >
-          {t.popup_detox_tab_title}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+          <span>{lang === "tr" ? "Copilot" : "Side Panel"}</span>
         </button>
       </div>
 
