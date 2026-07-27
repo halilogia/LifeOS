@@ -1,13 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
-const distDir = path.resolve('dist');
-
 console.log('Post-build: Copying assets...');
 
 const filesToCopy = [
   { src: 'src/manifest.json', dest: 'dist/manifest.json' },
-  { src: 'src/content.js', dest: 'dist/content.js' },
   { src: 'src/background.js', dest: 'dist/background.js' }
 ];
 

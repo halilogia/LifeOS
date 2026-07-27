@@ -8,7 +8,6 @@ import {
   MessageItemData,
 } from "./aichat/AiChatMessageItem.js";
 import { AiChatInputToolbar } from "./aichat/AiChatInputToolbar.js";
-import { AICompanionModal } from "./AICompanionModal.js";
 
 interface AIChatViewProps {
   lang: Language;
@@ -87,7 +86,6 @@ export function AIChatView({
   const [messages, setMessages] = useState<MessageItemData[]>([]);
   const [inputVal, setInputVal] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
-  const [showCompanionModal, setShowCompanionModal] = useState(false);
   const [openThinkingIndexes, setOpenThinkingIndexes] = useState<
     Record<number, boolean>
   >({});
@@ -861,7 +859,6 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           keyTitleText={t.ai_chat_key_title}
           settingsTitle={t.settings_title}
           onSettingsOpen={onSettingsOpen}
-          onOpenCompanionModal={() => setShowCompanionModal(true)}
         />
 
         {/* Messages List Area */}
@@ -902,13 +899,6 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           onSendMessage={handleSendMessage}
         />
       </div>
-
-      {showCompanionModal && (
-        <AICompanionModal
-          lang={lang}
-          onClose={() => setShowCompanionModal(false)}
-        />
-      )}
     </div>
   );
 }

@@ -12,7 +12,6 @@ interface AiChatHeaderBarProps {
   keyTitleText: string;
   settingsTitle: string;
   onSettingsOpen: () => void;
-  onOpenCompanionModal?: () => void;
 }
 
 function IconSettings() {
@@ -42,7 +41,6 @@ export function AiChatHeaderBar({
   keyTitleText: _keyTitleText,
   settingsTitle,
   onSettingsOpen,
-  onOpenCompanionModal,
 }: AiChatHeaderBarProps) {
   return (
     <header className="ai-chat-header">
@@ -55,38 +53,13 @@ export function AiChatHeaderBar({
         )}
       </div>
 
-      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-        {onOpenCompanionModal && (
-          <button
-            className="key-panel-toggle-btn configured"
-            onClick={onOpenCompanionModal}
-            title="LifeOS: AI Companion (YouTube & Web Özetleyici)"
-            style={{
-              padding: "6px 12px",
-              fontSize: "0.82rem",
-              fontWeight: 600,
-              background: "rgba(124, 58, 237, 0.2)",
-              border: "1px solid var(--accent-color)",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              cursor: "pointer",
-            }}
-          >
-            <span>🤖</span>
-            <span>AI Companion</span>
-          </button>
-        )}
-
-        <button
-          className={`key-panel-toggle-btn ${aiApiKey ? "configured" : ""}`}
-          onClick={onSettingsOpen}
-          title={settingsTitle}
-        >
-          <IconSettings />
-        </button>
-      </div>
+      <button
+        className={`key-panel-toggle-btn ${aiApiKey ? "configured" : ""}`}
+        onClick={onSettingsOpen}
+        title={settingsTitle}
+      >
+        <IconSettings />
+      </button>
     </header>
   );
 }
