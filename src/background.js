@@ -255,7 +255,7 @@ function isBistMarketOpen() {
   const utcOffset = date.getTimezoneOffset() * 60000;
   const trtDate = new Date(date.getTime() + utcOffset + 3 * 3600000);
   const day = trtDate.getDay();
-  if (day === 0 || day === 6) return false; // Hafta sonu kapalı
+  if (day === 0 || day === 6) {return false;} // Hafta sonu kapalı
   const timeInMinutes = trtDate.getHours() * 60 + trtDate.getMinutes();
   return timeInMinutes >= 9 * 60 + 55 && timeInMinutes <= 18 * 60 + 15;
 }
@@ -269,7 +269,7 @@ async function checkBistStockRules() {
   chrome.storage.sync.get(["stockPortfolio", "stockRules"], async (res) => {
     const portfolio = res.stockPortfolio || [];
     const rules = res.stockRules || [];
-    if (portfolio.length === 0 || rules.length === 0) return;
+    if (portfolio.length === 0 || rules.length === 0) {return;}
 
     const symbols = Array.from(new Set(portfolio.map((p) => p.symbol)));
     for (const sym of symbols) {
@@ -279,10 +279,10 @@ async function checkBistStockRules() {
           : `${sym.toUpperCase()}.IS`;
         const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=1d&range=1d`;
         const resp = await fetch(url);
-        if (!resp.ok) continue;
+        if (!resp.ok) {continue;}
         const json = await resp.json();
         const meta = json?.chart?.result?.[0]?.meta;
-        if (!meta) continue;
+        if (!meta) {continue;}
 
         const price = meta.regularMarketPrice ?? 0;
         const prev = meta.previousClose ?? price;
@@ -320,7 +320,7 @@ async function checkBistStockRules() {
             });
           }
         }
-      } catch (e) {
+      } catch {
         // ignore background fetch errors
       }
     }

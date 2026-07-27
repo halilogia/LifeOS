@@ -42,7 +42,9 @@ export async function fetchLatestKapNews(
           (item) =>
             item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
         );
-        if (filtered.length > 0) return filtered;
+        if (filtered.length > 0) {
+          return filtered;
+        }
       }
       return items;
     }
@@ -76,7 +78,9 @@ export async function fetchLatestKapNews(
             (item) =>
               item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
           );
-          if (filtered.length > 0) return filtered;
+          if (filtered.length > 0) {
+          return filtered;
+        }
         }
         return items;
       }
@@ -160,7 +164,9 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
       (item) =>
         item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
     );
-    if (filtered.length > 0) return filtered;
+    if (filtered.length > 0) {
+      return filtered;
+    }
   }
   return mockNews;
 }

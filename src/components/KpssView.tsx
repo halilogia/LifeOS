@@ -689,14 +689,6 @@ export function KpssView({
 
   const topics = getSortedTopics();
 
-  const completedTopicsCount = kpssProgress.filter(
-    (p) => p.subject === currentSubject && p.status === 2,
-  ).length;
-  const inProgressTopicsCount = kpssProgress.filter(
-    (p) => p.subject === currentSubject && p.status === 1,
-  ).length;
-
-  const totalTopics = (kpssData[currentSubject] || []).length;
   const overallNetObj = getOverallNets();
   const overallNet = overallNetObj.net;
   const maxNet = overallNetObj.max;

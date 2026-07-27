@@ -81,7 +81,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
   // Run Advisor Query
   const handleAskAdvisor = async (e: Event) => {
     e.preventDefault();
-    if (!querySymbol.trim()) return;
+    if (!querySymbol.trim()) {return;}
 
     setAdvisorLoading(true);
     const sym = querySymbol.trim().toUpperCase().replace(/\.IS$/, "");

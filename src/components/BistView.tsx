@@ -48,7 +48,7 @@ export function BistView({ lang }: BistViewProps) {
   const [rules, setRules] = useState<StockRule[]>([]);
   const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
-  const [_loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   // Search states (Midas-style search bar)
   const [searchQuery, setSearchQuery] = useState("");
