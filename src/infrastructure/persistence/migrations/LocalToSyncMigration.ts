@@ -43,6 +43,8 @@ const SYNC_KEYS = [
   "stockRules",
   "stockAlertLogs",
   "alarms",
+  "stockWatchlists",
+  "aiUserMemory",
 ];
 
 export class LocalToSyncMigration {

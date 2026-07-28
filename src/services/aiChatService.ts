@@ -68,24 +68,38 @@ export async function callAIConfigured({
       `\n\nKURALLAR:\n1. Yanıtını yukarıdaki CANLI İNTERNET ARAMA SONUÇLARINA dayandır.\n2. Bilgileri aktarırken metnin içine [1], [2] şeklinde kaynak numarası ekle.\n3. Yanıtın başında araştırmayı özetle.`;
   }
 
+  // Fetch Personal AI Memory (memory.md) context
+  const userMemory: string = await new Promise<string>((r) =>
+    chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
+      r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
+    ),
+  );
+
+  let memoryContextPrompt = "";
+  if (userMemory && userMemory.trim()) {
+    memoryContextPrompt = `\n\n--- 🧠 KİŞİSEL KULLANICI HAFIZASI & KİŞİSEL BAĞLAM (memory.md) ---\n${userMemory.trim()}\n\nÖNEMLİ: Tüm yanıtlarında yukarıdaki kişisel kullanıcı hafızasını ve tercihlerini her zaman göz önünde bulundur.`;
+  }
+
   const systemPrompt = `You are a helpful AI Assistant for the Life OS Personal Dashboard Chrome Extension with built-in Google AI Mode Web Research capabilities. The current year is ${new Date().getFullYear()}. The current date is ${todayStr}.
 You MUST default to replying in Turkish unless the user explicitly requests you in their prompt to reply in another specific language (e.g. English, Arabic, Korean, French, German, Spanish, etc.). If the user does not explicitly request a foreign language response, always respond in Turkish.
-You can chat naturally, but if the user wants to add, create, or schedule a task, or add a diary entry/note/study note, you must output a structured JSON response.
+You can chat naturally, but if the user wants to add/create a task, add a diary/note, or wants you to remember a fact/preference about them, you must output a structured JSON response.
+${memoryContextPrompt}
 ${webContextPrompt}
 
 Format your final output ONLY as a JSON object matching this schema:
 {
   "reply": "Your conversational response text (default to Turkish unless explicitly requested otherwise). Include [1], [2] citations if web sources were provided.",
-  "action": "create_task" | "add_note" | "none",
+  "action": "create_task" | "add_note" | "update_memory" | "none",
   "params": {
     "text": "Task text (only for create_task)",
     "dueDate": "YYYY-MM-DD target date (calculated relative to today's date if requested - only for create_task)",
     "repeat": "none" | "daily" | "weekly" | "monthly" (only for create_task),
     "note_type": "note" | "diary" | "cornell" (only for add_note),
-    "note_title": "Title for the note/diary/cornell entry (provide a suitable brief title if not explicitly provided - only for add_note)",
-    "note_content": "Content of the note or main notes section of Cornell notes (only for add_note)",
-    "note_cues": "Keywords, cues or questions (only for Cornell notes, cues/questions derived from context - only for add_note)",
-    "note_summary": "A brief summary of the study material (only for Cornell notes - only for add_note)"
+    "note_title": "Title for the note/diary/cornell entry (only for add_note)",
+    "note_content": "Content of the note (only for add_note)",
+    "note_cues": "Keywords or questions (only for add_note)",
+    "note_summary": "Summary of the study material (only for add_note)",
+    "memory_fact": "A concise bullet point describing a key personal fact, role, habit, goal, or preference the user told you to remember (only for update_memory)"
   }
 }
 Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
@@ -297,5 +311,39 @@ export async function handleAddNoteFromAI(
   });
   await new Promise<void>((r) =>
     chrome.storage.sync.set({ notes: currentNotes }, r),
+  );
+}
+
+/**
+ * Appends a new learned personal memory fact from AI Chat to chrome.storage.sync aiUserMemory.
+ */
+export async function handleUpdateMemoryFromAI(
+  newFact: string,
+): Promise<void> {
+  if (!newFact || !newFact.trim()) return;
+
+  const currentMemory: string = await new Promise<string>((r) =>
+    chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
+      r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
+    ),
+  );
+
+  const dateStr = new Date().toLocaleDateString("tr-TR");
+  const cleanFact = `- [${dateStr}] ${newFact.trim()}`;
+
+  let updatedMemory = currentMemory;
+  if (!updatedMemory || !updatedMemory.trim()) {
+    updatedMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
+  } else if (updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")) {
+    updatedMemory = updatedMemory.replace(
+      "## 💡 AI Tarafından Öğrenilen Bilgiler",
+      `## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`,
+    );
+  } else {
+    updatedMemory = `${updatedMemory.trim()}\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
+  }
+
+  await new Promise<void>((r) =>
+    chrome.storage.sync.set({ aiUserMemory: updatedMemory }, r),
   );
 }

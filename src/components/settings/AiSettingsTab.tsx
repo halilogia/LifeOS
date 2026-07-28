@@ -28,6 +28,26 @@ export function AiSettingsTab({
   const [models, setModels] = useState<string[]>([]);
   const [loadingModels, setLoadingModels] = useState(false);
   const [modelError, setModelError] = useState("");
+  const [userMemory, setUserMemory] = useState("");
+  const [memorySavedSuccess, setMemorySavedSuccess] = useState(false);
+
+  useEffect(() => {
+    chrome.storage.sync.get(["aiUserMemory"], (syncRes: Record<string, any>) => {
+      if (syncRes && typeof syncRes.aiUserMemory === "string") {
+        setUserMemory(syncRes.aiUserMemory);
+      } else {
+        const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
+        setUserMemory(defaultMemory);
+      }
+    });
+  }, []);
+
+  const handleSaveMemory = () => {
+    chrome.storage.sync.set({ aiUserMemory: userMemory }, () => {
+      setMemorySavedSuccess(true);
+      setTimeout(() => setMemorySavedSuccess(false), 2500);
+    });
+  };
 
   const fetchModels = async () => {
     setLoadingModels(true);
@@ -472,6 +492,68 @@ export function AiSettingsTab({
             }}
           >
             {aiShowThinking ? t.enabled : t.disabled}
+          </button>
+        </div>
+
+        {/* 🧠 Kişisel Hafıza & Kullanıcı Bağlamı (memory.md) */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            marginTop: "16px",
+            paddingTop: "14px",
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <label
+              style={{
+                fontSize: "0.9rem",
+                fontWeight: 700,
+                color: "#f8fafc",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span>🧠 Kişisel AI Hafızası & Bağlam Penceresi (memory.md)</span>
+            </label>
+            {memorySavedSuccess && (
+              <span style={{ fontSize: "0.75rem", color: "#34d399", fontWeight: 600 }}>
+                ✓ Hafıza Kaydedildi!
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", lineHeight: 1.4 }}>
+            Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu alana özel notlarınızı yazabilirsiniz.
+          </span>
+          <textarea
+            value={userMemory}
+            onInput={(e) => setUserMemory((e.target as HTMLTextAreaElement).value)}
+            rows={7}
+            style={{
+              width: "100%",
+              background: "rgba(15, 23, 42, 0.6)",
+              border: "1px solid rgba(139, 92, 246, 0.3)",
+              borderRadius: "10px",
+              padding: "10px 12px",
+              color: "#f1f5f9",
+              fontSize: "0.82rem",
+              fontFamily: "Fira Code, monospace",
+              lineHeight: 1.5,
+              outline: "none",
+              resize: "vertical",
+            }}
+            placeholder="# Kişisel Hafıza notlarınızı buraya yazın..."
+          />
+          <button
+            type="button"
+            className="stock-btn stock-btn-primary"
+            style={{ alignSelf: "flex-end", padding: "6px 16px", fontSize: "0.8rem" }}
+            onClick={handleSaveMemory}
+          >
+            💾 Kişisel Hafızayı Kaydet (memory.md)
           </button>
         </div>
       </div>
