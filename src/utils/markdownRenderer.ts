@@ -1,6 +1,7 @@
 /**
  * markdownRenderer.ts
  * Safe, XSS-protected Markdown to HTML converter.
+ * Supports headings, bold/italic, code blocks, lists, links, and embedded images.
  */
 
 export function renderMarkdown(text: string): string {
@@ -12,6 +13,17 @@ export function renderMarkdown(text: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+
+  // Parse Markdown Images FIRST before link parser: ![alt](url)
+  // Re-allow http/https in image src after XSS escaping
+  html = html.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s\)]+)\)/g, (_, alt, src) => {
+    return `<img src="${src}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
+  });
+
+  // Parse Markdown Links: [text](url)
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, (_, linkText, href) => {
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
+  });
 
   // Parse Code blocks: ```javascript ... ```
   html = html.replace(/```([\s\S]+?)```/g, (_, code) => {

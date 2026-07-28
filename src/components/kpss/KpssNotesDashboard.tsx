@@ -29,6 +29,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [autoTitleEnabled, setAutoTitleEnabled] = useState<boolean>(false);
   const [showGraphModal, setShowGraphModal] = useState<boolean>(false);
+  const [showInfoboxHelp, setShowInfoboxHelp] = useState<boolean>(false);
 
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"read" | "edit">("read");
@@ -283,6 +284,28 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                     <span>.md İndir</span>
                   </button>
 
+                  {/* Infobox Help Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowInfoboxHelp(true)}
+                    title={lang === "tr" ? "Dinamik Bilgi Kutusu Nasıl Çalışır?" : "Infobox Guide"}
+                    style={{
+                      background: "rgba(59, 130, 246, 0.15)",
+                      border: "1px solid rgba(59, 130, 246, 0.35)",
+                      color: "#60a5fa",
+                      borderRadius: "6px",
+                      padding: "5px 9px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.78rem",
+                      fontWeight: 800,
+                    }}
+                  >
+                    !
+                  </button>
+
                   {/* Icon-Only Neural Graph Button */}
                   <button
                     type="button"
@@ -374,6 +397,95 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
             setShowGraphModal(false);
           }}
         />
+      )}
+
+      {/* Infobox Help Guide Modal Popup */}
+      {showInfoboxHelp && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10000,
+          }}
+          onClick={() => setShowInfoboxHelp(false)}
+        >
+          <div
+            style={{
+              background: "#0f172a",
+              border: "1px solid rgba(59, 130, 246, 0.4)",
+              borderRadius: "14px",
+              padding: "24px",
+              maxWidth: "460px",
+              width: "90%",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+              color: "#f1f5f9",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "10px", marginBottom: "14px" }}>
+              <h3 style={{ margin: 0, color: "#38bdf8", fontSize: "1.05rem", fontWeight: 800 }}>
+                ℹ️ Dinamik Bilgi Kutusu Nasıl Çalışır?
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowInfoboxHelp(false)}
+                style={{ background: "none", border: "none", color: "#94a3b8", fontSize: "1.2rem", cursor: "pointer" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "0.84rem", lineHeight: 1.6 }}>
+              <div>
+                <strong style={{ color: "#60a5fa" }}>🖼️ 1. Kapak Görseli:</strong>
+                <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
+                  Notunuza yapıştırdığınız resim adresi (örneğin Google Görsel linki) metin içinden gizlenir ve otomatik olarak Bilgi Kutusu'nun en üstüne yerleştirilir. 2. ve 3. görseller metin içinde kalır.
+                </p>
+              </div>
+
+              <div>
+                <strong style={{ color: "#60a5fa" }}>📌 2. Dinamik Özet Satırları:</strong>
+                <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
+                  Notunuzda <code>Başlık : Açıklama</code> (örneğin <code>Zeytin : Akdeniz ikliminin en net kanıtıdır</code>) formatında yazdığınız tanımlar otomatik taranıp Bilgi Kutusu'na özet olarak çekilir.
+                </p>
+              </div>
+
+              <div>
+                <strong style={{ color: "#60a5fa" }}>🔗 3. Gelen Bağlantılar (Backlinks):</strong>
+                <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
+                  Diğer notlarda bu notun adı geçtiğinde otomatik bağlantı kurulur ve kutunun altında listelenir.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowInfoboxHelp(false)}
+              style={{
+                marginTop: "18px",
+                width: "100%",
+                background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+                border: "none",
+                color: "white",
+                padding: "9px",
+                borderRadius: "8px",
+                fontWeight: 700,
+                fontSize: "0.85rem",
+                cursor: "pointer",
+              }}
+            >
+              Anladım
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

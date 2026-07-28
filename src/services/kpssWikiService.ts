@@ -87,13 +87,12 @@ export function extractTitleFromContent(content: string): string {
   const lines = content.split("\n");
   for (const line of lines) {
     const trimmed = line.trim();
-    if (trimmed) {
-      const clean = trimmed.replace(/^#+\s*/, "").replace(/^[\:\-\*\_\`]+/, "").trim();
-      if (!clean) continue;
-      const words = clean.split(/\s+/);
-      if (words.length > 0 && words[0]) {
-        return words[0].replace(/[\,\.\:\;\!\?\"\'\(\)]/g, "").trim();
-      }
+    if (!trimmed) continue;
+    const clean = trimmed.replace(/^#+\s*/, "").replace(/^[\:\-\*\_\`]+/, "").trim();
+    if (!clean) continue;
+    const words = clean.split(/\s+/);
+    if (words.length > 0 && words[0]) {
+      return words[0].replace(/[\,\.\:\;\!\?\"\'\(\)]/g, "").trim();
     }
   }
   return "";
@@ -119,13 +118,50 @@ export function extractHeadings(content: string): HeadingItem[] {
 }
 
 /**
+ * Extract the first Image URL from markdown content for Infobox Featured Header
+ */
+export function extractFirstImageUrl(content: string): string | null {
+  if (!content) return null;
+
+  // 1. Check for standard Markdown image syntax: ![alt](url)
+  const mdImgMatch = content.match(/!\[.*?\]\((https?:\/\/[^\s\)]+)\)/i);
+  if (mdImgMatch && mdImgMatch[1]) return mdImgMatch[1];
+
+  // 2. Check for plain image URLs or Google Image thumbnail URLs
+  const plainUrlMatch = content.match(
+    /(https?:\/\/[^\s<>\"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>\"]+images\?[^\s<>\"]+|https?:\/\/[^\s<>\"]+encrypted-tbn[^\s<>\"]+)/i
+  );
+  if (plainUrlMatch && plainUrlMatch[0]) return plainUrlMatch[0];
+
+  return null;
+}
+
+/**
  * Render Markdown with custom styled links highlighted in blue.
  * Auto-links [[Target Note]] and mentions of other note titles.
- * Supports Unicode boundaries for Turkish characters (Ç, Ğ, İ, Ö, Ş, Ü).
+ * The 1st image URL is reserved for Infobox; 2nd+ images and markdown images render inside the article body.
  */
 export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiNote[]): string {
   if (!content) return "";
-  let html = renderMarkdown(content);
+
+  const firstImg = extractFirstImageUrl(content);
+  let processedContent = content;
+
+  // If firstImg exists, strip ALL instances of ![alt](firstImg) or standalone firstImg URL from body text
+  if (firstImg) {
+    const escapedUrl = firstImg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const mdPattern = new RegExp(`!\\[.*?\\]\\(${escapedUrl}\\)`, "gi");
+    const plainPattern = new RegExp(`^\\s*${escapedUrl}\\s*$`, "gim");
+    processedContent = processedContent.replace(mdPattern, "").replace(plainPattern, "");
+  }
+
+  // Convert any remaining plain image URLs into Markdown image syntax for in-body rendering
+  processedContent = processedContent.replace(
+    /^(https?:\/\/[^\s<>\"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>\"]+images\?[^\s<>\"]+|https?:\/\/[^\s<>\"]+encrypted-tbn[^\s<>\"]+)$/gim,
+    (url) => `![Görsel](${url})`
+  );
+
+  let html = renderMarkdown(processedContent);
 
   // 1. Process explicit [[Target Note|Display Name]] or [[Target Note]]
   html = html.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (_, title, display) => {
@@ -138,7 +174,7 @@ export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiN
     if (!n.title || n.title.trim().length < 3) return;
     const cleanTitle = n.title.trim();
     const escaped = cleanTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    
+
     // Use Unicode property boundaries to properly match Turkish characters (Ç, Ğ, İ, Ö, Ş, Ü)
     try {
       const regex = new RegExp(`(?<![\\p{L}\\p{N}])(${escaped})(?![\\p{L}\\p{N}])`, "gui");

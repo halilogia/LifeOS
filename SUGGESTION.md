@@ -57,7 +57,11 @@ Bu doküman, **ZenTodo / Life OS Chrome Extension** projesinin gelecekteki sür�
 ### 3.2 📑 Akıllı Sekme Gruplama & RAM Tasarrufu (Smart Tab Grouping & Suspender)
 * **Fikir**: Tarayıcınızda biriken 50+ sekmeyi AI ile konularına göre (Borsa, KPSS, Haberler) otomatik gruplama ve inaktif sekmeleri uyutarak RAM tasarrufu sağlama.
 
-### 3.3 📅 Google Calendar & Outlook Çift Yönlü Senkronizasyon
+### 3.4 📚 KPSS Wiki Notlarından Otomatik AI Flashcard & Test Üretimi
+* **Fikir**: Vikipedi formatındaki ders notlarınızdan tek tıkla yapay zeka ile **KPSS Bilgi Kartı (SRS)** veya **Test Sorusu** türetme.
+* **Katma Değer**: `Maki` veya `Çorum` ders notunu okurken "Kart Üret" butonuna basarak nottaki en kritik 5 soruyu otomatik SRS kart kutunuza ekler.
+
+---
 * **Fikir**: Eklentideki görevlerinizi ve hatırlatıcılarınızı doğrudan kişisel Google Takviminize işleme.
 
 ---
