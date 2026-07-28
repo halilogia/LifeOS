@@ -3,6 +3,7 @@ import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { PageContext, AgentActionPayload } from "@/content/agent/domAgentEngine.js";
 import { getAIConfigFromStorage, handleUpdateMemoryFromAI, executeAIAction } from "@/services/aiChatService.js";
+import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 
 interface ChatMessage {
   id: string;
@@ -54,9 +55,54 @@ export function SidePanelApp() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [agentStatus, setAgentStatus] = useState<string | null>(null);
   const [pageContext, setPageContext] = useState<PageContext | null>(null);
+  const [isListening, setIsListening] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = getTranslation(lang);
+
+  const toggleVoiceInput = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert(lang === "tr" ? "Tarayıcınız sesli komutu desteklemiyor." : "Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript));
+        setIsListening(false);
+      };
+
+      recognition.onerror = () => {
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch {
+      setIsListening(false);
+    }
+  };
 
   const [activeSessionKey, setActiveSessionKey] = useState<string>("");
 
@@ -384,12 +430,14 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                     : `✓ "${actionPayload.memory_fact}" saved to personal memory (memory.md).`;
                 }
               } else if (Array.isArray(actionPayload)) {
-                // Handle Form filling array actions
+                // Handle dynamic Agent tool actions (clicks, typing, scroll, extract)
                 const count = actionPayload.length;
+                const actionSummary = formatActionExecutionSummary(actionPayload, lang);
+
                 setAgentStatus(
                   lang === "tr"
-                    ? `Form aksiyonu yürütülüyor (${count} işlem)...`
-                    : `Executing form action (${count} items)...`,
+                    ? `Aksiyon yürütülüyor (${count} işlem)...`
+                    : `Executing agent tools (${count} items)...`,
                 );
 
                 let cleanPromptResponse = responseText
@@ -398,10 +446,10 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                   .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
                   .trim();
 
-                if (!cleanPromptResponse || cleanPromptResponse.length < 10) {
-                  cleanPromptResponse = lang === "tr"
-                    ? "✓ Sayfadaki form alanları kişisel hafızanızdaki (memory.md) bilgilerle otomatik olarak dolduruldu."
-                    : "✓ Form fields on the page have been filled using your personal memory (memory.md).";
+                if (!cleanPromptResponse || cleanPromptResponse.length < 5) {
+                  cleanPromptResponse = actionSummary;
+                } else {
+                  cleanPromptResponse = `${cleanPromptResponse}\n\n${actionSummary}`;
                 }
 
                 finalContent = cleanPromptResponse;
@@ -416,11 +464,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                           msg.id === assistantMsgId
                             ? {
                                 ...msg,
-                                content: `${cleanPromptResponse}\n\n✓ *${
-                                  lang === "tr"
-                                    ? `${count} adet alan dolduruldu`
-                                    : `${count} fields updated`
-                                }*`,
+                                content: cleanPromptResponse,
                               }
                             : msg,
                         ),
@@ -711,6 +755,20 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
 
       {/* Input Container */}
       <div className="sidepanel-input-container">
+        <button
+          className={`sidepanel-mic-btn ${isListening ? "listening" : ""}`}
+          onClick={toggleVoiceInput}
+          title={isListening ? (lang === "tr" ? "Dinleniyor..." : "Listening...") : (lang === "tr" ? "Sesli Komut Ver" : "Voice Command")}
+          disabled={isProcessing}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </button>
+
         <input
           type="text"
           className="sidepanel-input"
@@ -719,11 +777,20 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage();
           }}
-          placeholder={lang === "tr" ? "Sayfa hakkında soru yazın..." : "Ask a question..."}
+          placeholder={
+            isListening
+              ? lang === "tr"
+                ? "Konuşun, dinleniyor..."
+                : "Listening, speak now..."
+              : lang === "tr"
+                ? "Sayfa hakkında soru yazın veya sesli komut verin..."
+                : "Ask a question or use voice command..."
+          }
           disabled={isProcessing}
         />
+
         <button className="sidepanel-send-btn" onClick={() => handleSendMessage()} disabled={isProcessing}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
