@@ -30,10 +30,10 @@ export interface BISTSearchResult {
 }
 
 // ── Default BIST Ticker symbols for live discovery (NO hardcoded names) ───
-export const POPULAR_BIST_TICKERS: string[] = [
+export const POPULAR_BIST_TICKERS = [
   "THYAO.IS",
-  "AKBNK.IS",
   "GARAN.IS",
+  "AKBNK.IS",
   "EREGL.IS",
   "KCHOL.IS",
   "SASA.IS",
@@ -67,6 +67,47 @@ export const POPULAR_BIST_TICKERS: string[] = [
   "BRSAN.IS",
   "ENJSA.IS",
   "KCAER.IS",
+  "AEFES.IS",
+  "AGHOL.IS",
+  "AHGAZ.IS",
+  "AKCNS.IS",
+  "AKSA.IS",
+  "AKSEN.IS",
+  "ALARK.IS",
+  "ALFAS.IS",
+  "ALTNY.IS",
+  "ARCLK.IS",
+  "BERA.IS",
+  "BRYAT.IS",
+  "CANTE.IS",
+  "CCOLA.IS",
+  "CIMSA.IS",
+  "CWENE.IS",
+  "DOHOL.IS",
+  "ECILC.IS",
+  "EGEEN.IS",
+  "EKGYO.IS",
+  "ENKAI.IS",
+  "GESAN.IS",
+  "GUBRF.IS",
+  "ISMEN.IS",
+  "KORDS.IS",
+  "KOZAL.IS",
+  "KOZAA.IS",
+  "MGROS.IS",
+  "OTKAR.IS",
+  "OYAKC.IS",
+  "SKBNK.IS",
+  "TABGD.IS",
+  "TKFEN.IS",
+  "TSKB.IS",
+  "TTKOM.IS",
+  "TTRAK.IS",
+  "ULKER.IS",
+  "VESBE.IS",
+  "VESTL.IS",
+  "YEOTK.IS",
+  "YYLGD.IS",
 ];
 
 /**
@@ -325,11 +366,12 @@ export interface StockHistoryItem {
 export async function fetchStockHistory(
   symbol: string,
   range: string = "1mo",
-  interval: string = "1d",
+  interval?: string,
 ): Promise<StockHistoryItem[]> {
   const fullSymbol = symbol.endsWith(".IS") ? symbol : `${symbol}.IS`;
+  const effectiveInterval = interval ? interval : range === "1d" ? "15m" : "1d";
   try {
-    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=${interval}&range=${range}&includePrePost=false`;
+    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=${effectiveInterval}&range=${range}&includePrePost=false`;
     const res = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0",

@@ -143,6 +143,11 @@ export function BistView({ lang }: BistViewProps) {
     setActiveWatchlistId("all");
   };
 
+  const handleToggleSymbolInWatchlist = async (watchlistId: string, symbol: string) => {
+    const updated = await stockRepository.toggleSymbolInWatchlist(watchlistId, symbol);
+    setWatchlists(updated);
+  };
+
   // Handlers
   const handleSaveStock = async (itemData: Omit<StockPortfolioItem, "id">) => {
     const fullItem: StockPortfolioItem = {
@@ -291,8 +296,11 @@ export function BistView({ lang }: BistViewProps) {
         <BistKesfetTab
           searchQuery={searchQuery}
           quoteMap={quoteMap}
+          watchlists={watchlists}
           onSearchQueryChange={setSearchQuery}
           onQuickAddStock={handleQuickAddStock}
+          onToggleWatchlistSymbol={handleToggleSymbolInWatchlist}
+          onCreateWatchlist={handleCreateWatchlist}
           onOpenChart={(symClean) => setSelectedChartSymbol(symClean)}
           onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
         />
