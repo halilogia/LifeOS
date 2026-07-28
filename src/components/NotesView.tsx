@@ -16,6 +16,7 @@ import {
   NoteType,
 } from "@/components/notes/NoteEditorModal.js";
 import { QuoteEditorModal } from "@/components/notes/QuoteEditorModal.js";
+import { ZettelkastenGraphModal } from "@/components/notes/ZettelkastenGraphModal.js";
 
 interface NotesViewProps {
   lang: Language;
@@ -28,6 +29,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [quotes, setQuotes] = useState<CustomQuote[]>([]);
   const [filterType, setFilterType] = useState<NoteFilterType>("all");
+  const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
 
   // Note Modal States
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
@@ -259,6 +261,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           lang={lang}
           onOpenQuoteModal={() => setIsQuoteModalOpen(true)}
           onOpenNoteModal={() => handleOpenNoteModal()}
+          onOpenGraphModal={() => setIsGraphModalOpen(true)}
         />
 
         {/* Custom Quotes List */}
@@ -325,6 +328,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         noteSummary={noteSummary}
         notesPlaceholder={t.notes_placeholder}
         notesContentPlaceholder={t.notes_content_placeholder}
+        availableNotes={notes}
         onClose={() => setIsNoteModalOpen(false)}
         onNoteTypeChange={setNoteType}
         onNoteTitleChange={setNoteTitle}
@@ -345,6 +349,15 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         onQuoteAuthorChange={setQuoteAuthor}
         onSave={handleSaveQuote}
       />
+
+      {/* Obsidian Zettelkasten Interactive Graph View Modal */}
+      {isGraphModalOpen && (
+        <ZettelkastenGraphModal
+          notes={notes}
+          onClose={() => setIsGraphModalOpen(false)}
+          onSelectNote={(note) => handleOpenNoteModal(note)}
+        />
+      )}
     </div>
   );
 }

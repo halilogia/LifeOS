@@ -64,6 +64,9 @@ export function AiChatInputToolbar({
           type="button"
           className={`chip-btn ${enableWebSearch ? "active" : ""}`}
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
             background: enableWebSearch
               ? "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))"
               : "rgba(255, 255, 255, 0.04)",
@@ -74,7 +77,9 @@ export function AiChatInputToolbar({
           onClick={onToggleWebSearch}
           title="Google Canlı Arama (Search Grounding) Modu"
         >
-          <IconGlobe />
+          <span style={{ display: "inline-flex", alignItems: "center" }}>
+            <IconGlobe />
+          </span>
           <span>Google Canlı Arama: {enableWebSearch ? "AÇIK" : "KAPALI"}</span>
         </button>
 
