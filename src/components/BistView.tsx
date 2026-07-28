@@ -257,19 +257,12 @@ export function BistView({ lang }: BistViewProps) {
           quoteMap={quoteMap}
           onSearchQueryChange={setSearchQuery}
           onQuickAddStock={handleQuickAddStock}
-          onOpenChart={(symClean) => {
-            setSelectedChartSymbol(symClean);
-            setActiveTab("chart");
-          }}
+          onOpenChart={(symClean) => setSelectedChartSymbol(symClean)}
           onOpenAiModal={(symClean) => setAiModalSymbol(symClean)}
         />
       )}
 
       {activeTab === "halka-arz" && <HalkaArzView lang={lang} />}
-
-      {activeTab === "chart" && selectedChartSymbol && (
-        <CustomStockChart symbol={selectedChartSymbol} lang="tr" />
-      )}
 
       {/* Modals */}
       {showAddModal && (

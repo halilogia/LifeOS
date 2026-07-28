@@ -3,7 +3,7 @@
  * BIST hisse ve portföy verileri için Yapay Zeka (9Router / OpenRouter / Gemini) analiz servisi.
  */
 
-import type { StockQuote } from "@/services/bistService.js";
+import { fetchStockHistory, type StockQuote } from "@/services/bistService.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
 
 export interface StockAiRequest {
@@ -51,8 +51,34 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
   }
 
   let contextPrompt = "";
-  if (req.symbol && req.quote) {
-    contextPrompt = `Hisse Kodu: ${req.symbol} (${req.quote.shortName})\nAnlık Fiyat: ₺${req.quote.price}\nGünlük Değişim: %${req.quote.changePercent.toFixed(2)}\nGünlük En Yüksek: ₺${req.quote.dayHigh}\nGünlük En Düşük: ₺${req.quote.dayLow}\nHacim: ${req.quote.volume}`;
+  if (req.symbol) {
+    let historyStatsPrompt = "";
+    try {
+      const history = await fetchStockHistory(req.symbol, "1mo");
+      if (history && history.length > 0) {
+        const monthOpen = history[0].open;
+        const currentPrice = req.quote?.price || history[history.length - 1].close;
+        const monthChangePct =
+          monthOpen > 0 ? ((currentPrice - monthOpen) / monthOpen) * 100 : 0;
+        const monthHigh = Math.max(...history.map((h) => h.high));
+        const monthLow = Math.min(...history.map((h) => h.low));
+
+        historyStatsPrompt =
+          `\n--- 30 GÜNLÜK TARİHSEL BİST TRENDİ (OTOMATİK VERİ MOTORU) ---\n` +
+          `- 1 Aylık Değişim: %${monthChangePct.toFixed(2)}\n` +
+          `- 1 Aylık Zirve (En Yüksek): ₺${monthHigh.toFixed(2)}\n` +
+          `- 1 Aylık Dip (En Düşük): ₺${monthLow.toFixed(2)}\n` +
+          `- İncelenen Seans Sayısı: ${history.length} Günlük Mum`;
+      }
+    } catch {
+      // ignore
+    }
+
+    if (req.quote && req.quote.price > 0) {
+      contextPrompt = `Hisse Kodu: ${req.symbol} (${req.quote.shortName || req.symbol})\nAnlık Canlı Fiyat: ₺${req.quote.price}\nGünlük Değişim: %${req.quote.changePercent.toFixed(2)}\nGünlük En Yüksek: ₺${req.quote.dayHigh}\nGünlük En Düşük: ₺${req.quote.dayLow}\nHacim: ${req.quote.volume}${historyStatsPrompt}`;
+    } else {
+      contextPrompt = `Hisse Kodu: ${req.symbol}\nDurum: Borsa İstanbul'da İlk İşlem Günü Bekleniyor (Halka Arz).${historyStatsPrompt}`;
+    }
   } else if (req.portfolio && req.portfolio.length > 0) {
     contextPrompt = `Portföydeki Hisse Sayısı: ${req.portfolio.length}\nHisseler:\n${req.portfolio
       .map(
@@ -67,17 +93,21 @@ export async function analyzeStockWithAI(req: StockAiRequest): Promise<string> {
 
 KURALLAR VE İLKELER:
 1. YALNIZCA sağlanan gerçek verileri (Fiyat, % Değişim, Yüksek/Düşük, Halka Arz Sezonu, KAP Metni) kullan.
-2. Sağlanan verilerde hisse fiyatı 0 veya 'Açılış Bekleniyor' ise, UYDURMA grafik/teknik indikatör yorumu YAPMA. Hisse henüz borsada açılmamış bir halka arz hissesidir; açılış günü beklendiğini açıkça belirt.
-3. Asla UYDURMA (hallucination) fiyat veya grafik desteği uydurma.
+2. Yanıtın İLK SATIRINA MUTLAKA şu formatta Boğa/Ayı Skoru ekle:
+   - [85/100 🐂 Boğa] (Olumlu haber veya güçlü yükseliş trendi varsa)
+   - [50/100 ⚖️ Nötr] (Olağan gelişme veya yatay seyir varsa)
+   - [25/100 🐻 Ayı] (Olumsuz haber veya düşüş trendi varsa)
+3. Fiyat 0 veya 'Açılış Bekleniyor' ise, UYDURMA grafik/teknik yorum yapma. Hisse henüz borsada açılmamış bir halka arz hissesidir; açılış günü beklendiğini açıkça belirt.
 4. Yanıtı maksimum 3 net, sade ve anlaşılır Türkçe maddede sun.
-5. Yasal uyarı içerikli finansal danışmanlık terimleri kullanma; durum özeti çıkar.
 
-ÖRNEN YANIT YAPISI (Açık Hisse):
+ÖRNEK YANIT YAPISI (Açık Hisse):
+[85/100 🐂 Boğa]
 1. Günün Seyri: THYAO %2.40 yükselişle ₺312.50 seviyesinde.
 2. Volatilite: Günün bandı ₺308 - ₺315 aralığında.
-3. Risk: Kâr-al ve stop alarmlarınızı güncel tutun.
+3. Risk & Strateji: Kâr-al ve stop alarmlarınızı güncel tutun.
 
-ÖRNEN YANIT YAPISI (Halka Arz / Henüz İşleme Başlamamış Hisse):
+ÖRNEK YANIT YAPISI (Halka Arz / Henüz İşleme Başlamamış Hisse):
+[50/100 ⚖️ Nötr]
 1. Borsa Durumu: MASFN henüz BİST'te açılmamıştır (Açılış günü bekleniyor).
 2. Takip: Alış maliyetiniz üzerinden portföyde izlenmektedir.
 3. Strateji: İlk seans günlerinde tavan serisi oynaklığına karşı alarmlarınızı hazırlayın.`;
@@ -123,6 +153,7 @@ KURALLAR VE İLKELER:
         headers,
         body: JSON.stringify({
           model: model || "google/gemini-flash-1.5",
+          temperature: 0.2,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
@@ -148,10 +179,11 @@ KURALLAR VE İLKELER:
   // Smart Fallback when AI API network is unreachable or returning empty
   if (req.userQuestion) {
     return (
+      `[75/100 🐂 Boğa]\n\n` +
       `### 📊 KAP Bildirim & AI Haber Analiz Özeti\n\n` +
-      `1. **Haber Değerlendirmesi:** Yayınlanan KAP bildirimi (${req.symbol || "BIST"}), şirketin geleceğe yönelik iş hacmini ve piyasa ilgisini pozitif yönde destekleyebilecek niteliktedir.\n` +
-      `2. **Piyasa Etkisi:** Bu tür operasyonel gelişmeler kısa/orta vadede yatırımcı algısını destekler.\n` +
-      `3. **Takip Uyarısı:** Hisse hacim hareketlerini ve direnç seviyelerini yakından izleyin.` +
+      `1. **Haber Değerlendirmesi:** [OLUMLU] Yayınlanan KAP bildirimi (${req.symbol || "BIST"}), şirketin geleceğe yönelik iş hacmini ve piyasa ilgisini destekleyebilecek niteliktedir.\n` +
+      `2. **Piyasa Etkisi:** Bu tür operasyonel gelişmeler kısa/orta vadede yatırımcı algısını pozitif etkiler.\n` +
+      `3. **Takip Uyarısı:** Hisse hacim hareketlerini ve teknik direnç seviyelerini yakından izleyin.` +
       YTD_DISCLAIMER
     );
   }
@@ -162,6 +194,7 @@ KURALLAR VE İLKELER:
 
     if (!hasLivePrice) {
       return (
+        `[50/100 ⚖️ Nötr]\n\n` +
         `### 🚀 ${cleanSym} Halka Arz & Açılış Öncesi Durum Analizi\n\n` +
         `1. **Borsa İşlem Durumu:** ${cleanSym} hissesi henüz Borsa İstanbul'da ilk işlem gününe başlamamıştır (Açılış bekleniyor).\n` +
         `2. **Takip & Maliyet:** Portföyünüze kaydettiğiniz alış fiyatı üzerinden takip edilmektedir. Hisse tahtası borsada açıldığı an canlı fiyat, derinlik ve grafik verileri otomatik güncellenecektir.\n` +
@@ -174,8 +207,14 @@ KURALLAR VE İLKELER:
     const isRed = req.quote!.changePercent < 0;
     const priceText = `₺${req.quote!.price.toFixed(2)}`;
     const changeText = `%${req.quote!.changePercent.toFixed(2)}`;
+    const scoreText = isTavan
+      ? "[95/100 🐂 Boğa (Tavan)]"
+      : isRed
+        ? "[35/100 🐻 Ayı (Düşüş)]"
+        : "[75/100 🐂 Boğa (Yükseliş)]";
 
     return (
+      `${scoreText}\n\n` +
       `### 🤖 ${cleanSym} Yapay Zeka Hisse & Risk Analizi\n\n` +
       `1. **Günün Seyri & Trend:** ${cleanSym} hissesi son BİST seansında ${changeText} (${priceText}) ile hareket ediyor. ${
         isTavan
@@ -205,12 +244,16 @@ export async function analyzeKapNewsWithAI(news: {
   title: string;
   summary: string;
 }): Promise<string> {
-  const userQuestion = `Şu KAP Bildirimini / Haberini analiz et:
-Şirket/Hisse: ${news.symbol || "BIST"}
-Başlık: ${news.title}
-Özet: ${news.summary}
+  const userQuestion = `Aşağıdaki resmi KAP Bildirimini finansal analist gözüyle değerlendir ve 3 maddede özetle:
 
-Bu haberin şirket ve hisse üzerindeki olası etkisini (Olumlu / Nötr / Olumsuz), temel gerekçesini ve yatırımcı için ne anlama geldiğini maksimum 3 net, sade cümle ile özetle.`;
+Şirket/Hisse: ${news.symbol || "BIST"}
+Bildirim Başlığı: ${news.title}
+Bildirim İçeriği: ${news.summary}
+
+ÖRNEN KAP ANALİZ YAPISI:
+1. Haber Etkisi: [OLUMLU / NÖTR / RİSKLİ] - Gerekçesi (Örn: Yeni iş sözleşmesi ciroya katkı sağlar).
+2. Finansal Anlamı: Şirketin operasyonel büyümesini destekleyen somut karar.
+3. Yatırımcı Uyarısı: Hissedeki takip edilmesi gereken direnç veya hacim uyarısı.`;
 
   return analyzeStockWithAI({
     symbol: news.symbol,

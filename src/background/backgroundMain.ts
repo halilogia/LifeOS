@@ -4,6 +4,13 @@
  * Clean Architecture - Service Worker Domain Entry Point.
  */
 
+import {
+  createAmbientAudioEngine,
+  AmbientSoundType,
+} from "@/services/ambientAudioService.js";
+
+let bgAudioEngine = createAmbientAudioEngine();
+
 let currentDomain: string | null = null;
 let domainStartTime: number = Date.now();
 let screenTimeBuffer: Record<string, number> = {};
@@ -557,8 +564,16 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.commands.onCommand.addListener((command, tab) => {
-  if (command === "_execute_side_panel" && tab?.id) {
-    chrome.sidePanel.open({ tabId: tab.id });
+  if (command === "open_companion_ai" || command === "_execute_side_panel") {
+    if (tab?.id) {
+      chrome.sidePanel.open({ tabId: tab.id }).catch(() => {});
+    } else {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]?.id) {
+          chrome.sidePanel.open({ tabId: tabs[0].id }).catch(() => {});
+        }
+      });
+    }
   }
 });
 
@@ -585,6 +600,30 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 // Handle Volume Booster via Chrome Scripting API (MAIN World - Zero CSP Violations)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "play_ambient_sound") {
+    const soundType: AmbientSoundType = message.soundType;
+    const volume: number = message.volume ?? 0.5;
+    if (soundType === "none") {
+      bgAudioEngine.stopAllSounds();
+    } else if (soundType === "rain") {
+      bgAudioEngine.playRain(volume);
+    } else if (soundType === "wind") {
+      bgAudioEngine.playWind(volume);
+    } else if (soundType === "white_noise") {
+      bgAudioEngine.playHairdryer(volume);
+    } else if (soundType === "lofi") {
+      bgAudioEngine.playLofi(volume);
+    }
+    sendResponse({ success: true });
+    return true;
+  }
+
+  if (message.type === "set_ambient_volume") {
+    bgAudioEngine.setVolume(message.volume);
+    sendResponse({ success: true });
+    return true;
+  }
+
   if (message.type === "open_sidepanel") {
     if (sender.tab?.id) {
       chrome.sidePanel.open({ tabId: sender.tab.id });
