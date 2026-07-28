@@ -15,29 +15,7 @@ const RULES_KEY = "stockRules";
 const LOGS_KEY = "stockAlertLogs";
 const WATCHLISTS_KEY = "stockWatchlists";
 
-const DEFAULT_WATCHLISTS: StockWatchlist[] = [
-  {
-    id: "favorites",
-    name: "Favoriler",
-    description: "Favori hisselerim",
-    symbols: ["THYAO", "GARAN", "ASELS"],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "ipo",
-    name: "Halka Arz",
-    description: "Yeni katıldığım halka arzlar",
-    symbols: ["MASFN", "KARCL"],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "dividend",
-    name: "Temettü Hisseleri",
-    description: "Düzenli temettü ödeyen şirketler",
-    symbols: ["EREGL", "TUPRS", "FROTO"],
-    createdAt: new Date().toISOString(),
-  },
-];
+const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
 
 export class ChromeStorageStockRepository {
   async getPortfolio(): Promise<StockPortfolioItem[]> {
@@ -96,13 +74,7 @@ export class ChromeStorageStockRepository {
     return new Promise((resolve) => {
       chrome.storage.sync.get([WATCHLISTS_KEY], (res) => {
         const lists = res[WATCHLISTS_KEY] as StockWatchlist[] | undefined;
-        if (!lists || lists.length === 0) {
-          // Initialize defaults if empty
-          this.saveWatchlists(DEFAULT_WATCHLISTS);
-          resolve(DEFAULT_WATCHLISTS);
-        } else {
-          resolve(lists);
-        }
+        resolve(lists || []);
       });
     });
   }

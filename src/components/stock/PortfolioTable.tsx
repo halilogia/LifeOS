@@ -13,6 +13,7 @@ interface PortfolioTableProps {
   rules: StockRule[];
   onOpenAddModal: () => void;
   onAddRuleClick: (symbol: string) => void;
+  onDeleteRule?: (ruleId: string) => void;
   onDeleteItem: (id: string) => void;
   onAiAnalyzeClick: (symbol: string) => void;
   onOpenChart: (symbol: string) => void;
@@ -111,6 +112,7 @@ export function PortfolioTable({
   quotes,
   rules,
   onAddRuleClick,
+  onDeleteRule,
   onDeleteItem,
   onAiAnalyzeClick,
   onOpenChart,
@@ -280,21 +282,48 @@ export function PortfolioTable({
                               background: "rgba(99, 102, 241, 0.2)",
                               color: "#818cf8",
                               border: "1px solid rgba(99, 102, 241, 0.4)",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "4px",
                             }}
                           >
-                            {r.ruleType === "PRICE_ABOVE"
-                              ? `Fiyat > ₺${r.targetValue}`
-                              : r.ruleType === "PRICE_BELOW"
-                                ? `Fiyat < ₺${r.targetValue}`
-                                : r.ruleType === "RED_CANDLE"
-                                  ? "Kırmızı Mum"
-                                  : r.ruleType === "TAVAN_BREAK"
-                                    ? "Tavan Bozdu"
-                                    : r.ruleType === "STOP_LOSS"
-                                      ? `Stop %${r.targetValue}`
-                                      : r.ruleType === "TAKE_PROFIT"
-                                        ? `KarAl %${r.targetValue}`
-                                        : `İzleyenStop %${r.targetValue}`}
+                            <span>
+                              {r.ruleType === "PRICE_ABOVE"
+                                ? `Fiyat > ₺${r.targetValue}`
+                                : r.ruleType === "PRICE_BELOW"
+                                  ? `Fiyat < ₺${r.targetValue}`
+                                  : r.ruleType === "RED_CANDLE"
+                                    ? "Kırmızı Mum"
+                                    : r.ruleType === "TAVAN_BREAK"
+                                      ? "Tavan Bozdu"
+                                      : r.ruleType === "STOP_LOSS"
+                                        ? `Stop %${r.targetValue}`
+                                        : r.ruleType === "TAKE_PROFIT"
+                                          ? `KarAl %${r.targetValue}`
+                                          : `İzleyenStop %${r.targetValue}`}
+                            </span>
+                            {onDeleteRule && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteRule(r.id);
+                                }}
+                                title="Alarmı / Kuralı Kaldır"
+                                style={{
+                                  background: "transparent",
+                                  border: "none",
+                                  color: "#f87171",
+                                  cursor: "pointer",
+                                  fontWeight: 700,
+                                  fontSize: "0.85rem",
+                                  padding: "0 2px",
+                                  lineHeight: 1,
+                                }}
+                              >
+                                &times;
+                              </button>
+                            )}
                           </span>
                         ))
                       ) : (

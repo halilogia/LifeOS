@@ -609,7 +609,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       bgAudioEngine.playRain(volume);
     } else if (soundType === "wind") {
       bgAudioEngine.playWind(volume);
-    } else if (soundType === "white_noise") {
+    } else if (soundType === "white_noise" || (soundType as string) === "brown") {
       bgAudioEngine.playHairdryer(volume);
     } else if (soundType === "lofi") {
       bgAudioEngine.playLofi(volume);
