@@ -56,6 +56,20 @@ export function KpssDailyStatsCard({
   const [chartMetric, setChartMetric] = useState<"all" | "questions" | "videos">("all");
 
   useEffect(() => {
+    chrome.storage.sync.get(["kpss_chart_metric_mode"], (res) => {
+      const mode = res?.kpss_chart_metric_mode;
+      if (mode === "all" || mode === "questions" || mode === "videos") {
+        setChartMetric(mode);
+      }
+    });
+  }, []);
+
+  const handleMetricModeChange = (mode: "all" | "questions" | "videos") => {
+    setChartMetric(mode);
+    chrome.storage.sync.set({ kpss_chart_metric_mode: mode });
+  };
+
+  useEffect(() => {
     if (canvasRef.current) {
       drawKpssStatsChart(canvasRef.current, {
         lang,
@@ -193,7 +207,7 @@ export function KpssDailyStatsCard({
             <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.3)", padding: "2px", borderRadius: "6px", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
               <button
                 type="button"
-                onClick={() => setChartMetric("all")}
+                onClick={() => handleMetricModeChange("all")}
                 style={{
                   background: chartMetric === "all" ? "var(--accent-color, #2563eb)" : "transparent",
                   border: "none",
@@ -210,7 +224,7 @@ export function KpssDailyStatsCard({
               </button>
               <button
                 type="button"
-                onClick={() => setChartMetric("questions")}
+                onClick={() => handleMetricModeChange("questions")}
                 style={{
                   background: chartMetric === "questions" ? "#10b981" : "transparent",
                   border: "none",
@@ -227,7 +241,7 @@ export function KpssDailyStatsCard({
               </button>
               <button
                 type="button"
-                onClick={() => setChartMetric("videos")}
+                onClick={() => handleMetricModeChange("videos")}
                 style={{
                   background: chartMetric === "videos" ? "#3b82f6" : "transparent",
                   border: "none",

@@ -17,8 +17,9 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Günlük hedefleri yönettiğiniz ve ortalanmış şık odak kartına sahip **Odağım** bölümü.
   - Günlük, haftalık veya aylık tekrarlanan görevler için **Rutinler** listesi.
   - Sürükle-bırak (Drag-and-Drop) ve kolay taşımayı destekleyen modern **Kanban Panosu**.
-- **📚 KPSS Hazırlık Takibi**:
-  - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli ve çalışma istatistiklerini gösteren Canvas tabanlı grafik ekranı.
+- **📚 KPSS Hazırlık Takibi & Vikipedi Ders Notları**:
+  - Detaylı konu checklistleri, dinamik ilerleme çubukları, günlük çözülen soru sayılarını girme paneli, 7g/30g zaman ve metrik filtreli hafızalı Canvas çalışma grafiği.
+  - **Vikipedi Tarzı Ders Notları Okuyucusu**: Notlar arasında `[[Konu Adı]]` sözdizimi ile interaktif mavi iç bağlantılar (Wikilinks) kurabilme. Otomatik Başlık İçindekiler (TOC) menüsü, Okuma Süresi / Kelime İstatistiği ve İç & Gelen Bağlantıları (Backlinks) gösteren Wikipedia Bilgi Kutusu (Infobox).
   - **Yapay Zeka Seviye Tespit Sınavı**: Her konu için AI tarafından oluşturulan 5-25 soruluk çoktan seçmeli seviye belirleme testleri. Sınav sonucuna göre konu durumları otomatik güncellenir.
   - **Çıkmış Sorular Sınav Salonu**: 2009-2021 yılları arası orijinal ÖSYM çıkmış KPSS Lisans sorularını yıl bazında veya tüm yılların karışımından oluşan karma denemeler halinde çözebilme desteği. Sınav ekranında ÖSYM'nin kritik sınav reformu milatlarını (2013-2014-2018) gösteren dairesel `!` kılavuz butonu.
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.

@@ -31,10 +31,9 @@ A lightweight widget to capture content across the web.
 - [ ] **Floating Widget**: Keyboard-triggered floating glassmorphic popup that overlays on any website.
 - [ ] **Quick Capture**: Instantly save highlighted webpage text directly to notes or add tasks to the dashboard without opening the New Tab page.
 
-### 6. 📈 Dynamic KPSS Score Predictor & Smart Analytics (Yapay Zeka Destekli KPSS Puan Tahmincisi)
-Leverage placement quiz history to project real-world exam targets.
-- [ ] **Score Projection**: AI-driven statistical modeling of quiz scores to estimate potential KPSS scores.
-- [ ] **Weakness Analysis**: Automatically highlights topics with scores below 60% and suggests optimized study lists.
+### 6. 📚 Wikipedia-Style KPSS Knowledge Studio & Wikilink Graph
+Modular study note archiving with cross-note Wikilinks, Backlinks, and dynamic Infobox.
+- [ ] **In-Article Search & Keyword Highlight**: Real-time `Ctrl+F` text search bar inside long study notes.
 
 ---
 

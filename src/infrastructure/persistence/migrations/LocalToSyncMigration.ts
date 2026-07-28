@@ -28,6 +28,8 @@ const SYNC_KEYS = [
   "kpssGoalType",
   "kpssTargetNet",
   "kpssChartType",
+  "kpssChartDays",
+  "kpss_chart_metric_mode",
   "universalInfoBoxEnabled",
   "universalInfoBoxHotkey",
   "pomodoroHistory",

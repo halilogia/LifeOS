@@ -167,10 +167,16 @@ export function KpssView({
         r((res.kpssChartType as "line" | "bar") || "line"),
       ),
     );
+    const cDays: 7 | 30 = await new Promise((r) =>
+      chrome.storage.sync.get(["kpssChartDays"], (res) =>
+        r(res.kpssChartDays === 30 ? 30 : 7),
+      ),
+    );
 
     setKpssProgress(progress);
     setDailyStats(stats);
     setChartType(cType);
+    setChartDays(cDays);
 
     chrome.storage.local.get(["kpss_past_quizzes"], (res) => {
       if (res.kpss_past_quizzes) {
@@ -182,6 +188,11 @@ export function KpssView({
   const handleChartTypeChange = async (type: "line" | "bar") => {
     setChartType(type);
     chrome.storage.sync.set({ kpssChartType: type });
+  };
+
+  const handleChartDaysChange = async (days: 7 | 30) => {
+    setChartDays(days);
+    chrome.storage.sync.set({ kpssChartDays: days });
   };
 
   useEffect(() => {
@@ -526,7 +537,7 @@ export function KpssView({
               onSaveStats={handleSaveStats}
               onResetStats={handleResetStats}
               onDeleteStat={handleDeleteStat}
-              onChartDaysChange={setChartDays}
+              onChartDaysChange={handleChartDaysChange}
               onChartTypeChange={handleChartTypeChange}
               labels={labels}
               subjectsList={subjectsList}

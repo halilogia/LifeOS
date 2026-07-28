@@ -4,6 +4,15 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.9.0] - 2026-07-28
+### Eklendi & İyileştirildi
+- **KPSS Ders Notları & Wiki Stüdyosu Yenilemesi (`KpssNotesDashboard.tsx`, `KpssWikiReader.tsx`)**:
+  - Orijinal Vikipedi Dark Mode tasarımı uygulandı; mod sekmeleri (`Oku` | `Değiştir`), `.md İndir` butonu ve ikon bazlı **Wikiağ Nöral Graf** ikonu üst bar alanına taşındı.
+  - **Türkçe Unicode Wikilink Otomatik Bağlantı Motoru (`kpssWikiService.ts`)**: `\p{L}` Unicode regex sınırları ile `Çorum`, `İstanbul`, `İç Anadolu` gibi tüm Türkçe karakterli notlar metin içinde mavi tıklanabilir Wikilink'e dönüştürüldü.
+  - **Gelen Bağlantılar (Backlinks) Entegrasyonu**: Çapraz not atıfları Bilgi Kutusu altında `🔗 Gelen Bağlantılar` başlığı ile dinamik olarak listelendi.
+  - **Otomatik Görsel Algılama & Link Gizleme**: Nota yapıştırılan görsel URL'leri metin içindeki çirkin link görünümünden gizlendi ve Vikipedi kapak görseli olarak Bilgi Kutusu'nun en üstüne eklendi.
+  - **Dinamik Bilgi Kutusu Yardım Pop-up'ı (`!`)**: Bilgi Kutusu başlığına tıklanabilir `!` yardım ikonu eklendi.
+
 ## [3.8.0] - 2026-07-28
 ### Eklendi & İyileştirildi
 - **BİST 30 Günlük Derinlemesine Yapay Zeka Analizi (`stockAiService.ts`)**:
