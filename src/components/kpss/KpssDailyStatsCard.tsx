@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "preact/hooks";
+import { useRef, useEffect, useState } from "preact/hooks";
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { drawKpssStatsChart } from "@/utils/kpssChartDrawer.js";
 
@@ -53,6 +53,7 @@ export function KpssDailyStatsCard({
   kpssTargetDate,
 }: KpssDailyStatsCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [chartMetric, setChartMetric] = useState<"all" | "questions" | "videos">("all");
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -61,6 +62,7 @@ export function KpssDailyStatsCard({
         dailyStats,
         chartDays,
         chartType,
+        metricMode: chartMetric,
         goalType,
         targetNet,
         targetScore,
@@ -72,6 +74,7 @@ export function KpssDailyStatsCard({
     dailyStats,
     chartDays,
     chartType,
+    chartMetric,
     goalType,
     targetNet,
     targetScore,
@@ -146,7 +149,7 @@ export function KpssDailyStatsCard({
 
       <div
         className="kpss-chart-container"
-        style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
       >
         <div
           style={{
@@ -154,6 +157,8 @@ export function KpssDailyStatsCard({
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "4px",
+            flexWrap: "wrap",
+            gap: "8px",
           }}
         >
           <span
@@ -182,7 +187,64 @@ export function KpssDailyStatsCard({
             </svg>
             {lang === "tr" ? "İlerleme Grafiği" : "Progress Chart"}
           </span>
-          <div style={{ display: "flex", gap: "6px" }}>
+
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+            {/* Metric Mode Filter Pills: Tümü / Soru / Video (Clean Text, No Emojis) */}
+            <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.3)", padding: "2px", borderRadius: "6px", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
+              <button
+                type="button"
+                onClick={() => setChartMetric("all")}
+                style={{
+                  background: chartMetric === "all" ? "var(--accent-color, #2563eb)" : "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  fontSize: "0.65rem",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {lang === "tr" ? "Tümü" : "All"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setChartMetric("questions")}
+                style={{
+                  background: chartMetric === "questions" ? "#10b981" : "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  fontSize: "0.65rem",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {lang === "tr" ? "Soru" : "Questions"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setChartMetric("videos")}
+                style={{
+                  background: chartMetric === "videos" ? "#3b82f6" : "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  fontSize: "0.65rem",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontWeight: "700",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {lang === "tr" ? "Video" : "Videos"}
+              </button>
+            </div>
+
+            {/* Range & View Type Buttons */}
             <button
               onClick={() => onChartDaysChange(7)}
               style={{
@@ -259,46 +321,56 @@ export function KpssDailyStatsCard({
           style={{ display: "block", width: "100%", height: "200px" }}
         ></canvas>
 
-        {/* History Log List with Delete Option */}
+        {/* Saved Daily Logs - Glassmorphic Pill Chips with SVG Delete Button */}
         {dailyStats && dailyStats.length > 0 && (
-          <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
-            <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", fontWeight: "600" }}>
-              {lang === "tr" ? "Kaydedilen Günlük Veriler:" : "Saved Daily Records:"}
+          <div style={{ marginTop: "6px", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <span style={{ fontSize: "0.72rem", color: "#94a3b8", fontWeight: 700 }}>
+              {lang === "tr" ? "Kaydedilen Günlük Veriler:" : "Saved Daily Logs:"}
             </span>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: "100px", overflowY: "auto" }}>
-              {dailyStats.map((st) => (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {dailyStats.map((stat) => (
                 <div
-                  key={st.date}
+                  key={stat.date}
                   style={{
-                    display: "flex",
+                    display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    background: "rgba(30, 41, 59, 0.6)",
+                    border: "1px solid rgba(139, 92, 246, 0.25)",
+                    padding: "4px 10px",
                     borderRadius: "6px",
-                    padding: "4px 8px",
-                    fontSize: "0.7rem",
-                    color: "#f1f5f9",
+                    fontSize: "0.72rem",
+                    color: "#ffffff",
+                    fontWeight: 600,
                   }}
                 >
-                  <span style={{ fontWeight: 700, color: "var(--accent-color)" }}>{st.date}</span>
-                  <span>{st.questions} Soru</span>
-                  {st.videos ? <span>• {st.videos} Video</span> : null}
+                  <span style={{ color: "#a855f7", fontWeight: 700 }}>{stat.date}</span>
+                  <span style={{ color: "#cbd5e1" }}>
+                    {stat.questions > 0 && `${stat.questions} Soru `}
+                    {stat.videos ? `${stat.videos} Video` : ""}
+                  </span>
                   {onDeleteStat && (
                     <button
-                      onClick={() => onDeleteStat(st.date)}
-                      title={lang === "tr" ? "Bu Günü Sil" : "Delete Record"}
+                      type="button"
+                      onClick={() => onDeleteStat(stat.date)}
+                      title={lang === "tr" ? "Bu günü sil" : "Delete day"}
                       style={{
-                        background: "transparent",
+                        background: "rgba(239, 68, 68, 0.15)",
                         border: "none",
                         color: "#ef4444",
-                        cursor: "pointer",
-                        padding: "0 2px",
-                        display: "flex",
+                        borderRadius: "4px",
+                        width: "18px",
+                        height: "18px",
+                        display: "inline-flex",
                         alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        padding: 0,
+                        marginLeft: "2px",
+                        transition: "all 0.2s ease",
                       }}
                     >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <polyline points="3 6 5 6 21 6"></polyline>
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                       </svg>
