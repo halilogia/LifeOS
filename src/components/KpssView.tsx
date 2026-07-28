@@ -443,6 +443,11 @@ export function KpssView({
     });
   };
 
+  const handleDeleteStat = async (date: string) => {
+    await kpssService.deleteKpssDailyStat(date);
+    loadKpssData();
+  };
+
   const getSubjectNets = (subKey: string) => {
     return getSubjectNets_logic(subKey, kpssData, kpssProgress);
   };
@@ -520,6 +525,7 @@ export function KpssView({
               onSubjectInputChange={setSubjectInput}
               onSaveStats={handleSaveStats}
               onResetStats={handleResetStats}
+              onDeleteStat={handleDeleteStat}
               onChartDaysChange={setChartDays}
               onChartTypeChange={handleChartTypeChange}
               labels={labels}

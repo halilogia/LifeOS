@@ -18,6 +18,16 @@ export interface KpssChartParams {
   kpssTargetDate: number;
 }
 
+function getFormattedDateLabel(dateStr?: string): string {
+  if (!dateStr) return "";
+  if (dateStr.includes("/")) return dateStr;
+  const parts = dateStr.split("-");
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}`;
+  }
+  return dateStr;
+}
+
 export function getSubjectNets(subKey: string, kpssProgress: KpssProgress[]) {
   const tList = kpssData[subKey] || [];
   let totalNet = 0;
@@ -98,8 +108,46 @@ export function drawKpssStatsChart(
     kpssTargetDate,
   } = params;
 
-  const stats = dailyStats || [];
-  const lastNDays = stats.slice(-chartDays);
+  const statsMap = new Map<string, KpssDailyStats>();
+  (dailyStats || []).forEach((s) => {
+    if (!s.date) return;
+    let key = s.date;
+    if (s.date.includes("-")) {
+      const parts = s.date.split("-");
+      if (parts.length === 3) {
+        key = `${parts[2].padStart(2, "0")}/${parts[1].padStart(2, "0")}`;
+      }
+    }
+    statsMap.set(key, s);
+    statsMap.set(s.date, s);
+  });
+
+  const lastNDays: KpssDailyStats[] = [];
+  const today = new Date();
+
+  for (let i = chartDays - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(today.getDate() - i);
+    const dayStr = `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1).toString().padStart(2, "0")}`;
+    const isoStr = d.toISOString().split("T")[0];
+
+    const existing = statsMap.get(isoStr) || statsMap.get(dayStr);
+    if (existing) {
+      lastNDays.push({
+        date: dayStr,
+        questions: existing.questions || 0,
+        videos: existing.videos || 0,
+        subject: existing.subject,
+      });
+    } else {
+      lastNDays.push({
+        date: dayStr,
+        questions: 0,
+        videos: 0,
+        subject: "",
+      });
+    }
+  }
 
   // Calculate daily target score details
   const overallNetObj = getOverallNets(kpssProgress);
@@ -376,8 +424,7 @@ export function drawKpssStatsChart(
         ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         ctx.font = "500 10px Inter";
         ctx.textAlign = "center";
-        const dateParts = stat.date.split("-");
-        const dateLabel = `${dateParts[2]}/${dateParts[1]}`;
+        const dateLabel = getFormattedDateLabel(stat.date);
         ctx.fillText(dateLabel, slotX + slotWidth / 2, height - padding + 18);
       }
     });
@@ -484,8 +531,7 @@ export function drawKpssStatsChart(
       ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
       ctx.font = "500 10px Inter";
       ctx.textAlign = "center";
-      const dateParts = stat.date.split("-");
-      const dateLabel = `${dateParts[2]}/${dateParts[1]}`;
+      const dateLabel = getFormattedDateLabel(stat.date);
       ctx.fillText(dateLabel, x, height - padding + 18);
     }
   });

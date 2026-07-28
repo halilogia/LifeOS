@@ -137,6 +137,15 @@ export const kpssService = {
   },
 
   /**
+   * Deletes a specific day's record from history.
+   */
+  async deleteKpssDailyStat(date: string): Promise<void> {
+    const stats = await this.getKpssDailyStats();
+    const filtered = stats.filter((s) => s.date !== date);
+    await this.setKpssDailyStats(filtered);
+  },
+
+  /**
    * Retrieves dynamic progress percentage for a subject.
    */
   async getSubjectProgressPercentage(

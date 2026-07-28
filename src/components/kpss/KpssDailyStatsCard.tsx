@@ -14,6 +14,7 @@ interface KpssDailyStatsCardProps {
   onSubjectInputChange: (val: string) => void;
   onSaveStats: () => void;
   onResetStats: () => void;
+  onDeleteStat?: (date: string) => void;
   onChartDaysChange: (val: 7 | 30) => void;
   onChartTypeChange: (val: "line" | "bar") => void;
   labels: Record<string, string>;
@@ -39,6 +40,7 @@ export function KpssDailyStatsCard({
   onSubjectInputChange,
   onSaveStats,
   onResetStats,
+  onDeleteStat,
   onChartDaysChange,
   onChartTypeChange,
   labels,
@@ -256,6 +258,57 @@ export function KpssDailyStatsCard({
           id="kpss-history-chart"
           style={{ display: "block", width: "100%", height: "200px" }}
         ></canvas>
+
+        {/* History Log List with Delete Option */}
+        {dailyStats && dailyStats.length > 0 && (
+          <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+              {lang === "tr" ? "Kaydedilen Günlük Veriler:" : "Saved Daily Records:"}
+            </span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: "100px", overflowY: "auto" }}>
+              {dailyStats.map((st) => (
+                <div
+                  key={st.date}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "6px",
+                    padding: "4px 8px",
+                    fontSize: "0.7rem",
+                    color: "#f1f5f9",
+                  }}
+                >
+                  <span style={{ fontWeight: 700, color: "var(--accent-color)" }}>{st.date}</span>
+                  <span>{st.questions} Soru</span>
+                  {st.videos ? <span>• {st.videos} Video</span> : null}
+                  {onDeleteStat && (
+                    <button
+                      onClick={() => onDeleteStat(st.date)}
+                      title={lang === "tr" ? "Bu Günü Sil" : "Delete Record"}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#ef4444",
+                        cursor: "pointer",
+                        padding: "0 2px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
