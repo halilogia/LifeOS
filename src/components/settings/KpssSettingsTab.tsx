@@ -1,5 +1,7 @@
+import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { getAutoTitleSetting, saveAutoTitleSetting } from "@/services/kpssWikiService.js";
 
 interface KpssSettingsTabProps {
   lang: Language;
@@ -23,8 +25,15 @@ export function KpssSettingsTab({
   onResetKpssData,
 }: KpssSettingsTabProps) {
   const t = getTranslation(lang);
+  const [autoTitleEnabled, setAutoTitleEnabled] = useState(false);
+
+  useEffect(() => {
+    getAutoTitleSetting().then(setAutoTitleEnabled);
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      {/* KPSS Target Settings */}
       <div className="settings-group">
         <h3
           style={{
@@ -230,9 +239,9 @@ export function KpssSettingsTab({
               viewBox="0 0 24 24"
               fill="none"
               stroke="var(--accent-color)"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               style={{ flexShrink: 0, marginTop: "1px" }}
             >
               <circle cx="12" cy="12" r="10"></circle>
@@ -244,6 +253,100 @@ export function KpssSettingsTab({
                 ? "KPSS GK-GY puan türlerinde 80 Puan alabilmek için ortalama sınav zorluğuna göre 70-75 Net yapılması yeterli olabilmektedir. Net ve Puan birebir eşit değildir, standart sapma formüllere dahildir."
                 : "To score 80 Points in KPSS GK-GY, achieving around 70-75 Nets can be sufficient depending on average difficulty. Score and Net are not 1-to-1 equal due to standard deviation."}
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Wiki Notları Ayarları */}
+      <div className="settings-group">
+        <h3
+          style={{
+            margin: "0 0 12px 0",
+            fontSize: "0.85rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            color: "var(--text-secondary)",
+            opacity: 0.8,
+          }}
+        >
+          {lang === "tr" ? "KPSS Ders Notları & Wiki" : "KPSS Study Notes & Wiki"}
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            background: "rgba(255,255,255,0.01)",
+            border: "1px solid var(--card-border)",
+            borderRadius: "10px",
+            padding: "16px 14px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <div style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+                {lang === "tr" ? "Otomatik İlk Kelime Başlığı" : "Auto First-Word Title"}
+              </div>
+              <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: "2px" }}>
+                {lang === "tr"
+                  ? "Ders notu yazarken başlık alanı boş bırakılırsa sadece ilk kelimeyi otomatik başlık yapar."
+                  : "If title field is left blank when creating a note, automatically uses the first word as the title."}
+              </div>
+            </div>
+
+            <label
+              style={{
+                position: "relative",
+                display: "inline-block",
+                width: "44px",
+                height: "22px",
+                flexShrink: 0,
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={autoTitleEnabled}
+                onChange={(e) => {
+                  const checked = (e.target as HTMLInputElement).checked;
+                  setAutoTitleEnabled(checked);
+                  saveAutoTitleSetting(checked);
+                }}
+                style={{ opacity: 0, width: 0, height: 0 }}
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  cursor: "pointer",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: autoTitleEnabled ? "var(--accent-color, #3b82f6)" : "rgba(255,255,255,0.15)",
+                  transition: "0.3s",
+                  borderRadius: "22px",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    content: '""',
+                    height: "16px",
+                    width: "16px",
+                    left: autoTitleEnabled ? "24px" : "3px",
+                    bottom: "3px",
+                    backgroundColor: "white",
+                    transition: "0.3s",
+                    borderRadius: "50%",
+                  }}
+                />
+              </span>
+            </label>
           </div>
         </div>
       </div>

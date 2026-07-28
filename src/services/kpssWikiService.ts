@@ -21,6 +21,7 @@ export interface HeadingItem {
 }
 
 const STORAGE_KEY = "kpss_wiki_notes";
+const AUTO_TITLE_SETTING_KEY = "kpss_auto_title_enabled";
 
 /**
  * Fetch all KPSS wiki notes from chrome.storage.sync
@@ -38,15 +39,11 @@ export async function getKpssWikiNotes(): Promise<KpssWikiNote[]> {
       !n.title.includes("Anayasa Hukuku")
   );
 
-  // Fix missing or overly long paragraph titles
+  // Fix overly long corrupted paragraph titles (shorten to first word)
   cleaned.forEach((n) => {
-    if (!n.title || n.title === "Başlıksız Not" || n.title === "Başlıksız Ders Notu") {
-      const ext = extractTitleFromContent(n.content);
-      if (ext) n.title = ext;
-    } else if (n.title.length > 40) {
-      // If title was corrupted by a giant sentence, shorten it or extract heading
-      const heading = extractTitleFromContent(n.content);
-      n.title = heading && heading.length <= 40 ? heading : n.title.substring(0, 35).trim() + "...";
+    if (n.title.length > 35) {
+      const firstWord = extractTitleFromContent(n.content);
+      n.title = firstWord || n.title.split(/\s+/)[0] || "Ders Notu";
     }
   });
 
@@ -67,8 +64,23 @@ export async function saveKpssWikiNotes(notes: KpssWikiNote[]): Promise<void> {
 }
 
 /**
- * Extract Title from first line of content (e.g. # Title)
- * Limits long sentences to 35 characters max.
+ * Get Auto Title Setting from chrome.storage.sync (Default: false)
+ */
+export async function getAutoTitleSetting(): Promise<boolean> {
+  const res = await new Promise<any>((r) => chrome.storage.sync.get([AUTO_TITLE_SETTING_KEY], r));
+  return res[AUTO_TITLE_SETTING_KEY] === true;
+}
+
+/**
+ * Save Auto Title Setting to chrome.storage.sync
+ */
+export async function saveAutoTitleSetting(enabled: boolean): Promise<void> {
+  await new Promise<void>((r) => chrome.storage.sync.set({ [AUTO_TITLE_SETTING_KEY]: enabled }, r));
+}
+
+/**
+ * Extract Title from content: extracts ONLY the very first word!
+ * e.g. "Maki ailesinin..." -> "Maki"
  */
 export function extractTitleFromContent(content: string): string {
   if (!content) return "";
@@ -77,10 +89,11 @@ export function extractTitleFromContent(content: string): string {
     const trimmed = line.trim();
     if (trimmed) {
       const clean = trimmed.replace(/^#+\s*/, "").replace(/^[\:\-\*\_\`]+/, "").trim();
-      if (clean.length > 35) {
-        return clean.substring(0, 35) + "...";
+      if (!clean) continue;
+      const words = clean.split(/\s+/);
+      if (words.length > 0 && words[0]) {
+        return words[0].replace(/[\,\.\:\;\!\?\"\'\(\)]/g, "").trim();
       }
-      return clean;
     }
   }
   return "";
