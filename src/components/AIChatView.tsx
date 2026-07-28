@@ -12,6 +12,7 @@ import { parseLocalCommand } from "@/utils/aiCommandParser.js";
 import {
   callAIConfigured,
   handleAddNoteFromAI,
+  handleUpdateMemoryFromAI,
 } from "@/services/aiChatService.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
@@ -133,6 +134,11 @@ export function AIChatView({
           const cues = aiResponse.params.note_cues;
           const summary = aiResponse.params.note_summary;
           await handleAddNoteFromAI(type, content, lang, title, cues, summary);
+        } else if (
+          aiResponse.action === "update_memory" &&
+          aiResponse.params?.memory_fact
+        ) {
+          await handleUpdateMemoryFromAI(aiResponse.params.memory_fact);
         }
 
         setMessages((prev) => [
