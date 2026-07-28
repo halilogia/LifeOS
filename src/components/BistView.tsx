@@ -304,6 +304,7 @@ export function BistView({ lang }: BistViewProps) {
             quoteMap.get(aiModalSymbol.toUpperCase()) ||
             quoteMap.get(`${aiModalSymbol.toUpperCase()}.IS`)
           }
+          portfolioItems={portfolio}
           onClose={() => setAiModalSymbol(null)}
         />
       )}

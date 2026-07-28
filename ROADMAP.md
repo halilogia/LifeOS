@@ -40,11 +40,6 @@ Leverage placement quiz history to project real-world exam targets.
 
 ## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
 
-### 1. 🔔 KAP Haber Taraması & AI Duygu Analizi (KAP News & AI Sentiment)
-Takipteki BIST hisselerinin Kamuyu Aydınlatma Platformu (KAP) duyurularını anlık tarama ve yapay zeka ile analiz etme.
-- [ ] **KAP Canlı Akış Servisi**: Takip edilen hisselerin yeni KAP bildirimi düştüğünde arkaplanda masaüstü uyarısı verme.
-- [ ] **AI Haber Puanlaması**: AI'ın KAP haberini okuyup (Örn: Yeni İş Anlaşması, Bedelsiz Sermaye Artırımı) haber için "Olumlu (+2)", "Nötr" veya "Olumsuz (-2)" puan çıkarması.
-
 ### 2. 📊 Teknik İndikatör Sinyal Motoru (RSI, EMA 20/50, MACD)
 Gelişmiş teknik indikatör kuralları tanımlama.
 - [ ] **RSI Aşırı Alım/Satım Alarmları**: RSI 14 periyodu 30 altına inince "Aşırı Satım (Alım Fırsatı)", 70 üstüne çıkınca "Aşırı Alım (Kar Al)" uyarısı.
@@ -63,21 +58,4 @@ Gelişmiş teknik indikatör kuralları tanımlama.
 ---
 
 ## ✅ Completed Features Archive (Tamamlanan Özellikler Arşivi)
-- **BIST Automated Stock Management & Strategy Engine**: Full BIST & IPO portfolio monitoring, red candle alerts, tavan break rules, stop-loss, take-profit, trailing stop, background chrome alarms, desktop notifications, and Ollama/OpenRouter AI market advisor.
-- **Universal Extension-wide Localization**: Full translation dictionary support for English and Turkish across all sub-panels, charts, and settings.
-- **Extensible Fallback Proxy Localization**: Automatic fallback to English dictionary translation keys using ES6 Proxy architecture.
-- **Clean Architecture & Layout Assembly Refactoring for Popup Module**: Isolated presentation layouts from logic via `usePopup.ts` hooks and split popup views into dedicated sub-components (`PopupPomoTab.tsx` and `PopupDetoxTab.tsx`).
-- **Zero compile and lint error tolerance hardening**: Fixed all TypeScript and ESLint problems to ensure the codebase runs with absolute 0 compiler errors and 0 linter violations.
-- **ÖSYM KPSS Past Exams & Practice Room**: Integrated actual 2009-2021 KPSS exams for practice with dynamic count calculation.
-- **KPSS Soru Sistemi Değişim Milatları (Evolution Guide)**: Localized timeline info button overlay showing critical ÖSYM reform milestones.
-- **Custom Glassmorphic Date Picker**: Replaced the native browser calendar input with a dark glass popover dropdown (`DatePicker.tsx`).
-- **Web Audio API Ambient Sound Synthesis**: Implemented offline wind LFO sweeps, rain droplet pitter-patter click synthesis, and Rhodes lofi piano chords.
-- **KPSS Subject Auto-Scheduling Planner**: Dividing topics into calendars dynamically based on exam date and completion status.
-- **Lock Screen & Soft Alert Social Detox Limits**: Custom warning alerts on active tabs and lock redirection redirects.
-- **Rich Markdown Support for Notes & Cornell Notes**: Double-click note cards inline editors and safe Markdown formatting parser.
-- **Local AI Assistant & Page Summarizer**: Connects to local 9Router API with host permissions and offline JSON filters.
-- **Active Focus Mode Site Blocker (Detox Blocker)**: Blocks social media channels during focus sessions with deep MutationObserver blockers and local storage sync.
-- **KPSS Spaced Repetition (SRS)**: Spaced Repetition (SM2) flashcard algorithms and card flipping layout.
-- **Unified Eisenhower Matrix & Kanban Board view**: Merged Kanban board and Eisenhower matrix under a unified sidebar menu button.
-- **KPSS Target Tuning & Goal Types**: Settings page integration of score/net targets.
-- **Daily Screen Time Tracker & Capping**: Track domain spent times and filter out sleep/lock hours.
+

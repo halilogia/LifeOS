@@ -6,10 +6,12 @@
 import { useState, useEffect } from "preact/hooks";
 import { analyzeStockWithAI } from "@/services/stockAiService.js";
 import type { StockQuote } from "@/services/bistService.js";
+import type { StockPortfolioItem } from "@/types/stock.js";
 
 interface StockAiAnalysisModalProps {
   symbol: string;
   quote?: StockQuote;
+  portfolioItems?: StockPortfolioItem[];
   onClose: () => void;
 }
 
@@ -51,15 +53,22 @@ function IconSparkles() {
 export function StockAiAnalysisModal({
   symbol,
   quote,
+  portfolioItems,
   onClose,
 }: StockAiAnalysisModalProps) {
   const [analysisText, setAnalysisText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+  const isAllPortfolio = symbol === "ALL_PORTFOLIO";
+
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    analyzeStockWithAI({ symbol, quote }).then((res) => {
+    const reqPayload = isAllPortfolio && portfolioItems
+      ? { portfolio: portfolioItems }
+      : { symbol, quote };
+
+    analyzeStockWithAI(reqPayload).then((res) => {
       if (isMounted) {
         setAnalysisText(res);
         setLoading(false);
@@ -68,13 +77,13 @@ export function StockAiAnalysisModal({
     return () => {
       isMounted = false;
     };
-  }, [symbol, quote]);
+  }, [symbol, quote, portfolioItems]);
 
   return (
     <div className="stock-modal-overlay" onClick={onClose}>
       <div
         className="stock-modal-content"
-        style={{ maxWidth: "580px" }}
+        style={{ maxWidth: "620px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="stock-modal-header">
@@ -83,7 +92,11 @@ export function StockAiAnalysisModal({
             style={{ display: "flex", alignItems: "center", gap: "8px" }}
           >
             <IconSparkles />
-            <span>AI Borsa Analizi — {symbol.toUpperCase()}</span>
+            <span>
+              {isAllPortfolio
+                ? "Sabah BİST Açılış & Takip Listesi Raporu"
+                : `AI Borsa Analizi — ${symbol.toUpperCase()}`}
+            </span>
           </div>
           <button
             style={{

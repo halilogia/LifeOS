@@ -103,6 +103,42 @@ export function StockWatchlistTable({
 
   return (
     <div className="stock-table-container">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "14px",
+          paddingBottom: "10px",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        }}
+      >
+        <div style={{ fontWeight: 700, fontSize: "1rem", color: "#f8fafc" }}>
+          📌 BİST Takip Listem & Portföyüm
+        </div>
+        {portfolio.length > 0 && (
+          <button
+            style={{
+              background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
+              border: "none",
+              color: "#fff",
+              padding: "6px 14px",
+              borderRadius: "8px",
+              fontWeight: 600,
+              fontSize: "0.82rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
+            }}
+            onClick={() => onAiAnalyzeClick("ALL_PORTFOLIO")}
+          >
+            <IconSparkles />
+            <span>✦ AI Günlük Takip Listesi Açılış Raporu Al (9Router)</span>
+          </button>
+        )}
+      </div>
       <table className="stock-table">
         <thead>
           <tr>

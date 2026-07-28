@@ -4,6 +4,23 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [3.8.0] - 2026-07-28
+### Eklendi & İyileştirildi
+- **BİST 30 Günlük Derinlemesine Yapay Zeka Analizi (`stockAiService.ts`)**:
+  - Hisselerin 30 günlük OHLC mum verileri, 1 aylık toplam getiri %, 30 günlük zirve/dip aralığı otomatik hesaplanarak AI analiz motoruna bağlandı.
+  - Yapay zeka çıktısı 4 derinlemesine bölüme dönüştürüldü: *30 Günlük Performans & Trend*, *Günün Seyri & Volatilite*, *Kritik Destek / Direnç Seviyeleri* ve *Risk & Strateji*.
+- **Şeffaf Mor Glassmorphic Boğa / Ayı Rozetleri**:
+  - Yapay zeka borsa analiz başlığında ve Keşfet kartlarında `85/100 🐂 Boğa`, `50/100 ⚖️ Nötr` ve `35/100 🐻 Ayı` rozetleri şeffaf mor cam estetiğiyle güncellendi.
+- **Dinamik TL İşlem Hacmi & Pozitif İvme Sıralaması (`BistKesfetTab.tsx`)**:
+  - Öne çıkan hisseler sıralaması ham lot adedi yerine `Fiyat × Lot = TL Hacim` formülüyle güncellendi. THYAO gibi piyasa devleri hak ettiği 1. sıraya taşındı.
+  - Primli ve yükselişte olan hisseler Öne Çıkanlar vitrininde önceliklendirildi.
+- **Arka Planda Kesintisiz Çalan Ortam Sesleri (Persistent Background Audio)**:
+  - Popup penceresi kapatıldığında seslerin kesilmesi sorunu çözüldü; ortam sesleri (Yağmur, Rüzgar, Lo-Fi) `backgroundMain.ts` service worker üzerine taşındı.
+- **Günlüğüm Ders Notlarını Markdown (.md) Olarak İndirme (`NoteCard.tsx`)**:
+  - Her not ve Cornell kartına **`📥 .md İndir`** butonu eklenerek ders notlarının doğrudan `.md` olarak bilgisayara aktarılması sağlandı.
+- **`Ctrl + Shift + E` Kısayol Entegrasyonu**:
+  - Klavyeden `Ctrl + Shift + E` tuşuna basıldığında Companion AI Yan Paneli doğrudan açılacak şekilde `manifest.json` ve `backgroundMain.ts` güncellendi.
+
 ## [3.7.0] - 2026-07-26
 ### Eklendi
 - **Tüm Borsa İstanbul (BIST) İçin Otomatik Borsa Yönetim & Strateji Sistemi**: Halka arzlar ve tüm BIST hisseleri (`THYAO`, `GARAN`, `KRDMD`, `SASA`, `EREGL` vb.) için canlı fiyat akışı, portföy takibi, kar/zarar hesaplamaları ve otomatik kural motoru eklendi.
