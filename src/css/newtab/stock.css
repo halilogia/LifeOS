@@ -161,7 +161,9 @@
   border-radius: var(--radius-lg, 16px);
   border: 1px solid var(--card-border);
   padding: 18px 20px;
-  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--card-border) transparent;
 }
 
 .stock-table {

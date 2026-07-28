@@ -7,8 +7,16 @@ interface CustomStockChartProps {
   lang: Language;
 }
 
+const RANGE_LABELS: Record<string, string> = {
+  "1d": "1 Gün",
+  "1mo": "1 Ay",
+  "3mo": "3 Ay",
+  "6mo": "6 Ay",
+  "1y": "1 Yıl",
+};
+
 export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps) {
-  const [range, setRange] = useState<"1mo" | "3mo" | "6mo" | "1y" | any>("1mo");
+  const [range, setRange] = useState<"1d" | "1mo" | "3mo" | "6mo" | "1y">("1d");
   const [history, setHistory] = useState<StockHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(
@@ -199,14 +207,14 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
         </div>
 
         <div style={{ display: "flex", gap: "6px" }}>
-          {(["1mo", "3mo", "6mo", "1y"] as const).map((r) => (
+          {(["1d", "1mo", "3mo", "6mo", "1y"] as const).map((r) => (
             <button
               key={r}
               className={`stock-btn ${range === r ? "stock-btn-primary" : "stock-btn-secondary"}`}
               style={{ padding: "4px 10px", fontSize: "0.75rem" }}
               onClick={() => setRange(r)}
             >
-              {r.toUpperCase()}
+              {RANGE_LABELS[r]}
             </button>
           ))}
         </div>
@@ -224,8 +232,13 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
         {hoveredPoint ? (
           <>
             <span>
-              Tarih:{" "}
-              {new Date(hoveredPoint.timestamp).toLocaleDateString("tr-TR")}
+              {range === "1d" ? "Saat: " : "Tarih: "}
+              {range === "1d"
+                ? new Date(hoveredPoint.timestamp).toLocaleTimeString("tr-TR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : new Date(hoveredPoint.timestamp).toLocaleDateString("tr-TR")}
             </span>
             <span>Açılış: ₺{hoveredPoint.open.toFixed(2)}</span>
             <span style={{ color: "#4ade80" }}>

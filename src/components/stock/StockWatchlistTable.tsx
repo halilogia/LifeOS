@@ -169,7 +169,7 @@ export function StockWatchlistTable({
             onClick={() => onAiAnalyzeClick(activeSymbolsToAnalyze || "ALL_PORTFOLIO")}
           >
             <IconSparkles />
-            <span>✦ AI Günlük Takip Listesi Açılış Raporu Al (9Router)</span>
+            <span>✦ Seans Açılış Öncesi Strateji & Açılış Tahmini Al</span>
           </button>
         )}
       </div>
