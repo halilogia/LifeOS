@@ -15,7 +15,6 @@ import {
   extractTitleFromContent,
   extractHeadings,
 } from "@/services/kpssWikiService.js";
-import { KpssWikiHeader } from "@/components/kpss/KpssWikiHeader.js";
 import { KpssWikiSidebar } from "@/components/kpss/KpssWikiSidebar.js";
 import { KpssWikiReader } from "@/components/kpss/KpssWikiReader.js";
 import { KpssWikiEditor } from "@/components/kpss/KpssWikiEditor.js";
@@ -45,12 +44,6 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
   const loadSettings = async () => {
     const enabled = await getAutoTitleSetting();
     setAutoTitleEnabled(enabled);
-  };
-
-  const handleToggleAutoTitle = async () => {
-    const updated = !autoTitleEnabled;
-    setAutoTitleEnabled(updated);
-    await saveAutoTitleSetting(updated);
   };
 
   const loadNotes = async () => {
@@ -177,14 +170,8 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "14px" }}>
-      <KpssWikiHeader
-        lang={lang}
-        autoTitleEnabled={autoTitleEnabled}
-        onToggleAutoTitle={handleToggleAutoTitle}
-        onCreateNewNote={handleCreateNewNote}
-      />
-
-      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "14px", minHeight: "540px" }}>
+      {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
+      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: "16px", minHeight: "660px" }}>
         <KpssWikiSidebar
           lang={lang}
           notes={filteredNotes}
@@ -194,6 +181,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
           onSearchChange={setSearchQuery}
           onFilterChange={setSelectedSubjectFilter}
           onSelectNote={selectNote}
+          onCreateNewNote={handleCreateNewNote}
         />
 
         <div
@@ -201,10 +189,10 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
             background: "rgba(15, 23, 42, 0.65)",
             border: "1px solid rgba(255, 255, 255, 0.08)",
             borderRadius: "14px",
-            padding: "18px",
+            padding: "20px",
             display: "flex",
             flexDirection: "column",
-            gap: "14px",
+            gap: "16px",
           }}
         >
           {selectedNote ? (
@@ -219,7 +207,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#38bdf8", borderBottom: "2px solid #38bdf8", paddingBottom: "10px", marginBottom: "-11px" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#38bdf8", borderBottom: "2px solid #38bdf8", paddingBottom: "10px", marginBottom: "-11px" }}>
                     Ders Notu
                   </span>
                 </div>
@@ -233,9 +221,9 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                         background: viewMode === "read" ? "#2563eb" : "transparent",
                         border: "none",
                         color: "#ffffff",
-                        padding: "5px 12px",
+                        padding: "6px 14px",
                         borderRadius: "4px",
-                        fontSize: "0.75rem",
+                        fontSize: "0.78rem",
                         cursor: "pointer",
                         fontWeight: 700,
                       }}
@@ -249,9 +237,9 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                         background: viewMode === "edit" ? "#2563eb" : "transparent",
                         border: "none",
                         color: "#ffffff",
-                        padding: "5px 12px",
+                        padding: "6px 14px",
                         borderRadius: "4px",
-                        fontSize: "0.75rem",
+                        fontSize: "0.78rem",
                         cursor: "pointer",
                         fontWeight: 700,
                       }}
@@ -269,7 +257,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                       border: "1px solid rgba(239, 68, 68, 0.3)",
                       color: "#ef4444",
                       borderRadius: "6px",
-                      padding: "5px 10px",
+                      padding: "6px 11px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",

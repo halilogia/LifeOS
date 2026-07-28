@@ -34,41 +34,41 @@ export function KpssWikiReader({
   const readTimeMin = Math.ceil(wordCount / 150);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1, overflowY: "auto", paddingRight: "4px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "18px", flex: 1, overflowY: "auto", paddingRight: "6px" }}>
       {/* Article Title & Subtitle Header */}
-      <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)", paddingBottom: "8px" }}>
-        <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: 0, fontFamily: "sans-serif" }}>
+      <div style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.12)", paddingBottom: "10px" }}>
+        <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: "#ffffff", margin: 0, fontFamily: "sans-serif", letterSpacing: "-0.01em" }}>
           {displayTitle}
         </h1>
-        <div style={{ fontSize: "0.75rem", color: "#94a3b8", fontStyle: "italic", marginTop: "4px" }}>
+        <div style={{ fontSize: "0.78rem", color: "#94a3b8", fontStyle: "italic", marginTop: "4px" }}>
           Kişisel KPSS Ders Notu & Konu Özeti
         </div>
       </div>
 
       {/* Reader Grid Layout (Left TOC + Center Content + Right Infobox) */}
-      <div style={{ display: "grid", gridTemplateColumns: tableOfContents.length > 0 ? "180px 1fr 200px" : "1fr 200px", gap: "18px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: tableOfContents.length > 0 ? "200px 1fr 220px" : "1fr 220px", gap: "22px" }}>
         {/* Left Panel: İçindekiler (Table of Contents) */}
         {tableOfContents.length > 0 && (
           <div
             style={{
-              background: "rgba(15, 23, 42, 0.4)",
+              background: "rgba(15, 23, 42, 0.45)",
               border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "8px",
-              padding: "10px 12px",
+              borderRadius: "10px",
+              padding: "12px 14px",
               height: "fit-content",
             }}
           >
-            <div style={{ fontWeight: 800, fontSize: "0.75rem", color: "#cbd5e1", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "4px", marginBottom: "8px" }}>
+            <div style={{ fontWeight: 800, fontSize: "0.78rem", color: "#cbd5e1", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "6px", marginBottom: "10px" }}>
               İçindekiler
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {tableOfContents.map((item, idx) => (
                 <a
                   key={idx}
                   href={`#head-${idx}`}
                   style={{
                     color: "#60a5fa",
-                    fontSize: "0.72rem",
+                    fontSize: "0.76rem",
                     textDecoration: "none",
                     paddingLeft: `${(item.level - 1) * 8}px`,
                     overflow: "hidden",
@@ -86,9 +86,9 @@ export function KpssWikiReader({
         {/* Center Column: Article Body with Interactive Wikilinks */}
         <div
           style={{
-            color: "#e2e8f0",
-            fontSize: "0.88rem",
-            lineHeight: 1.7,
+            color: "#f1f5f9",
+            fontSize: "0.96rem",
+            lineHeight: 1.8,
             fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           }}
           onClick={onWikilinkClick}
@@ -98,14 +98,14 @@ export function KpssWikiReader({
         {/* Right Column: Bilgi Kutusu (Infobox) */}
         <div
           style={{
-            background: "rgba(30, 41, 59, 0.5)",
-            border: "1px solid rgba(59, 130, 246, 0.3)",
-            borderRadius: "10px",
-            padding: "12px",
+            background: "rgba(30, 41, 59, 0.55)",
+            border: "1px solid rgba(59, 130, 246, 0.35)",
+            borderRadius: "12px",
+            padding: "14px",
             height: "fit-content",
             display: "flex",
             flexDirection: "column",
-            gap: "10px",
+            gap: "12px",
           }}
         >
           <div
@@ -113,19 +113,20 @@ export function KpssWikiReader({
               background: "linear-gradient(135deg, #2563eb, #7c3aed)",
               color: "#ffffff",
               fontWeight: 800,
-              fontSize: "0.78rem",
+              fontSize: "0.82rem",
               textAlign: "center",
-              padding: "6px 8px",
-              borderRadius: "6px",
+              padding: "7px 10px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
             }}
           >
             {getSubjectLabel(note.subject)}
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.72rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.76rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#94a3b8" }}>
               <span>Kategori:</span>
-              <span style={{ color: "#f1f5f9", fontWeight: 600 }}>{note.subject.toUpperCase()}</span>
+              <span style={{ color: "#f1f5f9", fontWeight: 700 }}>{note.subject.toUpperCase()}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", color: "#94a3b8" }}>
               <span>Son Güncelleme:</span>

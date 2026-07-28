@@ -15,6 +15,7 @@ interface KpssWikiSidebarProps {
   onSearchChange: (q: string) => void;
   onFilterChange: (subject: string) => void;
   onSelectNote: (note: KpssWikiNote) => void;
+  onCreateNewNote: () => void;
 }
 
 export function KpssWikiSidebar({
@@ -26,6 +27,7 @@ export function KpssWikiSidebar({
   onSearchChange,
   onFilterChange,
   onSelectNote,
+  onCreateNewNote,
 }: KpssWikiSidebarProps) {
   const SUBJECT_FILTERS = [
     { id: "all", label: "Tümü" },
@@ -48,6 +50,35 @@ export function KpssWikiSidebar({
         gap: "12px",
       }}
     >
+      {/* Create New Note Button */}
+      <button
+        type="button"
+        onClick={onCreateNewNote}
+        style={{
+          width: "100%",
+          background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+          color: "#ffffff",
+          border: "none",
+          borderRadius: "8px",
+          padding: "9px 14px",
+          fontSize: "0.82rem",
+          fontWeight: 700,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "6px",
+          boxShadow: "0 4px 14px rgba(37, 99, 235, 0.35)",
+          transition: "all 0.2s ease",
+        }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>{lang === "tr" ? "Yeni Ders Notu Ekle" : "New Study Note"}</span>
+      </button>
+
       {/* Search Box */}
       <div style={{ position: "relative" }}>
         <input
@@ -105,7 +136,7 @@ export function KpssWikiSidebar({
       </div>
 
       {/* Note List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "6px", overflowY: "auto", flex: 1, maxHeight: "440px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", overflowY: "auto", flex: 1, maxHeight: "560px" }}>
         {notes.length === 0 ? (
           <div style={{ padding: "20px 10px", textAlign: "center", color: "#64748b", fontSize: "0.75rem" }}>
             Kayıtlı ders notu bulunamadı.

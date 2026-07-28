@@ -121,6 +121,7 @@ export function extractHeadings(content: string): HeadingItem[] {
 /**
  * Render Markdown with custom styled links highlighted in blue.
  * Auto-links [[Target Note]] and mentions of other note titles.
+ * Supports Unicode boundaries for Turkish characters (Ç, Ğ, İ, Ö, Ş, Ü).
  */
 export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiNote[]): string {
   if (!content) return "";
@@ -137,11 +138,20 @@ export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiN
     if (!n.title || n.title.trim().length < 3) return;
     const cleanTitle = n.title.trim();
     const escaped = cleanTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`\\b(${escaped})\\b`, "gi");
-
-    html = html.replace(regex, (match) => {
-      return `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`;
-    });
+    
+    // Use Unicode property boundaries to properly match Turkish characters (Ç, Ğ, İ, Ö, Ş, Ü)
+    try {
+      const regex = new RegExp(`(?<![\\p{L}\\p{N}])(${escaped})(?![\\p{L}\\p{N}])`, "gui");
+      html = html.replace(regex, (match) => {
+        return `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`;
+      });
+    } catch (e) {
+      // Fallback for environment without unicode regex flag
+      const regex = new RegExp(`\\b(${escaped})\\b`, "gi");
+      html = html.replace(regex, (match) => {
+        return `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`;
+      });
+    }
   });
 
   return html;
