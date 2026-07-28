@@ -5,9 +5,9 @@
 
 interface KpssHeaderBarProps {
   title: string;
-  activeTab: "progress" | "srs" | "past-exams";
+  activeTab: "progress" | "srs" | "past-exams" | "notes";
   lang: string;
-  onTabChange: (tab: "progress" | "srs" | "past-exams") => void;
+  onTabChange: (tab: "progress" | "srs" | "past-exams" | "notes") => void;
 }
 
 export function KpssHeaderBar({
@@ -30,6 +30,7 @@ export function KpssHeaderBar({
           display: "flex",
           justifyContent: "flex-start",
           gap: "10px",
+          flexWrap: "wrap",
         }}
       >
         <button
@@ -37,6 +38,14 @@ export function KpssHeaderBar({
           onClick={() => onTabChange("progress")}
         >
           {lang === "tr" ? "Konular & İlerleme" : "Topics & Progress"}
+        </button>
+        <button
+          className={`pomo-tab-link ${activeTab === "notes" ? "active" : ""}`}
+          onClick={() => onTabChange("notes")}
+        >
+          {lang === "tr"
+            ? "KPSS Ders Notları"
+            : "KPSS Notes"}
         </button>
         <button
           className={`pomo-tab-link ${activeTab === "srs" ? "active" : ""}`}

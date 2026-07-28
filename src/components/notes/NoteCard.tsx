@@ -1,4 +1,9 @@
 import { Note, Language } from "@/types/types.js";
+import {
+  extractInternalLinks,
+  extractTags,
+  getNodeColor,
+} from "@/services/zettelkastenEngine.js";
 
 interface NoteCardProps {
   note: Note;
@@ -369,6 +374,60 @@ export function NoteCard({
               }}
             />
           )}
+
+          {/* Zettelkasten Tags & Internal Links Chips */}
+          {(() => {
+            const rawText = `${note.content || ""} ${note.cues || ""} ${note.summary || ""}`;
+            const tags = extractTags(rawText);
+            const links = extractInternalLinks(rawText);
+
+            if (tags.length === 0 && links.length === 0) return null;
+
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  gap: "4px",
+                  flexWrap: "wrap",
+                  marginTop: "8px",
+                  marginBottom: "4px",
+                }}
+              >
+                {tags.map((t) => (
+                  <span
+                    key={t}
+                    style={{
+                      fontSize: "0.68rem",
+                      padding: "1px 6px",
+                      borderRadius: "4px",
+                      background: "rgba(168, 85, 247, 0.2)",
+                      color: getNodeColor([t]),
+                      border: "1px solid rgba(168, 85, 247, 0.3)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    #{t}
+                  </span>
+                ))}
+                {links.map((l) => (
+                  <span
+                    key={l}
+                    style={{
+                      fontSize: "0.68rem",
+                      padding: "1px 6px",
+                      borderRadius: "4px",
+                      background: "rgba(59, 130, 246, 0.15)",
+                      color: "#93c5fd",
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    [[{l}]]
+                  </span>
+                ))}
+              </div>
+            );
+          })()}
 
           <div
             className="note-card-footer"

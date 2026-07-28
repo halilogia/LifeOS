@@ -1,7 +1,6 @@
-/**
- * NoteEditorModal.tsx
- * Not, Günlük ve Cornell Notu oluşturma/düzenleme modali.
- */
+import { useState } from "preact/hooks";
+import { Note } from "@/types/types.js";
+import { extractInternalLinks } from "@/services/zettelkastenEngine.js";
 
 export type NoteType = "note" | "diary" | "cornell";
 
@@ -15,6 +14,7 @@ interface NoteEditorModalProps {
   noteSummary: string;
   notesPlaceholder: string;
   notesContentPlaceholder: string;
+  availableNotes?: Note[];
   onClose: () => void;
   onNoteTypeChange: (type: NoteType) => void;
   onNoteTitleChange: (val: string) => void;
@@ -34,6 +34,7 @@ export function NoteEditorModal({
   noteSummary,
   notesPlaceholder,
   notesContentPlaceholder,
+  availableNotes,
   onClose,
   onNoteTypeChange,
   onNoteTitleChange,
@@ -42,9 +43,52 @@ export function NoteEditorModal({
   onNoteSummaryChange,
   onSave,
 }: NoteEditorModalProps) {
+  const [showLinkSuggestions, setShowLinkSuggestions] = useState(false);
+  const [linkQuery, setLinkQuery] = useState("");
+
   if (!isOpen) {
     return null;
   }
+
+  const backlinks =
+    availableNotes && noteTitle.trim()
+      ? availableNotes.filter((n) => {
+          if (n.title.toLowerCase().trim() === noteTitle.toLowerCase().trim())
+            return false;
+          const links = extractInternalLinks(n.content || "");
+          return links.some(
+            (l) => l.toLowerCase().trim() === noteTitle.toLowerCase().trim(),
+          );
+        })
+      : [];
+
+  const filteredSuggestions = availableNotes
+    ? availableNotes.filter((n) =>
+        n.title.toLowerCase().includes(linkQuery.toLowerCase().trim()),
+      )
+    : [];
+
+  const handleContentInput = (val: string) => {
+    onNoteContentChange(val);
+    const lastDoubleBracket = val.lastIndexOf("[[");
+    if (lastDoubleBracket !== -1 && val.indexOf("]]", lastDoubleBracket) === -1) {
+      const q = val.slice(lastDoubleBracket + 2);
+      setLinkQuery(q);
+      setShowLinkSuggestions(true);
+    } else {
+      setShowLinkSuggestions(false);
+    }
+  };
+
+  const insertLink = (title: string) => {
+    const lastDoubleBracket = noteContent.lastIndexOf("[[");
+    if (lastDoubleBracket !== -1) {
+      const newContent =
+        noteContent.slice(0, lastDoubleBracket) + `[[${title}]] `;
+      onNoteContentChange(newContent);
+    }
+    setShowLinkSuggestions(false);
+  };
 
   return (
     <div className="settings-panel active" onClick={onClose}>
@@ -98,14 +142,14 @@ export function NoteEditorModal({
                     style={{
                       background:
                         noteType === t ? "var(--accent-color)" : "transparent",
-                      border: "none",
                       color:
                         noteType === t
                           ? "#fff"
-                          : "var(--text-secondary, rgba(255, 255, 255, 0.6))",
-                      padding: "5px 12px",
-                      borderRadius: "7px",
-                      fontSize: "0.78rem",
+                          : "var(--text-secondary, #94a3b8)",
+                      border: "none",
+                      padding: "4px 10px",
+                      borderRadius: "8px",
+                      fontSize: "0.75rem",
                       fontWeight: 600,
                       cursor: "pointer",
                       transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -156,7 +200,7 @@ export function NoteEditorModal({
           />
         </header>
 
-        <div className="note-editor-body" style={{ padding: "0 10px" }}>
+        <div className="note-editor-body" style={{ padding: "0 10px", position: "relative" }}>
           {noteType === "cornell" ? (
             <div
               style={{
@@ -235,14 +279,12 @@ export function NoteEditorModal({
                   <textarea
                     value={noteContent}
                     onInput={(e) =>
-                      onNoteContentChange(
-                        (e.target as HTMLTextAreaElement).value,
-                      )
+                      handleContentInput((e.target as HTMLTextAreaElement).value)
                     }
                     placeholder={
                       lang === "tr"
-                        ? "Ders esnasındaki ayrıntılı notlarınızı, formülleri ve açıklamaları buraya yazın..."
-                        : "Write detailed lecture notes, formulas, and explanations here..."
+                        ? "Ders esnasındaki ayrıntılı notlarınızı, [[İç Bağlantı]] ve #kpss/tarih etiketlerinizi yazın..."
+                        : "Write detailed lecture notes, [[Internal Links]], and #kpss/tarih tags here..."
                     }
                     style={{
                       background: "rgba(0, 0, 0, 0.2)",
@@ -304,7 +346,7 @@ export function NoteEditorModal({
               className="note-content-input"
               value={noteContent}
               onInput={(e) =>
-                onNoteContentChange((e.target as HTMLTextAreaElement).value)
+                handleContentInput((e.target as HTMLTextAreaElement).value)
               }
               placeholder={
                 noteType === "diary"
@@ -314,6 +356,118 @@ export function NoteEditorModal({
                   : notesContentPlaceholder
               }
             />
+          )}
+
+          {/* Autocomplete Popup when typing [[ */}
+          {showLinkSuggestions && filteredSuggestions.length > 0 && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "50px",
+                left: "20px",
+                width: "280px",
+                maxHeight: "180px",
+                overflowY: "auto",
+                background: "rgba(15, 23, 42, 0.95)",
+                border: "1px solid var(--accent-color, #a855f7)",
+                borderRadius: "12px",
+                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
+                zIndex: 100,
+                padding: "6px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.72rem",
+                  color: "#94a3b8",
+                  padding: "4px 8px",
+                  fontWeight: 600,
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                }}
+              >
+                🔗 İç Bağlantı Ekle (`[[...]]`):
+              </div>
+              {filteredSuggestions.map((n) => (
+                <button
+                  key={n.id}
+                  type="button"
+                  onClick={() => insertLink(n.title)}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "6px 10px",
+                    background: "transparent",
+                    border: "none",
+                    color: "#f8fafc",
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    borderRadius: "6px",
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.target as HTMLElement).style.background =
+                      "rgba(168, 85, 247, 0.2)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.target as HTMLElement).style.background =
+                      "transparent")
+                  }
+                >
+                  [[{n.title}]]
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Backlinks Panel ("🔗 Bağlantılı Notlar") */}
+          {backlinks.length > 0 && (
+            <div
+              style={{
+                marginTop: "12px",
+                padding: "10px 14px",
+                background: "rgba(15, 23, 42, 0.4)",
+                borderRadius: "10px",
+                border: "1px solid rgba(168, 85, 247, 0.2)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  color: "#c084fc",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                🔗 Bağlantılı Notlar (Backlinks - {backlinks.length}):
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "6px",
+                  flexWrap: "wrap",
+                  marginTop: "6px",
+                }}
+              >
+                {backlinks.map((b) => (
+                  <span
+                    key={b.id}
+                    style={{
+                      fontSize: "0.72rem",
+                      padding: "2px 8px",
+                      borderRadius: "6px",
+                      background: "rgba(168, 85, 247, 0.15)",
+                      color: "#e0e7ff",
+                      border: "1px solid rgba(168, 85, 247, 0.3)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    [[{b.title}]]
+                  </span>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 

@@ -39,6 +39,7 @@ import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
 import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssQuizModal } from "@/components/kpss/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
+import { KpssNotesDashboard } from "@/components/kpss/KpssNotesDashboard.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -104,9 +105,9 @@ export function KpssView({
   const [remainingCount, setRemainingCount] = useState(0);
 
   // Active sub-tab
-  const [activeTab, setActiveTab] = useState<"progress" | "srs" | "past-exams">(
-    "progress",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "progress" | "notes" | "srs" | "past-exams"
+  >("progress");
 
   // Sorting state for topic lists
   const [sortBy, setSortBy] = useState<"default" | "questions" | "status">(
@@ -557,6 +558,8 @@ export function KpssView({
               onShowDetail={(topic) => setActiveTopic(topic)}
             />
           </>
+        ) : activeTab === "notes" ? (
+          <KpssNotesDashboard lang={lang} />
         ) : activeTab === "srs" ? (
           <KpssSrsCard
             lang={lang}
