@@ -166,25 +166,45 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
         const model = (syncRes.aiModel as string) || (provider === "gemini" ? "gemini-1.5-flash" : "free");
         const rawEndpoint = (syncRes.aiEndpoint as string) || "http://localhost:20128/v1";
 
+        const userMemory: string = await new Promise<string>((r) =>
+          chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
+            r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
+          ),
+        );
+
         const currentContextText = activeCtx ? activeCtx.pageText : "";
         const currentTitle = activeCtx ? activeCtx.title : "";
         const currentUrl = activeCtx ? activeCtx.url : "";
+        const currentInteractiveElements =
+          activeCtx && activeCtx.interactiveElements
+            ? JSON.stringify(activeCtx.interactiveElements.slice(0, 35))
+            : "[]";
 
         const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
 Title: "${currentTitle}"
 URL: "${currentUrl}"
 
-Active Page Content Excerpt:
-"${currentContextText.slice(0, 5000)}"
+User Personal Memory (memory.md):
+"${userMemory || "No memory provided."}"
 
-If the user asks an action like "click button", "fill form", or "scroll", return your final JSON action code block at the end in this format:
+Active Page Content Excerpt:
+"${currentContextText.slice(0, 4000)}"
+
+Interactive Form & Input Elements on Active Page:
+${currentInteractiveElements}
+
+INSTRUCTIONS FOR FORM FILLING, REGISTRATION & WEB ACTIONS:
+If the user asks to fill a form, register, or sign up on a website/forum (e.g. "Formu doldur", "Kayıt ol", "Üye ol", "Bu siteye kayıt ol", "Sign up"), match input field labels/placeholders (Username, Email, Full Name, Bio, Occupation) on the active page against the user's personal memory (memory.md).
+Return a JSON array of actions or single action in markdown code block at the end:
 \`\`\`json
-{
-  "actionType": "click" | "type" | "scroll" | "extract" | "highlight",
-  "selector": "#selector-or-class",
-  "targetText": "button text to click",
-  "textValue": "text to type if typing"
-}
+[
+  {
+    "actionType": "type",
+    "selector": "input[name='username']",
+    "targetText": "Kullanıcı Adı",
+    "textValue": "HalilEmre"
+  }
+]
 \`\`\`
 
 Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Turkish" : "English"}.`;
@@ -272,15 +292,27 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
           if (jsonMatch && jsonMatch[1]) {
             try {
-              const actionPayload = JSON.parse(jsonMatch[1]) as AgentActionPayload;
-              setAgentStatus(lang === "tr" ? `Sayfa aksiyonu yürütülüyor: ${actionPayload.actionType}...` : `Executing action: ${actionPayload.actionType}...`);
-              
-              chrome.runtime.sendMessage({ type: "execute_agent_action", payload: actionPayload }, (actRes) => {
-                setAgentStatus(null);
-                if (actRes && actRes.success) {
-                  responseText += `\n\n✓ *${lang === "tr" ? "Aksiyon başarıyla gerçekleştirildi" : "Action executed successfully"} (${actionPayload.actionType})*`;
-                }
-              });
+              const actionPayload = JSON.parse(jsonMatch[1]);
+              const count = Array.isArray(actionPayload) ? actionPayload.length : 1;
+              setAgentStatus(
+                lang === "tr"
+                  ? `Form aksiyonu yürütülüyor (${count} işlem)...`
+                  : `Executing form action (${count} items)...`,
+              );
+
+              chrome.runtime.sendMessage(
+                { type: "execute_agent_action", payload: actionPayload },
+                (actRes) => {
+                  setAgentStatus(null);
+                  if (actRes && actRes.success) {
+                    responseText += `\n\n✓ *${
+                      lang === "tr"
+                        ? "Form & Sayfa aksiyonları başarıyla uygulandı"
+                        : "Form & Page actions executed successfully"
+                    } (${count} ${lang === "tr" ? "alan dolduruldu" : "fields updated"})*`;
+                  }
+                },
+              );
             } catch {
               setAgentStatus(null);
             }
@@ -402,6 +434,23 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             </button>
           </>
         )}
+
+        <button
+          className="sidepanel-chip"
+          style={{
+            background: "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))",
+            borderColor: "rgba(139, 92, 246, 0.4)",
+            color: "#34d399",
+            fontWeight: 600,
+          }}
+          onClick={() => handleSendMessage("Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.")}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>{lang === "tr" ? "✍️ Formu Doldur (memory.md)" : "✍️ Autofill Form"}</span>
+        </button>
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("summarize")}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
