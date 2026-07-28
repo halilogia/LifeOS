@@ -89,6 +89,11 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 4.3 Structured Planning
 * **Planning Workflow Requirement**: Any complex task (architectural changes, multiple file edits, or security revisions) requires establishing a structured plan inside `implementation_plan.md` and waiting for user review and approval before writing code.
 
+### 4.4 Zero Security Vulnerability & Zero Backdoor Guarantee (Sıfır Güvenlik İhlali ve Sıfır Arka Kapı Protokolü)
+* **Zero Backdoor Policy**: All code, scripts, network calls, and content script integrations MUST be strictly transparent and free of any backdoor, unauthorized telemetry, hidden data collection, or remote code execution (RCE).
+* **Strict Input & DOM Sanitization**: All user-entered text, WhatsApp Web chat messages, or external data inserted into active DOM trees MUST use safe DOM APIs (`document.createElement`, `element.textContent`, `element.setAttribute`) or be sanitized through strict `escapeHtml()` filters to guarantee 0 XSS vulnerabilities.
+* **API Key & Credential Safety**: User credentials and API keys (9Router, Gemini, OpenAI, Groq, Ollama) MUST strictly remain stored inside Chrome Extension secure storage (`chrome.storage.sync` / `chrome.storage.local`) and NEVER hardcoded, logged to external servers, or transmitted to unverified endpoints.
+
 ---
 
 ## 5. Clean Code & Clean Architecture Principles
