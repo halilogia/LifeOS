@@ -13,12 +13,18 @@
 
 .stock-summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
+@media (max-width: 768px) {
+  .stock-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stock-summary-card {
-  background: rgba(30, 41, 59, 0.65);
+  background: rgba(30, 41, 59, 0.55);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -54,40 +60,40 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
   width: fit-content;
 }
 
 .stock-badge-positive {
-  background: rgba(34, 197, 94, 0.15);
+  background: rgba(34, 197, 94, 0.12);
   color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  border: none;
 }
 
 .stock-badge-negative {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: none;
 }
 
 .stock-badge-neutral {
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(148, 163, 184, 0.12);
   color: #cbd5e1;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: none;
 }
 
 .stock-badge-tavan {
   background: linear-gradient(
     135deg,
-    rgba(234, 179, 8, 0.25),
-    rgba(245, 158, 11, 0.3)
+    rgba(234, 179, 8, 0.2),
+    rgba(245, 158, 11, 0.25)
   );
   color: #fef08a;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+  border: none;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
 }
 
 .stock-action-bar {
@@ -149,22 +155,24 @@
 }
 
 .stock-table-container {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(30, 41, 59, 0.45);
   backdrop-filter: blur(12px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  overflow-x: auto;
+  padding: 18px 20px;
+  overflow: hidden;
 }
 
 .stock-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: left;
 }
 
 .stock-table th {
-  background: rgba(15, 23, 42, 0.6);
-  padding: 12px;
+  background: rgba(15, 23, 42, 0.4);
+  padding: 12px 14px;
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -172,8 +180,16 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.stock-table th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.stock-table th:last-child {
+  border-top-right-radius: 8px;
+}
+
 .stock-table td {
-  padding: 12px;
+  padding: 12px 14px;
   font-size: 0.88rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
@@ -537,4 +553,151 @@ body:has(#sidebar.open) .stock-modal-overlay,
   color: white;
   border-color: transparent;
 }
+
+/* WatchlistSelectorBar (Midas Style Custom Watchlists Bar) */
+.watchlist-selector-container {
+  margin-bottom: 16px;
+}
+
+.watchlist-selector-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.watchlist-selector-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.watchlist-selector-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.watchlist-tab-chip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.watchlist-tab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.watchlist-tab-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.watchlist-tab-chip.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #f1f5f9;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2);
+}
+
+.watchlist-chip-count {
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.watchlist-tab-chip.active .watchlist-chip-count {
+  background: rgba(139, 92, 246, 0.35);
+  color: #e0e7ff;
+}
+
+.watchlist-delete-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px 6px;
+  margin-left: -4px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.watchlist-delete-btn:hover {
+  color: #f87171;
+}
+
+.watchlist-add-chip {
+  border-style: dashed;
+  color: var(--accent-color, #8b5cf6);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.watchlist-add-chip:hover {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: var(--accent-color, #8b5cf6);
+}
+
+.watchlist-add-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--accent-color, #8b5cf6);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.watchlist-add-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f8fafc;
+  font-size: 0.8rem;
+  width: 140px;
+  padding: 3px 6px;
+}
+
+.watchlist-add-submit-btn {
+  background: var(--accent-color, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.watchlist-add-cancel-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 3px 6px;
+}
+
+.watchlist-add-cancel-btn:hover {
+  color: #f8fafc;
+}
+
 

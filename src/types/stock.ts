@@ -42,3 +42,12 @@ export interface StockAlertLog {
   timestamp: string; // ISO Tarih
   isRead: boolean;
 }
+
+export interface StockWatchlist {
+  id: string;
+  name: string;
+  description?: string;
+  symbols: string[]; // Hisse sembolleri listesi (örn: ["THYAO", "GARAN"])
+  createdAt: string; // ISO Tarih
+}
+
