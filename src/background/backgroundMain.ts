@@ -8,6 +8,7 @@ import {
   createAmbientAudioEngine,
   AmbientSoundType,
 } from "@/services/ambientAudioService.js";
+import { callAIConfigured } from "@/services/aiChatService.js";
 
 let bgAudioEngine = createAmbientAudioEngine();
 
@@ -505,6 +506,33 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         sendResponse({ success: false, error: "No active tab" });
       }
     });
+    return true;
+  }
+
+  if (message.type === "GENERATE_AI_RESPONSE") {
+    chrome.storage.sync.get(
+      ["aiProvider", "aiApiKey", "aiModel", "aiEndpoint"],
+      async (res) => {
+        const provider = (res.aiProvider as string) || "9router";
+        const apiKey = (res.aiApiKey as string) || "";
+        const model = (res.aiModel as string) || "gemini-2.5-flash";
+        const endpoint = (res.aiEndpoint as string) || "";
+
+        try {
+          const aiResult = await callAIConfigured({
+            userPrompt: message.prompt,
+            aiProvider: provider,
+            aiApiKey: apiKey,
+            aiModel: model,
+            aiEndpoint: endpoint,
+            enableWebSearch: true,
+          });
+          sendResponse({ response: aiResult.reply });
+        } catch (err) {
+          sendResponse({ response: `Hata: ${String(err)}` });
+        }
+      },
+    );
     return true;
   }
 });

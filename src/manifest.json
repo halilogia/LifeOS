@@ -18,6 +18,7 @@
     "https://generativelanguage.googleapis.com/*",
     "https://halkarz.com/*",
     "https://www.youtube.com/*",
+    "https://web.whatsapp.com/*",
     "http://localhost/*",
     "http://127.0.0.1/*"
   ],

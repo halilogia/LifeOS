@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { DetoxMotivationCard } from "@/components/detox/DetoxMotivationCard.js";
 
 interface DetoxStatusCardProps {
   lang: Language;
@@ -44,7 +45,7 @@ export function DetoxStatusCard({
   onSelectedDurationChange,
 }: DetoxStatusCardProps) {
   return (
-    <div className="detox-card">
+    <div className="detox-card" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="detox-status-header">
         <div className="detox-title-group">
           <h2>{t.detox_title || "Sosyal Medya Detoksu"}</h2>
@@ -89,12 +90,17 @@ export function DetoxStatusCard({
             </div>
           </div>
 
-          <div className="detox-active-info">
+          <div className="detox-active-info" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <h3>{t.detox_active_title || "Derin Odaklanma Modu"}</h3>
             <p>
               {t.detox_active_desc ||
                 "Odaklanma oturumunuz boyunca seçilen sosyal medya kanalları tamamen engellenmiştir."}
             </p>
+
+            <DetoxMotivationCard
+              durationMinutes={endTime === -1 ? 0 : Math.max(1, Math.round(timeLeft / 60))}
+              lang={lang}
+            />
 
             <button className="detox-btn danger" onClick={onDisableDetox}>
               {t.detox_btn_disable || "Detoksu Sonlandır"}
@@ -123,9 +129,9 @@ export function DetoxStatusCard({
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="white"
-                          stroke-width="3"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
                           <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
@@ -231,10 +237,10 @@ export function DetoxStatusCard({
                         fontSize: "1rem",
                       }}
                       onMouseOver={(e) =>
-                        (e.currentTarget.style.color = "var(--danger)")
+                        ((e.currentTarget as HTMLElement).style.color = "var(--danger)")
                       }
                       onMouseOut={(e) =>
-                        (e.currentTarget.style.color = "var(--text-secondary)")
+                        ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
                       }
                     >
                       &times;
@@ -272,6 +278,13 @@ export function DetoxStatusCard({
               </select>
             </div>
           </div>
+
+          <DetoxMotivationCard
+            durationMinutes={
+              selectedDuration === -1 ? 0 : Math.round(selectedDuration / 60000)
+            }
+            lang={lang}
+          />
 
           <button className="detox-btn primary" onClick={onEnableDetox}>
             {t.detox_btn_enable || "Detoksu Başlat"}
