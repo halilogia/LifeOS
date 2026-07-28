@@ -1,5 +1,4 @@
 import { Language } from "@/types/types.js";
-import { DetoxMotivationCard } from "@/components/detox/DetoxMotivationCard.js";
 
 interface DetoxStatusCardProps {
   lang: Language;
@@ -273,13 +272,6 @@ export function DetoxStatusCard({
               </select>
             </div>
           </div>
-
-          <DetoxMotivationCard
-            durationMinutes={
-              selectedDuration === -1 ? 0 : Math.round(selectedDuration / 60000)
-            }
-            lang={lang}
-          />
 
           <button className="detox-btn primary" onClick={onEnableDetox}>
             {t.detox_btn_enable || "Detoksu Başlat"}

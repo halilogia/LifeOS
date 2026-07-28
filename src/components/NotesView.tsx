@@ -261,7 +261,6 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           lang={lang}
           onOpenQuoteModal={() => setIsQuoteModalOpen(true)}
           onOpenNoteModal={() => handleOpenNoteModal()}
-          onOpenGraphModal={() => setIsGraphModalOpen(true)}
         />
 
         {/* Custom Quotes List */}
