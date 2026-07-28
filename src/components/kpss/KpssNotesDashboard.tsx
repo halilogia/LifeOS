@@ -11,13 +11,13 @@ import {
   getKpssWikiNotes,
   saveKpssWikiNotes,
   getAutoTitleSetting,
-  saveAutoTitleSetting,
   extractTitleFromContent,
   extractHeadings,
 } from "@/services/kpssWikiService.js";
 import { KpssWikiSidebar } from "@/components/kpss/KpssWikiSidebar.js";
 import { KpssWikiReader } from "@/components/kpss/KpssWikiReader.js";
 import { KpssWikiEditor } from "@/components/kpss/KpssWikiEditor.js";
+import { ZettelkastenGraphModal } from "@/components/notes/ZettelkastenGraphModal.js";
 
 interface KpssNotesDashboardProps {
   lang: Language;
@@ -28,6 +28,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [autoTitleEnabled, setAutoTitleEnabled] = useState<boolean>(false);
+  const [showGraphModal, setShowGraphModal] = useState<boolean>(false);
 
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"read" | "edit">("read");
@@ -138,6 +139,18 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
     }
   };
 
+  const handleDownloadMarkdown = () => {
+    if (!selectedNote) return;
+    const filename = `${(selectedNote.title || "Ders-Notu").replace(/[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ]/g, "_")}.md`;
+    const blob = new Blob([selectedNote.content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleWikilinkClick = (e: MouseEvent) => {
     const target = (e.target as HTMLElement).closest("[data-wiki-link]");
     if (target) {
@@ -171,7 +184,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "14px" }}>
       {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
-      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: "16px", minHeight: "660px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: "16px", minHeight: "680px" }}>
         <KpssWikiSidebar
           lang={lang}
           notes={filteredNotes}
@@ -197,56 +210,106 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
         >
           {selectedNote ? (
             <>
+              {/* Wikipedia Header Tab Toolbar: Mode switch + Export Actions */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
-                  paddingBottom: "10px",
+                  paddingBottom: "8px",
+                  marginBottom: "4px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#38bdf8", borderBottom: "2px solid #38bdf8", paddingBottom: "10px", marginBottom: "-11px" }}>
-                    Ders Notu
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("read")}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: viewMode === "read" ? "#ffffff" : "#94a3b8",
+                      fontSize: "0.8rem",
+                      cursor: "pointer",
+                      fontWeight: viewMode === "read" ? 700 : 500,
+                      borderBottom: viewMode === "read" ? "2px solid #ffffff" : "2px solid transparent",
+                      paddingBottom: "8px",
+                      marginBottom: "-9px",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    Oku
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("edit")}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: viewMode === "edit" ? "#ffffff" : "#94a3b8",
+                      fontSize: "0.8rem",
+                      cursor: "pointer",
+                      fontWeight: viewMode === "edit" ? 700 : 500,
+                      borderBottom: viewMode === "edit" ? "2px solid #ffffff" : "2px solid transparent",
+                      paddingBottom: "8px",
+                      marginBottom: "-9px",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    Değiştir
+                  </button>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.4)", borderRadius: "6px", padding: "2px" }}>
-                    <button
-                      type="button"
-                      onClick={() => setViewMode("read")}
-                      style={{
-                        background: viewMode === "read" ? "#2563eb" : "transparent",
-                        border: "none",
-                        color: "#ffffff",
-                        padding: "6px 14px",
-                        borderRadius: "4px",
-                        fontSize: "0.78rem",
-                        cursor: "pointer",
-                        fontWeight: 700,
-                      }}
-                    >
-                      Oku
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setViewMode("edit")}
-                      style={{
-                        background: viewMode === "edit" ? "#2563eb" : "transparent",
-                        border: "none",
-                        color: "#ffffff",
-                        padding: "6px 14px",
-                        borderRadius: "4px",
-                        fontSize: "0.78rem",
-                        cursor: "pointer",
-                        fontWeight: 700,
-                      }}
-                    >
-                      Değiştir
-                    </button>
-                  </div>
+                  {/* Export Action: Download Markdown */}
+                  <button
+                    type="button"
+                    onClick={handleDownloadMarkdown}
+                    title={lang === "tr" ? "Markdown (.md) Olarak İndir" : "Download as Markdown"}
+                    style={{
+                      background: "rgba(59, 130, 246, 0.15)",
+                      border: "1px solid rgba(59, 130, 246, 0.3)",
+                      color: "#60a5fa",
+                      borderRadius: "6px",
+                      padding: "4px 10px",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <span>.md İndir</span>
+                  </button>
+
+                  {/* Icon-Only Neural Graph Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowGraphModal(true)}
+                    title={lang === "tr" ? "Wikiağ / Nöral Harita" : "Knowledge Graph"}
+                    style={{
+                      background: "rgba(56, 189, 248, 0.15)",
+                      border: "1px solid rgba(56, 189, 248, 0.35)",
+                      color: "#38bdf8",
+                      borderRadius: "6px",
+                      padding: "5px 9px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="6" cy="6" r="3"></circle>
+                      <circle cx="18" cy="6" r="3"></circle>
+                      <circle cx="12" cy="18" r="3"></circle>
+                      <line x1="8.5" y1="7.5" x2="15.5" y2="7.5"></line>
+                      <line x1="7.5" y1="8.5" x2="10.5" y2="15.5"></line>
+                      <line x1="16.5" y1="8.5" x2="13.5" y2="15.5"></line>
+                    </svg>
+                  </button>
 
                   <button
                     type="button"
@@ -257,13 +320,13 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                       border: "1px solid rgba(239, 68, 68, 0.3)",
                       color: "#ef4444",
                       borderRadius: "6px",
-                      padding: "6px 11px",
+                      padding: "5px 9px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                     }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                     </svg>
@@ -300,6 +363,18 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
           )}
         </div>
       </div>
+
+      {/* Zettelkasten Interactive 2D Neural Graph Modal */}
+      {showGraphModal && (
+        <ZettelkastenGraphModal
+          notes={notes as any}
+          onClose={() => setShowGraphModal(false)}
+          onSelectNote={(n) => {
+            selectNote(n as any);
+            setShowGraphModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
