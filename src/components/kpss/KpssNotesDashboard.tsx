@@ -10,6 +10,8 @@ import {
   KpssWikiNote,
   getKpssWikiNotes,
   saveKpssWikiNotes,
+  getAutoTitleSetting,
+  saveAutoTitleSetting,
   extractTitleFromContent,
   extractHeadings,
 } from "@/services/kpssWikiService.js";
@@ -26,6 +28,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
   const [notes, setNotes] = useState<KpssWikiNote[]>([]);
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [autoTitleEnabled, setAutoTitleEnabled] = useState<boolean>(false);
 
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"read" | "edit">("read");
@@ -36,7 +39,19 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
 
   useEffect(() => {
     loadNotes();
+    loadSettings();
   }, []);
+
+  const loadSettings = async () => {
+    const enabled = await getAutoTitleSetting();
+    setAutoTitleEnabled(enabled);
+  };
+
+  const handleToggleAutoTitle = async () => {
+    const updated = !autoTitleEnabled;
+    setAutoTitleEnabled(updated);
+    await saveAutoTitleSetting(updated);
+  };
 
   const loadNotes = async () => {
     const loaded = await getKpssWikiNotes();
@@ -52,7 +67,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
 
   const selectNote = (note: KpssWikiNote) => {
     setSelectedNoteId(note.id);
-    setEditorTitle(note.title || extractTitleFromContent(note.content) || "");
+    setEditorTitle(note.title || "");
     setEditorSubject(note.subject || "tarih");
     setEditorContent(note.content || "");
     setViewMode("read");
@@ -84,9 +99,12 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
     if (!selectedNoteId) return;
 
     let finalTitle = editorTitle.trim();
-    if (!finalTitle && editorContent) {
+
+    // If auto title is enabled AND user left title empty, extract ONLY the first word
+    if (autoTitleEnabled && !finalTitle && editorContent) {
       finalTitle = extractTitleFromContent(editorContent);
     }
+
     if (!finalTitle) {
       finalTitle = lang === "tr" ? "Başlıksız Ders Notu" : "Untitled Note";
     }
@@ -159,7 +177,12 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "14px" }}>
-      <KpssWikiHeader lang={lang} onCreateNewNote={handleCreateNewNote} />
+      <KpssWikiHeader
+        lang={lang}
+        autoTitleEnabled={autoTitleEnabled}
+        onToggleAutoTitle={handleToggleAutoTitle}
+        onCreateNewNote={handleCreateNewNote}
+      />
 
       <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "14px", minHeight: "540px" }}>
         <KpssWikiSidebar
