@@ -24,10 +24,16 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
 - **📈 Otomatik Borsa İstanbul (BIST) Yönetim & Strateji Sistemi**:
   - **Canlı Takip & Portföy Metrikleri**: Tüm BIST hisseleri ve Halka Arzlar için canlı fiyat akışı, maliyet, lot adedi, toplam portföy değeri ve anlık Kar/Zarar göstergesi.
+  - **30 Günlük Derinlemesine Yapay Zeka Analizi (`stockAiService.ts`)**: Hisselerin 30 günlük OHLC mum verileri, 1 aylık getiri %, 30 günlük zirve/dip aralığı ve destek/direnç seviyeleri otomatik hesaplanarak AI modeline sunulur. 4 derinlemesine bölüm halinde raporlanır (*30 Günlük Performans*, *Günün Seyri*, *Kritik Destek/Direnç*, *Risk Stratejisi*).
+  - **Şeffaf Mor Glassmorphic Boğa / Ayı Rozetleri**: `85/100 🐂 Boğa`, `50/100 ⚖️ Nötr` ve `35/100 🐻 Ayı` rozetleri şeffaf mor cam estetiğiyle canlı sunulur.
+  - **Dinamik TL İşlem Hacmi & Pozitif İvme Vitrini**: Öne çıkan BİST hisseleri ham lot yerine `Fiyat × Lot = TL Hacim` formülüyle taranır ve primli hisseler ilk sırada gösterilir.
   - **Otomatik Satış & Alarm Motoru (`stockRuleEngine.ts`)**: Kırmızı Mum (Değişim < %0), Tavan Bozma (%10 seriden sarkma), Stop-Loss %, Kar-Al % ve İzleyen Stop (Trailing Stop - Zirveden % düşüş) kuralları.
   - **Masaüstü Alarmları**: Arka plan servisi (`background.js`) üzerinden 3 dakikada bir otomatik fiyat kontrolü ve `chrome.notifications` masaüstü alarm uyarısı.
-  - **Yapay Zeka (Ollama / OpenRouter / Gemini) Borsa Danışmanı**: Seçilen BIST hisseleri için canlı teknik/temel yapay zeka analiz ekranı.
   - **Özel Mum (Candlestick) Grafiği**: BIST hisseleri için 1M, 3M, 6M, 1Y zaman aralığı filtreli ve fare takipli crosshair mum grafik ekranı.
+- **✍️ Günlüğüm (Notlar & Ders Notları & .md İndirme)**:
+  - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" kayıtları ekleme. Her karta eklenen **`📥 .md İndir`** butonu ile notları bilgisayara `.md` formatında dışa aktarabilme.
+- **🎵 Kesintisiz Arka Plan Odak Sesleri & Kısayollar**:
+  - Web Audio API ses sentezleyicileri (Yağmur, Rüzgar, Lo-Fi) `backgroundMain.ts` servisine taşınarak Popup kapansa dahi kesintisiz çalma sağlandı. `Ctrl + Shift + E` kısayoluyla Companion AI Yan Paneli anında tetiklenebilir.
 - **🕌 Namaz Vakitleri**:
   - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
