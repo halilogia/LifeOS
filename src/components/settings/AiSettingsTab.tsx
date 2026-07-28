@@ -32,14 +32,26 @@ export function AiSettingsTab({
   const [memorySavedSuccess, setMemorySavedSuccess] = useState(false);
 
   useEffect(() => {
-    chrome.storage.sync.get(["aiUserMemory"], (syncRes: Record<string, any>) => {
-      if (syncRes && typeof syncRes.aiUserMemory === "string") {
-        setUserMemory(syncRes.aiUserMemory);
-      } else {
-        const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
-        setUserMemory(defaultMemory);
+    const loadMemory = () => {
+      chrome.storage.sync.get(["aiUserMemory"], (syncRes: Record<string, any>) => {
+        if (syncRes && typeof syncRes.aiUserMemory === "string") {
+          setUserMemory(syncRes.aiUserMemory);
+        } else {
+          const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
+          setUserMemory(defaultMemory);
+        }
+      });
+    };
+
+    loadMemory();
+
+    const listener = (changes: Record<string, chrome.storage.StorageChange>, areaName: string) => {
+      if (areaName === "sync" && changes.aiUserMemory && typeof changes.aiUserMemory.newValue === "string") {
+        setUserMemory(changes.aiUserMemory.newValue);
       }
-    });
+    };
+    chrome.storage.onChanged.addListener(listener);
+    return () => chrome.storage.onChanged.removeListener(listener);
   }, []);
 
   const handleSaveMemory = () => {
@@ -522,10 +534,14 @@ export function AiSettingsTab({
                 color: "#f8fafc",
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "8px",
               }}
             >
-              <span>🧠 Kişisel AI Hafızası (memory.md)</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              <span>Kişisel AI Hafızası (memory.md)</span>
             </label>
             {memorySavedSuccess && (
               <span
@@ -596,7 +612,12 @@ export function AiSettingsTab({
               marginTop: "4px",
             }}
           >
-            <span>💾 Kişisel Hafızayı Kaydet (memory.md)</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span>Kişisel Hafızayı Kaydet (memory.md)</span>
           </button>
         </div>
       </div>
