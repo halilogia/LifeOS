@@ -1,6 +1,6 @@
 /**
  * domAgentEngine.ts
- * DOM inspection, element highlighting, and browser action execution engine.
+ * DOM inspection, Google Forms detection, element highlighting, and form autofill execution engine.
  * Clean Architecture - Content Script Module.
  */
 
@@ -9,6 +9,7 @@ export interface PageElementInfo {
   id?: string;
   className?: string;
   text?: string;
+  label?: string;
   placeholder?: string;
   type?: string;
   selector: string;
@@ -32,7 +33,7 @@ export interface AgentActionPayload {
 }
 
 /**
- * Extracts comprehensive page context from active DOM.
+ * Extracts comprehensive page context and form field structure from active DOM.
  */
 export function getPageContext(): PageContext {
   const title = document.title || "";
@@ -49,10 +50,10 @@ export function getPageContext(): PageContext {
     pageText = cloneBody.innerText.replace(/\s+/g, " ").trim().slice(0, 4000);
   }
 
-  // Find interactive elements (buttons, inputs, links, forms)
+  // Find interactive elements and form inputs (supports Google Forms & HTML5 forms)
   const elements: PageElementInfo[] = [];
-  const query = "button, a[href], input, textarea, select, [role='button']";
-  const nodes = Array.from(document.querySelectorAll(query)).slice(0, 40);
+  const query = "button, a[href], input, textarea, select, [role='button'], [role='textbox']";
+  const nodes = Array.from(document.querySelectorAll(query)).slice(0, 50);
 
   nodes.forEach((node, idx) => {
     const el = node as HTMLElement;
@@ -66,12 +67,34 @@ export function getPageContext(): PageContext {
     const placeholder = (el as HTMLInputElement).placeholder || "";
     const type = (el as HTMLInputElement).type || "";
 
+    // Detect field label (Aria, Label tag, or Google Forms Question Title)
+    let label = "";
+    if (el.getAttribute("aria-label")) {
+      label = el.getAttribute("aria-label") || "";
+    } else if (el.id) {
+      const lblEl = document.querySelector(`label[for="${el.id}"]`);
+      if (lblEl) label = (lblEl as HTMLElement).innerText || "";
+    }
+
+    if (!label) {
+      const container = el.closest("[role='listitem'], .freebirdFormviewerComponentsQuestionBaseRoot, .form-group, .field, div");
+      if (container) {
+        const heading = container.querySelector("[role='heading'], label, .M7eMe, .title");
+        if (heading) label = (heading as HTMLElement).innerText || "";
+      }
+    }
+
     // Generate unique CSS selector fallback
     let selector = id;
     if (!selector) {
-      if (el.className && typeof el.className === "string") {
+      const nameAttr = el.getAttribute("name");
+      if (nameAttr) {
+        selector = `${tag}[name='${nameAttr}']`;
+      } else if (el.getAttribute("aria-label")) {
+        selector = `${tag}[aria-label='${el.getAttribute("aria-label")}']`;
+      } else if (el.className && typeof el.className === "string") {
         const firstClass = el.className.split(" ")[0];
-        if (firstClass) {
+        if (firstClass && !firstClass.includes(":")) {
           selector = `${tag}.${firstClass}`;
         }
       }
@@ -85,6 +108,7 @@ export function getPageContext(): PageContext {
       id: el.id || undefined,
       className: el.className || undefined,
       text: text || undefined,
+      label: label.trim() || undefined,
       placeholder: placeholder || undefined,
       type: type || undefined,
       selector,
@@ -123,7 +147,7 @@ export function highlightElement(target: HTMLElement): void {
 }
 
 /**
- * Finds element by selector or matching text content.
+ * Finds element by selector, aria-label, or matching text content.
  */
 function findTargetElement(selector?: string, targetText?: string): HTMLElement | null {
   if (selector) {
@@ -137,11 +161,13 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
 
   if (targetText) {
     const textLower = targetText.toLowerCase().trim();
-    const all = Array.from(document.querySelectorAll("button, a, input, [role='button'], label, span, div"));
+    const all = Array.from(document.querySelectorAll("button, a, input, textarea, [role='button'], [role='textbox'], label, span, div"));
     for (const el of all) {
       const htmlEl = el as HTMLElement;
+      const aria = (htmlEl.getAttribute("aria-label") || "").toLowerCase().trim();
       const val = (htmlEl.innerText || (htmlEl as HTMLInputElement).value || "").toLowerCase().trim();
-      if (val === textLower || (val.length > 0 && val.includes(textLower))) {
+
+      if (aria === textLower || aria.includes(textLower) || val === textLower || (val.length > 0 && val.includes(textLower))) {
         return htmlEl;
       }
     }
@@ -151,7 +177,7 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
 }
 
 /**
- * Executes requested browser action on active DOM.
+ * Executes requested browser action or form autofill on active DOM.
  */
 export function executeAgentAction(payload: AgentActionPayload): { success: boolean; message: string; extractedData?: any } {
   const { actionType, selector, targetText, textValue, direction } = payload;
@@ -193,12 +219,18 @@ export function executeAgentAction(payload: AgentActionPayload): { success: bool
 
   if (actionType === "type") {
     const inputEl = targetEl as HTMLInputElement | HTMLTextAreaElement;
-    if ("value" in inputEl) {
-      inputEl.value = textValue || "";
-      inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-      inputEl.dispatchEvent(new Event("change", { bubbles: true }));
-      return { success: true, message: `Typed text into element: ${selector || targetText}` };
-    }
+
+    // Focus & Fill input with event dispatches for dynamic forms (Google Forms, React, Vue)
+    inputEl.focus();
+    inputEl.value = textValue || "";
+
+    // Dispatch synthetic events so form state updates immediately
+    inputEl.dispatchEvent(new Event("focus", { bubbles: true }));
+    inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+    inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+    inputEl.dispatchEvent(new Event("blur", { bubbles: true }));
+
+    return { success: true, message: `Typed text into element: ${selector || targetText}` };
   }
 
   return { success: false, message: `Action type '${actionType}' could not be completed.` };
@@ -216,29 +248,14 @@ export function initDomAgentEngine(): void {
     }
 
     if (message.type === "agent_execute_action") {
-      const result = executeAgentAction(message.payload as AgentActionPayload);
-      sendResponse(result);
+      if (Array.isArray(message.payload)) {
+        const results = (message.payload as AgentActionPayload[]).map((action) => executeAgentAction(action));
+        sendResponse({ success: true, message: `Executed ${results.length} form actions`, results });
+      } else {
+        const result = executeAgentAction(message.payload as AgentActionPayload);
+        sendResponse(result);
+      }
       return true;
-    }
-  });
-
-  // Global webpage shortcut listener for Alt+S or Ctrl+Shift+E
-  document.addEventListener("keydown", (e: KeyboardEvent) => {
-    const isAltS = e.altKey && (e.key === "s" || e.key === "S" || e.key === "ş" || e.key === "Ş");
-    const isCtrlShiftE = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "e" || e.key === "E");
-
-    if (isAltS || isCtrlShiftE) {
-      const activeEl = document.activeElement;
-      // Do not trigger if user is typing in an input or textarea
-      if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA" || (activeEl as HTMLElement).isContentEditable)) {
-        return;
-      }
-      try {
-        if (!chrome.runtime?.id) return;
-        chrome.runtime.sendMessage({ type: "open_sidepanel" });
-      } catch {
-        // Extension context invalidated on extension reload
-      }
     }
   });
 }
