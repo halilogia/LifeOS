@@ -18,6 +18,7 @@ import type {
   StockPortfolioItem,
   StockRule,
   StockAlertLog,
+  StockWatchlist,
 } from "@/types/stock.js";
 
 // Extracted Sub-components
@@ -25,6 +26,7 @@ import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
 import { BistKesfetTab } from "@/components/stock/BistKesfetTab.js";
 import { BistActionBar, BistTabId } from "@/components/stock/BistActionBar.js";
 import { PortfolioSummaryCard } from "@/components/stock/PortfolioSummaryCard.js";
+import { PortfolioTable } from "@/components/stock/PortfolioTable.js";
 import { StockWatchlistTable } from "@/components/stock/StockWatchlistTable.js";
 import { AddStockModal } from "@/components/stock/AddStockModal.js";
 import { RuleBuilderModal } from "@/components/stock/RuleBuilderModal.js";
@@ -44,8 +46,10 @@ const stockRepository = new ChromeStorageStockRepository();
 export function BistView({ lang }: BistViewProps) {
   const [activeTab, setActiveTab] = useState<BistTabId>("portfolio");
 
-  // Portfolio & Rules states
+  // Portfolio & Watchlists & Rules states
   const [portfolio, setPortfolio] = useState<StockPortfolioItem[]>([]);
+  const [watchlists, setWatchlists] = useState<StockWatchlist[]>([]);
+  const [activeWatchlistId, setActiveWatchlistId] = useState<string>("all");
   const [rules, setRules] = useState<StockRule[]>([]);
   const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
@@ -69,15 +73,17 @@ export function BistView({ lang }: BistViewProps) {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [savedPortfolio, savedRules, savedLogs, popularQuotes] =
+      const [savedPortfolio, savedWatchlists, savedRules, savedLogs, popularQuotes] =
         await Promise.all([
           stockRepository.getPortfolio(),
+          stockRepository.getWatchlists(),
           stockRepository.getRules(),
           stockRepository.getAlertLogs(),
           fetchStockPrices(),
         ]);
 
       setPortfolio(savedPortfolio);
+      setWatchlists(savedWatchlists);
       setRules(savedRules);
       setAlertLogs(savedLogs);
 
@@ -122,6 +128,21 @@ export function BistView({ lang }: BistViewProps) {
     return () => clearInterval(interval);
   }, [loadData]);
 
+  // Watchlist Handlers
+  const handleCreateWatchlist = async (name: string) => {
+    const updated = await stockRepository.createWatchlist(name);
+    setWatchlists(updated);
+    if (updated.length > 0) {
+      setActiveWatchlistId(updated[updated.length - 1].id);
+    }
+  };
+
+  const handleDeleteWatchlist = async (id: string) => {
+    const updated = await stockRepository.deleteWatchlist(id);
+    setWatchlists(updated);
+    setActiveWatchlistId("all");
+  };
+
   // Handlers
   const handleSaveStock = async (itemData: Omit<StockPortfolioItem, "id">) => {
     const fullItem: StockPortfolioItem = {
@@ -144,9 +165,9 @@ export function BistView({ lang }: BistViewProps) {
     loadData();
   };
 
-  const handleDeleteStock = async (symbol: string) => {
+  const handleDeleteStock = async (symbolOrId: string) => {
     const updated = portfolio.filter(
-      (p) => p.symbol.toUpperCase() !== symbol.toUpperCase(),
+      (p) => p.id !== symbolOrId && p.symbol.toUpperCase() !== symbolOrId.toUpperCase(),
     );
     setPortfolio(updated);
     await stockRepository.savePortfolio(updated);
@@ -226,7 +247,7 @@ export function BistView({ lang }: BistViewProps) {
         onRefreshData={loadData}
       />
 
-      {/* TAB 1: MAIN PORTFOLIO (Clean Midas-style view without search bar clutter) */}
+      {/* TAB 1: BİST PORTFÖYÜM */}
       {activeTab === "portfolio" && (
         <>
           <PortfolioSummaryCard
@@ -238,7 +259,7 @@ export function BistView({ lang }: BistViewProps) {
             triggeredAlertsCount={alertLogs.length}
           />
 
-          <StockWatchlistTable
+          <PortfolioTable
             portfolio={portfolio}
             quotes={quotes}
             rules={rules}
@@ -248,6 +269,21 @@ export function BistView({ lang }: BistViewProps) {
             onOpenChart={(sym) => setSelectedChartSymbol(sym)}
           />
         </>
+      )}
+
+      {/* TAB 2: TAKİP LİSTELERİM (Midas Style Custom Watchlists) */}
+      {activeTab === "watchlist" && (
+        <StockWatchlistTable
+          watchlists={watchlists}
+          activeWatchlistId={activeWatchlistId}
+          quotes={quotes}
+          onSelectWatchlist={setActiveWatchlistId}
+          onCreateWatchlist={handleCreateWatchlist}
+          onDeleteWatchlist={handleDeleteWatchlist}
+          onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
+          onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
+          onOpenChart={(sym) => setSelectedChartSymbol(sym)}
+        />
       )}
 
       {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search Grid) */}
@@ -320,7 +356,21 @@ export function BistView({ lang }: BistViewProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="chart-modal-header">
-              <h2>📈 {selectedChartSymbol.toUpperCase()} Canlı BİST Grafiği</h2>
+              <h2 style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                <span>{selectedChartSymbol.toUpperCase()} Canlı BİST Grafiği</span>
+              </h2>
               <button
                 className="chart-close-btn"
                 onClick={() => setSelectedChartSymbol(null)}
@@ -335,3 +385,4 @@ export function BistView({ lang }: BistViewProps) {
     </div>
   );
 }
+

@@ -150,35 +150,26 @@ export function PortfolioSummaryCard({
         </div>
       </div>
 
-      {/* Kurulu Alarm Kuralları */}
+      {/* Alarmlar ve Bildirimler */}
       <div className="stock-summary-card">
         <div
           className="stock-card-label"
           style={{ display: "flex", alignItems: "center", gap: "6px" }}
         >
           <IconShield />
-          <span>Kurulu Alarmlar</span>
+          <span>Alarmlar & Takip</span>
         </div>
-        <div className="stock-card-value">{activeRulesCount} Kural</div>
-        <div className="stock-card-badge stock-badge-neutral">
-          7/24 Fiyat Takibi
-        </div>
-      </div>
-
-      {/* Tetiklenen Alarm Geçmişi */}
-      <div className="stock-summary-card">
+        <div className="stock-card-value">{activeRulesCount} Aktif Kural</div>
         <div
-          className="stock-card-label"
-          style={{ display: "flex", alignItems: "center", gap: "6px" }}
+          className={`stock-card-badge ${
+            triggeredAlertsCount > 0
+              ? "stock-badge-negative"
+              : "stock-badge-neutral"
+          }`}
         >
-          <IconBell />
-          <span>Alarm Geçmişi</span>
-        </div>
-        <div className="stock-card-value">{triggeredAlertsCount} Bildirim</div>
-        <div
-          className={`stock-card-badge ${triggeredAlertsCount > 0 ? "stock-badge-negative" : "stock-badge-neutral"}`}
-        >
-          {triggeredAlertsCount > 0 ? "Tetiklenen Var" : "Risk Yok"}
+          {triggeredAlertsCount > 0
+            ? `${triggeredAlertsCount} Tetiklenen Bildirim`
+            : "7/24 Fiyat Takibi"}
         </div>
       </div>
     </div>

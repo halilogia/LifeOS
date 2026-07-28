@@ -7,11 +7,37 @@ import type {
   StockPortfolioItem,
   StockRule,
   StockAlertLog,
+  StockWatchlist,
 } from "@/types/stock.js";
 
 const PORTFOLIO_KEY = "stockPortfolio";
 const RULES_KEY = "stockRules";
 const LOGS_KEY = "stockAlertLogs";
+const WATCHLISTS_KEY = "stockWatchlists";
+
+const DEFAULT_WATCHLISTS: StockWatchlist[] = [
+  {
+    id: "favorites",
+    name: "Favoriler",
+    description: "Favori hisselerim",
+    symbols: ["THYAO", "GARAN", "ASELS"],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "ipo",
+    name: "Halka Arz",
+    description: "Yeni katıldığım halka arzlar",
+    symbols: ["MASFN", "KARCL"],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "dividend",
+    name: "Temettü Hisseleri",
+    description: "Düzenli temettü ödeyen şirketler",
+    symbols: ["EREGL", "TUPRS", "FROTO"],
+    createdAt: new Date().toISOString(),
+  },
+];
 
 export class ChromeStorageStockRepository {
   async getPortfolio(): Promise<StockPortfolioItem[]> {
@@ -65,4 +91,66 @@ export class ChromeStorageStockRepository {
     const updated = [log, ...existing].slice(0, 100);
     await this.saveAlertLogs(updated);
   }
+
+  async getWatchlists(): Promise<StockWatchlist[]> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([WATCHLISTS_KEY], (res) => {
+        const lists = res[WATCHLISTS_KEY] as StockWatchlist[] | undefined;
+        if (!lists || lists.length === 0) {
+          // Initialize defaults if empty
+          this.saveWatchlists(DEFAULT_WATCHLISTS);
+          resolve(DEFAULT_WATCHLISTS);
+        } else {
+          resolve(lists);
+        }
+      });
+    });
+  }
+
+  async saveWatchlists(watchlists: StockWatchlist[]): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [WATCHLISTS_KEY]: watchlists }, resolve);
+    });
+  }
+
+  async createWatchlist(name: string, description?: string): Promise<StockWatchlist[]> {
+    const lists = await this.getWatchlists();
+    const newList: StockWatchlist = {
+      id: `wl-${Date.now()}`,
+      name: name.trim(),
+      description: description?.trim() || "",
+      symbols: [],
+      createdAt: new Date().toISOString(),
+    };
+    const updated = [...lists, newList];
+    await this.saveWatchlists(updated);
+    return updated;
+  }
+
+  async deleteWatchlist(id: string): Promise<StockWatchlist[]> {
+    const lists = await this.getWatchlists();
+    const updated = lists.filter((l) => l.id !== id);
+    await this.saveWatchlists(updated);
+    return updated;
+  }
+
+  async toggleSymbolInWatchlist(watchlistId: string, symbol: string): Promise<StockWatchlist[]> {
+    const lists = await this.getWatchlists();
+    const cleanSym = symbol.replace(/\.IS$/, "").toUpperCase();
+    const updated = lists.map((list) => {
+      if (list.id === watchlistId) {
+        const hasSymbol = list.symbols.some(
+          (s) => s.replace(/\.IS$/, "").toUpperCase() === cleanSym,
+        );
+        const newSymbols = hasSymbol
+          ? list.symbols.filter((s) => s.replace(/\.IS$/, "").toUpperCase() !== cleanSym)
+          : [...list.symbols, cleanSym];
+        return { ...list, symbols: newSymbols };
+      }
+      return list;
+    });
+    await this.saveWatchlists(updated);
+    return updated;
+  }
 }
+
