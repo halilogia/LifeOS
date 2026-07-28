@@ -1,6 +1,6 @@
 /**
  * domAgentEngine.ts
- * DOM inspection, Google Forms detection, element highlighting, and form autofill execution engine.
+ * Claude / Browser-Use style visual element scanning sweep, neon target bounding box overlays, and form autofill execution engine.
  * Clean Architecture - Content Script Module.
  */
 
@@ -126,24 +126,120 @@ export function getPageContext(): PageContext {
 }
 
 /**
- * Applies temporary glowing visual highlight to target DOM element.
+ * Triggers a temporary semi-transparent blue visual scan sweep overlay over active viewport (Claude / Browser-Use style).
  */
-export function highlightElement(target: HTMLElement): void {
-  const originalOutline = target.style.outline;
-  const originalBoxShadow = target.style.boxShadow;
-  const originalTransition = target.style.transition;
+export function showScanningSweep(): void {
+  const existing = document.getElementById("browser-use-scan-overlay");
+  if (existing) existing.remove();
 
-  target.style.transition = "all 0.3s ease";
-  target.style.outline = "2px solid #8b5cf6";
-  target.style.boxShadow = "0 0 16px rgba(139, 92, 246, 0.8)";
+  const scanOverlay = document.createElement("div");
+  scanOverlay.id = "browser-use-scan-overlay";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.top = "0";
+  scanOverlay.style.left = "0";
+  scanOverlay.style.width = "100vw";
+  scanOverlay.style.height = "100vh";
+  scanOverlay.style.backgroundColor = "rgba(59, 130, 246, 0.08)";
+  scanOverlay.style.backdropFilter = "blur(1px)";
+  scanOverlay.style.zIndex = "999998";
+  scanOverlay.style.pointerEvents = "none";
+  scanOverlay.style.transition = "opacity 0.4s ease";
+
+  // Animated laser scanning beam
+  const beam = document.createElement("div");
+  beam.style.position = "absolute";
+  beam.style.top = "0";
+  beam.style.left = "0";
+  beam.style.width = "100%";
+  beam.style.height = "3px";
+  beam.style.background = "linear-gradient(90deg, transparent, #3b82f6, #60a5fa, #3b82f6, transparent)";
+  beam.style.boxShadow = "0 0 15px #3b82f6, 0 0 30px #60a5fa";
+  beam.style.animation = "browserUseSweep 0.8s ease-in-out forwards";
+
+  // Inject keyframe style if missing
+  if (!document.getElementById("browser-use-styles")) {
+    const styleEl = document.createElement("style");
+    styleEl.id = "browser-use-styles";
+    styleEl.textContent = `
+      @keyframes browserUseSweep {
+        0% { top: 0%; opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+      }
+      @keyframes browserUsePulse {
+        0% { transform: scale(1); box-shadow: 0 0 20px rgba(59, 130, 246, 0.9); }
+        50% { transform: scale(1.02); box-shadow: 0 0 35px rgba(139, 92, 246, 1); }
+        100% { transform: scale(1); box-shadow: 0 0 20px rgba(59, 130, 246, 0.9); }
+      }
+    `;
+    document.head.appendChild(styleEl);
+  }
+
+  scanOverlay.appendChild(beam);
+  document.body.appendChild(scanOverlay);
+
+  setTimeout(() => {
+    scanOverlay.style.opacity = "0";
+    setTimeout(() => scanOverlay.remove(), 400);
+  }, 750);
+}
+
+/**
+ * Renders glowing floating bounding box and target action badge overlay over target DOM element.
+ */
+export function highlightElement(target: HTMLElement, actionLabel?: string): void {
+  // Trigger blue scanning sweep effect
+  showScanningSweep();
 
   target.scrollIntoView({ behavior: "smooth", block: "center" });
 
+  const rect = target.getBoundingClientRect();
+  const scrollX = window.scrollX || window.pageXOffset;
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  // Create floating visual target overlay
+  const overlayBox = document.createElement("div");
+  overlayBox.className = "browser-use-target-box";
+  overlayBox.style.position = "absolute";
+  overlayBox.style.top = `${rect.top + scrollY - 4}px`;
+  overlayBox.style.left = `${rect.left + scrollX - 4}px`;
+  overlayBox.style.width = `${rect.width + 8}px`;
+  overlayBox.style.height = `${rect.height + 8}px`;
+  overlayBox.style.border = "2px solid #3b82f6";
+  overlayBox.style.borderRadius = "6px";
+  overlayBox.style.background = "rgba(59, 130, 246, 0.12)";
+  overlayBox.style.boxShadow = "0 0 25px rgba(59, 130, 246, 0.9)";
+  overlayBox.style.zIndex = "999999";
+  overlayBox.style.pointerEvents = "none";
+  overlayBox.style.animation = "browserUsePulse 1.2s infinite ease-in-out";
+
+  // Action Badge Label
+  const badge = document.createElement("div");
+  badge.style.position = "absolute";
+  badge.style.top = "-28px";
+  badge.style.left = "0";
+  badge.style.background = "linear-gradient(135deg, #2563eb, #7c3aed)";
+  badge.style.color = "#ffffff";
+  badge.style.fontSize = "11px";
+  badge.style.fontWeight = "700";
+  badge.style.padding = "3px 8px";
+  badge.style.borderRadius = "4px";
+  badge.style.whiteSpace = "nowrap";
+  badge.style.boxShadow = "0 2px 8px rgba(0,0,0,0.4)";
+  badge.style.display = "flex";
+  badge.style.alignItems = "center";
+  badge.style.gap = "4px";
+  badge.innerHTML = `🎯 Browser-Use: ${actionLabel || "Aksiyon Tıklanıyor"}`;
+
+  overlayBox.appendChild(badge);
+  document.body.appendChild(overlayBox);
+
   setTimeout(() => {
-    target.style.outline = originalOutline;
-    target.style.boxShadow = originalBoxShadow;
-    target.style.transition = originalTransition;
-  }, 2500);
+    overlayBox.style.transition = "opacity 0.3s ease";
+    overlayBox.style.opacity = "0";
+    setTimeout(() => overlayBox.remove(), 300);
+  }, 2200);
 }
 
 /**
@@ -177,18 +273,20 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
 }
 
 /**
- * Executes requested browser action or form autofill on active DOM.
+ * Executes requested browser action or form autofill on active DOM with Claude / Browser-Use overlays.
  */
 export function executeAgentAction(payload: AgentActionPayload): { success: boolean; message: string; extractedData?: any } {
   const { actionType, selector, targetText, textValue, direction } = payload;
 
   if (actionType === "scroll") {
+    showScanningSweep();
     const scrollAmount = direction === "up" ? -400 : 400;
     window.scrollBy({ top: scrollAmount, behavior: "smooth" });
     return { success: true, message: `Scrolled ${direction || "down"}` };
   }
 
   if (actionType === "extract") {
+    showScanningSweep();
     const context = getPageContext();
     return {
       success: true,
@@ -207,7 +305,8 @@ export function executeAgentAction(payload: AgentActionPayload): { success: bool
     return { success: false, message: `Target element not found: ${selector || targetText}` };
   }
 
-  highlightElement(targetEl);
+  const labelText = targetText || (targetEl as HTMLInputElement).placeholder || targetEl.innerText || "Öğe";
+  highlightElement(targetEl, `${actionType.toUpperCase()}: ${labelText.slice(0, 25)}`);
 
   if (actionType === "click" || actionType === "highlight") {
     if (actionType === "click") {
