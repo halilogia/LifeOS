@@ -55,6 +55,7 @@ export function AIChatView({
   const [messages, setMessages] = useState<MessageItemData[]>([]);
   const [inputVal, setInputVal] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [enableWebSearch, setEnableWebSearch] = useState(true);
   const [openThinkingIndexes, setOpenThinkingIndexes] = useState<
     Record<number, boolean>
   >({});
@@ -111,6 +112,7 @@ export function AIChatView({
           aiApiKey,
           aiModel,
           aiEndpoint,
+          enableWebSearch,
         });
         setIsBotTyping(false);
 
@@ -139,6 +141,8 @@ export function AIChatView({
             sender: "bot",
             text: aiResponse.reply,
             thinking: aiResponse.thinking,
+            searchQuery: aiResponse.searchQuery,
+            sources: aiResponse.sources,
             time: new Date().toLocaleTimeString(
               lang === "tr" ? "tr-TR" : "en-US",
               {
@@ -338,10 +342,15 @@ export function AIChatView({
           {isBotTyping && (
             <div className="message-bubble-wrapper bot">
               <div className="avatar">🤖</div>
-              <div className="message-bubble typing">
+              <div className="message-bubble typing" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
+                {enableWebSearch && (
+                  <span style={{ fontSize: "0.75rem", color: "#34d399", fontWeight: 600, marginLeft: "6px" }}>
+                    🌐 Google Canlı İnternet Arama & Araştırma Yapılıyor...
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -356,8 +365,10 @@ export function AIChatView({
           suggestion1={t.ai_chat_suggestion_1}
           suggestion2={t.ai_chat_suggestion_2}
           suggestion3={t.ai_chat_suggestion_3}
+          enableWebSearch={enableWebSearch}
           onInputChange={setInputVal}
           onSendMessage={handleSendMessage}
+          onToggleWebSearch={() => setEnableWebSearch((prev) => !prev)}
         />
       </div>
     </div>
