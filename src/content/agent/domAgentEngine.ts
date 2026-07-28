@@ -41,13 +41,15 @@ export function getPageContext(): PageContext {
   const domain = window.location.hostname.replace("www.", "");
   const selectedText = window.getSelection()?.toString().trim() || "";
 
-  // Extract clean visible text content (exclude scripts, styles)
+  // Extract clean visible text content (exclude scripts, styles, boilerplate headers & footers)
   const cloneBody = document.body ? (document.body.cloneNode(true) as HTMLElement) : null;
   let pageText = "";
   if (cloneBody) {
-    const junkElements = cloneBody.querySelectorAll("script, style, noscript, svg, iframe");
+    const junkElements = cloneBody.querySelectorAll(
+      "script, style, noscript, svg, iframe, nav, footer, .footer, #footer, .sidebar-nav",
+    );
     junkElements.forEach((el) => el.remove());
-    pageText = cloneBody.innerText.replace(/\s+/g, " ").trim().slice(0, 4000);
+    pageText = cloneBody.innerText.replace(/\s+/g, " ").trim().slice(0, 3000);
   }
 
   // Find interactive elements and form inputs (supports Google Forms, HTML5 forms & custom React/Vue inputs)
