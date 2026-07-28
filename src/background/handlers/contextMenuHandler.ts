@@ -1,0 +1,108 @@
+/**
+ * contextMenuHandler.ts
+ * Clean Architecture - Background Domain Handler for Right-Click Context Menus and Extension Commands.
+ */
+
+function setupContextMenus(): void {
+  if (!chrome.contextMenus) return;
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "lifeos_copilot_root",
+      title: "Life OS Copilot",
+      contexts: ["page", "selection"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_open_copilot",
+      parentId: "lifeos_copilot_root",
+      title: "🚀 Life OS Yan Panelini Aç",
+      contexts: ["page", "selection"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_summarize_page",
+      parentId: "lifeos_copilot_root",
+      title: "📝 Sayfayı Özetle",
+      contexts: ["page"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_translate_page",
+      parentId: "lifeos_copilot_root",
+      title: "🔤 Sayfayı Türkçe'ye Çevir",
+      contexts: ["page"],
+    });
+
+    chrome.contextMenus.create({
+      id: "lifeos_analyze_selection",
+      parentId: "lifeos_copilot_root",
+      title: "💬 Seçili Metni Analiz Et / Çevir",
+      contexts: ["selection"],
+    });
+  });
+}
+
+/**
+ * Initializes context menus, extension startup listeners, hotkeys, and context menu click actions.
+ */
+export function initContextMenuHandler(): void {
+  chrome.runtime.onInstalled.addListener(() => {
+    setupContextMenus();
+    if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+      chrome.sidePanel
+        .setPanelBehavior({ openPanelOnActionClick: false })
+        .catch(() => {});
+    }
+  });
+
+  chrome.runtime.onStartup.addListener(() => {
+    setupContextMenus();
+    if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+      chrome.sidePanel
+        .setPanelBehavior({ openPanelOnActionClick: false })
+        .catch(() => {});
+    }
+  });
+
+  chrome.commands.onCommand.addListener((command, tab) => {
+    if (command === "open_companion_ai" || command === "_execute_side_panel") {
+      if (tab?.id) {
+        chrome.sidePanel.open({ tabId: tab.id }).catch(() => {});
+      } else {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs[0]?.id) {
+            chrome.sidePanel.open({ tabId: tabs[0].id }).catch(() => {});
+          }
+        });
+      }
+    }
+  });
+
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (tab && tab.id) {
+      chrome.sidePanel.open({ tabId: tab.id });
+
+      let autoPrompt = "";
+      if (info.menuItemId === "lifeos_summarize_page") {
+        autoPrompt = "Bu sayfayı 3 ana maddede özetle.";
+      } else if (info.menuItemId === "lifeos_translate_page") {
+        autoPrompt =
+          "Bu sayfanın içeriğini Türkçe'ye çevir ve anlaşılır bir özet sun.";
+      } else if (
+        info.menuItemId === "lifeos_analyze_selection" &&
+        info.selectionText
+      ) {
+        autoPrompt = `Şu seçili metni analiz et ve anlaşılır Türkçe açıklamasını yap:\n"${info.selectionText}"`;
+      }
+
+      if (autoPrompt) {
+        setTimeout(() => {
+          chrome.runtime.sendMessage({
+            type: "copilot_auto_prompt",
+            prompt: autoPrompt,
+          });
+        }, 600);
+      }
+    }
+  });
+}
