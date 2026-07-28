@@ -359,4 +359,5 @@ export const en = {
   stock_search_placeholder: "Search BIST stocks (e.g. THYAO, GARAN)...",
   stock_load_more: "Load More BIST Stocks",
   stock_ai_featured_title: "✦ AI Weekly Featured BIST Stocks",
+  popup_detox_tab_title: "Detox Limits",
 };

@@ -506,7 +506,15 @@ export function AiSettingsTab({
             borderTop: "1px solid rgba(255, 255, 255, 0.08)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
             <label
               style={{
                 fontSize: "0.9rem",
@@ -517,15 +525,34 @@ export function AiSettingsTab({
                 gap: "6px",
               }}
             >
-              <span>🧠 Kişisel AI Hafızası & Bağlam Penceresi (memory.md)</span>
+              <span>🧠 Kişisel AI Hafızası (memory.md)</span>
             </label>
             {memorySavedSuccess && (
-              <span style={{ fontSize: "0.75rem", color: "#34d399", fontWeight: 600 }}>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  background: "rgba(52, 211, 153, 0.15)",
+                  border: "1px solid rgba(52, 211, 153, 0.4)",
+                  color: "#34d399",
+                  padding: "3px 10px",
+                  borderRadius: "12px",
+                  fontWeight: 600,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
                 ✓ Hafıza Kaydedildi!
               </span>
             )}
           </div>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", lineHeight: 1.4 }}>
+          <span
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--text-secondary)",
+              lineHeight: 1.4,
+            }}
+          >
             Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu alana özel notlarınızı yazabilirsiniz.
           </span>
           <textarea
@@ -549,11 +576,27 @@ export function AiSettingsTab({
           />
           <button
             type="button"
-            className="stock-btn stock-btn-primary"
-            style={{ alignSelf: "flex-end", padding: "6px 16px", fontSize: "0.8rem" }}
             onClick={handleSaveMemory}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              padding: "9px 18px",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              borderRadius: "8px",
+              color: "#ffffff",
+              background: "linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              width: "100%",
+              marginTop: "4px",
+            }}
           >
-            💾 Kişisel Hafızayı Kaydet (memory.md)
+            <span>💾 Kişisel Hafızayı Kaydet (memory.md)</span>
           </button>
         </div>
       </div>

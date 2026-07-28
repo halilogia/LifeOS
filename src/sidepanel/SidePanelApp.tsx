@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { PageContext, AgentActionPayload } from "@/content/agent/domAgentEngine.js";
+import { getAIConfigFromStorage } from "@/services/aiChatService.js";
 
 interface ChatMessage {
   id: string;
@@ -21,10 +22,16 @@ export function SidePanelApp() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = getTranslation(lang);
 
+  const [activeDomain, setActiveDomain] = useState<string>("");
+
   // Load language settings & initial page context
   useEffect(() => {
-    chrome.storage.sync.get(["lang"], (res) => {
+    chrome.storage.sync.get(["lang", "autoGroupTabs"], (res) => {
       if (res.lang) setLang(res.lang as Language);
+      // Group tab ONCE when sidepanel is opened
+      if (res.autoGroupTabs !== false) {
+        chrome.runtime.sendMessage({ type: "group_active_tab" });
+      }
     });
 
     refreshPageContext();
@@ -57,6 +64,10 @@ export function SidePanelApp() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Persist messages for active domain group session
+    if (activeDomain && messages.length > 0) {
+      chrome.storage.local.set({ [`copilot_chat_${activeDomain}`]: messages });
+    }
   }, [messages, agentStatus]);
 
   const refreshPageContext = () => {
@@ -68,20 +79,27 @@ export function SidePanelApp() {
           return;
         }
         if (response.context) {
-          setPageContext(response.context);
+          const newCtx: PageContext = response.context;
+          setPageContext(newCtx);
+          const newDomain = newCtx.domain || "default";
+
+          if (newDomain !== activeDomain) {
+            // Switch conversation thread to the active tab group domain
+            setActiveDomain(newDomain);
+            chrome.storage.local.get([`copilot_chat_${newDomain}`], (storeRes) => {
+              const savedMsgs = storeRes[`copilot_chat_${newDomain}`];
+              if (Array.isArray(savedMsgs)) {
+                setMessages(savedMsgs);
+              } else {
+                setMessages([]);
+              }
+            });
+          }
         }
       });
     } catch {
       setAgentStatus(null);
     }
-
-    // Auto-group tab if setting is enabled
-    chrome.storage.sync.get(["autoGroupTabs"], (res) => {
-      const isAutoGroupEnabled = res.autoGroupTabs !== false;
-      if (isAutoGroupEnabled) {
-        chrome.runtime.sendMessage({ type: "group_active_tab" });
-      }
-    });
   };
 
 function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
@@ -157,28 +175,26 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
       });
     }
 
-    // Fetch AI config settings
-    chrome.storage.sync.get(
-      ["geminiApiKey", "aiApiKey", "aiProvider", "aiModel", "aiEndpoint"],
-      async (syncRes) => {
-        const apiKey = (syncRes.geminiApiKey as string) || (syncRes.aiApiKey as string) || "";
-        const provider = (syncRes.aiProvider as string) || "gemini";
-        const model = (syncRes.aiModel as string) || (provider === "gemini" ? "gemini-1.5-flash" : "free");
-        const rawEndpoint = (syncRes.aiEndpoint as string) || "http://localhost:20128/v1";
+    // Fetch AI config settings via centralized single authoritative helper
+    const aiConfig = await getAIConfigFromStorage();
+    const apiKey = aiConfig.aiApiKey;
+    const provider = aiConfig.aiProvider;
+    const model = aiConfig.aiModel;
+    const rawEndpoint = aiConfig.aiEndpoint;
 
-        const userMemory: string = await new Promise<string>((r) =>
-          chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
-            r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
-          ),
-        );
+    const userMemory: string = await new Promise<string>((r) =>
+      chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
+        r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
+      ),
+    );
 
-        const currentContextText = activeCtx ? activeCtx.pageText : "";
-        const currentTitle = activeCtx ? activeCtx.title : "";
-        const currentUrl = activeCtx ? activeCtx.url : "";
-        const currentInteractiveElements =
-          activeCtx && activeCtx.interactiveElements
-            ? JSON.stringify(activeCtx.interactiveElements.slice(0, 35))
-            : "[]";
+    const currentContextText = activeCtx ? activeCtx.pageText : "";
+    const currentTitle = activeCtx ? activeCtx.title : "";
+    const currentUrl = activeCtx ? activeCtx.url : "";
+    const currentInteractiveElements =
+      activeCtx && activeCtx.interactiveElements
+        ? JSON.stringify(activeCtx.interactiveElements.slice(0, 50))
+        : "[]";
 
         const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
 Title: "${currentTitle}"
@@ -290,6 +306,8 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
 
           // Check for JSON action code block in response
           const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
+          let finalContent = responseText;
+
           if (jsonMatch && jsonMatch[1]) {
             try {
               const actionPayload = JSON.parse(jsonMatch[1]);
@@ -300,16 +318,40 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                   : `Executing form action (${count} items)...`,
               );
 
+              // Strip out raw ```json ... ``` code block and long preamble
+              let cleanPromptResponse = responseText
+                .replace(/```json[\s\S]*?```/gi, "")
+                .replace(/Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+                .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+                .trim();
+
+              if (!cleanPromptResponse || cleanPromptResponse.length < 10) {
+                cleanPromptResponse = lang === "tr"
+                  ? "✓ Sayfadaki form alanları kişisel hafızanızdaki (memory.md) bilgilerle otomatik olarak dolduruldu."
+                  : "✓ Form fields on the page have been filled using your personal memory (memory.md).";
+              }
+
+              finalContent = cleanPromptResponse;
+
               chrome.runtime.sendMessage(
                 { type: "execute_agent_action", payload: actionPayload },
                 (actRes) => {
                   setAgentStatus(null);
                   if (actRes && actRes.success) {
-                    responseText += `\n\n✓ *${
-                      lang === "tr"
-                        ? "Form & Sayfa aksiyonları başarıyla uygulandı"
-                        : "Form & Page actions executed successfully"
-                    } (${count} ${lang === "tr" ? "alan dolduruldu" : "fields updated"})*`;
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMsgId
+                          ? {
+                              ...msg,
+                              content: `${cleanPromptResponse}\n\n✓ *${
+                                lang === "tr"
+                                  ? `${count} adet alan dolduruldu`
+                                  : `${count} fields updated`
+                              }*`,
+                            }
+                          : msg,
+                      ),
+                    );
                   }
                 },
               );
@@ -320,10 +362,11 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             setAgentStatus(null);
           }
 
+          const assistantMsgId = (Date.now() + 1).toString();
           const assistantMsg: ChatMessage = {
-            id: (Date.now() + 1).toString(),
+            id: assistantMsgId,
             role: "assistant",
-            content: responseText,
+            content: finalContent,
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           };
 
@@ -340,8 +383,6 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
         } finally {
           setIsProcessing(false);
         }
-      },
-    );
   };
 
   const isYoutube = pageContext?.url?.includes("youtube.com/watch");
