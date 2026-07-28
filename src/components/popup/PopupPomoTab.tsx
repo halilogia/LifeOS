@@ -59,34 +59,26 @@ export function PopupPomoTab({
   }
 
   useEffect(() => {
-    audioEngineRef.current?.setVolume(volume);
+    chrome.runtime.sendMessage({ type: "set_ambient_volume", volume }).catch(() => {});
   }, [volume]);
 
-  useEffect(() => {
-    return () => {
-      audioEngineRef.current?.stopAllSounds();
-    };
-  }, []);
-
   const handleSoundToggle = (soundType: AmbientSoundType) => {
-    const engine = audioEngineRef.current;
-    if (!engine) return;
-
     if (activeSound === soundType && isPlaying) {
-      engine.stopAllSounds();
+      setActiveSound("none");
       setIsPlaying(false);
+      chrome.runtime.sendMessage({
+        type: "play_ambient_sound",
+        soundType: "none",
+        volume,
+      }).catch(() => {});
     } else {
       setActiveSound(soundType);
       setIsPlaying(true);
-      if (soundType === "white_noise") {
-        engine.playHairdryer(volume);
-      } else if (soundType === "rain") {
-        engine.playRain(volume);
-      } else if (soundType === "wind") {
-        engine.playWind(volume);
-      } else if (soundType === "lofi") {
-        engine.playLofi(volume);
-      }
+      chrome.runtime.sendMessage({
+        type: "play_ambient_sound",
+        soundType,
+        volume,
+      }).catch(() => {});
     }
   };
 

@@ -370,10 +370,73 @@ export function NoteCard({
             />
           )}
 
-          <div className="note-card-footer" style={{ width: "100%" }}>
+          <div
+            className="note-card-footer"
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: "8px",
+            }}
+          >
             <span className="note-card-date">
               {new Date(note.createdAt).toLocaleDateString()}
             </span>
+            <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+              <button
+                className="note-action-btn"
+                style={{
+                  background: "rgba(139, 92, 246, 0.15)",
+                  border: "1px solid rgba(139, 92, 246, 0.3)",
+                  color: "#c084fc",
+                  borderRadius: "6px",
+                  padding: "2px 8px",
+                  fontSize: "0.72rem",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  let mdText = `# ${note.title || "Not"}\n\n`;
+                  if (note.type === "cornell") {
+                    if (note.cues) mdText += `### İpuçları / Anahtar Kelimeler\n${note.cues}\n\n`;
+                    if (note.content) mdText += `### Notlar\n${note.content}\n\n`;
+                    if (note.summary) mdText += `### Özet\n${note.summary}\n\n`;
+                  } else {
+                    mdText += `${note.content || ""}\n\n`;
+                  }
+                  mdText += `---\n*Oluşturulma Tarihi: ${new Date(note.createdAt).toLocaleDateString()}*`;
+
+                  const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8;" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${(note.title || "Not").replace(/[^a-zA-Z0-9_\u00C0-\u024F]/g, "_")}.md`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                title={lang === "tr" ? ".md Olarak İndir" : "Export .md"}
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>.md İndir</span>
+              </button>
+            </div>
           </div>
         </>
       )}

@@ -49,6 +49,13 @@
     "default_title": "Life OS - Personal Dashboard"
   },
   "commands": {
+    "open_companion_ai": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Life OS Web Copilot / Companion AI Yan Panelini Aç"
+    },
     "_execute_side_panel": {
       "suggested_key": {
         "default": "Ctrl+Shift+E",
