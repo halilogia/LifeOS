@@ -8,7 +8,7 @@ import {
   createAmbientAudioEngine,
   AmbientSoundType,
 } from "@/services/ambientAudioService.js";
-import { callAIConfigured } from "@/services/aiChatService.js";
+import { callAIConfigured, getAIConfigFromStorage } from "@/services/aiChatService.js";
 
 let bgAudioEngine = createAmbientAudioEngine();
 
@@ -510,29 +510,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
 
   if (message.type === "GENERATE_AI_RESPONSE") {
-    chrome.storage.sync.get(
-      ["aiProvider", "aiApiKey", "aiModel", "aiEndpoint"],
-      async (res) => {
-        const provider = (res.aiProvider as string) || "9router";
-        const apiKey = (res.aiApiKey as string) || "";
-        const model = (res.aiModel as string) || "gemini-2.5-flash";
-        const endpoint = (res.aiEndpoint as string) || "";
-
-        try {
-          const aiResult = await callAIConfigured({
-            userPrompt: message.prompt,
-            aiProvider: provider,
-            aiApiKey: apiKey,
-            aiModel: model,
-            aiEndpoint: endpoint,
-            enableWebSearch: true,
-          });
-          sendResponse({ response: aiResult.reply });
-        } catch (err) {
-          sendResponse({ response: `Hata: ${String(err)}` });
-        }
-      },
-    );
+    getAIConfigFromStorage().then(async (aiConfig) => {
+      try {
+        const aiResult = await callAIConfigured({
+          userPrompt: message.prompt,
+          aiProvider: aiConfig.aiProvider,
+          aiApiKey: aiConfig.aiApiKey,
+          aiModel: aiConfig.aiModel,
+          aiEndpoint: aiConfig.aiEndpoint,
+          enableWebSearch: true,
+        });
+        sendResponse({ response: aiResult.reply });
+      } catch (err: any) {
+        const errMsg = err?.message || String(err);
+        sendResponse({ response: `Hata: ${errMsg}` });
+      }
+    });
     return true;
   }
 });

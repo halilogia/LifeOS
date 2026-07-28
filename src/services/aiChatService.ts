@@ -30,6 +30,69 @@ export interface AIResponseData {
 }
 
 /**
+ * Single Authoritative AI Config Loader
+ * Guaranteed 0 API error protocol: reads both sync & local, supports both key names, provides 9Router/OpenRouter defaults.
+ */
+export async function getAIConfigFromStorage(): Promise<{
+  aiProvider: string;
+  aiApiKey: string;
+  aiModel: string;
+  aiEndpoint: string;
+  aiShowThinking: boolean;
+}> {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(
+      ["aiProvider", "aiApiKey", "geminiApiKey", "aiModel", "aiEndpoint", "aiShowThinking"],
+      (syncRes) => {
+        chrome.storage.local.get(
+          ["aiProvider", "aiApiKey", "geminiApiKey", "aiModel", "aiEndpoint", "aiShowThinking"],
+          (localRes) => {
+            const provider =
+              (typeof syncRes.aiProvider === "string" && syncRes.aiProvider) ||
+              (typeof localRes.aiProvider === "string" && localRes.aiProvider) ||
+              "openrouter";
+
+            const rawApiKey =
+              syncRes.geminiApiKey ||
+              syncRes.aiApiKey ||
+              localRes.geminiApiKey ||
+              localRes.aiApiKey;
+            const apiKey = typeof rawApiKey === "string" ? rawApiKey.trim() : "";
+
+            const rawModel =
+              (typeof syncRes.aiModel === "string" && syncRes.aiModel) ||
+              (typeof localRes.aiModel === "string" && localRes.aiModel) ||
+              "free";
+            const model = rawModel.trim() ? rawModel.trim() : "free";
+
+            const rawEndpoint =
+              (typeof syncRes.aiEndpoint === "string" && syncRes.aiEndpoint) ||
+              (typeof localRes.aiEndpoint === "string" && localRes.aiEndpoint) ||
+              "http://localhost:20128/v1";
+            const endpoint = rawEndpoint.trim() ? rawEndpoint.trim() : "http://localhost:20128/v1";
+
+            const showThinking =
+              syncRes.aiShowThinking !== undefined
+                ? syncRes.aiShowThinking
+                : localRes.aiShowThinking !== undefined
+                  ? localRes.aiShowThinking
+                  : true;
+
+            resolve({
+              aiProvider: provider,
+              aiApiKey: apiKey,
+              aiModel: model,
+              aiEndpoint: endpoint,
+              aiShowThinking: Boolean(showThinking),
+            });
+          },
+        );
+      },
+    );
+  });
+}
+
+/**
  * Dispatches prompt request to configured AI Provider API (Ollama, OpenRouter, Gemini) with Google AI Mode Search Agent.
  */
 export async function callAIConfigured({
@@ -148,13 +211,13 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       throw new Error("Empty response from Ollama");
     }
     responseData = parseAIResponse(textResponse);
-  } else if (aiProvider === "openrouter") {
+  } else if (aiProvider === "openrouter" || aiProvider === "9router") {
     const baseUrl =
       aiEndpoint && aiEndpoint.trim()
         ? aiEndpoint.trim().replace(/\/$/, "")
-        : "https://openrouter.ai/api/v1";
+        : "http://localhost:20128/v1";
     const url = `${baseUrl}/chat/completions`;
-    const modelName = aiModel || "google/gemini-2.5-flash";
+    const modelName = aiModel && aiModel.trim() ? aiModel.trim() : "free";
     const isLocal =
       baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
 
@@ -163,7 +226,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     };
 
     if (aiApiKey && aiApiKey.trim()) {
-      headers["Authorization"] = `Bearer ${aiApiKey}`;
+      headers["Authorization"] = `Bearer ${aiApiKey.trim()}`;
     }
 
     if (!isLocal) {
@@ -192,8 +255,13 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       } catch {
         // ignore
       }
+      if (res.status === 401) {
+        throw new Error(
+          "9Router / OpenRouter API anahtarı geçersiz veya eksik. Lütfen Ayarlar > AI Asistan menüsünden API anahtarınızı kontrol edin.",
+        );
+      }
       throw new Error(
-        `OpenRouter API returned status ${res.status}: ${errBody || res.statusText}`,
+        `OpenRouter / 9Router Hata Dündü (${res.status}): ${errBody || res.statusText}`,
       );
     }
 
