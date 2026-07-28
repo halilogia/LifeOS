@@ -336,6 +336,52 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 }
 
 /**
+ * Automatically executes structured AI actions (create tasks, add notes/diaries, update memory).
+ */
+export async function executeAIAction(
+  aiResult: AIResponseData,
+  lang: string = "tr",
+): Promise<void> {
+  if (!aiResult.action || aiResult.action === "none") return;
+
+  if (aiResult.action === "create_task" && aiResult.params?.text) {
+    const text = aiResult.params.text;
+    const repeat = aiResult.params.repeat || "none";
+    const dueDate = aiResult.params.dueDate || "";
+
+    const todos: any[] = await new Promise((r) =>
+      chrome.storage.sync.get(["todos"], (res) => r((res.todos as any[]) || [])),
+    );
+
+    const newTodo = {
+      id: `task-${Date.now()}`,
+      text: text,
+      completed: false,
+      repeat: repeat,
+      dueDate: dueDate,
+      status: "todo",
+      category: "general",
+      createdAt: new Date().toISOString(),
+    };
+
+    todos.unshift(newTodo);
+    await new Promise<void>((r) => chrome.storage.sync.set({ todos }, r));
+  } else if (aiResult.action === "add_note" && aiResult.params?.note_content) {
+    const type = aiResult.params.note_type || "note";
+    const content = aiResult.params.note_content;
+    const title = aiResult.params.note_title;
+    const cues = aiResult.params.note_cues;
+    const summary = aiResult.params.note_summary;
+    await handleAddNoteFromAI(type, content, lang, title, cues, summary);
+  } else if (
+    aiResult.action === "update_memory" &&
+    aiResult.params?.memory_fact
+  ) {
+    await handleUpdateMemoryFromAI(aiResult.params.memory_fact);
+  }
+}
+
+/**
  * Creates note, diary, or Cornell study note in chrome.storage.sync notes array.
  */
 export async function handleAddNoteFromAI(
