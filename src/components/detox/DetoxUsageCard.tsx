@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { DetoxMotivationCard } from "@/components/detox/DetoxMotivationCard.js";
 
 interface DetoxUsageCardProps {
   lang: Language;
@@ -175,6 +176,16 @@ export function DetoxUsageCard({
                   : `Show All (${sortedScreenTimeSites.length})`}
             </button>
           )}
+        </div>
+      )}
+
+      {/* Motivational Achievements Section under Screen Time */}
+      {totalScreenTimeSeconds > 60 && (
+        <div style={{ marginTop: "1.5rem" }}>
+          <DetoxMotivationCard
+            durationMinutes={Math.round(totalScreenTimeSeconds / 60)}
+            lang={lang}
+          />
         </div>
       )}
     </div>

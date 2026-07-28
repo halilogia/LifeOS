@@ -35,7 +35,10 @@ export function DetoxMotivationCard({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <span style={{ fontSize: "1.2rem" }}>💡</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>
+          <line x1="9" y1="21" x2="15" y2="21"></line>
+        </svg>
         <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: 700, color: "#f8fafc" }}>
           {isTr ? "Bu Süreyle Ne Yapabilirdin?" : "What Could You Achieve With This Time?"}
         </h4>

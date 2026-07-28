@@ -97,11 +97,6 @@ export function DetoxStatusCard({
                 "Odaklanma oturumunuz boyunca seçilen sosyal medya kanalları tamamen engellenmiştir."}
             </p>
 
-            <DetoxMotivationCard
-              durationMinutes={endTime === -1 ? 0 : Math.max(1, Math.round(timeLeft / 60))}
-              lang={lang}
-            />
-
             <button className="detox-btn danger" onClick={onDisableDetox}>
               {t.detox_btn_disable || "Detoksu Sonlandır"}
             </button>

@@ -2,13 +2,49 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { PageContext, AgentActionPayload } from "@/content/agent/domAgentEngine.js";
-import { getAIConfigFromStorage } from "@/services/aiChatService.js";
+import { getAIConfigFromStorage, handleUpdateMemoryFromAI, executeAIAction } from "@/services/aiChatService.js";
 
 interface ChatMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
   timestamp: string;
+}
+
+/**
+ * Robustly detects whether the active page contains personal registration/application form fields.
+ */
+function isPersonalFormPage(context: PageContext | null): boolean {
+  if (!context || !context.interactiveElements || context.interactiveElements.length === 0) {
+    return false;
+  }
+
+  // Keywords indicative of personal registration, application, or profile forms
+  const personalKeywords = [
+    "ad", "soyad", "name", "email", "e-posta", "mail", "tel", "phone", "telefon",
+    "doğum", "birth", "tarih", "date", "adres", "address", "meslek", "job",
+    "tckn", "tc", "şifre", "password", "kayıt", "register", "signup", "başvuru",
+    "apply", "biyografi", "bio", "şehir", "city", "ülke", "country"
+  ];
+
+  const matchingFormInputs = context.interactiveElements.filter((el) => {
+    if (el.tag !== "input" && el.tag !== "textarea" && el.tag !== "select") return false;
+    
+    const type = (el.type || "").toLowerCase();
+    if (type === "hidden" || type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "search") {
+      return false;
+    }
+
+    const identifier = `${el.text || ""} ${el.label || ""} ${el.placeholder || ""} ${el.id || ""} ${el.className || ""}`.toLowerCase();
+    
+    // Ignore Wikipedia search bar, Google Search input, etc.
+    if (identifier.includes("search") || identifier.includes("wiki")) return false;
+
+    // Check if element label/placeholder/name matches any personal form field keyword
+    return personalKeywords.some((kw) => identifier.includes(kw));
+  });
+
+  return matchingFormInputs.length >= 1;
 }
 
 export function SidePanelApp() {
@@ -22,7 +58,7 @@ export function SidePanelApp() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = getTranslation(lang);
 
-  const [activeDomain, setActiveDomain] = useState<string>("");
+  const [activeSessionKey, setActiveSessionKey] = useState<string>("");
 
   // Load language settings & initial page context
   useEffect(() => {
@@ -64,11 +100,11 @@ export function SidePanelApp() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    // Persist messages for active domain group session
-    if (activeDomain && messages.length > 0) {
-      chrome.storage.local.set({ [`copilot_chat_${activeDomain}`]: messages });
+    // Persist messages for unique Tab Group session key
+    if (activeSessionKey && messages.length > 0) {
+      chrome.storage.local.set({ [activeSessionKey]: messages });
     }
-  }, [messages, agentStatus]);
+  }, [messages, agentStatus, activeSessionKey]);
 
   const refreshPageContext = () => {
     setAgentStatus(lang === "tr" ? "Sayfa taranıyor..." : "Scanning page...");
@@ -81,24 +117,41 @@ export function SidePanelApp() {
         if (response.context) {
           const newCtx: PageContext = response.context;
           setPageContext(newCtx);
-          const newDomain = newCtx.domain || "default";
 
-          if (newDomain !== activeDomain) {
-            // Switch conversation thread to the active tab group domain
-            setActiveDomain(newDomain);
-            chrome.storage.local.get([`copilot_chat_${newDomain}`], (storeRes) => {
-              const savedMsgs = storeRes[`copilot_chat_${newDomain}`];
-              if (Array.isArray(savedMsgs)) {
-                setMessages(savedMsgs);
-              } else {
-                setMessages([]);
-              }
-            });
-          }
+          chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const activeTab = tabs[0];
+            const groupId = activeTab && activeTab.groupId !== undefined && activeTab.groupId !== -1 ? activeTab.groupId : null;
+            const domain = newCtx.domain || "default";
+            const tabId = activeTab ? activeTab.id : 0;
+
+            // Unique key per Chrome Tab Group (or per domain tab)
+            const sessionKey = groupId
+              ? `copilot_chat_group_${groupId}`
+              : `copilot_chat_domain_${domain}_${tabId}`;
+
+            if (sessionKey !== activeSessionKey) {
+              setActiveSessionKey(sessionKey);
+              chrome.storage.local.get([sessionKey], (storeRes) => {
+                const savedMsgs = storeRes[sessionKey];
+                if (Array.isArray(savedMsgs)) {
+                  setMessages(savedMsgs);
+                } else {
+                  setMessages([]);
+                }
+              });
+            }
+          });
         }
       });
     } catch {
       setAgentStatus(null);
+    }
+  };
+
+  const handleNewChat = () => {
+    setMessages([]);
+    if (activeSessionKey) {
+      chrome.storage.local.remove([activeSessionKey]);
     }
   };
 
@@ -211,7 +264,7 @@ ${currentInteractiveElements}
 
 INSTRUCTIONS FOR FORM FILLING, REGISTRATION & WEB ACTIONS:
 If the user asks to fill a form, register, or sign up on a website/forum (e.g. "Formu doldur", "Kayıt ol", "Üye ol", "Bu siteye kayıt ol", "Sign up"), match input field labels/placeholders (Username, Email, Full Name, Bio, Occupation) on the active page against the user's personal memory (memory.md).
-Return a JSON array of actions or single action in markdown code block at the end:
+Return a JSON array of actions in markdown code block at the end:
 \`\`\`json
 [
   {
@@ -223,7 +276,16 @@ Return a JSON array of actions or single action in markdown code block at the en
 ]
 \`\`\`
 
-Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Turkish" : "English"}.`;
+INSTRUCTIONS FOR SAVING / UPDATING PERSONAL MEMORY (memory.md):
+If the user asks to save, add, or remember a fact/email/detail about them (e.g. "hafızana mail adresimi ekle", "e-postamı kaydet", "beni hatırla", "hafızayı güncelle"), format a JSON code block in your response:
+\`\`\`json
+{
+  "action": "update_memory",
+  "memory_fact": "E-posta: halilemrekuyupinar@proton.me"
+}
+\`\`\`
+
+Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Turkish" : "English"}. Do not use low-quality emojis in output formatting.`;
 
         try {
           let responseText = "";
@@ -311,54 +373,71 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           if (jsonMatch && jsonMatch[1]) {
             try {
               const actionPayload = JSON.parse(jsonMatch[1]);
-              const count = Array.isArray(actionPayload) ? actionPayload.length : 1;
-              setAgentStatus(
-                lang === "tr"
-                  ? `Form aksiyonu yürütülüyor (${count} işlem)...`
-                  : `Executing form action (${count} items)...`,
-              );
 
-              // Strip out raw ```json ... ``` code block and long preamble
-              let cleanPromptResponse = responseText
-                .replace(/```json[\s\S]*?```/gi, "")
-                .replace(/Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
-                .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
-                .trim();
+              // Handle Memory Update action directly
+              if (!Array.isArray(actionPayload) && actionPayload.action === "update_memory" && actionPayload.memory_fact) {
+                await handleUpdateMemoryFromAI(actionPayload.memory_fact);
+                finalContent = responseText.replace(/```json[\s\S]*?```/gi, "").trim();
+                if (!finalContent) {
+                  finalContent = lang === "tr"
+                    ? `✓ "${actionPayload.memory_fact}" bilgisi kişisel hafızanıza (memory.md) eklendi.`
+                    : `✓ "${actionPayload.memory_fact}" saved to personal memory (memory.md).`;
+                }
+              } else if (Array.isArray(actionPayload)) {
+                // Handle Form filling array actions
+                const count = actionPayload.length;
+                setAgentStatus(
+                  lang === "tr"
+                    ? `Form aksiyonu yürütülüyor (${count} işlem)...`
+                    : `Executing form action (${count} items)...`,
+                );
 
-              if (!cleanPromptResponse || cleanPromptResponse.length < 10) {
-                cleanPromptResponse = lang === "tr"
-                  ? "✓ Sayfadaki form alanları kişisel hafızanızdaki (memory.md) bilgilerle otomatik olarak dolduruldu."
-                  : "✓ Form fields on the page have been filled using your personal memory (memory.md).";
+                let cleanPromptResponse = responseText
+                  .replace(/```json[\s\S]*?```/gi, "")
+                  .replace(/Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+                  .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+                  .trim();
+
+                if (!cleanPromptResponse || cleanPromptResponse.length < 10) {
+                  cleanPromptResponse = lang === "tr"
+                    ? "✓ Sayfadaki form alanları kişisel hafızanızdaki (memory.md) bilgilerle otomatik olarak dolduruldu."
+                    : "✓ Form fields on the page have been filled using your personal memory (memory.md).";
+                }
+
+                finalContent = cleanPromptResponse;
+
+                chrome.runtime.sendMessage(
+                  { type: "execute_agent_action", payload: actionPayload },
+                  (actRes) => {
+                    setAgentStatus(null);
+                    if (actRes && actRes.success) {
+                      setMessages((prev) =>
+                        prev.map((msg) =>
+                          msg.id === assistantMsgId
+                            ? {
+                                ...msg,
+                                content: `${cleanPromptResponse}\n\n✓ *${
+                                  lang === "tr"
+                                    ? `${count} adet alan dolduruldu`
+                                    : `${count} fields updated`
+                                }*`,
+                              }
+                            : msg,
+                        ),
+                      );
+                    }
+                  },
+                );
               }
-
-              finalContent = cleanPromptResponse;
-
-              chrome.runtime.sendMessage(
-                { type: "execute_agent_action", payload: actionPayload },
-                (actRes) => {
-                  setAgentStatus(null);
-                  if (actRes && actRes.success) {
-                    setMessages((prev) =>
-                      prev.map((msg) =>
-                        msg.id === assistantMsgId
-                          ? {
-                              ...msg,
-                              content: `${cleanPromptResponse}\n\n✓ *${
-                                lang === "tr"
-                                  ? `${count} adet alan dolduruldu`
-                                  : `${count} fields updated`
-                              }*`,
-                            }
-                          : msg,
-                      ),
-                    );
-                  }
-                },
-              );
             } catch {
               setAgentStatus(null);
             }
           } else {
+            // Fallback: If user prompt asked to add email/memory but no JSON was generated, parse email directly
+            const emailMatch = textToSend.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+            if ((textToSend.toLowerCase().includes("hafıza") || textToSend.toLowerCase().includes("mail")) && emailMatch) {
+              await handleUpdateMemoryFromAI(`E-posta: ${emailMatch[1]}`);
+            }
             setAgentStatus(null);
           }
 
@@ -416,7 +495,32 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           </svg>
           <span>Life OS Web Copilot</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <button
+            type="button"
+            onClick={handleNewChat}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 9px",
+              fontSize: "0.74rem",
+              fontWeight: 600,
+              borderRadius: "6px",
+              color: "#a78bfa",
+              background: "rgba(139, 92, 246, 0.15)",
+              border: "1px solid rgba(139, 92, 246, 0.35)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            title={lang === "tr" ? "Yeni Sohbet Başlat" : "Start New Chat"}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>{lang === "tr" ? "Yeni Sohbet" : "New Chat"}</span>
+          </button>
           <span className="sidepanel-header-badge">AI Agent</span>
         </div>
       </header>
@@ -458,7 +562,10 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 borderColor: "#8b5cf6",
               }}
             >
-              <span>🎬</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
               <span>{lang === "tr" ? "Videoyu Özetle" : "Summarize Video"}</span>
             </button>
             <button
@@ -470,28 +577,33 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 borderColor: "rgba(139, 92, 246, 0.4)",
               }}
             >
-              <span>📝</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 11 12 14 22 4"></polyline>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
               <span>{lang === "tr" ? "5 Soruluk Test" : "5-Q Video Quiz"}</span>
             </button>
           </>
         )}
 
-        <button
-          className="sidepanel-chip"
-          style={{
-            background: "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))",
-            borderColor: "rgba(139, 92, 246, 0.4)",
-            color: "#34d399",
-            fontWeight: 600,
-          }}
-          onClick={() => handleSendMessage("Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.")}
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-          </svg>
-          <span>{lang === "tr" ? "✍️ Formu Doldur (memory.md)" : "✍️ Autofill Form"}</span>
-        </button>
+        {isPersonalFormPage(pageContext) && (
+          <button
+            className="sidepanel-chip"
+            style={{
+              background: "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))",
+              borderColor: "rgba(139, 92, 246, 0.4)",
+              color: "#34d399",
+              fontWeight: 600,
+            }}
+            onClick={() => handleSendMessage("Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.")}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            <span>{lang === "tr" ? "Formu Doldur (memory.md)" : "Autofill Form"}</span>
+          </button>
+        )}
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("summarize")}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -534,14 +646,41 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
       {/* Messages Feed */}
       <div className="sidepanel-messages">
         {messages.length === 0 ? (
-          <div style={{ padding: "24px 12px", textAlign: "center", color: "var(--text-secondary)", fontSize: "0.8rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="1.8">
-              <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"></path>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-              <line x1="9" y1="9" x2="9.01" y2="9"></line>
-              <line x1="15" y1="9" x2="15.01" y2="9"></line>
-            </svg>
-            <span>{lang === "tr" ? "Web Copilot aktif. Sayfayı özetlemek veya soru sormak için butonları kullanın." : "Web Copilot is ready. Use action buttons or ask questions about this page."}</span>
+          <div className="sidepanel-empty-state">
+            <div className="ai-orb-container">
+              <div className="ai-orb-ring-outer"></div>
+              <div className="ai-orb-ring-inner"></div>
+              <div className="ai-orb-core">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              </div>
+            </div>
+            <div className="sidepanel-empty-title">
+              <span>{lang === "tr" ? "Life OS Agent Hazır" : "Life OS Agent Ready"}</span>
+            </div>
+            <p className="sidepanel-empty-desc">
+              {lang === "tr"
+                ? "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz."
+                : "Analyze the active web page, ask questions, or use quick action triggers."}
+            </p>
+
+            <div className="sidepanel-starter-grid">
+              <button className="starter-card" onClick={() => handleChipClick("summarize")}>
+                <div className="starter-icon purple">✨</div>
+                <div className="starter-text">
+                  <strong>{lang === "tr" ? "Sayfayı Özetle" : "Summarize Page"}</strong>
+                  <span>{lang === "tr" ? "3 ana maddede özetle" : "Get 3 key bullet points"}</span>
+                </div>
+              </button>
+              <button className="starter-card" onClick={() => handleChipClick("key_takeaways")}>
+                <div className="starter-icon green">💡</div>
+                <div className="starter-text">
+                  <strong>{lang === "tr" ? "Ana Fikirler" : "Key Takeaways"}</strong>
+                  <span>{lang === "tr" ? "Kilit çıkarımlar & aksiyonlar" : "Key insights & action items"}</span>
+                </div>
+              </button>
+            </div>
           </div>
         ) : (
           messages.map((msg) => (
