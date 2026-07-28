@@ -359,4 +359,5 @@ export const tr = {
   stock_search_placeholder: "BİST hisse ara (Örn: THYAO, GARAN, ASELS)...",
   stock_load_more: "Daha Fazla BİST Hissesi Yükle",
   stock_ai_featured_title: "✦ AI Haftalık Öne Çıkan BİST Hisseleri",
+  popup_detox_tab_title: "Detoks & Süre Sınırı",
 };

@@ -50,24 +50,30 @@ export function getPageContext(): PageContext {
     pageText = cloneBody.innerText.replace(/\s+/g, " ").trim().slice(0, 4000);
   }
 
-  // Find interactive elements and form inputs (supports Google Forms & HTML5 forms)
+  // Find interactive elements and form inputs (supports Google Forms, HTML5 forms & custom React/Vue inputs)
   const elements: PageElementInfo[] = [];
-  const query = "button, a[href], input, textarea, select, [role='button'], [role='textbox']";
-  const nodes = Array.from(document.querySelectorAll(query)).slice(0, 50);
+  const query = "input, textarea, select, button, a[href], [role='button'], [role='textbox'], [contenteditable='true']";
+  const nodes = Array.from(document.querySelectorAll(query)).slice(0, 75);
 
   nodes.forEach((node, idx) => {
     const el = node as HTMLElement;
-    if (!el.offsetWidth && !el.offsetHeight) {
-      return; // Skip hidden elements
+    const tag = el.tagName.toLowerCase();
+    const isFormInput = tag === "input" || tag === "textarea" || tag === "select";
+    
+    // Skip hidden elements except form inputs that might be dynamically styled
+    if (!isFormInput && !el.offsetWidth && !el.offsetHeight) {
+      return;
+    }
+    if (el.style.display === "none" || (el as HTMLInputElement).type === "hidden") {
+      return;
     }
 
-    const tag = el.tagName.toLowerCase();
     const id = el.id ? `#${el.id}` : "";
-    const text = (el.innerText || (el as HTMLInputElement).value || (el as HTMLInputElement).placeholder || "").trim().slice(0, 40);
     const placeholder = (el as HTMLInputElement).placeholder || "";
     const type = (el as HTMLInputElement).type || "";
+    const text = (el.innerText || (el as HTMLInputElement).value || placeholder || "").trim().slice(0, 40);
 
-    // Detect field label (Aria, Label tag, or Google Forms Question Title)
+    // Detect field label (Aria, Label tag, or nearby text wrapper)
     let label = "";
     if (el.getAttribute("aria-label")) {
       label = el.getAttribute("aria-label") || "";
@@ -77,10 +83,10 @@ export function getPageContext(): PageContext {
     }
 
     if (!label) {
-      const container = el.closest("[role='listitem'], .freebirdFormviewerComponentsQuestionBaseRoot, .form-group, .field, div");
+      const container = el.closest(".form-group, .field, label, div, p");
       if (container) {
-        const heading = container.querySelector("[role='heading'], label, .M7eMe, .title");
-        if (heading) label = (heading as HTMLElement).innerText || "";
+        const heading = container.querySelector("label, span, p, h1, h2, h3, h4, h5, h6");
+        if (heading && heading !== el) label = (heading as HTMLElement).innerText || "";
       }
     }
 
@@ -90,6 +96,8 @@ export function getPageContext(): PageContext {
       const nameAttr = el.getAttribute("name");
       if (nameAttr) {
         selector = `${tag}[name='${nameAttr}']`;
+      } else if (placeholder) {
+        selector = `${tag}[placeholder='${placeholder}']`;
       } else if (el.getAttribute("aria-label")) {
         selector = `${tag}[aria-label='${el.getAttribute("aria-label")}']`;
       } else if (el.className && typeof el.className === "string") {
@@ -230,15 +238,42 @@ export function highlightElement(target: HTMLElement, actionLabel?: string): voi
   badge.style.display = "flex";
   badge.style.alignItems = "center";
   badge.style.gap = "4px";
-  badge.innerHTML = `🎯 Browser-Use: ${actionLabel || "Aksiyon Tıklanıyor"}`;
+  badge.innerHTML = `🎯 Browser-Use Agent: ${actionLabel || "İşlem Yapılıyor"}`;
+
+  // Animated Glowing AI Cursor Dot (Claude / Browser-Use Cursor)
+  const cursorDot = document.createElement("div");
+  cursorDot.id = "browser-use-ai-cursor";
+  cursorDot.style.position = "absolute";
+  cursorDot.style.top = `${rect.top + scrollY + rect.height / 2}px`;
+  cursorDot.style.left = `${rect.left + scrollX + rect.width / 2}px`;
+  cursorDot.style.width = "18px";
+  cursorDot.style.height = "18px";
+  cursorDot.style.borderRadius = "50%";
+  cursorDot.style.background = "radial-gradient(circle, #8b5cf6 0%, #3b82f6 100%)";
+  cursorDot.style.border = "2px solid #ffffff";
+  cursorDot.style.boxShadow = "0 0 15px #8b5cf6, 0 0 30px #3b82f6";
+  cursorDot.style.zIndex = "9999999";
+  cursorDot.style.pointerEvents = "none";
+  cursorDot.style.transform = "translate(-50%, -50%) scale(1)";
+  cursorDot.style.transition = "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)";
 
   overlayBox.appendChild(badge);
   document.body.appendChild(overlayBox);
+  document.body.appendChild(cursorDot);
+
+  setTimeout(() => {
+    cursorDot.style.transform = "translate(-50%, -50%) scale(1.4)";
+    cursorDot.style.opacity = "0.7";
+  }, 300);
 
   setTimeout(() => {
     overlayBox.style.transition = "opacity 0.3s ease";
     overlayBox.style.opacity = "0";
-    setTimeout(() => overlayBox.remove(), 300);
+    cursorDot.style.opacity = "0";
+    setTimeout(() => {
+      overlayBox.remove();
+      cursorDot.remove();
+    }, 300);
   }, 2200);
 }
 
@@ -257,13 +292,29 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
 
   if (targetText) {
     const textLower = targetText.toLowerCase().trim();
-    const all = Array.from(document.querySelectorAll("button, a, input, textarea, [role='button'], [role='textbox'], label, span, div"));
+    const all = Array.from(
+      document.querySelectorAll(
+        "input, textarea, select, button, a, [role='button'], [role='textbox'], label",
+      ),
+    );
+
     for (const el of all) {
       const htmlEl = el as HTMLElement;
       const aria = (htmlEl.getAttribute("aria-label") || "").toLowerCase().trim();
+      const placeholder = (htmlEl.getAttribute("placeholder") || "").toLowerCase().trim();
+      const nameAttr = (htmlEl.getAttribute("name") || "").toLowerCase().trim();
+      const idAttr = (htmlEl.id || "").toLowerCase().trim();
       const val = (htmlEl.innerText || (htmlEl as HTMLInputElement).value || "").toLowerCase().trim();
+      const parentText = ((htmlEl.parentElement || htmlEl.closest("label, div, p")) as HTMLElement)?.innerText?.toLowerCase().trim() || "";
 
-      if (aria === textLower || aria.includes(textLower) || val === textLower || (val.length > 0 && val.includes(textLower))) {
+      if (
+        aria.includes(textLower) ||
+        placeholder.includes(textLower) ||
+        nameAttr.includes(textLower) ||
+        idAttr.includes(textLower) ||
+        val.includes(textLower) ||
+        parentText.includes(textLower)
+      ) {
         return htmlEl;
       }
     }
