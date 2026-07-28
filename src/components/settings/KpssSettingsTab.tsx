@@ -32,30 +32,19 @@ export function KpssSettingsTab({
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
       {/* KPSS Target Settings */}
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {t.settings_kpss_title}
-        </h3>
+        <h3>{t.settings_kpss_title}</h3>
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "16px",
+            gap: "14px",
             background: "rgba(255,255,255,0.01)",
             border: "1px solid var(--card-border)",
             borderRadius: "10px",
-            padding: "16px 14px",
+            padding: "14px",
           }}
         >
           {/* Goal Type Pill Selector */}
@@ -259,18 +248,7 @@ export function KpssSettingsTab({
 
       {/* Wiki Notları Ayarları */}
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {lang === "tr" ? "KPSS Ders Notları & Wiki" : "KPSS Study Notes & Wiki"}
-        </h3>
+        <h3>{lang === "tr" ? "KPSS Ders Notları & Wiki" : "KPSS Study Notes & Wiki"}</h3>
         <div
           style={{
             display: "flex",
@@ -279,7 +257,7 @@ export function KpssSettingsTab({
             background: "rgba(255,255,255,0.01)",
             border: "1px solid var(--card-border)",
             borderRadius: "10px",
-            padding: "16px 14px",
+            padding: "14px",
           }}
         >
           <div
@@ -353,18 +331,7 @@ export function KpssSettingsTab({
 
       {/* Reset KPSS Data Section */}
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {lang === "tr" ? "Veri Sıfırlama" : "Data Reset"}
-        </h3>
+        <h3>{lang === "tr" ? "Veri Sıfırlama" : "Data Reset"}</h3>
         <div
           style={{
             display: "flex",
@@ -373,7 +340,7 @@ export function KpssSettingsTab({
             background: "rgba(255,255,255,0.01)",
             border: "1px solid var(--card-border)",
             borderRadius: "10px",
-            padding: "16px 14px",
+            padding: "14px",
           }}
         >
           <p

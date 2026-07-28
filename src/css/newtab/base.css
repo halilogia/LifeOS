@@ -350,15 +350,16 @@ body {
 .settings-group {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .settings-group h3 {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
   color: var(--text-secondary);
-  opacity: 0.6;
+  opacity: 0.8;
+  margin: 0 0 0.35rem 0;
 }
 
 .settings-actions {
