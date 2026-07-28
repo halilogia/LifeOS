@@ -474,24 +474,21 @@ export function BistKesfetTab({
                 <button
                   onClick={() => setWatchlistModalSymbol(symClean)}
                   style={{
-                    flex: 1,
                     background: "rgba(139, 92, 246, 0.15)",
                     border: "1px solid rgba(139, 92, 246, 0.3)",
                     borderRadius: "6px",
                     color: "#c084fc",
                     fontSize: "0.72rem",
                     fontWeight: 600,
-                    padding: "5px 0",
+                    padding: "5px 8px",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
                     gap: "4px",
                   }}
-                  title="Takip Listeme Ekle"
+                  title="Takip Listesine Ekle"
                 >
                   <IconBookmark />
-                  <span>Listeme Ekle</span>
                 </button>
 
                 <button
@@ -589,62 +586,71 @@ export function BistKesfetTab({
                 {watchlistModalSymbol.toUpperCase()} — Hangi Takip Listesine Eklensin?
               </div>
               <button
-                className="chart-close-btn"
+                type="button"
                 onClick={() => setWatchlistModalSymbol(null)}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-secondary)",
+                  fontSize: "1.2rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  padding: "4px 8px",
+                }}
+                title="Kapat"
               >
-                Kapat
+                &times;
               </button>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {watchlists.map((wl) => {
-                const isAdded = wl.symbols.some(
-                  (s) => s.replace(".IS", "").toUpperCase() === watchlistModalSymbol.toUpperCase(),
-                );
-                return (
-                  <button
-                    key={wl.id}
-                    type="button"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "10px 14px",
-                      borderRadius: "10px",
-                      background: isAdded ? "rgba(139, 92, 246, 0.2)" : "rgba(255, 255, 255, 0.04)",
-                      border: `1px solid ${isAdded ? "rgba(139, 92, 246, 0.5)" : "rgba(255, 255, 255, 0.08)"}`,
-                      color: isAdded ? "#e0e7ff" : "#f1f5f9",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      onToggleWatchlistSymbol(wl.id, watchlistModalSymbol);
-                    }}
-                  >
-                    <span>{wl.name} ({wl.symbols.length} varlık)</span>
-                    {isAdded && (
-                      <span style={{ color: "#818cf8", display: "flex", alignItems: "center" }}>
-                        <IconCheck />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+              {watchlists.length === 0 ? (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "16px 8px",
+                    color: "var(--text-secondary)",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  Henüz bir takip listeniz yok. "Takip Listelerim" sekmesinden yeni liste oluşturabilirsiniz.
+                </div>
+              ) : (
+                watchlists.map((wl) => {
+                  const isAdded = wl.symbols.some(
+                    (s) => s.replace(".IS", "").toUpperCase() === watchlistModalSymbol.toUpperCase(),
+                  );
+                  return (
+                    <button
+                      key={wl.id}
+                      type="button"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "10px 14px",
+                        borderRadius: "10px",
+                        background: isAdded ? "rgba(139, 92, 246, 0.2)" : "rgba(255, 255, 255, 0.04)",
+                        border: `1px solid ${isAdded ? "rgba(139, 92, 246, 0.5)" : "rgba(255, 255, 255, 0.08)"}`,
+                        color: isAdded ? "#e0e7ff" : "#f1f5f9",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        onToggleWatchlistSymbol(wl.id, watchlistModalSymbol);
+                      }}
+                    >
+                      <span>{wl.name} ({wl.symbols.length} varlık)</span>
+                      {isAdded && (
+                        <span style={{ color: "#818cf8", display: "flex", alignItems: "center" }}>
+                          <IconCheck />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })
+              )}
             </div>
-
-            <form onSubmit={handleCreateAndAdd} style={{ display: "flex", gap: "6px", marginTop: "10px" }}>
-              <input
-                type="text"
-                className="stock-input"
-                style={{ flex: 1 }}
-                placeholder="+ Yeni Liste Adı..."
-                value={newListName}
-                onInput={(e) => setNewListName((e.target as HTMLInputElement).value)}
-              />
-              <button type="submit" className="stock-btn stock-btn-primary">
-                Oluştur
-              </button>
-            </form>
           </div>
         </div>
       )}

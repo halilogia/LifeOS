@@ -75,7 +75,7 @@ export function AiChatInputToolbar({
           title="Google Canlı Arama (Search Grounding) Modu"
         >
           <IconGlobe />
-          <span>🌐 Google Canlı Arama: {enableWebSearch ? "AÇIK" : "KAPALI"}</span>
+          <span>Google Canlı Arama: {enableWebSearch ? "AÇIK" : "KAPALI"}</span>
         </button>
 
         <button className="chip-btn" onClick={() => onSendMessage(suggestion1)}>

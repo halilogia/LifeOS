@@ -236,6 +236,12 @@ export function BistView({ lang }: BistViewProps) {
       : 0;
   const activeRulesCount = rules.filter((r) => r.isActive).length;
 
+  const handleDeleteRule = async (ruleId: string) => {
+    const updatedRules = rules.filter((r) => r.id !== ruleId);
+    setRules(updatedRules);
+    await stockRepository.saveRules(updatedRules);
+  };
+
   return (
     <div className="stock-dashboard">
       {/* Action & Nav Bar */}
@@ -269,6 +275,7 @@ export function BistView({ lang }: BistViewProps) {
             quotes={quotes}
             rules={rules}
             onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
+            onDeleteRule={handleDeleteRule}
             onDeleteItem={handleDeleteStock}
             onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
             onOpenChart={(sym) => setSelectedChartSymbol(sym)}
