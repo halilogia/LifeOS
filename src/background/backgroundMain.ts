@@ -598,29 +598,28 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-// Handle Volume Booster via Chrome Scripting API (MAIN World - Zero CSP Violations)
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "play_ambient_sound") {
-    const soundType: AmbientSoundType = message.soundType;
-    const volume: number = message.volume ?? 0.5;
-    if (soundType === "none") {
-      bgAudioEngine.stopAllSounds();
-    } else if (soundType === "rain") {
-      bgAudioEngine.playRain(volume);
-    } else if (soundType === "wind") {
-      bgAudioEngine.playWind(volume);
-    } else if (soundType === "white_noise" || (soundType as string) === "brown") {
-      bgAudioEngine.playHairdryer(volume);
-    } else if (soundType === "lofi") {
-      bgAudioEngine.playLofi(volume);
+async function ensureOffscreenDocument() {
+  try {
+    const hasDoc = await chrome.offscreen.hasDocument();
+    if (!hasDoc) {
+      await chrome.offscreen.createDocument({
+        url: "offscreen.html",
+        reasons: [chrome.offscreen.Reason.AUDIO_PLAYBACK],
+        justification: "Play persistent Pomodoro ambient background sounds",
+      });
     }
-    sendResponse({ success: true });
-    return true;
+  } catch {
+    // Ignore error if offscreen document is already created
   }
+}
 
-  if (message.type === "set_ambient_volume") {
-    bgAudioEngine.setVolume(message.volume);
-    sendResponse({ success: true });
+// Handle Volume Booster & Offscreen Ambient Audio
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "play_ambient_sound" || message.type === "set_ambient_volume") {
+    ensureOffscreenDocument().then(() => {
+      chrome.runtime.sendMessage(message).catch(() => {});
+      sendResponse({ success: true });
+    });
     return true;
   }
 

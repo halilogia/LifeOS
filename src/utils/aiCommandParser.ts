@@ -57,15 +57,7 @@ export const BIST_ALIASES: Record<string, { symbol: string; displayName: string 
   işbank: { symbol: "ISCTR.IS", displayName: "İş Bankası C" },
 };
 
-import { POPULAR_BIST_TICKERS } from "@/services/bistService.js";
 
-// Dynamically populate aliases from POPULAR_BIST_TICKERS
-POPULAR_BIST_TICKERS.forEach((ticker) => {
-  const cleanSymbol = ticker.replace(".IS", "").toLowerCase();
-  if (!BIST_ALIASES[cleanSymbol]) {
-    BIST_ALIASES[cleanSymbol] = { symbol: ticker, displayName: cleanSymbol.toUpperCase() };
-  }
-});
 
 export interface LocalParsedResult {
   parsed: boolean;

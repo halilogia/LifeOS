@@ -16,6 +16,7 @@ export default defineConfig({
         newtab: path.resolve(__dirname, 'newtab.html'),
         popup: path.resolve(__dirname, 'popup.html'),
         sidepanel: path.resolve(__dirname, 'sidepanel.html'),
+        offscreen: path.resolve(__dirname, 'offscreen.html'),
         content: path.resolve(__dirname, 'src/content/contentMain.ts'),
         background: path.resolve(__dirname, 'src/background/backgroundMain.ts'),
       },
