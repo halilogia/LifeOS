@@ -145,6 +145,48 @@ export async function executeWebSearch(
 function parseDuckDuckGoHTML(html: string): WebSearchSource[] {
   const sources: WebSearchSource[] = [];
   try {
+    if (typeof DOMParser === "undefined") {
+      // Service Worker (Background) context: DOMParser does not exist, use regex parsing
+      const resultBlocks = html
+        .split(/<div[^>]*class="[^"]*result[^"]*"[^>]*>/gi)
+        .slice(1);
+      for (const block of resultBlocks) {
+        if (sources.length >= 4) break;
+        const hrefMatch = block.match(
+          /href="([^"]*uddg=[^"]*)"|href="(https?:\/\/[^"]+)"/i,
+        );
+        const titleMatch =
+          block.match(/<a[^>]*class="[^"]*result__url[^"]*"[^>]*>([\s\S]*?)<\/a>/i) ||
+          block.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+        const snippetMatch = block.match(
+          /class="[^"]*result__snippet[^"]*"[^>]*>([\s\S]*?)<\/(?:a|td|div)>/i,
+        );
+
+        if (hrefMatch) {
+          let rawUrl = hrefMatch[1] || hrefMatch[2] || "";
+          if (rawUrl.includes("uddg=")) {
+            const m = rawUrl.match(/uddg=([^&]+)/);
+            if (m && m[1]) rawUrl = decodeURIComponent(m[1]);
+          }
+          const cleanTitle = (titleMatch ? titleMatch[1] : "Arama Sonucu")
+            .replace(/<[^>]+>/g, "")
+            .trim();
+          const cleanSnippet = (snippetMatch ? snippetMatch[1] : cleanTitle)
+            .replace(/<[^>]+>/g, "")
+            .trim();
+
+          if (rawUrl.startsWith("http") && cleanTitle) {
+            sources.push({
+              title: cleanTitle,
+              url: rawUrl,
+              snippet: cleanSnippet,
+            });
+          }
+        }
+      }
+      return sources;
+    }
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const results = doc.querySelectorAll(".result");

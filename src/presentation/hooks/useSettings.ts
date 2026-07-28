@@ -163,6 +163,14 @@ export function useSettings() {
       await syncSet({
         aiProvider: provider,
         geminiApiKey: key,
+        aiApiKey: key,
+        aiModel: model,
+        aiEndpoint: epVal,
+      });
+      chrome.storage.local.set({
+        aiProvider: provider,
+        geminiApiKey: key,
+        aiApiKey: key,
         aiModel: model,
         aiEndpoint: epVal,
       });

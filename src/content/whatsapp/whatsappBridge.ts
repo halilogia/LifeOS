@@ -2,9 +2,39 @@
  * whatsappBridge.ts
  * WhatsApp Web OpenClaw / 9Router AI & Life OS Integration.
  * Clean Architecture & Strict Security (0 Vulnerability, 0 Backdoor).
+ * 
+ * TELEFON UZAKTAN YÖNETİM MODU (Remote Mobile AI Bot):
+ * Telefonunuzdan "Kendime Mesaj / Siz" sohbetine attığınız @ai mesajları,
+ * bilgisayarda WhatsApp Web sekmesi açık olduğu sürece (arka planda bile dursa)
+ * 9Router AI tarafından işlenir ve ANINDA TELEFONUNUZA yanıt olarak düşer! 📱🤖
  */
 
 import { Note, Todo } from "@/types/types.js";
+
+const processedAiMessages = new Set<string>();
+
+/**
+ * Safe helper to observe document body or documentElement
+ * Prevents "parameter 1 is not of type 'Node'" error when DOM is loading.
+ */
+function safeObserve(observer: MutationObserver, options: MutationObserverInit): void {
+  const attach = () => {
+    const targetNode = document.body || document.documentElement;
+    if (targetNode) {
+      try {
+        observer.observe(targetNode, options);
+      } catch (err) {
+        console.warn("[Life OS WhatsApp Bridge] Observer attach error:", err);
+      }
+    }
+  };
+
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", attach, { once: true });
+  } else {
+    attach();
+  }
+}
 
 /**
  * Main initialization for WhatsApp Web Bridge.
@@ -18,9 +48,14 @@ export function initWhatsappBridge(): void {
   // Inject CSS styles for WhatsApp action buttons and toasts
   injectWhatsappStyles();
 
-  // Initialize AI listener & message observer
-  setupAiAssistantListener();
+  // Initialize Remote AI listener & message observer
+  setupRemoteAiAssistantObserver();
   setupQuickActionObserver();
+
+  // Show welcome toast when WhatsApp Web is loaded
+  setTimeout(() => {
+    showToast("📱 Uzaktan Telefon AI Modu Aktif! Telefondan @ai yazıp atabilirsiniz.");
+  }, 4000);
 }
 
 /**
@@ -35,30 +70,32 @@ function injectWhatsappStyles(): void {
     .life-os-wp-actions {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       margin-left: 8px;
-      opacity: 0.4;
+      opacity: 0.3;
       transition: opacity 0.2s ease;
       vertical-align: middle;
     }
-    .message-in:hover .life-os-wp-actions,
-    .message-out:hover .life-os-wp-actions {
+    div.message-in:hover .life-os-wp-actions,
+    div.message-out:hover .life-os-wp-actions,
+    div[role="row"]:hover .life-os-wp-actions {
       opacity: 1;
     }
     .life-os-wp-btn {
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(139, 92, 246, 0.4);
       color: #c084fc;
       border-radius: 6px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .life-os-wp-btn:hover {
-      background: rgba(139, 92, 246, 0.3);
+      background: rgba(139, 92, 246, 0.4);
       color: #ffffff;
       transform: scale(1.05);
     }
@@ -66,14 +103,14 @@ function injectWhatsappStyles(): void {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.95);
       border: 1px solid #8b5cf6;
       color: #f8fafc;
       padding: 10px 18px;
       border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
       z-index: 999999;
       font-family: system-ui, -apple-system, sans-serif;
       animation: lifeOsToastIn 0.3s ease-out;
@@ -83,13 +120,17 @@ function injectWhatsappStyles(): void {
       to { opacity: 1; transform: translateY(0); }
     }
   `;
-  (document.head || document.documentElement).appendChild(styleEl);
+  const parent = document.head || document.documentElement;
+  if (parent) {
+    parent.appendChild(styleEl);
+  }
 }
 
 /**
  * Show a safe temporary toast message on screen.
  */
 function showToast(messageText: string): void {
+  if (!document.body) return;
   const toast = document.createElement("div");
   toast.className = "life-os-wp-toast";
   toast.textContent = messageText;
@@ -97,54 +138,116 @@ function showToast(messageText: string): void {
 
   setTimeout(() => {
     toast.remove();
-  }, 3000);
+  }, 4500);
 }
 
 /**
- * WhatsApp 9Router AI Assistant (OpenClaw Mode)
- * Intercepts outbound messages starting with @ai or ending with ?
+ * Remote WhatsApp 9Router AI Assistant Observer (OpenClaw Mode)
+ * Scans ALL message bubbles in chat stream for prompts (@ai, /ai, @9router)
+ * Works seamlessly whether sent from PC OR sent from Phone!
  */
-function setupAiAssistantListener(): void {
+function setupRemoteAiAssistantObserver(): void {
   let isProcessingAi = false;
 
-  document.addEventListener(
-    "keydown",
-    async (e: KeyboardEvent) => {
-      if (e.key !== "Enter" || e.shiftKey || isProcessingAi) return;
+  // Snapshot and mark all pre-existing messages in DOM as processed on startup
+  const markExistingMessagesAsProcessed = () => {
+    const existing = document.querySelectorAll(
+      "div.message-out, div.message-in, div[role='row'], div.copyable-text",
+    );
+    existing.forEach((msgNode, idx) => {
+      const textEl =
+        msgNode.querySelector("span.selectable-text") ||
+        msgNode.querySelector("div.copyable-text") ||
+        msgNode.querySelector("span._ao3e");
+      if (textEl && textEl.textContent) {
+        const text = textEl.textContent.trim();
+        processedAiMessages.add(`${text}_${idx}`);
+      }
+    });
+  };
 
-      const activeEl = document.activeElement as HTMLElement;
-      if (!activeEl) return;
+  // Perform snapshot when DOM ready
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", markExistingMessagesAsProcessed, { once: true });
+  } else {
+    markExistingMessagesAsProcessed();
+  }
 
-      // WhatsApp Web message box query
-      const isInput =
-        activeEl.getAttribute("contenteditable") === "true" ||
-        activeEl.classList.contains("selectable-text");
+  const scanAllMessagesForPrompts = async () => {
+    if (isProcessingAi) return;
 
-      if (!isInput) return;
+    // Scan all message elements in active chat window
+    const allMessageNodes = Array.from(
+      document.querySelectorAll("div.message-out, div.message-in, div[role='row'], div.copyable-text"),
+    );
 
-      const text = activeEl.innerText || activeEl.textContent || "";
-      const trimmed = text.trim();
+    if (allMessageNodes.length === 0) return;
 
-      // Check if message demands AI response (@ai prefix or ending with ?)
+    // Iterate backwards starting from latest messages
+    for (let i = allMessageNodes.length - 1; i >= Math.max(0, allMessageNodes.length - 8); i--) {
+      const msgNode = allMessageNodes[i];
+      const textEl =
+        msgNode.querySelector("span.selectable-text") ||
+        msgNode.querySelector("div.copyable-text") ||
+        msgNode.querySelector("span._ao3e");
+
+      if (!textEl) continue;
+
+      const rawText = textEl.textContent || "";
+      const trimmed = rawText.trim();
+
+      // Ignore bot responses, action button labels, or error messages
+      if (
+        trimmed.includes("9Router AI:") ||
+        trimmed.includes("Hata:") ||
+        trimmed.includes("API anahtarı") ||
+        trimmed.includes("Not Yap") ||
+        trimmed.includes("Görev Yap")
+      ) {
+        continue;
+      }
+
+      // Check if message demands AI response
+      const lower = trimmed.toLowerCase();
       const isAiTrigger =
-        trimmed.startsWith("@ai ") ||
-        trimmed.startsWith("/ai ") ||
-        (trimmed.length > 5 && trimmed.endsWith("?"));
+        lower.startsWith("@ai ") ||
+        lower.startsWith("/ai ") ||
+        lower.startsWith("@9router ") ||
+        lower === "@ai" ||
+        lower === "/ai";
 
-      if (!isAiTrigger) return;
+      if (!isAiTrigger) continue;
+
+      // Unique hash ID for message to avoid duplicate replies
+      const msgHash = `${trimmed}_${i}`;
+      if (processedAiMessages.has(msgHash)) continue;
+
+      // Mark as processed immediately
+      processedAiMessages.add(msgHash);
 
       const cleanPrompt = trimmed
         .replace(/^@ai\s*/i, "")
-        .replace(/^\/ai\s*/i, "");
+        .replace(/^\/ai\s*/i, "")
+        .replace(/^@9router\s*/i, "")
+        .trim();
 
-      if (!cleanPrompt) return;
+      if (!cleanPrompt) continue;
 
       isProcessingAi = true;
-      showToast("⚡ 9Router AI Düşünüyor...");
+      showToast(`📱 Telefondan İstek Geldi: "${cleanPrompt.slice(0, 25)}..."`);
 
       try {
+        if (!chrome.runtime?.id) {
+          isProcessingAi = false;
+          return;
+        }
+
         // Fetch AI Response from background script via runtime message
         const aiResponse: string = await new Promise((resolve, reject) => {
+          if (!chrome.runtime?.id) {
+            resolve("");
+            return;
+          }
           chrome.runtime.sendMessage(
             {
               type: "GENERATE_AI_RESPONSE",
@@ -152,69 +255,123 @@ function setupAiAssistantListener(): void {
             },
             (res) => {
               if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError);
+                // Silently ignore extension invalidation on reload
+                if (chrome.runtime.lastError.message?.includes("Extension context invalidated")) {
+                  resolve("");
+                } else {
+                  reject(chrome.runtime.lastError);
+                }
               } else if (res && res.response) {
                 resolve(res.response);
               } else {
                 resolve(
-                  "Üzgünüm, 9Router AI yanıtı oluşturulamadı. Lütfen API anahtarınızı kontrol edin.",
+                  "Üzgünüm, 9Router AI yanıtı oluşturulamadı. Lütfen eklenti ayarlarından API anahtarınızı kontrol edin.",
                 );
               }
             },
           );
         });
 
-        // Insert AI answer back into WhatsApp chat box after a small natural pause
-        setTimeout(() => {
-          sendTextToWhatsappChat(aiResponse);
+        if (!aiResponse) {
           isProcessingAi = false;
-        }, 1200);
+          return;
+        }
+
+        // Format & clean AI answer back into WhatsApp chat box (plain answer only, no prefixes/citations)
+        const cleanReply = aiResponse
+          .replace(/^🤖\s*9Router\s*AI:\s*/i, "")
+          .replace(/^9Router\s*AI:\s*/i, "")
+          .replace(/^Hata:\s*/i, "")
+          .replace(/\[\d+\]/g, "")
+          .replace(/\n{3,}/g, "\n\n")
+          .trim();
+
+        setTimeout(() => {
+          sendTextToWhatsappChat(cleanReply);
+          isProcessingAi = false;
+        }, 800);
+
+        // Process only one AI prompt per scan pass
+        break;
       } catch (err) {
         console.error("[Life OS WhatsApp Bridge] AI Error:", err);
         isProcessingAi = false;
       }
-    },
-    true,
-  );
+    }
+  };
+
+  const observer = new MutationObserver(() => {
+    scanAllMessagesForPrompts();
+  });
+
+  safeObserve(observer, {
+    childList: true,
+    subtree: true,
+  });
 }
 
 /**
- * Safe helper to type and send text back into WhatsApp Web chat.
+ * Safe helper to type and send text back into WhatsApp Web chat box.
+ * Dispatches native input & click events to send reply back to user's phone!
  */
 function sendTextToWhatsappChat(replyText: string): void {
-  const mainFooter = document.querySelector("footer");
-  if (!mainFooter) return;
+  const inputArea =
+    document.querySelector('footer div[contenteditable="true"]') ||
+    document.querySelector('div[contenteditable="true"][data-tab="10"]') ||
+    document.querySelector('div[contenteditable="true"][role="textbox"]') ||
+    document.querySelector('div[contenteditable="true"]');
 
-  const inputArea = mainFooter.querySelector(
-    'div[contenteditable="true"]',
-  ) as HTMLElement;
+  if (!inputArea) {
+    console.warn("[Life OS WhatsApp Bridge] Input area not found");
+    return;
+  }
 
-  if (!inputArea) return;
+  const el = inputArea as HTMLElement;
+  el.focus();
 
-  inputArea.focus();
+  const formattedText = `🤖 9Router AI:\n${replyText}`;
 
-  // Safe DOM manipulation to clear & set text
-  inputArea.innerText = `🤖 9Router AI:\n${replyText}`;
+  try {
+    document.execCommand("insertText", false, formattedText);
+  } catch (e) {
+    el.innerText = formattedText;
+  }
 
   // Dispatch Input Event so WhatsApp Web reactively enables the send button
   const inputEvent = new InputEvent("input", {
     bubbles: true,
     cancelable: true,
   });
-  inputArea.dispatchEvent(inputEvent);
+  el.dispatchEvent(inputEvent);
 
-  // Dispatch Enter Key press event to submit message
+  // Click WhatsApp Send Button
   setTimeout(() => {
-    const enterEvent = new KeyboardEvent("keydown", {
-      key: "Enter",
-      keyCode: 13,
-      code: "Enter",
-      which: 13,
-      bubbles: true,
-      cancelable: true,
-    });
-    inputArea.dispatchEvent(enterEvent);
-  }, 400);
+    const sendButton =
+      document.querySelector('footer span[data-icon="send"]') ||
+      document.querySelector('footer button[aria-label="Gönder"]') ||
+      document.querySelector('footer button[aria-label="Send"]') ||
+      document.querySelector('span[data-icon="send"]');
+
+    if (sendButton) {
+      const btn = (
+        sendButton.tagName === "BUTTON"
+          ? sendButton
+          : sendButton.closest("button") || sendButton
+      ) as HTMLElement;
+      btn.click();
+    } else {
+      // Fallback: Dispatch Enter key
+      const enterEvent = new KeyboardEvent("keydown", {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+        cancelable: true,
+      });
+      el.dispatchEvent(enterEvent);
+    }
+  }, 300);
 }
 
 /**
@@ -226,13 +383,17 @@ function setupQuickActionObserver(): void {
     attachButtonsToMessages();
   });
 
-  observer.observe(document.body, {
+  safeObserve(observer, {
     childList: true,
     subtree: true,
   });
 
-  // Initial pass
-  attachButtonsToMessages();
+  // Initial pass when ready
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", () => attachButtonsToMessages(), { once: true });
+  } else {
+    attachButtonsToMessages();
+  }
 }
 
 /**
@@ -240,17 +401,21 @@ function setupQuickActionObserver(): void {
  */
 function attachButtonsToMessages(): void {
   const messageContainers = document.querySelectorAll(
-    "div.message-in, div.message-out",
+    "div.message-in, div.message-out, div[role='row']",
   );
 
   messageContainers.forEach((msgBox) => {
     if (msgBox.querySelector(".life-os-wp-actions")) return; // Already attached
 
-    const textEl = msgBox.querySelector("span.selectable-text");
+    const textEl =
+      msgBox.querySelector("span.selectable-text") ||
+      msgBox.querySelector("div.copyable-text") ||
+      msgBox.querySelector("span._ao3e");
+
     if (!textEl) return;
 
     const messageText = textEl.textContent?.trim();
-    if (!messageText || messageText.length < 3) return;
+    if (!messageText || messageText.length < 2) return;
 
     // Create safe button container
     const container = document.createElement("span");

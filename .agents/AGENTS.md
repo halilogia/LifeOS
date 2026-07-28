@@ -119,3 +119,6 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **Eksiksiz Kod Çıktısı (No Lazy Code)**: Kod yazarken hiçbir zaman `// ... eski kodlar buraya gelecek` veya `// mantık aynı kalıyor` şeklinde kısaltma yapılamaz. Tüm kod ve alt bileşenler baştan sona tam ve çalışır halde sunulmalıdır.
 * **Tam Değişiklik İptali & İnceleme**: Refactoring sonrasında `npx tsc --noEmit` ve `npm run build` ile %100 sorunsuz derlendiği doğrulanmalı ve yapılan parçalama işlemlerinin özeti sunulmalıdır.
 
+### 4.6 Merkezi ve Tekil AI Yapılandırma Protokolü (Sıfır API Hatası Garantisi)
+* **Merkezi AI Yapılandırması Zorunluluğu**: Yeni bir AI özelliği veya arka plan servisi eklenirken asla elle/ad-hoc `chrome.storage` ayrıştırma mantığı yazılmamalıdır. Her zaman `src/services/aiChatService.ts` içerisindeki tekil yetkili `getAIConfigFromStorage()` fonksiyonu kullanılmalıdır.
+* **Çift Depolama & Çift Key Garantisi**: Ayarlar kaydedilirken hem `chrome.storage.sync` hem de `chrome.storage.local` depolarına `geminiApiKey` ve `aiApiKey` alanları eşzamanlı yazılır. Böylece hiçbir yeni AI modülü yetki veya anahtar hatası veremez.
