@@ -3,7 +3,11 @@
  * Clean Architecture - Background Domain Handler for Runtime Messages (Translation, Tab Context, AI Dispatching).
  */
 
-import { callAIConfigured, getAIConfigFromStorage } from "@/services/aiChatService.js";
+import {
+  callAIConfigured,
+  getAIConfigFromStorage,
+  executeAIAction,
+} from "@/services/aiChatService.js";
 
 /**
  * Main runtime message dispatcher for translation, agent actions, tab context, tab grouping, and AI response generation.
@@ -192,6 +196,10 @@ export function handleRuntimeMessage(
           aiEndpoint: aiConfig.aiEndpoint,
           enableWebSearch: true,
         });
+
+        // Automatically execute structured AI actions (tasks, notes, memory updates)
+        await executeAIAction(aiResult);
+
         sendResponse({ response: aiResult.reply });
       } catch (err: any) {
         const errMsg = err?.message || String(err);

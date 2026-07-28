@@ -9,8 +9,6 @@
  * 9Router AI tarafından işlenir ve ANINDA TELEFONUNUZA yanıt olarak düşer! 📱🤖
  */
 
-import { Note, Todo } from "@/types/types.js";
-
 const processedAiMessages = new Set<string>();
 
 /**
@@ -50,7 +48,6 @@ export function initWhatsappBridge(): void {
 
   // Initialize Remote AI listener & message observer
   setupRemoteAiAssistantObserver();
-  setupQuickActionObserver();
 
   // Show welcome toast when WhatsApp Web is loaded
   setTimeout(() => {
@@ -329,7 +326,7 @@ function sendTextToWhatsappChat(replyText: string): void {
   const el = inputArea as HTMLElement;
   el.focus();
 
-  const formattedText = `🤖 9Router AI:\n${replyText}`;
+  const formattedText = replyText;
 
   try {
     document.execCommand("insertText", false, formattedText);
@@ -372,142 +369,4 @@ function sendTextToWhatsappChat(replyText: string): void {
       el.dispatchEvent(enterEvent);
     }
   }, 300);
-}
-
-/**
- * Setup MutationObserver to attach "Life OS Not Yap" and "Life OS Görev Yap"
- * quick buttons to WhatsApp message bubbles on hover.
- */
-function setupQuickActionObserver(): void {
-  const observer = new MutationObserver(() => {
-    attachButtonsToMessages();
-  });
-
-  safeObserve(observer, {
-    childList: true,
-    subtree: true,
-  });
-
-  // Initial pass when ready
-  if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", () => attachButtonsToMessages(), { once: true });
-  } else {
-    attachButtonsToMessages();
-  }
-}
-
-/**
- * Find WhatsApp message elements and insert quick buttons safely.
- */
-function attachButtonsToMessages(): void {
-  const messageContainers = document.querySelectorAll(
-    "div.message-in, div.message-out, div[role='row']",
-  );
-
-  messageContainers.forEach((msgBox) => {
-    if (msgBox.querySelector(".life-os-wp-actions")) return; // Already attached
-
-    const textEl =
-      msgBox.querySelector("span.selectable-text") ||
-      msgBox.querySelector("div.copyable-text") ||
-      msgBox.querySelector("span._ao3e");
-
-    if (!textEl) return;
-
-    const messageText = textEl.textContent?.trim();
-    if (!messageText || messageText.length < 2) return;
-
-    // Create safe button container
-    const container = document.createElement("span");
-    container.className = "life-os-wp-actions";
-
-    // "📝 Not Yap" Button
-    const noteBtn = document.createElement("button");
-    noteBtn.type = "button";
-    noteBtn.className = "life-os-wp-btn";
-    noteBtn.textContent = "📝 Not Yap";
-    noteBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      saveWhatsappToNotes(messageText);
-    });
-
-    // "✅ Görev Yap" Button
-    const taskBtn = document.createElement("button");
-    taskBtn.type = "button";
-    taskBtn.className = "life-os-wp-btn";
-    taskBtn.textContent = "✅ Görev Yap";
-    taskBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      saveWhatsappToTasks(messageText);
-    });
-
-    container.appendChild(noteBtn);
-    container.appendChild(taskBtn);
-
-    // Append safely next to message text
-    textEl.appendChild(container);
-  });
-}
-
-/**
- * Save WhatsApp message to Life OS Notes in chrome.storage.sync.
- */
-async function saveWhatsappToNotes(text: string): Promise<void> {
-  try {
-    const existingNotes: Note[] = await new Promise((r) =>
-      chrome.storage.sync.get(["notes"], (res) => r((res.notes as Note[]) || [])),
-    );
-
-    const firstLine = text.split("\n")[0].slice(0, 40);
-    const newNote: Note = {
-      id: `wp-note-${Date.now()}`,
-      title: `WhatsApp: ${firstLine}...`,
-      content: `${text}\n\n#whatsapp #kpss`,
-      createdAt: new Date().toISOString(),
-      type: "note",
-    };
-
-    existingNotes.unshift(newNote);
-
-    await new Promise<void>((r) =>
-      chrome.storage.sync.set({ notes: existingNotes }, r),
-    );
-
-    showToast("📝 WhatsApp Mesajı Life OS Notlarına Eklendi!");
-  } catch (err) {
-    console.error("[Life OS] Save Note Error:", err);
-  }
-}
-
-/**
- * Save WhatsApp message to Life OS Kanban Tasks in chrome.storage.sync.
- */
-async function saveWhatsappToTasks(text: string): Promise<void> {
-  try {
-    const existingTodos: Todo[] = await new Promise((r) =>
-      chrome.storage.sync.get(["todos"], (res) => r((res.todos as Todo[]) || [])),
-    );
-
-    const newTodo: Todo = {
-      id: `wp-todo-${Date.now()}`,
-      text: `[WhatsApp] ${text}`,
-      completed: false,
-      status: "todo",
-      repeat: "none",
-      category: "general",
-      lastCompletedDate: null,
-      urgent: false,
-      important: false,
-    };
-
-    existingTodos.unshift(newTodo);
-
-    await new Promise<void>((r) =>
-      chrome.storage.sync.set({ todos: existingTodos }, r),
-    );
-
-    showToast("✅ WhatsApp Mesajı Life OS Görevlerine Eklendi!");
-  } catch (err) {
-    console.error("[Life OS] Save Task Error:", err);
-  }
 }
