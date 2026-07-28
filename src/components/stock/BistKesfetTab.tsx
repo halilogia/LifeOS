@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect } from "preact/hooks";
-import { POPULAR_BIST_TICKERS, StockQuote } from "@/services/bistService.js";
+import { fetchDynamicBistTickers, StockQuote } from "@/services/bistService.js";
 import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
 import type { StockWatchlist } from "@/types/stock.js";
 
@@ -121,11 +121,27 @@ export function BistKesfetTab({
   // Modal for adding a stock to a watchlist
   const [watchlistModalSymbol, setWatchlistModalSymbol] = useState<string | null>(null);
   const [newListName, setNewListName] = useState("");
+  const [bistTickers, setBistTickers] = useState<string[]>([]);
 
   // Infinite Scroll state: initial 24, increment by 24 on scroll
   const [visibleCount, setVisibleCount] = useState(24);
 
-  const filteredTickers = POPULAR_BIST_TICKERS.filter((sym) => {
+  useEffect(() => {
+    fetchDynamicBistTickers().then((list) => {
+      if (list && list.length > 0) {
+        setBistTickers(list);
+      }
+    });
+  }, []);
+
+  const allTickers = Array.from(
+    new Set([
+      ...bistTickers,
+      ...Array.from(quoteMap.keys()).map((k) => (k.endsWith(".IS") ? k : `${k}.IS`)),
+    ]),
+  );
+
+  const filteredTickers = allTickers.filter((sym) => {
     const cleanSym = sym.replace(".IS", "").toLowerCase();
     const queryLower = searchQuery.toLowerCase().trim();
     return !queryLower || cleanSym.includes(queryLower);
@@ -148,7 +164,7 @@ export function BistKesfetTab({
   }, [filteredTickers.length]);
 
   // Dynamically calculate top featured stocks: prioritize positive momentum gainers & high TL Volume
-  const featuredStocks = POPULAR_BIST_TICKERS.map((fullSym) => {
+  const featuredStocks = allTickers.map((fullSym) => {
     const cleanSym = fullSym.replace(".IS", "");
     const q = quoteMap.get(cleanSym) || quoteMap.get(fullSym);
     const price = q ? q.price : 0;

@@ -3,8 +3,8 @@
  * Takip edilen veya satın alınan BIST hissesi ekleme modali.
  */
 
-import { useState } from "preact/hooks";
-import { POPULAR_BIST_TICKERS } from "@/services/bistService.js";
+import { useState, useEffect } from "preact/hooks";
+import { fetchDynamicBistTickers } from "@/services/bistService.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 
 interface AddStockModalProps {
@@ -43,6 +43,15 @@ export function AddStockModal({
   const [buyPrice, setBuyPrice] = useState<number>(0);
   const [lotCount, setLotCount] = useState<number>(0);
   const [note, setNote] = useState<string>("");
+  const [tickers, setTickers] = useState<string[]>(["THYAO.IS", "GARAN.IS", "AKBNK.IS", "EREGL.IS", "ASELS.IS"]);
+
+  useEffect(() => {
+    fetchDynamicBistTickers().then((list) => {
+      if (list && list.length > 0) {
+        setTickers(list);
+      }
+    });
+  }, []);
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
@@ -105,7 +114,7 @@ export function AddStockModal({
                   setSelectedStock((e.target as HTMLSelectElement).value)
                 }
               >
-                {POPULAR_BIST_TICKERS.map((sym) => (
+                {tickers.map((sym) => (
                   <option key={sym} value={sym}>
                     {sym.replace(".IS", "")}
                   </option>

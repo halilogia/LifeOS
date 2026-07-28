@@ -6,8 +6,8 @@
  */
 
 export interface StockQuote {
-  symbol: string; // THYAO.IS
-  shortName: string; // Türk Hava Yolları
+  symbol: string;
+  shortName: string;
   price: number;
   previousClose: number;
   change: number;
@@ -29,44 +29,38 @@ export interface BISTSearchResult {
   exchange: string;
 }
 
-// ── Default BIST Ticker symbols for live discovery (NO hardcoded names) ───
-export const POPULAR_BIST_TICKERS = [
-  "THYAO.IS", "GARAN.IS", "AKBNK.IS", "EREGL.IS", "KCHOL.IS", "SASA.IS", "TUPRS.IS", "BIMAS.IS",
-  "ASELS.IS", "FROTO.IS", "PGSUS.IS", "ISCTR.IS", "SAHOL.IS", "TCELL.IS", "SISE.IS", "YKBNK.IS",
-  "HEKTS.IS", "SOKM.IS", "VAKBN.IS", "HALKB.IS", "DOAS.IS", "KRDMD.IS", "ASTOR.IS", "KONTR.IS",
-  "REEDR.IS", "ODAS.IS", "PETKM.IS", "MAVI.IS", "TAVHL.IS", "TOASO.IS", "EUPWR.IS", "SMRTG.IS",
-  "MIATK.IS", "BRSAN.IS", "ENJSA.IS", "KCAER.IS", "AEFES.IS", "AGHOL.IS", "AHGAZ.IS", "AKCNS.IS",
-  "AKSA.IS", "AKSEN.IS", "ALARK.IS", "ALFAS.IS", "ALTNY.IS", "ARCLK.IS", "BERA.IS", "BRYAT.IS",
-  "CANTE.IS", "CCOLA.IS", "CIMSA.IS", "CWENE.IS", "DOHOL.IS", "ECILC.IS", "EGEEN.IS", "EKGYO.IS",
-  "ENKAI.IS", "GESAN.IS", "GUBRF.IS", "ISMEN.IS", "KORDS.IS", "KOZAL.IS", "KOZAA.IS", "MGROS.IS",
-  "OTKAR.IS", "OYAKC.IS", "SKBNK.IS", "TABGD.IS", "TKFEN.IS", "TSKB.IS", "TTKOM.IS", "TTRAK.IS",
-  "ULKER.IS", "VESBE.IS", "VESTL.IS", "YEOTK.IS", "YYLGD.IS", "ADEL.IS", "AGROT.IS", "AKFGY.IS",
-  "ALBRK.IS", "ALCAR.IS", "ANELE.IS", "ANHYT.IS", "ANSGR.IS", "ARDYZ.IS", "ARENA.IS", "ARSAN.IS",
-  "ASGYO.IS", "ATAKP.IS", "AVPGY.IS", "AYDEM.IS", "BAGFS.IS", "BANVT.IS", "BARMA.IS", "BASGZ.IS",
-  "BEGYO.IS", "BFREN.IS", "BIENY.IS", "BIOEN.IS", "BIZIM.IS", "BJKAS.IS", "BOBET.IS", "BORLS.IS",
-  "BOSSA.IS", "BSOKE.IS", "BTCIM.IS", "BUCIM.IS", "BYDNR.IS", "CATES.IS", "CELHA.IS", "CEMAS.IS",
-  "CEMTS.IS", "CONSE.IS", "CVKMD.IS", "DAPGM.IS", "DARDL.IS", "DGATE.IS", "DGNMO.IS", "DMRGD.IS",
-  "DNRGY.IS", "DOBUR.IS", "DURDO.IS", "DYOBY.IS", "EBEBK.IS", "ECGYO.IS", "ECZYT.IS", "EDATA.IS",
-  "EGGUB.IS", "EGPRO.IS", "EGSER.IS", "EKOS.IS", "EKSUN.IS", "ELITE.IS", "EMKEL.IS", "ENSRI.IS",
-  "ERCB.IS", "ESEN.IS", "ESCAR.IS", "EYGYO.IS", "FADE.IS", "FENER.IS", "FMIZP.IS", "FONET.IS",
-  "FORTE.IS", "FZLGY.IS", "GARFA.IS", "GEDIK.IS", "GENIL.IS", "GEREL.IS", "GIPTA.IS", "GLYHO.IS",
-  "GOKNR.IS", "GOLTS.IS", "GOODY.IS", "GOZDE.IS", "GRSEL.IS", "GSDHO.IS", "GSRAY.IS", "GWIND.IS",
-  "HATSN.IS", "HUNER.IS", "HURGZ.IS", "INGRM.IS", "INVEO.IS", "INVES.IS", "IPEKE.IS", "ISDMR.IS",
-  "ISFIN.IS", "ISGYO.IS", "IZENR.IS", "IZMDC.IS", "JANTS.IS", "KATEK.IS", "KFEIN.IS", "KLGYO.IS",
-  "KLMSN.IS", "KMPUR.IS", "KNFRT.IS", "KONYA.IS", "KRPLS.IS", "KRTEK.IS", "KRVGD.IS", "KTLEV.IS",
-  "KZBGY.IS", "KZGYO.IS", "LIDER.IS", "LKMNH.IS", "LMKDC.IS", "LOGO.IS", "LRVGY.IS", "MACKO.IS",
-  "MAGEN.IS", "MAKIM.IS", "MANAS.IS", "MARTI.IS", "MEDTR.IS", "MHRGY.IS", "MOBTL.IS", "MPARK.IS",
-  "MTRKS.IS", "NATEN.IS", "NETAS.IS", "NTGAZ.IS", "NTHOL.IS", "OBAMS.IS", "OFSYM.IS", "ONCSM.IS",
-  "OSMEN.IS", "OYYAT.IS", "OZKGY.IS", "PASEU.IS", "PENTA.IS", "PETUN.IS", "PKART.IS", "PLTUR.IS",
-  "POLHO.IS", "POLTK.IS", "PRKME.IS", "PSGYO.IS", "QUAGR.IS", "RALYH.IS", "RNPOL.IS", "RTALB.IS",
-  "RUBNS.IS", "RYGYO.IS", "RYSAS.IS", "SAMAT.IS", "SARKY.IS", "SAYAS.IS", "SDTTR.IS", "SEGMN.IS",
-  "SELEC.IS", "SILVR.IS", "SKMD.IS", "SMART.IS", "SNAAM.IS", "SOKE.IS", "SRVGY.IS", "SUNTK.IS",
-  "SURGY.IS", "SUWEN.IS", "TARKM.IS", "TATEN.IS", "TATGD.IS", "TEKTU.IS", "TERA.IS", "TKNSA.IS",
-  "TMSN.IS", "TNZTP.IS", "TRCAS.IS", "TRGYO.IS", "TRILC.IS", "TSPOR.IS", "TUCLK.IS", "TUKAS.IS",
-  "TUREX.IS", "TURSG.IS", "ULUFA.IS", "ULUSE.IS", "UNLU.IS", "USAK.IS", "VAKFN.IS", "VAKKO.IS",
-  "VBTYZ.IS", "VERTU.IS", "VERUS.IS", "VKGYO.IS", "YATAS.IS", "YGYO.IS", "YUNSA.IS", "ZOREN.IS",
-  "ZRGYO.IS",
-];
+// ── Dynamic BIST Ticker Discovery (NO hardcoded arrays) ───
+export async function fetchDynamicBistTickers(): Promise<string[]> {
+  try {
+    const prefixes = ["IS", "THY", "GARAN", "AKBNK", "EREGL", "ASELS", "KCHOL", "TUPRS", "SASA", "BIMAS"];
+    const results = await Promise.all(
+      prefixes.map((p) =>
+        fetch(`https://query2.finance.yahoo.com/v1/finance/search?q=${p}&quotesCount=20&newsCount=0`, {
+          headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
+          signal: AbortSignal.timeout(5000),
+        })
+          .then((r) => (r.ok ? r.json() : { quotes: [] }))
+          .catch(() => ({ quotes: [] })),
+      ),
+    );
+
+    const set = new Set<string>();
+    for (const res of results) {
+      const quotes = res.quotes || [];
+      for (const q of quotes) {
+        if (q.symbol && typeof q.symbol === "string" && q.symbol.endsWith(".IS")) {
+          set.add(q.symbol.toUpperCase());
+        }
+      }
+    }
+    if (set.size > 0) {
+      return Array.from(set);
+    }
+  } catch {
+    // Ignore error
+  }
+  return ["THYAO.IS", "GARAN.IS", "AKBNK.IS", "EREGL.IS", "ASELS.IS"];
+}
 
 /**
  * Yahoo Finance Canlı Arama API'si.
@@ -240,7 +234,7 @@ export async function fetchStockQuote(symbol: string): Promise<StockQuote> {
 export async function fetchStockPrices(
   symbols?: string[],
 ): Promise<StockQuote[]> {
-  const targetSymbols = symbols ?? POPULAR_BIST_TICKERS;
+  const targetSymbols = symbols ?? (await fetchDynamicBistTickers());
 
   // Cache kontrolü (sadece tam liste için)
   if (!symbols) {
