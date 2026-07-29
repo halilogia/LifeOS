@@ -15,6 +15,7 @@ import { GoogleAuthUseCase } from "@/application/use-cases/sync/GoogleAuthUseCas
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
 import { BackupToDriveUseCase } from "@/application/use-cases/sync/BackupToDriveUseCase.js";
 import { RestoreFromDriveUseCase } from "@/application/use-cases/sync/RestoreFromDriveUseCase.js";
+import { logger } from "@/utils/logger.js";
 
 function createSyncPort() {
   const tasksApi = new GoogleTasksApi();
@@ -101,7 +102,7 @@ export function useSync(options: UseSyncOptions = {}) {
       }
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      console.error("Google sign in failed:", e);
+      logger.error("Google sign in failed:", e);
       if (showAlert) {
         showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
       }
@@ -131,7 +132,7 @@ export function useSync(options: UseSyncOptions = {}) {
       await syncTasksUC.execute();
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      console.error("Manual task sync failed:", e);
+      logger.error("Manual task sync failed:", e);
       if (showAlert) {
         showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
       }
@@ -154,7 +155,7 @@ export function useSync(options: UseSyncOptions = {}) {
       }
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      console.error("Manual backup failed:", e);
+      logger.error("Manual backup failed:", e);
       if (showAlert) {
         showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
       }
@@ -179,7 +180,7 @@ export function useSync(options: UseSyncOptions = {}) {
       return result;
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      console.error("Restore failed:", e);
+      logger.error("Restore failed:", e);
       if (showAlert) {
         showAlert(`${errorLabel}\n\n[${detailLabel}]: ${errMsg}`);
       }
@@ -193,9 +194,9 @@ export function useSync(options: UseSyncOptions = {}) {
     if (settings.enabled) {
       try {
         await backupUC.execute();
-        console.log("Cloud auto-backup completed successfully.");
+        logger.log("Cloud auto-backup completed successfully.");
       } catch (e) {
-        console.error("Auto cloud backup failed:", e);
+        logger.error("Auto cloud backup failed:", e);
       }
     }
   }, []);

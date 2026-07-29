@@ -37,6 +37,7 @@ import { StockAiReportTab } from "@/components/stock/StockAiReportTab.js";
 import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
+import { logger } from "@/utils/logger.js";
 
 interface BistViewProps {
   lang: Language;
@@ -118,7 +119,7 @@ export function BistView({ lang }: BistViewProps) {
         }
       }
     } catch (err) {
-      console.error("BistView loadData error:", err);
+      logger.error("BistView loadData error:", err);
     } finally {
       setLoading(false);
     }

@@ -109,7 +109,7 @@ export function createStockAiService(aiConfigRepo: IAiConfigRepository) {
           }
         }
       } catch (e) {
-        console.error("stockAiService fetch error:", e);
+        logger.error("stockAiService fetch error:", e);
       }
 
       // Smart Fallback
@@ -132,6 +132,7 @@ export type StockAiService = ReturnType<typeof createStockAiService>;
 /* ------------------------------------------------------------------ */
 
 import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/ChromeStorageAiConfigRepository.js";
+import { logger } from "@/utils/logger.js";
 
 const _defaultAiConfigRepo = new ChromeStorageAiConfigRepository();
 const _defaultStockAiService = createStockAiService(_defaultAiConfigRepo);

@@ -65,7 +65,7 @@ export function SidePanelApp() {
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert(lang === "tr" ? "Tarayıcınız sesli komutu desteklemiyor." : "Speech recognition is not supported in this browser.");
+      alert(t.speech_not_supported);
       return;
     }
 
@@ -153,7 +153,7 @@ export function SidePanelApp() {
   }, [messages, agentStatus, activeSessionKey]);
 
   const refreshPageContext = () => {
-    setAgentStatus(lang === "tr" ? "Sayfa taranıyor..." : "Scanning page...");
+    setAgentStatus(t.page_scanning);
     try {
       chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (response) => {
         setAgentStatus(null);
@@ -213,7 +213,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
   return (
     <button
       onClick={handleCopy}
-      title={copied ? (lang === "tr" ? "Kopyalandı!" : "Copied!") : (lang === "tr" ? "Metni Kopyala" : "Copy text")}
+      title={copied ? t.copy_title_copied : t.copy_title}
       style={{
         background: "transparent",
         border: "none",
@@ -238,7 +238,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
       )}
-      <span>{copied ? (lang === "tr" ? "Kopyalandı" : "Copied") : (lang === "tr" ? "Kopyala" : "Copy")}</span>
+      <span>{copied ? t.copy_label_copied : t.copy_label}</span>
     </button>
   );
 }
@@ -257,7 +257,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
     setMessages((prev) => [...prev, userMsg]);
     if (!promptOverride) {setInputText("");}
     setIsProcessing(true);
-    setAgentStatus(lang === "tr" ? "Yapay zeka yanıtlıyor..." : "AI Copilot thinking...");
+    setAgentStatus(t.agent_thinking);
 
     // On-the-fly fetch active tab context if empty
     let activeCtx = pageContext;
@@ -331,7 +331,7 @@ If the user asks to save, add, or remember a fact/email/detail about them (e.g. 
 }
 \`\`\`
 
-Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Turkish" : "English"}. Do not use low-quality emojis in output formatting.`;
+Answer the user clearly, professionally, and concisely in ${t.answer_language}. Do not use low-quality emojis in output formatting.`;
 
         try {
           let responseText = "";
@@ -425,9 +425,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 await handleUpdateMemoryFromAI(actionPayload.memory_fact);
                 finalContent = responseText.replace(/```json[\s\S]*?```/gi, "").trim();
                 if (!finalContent) {
-                  finalContent = lang === "tr"
-                    ? `✓ "${actionPayload.memory_fact}" bilgisi kişisel hafızanıza (memory.md) eklendi.`
-                    : `✓ "${actionPayload.memory_fact}" saved to personal memory (memory.md).`;
+                  finalContent = t.memory_saved.replace("{fact}", actionPayload.memory_fact);
                 }
               } else if (Array.isArray(actionPayload)) {
                 // Handle dynamic Agent tool actions (clicks, typing, scroll, extract)
@@ -435,9 +433,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 const actionSummary = formatActionExecutionSummary(actionPayload, lang);
 
                 setAgentStatus(
-                  lang === "tr"
-                    ? `Aksiyon yürütülüyor (${count} işlem)...`
-                    : `Executing agent tools (${count} items)...`,
+                  t.executing_actions.replace("{count}", String(count)),
                 );
 
                 let cleanPromptResponse = responseText
@@ -499,7 +495,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           const errorMsg: ChatMessage = {
             id: (Date.now() + 1).toString(),
             role: "assistant",
-            content: `⚠️ ${lang === "tr" ? "Yanıt alınamadı. Lütfen Ayarlar'dan API Anahtarınızı kontrol edin." : "Failed to get response. Please check API Key in Settings."}\nError: ${err?.message || "Unknown error"}`,
+            content: `⚠️ ${t.failed_response}\nError: ${err?.message || "Unknown error"}`,
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           };
           setMessages((prev) => [...prev, errorMsg]);
@@ -513,17 +509,17 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
   const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract" | "yt_summarize" | "yt_quiz") => {
     let prompt = "";
     if (type === "yt_summarize") {
-      prompt = lang === "tr" ? "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar." : "Summarize this YouTube video transcript and extract key timestamps.";
+      prompt = t.prompt_yt_summarize;
     } else if (type === "yt_quiz") {
-      prompt = lang === "tr" ? "Bu YouTube videosunun içeriğini/transkriptini incele. Konuyu pekiştirmek için video içeriğinden 5 soruluk çoktan seçmeli (A, B, C, D seçenekli) soru testi oluştur ve en alt kısımda cevap anahtarı ile açıklamalarını ver." : "Create a 5-question multiple choice quiz with answer key based on this video.";
+      prompt = t.prompt_yt_quiz;
     } else if (type === "summarize") {
-      prompt = lang === "tr" ? "Bu sayfayı 3 ana maddede özetle." : "Summarize this page in 3 key bullet points.";
+      prompt = t.prompt_summarize;
     } else if (type === "key_takeaways") {
-      prompt = lang === "tr" ? "Bu sayfadaki en önemli çıkarımları ve eylem maddelerini yaz." : "Extract key takeaways and action items from this page.";
+      prompt = t.prompt_takeaways;
     } else if (type === "ask") {
-      prompt = lang === "tr" ? "Bu sayfa ne anlatıyor ve ne amaçla yazılmıştır?" : "What is this page about and what is its goal?";
+      prompt = t.prompt_ask;
     } else if (type === "extract") {
-      prompt = lang === "tr" ? "Bu sayfadaki önemli veri veya listeleri çıkar." : "Extract important structured data or lists from this page.";
+      prompt = t.prompt_extract;
     }
     handleSendMessage(prompt);
   };
@@ -557,13 +553,13 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
               cursor: "pointer",
               transition: "all 0.2s ease",
             }}
-            title={lang === "tr" ? "Yeni Sohbet Başlat" : "Start New Chat"}
+            title={t.new_chat_tooltip}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            <span>{lang === "tr" ? "Yeni Sohbet" : "New Chat"}</span>
+            <span>{t.new_chat_label}</span>
           </button>
           <span className="sidepanel-header-badge">AI Agent</span>
         </div>
@@ -572,7 +568,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
       {/* Active Tab Status Bar */}
       <div className="sidepanel-tab-status">
         <div className="sidepanel-tab-info">
-          <span className="sidepanel-tab-title">{pageContext?.title || (lang === "tr" ? "Sayfa Yükleniyor..." : "Loading page...")}</span>
+          <span className="sidepanel-tab-title">{pageContext?.title || t.page_loading}</span>
           <span className="sidepanel-tab-url">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
@@ -584,7 +580,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
         <button
           className="sidepanel-refresh-btn"
           onClick={refreshPageContext}
-          title={lang === "tr" ? "Sayfayı Yeniden Tara" : "Rescan Page"}
+          title={t.rescan_page}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="23 4 23 10 17 10"></polyline>
@@ -610,7 +606,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
-              <span>{lang === "tr" ? "Videoyu Özetle" : "Summarize Video"}</span>
+              <span>{t.summarize_video}</span>
             </button>
             <button
               className="sidepanel-chip"
@@ -625,7 +621,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
                 <polyline points="9 11 12 14 22 4"></polyline>
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
               </svg>
-              <span>{lang === "tr" ? "5 Soruluk Test" : "5-Q Video Quiz"}</span>
+              <span>{t.video_quiz}</span>
             </button>
           </>
         )}
@@ -645,7 +641,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
               <path d="M12 20h9"></path>
               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
             </svg>
-            <span>{lang === "tr" ? "Formu Doldur (memory.md)" : "Autofill Form"}</span>
+            <span>{t.autofill_form}</span>
           </button>
         )}
 
@@ -656,7 +652,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             <line x1="16" y1="13" x2="8" y2="13"></line>
             <line x1="16" y1="17" x2="8" y2="17"></line>
           </svg>
-          <span>{lang === "tr" ? "Özetle" : "Summarize"}</span>
+          <span>{t.chip_summarize}</span>
         </button>
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("key_takeaways")}>
@@ -665,7 +661,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             <path d="M12 16v-4"></path>
             <path d="M12 8h.01"></path>
           </svg>
-          <span>{lang === "tr" ? "Ana Fikirler" : "Key Takeaways"}</span>
+          <span>{t.chip_takeaways}</span>
         </button>
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("extract")}>
@@ -674,7 +670,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
           </svg>
-          <span>{lang === "tr" ? "Veri Çıkar" : "Extract Data"}</span>
+          <span>{t.chip_extract}</span>
         </button>
 
         <button className="sidepanel-chip" onClick={() => handleChipClick("ask")}>
@@ -683,7 +679,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
           </svg>
-          <span>{lang === "tr" ? "Soru Sor" : "Ask"}</span>
+          <span>{t.chip_ask}</span>
         </button>
       </div>
 
@@ -701,27 +697,25 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
               </div>
             </div>
             <div className="sidepanel-empty-title">
-              <span>{lang === "tr" ? "Life OS Agent Hazır" : "Life OS Agent Ready"}</span>
+              <span>{t.agent_ready}</span>
             </div>
             <p className="sidepanel-empty-desc">
-              {lang === "tr"
-                ? "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz."
-                : "Analyze the active web page, ask questions, or use quick action triggers."}
+              {t.agent_analyze_desc}
             </p>
 
             <div className="sidepanel-starter-grid">
               <button className="starter-card" onClick={() => handleChipClick("summarize")}>
                 <div className="starter-icon purple">✨</div>
                 <div className="starter-text">
-                  <strong>{lang === "tr" ? "Sayfayı Özetle" : "Summarize Page"}</strong>
-                  <span>{lang === "tr" ? "3 ana maddede özetle" : "Get 3 key bullet points"}</span>
+                  <strong>{t.starter_summarize}</strong>
+                  <span>{t.starter_summarize_desc}</span>
                 </div>
               </button>
               <button className="starter-card" onClick={() => handleChipClick("key_takeaways")}>
                 <div className="starter-icon green">💡</div>
                 <div className="starter-text">
-                  <strong>{lang === "tr" ? "Ana Fikirler" : "Key Takeaways"}</strong>
-                  <span>{lang === "tr" ? "Kilit çıkarımlar & aksiyonlar" : "Key insights & action items"}</span>
+                  <strong>{t.starter_takeaways}</strong>
+                  <span>{t.starter_takeaways_desc}</span>
                 </div>
               </button>
             </div>
@@ -758,7 +752,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
         <button
           className={`sidepanel-mic-btn ${isListening ? "listening" : ""}`}
           onClick={toggleVoiceInput}
-          title={isListening ? (lang === "tr" ? "Dinleniyor..." : "Listening...") : (lang === "tr" ? "Sesli Komut Ver" : "Voice Command")}
+          title={isListening ? t.listening_tooltip : t.voice_command_tooltip}
           disabled={isProcessing}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -779,12 +773,8 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           }}
           placeholder={
             isListening
-              ? lang === "tr"
-                ? "Konuşun, dinleniyor..."
-                : "Listening, speak now..."
-              : lang === "tr"
-                ? "Sayfa hakkında soru yazın veya sesli komut verin..."
-                : "Ask a question or use voice command..."
+              ? t.listening_placeholder
+              : t.question_placeholder
           }
           disabled={isProcessing}
         />

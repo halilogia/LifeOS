@@ -3,6 +3,7 @@ import { GameEntry, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
 import { arcadeService, GamePackage } from "@/services/arcadeService.js";
 import { translations } from "@/utils/i18n.js";
+import { logger } from "@/utils/logger.js";
 
 interface ArcadeGameModalProps {
   game: GameEntry;
@@ -166,7 +167,7 @@ export function ArcadeGameModal({
       setDevCmdCopied(true);
       window.setTimeout(() => setDevCmdCopied(false), 2000);
     } catch (e) {
-      console.warn("Clipboard write failed:", e);
+      logger.warn("Clipboard write failed:", e);
     }
   };
 

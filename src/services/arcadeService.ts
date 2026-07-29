@@ -144,7 +144,7 @@ const findCoverImage = async (rootDir: unknown): Promise<string | undefined> => 
       reader.readAsDataURL(file);
     });
   } catch (e) {
-    console.warn("Cover image read failed:", e);
+    logger.warn("Cover image read failed:", e);
     return undefined;
   }
 };
@@ -326,7 +326,7 @@ export function createArcadeService(repo: IArcadeRepository) {
       const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
       const candidate = game.entryHTMLPath ?? "dist/index.html";
       if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
-        console.warn("Disallowed entryHTMLPath:", candidate);
+        logger.warn("Disallowed entryHTMLPath:", candidate);
         return null;
       }
 
@@ -358,7 +358,7 @@ export function createArcadeService(repo: IArcadeRepository) {
           const file = await (fHandle as FileHandle).getFile();
           files[path] = await file.arrayBuffer();
         } catch (e) {
-          console.warn("Failed reading asset:", path, e);
+          logger.warn("Failed reading asset:", path, e);
         }
       }
 
@@ -374,7 +374,7 @@ export function createArcadeService(repo: IArcadeRepository) {
       const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
       const candidate = game.entryHTMLPath ?? "dist/index.html";
       if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
-        console.warn("Refusing to resolve disallowed entryHTMLPath:", candidate);
+        logger.warn("Refusing to resolve disallowed entryHTMLPath:", candidate);
         return null;
       }
 
@@ -541,5 +541,6 @@ async function hasDirectoryNamed(root: unknown, name: string): Promise<boolean> 
  * Singleton instance with the default storage-backed repository.
  */
 import { ChromeStorageArcadeRepository } from "@/infrastructure/persistence/ChromeStorageArcadeRepository.js";
+import { logger } from "@/utils/logger.js";
 const _defaultRepo = new ChromeStorageArcadeRepository();
 export const arcadeService = createArcadeService(_defaultRepo);

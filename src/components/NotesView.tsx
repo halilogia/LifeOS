@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { Note, CustomQuote, Language } from "@/types/types.js";
-import { translations } from "@/utils/i18n.js";
+import { getTranslation } from "@/utils/i18n.js";
 import { renderMarkdown } from "@/utils/markdownRenderer.js";
 
 // Extracted Sub-components
@@ -24,7 +24,7 @@ interface NotesViewProps {
 }
 
 export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
-  const t = translations[lang];
+  const t = getTranslation(lang);
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [quotes, setQuotes] = useState<CustomQuote[]>([]);
@@ -191,10 +191,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
 
   const handleDeleteNote = (e: MouseEvent, id: string) => {
     e.stopPropagation();
-    const confirmMsg =
-      lang === "tr"
-        ? "Bu notu silmek istediğinize emin misiniz?"
-        : "Are you sure you want to delete this note?";
+    const confirmMsg = t.delete_confirm_note;
     onShowConfirm(confirmMsg, async () => {
       const currentNotes: Note[] = await new Promise((r) =>
         chrome.storage.sync.get(["notes"], (res) =>
@@ -234,10 +231,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   };
 
   const handleDeleteQuote = (index: number) => {
-    const confirmMsg =
-      lang === "tr"
-        ? "Bu sözü silmek istediğinize emin misiniz?"
-        : "Are you sure you want to delete this quote?";
+    const confirmMsg = t.delete_confirm_quote;
     onShowConfirm(confirmMsg, async () => {
       const currentQuotes: CustomQuote[] = await new Promise((r) =>
         chrome.storage.sync.get(["customQuotes"], (res) =>

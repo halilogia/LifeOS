@@ -122,7 +122,7 @@ export function App() {
   } = useSync({
     showAlert,
     errorLabel: t.google_sync_error,
-    detailLabel: lang === "tr" ? "Detay" : "Detail",
+    detailLabel: t.sync_detail_label,
     successBackupLabel: t.google_sync_success_backup,
     successRestoreLabel: t.google_sync_success_restore,
     noBackupLabel: t.google_sync_no_backup,
@@ -204,10 +204,7 @@ export function App() {
   };
 
   const handleClearAllDataConfirm = () => {
-    const confirmMsg =
-      lang === "tr"
-        ? "Tüm verileriniz kalıcı olarak silinecektir. Emin misiniz?"
-        : "All your data will be permanently deleted. Are you sure?";
+    const confirmMsg = t.confirm_msg_clear_all_data;
     showConfirm(confirmMsg, async () => {
       await handleClearAllData();
       window.location.reload();
@@ -215,17 +212,10 @@ export function App() {
   };
 
   const handleResetKpssDataConfirm = () => {
-    const confirmMsg =
-      lang === "tr"
-        ? "Tüm KPSS çalışma verileriniz, test sonuçlarınız ve istatistikleriniz sıfırlanacaktır. Emin misiniz?"
-        : "All your KPSS study progress, test results, and statistics will be reset. Are you sure?";
+    const confirmMsg = t.confirm_msg_reset_kpss_data;
     showConfirm(confirmMsg, async () => {
       await kpssService.resetAllKpssData();
-      showAlert(
-        lang === "tr"
-          ? "KPSS verileri başarıyla sıfırlandı!"
-          : "KPSS data has been successfully reset!",
-      );
+      showAlert(t.alert_kpss_reset_success);
     });
   };
 

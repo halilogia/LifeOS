@@ -10,6 +10,7 @@ import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import { toggleTodo } from "@/domain/entities/Todo.js";
 import { isRepeating } from "@/domain/value-objects/RepeatType.js";
+import { logger } from "@/utils/logger.js";
 
 export interface ToggleTodoRequest {
   readonly index: number;
@@ -55,7 +56,7 @@ export class ToggleTodoUseCase {
           completed: updatedTodo.completed ? new Date().toISOString() : null,
         });
       } catch (err) {
-        console.error("Failed to update Google Task:", err);
+        logger.error("Failed to update Google Task:", err);
       }
     }
 

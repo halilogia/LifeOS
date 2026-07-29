@@ -6,6 +6,7 @@
 
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { kpssData } from "@/services/kpssService.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 export interface KpssChartParams {
   lang: Language;
@@ -110,6 +111,8 @@ export function drawKpssStatsChart(
     kpssProgress,
     kpssTargetDate,
   } = params;
+
+  const t = getTranslation(lang);
 
   const showQuestions = metricMode === "all" || metricMode === "questions";
   const showVideos = metricMode === "all" || metricMode === "videos";
@@ -230,7 +233,7 @@ export function drawKpssStatsChart(
       ctx.font = "bold 9px Inter";
       ctx.textAlign = "left";
       ctx.fillText(
-        `${lang === "tr" ? "Hedef Soru" : "Target Q"}: ${dailyQuestionsTarget}`,
+        `${t.kpss_chart_target_q}: ${dailyQuestionsTarget}`,
         padding + 4,
         yTargetQ - 4
       );
@@ -249,7 +252,7 @@ export function drawKpssStatsChart(
       ctx.font = "bold 9px Inter";
       ctx.textAlign = "right";
       ctx.fillText(
-        `${lang === "tr" ? "Hedef Video" : "Target V"}: ${dailyVideosTarget}`,
+        `${t.kpss_chart_target_v}: ${dailyVideosTarget}`,
         width - padding - 4,
         yTargetV - 4
       );

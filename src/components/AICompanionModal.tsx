@@ -8,6 +8,7 @@ import {
 import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/ChromeStorageNoteRepository.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { Note } from "@/domain/repositories/INoteRepository.js";
+import { logger } from "@/utils/logger.js";
 
 interface AICompanionModalProps {
   lang: Language;
@@ -130,7 +131,7 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
 
       setStatusMsg("");
     } catch (err: any) {
-      console.error(err);
+      logger.error(err);
       setStatusMsg(err?.message || "Video analizi sırasında bir hata oluştu.");
     } finally {
       setLoading(false);
@@ -151,7 +152,7 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
       await noteRepo.saveAll([newNote, ...existing]);
       setSavedSuccessMsg("✓ Özet başarıyla Günlüğüm & Notlar alanına eklendi!");
     } catch (err) {
-      console.error("Save to notes failed:", err);
+      logger.error("Save to notes failed:", err);
     }
   };
 
@@ -171,7 +172,7 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
       await todoRepo.saveAll([newTask, ...existing]);
       setSavedSuccessMsg("✓ Görev odağım listesine eklendi!");
     } catch (err) {
-      console.error("Save to tasks failed:", err);
+      logger.error("Save to tasks failed:", err);
     }
   };
 

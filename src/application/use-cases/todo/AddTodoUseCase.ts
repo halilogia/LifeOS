@@ -11,6 +11,7 @@ import type { Todo } from "@/domain/entities/Todo.js";
 import { createTodo, assignTodoId } from "@/domain/entities/Todo.js";
 import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
 import { isRepeating } from "@/domain/value-objects/RepeatType.js";
+import { logger } from "@/utils/logger.js";
 
 export interface AddTodoRequest {
   readonly text: string;
@@ -67,7 +68,7 @@ export class AddTodoUseCase {
         todo = assignTodoId(todo, remote.id);
         synced = true;
       } catch (err) {
-        console.error("Failed to add task to Google Tasks:", err);
+        logger.error("Failed to add task to Google Tasks:", err);
       }
     }
 

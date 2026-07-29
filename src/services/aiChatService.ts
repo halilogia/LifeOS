@@ -6,6 +6,7 @@
  */
 
 import { parseAIResponse } from "@/utils/aiCommandParser.js";
+import { getTranslation } from "@/utils/i18n.js";
 import {
   executeWebSearch,
   detectNeedsWebSearch,
@@ -67,7 +68,7 @@ export function createAiChatService(deps: AiChatDependencies) {
       try {
         webSearchData = await executeWebSearch(userPrompt);
       } catch (e) {
-        console.warn("webSearchAgent execution error:", e);
+        logger.warn("webSearchAgent execution error:", e);
       }
     }
 
@@ -301,14 +302,15 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     summary?: string,
   ): Promise<void> {
     const currentNotes = await noteRepo.getAll();
+    const t = getTranslation(lang as any);
     const formattedDate = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
     const defaultTitle =
       title ||
       (type === "diary"
-        ? lang === "tr" ? `Günlük - ${formattedDate}` : `Diary - ${formattedDate}`
+        ? t.note_diary_title.replace("{date}", formattedDate)
         : type === "cornell"
-          ? lang === "tr" ? `Ders Notu - ${formattedDate}` : `Study Note - ${formattedDate}`
-          : lang === "tr" ? `Not - ${formattedDate}` : `Note - ${formattedDate}`);
+          ? t.note_cornell_title.replace("{date}", formattedDate)
+          : t.note_title.replace("{date}", formattedDate));
 
     currentNotes.push({
       id: crypto.randomUUID(),
@@ -364,6 +366,7 @@ import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/Ch
 import { ChromeStorageMemoryRepository } from "@/infrastructure/persistence/ChromeStorageMemoryRepository.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/ChromeStorageNoteRepository.js";
+import { logger } from "@/utils/logger.js";
 
 const _defaultRepos: AiChatDependencies = {
   aiConfigRepo: new ChromeStorageAiConfigRepository(),

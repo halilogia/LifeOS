@@ -81,7 +81,7 @@ export async function searchBistStocks(query: string): Promise<BISTSearchResult[
       };
     });
   } catch (err) {
-    console.error("searchBistStocks error:", err);
+    logger.error("searchBistStocks error:", err);
     return [];
   }
 }
@@ -186,6 +186,7 @@ export type BistService = ReturnType<typeof createBistService>;
 /* ------------------------------------------------------------------ */
 
 import { ChromeStorageBistCacheRepository } from "@/infrastructure/persistence/ChromeStorageBistCacheRepository.js";
+import { logger } from "@/utils/logger.js";
 
 const _defaultCacheRepo = new ChromeStorageBistCacheRepository();
 const _defaultService = createBistService(_defaultCacheRepo);
@@ -258,7 +259,7 @@ export async function fetchStockHistory(
     }
     return history;
   } catch (e) {
-    console.error("fetchStockHistory error:", e);
+    logger.error("fetchStockHistory error:", e);
     return [];
   }
 }

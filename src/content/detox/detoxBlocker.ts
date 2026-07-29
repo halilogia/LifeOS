@@ -4,6 +4,9 @@
  * Clean Architecture - Content Script Domain Module.
  */
 
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
+
 export function initDetoxBlocker(): void {
   const currentHost = window.location.hostname;
 
@@ -250,10 +253,11 @@ function showTopWarningBanner(minutesLeft: number, lang: string, domain: string)
 
   if (banner) {
     const siteLabel = domain.replace(".com", "").toUpperCase();
+    const t = getTranslation(lang as Language);
     banner.textContent =
-      lang === "tr"
-        ? `⚠️ Sosyal Medya Limiti: ${siteLabel} için kalan süreniz ${minutesLeft} dakika.`
-        : `⚠️ Social Media Limit: You have ${minutesLeft} minutes left for ${siteLabel}.`;
+      t.social_media_limit_warning
+        .replace("{site}", siteLabel)
+        .replace("{minutes}", String(minutesLeft));
   }
 }
 
@@ -353,43 +357,26 @@ function setupBlockPage(
   const randomQuote =
     quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
-  let titleText = lang === "tr" ? "Odaklanma Zamanı!" : "Time to Focus!";
-  let descText =
-    lang === "tr"
-      ? "Bu web sitesi, sosyal medya detoksunuz kapsamında engellenmiştir."
-      : "This website is currently blocked as part of your social media detox.";
+  const t = getTranslation(lang as Language);
+  let titleText = t.focus_time;
+  let descText = t.detox_blocked_default_desc;
 
   if (isPomo) {
-    titleText = lang === "tr" ? "Odaklanma Zamanı!" : "Focus Session!";
-    descText =
-      lang === "tr"
-        ? "Bu web sitesi, aktif Pomodoro odaklanma seansınız boyunca geçici olarak engellenmiştir."
-        : "This website is temporarily blocked during your active Pomodoro focus session.";
+    titleText = t.pomo_focus_session;
+    descText = t.pomo_blocked_desc;
   } else if (isLimitBlock) {
-    titleText =
-      lang === "tr" ? "Günlük Limite Ulaştınız!" : "Daily Limit Reached!";
-    descText =
-      lang === "tr"
-        ? `Bu web sitesi için günlük ${activeLimitMinutes} dakikalık kullanım limitinizi doldurdunuz. Kendinize zaman ayırın!`
-        : `You have reached your daily ${activeLimitMinutes}-minute usage limit for this website. Take a break!`;
+    titleText = t.daily_limit_reached;
+    descText = t.daily_limit_desc
+      .replace("{minutes}", String(activeLimitMinutes));
   }
 
-  const buttonText =
-    lang === "tr" ? "Kontrol Paneline Git" : "Go to Dashboard";
+  const buttonText = t.go_to_dashboard;
   const timeRemainingLabel = isPomo
-    ? lang === "tr"
-      ? "Kalan Odak Süresi"
-      : "Remaining Focus Time"
-    : lang === "tr"
-      ? "Detoks Süresi"
-      : "Detox Duration";
+    ? t.remaining_focus_time
+    : t.detox_duration;
   const permanentLabel = isLimitBlock
-    ? lang === "tr"
-      ? "Günlük Limit Doldu"
-      : "Daily Limit Expired"
-    : lang === "tr"
-      ? "Süresiz Blok"
-      : "Permanent Block";
+    ? t.daily_limit_expired
+    : t.permanent_block;
 
   const blockHtml = `
     <div id="detox-block-card" style="
@@ -454,12 +441,12 @@ function setupBlockPage(
       ">
         <div style="font-weight: 700; font-size: 0.82rem; color: #c084fc; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
           <span>💡</span>
-          <span>${lang === "tr" ? "Bu Sürede Harcayacağın Zamanla:" : "What You Could Achieve Right Now:"}</span>
+          <span>${t.detox_you_could_achieve}</span>
         </div>
         <div style="font-size: 0.78rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px; line-height: 1.4;">
-          <span>• ✍️ ${lang === "tr" ? "20+ KPSS sorusu çözebilir" : "Solve 20+ Practice Questions"}</span>
-          <span>• 📚 ${lang === "tr" ? "15 sayfa kitap okuyabilir" : "Read 15 Book Pages"}</span>
-          <span>• 🎯 ${lang === "tr" ? "1 Tam Odaklanmış Pomodoro tamamlayabilirdin!" : "Complete 1 Focused Pomodoro Session!"}</span>
+          <span>• ✍️ ${t.detox_kpss_solve}</span>
+          <span>• 📚 ${t.detox_read_pages}</span>
+          <span>• 🎯 ${t.detox_pomodoro_complete}</span>
         </div>
       </div>
 

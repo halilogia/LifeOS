@@ -3,6 +3,7 @@ import { Todo, Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
 import { GoogleCalendarApi } from "@/infrastructure/api/GoogleCalendarApi.js";
+import { logger } from "@/utils/logger.js";
 
 const _authApi = new GoogleAuthApi();
 const _calendarApi = new GoogleCalendarApi();
@@ -118,7 +119,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
             setCalendarEvents(items);
           }
         } catch (e) {
-          console.error("Google Calendar fetching error:", e);
+          logger.error("Google Calendar fetching error:", e);
         } finally {
           // calendar sync finished
         }

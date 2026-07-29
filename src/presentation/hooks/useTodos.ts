@@ -22,6 +22,7 @@ import { DeleteTodoUseCase } from "@/application/use-cases/todo/DeleteTodoUseCas
 import { MoveTaskUseCase } from "@/application/use-cases/todo/MoveTaskUseCase.js";
 import { UpdatePrioritiesUseCase } from "@/application/use-cases/todo/UpdatePrioritiesUseCase.js";
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
+import { logger } from "@/utils/logger.js";
 
 // ---- helpers scoped to module (not duplicated per hook instance) ----
 
@@ -166,12 +167,9 @@ export function useTodos(
             showAlert(t.alert_restore_invalid);
           }
         } catch (err) {
-          console.error(err);
+          logger.error(err);
           const errMsg = err instanceof Error ? err.message : String(err);
-          const detailLabel =
-            (t as Record<string, string> | undefined)?.lang === "tr"
-              ? "Detay"
-              : "Detail";
+          const detailLabel = t?.sync_detail_label || "Detail";
           if (showAlert) {
             showAlert(
               `${t?.alert_restore_error || "Restore failed"}\n\n[${detailLabel}]: ${errMsg}`,

@@ -46,11 +46,11 @@ export function createGamesService(cacheRepo: IGamesCacheRepository) {
         await cacheRepo.setLiveCache(list);
         return list;
       } catch (error) {
-        console.error("gamesService: Failed to fetch live giveaways:", error);
+        logger.error("gamesService: Failed to fetch live giveaways:", error);
         // Fallback to expired cache if available
         const cached = await cacheRepo.getLiveCache();
         if (cached && cached.data.length > 0) {
-          console.log("gamesService: Using expired cache as fallback");
+          logger.log("gamesService: Using expired cache as fallback");
           return cached.data;
         }
         throw error;
@@ -95,13 +95,13 @@ export function createGamesService(cacheRepo: IGamesCacheRepository) {
         }
         return [];
       } catch (error) {
-        console.error(
+        logger.error(
           "gamesService: Failed to fetch historical giveaways:",
           error,
         );
         const cached = await cacheRepo.getHistoryCache();
         if (cached && cached.data.length > 0) {
-          console.log("gamesService: Using expired history cache as fallback");
+          logger.log("gamesService: Using expired history cache as fallback");
           return cached.data;
         }
         throw error;
@@ -131,5 +131,6 @@ export type GamesService = ReturnType<typeof createGamesService>;
  * Components that need testability can import `createGamesService` instead.
  */
 import { ChromeStorageGamesCacheRepository } from "@/infrastructure/persistence/ChromeStorageGamesCacheRepository.js";
+import { logger } from "@/utils/logger.js";
 const _defaultCacheRepo = new ChromeStorageGamesCacheRepository();
 export const gamesService = createGamesService(_defaultCacheRepo);

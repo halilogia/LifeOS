@@ -41,6 +41,7 @@ import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssQuizModal } from "@/components/kpss/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/KpssNotesDashboard.js";
+import { logger } from "@/utils/logger.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -136,7 +137,7 @@ export function KpssView({
       setSrsIndex(0);
       setSrsLoading(false);
     } catch (e) {
-      console.error("Failed to load KPSS SRS Queue:", e);
+      logger.error("Failed to load KPSS SRS Queue:", e);
       setSrsLoading(false);
     }
   };
@@ -279,7 +280,7 @@ export function KpssView({
               }
             })
             .catch((err) => {
-              console.error("Background questions pre-fetch failed:", err);
+              logger.error("Background questions pre-fetch failed:", err);
             })
             .finally(() => {
               setIsBackgroundLoading(false);
@@ -321,7 +322,7 @@ export function KpssView({
               }
             })
             .catch((err) => {
-              console.error("Background questions pre-fetch failed:", err);
+              logger.error("Background questions pre-fetch failed:", err);
             })
             .finally(() => {
               setIsBackgroundLoading(false);
@@ -331,7 +332,7 @@ export function KpssView({
         }
       }
     } catch (err: any) {
-      console.error("AI quiz generation error:", err);
+      logger.error("AI quiz generation error:", err);
       setQuizError(t.kpss_quiz_error);
       setQuizLoading(false);
       setIsBackgroundLoading(false);
@@ -354,7 +355,7 @@ export function KpssView({
       setPastQuizzes(updatedPastQuizzes);
       await loadKpssData();
     } catch (err) {
-      console.error(
+      logger.error(
         "Failed to update status and save stats on quiz completion:",
         err,
       );

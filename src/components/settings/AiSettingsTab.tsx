@@ -1,4 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
+import { logger } from "@/utils/logger.js";
 
 interface AiSettingsTabProps {
   t: any;
@@ -87,7 +88,7 @@ export function AiSettingsTab({
         throw new Error("Invalid format");
       }
     } catch (err: any) {
-      console.error("Failed to fetch models:", err);
+      logger.error("Failed to fetch models:", err);
       setModelError(t.settings_ai_failed_models);
     } finally {
       setLoadingModels(false);

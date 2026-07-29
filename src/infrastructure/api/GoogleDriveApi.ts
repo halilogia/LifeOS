@@ -6,6 +6,7 @@
  */
 
 import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
+import { logger } from "@/utils/logger.js";
 
 export class GoogleDriveApi implements IDriveBackupPort {
   async backupToDrive(
@@ -70,7 +71,7 @@ export class GoogleDriveApi implements IDriveBackupPort {
 
       return true;
     } catch (error) {
-      console.error("Backup to Google Drive failed:", error);
+      logger.error("Backup to Google Drive failed:", error);
       throw error;
     }
   }
@@ -108,7 +109,7 @@ export class GoogleDriveApi implements IDriveBackupPort {
       const backupData = await downloadRes.json();
       return backupData;
     } catch (error) {
-      console.error("Restore from Google Drive failed:", error);
+      logger.error("Restore from Google Drive failed:", error);
       throw error;
     }
   }

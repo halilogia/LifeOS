@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * webSearchAgent.ts
  * Google AI Mode & Perplexity Tarzı Özerk Web Araştırma Agent Servisi.
@@ -96,7 +98,7 @@ export async function executeWebSearch(
       }
     }
   } catch (e) {
-    console.warn("Primary DuckDuckGo HTML search error:", e);
+    logger.warn("Primary DuckDuckGo HTML search error:", e);
   }
 
   // 2. Fallback: DuckDuckGo Instant API
@@ -133,7 +135,7 @@ export async function executeWebSearch(
       }
     }
   } catch (e) {
-    console.warn("Fallback DuckDuckGo API search error:", e);
+    logger.warn("Fallback DuckDuckGo API search error:", e);
   }
 
   return { query: cleanQuery, sources: [] };
@@ -220,7 +222,7 @@ function parseDuckDuckGoHTML(html: string): WebSearchSource[] {
       }
     });
   } catch (e) {
-    console.error("parseDuckDuckGoHTML error:", e);
+    logger.error("parseDuckDuckGoHTML error:", e);
   }
   return sources;
 }

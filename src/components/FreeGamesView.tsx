@@ -21,6 +21,7 @@ import { GameCard } from "@/components/GameCard.js";
 // Extracted Sub-components
 import { FreeGamesFilterBar } from "@/components/freegames/FreeGamesFilterBar.js";
 import { WasItFreeSearchTab } from "@/components/freegames/WasItFreeSearchTab.js";
+import { logger } from "@/utils/logger.js";
 
 interface FreeGamesViewProps {
   lang: Language;
@@ -66,7 +67,7 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
       setAllGiveaways(list);
       setLoading(false);
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       setError(true);
       setLoading(false);
     }
@@ -108,7 +109,7 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
         setHistoryResults(matched);
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       setHistoryLoading(false);
       setHistoryEmpty(true);
     }

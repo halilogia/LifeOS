@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * ambientAudioService.ts
  * WebAudio API prosedürel ses üreticisi ve sentezleyici servisi.
@@ -103,7 +105,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       motorOsc.start();
       whiteNoiseSourceRef = noiseSource;
     } catch (e) {
-      console.error("Failed to play hairdryer:", e);
+      logger.error("Failed to play hairdryer:", e);
     }
   };
 
@@ -191,7 +193,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       noiseSource.start();
       whiteNoiseSourceRef = noiseSource;
     } catch (e) {
-      console.error("Failed to play rain:", e);
+      logger.error("Failed to play rain:", e);
     }
   };
 
@@ -250,7 +252,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       noiseSource.start();
       whiteNoiseSourceRef = noiseSource;
     } catch (e) {
-      console.error("Failed to play wind:", e);
+      logger.error("Failed to play wind:", e);
     }
   };
 
@@ -336,7 +338,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
       masterGain.connect(ctx.destination);
     } catch (e) {
-      console.error("Failed to play lofi:", e);
+      logger.error("Failed to play lofi:", e);
     }
   };
 

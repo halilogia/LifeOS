@@ -11,6 +11,7 @@ import { getAllWords } from "@/services/vocabularyService.js";
 import { Word } from "@/types/word.js";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { logger } from "@/utils/logger.js";
 
 interface SrsViewProps {
   lang: Language;
@@ -77,7 +78,7 @@ export function SrsView({ lang }: SrsViewProps) {
       setCurrentWordIndex(0);
       setLoading(false);
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       setError(true);
       setLoading(false);
     }
