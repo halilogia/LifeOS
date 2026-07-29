@@ -83,8 +83,72 @@ const ensurePermission = async (handle: any): Promise<boolean> => {
 /* Generic helpers                                                     */
 /* ------------------------------------------------------------------ */
 
-const formatFolderName = (name: string): string =>
-  name.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()).trim();
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  const chunkSize = 0x8000;
+  for (let i = 0; i < len; i += chunkSize) {
+    binary += String.fromCharCode.apply(
+      null,
+      bytes.subarray(i, Math.min(i + chunkSize, len)) as unknown as number[],
+    );
+  }
+  return btoa(binary);
+};
+
+const getMimeType = (filename: string, fallbackType?: string): string => {
+  const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+  switch (ext) {
+    case "js":
+    case "mjs":
+      return "text/javascript;charset=utf-8";
+    case "css":
+      return "text/css;charset=utf-8";
+    case "html":
+    case "htm":
+      return "text/html;charset=utf-8";
+    case "json":
+      return "application/json;charset=utf-8";
+    case "png":
+      return "image/png";
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "gif":
+      return "image/gif";
+    case "webp":
+      return "image/webp";
+    case "svg":
+      return "image/svg+xml;charset=utf-8";
+    case "woff":
+      return "font/woff";
+    case "woff2":
+      return "font/woff2";
+    case "ttf":
+      return "font/ttf";
+    case "otf":
+      return "font/otf";
+    case "mp3":
+      return "audio/mpeg";
+    case "wav":
+      return "audio/wav";
+    case "ogg":
+      return "audio/ogg";
+    case "mp4":
+      return "video/mp4";
+    default:
+      return fallbackType || "application/octet-stream";
+  }
+};
+
+const formatFolderName = (name: string): string => {
+  const cleaned = name.replace(/[-_]+/g, " ").trim();
+  return cleaned
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toLocaleUpperCase("tr-TR") + word.slice(1))
+    .join(" ");
+};
 
 const detectCategory = (name: string): GameEntry["category"] => {
   const lower = name.toLowerCase();
@@ -213,9 +277,10 @@ const writeJSON = async (key: string, value: unknown): Promise<void> => {
 /* ------------------------------------------------------------------ */
 
 const joinPath = (base: string, rel: string): string => {
-  if (rel.startsWith("/")) {return rel.slice(1);}
+  let cleanRel = rel;
+  if (cleanRel.startsWith("/")) { cleanRel = cleanRel.slice(1); }
   const stack = base.split("/").filter(Boolean);
-  for (const part of rel.split("/")) {
+  for (const part of cleanRel.split("/")) {
     if (part === "" || part === ".") {continue;}
     if (part === "..") {stack.pop();}
     else {stack.push(part);}
@@ -287,6 +352,11 @@ const rewriteAttributes = async (
 /* Public API                                                          */
 /* ------------------------------------------------------------------ */
 
+export interface GamePackage {
+  html: string;
+  files: Record<string, ArrayBuffer>;
+}
+
 export type ImportMode = "dist" | "dev" | "missing";
 
 export interface ImportResult {
@@ -330,23 +400,28 @@ export const arcadeService = {
     const handleId = `h_${crypto.randomUUID()}`;
     await putHandle(handleId, dir);
 
-    const hasDist = await hasDirectoryNamed(dir, "dist");
     const entryHTMLPath = await findEntryHTMLPath(dir);
     const coverImage = await findCoverImage(dir);
+    const isPlayable = Boolean(entryHTMLPath);
+
+    let displayTitle = formatFolderName(folderName);
+    if (folderName.toLowerCase() === "dist" || folderName.toLowerCase() === "build") {
+      displayTitle = "Oyun Projesi (" + folderName + ")";
+    }
 
     const game: GameEntry = {
       id: `import_${handleId.slice(2, 14)}`,
-      title: formatFolderName(folderName),
-      description: hasDist
-        ? `${folderName} oyun projesi (dist build).`
-        : `${folderName} geliştirme aşamasında. Oynamak için npm run dev çalıştırın.`,
+      title: displayTitle,
+      description: isPlayable
+        ? `${displayTitle} (çalıştırmaya hazır).`
+        : `${displayTitle} geliştirme aşamasında. Oynamak için npm run dev çalıştırın.`,
       category: detectCategory(folderName),
-      status: hasDist ? "playable" : "in_progress",
+      status: isPlayable ? "playable" : "in_progress",
       coverImage,
       folderPath: folderName,
       handleId,
       entryHTMLPath,
-      mode: hasDist ? "dist" : "dev",
+      mode: isPlayable ? "dist" : "dev",
       techStack: detectTechStack(folderName),
       devNotes: "",
       isFavorite: false,
@@ -354,9 +429,57 @@ export const arcadeService = {
     };
 
     const games = await this.loadGames();
-    const next = [game, ...games.filter((g) => g.handleId !== handleId)];
+    const next = [game, ...games.filter((g) => g.handleId !== handleId && g.folderPath !== folderName)];
     await writeJSON(STORAGE_KEY_GAMES, next);
-    return { game, mode: hasDist ? "dist" : "dev", missingDist: !hasDist };
+    return { game, mode: isPlayable ? "dist" : "dev", missingDist: !isPlayable };
+  },
+
+  async loadGamePackage(game: GameEntry): Promise<GamePackage | null> {
+    const handle = await getHandle(game.handleId);
+    if (!handle) {return null;}
+    const ok = await ensurePermission(handle);
+    if (!ok) {return null;}
+
+    const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
+    const candidate = game.entryHTMLPath ?? "dist/index.html";
+    if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
+      console.warn("Disallowed entryHTMLPath:", candidate);
+      return null;
+    }
+
+    const parts = candidate.split("/");
+    const fileName = parts.pop()!;
+    let folderDir = handle;
+    for (const part of parts) {
+      try {
+        folderDir = await folderDir.getDirectoryHandle(part);
+      } catch {
+        return null;
+      }
+    }
+
+    let htmlFile: File;
+    try {
+      const fileHandle = await folderDir.getFileHandle(fileName);
+      htmlFile = await fileHandle.getFile();
+    } catch {
+      return null;
+    }
+
+    const html = await htmlFile.text();
+    const files: Record<string, ArrayBuffer> = {};
+
+    for await (const { path, handle: fHandle } of walkDirectory(folderDir)) {
+      if (path === fileName) {continue;}
+      try {
+        const file = await fHandle.getFile();
+        files[path] = await file.arrayBuffer();
+      } catch (e) {
+        console.warn("Failed reading asset:", path, e);
+      }
+    }
+
+    return { html, files };
   },
 
   async resolveGameURL(game: GameEntry): Promise<string | null> {
@@ -425,8 +548,10 @@ export const arcadeService = {
       try {
         const fileHandle = await parent.getFileHandle(targetName);
         const file = await fileHandle.getFile();
-        const blob = new Blob([await file.arrayBuffer()], { type: file.type || "application/octet-stream" });
-        const url = URL.createObjectURL(blob);
+        const buffer = await file.arrayBuffer();
+        const mime = getMimeType(targetName, file.type);
+        const base64 = arrayBufferToBase64(buffer);
+        const url = `data:${mime};base64,${base64}`;
         cache.set(clean, url);
         return url;
       } catch {
@@ -444,8 +569,11 @@ export const arcadeService = {
     // SECURITY: strip inline event handlers like onclick="..." that could leak
     // a parent frame reference.
     rewritten = rewritten.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
-    const blob = new Blob([rewritten], { type: "text/html; charset=utf-8" });
-    return URL.createObjectURL(blob);
+    return rewritten;
+  },
+
+  async resolveGameHTML(game: GameEntry): Promise<string | null> {
+    return this.resolveGameURL(game);
   },
 
   async deleteGame(gameId: string): Promise<GameEntry[]> {
@@ -473,10 +601,10 @@ export const arcadeService = {
     return next;
   },
 
-  async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"]): Promise<GameEntry[]> {
+  async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"], title?: string): Promise<GameEntry[]> {
     const games = await this.loadGames();
     const next = games.map((g) =>
-      g.id === gameId ? { ...g, devNotes: notes, todoList: todoList ?? g.todoList } : g,
+      g.id === gameId ? { ...g, devNotes: notes, todoList: todoList ?? g.todoList, title: title?.trim() || g.title } : g,
     );
     await writeJSON(STORAGE_KEY_GAMES, next);
     return next;

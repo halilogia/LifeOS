@@ -1,272 +1,577 @@
 /* ── Life OS Arcade: Game Runner & Modal Player ────────────────────────────── */
 
-.arcade-modal-backdrop {
+.arcade-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(9, 13, 22, 0.85);
-  backdrop-filter: blur(12px);
-  z-index: 1000;
+  backdrop-filter: blur(16px);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-8);
+  animation: arcadeModalFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.arcade-modal-content {
-  background: #0f172a;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
+.arcade-modal-container {
+  background: var(--card-bg, #1e293b);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius-lg, 16px);
   width: 100%;
-  max-width: 780px;
+  max-width: 860px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.7),
+    0 0 40px var(--accent-glow, rgba(139, 92, 246, 0.15));
+  position: relative;
+  backdrop-filter: blur(20px);
 }
 
 .arcade-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-7) var(--space-9);
-  background: rgba(30, 41, 59, 0.6);
+  padding: var(--space-6) var(--space-8);
+  background: rgba(15, 23, 42, 0.65);
   border-bottom: 1px solid var(--card-border);
+  gap: var(--space-4);
 }
 
-.arcade-modal-title-box {
+.arcade-modal-title-section {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
-.arcade-modal-title-box h3 {
+.arcade-modal-title-section h2 {
   font-size: 18px;
+  font-weight: 700;
   color: var(--text-primary);
+  margin: 0;
 }
 
-.arcade-modal-cat {
-  font-size: 10px;
+.arcade-modal-badge {
+  font-size: 11px;
   font-weight: 700;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.2);
   color: var(--accent-color);
   padding: 3px var(--space-3);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.arcade-mode-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.arcade-mode-badge.dist {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.arcade-mode-badge.dev {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.arcade-modal-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: rotate(90deg);
 }
 
 .arcade-modal-tabs {
   display: flex;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-8);
+  background: rgba(15, 23, 42, 0.4);
+  border-bottom: 1px solid var(--card-border);
 }
 
-.modal-tab-btn {
+.arcade-tab-btn {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid var(--card-border);
+  background: transparent;
+  border: 1px solid transparent;
   color: var(--text-secondary);
   padding: var(--space-2) var(--space-6);
   border-radius: var(--radius-sm);
   font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.modal-tab-btn.active {
+.arcade-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.arcade-tab-btn.active {
   background: var(--accent-color);
   color: #fff;
   border-color: var(--accent-color);
-}
-
-.arcade-modal-close {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.arcade-modal-close:hover {
-  color: var(--text-primary);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .arcade-modal-body {
-  padding: var(--space-9);
+  padding: var(--space-8);
   overflow-y: auto;
-}
-
-.arcade-game-view-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.arcade-iframe-container {
-  width: 100%;
-  height: 480px;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--card-border);
+  gap: var(--space-6);
+}
+
+.arcade-play-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  width: 100%;
   border-radius: var(--radius-md);
   overflow: hidden;
-}
-
-.arcade-iframe-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3) var(--space-6);
-  background: #0f172a;
-  border-bottom: 1px solid var(--card-border);
-  font-size: 12px;
-  gap: var(--space-5);
-}
-
-.arcade-url-edit-box {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex: 1;
-}
-
-.arcade-url-icon {
-  font-size: 14px;
-}
-
-.arcade-url-input {
-  background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--card-border);
-  border-radius: var(--radius-sm);
-  color: var(--accent-color);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  padding: var(--space-1) var(--space-3);
-  outline: none;
-  min-width: 180px;
+  background: #090d16;
 }
 
-.arcade-url-input:focus {
-  border-color: var(--accent-color);
-}
-
-.arcade-save-url-btn {
-  background: rgba(139, 92, 246, 0.2);
-  border: 1px solid var(--accent-color);
-  color: #fff;
-  padding: 3px var(--space-3);
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.arcade-toast-banner {
-  background: rgba(16, 185, 129, 0.15);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
-  color: var(--success);
-  padding: var(--space-2) var(--space-6);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.arcade-iframe-helper-footer {
+.arcade-loading-state {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-6);
-  background: rgba(15, 23, 42, 0.9);
-  border-top: 1px solid var(--card-border);
-}
-
-.helper-info-text {
-  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  gap: var(--space-4);
   color: var(--text-secondary);
 }
 
-.helper-cmd-row {
+.arcade-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(139, 92, 246, 0.2);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: arcadeSpin 0.8s linear infinite;
+}
+
+.arcade-error-panel {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-5);
-  background: #090d16;
-  border: 1px solid var(--card-border);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-sm);
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-10);
+  gap: var(--space-4);
+  background: rgba(239, 68, 68, 0.05);
+  height: 100%;
+  min-height: 400px;
 }
 
-.helper-cmd-row code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--success);
-  word-break: break-all;
+.arcade-error-panel h3 {
+  font-size: 16px;
+  color: var(--danger);
+  font-weight: 700;
 }
 
-
-.arcade-bar-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.arcade-copy-cmd-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--card-border);
+.arcade-error-panel p {
+  font-size: 13px;
   color: var(--text-secondary);
-  padding: var(--space-1) var(--space-4);
-  border-radius: var(--radius-sm);
+  max-width: 480px;
+}
+
+.arcade-error-hint {
   font-size: 12px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  color: var(--text-muted);
 }
-
-.arcade-copy-cmd-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: var(--text-primary);
-}
-
-.arcade-open-tab-btn {
-  background: var(--accent-color);
-  color: #fff;
-  padding: var(--space-1) var(--space-5);
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s ease;
-}
-
-.arcade-open-tab-btn:hover {
-  background: var(--accent-hover);
-}
-
 
 .arcade-game-iframe {
   width: 100%;
   height: 100%;
+  min-height: 520px;
   border: none;
+  background: #000;
+  display: block;
 }
 
-.arcade-no-embed {
+.arcade-dev-mode-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-11) var(--space-8);
-  gap: var(--space-5);
   text-align: center;
-  color: var(--text-secondary);
+  padding: var(--space-10) var(--space-8);
+  gap: var(--space-5);
+  background: rgba(15, 23, 42, 0.5);
+  min-height: 440px;
 }
 
-.arcade-cmd-hint {
+.arcade-dev-mode-panel h3 {
+  font-size: 18px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.arcade-dev-mode-panel p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.arcade-cmd-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
   background: #090d16;
   border: 1px solid var(--card-border);
-  padding: var(--space-4) var(--space-7);
-  border-radius: var(--radius-sm);
-  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 560px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-.arcade-cmd-hint code {
-  color: var(--success);
+.arcade-cmd-box code {
   font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--success);
+  word-break: break-all;
+  text-align: left;
+}
+
+.arcade-copy-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.arcade-copy-btn:hover {
+  background: var(--accent-hover);
+}
+
+.arcade-copy-btn.copied {
+  background: var(--success);
+}
+
+.arcade-dev-mode-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 520px;
+  font-style: italic;
+}
+
+.arcade-dev-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: var(--space-2) 0;
+}
+
+.arcade-dev-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+}
+
+.arcade-dev-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.arcade-title-input {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 600;
+  padding: var(--space-3) var(--space-4);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.arcade-title-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.arcade-status-buttons {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.arcade-status-btn {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-status-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.arcade-status-btn.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.arcade-folder-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: #090d16;
+  border: 1px solid var(--card-border);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-color);
+  word-break: break-all;
+}
+
+.arcade-folder-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.arcade-notes-textarea {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 13px;
+  padding: var(--space-4);
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s ease;
+}
+
+.arcade-notes-textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.arcade-todo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arcade-todo-add-btn {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-todo-add-btn:hover {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.arcade-no-todo {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.arcade-todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+}
+
+.arcade-todo-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: rgba(9, 13, 22, 0.6);
+  border: 1px solid var(--card-border);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.arcade-todo-item.completed span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.arcade-todo-item span {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.arcade-todo-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.arcade-todo-delete-btn:hover {
+  color: var(--danger);
+}
+
+.arcade-dev-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.arcade-btn-primary {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+.arcade-btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.arcade-btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: var(--danger);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-btn-danger:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.arcade-toast {
+  position: absolute;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: arcadeToastSlide 0.2s ease;
+}
+
+.arcade-toast.info {
+  background: rgba(16, 185, 129, 0.95);
+  color: #fff;
+}
+
+.arcade-toast.error {
+  background: rgba(239, 68, 68, 0.95);
+  color: #fff;
+}
+
+@keyframes arcadeModalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes arcadeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes arcadeToastSlide {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
