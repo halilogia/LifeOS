@@ -339,7 +339,7 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
                     const expiryText =
                       game.end_date && game.end_date !== "N/A"
                         ? `${t.ends_in} ${game.end_date}`
-                        : t.free_games_permanent
+                        : t.free_games_permanent;
                     const displayPlatforms = getCleanerPlatforms(
                       game.platforms,
                       game.title,

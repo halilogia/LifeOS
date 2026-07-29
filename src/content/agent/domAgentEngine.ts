@@ -81,14 +81,14 @@ export function getPageContext(): PageContext {
       label = el.getAttribute("aria-label") || "";
     } else if (el.id) {
       const lblEl = document.querySelector(`label[for="${el.id}"]`);
-      if (lblEl) label = (lblEl as HTMLElement).innerText || "";
+      if (lblEl) {label = (lblEl as HTMLElement).innerText || "";}
     }
 
     if (!label) {
       const container = el.closest(".form-group, .field, label, div, p");
       if (container) {
         const heading = container.querySelector("label, span, p, h1, h2, h3, h4, h5, h6");
-        if (heading && heading !== el) label = (heading as HTMLElement).innerText || "";
+        if (heading && heading !== el) {label = (heading as HTMLElement).innerText || "";}
       }
     }
 
@@ -140,7 +140,7 @@ export function getPageContext(): PageContext {
  */
 export function showScanningSweep(): void {
   const existing = document.getElementById("browser-use-scan-overlay");
-  if (existing) existing.remove();
+  if (existing) {existing.remove();}
 
   const scanOverlay = document.createElement("div");
   scanOverlay.id = "browser-use-scan-overlay";
@@ -286,7 +286,7 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
   if (selector) {
     try {
       const el = document.querySelector(selector) as HTMLElement;
-      if (el) return el;
+      if (el) {return el;}
     } catch {
       // Ignore invalid CSS selector syntax
     }

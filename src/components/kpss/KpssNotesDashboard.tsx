@@ -92,7 +92,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleSaveArticle = async () => {
-    if (!selectedNoteId) return;
+    if (!selectedNoteId) {return;}
 
     let finalTitle = editorTitle.trim();
 
@@ -126,7 +126,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleDeleteArticle = async () => {
-    if (!selectedNoteId) return;
+    if (!selectedNoteId) {return;}
 
     const filtered = notes.filter((n) => n.id !== selectedNoteId);
     await saveKpssWikiNotes(filtered);
@@ -142,7 +142,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleDownloadMarkdown = () => {
-    if (!selectedNote) return;
+    if (!selectedNote) {return;}
     const filename = `${(selectedNote.title || "Ders-Notu").replace(/[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ]/g, "_")}.md`;
     const blob = new Blob([selectedNote.content], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -172,7 +172,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const filteredNotes = notes.filter((n) => {
-    if (selectedSubjectFilter !== "all" && n.subject !== selectedSubjectFilter) return false;
+    if (selectedSubjectFilter !== "all" && n.subject !== selectedSubjectFilter) {return false;}
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       return n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q);

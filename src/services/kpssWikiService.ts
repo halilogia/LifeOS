@@ -28,7 +28,7 @@ const AUTO_TITLE_SETTING_KEY = "kpss_auto_title_enabled";
  */
 export async function getKpssWikiNotes(): Promise<KpssWikiNote[]> {
   const res = await new Promise<any>((r) => chrome.storage.sync.get([STORAGE_KEY], r));
-  let loaded: KpssWikiNote[] = res[STORAGE_KEY] || [];
+  const loaded: KpssWikiNote[] = res[STORAGE_KEY] || [];
 
   // Filter out legacy dummy sample notes if present
   const cleaned = loaded.filter(
@@ -83,13 +83,13 @@ export async function saveAutoTitleSetting(enabled: boolean): Promise<void> {
  * e.g. "Maki ailesinin..." -> "Maki"
  */
 export function extractTitleFromContent(content: string): string {
-  if (!content) return "";
+  if (!content) {return "";}
   const lines = content.split("\n");
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed) continue;
+    if (!trimmed) {continue;}
     const clean = trimmed.replace(/^#+\s*/, "").replace(/^[\:\-\*\_\`]+/, "").trim();
-    if (!clean) continue;
+    if (!clean) {continue;}
     const words = clean.split(/\s+/);
     if (words.length > 0 && words[0]) {
       return words[0].replace(/[\,\.\:\;\!\?\"\'\(\)]/g, "").trim();
@@ -102,7 +102,7 @@ export function extractTitleFromContent(content: string): string {
  * Extract H1, H2, H3 headings from markdown content
  */
 export function extractHeadings(content: string): HeadingItem[] {
-  if (!content) return [];
+  if (!content) {return [];}
   const lines = content.split("\n");
   const headings: HeadingItem[] = [];
   lines.forEach((l) => {
@@ -121,17 +121,17 @@ export function extractHeadings(content: string): HeadingItem[] {
  * Extract the first Image URL from markdown content for Infobox Featured Header
  */
 export function extractFirstImageUrl(content: string): string | null {
-  if (!content) return null;
+  if (!content) {return null;}
 
   // 1. Check for standard Markdown image syntax: ![alt](url)
   const mdImgMatch = content.match(/!\[.*?\]\((https?:\/\/[^\s\)]+)\)/i);
-  if (mdImgMatch && mdImgMatch[1]) return mdImgMatch[1];
+  if (mdImgMatch && mdImgMatch[1]) {return mdImgMatch[1];}
 
   // 2. Check for plain image URLs or Google Image thumbnail URLs
   const plainUrlMatch = content.match(
     /(https?:\/\/[^\s<>\"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>\"]+images\?[^\s<>\"]+|https?:\/\/[^\s<>\"]+encrypted-tbn[^\s<>\"]+)/i
   );
-  if (plainUrlMatch && plainUrlMatch[0]) return plainUrlMatch[0];
+  if (plainUrlMatch && plainUrlMatch[0]) {return plainUrlMatch[0];}
 
   return null;
 }
@@ -142,7 +142,7 @@ export function extractFirstImageUrl(content: string): string | null {
  * The 1st image URL is reserved for Infobox; 2nd+ images and markdown images render inside the article body.
  */
 export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiNote[]): string {
-  if (!content) return "";
+  if (!content) {return "";}
 
   const firstImg = extractFirstImageUrl(content);
   let processedContent = content;
@@ -171,7 +171,7 @@ export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiN
 
   // 2. Auto-link mentions of existing note titles (e.g. "Çorum", "Manisa")
   allNotes.forEach((n) => {
-    if (!n.title || n.title.trim().length < 3) return;
+    if (!n.title || n.title.trim().length < 3) {return;}
     const cleanTitle = n.title.trim();
     const escaped = cleanTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 

@@ -57,7 +57,7 @@ export function NoteEditorModal({
     availableNotes && noteTitle.trim()
       ? availableNotes.filter((n) => {
           if (n.title.toLowerCase().trim() === noteTitle.toLowerCase().trim())
-            return false;
+            {return false;}
           const links = extractInternalLinks(n.content || "");
           return links.some(
             (l) => l.toLowerCase().trim() === noteTitle.toLowerCase().trim(),

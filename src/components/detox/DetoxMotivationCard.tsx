@@ -17,7 +17,7 @@ export function DetoxMotivationCard({
 }: DetoxMotivationCardProps) {
   const achievements = calculateMotivationalAchievements(durationMinutes, lang);
 
-  if (achievements.length === 0) return null;
+  if (achievements.length === 0) {return null;}
 
   const t = translations[lang as "tr" | "en"];
 

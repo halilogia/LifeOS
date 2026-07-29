@@ -36,7 +36,7 @@ export interface ZettelkastenGraph {
  * e.g. "Daha fazla bilgi için [[Tarih - Amasya Genelgesi]] sayfasına bakın."
  */
 export function extractInternalLinks(content: string): string[] {
-  if (!content) return [];
+  if (!content) {return [];}
   const regex = /\[\[([^\]\|]+)(?:\|[^\]]+)?\]\]/g;
   const links: string[] = [];
   let match;
@@ -53,7 +53,7 @@ export function extractInternalLinks(content: string): string[] {
  * e.g. "#kpss/tarih", "#kpss/cografya", "#genel"
  */
 export function extractTags(content: string): string[] {
-  if (!content) return [];
+  if (!content) {return [];}
   const regex = /(?:^|\s)#([a-zA-Z0-9_\/öçşğıüÖÇŞĞİÜ-]+)/g;
   const tags: string[] = [];
   let match;
@@ -70,12 +70,12 @@ export function extractTags(content: string): string[] {
  */
 export function getNodeColor(tags: string[] = [], subject?: string, title?: string): string {
   const tagStr = (tags.join(" ") + " " + (subject || "") + " " + (title || "")).toLowerCase();
-  if (tagStr.includes("tarih")) return "#a855f7"; // Purple
-  if (tagStr.includes("cografya") || tagStr.includes("coğrafya")) return "#10b981"; // Emerald
-  if (tagStr.includes("vatandaslik") || tagStr.includes("vatandaşlık")) return "#3b82f6"; // Blue
-  if (tagStr.includes("turkce") || tagStr.includes("türkçe")) return "#f59e0b"; // Amber
-  if (tagStr.includes("matematik")) return "#ef4444"; // Red
-  if (tagStr.includes("kpss")) return "#8b5cf6"; // Violet
+  if (tagStr.includes("tarih")) {return "#a855f7";} // Purple
+  if (tagStr.includes("cografya") || tagStr.includes("coğrafya")) {return "#10b981";} // Emerald
+  if (tagStr.includes("vatandaslik") || tagStr.includes("vatandaşlık")) {return "#3b82f6";} // Blue
+  if (tagStr.includes("turkce") || tagStr.includes("türkçe")) {return "#f59e0b";} // Amber
+  if (tagStr.includes("matematik")) {return "#ef4444";} // Red
+  if (tagStr.includes("kpss")) {return "#8b5cf6";} // Violet
   return "#6366f1"; // Default Indigo
 }
 
@@ -85,7 +85,7 @@ export function getNodeColor(tags: string[] = [], subject?: string, title?: stri
 export function getBacklinks(targetNote: Note, allNotes: Note[]): Note[] {
   const targetTitleLower = targetNote.title.trim().toLowerCase();
   return allNotes.filter((n) => {
-    if (n.id === targetNote.id) return false;
+    if (n.id === targetNote.id) {return false;}
     const links = extractInternalLinks(n.content);
     return links.some((l) => l.trim().toLowerCase() === targetTitleLower);
   });

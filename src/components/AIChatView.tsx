@@ -85,7 +85,7 @@ export function AIChatView({
   // Handle Send Message
   const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputVal).trim();
-    if (!query) return;
+    if (!query) {return;}
 
     if (!textToSend) {
       setInputVal("");

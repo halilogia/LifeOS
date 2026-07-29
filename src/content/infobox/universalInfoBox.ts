@@ -50,11 +50,11 @@ function handleTextSelection(e: MouseEvent, hotkey: string): void {
     }
 
     try {
-      if (!chrome.runtime?.id) return;
+      if (!chrome.runtime?.id) {return;}
       chrome.runtime.sendMessage(
         { type: "translate_text", text: text },
         (response: { translation?: string }) => {
-          if (chrome.runtime.lastError) return;
+          if (chrome.runtime.lastError) {return;}
           if (response && response.translation) {
             showTranslationBubble(response.translation, selection);
           }

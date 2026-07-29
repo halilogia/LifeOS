@@ -83,7 +83,7 @@ export function WatchlistSelectorBar({
 
   const handleCreateSubmit = (e: Event) => {
     e.preventDefault();
-    if (!newListName.trim()) return;
+    if (!newListName.trim()) {return;}
     onCreateWatchlist(newListName.trim());
     setNewListName("");
     setShowAddForm(false);

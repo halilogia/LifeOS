@@ -42,7 +42,7 @@ export function ZettelkastenGraphModal({
 
   // Filtered / Highlighted Node IDs
   const activeNodeIds = useMemo(() => {
-    if (!filterQuery.trim()) return null;
+    if (!filterQuery.trim()) {return null;}
     const q = filterQuery.toLowerCase().trim();
     const set = new Set<string>();
     graph.nodes.forEach((n) => {
@@ -58,11 +58,11 @@ export function ZettelkastenGraphModal({
 
   // Connected nodes set for hover effect
   const connectedNodeIds = useMemo(() => {
-    if (!hoveredNodeId) return null;
+    if (!hoveredNodeId) {return null;}
     const set = new Set<string>([hoveredNodeId]);
     graph.edges.forEach((e) => {
-      if (e.source === hoveredNodeId) set.add(e.target);
-      if (e.target === hoveredNodeId) set.add(e.source);
+      if (e.source === hoveredNodeId) {set.add(e.target);}
+      if (e.target === hoveredNodeId) {set.add(e.source);}
     });
     return set;
   }, [graph, hoveredNodeId]);
@@ -267,7 +267,7 @@ export function ZettelkastenGraphModal({
               {graph.edges.map((edge, idx) => {
                 const sourceNode = graph.nodes.find((n) => n.id === edge.source);
                 const targetNode = graph.nodes.find((n) => n.id === edge.target);
-                if (!sourceNode || !targetNode) return null;
+                if (!sourceNode || !targetNode) {return null;}
 
                 const isConnectedToHover =
                   hoveredNodeId &&
@@ -371,7 +371,7 @@ export function ZettelkastenGraphModal({
           {/* Hover Tooltip Overlay */}
           {hoveredNodeId && (() => {
             const hNode = graph.nodes.find((n) => n.id === hoveredNodeId);
-            if (!hNode) return null;
+            if (!hNode) {return null;}
             return (
               <div
                 style={{

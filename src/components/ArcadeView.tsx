@@ -90,14 +90,6 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-  const handleUpdateScore = async (gameId: string, newScore: number) => {
-    const updated = await arcadeService.updateHighScore(gameId, newScore);
-    setGames(updated);
-    if (activeGame && activeGame.id === gameId) {
-      setActiveGame(updated.find((g) => g.id === gameId) || null);
-    }
-  };
-
   const handleUpdateStatus = async (gameId: string, status: GameEntry["status"]) => {
     const updated = await arcadeService.updateGameStatus(gameId, status);
     setGames(updated);
@@ -323,7 +315,6 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
           game={activeGame}
           lang={lang}
           onClose={() => setActiveGame(null)}
-          onUpdateScore={handleUpdateScore}
           onUpdateStatus={handleUpdateStatus}
           onUpdateIframeUrl={handleUpdateIframeUrl}
           onUpdateDevNotes={handleUpdateDevNotes}

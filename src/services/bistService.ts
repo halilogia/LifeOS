@@ -67,7 +67,7 @@ export async function fetchDynamicBistTickers(): Promise<string[]> {
  * Hiçbir hisse adı veya bilgisi manuel yazılmaz, doğrudan Borsa İstanbul / Yahoo veritabanından çekilir.
  */
 export async function searchBistStocks(query: string): Promise<BISTSearchResult[]> {
-  if (!query || query.trim().length === 0) return [];
+  if (!query || query.trim().length === 0) {return [];}
 
   try {
     const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query.trim())}&quotesCount=15&newsCount=0`;
@@ -79,7 +79,7 @@ export async function searchBistStocks(query: string): Promise<BISTSearchResult[
       signal: AbortSignal.timeout(6000),
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) {return [];}
 
     const json = await res.json();
     const quotes = (json?.quotes as Array<{

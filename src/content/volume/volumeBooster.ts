@@ -14,7 +14,7 @@ function getOrCreateContentAudioContext(): AudioContext | null {
   if (!contentAudioCtx) {
     const AudioCtxClass =
       window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioCtxClass) return null;
+    if (!AudioCtxClass) {return null;}
     contentAudioCtx = new AudioCtxClass();
     contentGainNode = contentAudioCtx.createGain();
     contentGainNode.connect(contentAudioCtx.destination);
@@ -26,9 +26,9 @@ function getOrCreateContentAudioContext(): AudioContext | null {
 }
 
 function attachContentGainToElement(el: HTMLMediaElement): void {
-  if (!el || connectedMediaSet.has(el)) return;
+  if (!el || connectedMediaSet.has(el)) {return;}
   const ctx = getOrCreateContentAudioContext();
-  if (!ctx || !contentGainNode) return;
+  if (!ctx || !contentGainNode) {return;}
 
   try {
     const source = ctx.createMediaElementSource(el);

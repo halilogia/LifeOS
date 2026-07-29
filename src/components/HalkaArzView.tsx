@@ -70,8 +70,8 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   ).length;
 
   const displayedActiveList = activeIPOs.filter((item) => {
-    if (subFilter === "active_only") return item.status === "active";
-    if (subFilter === "upcoming_only") return item.status === "upcoming";
+    if (subFilter === "active_only") {return item.status === "active";}
+    if (subFilter === "upcoming_only") {return item.status === "upcoming";}
     return true;
   });
 

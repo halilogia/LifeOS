@@ -29,7 +29,7 @@ function isPersonalFormPage(context: PageContext | null): boolean {
   ];
 
   const matchingFormInputs = context.interactiveElements.filter((el) => {
-    if (el.tag !== "input" && el.tag !== "textarea" && el.tag !== "select") return false;
+    if (el.tag !== "input" && el.tag !== "textarea" && el.tag !== "select") {return false;}
     
     const type = (el.type || "").toLowerCase();
     if (type === "hidden" || type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "search") {
@@ -39,7 +39,7 @@ function isPersonalFormPage(context: PageContext | null): boolean {
     const identifier = `${el.text || ""} ${el.label || ""} ${el.placeholder || ""} ${el.id || ""} ${el.className || ""}`.toLowerCase();
     
     // Ignore Wikipedia search bar, Google Search input, etc.
-    if (identifier.includes("search") || identifier.includes("wiki")) return false;
+    if (identifier.includes("search") || identifier.includes("wiki")) {return false;}
 
     // Check if element label/placeholder/name matches any personal form field keyword
     return personalKeywords.some((kw) => identifier.includes(kw));
@@ -109,7 +109,7 @@ export function SidePanelApp() {
   // Load language settings & initial page context
   useEffect(() => {
     chrome.storage.sync.get(["lang", "autoGroupTabs"], (res) => {
-      if (res.lang) setLang(res.lang as Language);
+      if (res.lang) {setLang(res.lang as Language);}
       // Group tab ONCE when sidepanel is opened
       if (res.autoGroupTabs !== false) {
         chrome.runtime.sendMessage({ type: "group_active_tab" });
@@ -204,7 +204,7 @@ export function SidePanelApp() {
 function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
-    if (!text) return;
+    if (!text) {return;}
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -245,7 +245,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
 
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
-    if (!textToSend || isProcessing) return;
+    if (!textToSend || isProcessing) {return;}
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -255,7 +255,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    if (!promptOverride) setInputText("");
+    if (!promptOverride) {setInputText("");}
     setIsProcessing(true);
     setAgentStatus(lang === "tr" ? "Yapay zeka yanıtlıyor..." : "AI Copilot thinking...");
 
@@ -775,7 +775,7 @@ Answer the user clearly, professionally, and concisely in ${lang === "tr" ? "Tur
           value={inputText}
           onInput={(e) => setInputText((e.target as HTMLInputElement).value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleSendMessage();
+            if (e.key === "Enter") {handleSendMessage();}
           }}
           placeholder={
             isListening

@@ -32,7 +32,9 @@ export function handleMediaAndTabMessage(
     message.type === "set_ambient_volume"
   ) {
     ensureOffscreenDocument().then(() => {
-      chrome.runtime.sendMessage(message).catch(() => {});
+      chrome.runtime.sendMessage(message).catch(() => {
+        // The offscreen document may not be ready yet.
+      });
       sendResponse({ success: true });
     });
     return true;
@@ -67,7 +69,7 @@ export function handleMediaAndTabMessage(
           if (!audioCtx) {
             const AudioCtxClass =
               window.AudioContext || (window as any).webkitAudioContext;
-            if (!AudioCtxClass) return;
+            if (!AudioCtxClass) {return;}
             audioCtx = new AudioCtxClass();
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
