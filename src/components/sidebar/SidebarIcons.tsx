@@ -5,7 +5,24 @@
 
 export function SidebarIcon({ itemKey }: { itemKey: string }) {
   switch (itemKey) {
+    case "arcade":
+      return (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="6" width="20" height="12" rx="4" />
+          <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" />
+        </svg>
+      );
     case "bist":
+
       return (
         <svg
           width="20"

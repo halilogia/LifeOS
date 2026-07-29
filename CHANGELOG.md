@@ -4,14 +4,30 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [4.0.0] - 2026-07-29
+### Eklendi & İyileştirildi
+- **Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Laboratuvarı)**:
+
+  - **YouTube Playables Vitrin Tasarımı (`ArcadeHeader.tsx`, `ArcadeGameCard.tsx`)**: YouTube "Hazır Oyunlar" estetiğinde büyük kapak posterleri, canlı durum rozetleri (`Oynanabilir`, `Geliştiriliyor`, `Konsept`), teknoloji etiketleri (`Phaser`, `Three.js`, `Canvas`), kategori filtreleme çipleri ve arama çubuğu entegre edildi.
+  - **Steam Tarzı Oyun & Geliştirici Detay Paneli (`ArcadeGameModal.tsx`)**:
+    - Oyuna tıklandığında açılan oyun oynatma ve detay modalı.
+    - **Oyna Sekmesi**: Gömülü oyunları doğrudan oynatır; yerel sunucularda (`http://localhost:5173`) çalışan `In Progress` oyun projeleri için canlı `iframe` çalıştırma desteği sağlar.
+    - **Steam Dev Log Sekmesi**: En Yüksek Skor, Oynanma Sayısı, `C:\Users\emre_\Desktop\GitHub\In Progress\<oyun-klasoru>` proje klasör yolu, düzenlenebilir geliştirici notları ve interaktif To-Do checklist paneli.
+  - **3 Adet Dahili HTML5 Mini Oyun (Built-in Engines)**:
+    - **Neon Snake Arcade (`SnakeGame.tsx`)**: Skor takipli retro yılan oyunu.
+    - **2D Knight Runner (`KnightRunner.tsx`)**: Engellerden zıplamalı ve altın toplamalı 2D şövalye koşu oyunu.
+    - **Galaxy Defender 2D (`SpaceShooter.tsx`)**: Lazer ateşlemeli retro uzay savaşı oyunu.
+  - **Yerel Proje & Özel Oyun Kaydedici (`arcadeService.ts`, `AddGameModal.tsx`)**: `In Progress` altındaki projelerinizi (2D Şövalye, 60 Days Survival, Isekai AI, Car Races, Tarot Kaderi vb.) veya özel dev sunucularınızı kütüphaneye kaydedebilme ve yönetebilme olanağı.
+  - **Koyu Glassmorphic CSS & Tam i18n Desteği (`arcade.css`)**: Koyu temalı cam efekti (glassmorphism) stili yazıldı ve Türkçe/İngilizce dil çevirileri eklendi.
+
 ## [3.9.0] - 2026-07-28
 ### Eklendi & İyileştirildi
+
 - **KPSS Ders Notları & Wiki Stüdyosu Yenilemesi (`KpssNotesDashboard.tsx`, `KpssWikiReader.tsx`)**:
   - Orijinal Vikipedi Dark Mode tasarımı uygulandı; mod sekmeleri (`Oku` | `Değiştir`), `.md İndir` butonu ve ikon bazlı **Wikiağ Nöral Graf** ikonu üst bar alanına taşındı.
   - **Türkçe Unicode Wikilink Otomatik Bağlantı Motoru (`kpssWikiService.ts`)**: `\p{L}` Unicode regex sınırları ile `Çorum`, `İstanbul`, `İç Anadolu` gibi tüm Türkçe karakterli notlar metin içinde mavi tıklanabilir Wikilink'e dönüştürüldü.
   - **Gelen Bağlantılar (Backlinks) Entegrasyonu**: Çapraz not atıfları Bilgi Kutusu altında `🔗 Gelen Bağlantılar` başlığı ile dinamik olarak listelendi.
   - **Otomatik Görsel Algılama & Link Gizleme**: Nota yapıştırılan görsel URL'leri metin içindeki çirkin link görünümünden gizlendi ve Vikipedi kapak görseli olarak Bilgi Kutusu'nun en üstüne eklendi.
-  - **Dinamik Bilgi Kutusu Yardım Pop-up'ı (`!`)**: Bilgi Kutusu başlığına tıklanabilir `!` yardım ikonu eklendi.
 
 ## [3.8.0] - 2026-07-28
 ### Eklendi & İyileştirildi
@@ -87,7 +103,6 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
   - Model yanıtlarındaki markdown kod bloklarını (` ```json ... ``` `) otomatik temizleyen `cleanAndParseJSON` filtresi entegre edildi.
   - Yerel 9Router proxy'sine erişimi tarayıcı CORS engelinden korumak adına `manifest.json` dosyasına `localhost` ve `127.0.0.1` izinleri eklendi.
 - **Temiz Mimari (Clean Architecture) Geliştirmesi**: Görsel kod ayırma kuralına uygun şekilde `FreeGamesView.tsx` dosyasından `<GameCard />` ve `<HistoryCard />` sunum bileşenleri ayrıştırıldı.
-- **Premium Alarm Buton Güncellemeleri**: Ana sayfa Pomodoro alarm bölümündeki ekleme ve silme düğmeleri görsel olarak mor-indigo renk geçişli şık butonlar ve SVG çöp kutusu ikonlarıyla değiştirildi. Varsayılan onay listesi seçim elemanları premium slider switch'ler ile güncellendi.
 - **Açılır Kutu Okunabilirlik İyileştirmesi**: Açılır kutulardaki (Detox seçici vb.) beyaz üzeri beyaz yazı okunma kontrast hatası, tüm seçenek etiketlerine koyu arka plan (`#161622`) ve beyaz metin uygulanarak çözüldü.
 
 ---
@@ -396,8 +411,6 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ## [1.0.0] - Ana Kararlı Sürüm (Milestone)
 ### Eklendi
-- **Glassmorphism (Buzlu Cam) Tasarım Sistemi**:
-  - Tamamen özelleştirilmiş, modern, animasyonlu sidebar, blur efektli kartlar ve karanlık mod estetiği (`part_1.css` - `part_10.css` arası modüler yapı).
 - **Odaklanma Zamanlayıcısı (Pomodoro)**:
   - Focus, Short Break ve Long Break modları.
   - SVG tabanlı dairesel ilerleme çubuğu.

@@ -18,6 +18,7 @@ interface SidebarProps {
 
 const DEFAULT_ORDER = [
   "list",
+  "arcade",
   "willpower",
   "pomodoro",
   "eisenhower",
@@ -32,6 +33,7 @@ const DEFAULT_ORDER = [
   "free-games",
   "bist",
 ];
+
 
 export function Sidebar({
   lang,

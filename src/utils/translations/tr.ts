@@ -360,4 +360,22 @@ export const tr = {
   stock_load_more: "Daha Fazla BİST Hissesi Yükle",
   stock_ai_featured_title: "✦ AI Haftalık Öne Çıkan BİST Hisseleri",
   popup_detox_tab_title: "Detoks & Süre Sınırı",
+  view_arcade: "Oyunlar (Life OS Arcade)",
+
+  sidebar_arcade: "Oyunlar & Dev Hub",
+  arcade_main_title: "Oyun Kütüphanesi & Laboratuvarı",
+  arcade_subtitle: "Kendi geliştirdiğin oyun projelerini ve hazır mini oyunları tek bir yerde yönet, oyna ve geliştir.",
+  arcade_search_placeholder: "Oyunlarda veya projelerde ara...",
+  arcade_cat_all: "Tüm Oyunlar",
+  arcade_cat_playable: "Oynanabilir",
+  arcade_cat_in_progress: "Geliştirilenler",
+  arcade_cat_favorites: "Favoriler",
+  arcade_add_game_btn: "+ Oyun / Proje Ekle",
+  arcade_status_playable: "Oynanabilir",
+  arcade_status_in_progress: "Geliştiriliyor",
+  arcade_status_concept: "Konsept",
+  arcade_play_btn: "Oyna",
+  arcade_tab_play: "Oyna",
+  arcade_tab_dev: "Steam Dev Log",
 };
+
