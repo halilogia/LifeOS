@@ -287,13 +287,36 @@ export const arcadeService = {
   },
 
   /**
-   * Delete game entry
+   * Delete game entry (custom or default)
    */
   async deleteGame(gameId: string): Promise<GameEntry[]> {
     const games = await this.loadGames();
-    const updated = games.filter((g) => g.id !== gameId || g.isBuiltIn);
+    const updated = games.filter((g) => g.id !== gameId);
     await this.saveGames(updated);
     return updated;
+  },
+
+  /**
+   * Update game status (playable, in_progress, concept)
+   */
+  async updateGameStatus(gameId: string, status: GameEntry["status"]): Promise<GameEntry[]> {
+    const games = await this.loadGames();
+    const updated = games.map((g) => {
+      if (g.id === gameId) {
+        return { ...g, status };
+      }
+      return g;
+    });
+    await this.saveGames(updated);
+    return updated;
+  },
+
+  /**
+   * Reset game library to default list
+   */
+  async resetToDefaults(): Promise<GameEntry[]> {
+    await this.saveGames(DEFAULT_GAMES);
+    return DEFAULT_GAMES;
   },
 
   /**
@@ -315,3 +338,4 @@ export const arcadeService = {
     return updated;
   },
 };
+

@@ -297,7 +297,8 @@
   color: var(--text-secondary);
   line-height: 1.4;
   display: -webkit-box;
-  -webkit-linerc-clamp: 2;
+  -webkit-line-clamp: 2;
+
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -754,6 +755,23 @@
 .arcade-url-label {
   color: var(--text-muted);
   font-family: var(--font-mono);
+}
+
+.steam-status-select {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  color: var(--accent-color);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  cursor: pointer;
+}
+
+.steam-status-select option {
+  background: #0f172a;
+  color: var(--text-primary);
 }
 
 .arcade-open-tab-btn {

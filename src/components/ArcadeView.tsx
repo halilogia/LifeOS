@@ -46,6 +46,15 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
+  const handleUpdateStatus = async (gameId: string, status: GameEntry["status"]) => {
+    const updated = await arcadeService.updateGameStatus(gameId, status);
+    setGames(updated);
+    if (activeGame && activeGame.id === gameId) {
+      setActiveGame(updated.find((g) => g.id === gameId) || null);
+    }
+  };
+
+
   const handleUpdateDevNotes = async (
     gameId: string,
     notes: string,
@@ -148,8 +157,9 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
           lang={lang}
           onClose={() => setActiveGame(null)}
           onUpdateScore={handleUpdateScore}
-
+          onUpdateStatus={handleUpdateStatus}
           onUpdateDevNotes={handleUpdateDevNotes}
+
           onDeleteGame={handleDeleteGame}
         />
       )}
