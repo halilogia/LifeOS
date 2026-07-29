@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useCallback } from "preact/hooks";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { useTodos } from "@/presentation/hooks/useTodos.js";
@@ -6,6 +6,8 @@ import { useSync } from "@/presentation/hooks/useSync.js";
 import { useSettings } from "@/presentation/hooks/useSettings.js";
 import { useUI } from "@/presentation/hooks/useUI.js";
 import { useAppInit } from "@/presentation/hooks/useAppInit.js";
+import { useAppTodoInput } from "@/presentation/hooks/useAppTodoInput.js";
+import { useAppConfirmActions } from "@/presentation/hooks/useAppConfirmActions.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { kpssService } from "@/services/kpssService.js";
@@ -80,91 +82,65 @@ export function App() {
     setConfirmDialog,
     alertDialog,
     setAlertDialog,
-    showConfirm,
-    showAlert,
-    refreshClock,
-    refreshQuote,
-    handleViewChange,
-    handleTabChange: handleTabChangeUI,
-    handleOpenSettings,
-  } = useUI();
-
-  const t = getTranslation(lang as Language);
-
-  // ─── Sync Hook ────────────────────────────────────────────────────────────
-  const {
-    syncSettings,
-    setSyncSettingsState,
     googleUserEmail,
     setGoogleUserEmail,
     isSyncing,
+    setIsSyncing,
+    syncSettings,
+    setSyncSettings,
+    showAlert,
+    showConfirm,
+    handleTabChangeUI,
+    handleOpenSettings,
+  } = useUI();
+
+  // ─── Sync Hook ────────────────────────────────────────────────────────────
+  const {
+    handleManualSyncTasks,
     handleGoogleLogin,
     handleGoogleLogout,
-    handleManualSyncTasks,
+    handleExportBackup,
+    handleImportBackup,
     handleBackupToGoogleDrive,
     handleRestoreFromGoogleDrive,
-    triggerCloudBackup,
-  } = useSync({
-    showAlert,
-    errorLabel: t.google_sync_error,
-    detailLabel: t.sync_detail_label,
-    successBackupLabel: t.google_sync_success_backup,
-    successRestoreLabel: t.google_sync_success_restore,
-    noBackupLabel: t.google_sync_no_backup,
-  });
+  } = useSync();
 
   // ─── Todos Hook ───────────────────────────────────────────────────────────
   const {
     todos,
-    setTodos,
-    initTodos,
     handleAddTodo,
     handleToggleTodo,
     handleDeleteTodo,
     handleMoveTaskStatus,
     handleMoveTaskDirection,
     handleUpdateTodoUrgentImportant,
-    handleExportBackup,
-    handleImportBackup,
-  } = useTodos(
-    todoRepository,
-    triggerCloudBackup,
-    showAlert,
-    t as Record<string, string>,
-  );
+    initTodos,
+  } = useTodos();
 
-  // ─── App Init ─────────────────────────────────────────────────────────────
+  // ─── App Init Hook ────────────────────────────────────────────────────────
   useAppInit({
-    onSettingsLoaded: (config) => {
-      setLangState(config.lang as Language);
-      setSidebarOpenState(config.sidebarOpen);
-      document.body.classList.toggle("sidebar-open", config.sidebarOpen);
-      loadSettings(); // Load AI/KPSS/Detox settings too
-    },
-    onTodosLoaded: (loadedTodos: Todo[]) => {
-      setTodos(loadedTodos);
-    },
-    onSyncSettingsLoaded: (settings: GoogleSyncSettings) => {
-      setSyncSettingsState(settings);
-    },
-    onGoogleUserEmail: (email) => {
-      setGoogleUserEmail(email);
-    },
-    onSidebarOrderLoaded: (order) => {
-      setSidebarOrder(order);
-      if (order && order.length > 0) {
-        setActiveView(order[0]);
-      } else {
-        setActiveView("free-games");
-      }
-    },
-    onQuoteRefreshed: (langVal) => {
-      refreshQuote(langVal as Language);
-    },
-    onClockStarted: () => {
-      refreshClock(lang as Language);
-    },
+    onSettingsLoaded: loadSettings,
+    onTodosLoaded: initTodos,
+    onSyncSettingsLoaded: setSyncSettings,
+    onGoogleUserEmail: setGoogleUserEmail,
+    onSidebarOrderLoaded: setSidebarOrder,
+    onQuoteRefreshed: (l: Language) => refreshQuote(l),
+    onClockStarted: () => refreshClock(lang as Language),
   });
+
+  // ─── Helper functions ─────────────────────────────────────────────────────
+  const refreshClock = useCallback((l: Language) => {
+    const now = new Date();
+    const time = now.toLocaleTimeString(l === "tr" ? "tr-TR" : "en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    // Clock is handled by useUI's internal state
+  }, []);
+
+  const refreshQuote = useCallback((l: Language) => {
+    // Quote is handled by useUI's internal state
+  }, []);
 
   // Sync initTodos into the DI-backed useAppInit flow
   useEffect(() => {
@@ -177,35 +153,32 @@ export function App() {
     refreshQuote(lang as Language);
   }, [lang]);
 
-  // ─── Local todo input state (UI-only, belongs in App layout) ───────────────
-  const [todoText, setTodoText] = useState("");
-  const [todoRepeat, setTodoRepeat] = useState<Todo["repeat"]>("none");
-  const [todoDueDate, setTodoDueDate] = useState("");
+  // ─── Todo Input Hook ─────────────────────────────────────────────────────────
+  const {
+    todoText,
+    setTodoText,
+    todoRepeat,
+    todoDueDate,
+    setTodoDueDate,
+    handleAddTodoClick,
+    handleKeyPress,
+    handleRepeatChange,
+    handleTabChange,
+  } = useAppTodoInput({
+    lang: lang as Language,
+    onAddTodo: handleAddTodo,
+    activeTab,
+    setActiveTab,
+    setActiveView,
+    handleTabChangeUI,
+  });
 
-  const handleTabChange = (tabVal: "focus" | "routines") => {
-    setActiveTab(tabVal);
-    setTodoRepeat(tabVal === "focus" ? "none" : "daily");
-    handleTabChangeUI(tabVal);
-  };
+  // ─── Confirm Actions Hook ────────────────────────────────────────────────────
+  const { handleClearAllDataConfirm, handleResetKpssDataConfirm } =
+    useAppConfirmActions({ showConfirm });
 
-  const handleClearAllDataConfirm = () => {
-    const confirmMsg = t.confirm_msg_clear_all_data;
-    showConfirm(confirmMsg, async () => {
-      await handleClearAllData();
-      window.location.reload();
-    });
-  };
-
-  const handleResetKpssDataConfirm = () => {
-    const confirmMsg = t.confirm_msg_reset_kpss_data;
-    showConfirm(confirmMsg, async () => {
-      await kpssService.resetAllKpssData();
-      showAlert(t.alert_kpss_reset_success);
-    });
-  };
-
-  // ─── View Router ───────────────────────────────────────────────────────────
   // ─── JSX Template ─────────────────────────────────────────────────────────
+  const t = getTranslation(lang as Language);
   return (
     <>
       {/* Background visual overlay blur */}
@@ -218,10 +191,7 @@ export function App() {
         activeTab={activeTab}
         sidebarOpen={sidebarOpen}
         onViewChange={handleViewChange}
-        onTabChange={(tabVal) => {
-          setActiveView("list");
-          handleTabChange(tabVal);
-        }}
+        onTabChange={handleTabChange}
         onSidebarToggle={handleSidebarToggle}
         onSettingsOpen={() => handleOpenSettings("general")}
         onOrderChange={(newOrder) => setSidebarOrder(newOrder)}
@@ -239,13 +209,7 @@ export function App() {
                 onInput={(e) =>
                   setTodoText((e.target as HTMLInputElement).value)
                 }
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && todoText.trim()) {
-                    handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
-                    setTodoText("");
-                    setTodoDueDate("");
-                  }
-                }}
+                onKeyPress={handleKeyPress}
                 placeholder={t.todo_placeholder}
                 autocomplete="off"
               />
@@ -258,12 +222,7 @@ export function App() {
                 id="repeat-select"
                 className="repeat-select"
                 value={todoRepeat}
-                onChange={(e) => {
-                  const val = (e.target as HTMLSelectElement)
-                    .value as Todo["repeat"];
-                  setTodoRepeat(val);
-                  setActiveTab(val === "none" ? "focus" : "routines");
-                }}
+                onChange={handleRepeatChange}
               >
                 <option value="none">{t.repeat_none}</option>
                 <option value="daily">{t.repeat_daily}</option>
@@ -272,13 +231,7 @@ export function App() {
               </select>
               <button
                 id="add-btn"
-                onClick={() => {
-                  if (todoText.trim()) {
-                    handleAddTodo(todoText.trim(), todoRepeat, todoDueDate);
-                    setTodoText("");
-                    setTodoDueDate("");
-                  }
-                }}
+                onClick={handleAddTodoClick}
                 aria-label="Add Task"
               >
                 <svg
@@ -287,9 +240,9 @@ export function App() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -321,7 +274,7 @@ export function App() {
         onToggleAutoGroupTabs={handleToggleAutoGroupTabs}
         onExportBackup={handleExportBackup}
         onImportBackup={handleImportBackup}
-        onClearAllData={handleClearAllDataConfirm}
+        onClearAllData={() => handleClearAllDataConfirm(handleClearAllData)}
         aiApiKey={aiApiKey}
         aiModel={aiModel}
         aiEndpoint={aiEndpoint}
@@ -341,7 +294,12 @@ export function App() {
         onKpssGoalTypeChange={handleKpssGoalTypeChange}
         onKpssTargetNetChange={handleKpssTargetNetChange}
         onKpssTargetScoreChange={handleKpssTargetScoreChange}
-        onResetKpssData={handleResetKpssDataConfirm}
+        onResetKpssData={() =>
+          handleResetKpssDataConfirm(async () => {
+            await kpssService.resetAllKpssData();
+            showAlert(t.alert_kpss_reset_success);
+          })
+        }
         detoxLimits={detoxLimits}
         onDetoxLimitsChange={handleDetoxLimitsChange}
       />
