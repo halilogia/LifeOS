@@ -1,0 +1,163 @@
+/* ── Life OS Arcade: Game Runner & Modal Player ────────────────────────────── */
+
+.arcade-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.arcade-modal-content {
+  background: #0f172a;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.arcade-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(30, 41, 59, 0.6);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.arcade-modal-title-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arcade-modal-title-box h3 {
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.arcade-modal-cat {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-color);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.arcade-modal-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.modal-tab-btn.active {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+}
+
+.arcade-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.arcade-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.arcade-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.arcade-game-view-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.arcade-iframe-container {
+  width: 100%;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.arcade-iframe-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: #0f172a;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 12px;
+}
+
+.arcade-url-label {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.arcade-open-tab-btn {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.arcade-game-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.arcade-no-embed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.arcade-cmd-hint {
+  background: #090d16;
+  border: 1px solid var(--card-border);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+
+.arcade-cmd-hint code {
+  color: var(--success);
+  font-family: var(--font-mono);
+}

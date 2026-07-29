@@ -119,6 +119,15 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **Eksiksiz Kod Çıktısı (No Lazy Code)**: Kod yazarken hiçbir zaman `// ... eski kodlar buraya gelecek` veya `// mantık aynı kalıyor` şeklinde kısaltma yapılamaz. Tüm kod ve alt bileşenler baştan sona tam ve çalışır halde sunulmalıdır.
 * **Tam Değişiklik İptali & İnceleme**: Refactoring sonrasında `npx tsc --noEmit` ve `npm run build` ile %100 sorunsuz derlendiği doğrulanmalı ve yapılan parçalama işlemlerinin özeti sunulmalıdır.
 
+### 5.6 Modüler CSS ve Temiz Stil Mimarisi (Esnek Modülerlik İlkesi)
+* **Esnek Modüler CSS Kuralı**: Sabit/katı satır sayıları yerine okunabilirlik, sürdürülebilirlik ve etki alanı (domain) ayrımı esas alınır. Tek bir dosyada okunabilirliği zorlaştıracak veya farklı sorumlulukları tek bir yerde toplayacak şekilde şişen stiller `src/css/newtab/<feature>/` altında mantıksal alt parçalara bölünmeli (örn: `arcade-base.css`, `arcade-cards.css`, `arcade-modal.css`) ve ana modül CSS'inde `@import` ile birleştirilmelidir.
+
+
+### 5.7 Gerçekçi Veri ve Sıfır Sahte Statik Veri Protokolü (Zero Hardcoded Fake Data Protocol)
+* **Sıfır Sahte / Statik Veri Garantisi**: Kod tabanına, servislere veya veri katmanına kesinlikle elle yazılmış uydurma/sahte statik dummy veriler yerleştirilemez.
+* Veriler her zaman dinamik olarak kullanıcı girdisi, gerçek canlı API'ler (`chrome.storage.sync` / `local`) veya kullanıcının kendi yerel projeleri ve yerelleştirilmiş gerçek veri kaynaklarından okunmalı ve yönetilmelidir.
+
 ### 4.6 Merkezi ve Tekil AI Yapılandırma Protokolü (Sıfır API Hatası Garantisi)
 * **Merkezi AI Yapılandırması Zorunluluğu**: Yeni bir AI özelliği veya arka plan servisi eklenirken asla elle/ad-hoc `chrome.storage` ayrıştırma mantığı yazılmamalıdır. Her zaman `src/services/aiChatService.ts` içerisindeki tekil yetkili `getAIConfigFromStorage()` fonksiyonu kullanılmalıdır.
 * **Çift Depolama & Çift Key Garantisi**: Ayarlar kaydedilirken hem `chrome.storage.sync` hem de `chrome.storage.local` depolarına `geminiApiKey` ve `aiApiKey` alanları eşzamanlı yazılır. Böylece hiçbir yeni AI modülü yetki veya anahtar hatası veremez.
+
