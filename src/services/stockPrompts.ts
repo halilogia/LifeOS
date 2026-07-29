@@ -5,6 +5,7 @@
 
 import type { StockHistoryItem, StockQuote } from "@/services/bistService.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
+import type { Language } from "@/types/types.js";
 
 export const YTD_DISCLAIMER =
   "\n\n⚠️ YASAL UYARI: Bu analiz yapay zeka tarafından derlenmiş olup kesinlikle Yatırım Tavsiyesi Değildir (YTD).";
@@ -153,6 +154,16 @@ export function buildStockContextPrompt(params: BuildStockContextParams): string
   }
 
   return "Veri mevcut değil.";
+}
+
+/**
+ * Kullanıcının portföyü için AI rapor prompt'u — dil desteği ile.
+ */
+export function getStockReportUserPrompt(lang: Language): string {
+  if (lang === "en") {
+    return "Provide a concise Turkish newspaper-style summary of my portfolio's current state, risks, and points to watch for today/this week.";
+  }
+  return "Portföyümün bugünkü/bu haftaki genel durumunu, risklerini ve dikkat edilmesi gereken konuları Türkçe sade bir gazete özeti olarak çıkar.";
 }
 
 /**

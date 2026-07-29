@@ -303,6 +303,7 @@ export function BistView({ lang }: BistViewProps) {
       {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search Grid) */}
       {activeTab === "kesfet" && (
         <BistKesfetTab
+          lang={lang}
           searchQuery={searchQuery}
           quoteMap={quoteMap}
           watchlists={watchlists}
@@ -345,13 +346,15 @@ export function BistView({ lang }: BistViewProps) {
 
       {showKapNewsModal && (
         <StockKapNewsModal
-          symbols={portfolio.map((p) => p.symbol.replace(/\.IS$/, ""))}
+          symbols={portfolio.map((p) => p.symbol.replace(/\.IS$/i, ""))}
+          lang={lang}
           onClose={() => setShowKapNewsModal(false)}
         />
       )}
 
       {aiModalSymbol && (
         <StockAiAnalysisModal
+          lang={lang}
           symbol={aiModalSymbol}
           quote={
             quoteMap.get(aiModalSymbol.toUpperCase()) ||

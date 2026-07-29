@@ -9,9 +9,12 @@ import {
   type KapNewsItem,
 } from "@/services/kapNewsService.js";
 import { analyzeKapNewsWithAI } from "@/services/stockAiService.js";
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 interface StockKapNewsModalProps {
   symbols: string[];
+  lang: Language;
   onClose: () => void;
 }
 
@@ -107,8 +110,10 @@ function IconBearTrend() {
 
 export function StockKapNewsModal({
   symbols,
+  lang,
   onClose,
 }: StockKapNewsModalProps) {
+  const t = getTranslation(lang);
   const [news, setNews] = useState<KapNewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [aiAnalysisMap, setAiAnalysisMap] = useState<
@@ -150,7 +155,7 @@ export function StockKapNewsModal({
         ...prev,
         [item.id]: {
           loading: false,
-          text: `⚠️ Analiz oluşturulamadı: ${e?.message || "Hata oluştu."}`,
+          text: t.stock_kap_news_analysis_error.replace("{message}", e?.message || t.stock_error_occurred),
         },
       }));
     }
@@ -165,7 +170,7 @@ export function StockKapNewsModal({
       >
         <div className="stock-modal-header">
           <div className="stock-modal-title">
-            📰 KAP & BIST Şirket Haberleri
+            {t.stock_kap_news_title}
           </div>
           <button
             style={{
@@ -194,13 +199,13 @@ export function StockKapNewsModal({
             <div
               style={{ textAlign: "center", padding: "40px", color: "#94a3b8" }}
             >
-              <span>Resmi KAP haberleri yükleniyor...</span>
+              <span>{t.stock_kap_news_loading}</span>
             </div>
           ) : news.length === 0 ? (
             <div
               style={{ textAlign: "center", padding: "40px", color: "#94a3b8" }}
             >
-              Takip ettiğiniz hisselere ait yeni bir KAP bildirimi bulunamadı.
+              {t.stock_kap_news_empty}
             </div>
           ) : (
             news.map((item) => {
@@ -284,7 +289,7 @@ export function StockKapNewsModal({
                         textDecoration: "none",
                       }}
                     >
-                      <span>KAP Açıklamasını Göster</span>
+                      <span>{t.stock_kap_news_show_detail}</span>
                       <IconExternal />
                     </a>
 
@@ -309,8 +314,8 @@ export function StockKapNewsModal({
                       <IconSparkles />
                       <span>
                         {aiState?.loading
-                          ? "Analiz Ediliyor..."
-                          : "AI ile Analiz Et"}
+                          ? t.stock_analysis_analyzing
+                          : t.stock_analysis_btn}
                       </span>
                     </button>
                   </div>
@@ -341,7 +346,7 @@ export function StockKapNewsModal({
                         }}
                       >
                         <IconSparkles />
-                        <span>AI Haber Analiz Özeti</span>
+                        <span>{t.stock_kap_news_ai_analysis_title}</span>
                       </div>
                       {aiState.text}
                     </div>
@@ -360,7 +365,7 @@ export function StockKapNewsModal({
           }}
         >
           <button className="stock-btn stock-btn-primary" onClick={onClose}>
-            Kapat
+            {t.stock_close_btn}
           </button>
         </div>
       </div>

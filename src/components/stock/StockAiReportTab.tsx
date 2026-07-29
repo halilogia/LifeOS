@@ -4,13 +4,17 @@
  */
 
 import { useState } from "preact/hooks";
-import { analyzeStockWithAI } from "@/services/stockAiService.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 import type { StockQuote } from "@/services/bistService.js";
+import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
+import { analyzeStockWithAI } from "@/services/stockAiService.js";
+import { getStockReportUserPrompt } from "@/services/stockPrompts.js";
 
 interface StockAiReportTabProps {
   portfolio: StockPortfolioItem[];
   quotes: StockQuote[];
+  lang: Language;
 }
 
 function IconSparkles() {
@@ -48,7 +52,8 @@ function IconSearch() {
   );
 }
 
-export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
+export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabProps) {
+  const t = getTranslation(lang);
   const [subTab, setSubTab] = useState<"digest" | "advisor">("digest");
   const [reportText, setReportText] = useState<string>("");
   const [reportLoading, setReportLoading] = useState<boolean>(false);
@@ -65,14 +70,11 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
     try {
       const res = await analyzeStockWithAI({
         portfolio,
-        userQuestion:
-          "Portföyümün bugünkü/bu haftaki genel durumunu, risklerini ve dikkat edilmesi gereken konuları Türkçe sade bir gazete özeti olarak çıkar.",
+        userQuestion: getStockReportUserPrompt(lang),
       });
       setReportText(res);
     } catch {
-      setReportText(
-        "Rapor oluşturulurken bir hata meydana geldi. Lütfen 9Router / AI ayarlarınızı kontrol edin.",
-      );
+      setReportText(t.stock_analysis_report_error);
     } finally {
       setReportLoading(false);
     }
@@ -95,13 +97,11 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
         quote: matchedQuote,
         userQuestion: queryQuestion.trim()
           ? queryQuestion.trim()
-          : `${sym} hissesini almayı düşünüyorum. Şirketin genel seyri, riskleri ve dikkat edilmesi gereken konular hakkında ne düşünüyorsun?`,
+          : t.stock_analysis_prompt_advisor_default.replace("{symbol}", sym),
       });
       setAdvisorResponse(res);
     } catch {
-      setAdvisorResponse(
-        "Danışman sorgusu yanıtlanamadı. Lütfen AI ayarlarınızı kontrol edin.",
-      );
+      setAdvisorResponse(t.stock_analysis_query_error);
     } finally {
       setAdvisorLoading(false);
     }
@@ -116,14 +116,14 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
           onClick={() => setSubTab("digest")}
         >
           <IconSparkles />
-          <span>Günlük / Haftalık AI Borsa Özeti</span>
+          <span>{t.stock_ai_report_tab_digest}</span>
         </button>
         <button
           className={`stock-btn ${subTab === "advisor" ? "stock-btn-primary" : "stock-btn-secondary"}`}
           onClick={() => setSubTab("advisor")}
         >
           <IconSearch />
-          <span>Yatırım & Alım Karar Asistanı</span>
+          <span>{t.stock_ai_report_tab_advisor}</span>
         </button>
       </div>
 
@@ -150,7 +150,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
           >
             <div>
               <h3 style={{ margin: 0, fontSize: "1.1rem", color: "#f8fafc" }}>
-                🤖 AI Portföy & Piyasa Sağlık Raporu
+                {t.stock_ai_report_title}
               </h3>
               <p
                 style={{
@@ -159,8 +159,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
                   color: "#94a3b8",
                 }}
               >
-                9Router AI altyapısıyla portföyünüzün genel durumunu tek tıkla
-                Türkçe sade bir özet olarak alın.
+                {t.stock_ai_report_desc}
               </p>
             </div>
             <button
@@ -170,7 +169,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
             >
               <IconSparkles />
               <span>
-                {reportLoading ? "Rapor Hazırlanıyor..." : "Rapor Oluştur"}
+                {reportLoading ? t.stock_analysis_report_generating : t.stock_analysis_report_generate}
               </span>
             </button>
           </div>
@@ -195,7 +194,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
                 }}
               />
               <span>
-                9Router AI portföy verilerini ve piyasayı analiz ediyor...
+                {t.stock_ai_report_analyzing}
               </span>
             </div>
           ) : reportText ? (
@@ -222,8 +221,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
                 fontSize: "0.9rem",
               }}
             >
-              Henüz rapor oluşturulmadı. Yukarıdaki "Rapor Oluştur" butonuna
-              basarak anlık piyasa özetinizi alabilirsiniz.
+              {t.stock_ai_report_empty}
             </div>
           )}
         </div>
@@ -245,7 +243,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
         >
           <div>
             <h3 style={{ margin: 0, fontSize: "1.1rem", color: "#f8fafc" }}>
-              💡 Alım & Yatırım Karar Asistanı
+              {t.stock_ai_advisor_title}
             </h3>
             <p
               style={{
@@ -254,8 +252,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
                 color: "#94a3b8",
               }}
             >
-              Yeni bir hisse almadan veya karar vermeden önce hisse kodunu
-              yazarak 9Router AI'dan sade değerlendirme alın.
+              {t.stock_ai_advisor_desc}
             </p>
           </div>
 
@@ -271,11 +268,11 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
               }}
             >
               <div className="stock-form-group">
-                <label className="stock-form-label">Hisse Sembolü</label>
+                <label className="stock-form-label">{t.stock_ai_advisor_symbol_label}</label>
                 <input
                   type="text"
                   className="stock-input"
-                  placeholder="Örn: KRDMD, SASA, EREGL"
+                  placeholder={t.stock_ai_advisor_symbol_placeholder}
                   value={querySymbol}
                   onInput={(e) =>
                     setQuerySymbol((e.target as HTMLInputElement).value)
@@ -286,12 +283,12 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
 
               <div className="stock-form-group">
                 <label className="stock-form-label">
-                  Özel Soru (İsteğe Bağlı)
+                  {t.stock_ai_advisor_question_label}
                 </label>
                 <input
                   type="text"
                   className="stock-input"
-                  placeholder="Örn: Bu hisseyi 1 ay tutmak riskli mi?"
+                  placeholder={t.stock_ai_advisor_question_placeholder}
                   value={queryQuestion}
                   onInput={(e) =>
                     setQueryQuestion((e.target as HTMLInputElement).value)
@@ -309,8 +306,8 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
                 <IconSearch />
                 <span>
                   {advisorLoading
-                    ? "AI Analiz Ediyor..."
-                    : "AI Danışmanına Sor"}
+                    ? t.stock_analysis_analyzing
+                    : t.stock_analysis_ask}
                 </span>
               </button>
             </div>
@@ -325,7 +322,7 @@ export function StockAiReportTab({ portfolio, quotes }: StockAiReportTabProps) {
               }}
             >
               <span>
-                AI {querySymbol.toUpperCase()} hissesini değerlendiriyor...
+                {t.stock_ai_advisor_analyzing.replace("{symbol}", querySymbol.toUpperCase())}
               </span>
             </div>
           ) : advisorResponse ? (
