@@ -8,7 +8,9 @@ interface ArcadeHeaderProps {
   searchQuery: string;
   onCategoryChange: (cat: GameCategory) => void;
   onSearchChange: (q: string) => void;
-  onScanFolder: () => void;
+  onImportFolder: () => void;
+  importing: boolean;
+  browserSupport: boolean;
 }
 
 export function ArcadeHeader({
@@ -17,7 +19,9 @@ export function ArcadeHeader({
   searchQuery,
   onCategoryChange,
   onSearchChange,
-  onScanFolder,
+  onImportFolder,
+  importing,
+  browserSupport,
 }: ArcadeHeaderProps) {
   const t = translations[lang];
   const tr = t as Record<string, string>;
@@ -40,9 +44,7 @@ export function ArcadeHeader({
           <span>{tr.arcade_badge_title}</span>
         </div>
         <h2>{tr.arcade_main_title}</h2>
-        <p className="arcade-subtitle">
-          {tr.arcade_subtitle}
-        </p>
+        <p className="arcade-subtitle">{tr.arcade_subtitle}</p>
       </div>
 
       <div className="arcade-controls-row">
@@ -71,11 +73,15 @@ export function ArcadeHeader({
           ))}
         </div>
 
-        <button className="arcade-add-btn" onClick={onScanFolder}>
+        <button
+          className="arcade-add-btn"
+          onClick={onImportFolder}
+          disabled={importing || !browserSupport}
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <span>{tr.arcade_scan_folder_btn}</span>
+          <span>{importing ? tr.arcade_importing_btn : tr.arcade_import_folder_btn}</span>
         </button>
       </div>
     </div>
