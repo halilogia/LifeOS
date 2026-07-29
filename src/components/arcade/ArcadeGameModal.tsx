@@ -88,8 +88,8 @@ export function ArcadeGameModal({
         if (cancelled) {return;}
         if (pkg) {setGamePkg(pkg);}
         else {setError(tr.arcade_iframe_error);}
-      } catch (err: any) {
-        if (!cancelled) {setError(err?.message ?? tr.arcade_iframe_error);}
+      } catch (err: unknown) {
+        if (!cancelled) {setError(err instanceof Error ? (err?.message ?? tr.arcade_iframe_error) : tr.arcade_iframe_error);}
       } finally {
         if (!cancelled) {setLoading(false);}
       }
@@ -114,8 +114,8 @@ export function ArcadeGameModal({
       } else {
         setError(tr.arcade_iframe_error);
       }
-    } catch (err: any) {
-      setError(err?.message ?? tr.arcade_iframe_error);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? (err?.message ?? tr.arcade_iframe_error) : tr.arcade_iframe_error);
     } finally {
       setLoading(false);
     }

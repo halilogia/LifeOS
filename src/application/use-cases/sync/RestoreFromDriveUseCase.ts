@@ -7,6 +7,8 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { INoteRepository } from "@/domain/repositories/INoteRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import type { Note } from "@/types/types.js";
 import { logger } from "@/utils/logger.js";
 
 export interface RestoreResult {
@@ -43,10 +45,10 @@ export class RestoreFromDriveUseCase {
 
       // Restore data to repositories if available
       if (restored.todos && this.todoRepo) {
-        await this.todoRepo.saveAll(restored.todos as any);
+        await this.todoRepo.saveAll(restored.todos as Todo[]);
       }
       if (restored.notes && this.noteRepo) {
-        await this.noteRepo.saveAll(restored.notes as any);
+        await this.noteRepo.saveAll(restored.notes as Note[]);
       }
 
       return { restored: true, data: restored };

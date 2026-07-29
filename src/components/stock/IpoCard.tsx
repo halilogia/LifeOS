@@ -4,7 +4,7 @@ import { IPOEntry } from "@/services/ipoService.js";
 interface IpoCardProps {
   ipo: IPOEntry;
   lang: Language;
-  t: any;
+  t: Record<string, string>;
 }
 
 function formatDate(dateStr: string, lang: Language): string {

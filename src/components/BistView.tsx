@@ -154,7 +154,7 @@ export function BistView({ lang }: BistViewProps) {
   // Handlers
   const handleSaveStock = async (itemData: Omit<StockPortfolioItem, "id">) => {
     const fullItem: StockPortfolioItem = {
-      id: (itemData as any).id || `stock-${Date.now()}`,
+      id: (itemData as StockPortfolioItem).id || `stock-${Date.now()}`,
       ...itemData,
     };
     const existingIdx = portfolio.findIndex(
@@ -185,8 +185,8 @@ export function BistView({ lang }: BistViewProps) {
     ruleData: Omit<StockRule, "id" | "createdAt">,
   ) => {
     const fullRule: StockRule = {
-      id: (ruleData as any).id || `rule-${Date.now()}`,
-      createdAt: (ruleData as any).createdAt || new Date().toISOString(),
+      id: (ruleData as StockRule).id || `rule-${Date.now()}`,
+      createdAt: (ruleData as StockRule).createdAt || new Date().toISOString(),
       ...ruleData,
     };
     const existingIdx = rules.findIndex((r) => r.id === fullRule.id);

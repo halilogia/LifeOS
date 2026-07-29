@@ -2,7 +2,7 @@ import { Language } from "@/types/types.js";
 
 interface GeneralSettingsTabProps {
   lang: Language;
-  t: any;
+  t: Record<string, string>;
   onToggleLang: () => void;
   freeGamesNotificationsEnabled: boolean;
   onToggleFreeGamesNotifications: () => void;

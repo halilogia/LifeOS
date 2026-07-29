@@ -160,7 +160,7 @@ export function buildKnowledgeGraph(
       vx: 0,
       vy: 0,
       radius: Math.max(16, Math.min(32, 16 + linkDeg * 4)),
-      color: getNodeColor(tags, (n as any).subject || (n as any).category, n.title),
+      color: getNodeColor(tags, n.type || "note", n.title),
       linksCount: linkDeg,
     };
   });

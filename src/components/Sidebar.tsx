@@ -9,7 +9,7 @@ interface SidebarProps {
   activeView: string;
   activeTab: "focus" | "routines";
   sidebarOpen: boolean;
-  onViewChange: (view: any) => void;
+  onViewChange: (view: string) => void;
   onTabChange: (tab: "focus" | "routines") => void;
   onSidebarToggle: () => void;
   onSettingsOpen: () => void;
@@ -71,14 +71,18 @@ export function Sidebar({
     });
   }, []);
 
-  const handleDragStart = (e: any, id: string) => {
+  const handleDragStart = (e: DragEvent, id: string) => {
     setDraggedItem(id);
-    e.dataTransfer.effectAllowed = "move";
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+    }
   };
 
-  const handleDragOver = (e: any, id: string) => {
+  const handleDragOver = (e: DragEvent, id: string) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = "move";
+    }
     if (dragOverItem !== id) {
       setDragOverItem(id);
     }
@@ -95,7 +99,7 @@ export function Sidebar({
     setDragOverItem(null);
   };
 
-  const handleDrop = async (e: any, targetId: string) => {
+  const handleDrop = async (e: DragEvent, targetId: string) => {
     e.preventDefault();
     const currentItem = draggedItem;
     setDraggedItem(null);

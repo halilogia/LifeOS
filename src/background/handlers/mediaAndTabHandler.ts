@@ -1,4 +1,5 @@
 import { logger } from "@/utils/logger.js";
+import type { RuntimeMessage } from "./runtimeMessageHandler.js";
 
 /**
  * mediaAndTabHandler.ts
@@ -25,9 +26,9 @@ async function ensureOffscreenDocument(): Promise<void> {
  * Returns true if message was handled asynchronously.
  */
 export function handleMediaAndTabMessage(
-  message: any,
+  message: RuntimeMessage,
   sender: chrome.runtime.MessageSender,
-  sendResponse: (response?: any) => void,
+  sendResponse: (response?: Record<string, unknown>) => void,
 ): boolean {
   if (
     message.type === "play_ambient_sound" ||
@@ -65,18 +66,18 @@ export function handleMediaAndTabMessage(
         target: { tabId: targetTabId },
         world: "MAIN",
         func: (boostMultiplier: number) => {
-          let audioCtx = (window as any)._lifeosAudioCtx;
-          let gainNode = (window as any)._lifeosGainNode;
+          let audioCtx = window._lifeosAudioCtx;
+          let gainNode = window._lifeosGainNode;
 
           if (!audioCtx) {
             const AudioCtxClass =
-              window.AudioContext || (window as any).webkitAudioContext;
+              window.AudioContext || window.webkitAudioContext;
             if (!AudioCtxClass) {return;}
             audioCtx = new AudioCtxClass();
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
-            (window as any)._lifeosAudioCtx = audioCtx;
-            (window as any)._lifeosGainNode = gainNode;
+            window._lifeosAudioCtx = audioCtx;
+            window._lifeosGainNode = gainNode;
           }
 
           if (audioCtx.state === "suspended") {
@@ -84,8 +85,8 @@ export function handleMediaAndTabMessage(
           }
 
           const connectedMap =
-            (window as any)._lifeosConnectedMap || new WeakMap();
-          (window as any)._lifeosConnectedMap = connectedMap;
+            window._lifeosConnectedMap || new WeakMap();
+          window._lifeosConnectedMap = connectedMap;
 
           const mediaEls = Array.from(
             document.querySelectorAll("video, audio"),
@@ -95,7 +96,7 @@ export function handleMediaAndTabMessage(
             if (!connectedMap.has(el)) {
               try {
                 const source = audioCtx.createMediaElementSource(el);
-                source.connect(gainNode);
+                source.connect(gainNode!);
                 connectedMap.set(el, source);
               } catch (e) {}
             }

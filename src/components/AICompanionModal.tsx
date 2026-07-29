@@ -130,9 +130,9 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
       }
 
       setStatusMsg("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error(err);
-      setStatusMsg(err?.message || "Video analizi sırasında bir hata oluştu.");
+      setStatusMsg(err instanceof Error ? err.message : "Video analizi sırasında bir hata oluştu.");
     } finally {
       setLoading(false);
     }

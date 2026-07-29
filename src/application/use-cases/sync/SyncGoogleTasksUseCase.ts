@@ -7,7 +7,7 @@
 
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import type { ITodoSyncPort, RemoteTask } from "@/application/ports/ITodoSyncPort.js";
 import { parseRepeatFromNotes } from "@/domain/services/TaskService.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import { logger } from "@/utils/logger.js";
@@ -49,7 +49,7 @@ export class SyncGoogleTasksUseCase {
           this.todoRepository.getAll(),
         ]);
 
-      const mappedFocus: Todo[] = remoteFocusTasks.map((t: any) => {
+      const mappedFocus: Todo[] = remoteFocusTasks.map((t: RemoteTask) => {
         const status: "done" | "todo" =
           t.status === "completed" ? "done" : "todo";
         return {
@@ -64,7 +64,7 @@ export class SyncGoogleTasksUseCase {
         };
       });
 
-      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: any) => {
+      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: RemoteTask) => {
         const repeat = parseRepeatFromNotes(t.notes);
         const status: "done" | "todo" =
           t.status === "completed" ? "done" : "todo";

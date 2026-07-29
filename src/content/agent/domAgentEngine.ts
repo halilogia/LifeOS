@@ -325,10 +325,16 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
   return null;
 }
 
+export interface ExtractedPageData {
+  title: string;
+  url: string;
+  summaryText: string;
+}
+
 /**
  * Executes requested browser action or form autofill on active DOM with Claude / Browser-Use overlays.
  */
-export function executeAgentAction(payload: AgentActionPayload): { success: boolean; message: string; extractedData?: any } {
+export function executeAgentAction(payload: AgentActionPayload): { success: boolean; message: string; extractedData?: ExtractedPageData } {
   const { actionType, selector, targetText, textValue, direction } = payload;
 
   if (actionType === "scroll") {

@@ -317,7 +317,7 @@ export function parseLocalCommand(query: string): LocalParsedResult {
 /**
  * Normalizes and parses raw JSON string from AI response.
  */
-export function cleanAndParseJSON(text: string): any {
+export function cleanAndParseJSON(text: string): unknown {
   let cleaned = text.trim();
 
   // 1. Remove think blocks entirely
@@ -417,7 +417,7 @@ export function cleanAndParseJSON(text: string): any {
 export function parseAIResponse(rawText: string): {
   reply: string;
   action: string;
-  params: any;
+  params: Record<string, unknown> | null;
   thinking: string;
 } {
   let thinking = "";

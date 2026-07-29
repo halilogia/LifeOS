@@ -7,13 +7,14 @@
 import type { KpssTopic } from "@/domain/constants/kpssCurriculum.js";
 import { KpssProgress } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 export function calculateKpssCountdown(
   targetDate: number,
   now: number,
   lang: string,
 ): string {
-  const t = getTranslation(lang as any);
+  const t = getTranslation(lang as Language);
   const diffKpss = targetDate - now;
   if (diffKpss <= 0) {
     return t.kpss_exam_started;
@@ -36,7 +37,7 @@ export function calculateEstimatedCompletionTime(
   now: number,
   lang: string,
 ): string {
-  const t = getTranslation(lang as any);
+  const t = getTranslation(lang as Language);
   if (remainingCount === 0) {
     return t.kpss_completed;
   }

@@ -169,7 +169,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
     today.getFullYear() === year && today.getMonth() === month;
 
   // Render day cells
-  const dayCells: any[] = [];
+  const dayCells: preact.JSX.Element[] = [];
   // Empty slots
   for (let i = 0; i < startOffset; i++) {
     dayCells.push(

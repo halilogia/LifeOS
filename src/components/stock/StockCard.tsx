@@ -3,7 +3,7 @@ import type { StockQuote } from "@/types/bist.js";
 
 interface StockCardProps {
   quote: StockQuote;
-  t: any;
+  t: Record<string, string>;
   onClick: () => void;
 }
 

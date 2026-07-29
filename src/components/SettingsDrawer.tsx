@@ -26,7 +26,7 @@ export interface SettingsDrawerProps {
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
   onExportBackup: () => void;
-  onImportBackup: (e: any) => void;
+  onImportBackup: (e: Event) => void;
   onClearAllData: () => void;
   aiApiKey: string;
   aiModel: string;

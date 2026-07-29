@@ -5,7 +5,10 @@
  */
 
 import { useEffect, useCallback } from "preact/hooks";
+import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import type { RemoteTask } from "@/application/ports/ITodoSyncPort.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
@@ -26,13 +29,13 @@ function createSyncPort() {
       tasksApi.getOrCreateTaskList(token, title),
     getTasks: (token: string, taskListId: string) =>
       tasksApi.getTasks(token, taskListId),
-    createTask: (token: string, taskListId: string, task: any) =>
+    createTask: (token: string, taskListId: string, task: RemoteTask) =>
       tasksApi.createTask(token, taskListId, task),
     updateTask: (
       token: string,
       taskListId: string,
       taskId: string,
-      task: any,
+      task: RemoteTask,
     ) => tasksApi.updateTask(token, taskListId, taskId, task),
     deleteTask: (token: string, taskListId: string, taskId: string) =>
       tasksApi.deleteTask(token, taskListId, taskId),
@@ -51,8 +54,8 @@ export interface AppInitCallbacks {
     universalInfoBoxEnabled: boolean;
     universalInfoBoxHotkey: string;
   }) => void;
-  onTodosLoaded: (todos: any[]) => void;
-  onSyncSettingsLoaded: (settings: any) => void;
+  onTodosLoaded: (todos: readonly Todo[]) => void;
+  onSyncSettingsLoaded: (settings: GoogleSyncSettings) => void;
   onGoogleUserEmail: (email: string) => void;
   onSidebarOrderLoaded: (order: string[]) => void;
   onQuoteRefreshed: (lang: Language) => void;
@@ -71,7 +74,7 @@ export function useAppInit(callbacks: AppInitCallbacks) {
 
     // 2. Load configurations
     const config = await settingsRepo.getSettings();
-    callbacks.onSettingsLoaded(config as any);
+    callbacks.onSettingsLoaded(config);
 
     const savedOrder = await settingsRepo.getSidebarOrder();
     callbacks.onSidebarOrderLoaded(savedOrder || []);
@@ -82,7 +85,7 @@ export function useAppInit(callbacks: AppInitCallbacks) {
     // 3. Load and clean task items (via use case)
     const resetUC = new ResetRepeatingTodosUseCase(todoRepo);
     const { todos } = await resetUC.execute();
-    callbacks.onTodosLoaded(todos as any);
+    callbacks.onTodosLoaded(todos);
 
     // 4. Trigger background task sync if Google Sync is enabled
     const syncConfig = await syncRepo.getSyncSettings();

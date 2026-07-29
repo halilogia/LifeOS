@@ -16,7 +16,7 @@ initAlarmNotificationHandler();
 initContextMenuHandler();
 
 // Unified Message Orchestrator
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   // 1. Dispatch media, offscreen audio, and tab volume booster events
   const handledMedia = handleMediaAndTabMessage(message, sender, sendResponse);
   if (handledMedia) {
@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   // 2. Dispatch translation, tab context, tab grouping, and AI generation events
-  const handledRuntime = handleRuntimeMessage(message, sender, sendResponse);
+  const handledRuntime = await handleRuntimeMessage(message, sender, sendResponse);
   if (handledRuntime) {
     return true;
   }

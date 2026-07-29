@@ -1,7 +1,7 @@
 import { PomodoroLog } from "@/types/types.js";
 
 interface PomoZenGardenCardProps {
-  gridCells: any[];
+  gridCells: preact.JSX.Element[];
   showPlantModal: boolean;
   focusNote: string;
   selectedElement: PomodoroLog["element"];
