@@ -1,23 +1,52 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 import { arcadeService } from "@/services/arcadeService.js";
 import { GameEntry, GameCategory, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
 import { ArcadeHeader } from "@/components/arcade/ArcadeHeader.js";
 import { ArcadeGameCard } from "@/components/arcade/ArcadeGameCard.js";
 import { ArcadeGameModal } from "@/components/arcade/ArcadeGameModal.js";
-import { AddGameModal } from "@/components/arcade/AddGameModal.js";
 
 interface ArcadeViewProps {
   lang: Language;
 }
+
+const formatFolderName = (name: string): string => {
+  return name
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
+};
+
+const detectCategory = (name: string): GameEntry["category"] => {
+  const lower = name.toLowerCase();
+  if (lower.includes("rpg") || lower.includes("adventure") || lower.includes("isekai") || lower.includes("quest")) return "rpg";
+  if (lower.includes("sim") || lower.includes("manager") || lower.includes("survival") || lower.includes("tycoon") || lower.includes("market") || lower.includes("stardew")) return "simulation";
+  if (lower.includes("ai") || lower.includes("focus")) return "ai";
+  if (lower.includes("puzzle") || lower.includes("match") || lower.includes("tarot") || lower.includes("card")) return "puzzle";
+  if (lower.includes("race") || lower.includes("moto") || lower.includes("runner") || lower.includes("wave")) return "casual";
+  return "action";
+};
+
+
+const detectTechStack = (name: string): string[] => {
+  const lower = name.toLowerCase();
+  const stack: string[] = [];
+  if (lower.includes("3d") || lower.includes("voxel") || lower.includes("webgl")) stack.push("Three.js");
+  if (lower.includes("2d") || lower.includes("canvas") || lower.includes("phaser")) stack.push("Canvas / 2D");
+  if (lower.includes("ai")) stack.push("Gemini API");
+  if (stack.length === 0) stack.push("TypeScript", "Vite");
+  return stack;
+};
 
 export function ArcadeView({ lang }: ArcadeViewProps) {
   const [games, setGames] = useState<GameEntry[]>([]);
   const [activeCategory, setActiveCategory] = useState<GameCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeGame, setActiveGame] = useState<GameEntry | null>(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [scanning, setScanning] = useState(false);
+
+  const folderInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadGamesList();
@@ -54,7 +83,6 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-
   const handleUpdateDevNotes = async (
     gameId: string,
     notes: string,
@@ -67,36 +95,129 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-  const handleAddGame = async (
-    newGame: Omit<
-      GameEntry,
-      "id" | "createdAt" | "highScore" | "playCount" | "totalPlayTimeSeconds"
-    >,
-  ) => {
-    const updated = await arcadeService.addGame(newGame);
-    setGames(updated);
-  };
-
   const handleDeleteGame = async (gameId: string) => {
     const updated = await arcadeService.deleteGame(gameId);
     setGames(updated);
     setActiveGame(null);
   };
 
-  // Filter games based on Category & Search Query
-  const filteredGames = games.filter((game) => {
-    // Category match
-    if (activeCategory === "playable" && game.status !== "playable") {
-      return false;
+  // Folder Scan Trigger
+  const handleScanFolderTrigger = async () => {
+    setScanning(true);
+    try {
+      if ("showDirectoryPicker" in window) {
+        const dirHandle = await (window as any).showDirectoryPicker({ mode: "read" });
+        const scannedGames: GameEntry[] = [];
+        let port = 5173;
+
+        for await (const entry of dirHandle.values()) {
+          if (entry.kind === "directory") {
+            const folderName = entry.name;
+            const title = formatFolderName(folderName);
+            const devPath = `C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\${folderName}`;
+            const id = `scan_${folderName.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase()}`;
+
+            scannedGames.push({
+              id,
+              title,
+              description: `${folderName} yerel oyun geliştirme projesi.`,
+              category: detectCategory(folderName),
+              status: "in_progress",
+              embedType: "iframe",
+              iframeUrl: `http://localhost:${port++}`,
+              devPath,
+              techStack: detectTechStack(folderName),
+              highScore: 0,
+              playCount: 0,
+              totalPlayTimeSeconds: 0,
+              devNotes: "Klasör taraması ile otomatik eklendi.",
+              isFavorite: false,
+              createdAt: new Date().toISOString(),
+            });
+          }
+        }
+
+        if (scannedGames.length > 0) {
+          const updated = await arcadeService.importScannedGames(scannedGames);
+          setGames(updated);
+        }
+      } else {
+        folderInputRef.current?.click();
+      }
+    } catch (err: any) {
+      // If user cancelled showDirectoryPicker or if it throws permission error, fallback to file input
+      if (err.name !== "AbortError") {
+        folderInputRef.current?.click();
+      }
+    } finally {
+      setScanning(false);
     }
-    if (activeCategory === "in_progress" && game.status !== "in_progress") {
-      return false;
-    }
-    if (activeCategory === "favorites" && !game.isFavorite) {
-      return false;
+  };
+
+  // Fallback webkitdirectory Input Handler
+  const handleFolderInputChange = async (e: Event) => {
+    const input = e.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    setScanning(true);
+    const folderSet = new Set<string>();
+    const files = Array.from(input.files);
+
+    files.forEach((file) => {
+      const relPath = file.webkitRelativePath;
+      if (relPath) {
+        const parts = relPath.split("/");
+        // If user picked "In Progress" folder, top subfolder is parts[1]
+        // If user picked a single game folder, parts[0] is the folder name
+        if (parts.length > 1) {
+          folderSet.add(parts[1]);
+        } else if (parts.length === 1) {
+          folderSet.add(parts[0]);
+        }
+      }
+    });
+
+    const folderNames = Array.from(folderSet);
+    let port = 5173;
+    const scannedGames: GameEntry[] = folderNames.map((folderName) => {
+      const title = formatFolderName(folderName);
+      const devPath = `C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\${folderName}`;
+      const id = `scan_${folderName.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase()}`;
+
+      return {
+        id,
+        title,
+        description: `${folderName} yerel oyun geliştirme projesi.`,
+        category: detectCategory(folderName),
+        status: "in_progress",
+        embedType: "iframe",
+        iframeUrl: `http://localhost:${port++}`,
+        devPath,
+        techStack: detectTechStack(folderName),
+        highScore: 0,
+        playCount: 0,
+        totalPlayTimeSeconds: 0,
+        devNotes: "Klasör taraması ile otomatik eklendi.",
+        isFavorite: false,
+        createdAt: new Date().toISOString(),
+      };
+    });
+
+    if (scannedGames.length > 0) {
+      const updated = await arcadeService.importScannedGames(scannedGames);
+      setGames(updated);
     }
 
-    // Search query match
+    setScanning(false);
+    input.value = "";
+  };
+
+  // Filter games based on Category & Search Query
+  const filteredGames = games.filter((game) => {
+    if (activeCategory === "playable" && game.status !== "playable") return false;
+    if (activeCategory === "in_progress" && game.status !== "in_progress") return false;
+    if (activeCategory === "favorites" && !game.isFavorite) return false;
+
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const matchTitle = game.title.toLowerCase().includes(q);
@@ -110,6 +231,17 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
 
   return (
     <div className="arcade-view-container">
+      {/* Invisible Folder Picker Fallback Input */}
+      <input
+        ref={folderInputRef}
+        type="file"
+        // @ts-ignore
+        webkitdirectory="true"
+        directory="true"
+        style={{ display: "none" }}
+        onChange={handleFolderInputChange}
+      />
+
       {/* Header Controls & Filter */}
       <ArcadeHeader
         lang={lang}
@@ -117,23 +249,22 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
         searchQuery={searchQuery}
         onCategoryChange={setActiveCategory}
         onSearchChange={setSearchQuery}
-        onOpenAddModal={() => setIsAddModalOpen(true)}
+        onScanFolder={handleScanFolderTrigger}
       />
 
       {/* Main Games Grid */}
-      {loading ? (
+      {loading || scanning ? (
         <div className="arcade-loading-state">
           <div className="arcade-spinner" />
-          <p>Oyun Kütüphanesi Yükleniyor...</p>
+          <p>{scanning ? "Oyun Klasörleri Taranıyor..." : "Oyun Kütüphanesi Yükleniyor..."}</p>
         </div>
       ) : filteredGames.length === 0 ? (
         <div className="arcade-empty-state">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
-            <rect x="2" y="6" width="20" height="12" rx="4" />
-            <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" />
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <h3>Sonuç Bulunamadı</h3>
-          <p>Seçilen filtreye veya aramaya uygun oyun bulunamadı.</p>
+          <h3>Henüz Taranmış Oyun Bulunamadı</h3>
+          <p>Sağ üstteki <strong>"Klasör Tara"</strong> butonuna basıp <code>C:\Users\emre_\Desktop\GitHub\In Progress</code> klasörünü seçerek projelerini otomatik yükle.</p>
         </div>
       ) : (
         <div className="arcade-games-grid">
@@ -159,17 +290,7 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
           onUpdateScore={handleUpdateScore}
           onUpdateStatus={handleUpdateStatus}
           onUpdateDevNotes={handleUpdateDevNotes}
-
           onDeleteGame={handleDeleteGame}
-        />
-      )}
-
-      {/* Add New Game Modal */}
-      {isAddModalOpen && (
-        <AddGameModal
-          lang={lang}
-          onClose={() => setIsAddModalOpen(false)}
-          onAddGame={handleAddGame}
         />
       )}
     </div>
