@@ -1,9 +1,8 @@
-import { Language } from "@/types/types.js";
 import { WordReviewData, ReviewQuality } from "@/types/word.js";
 import { KpssFlashcard } from "@/services/kpssService.js";
 
 interface KpssSrsCardProps {
-  lang: Language;
+  t: Record<string, string>;
   srsLoading: boolean;
   srsQueue: WordReviewData[];
   srsIndex: number;
@@ -16,7 +15,7 @@ interface KpssSrsCardProps {
 }
 
 export function KpssSrsCard({
-  lang,
+  t,
   srsLoading,
   srsQueue,
   srsIndex,
@@ -42,9 +41,7 @@ export function KpssSrsCard({
       >
         <div className="ha-spinner" />
         <span style={{ fontSize: "0.95rem", color: "var(--text-secondary)" }}>
-          {lang === "tr"
-            ? "Tekrar kartları hazırlanıyor..."
-            : "Preparing repetition cards..."}
+          {t.kpss_srs_preparing}
         </span>
       </div>
     );
@@ -75,7 +72,7 @@ export function KpssSrsCard({
             marginBottom: "8px",
           }}
         >
-          {lang === "tr" ? "Harika İş!" : "Great Job!"}
+          {t.kpss_srs_great_job}
         </h3>
         <p
           style={{
@@ -85,16 +82,14 @@ export function KpssSrsCard({
             color: "var(--text-secondary)",
           }}
         >
-          {lang === "tr"
-            ? "Bugünlük tüm KPSS tekrar kartlarını tamamladınız."
-            : "You have reviewed all due KPSS repetition cards for today."}
+          {t.kpss_srs_all_done}
         </p>
         <button
           className="settings-add-btn"
           onClick={onReloadQueue}
           style={{ padding: "10px 24px" }}
         >
-          {lang === "tr" ? "Tekrar Yükle" : "Review Again"}
+          {t.kpss_srs_reload}
         </button>
       </div>
     );
@@ -129,9 +124,7 @@ export function KpssSrsCard({
       >
         <span>{card.category}</span>
         <span>
-          {lang === "tr"
-            ? `Kart ${srsIndex + 1} / ${srsQueue.length}`
-            : `Card ${srsIndex + 1} / ${srsQueue.length}`}
+          {`${t.kpss_srs_card_label} ${srsIndex + 1} / ${srsQueue.length}`}
         </span>
       </div>
 
@@ -169,9 +162,7 @@ export function KpssSrsCard({
               }}
             >
               💡{" "}
-              {lang === "tr"
-                ? "Cevabı görmek için tıkla"
-                : "Click to see answer"}
+              {t.kpss_srs_click_to_see}
             </span>
           </div>
           <div
@@ -197,7 +188,7 @@ export function KpssSrsCard({
                   color: "var(--text-secondary)",
                 }}
               >
-                {lang === "tr" ? "İpucu: " : "Hint: "}
+                {t.kpss_srs_hint}
                 {card.hint}
               </p>
             )}
@@ -226,7 +217,7 @@ export function KpssSrsCard({
             }}
             onClick={() => onReviewQuality("hard")}
           >
-            {lang === "tr" ? "Zor" : "Hard"}
+            {t.kpss_srs_hard}
           </button>
           <button
             className="srs-btn srs-btn-medium"
@@ -238,7 +229,7 @@ export function KpssSrsCard({
             }}
             onClick={() => onReviewQuality("medium")}
           >
-            {lang === "tr" ? "Orta" : "Medium"}
+            {t.kpss_srs_medium}
           </button>
           <button
             className="srs-btn srs-btn-easy"
@@ -250,7 +241,7 @@ export function KpssSrsCard({
             }}
             onClick={() => onReviewQuality("easy")}
           >
-            {lang === "tr" ? "Kolay" : "Easy"}
+            {t.kpss_srs_easy}
           </button>
         </div>
       )}

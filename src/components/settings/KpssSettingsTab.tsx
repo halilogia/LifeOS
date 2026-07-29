@@ -1,10 +1,10 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import { getTranslation } from "@/utils/i18n.js";
 import { getAutoTitleSetting, saveAutoTitleSetting } from "@/services/kpssWikiService.js";
 
 interface KpssSettingsTabProps {
   lang: Language;
+  t: Record<string, string>;
   kpssGoalType: "net" | "score";
   kpssTargetNet: number;
   kpssTargetScore: number;
@@ -16,6 +16,7 @@ interface KpssSettingsTabProps {
 
 export function KpssSettingsTab({
   lang,
+  t,
   kpssGoalType,
   kpssTargetNet,
   kpssTargetScore,
@@ -24,7 +25,6 @@ export function KpssSettingsTab({
   onKpssTargetScoreChange,
   onResetKpssData,
 }: KpssSettingsTabProps) {
-  const t = getTranslation(lang);
   const [autoTitleEnabled, setAutoTitleEnabled] = useState(false);
 
   useEffect(() => {
@@ -238,9 +238,7 @@ export function KpssSettingsTab({
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
             <span>
-              {lang === "tr"
-                ? "KPSS GK-GY puan türlerinde 80 Puan alabilmek için ortalama sınav zorluğuna göre 70-75 Net yapılması yeterli olabilmektedir. Net ve Puan birebir eşit değildir, standart sapma formüllere dahildir."
-                : "To score 80 Points in KPSS GK-GY, achieving around 70-75 Nets can be sufficient depending on average difficulty. Score and Net are not 1-to-1 equal due to standard deviation."}
+              {t.settings_kpss_net_score_info}
             </span>
           </div>
         </div>
@@ -248,7 +246,7 @@ export function KpssSettingsTab({
 
       {/* Wiki Notları Ayarları */}
       <div className="settings-group">
-        <h3>{lang === "tr" ? "KPSS Ders Notları & Wiki" : "KPSS Study Notes & Wiki"}</h3>
+        <h3>{t.settings_kpss_notes_wiki}</h3>
         <div
           style={{
             display: "flex",
@@ -269,12 +267,10 @@ export function KpssSettingsTab({
           >
             <div>
               <div style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
-                {lang === "tr" ? "Otomatik İlk Kelime Başlığı" : "Auto First-Word Title"}
+                {t.settings_kpss_auto_title}
               </div>
               <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: "2px" }}>
-                {lang === "tr"
-                  ? "Ders notu yazarken başlık alanı boş bırakılırsa sadece ilk kelimeyi otomatik başlık yapar."
-                  : "If title field is left blank when creating a note, automatically uses the first word as the title."}
+                {t.settings_kpss_auto_title_desc}
               </div>
             </div>
 
@@ -331,7 +327,7 @@ export function KpssSettingsTab({
 
       {/* Reset KPSS Data Section */}
       <div className="settings-group">
-        <h3>{lang === "tr" ? "Veri Sıfırlama" : "Data Reset"}</h3>
+        <h3>{t.settings_kpss_data_reset}</h3>
         <div
           style={{
             display: "flex",
@@ -351,9 +347,7 @@ export function KpssSettingsTab({
               lineHeight: 1.4,
             }}
           >
-            {lang === "tr"
-              ? "Tüm KPSS konu tamamlama verilerinizi, günlük soru/video istatistiklerinizi, SRS tekrar kartlarınızı ve çıkmış sınav test geçmişinizi sıfırlar."
-              : "Resets all your KPSS topic progress, daily question/video stats, SRS flashcards, and past test quiz records."}
+            {t.settings_kpss_data_reset_desc}
           </p>
           <button
             type="button"
@@ -383,9 +377,7 @@ export function KpssSettingsTab({
                 "rgba(239, 68, 68, 0.3)";
             }}
           >
-            {lang === "tr"
-              ? "Tüm KPSS Verilerini Sıfırla"
-              : "Reset All KPSS Data"}
+            {t.settings_kpss_reset_button}
           </button>
         </div>
       </div>

@@ -21,9 +21,10 @@ import { ZettelkastenGraphModal } from "@/components/notes/ZettelkastenGraphModa
 
 interface KpssNotesDashboardProps {
   lang: Language;
+  t: Record<string, string>;
 }
 
-export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
+export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   const [notes, setNotes] = useState<KpssWikiNote[]>([]);
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -101,7 +102,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
     }
 
     if (!finalTitle) {
-      finalTitle = lang === "tr" ? "Başlıksız Ders Notu" : "Untitled Note";
+      finalTitle = t.kpss_notes_untitled;
     }
 
     const updatedNotes = notes.map((n) => {
@@ -188,6 +189,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
       <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: "16px", minHeight: "680px" }}>
         <KpssWikiSidebar
           lang={lang}
+          t={t}
           notes={filteredNotes}
           selectedNoteId={selectedNoteId}
           searchQuery={searchQuery}
@@ -266,7 +268,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                   <button
                     type="button"
                     onClick={handleDownloadMarkdown}
-                    title={lang === "tr" ? "Markdown (.md) Olarak İndir" : "Download as Markdown"}
+                    title={t.kpss_notes_download_md}
                     style={{
                       background: "rgba(59, 130, 246, 0.15)",
                       border: "1px solid rgba(59, 130, 246, 0.3)",
@@ -290,7 +292,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                   <button
                     type="button"
                     onClick={() => setShowGraphModal(true)}
-                    title={lang === "tr" ? "Wikiağ / Nöral Harita" : "Knowledge Graph"}
+                    title={t.kpss_notes_knowledge_graph}
                     style={{
                       background: "rgba(56, 189, 248, 0.15)",
                       border: "1px solid rgba(56, 189, 248, 0.35)",
@@ -317,7 +319,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                   <button
                     type="button"
                     onClick={handleDeleteArticle}
-                    title={lang === "tr" ? "Notu Sil" : "Delete Note"}
+                    title={t.kpss_notes_delete}
                     style={{
                       background: "rgba(239, 68, 68, 0.15)",
                       border: "1px solid rgba(239, 68, 68, 0.3)",
@@ -340,6 +342,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
               {viewMode === "read" ? (
                 <KpssWikiReader
                   lang={lang}
+                  t={t}
                   note={selectedNote}
                   allNotes={notes}
                   tableOfContents={tableOfContents}

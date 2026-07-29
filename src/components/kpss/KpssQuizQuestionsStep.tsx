@@ -28,7 +28,7 @@ export interface QuizQuestion {
 }
 
 interface KpssQuizQuestionsStepProps {
-  lang: string;
+  t: Record<string, string>;
   quizLoading: boolean;
   quizError: string | null;
   quizQuestions: QuizQuestion[];
@@ -43,7 +43,7 @@ interface KpssQuizQuestionsStepProps {
 }
 
 export function KpssQuizQuestionsStep({
-  lang,
+  t,
   quizLoading,
   quizError,
   quizQuestions,
@@ -61,9 +61,7 @@ export function KpssQuizQuestionsStep({
       <div className="ha-loading" style={{ minHeight: "200px" }}>
         <div className="ha-spinner" />
         <span style={{ fontSize: "0.95rem" }}>
-          {lang === "tr"
-            ? "Yapay Zekâ seviye tespit sorularını oluşturuyor. Lütfen bekleyin..."
-            : "AI is generating proficiency questions. Please wait..."}
+          {t.kpss_quiz_generating}
         </span>
       </div>
     );
@@ -74,7 +72,7 @@ export function KpssQuizQuestionsStep({
       <div className="ha-error" style={{ minHeight: "200px" }}>
         <span>{quizError}</span>
         <button className="ha-retry-btn" onClick={onStartQuiz}>
-          {lang === "tr" ? "Tekrar Dene" : "Retry"}
+          {t.kpss_quiz_retry}
         </button>
       </div>
     );
@@ -108,9 +106,7 @@ export function KpssQuizQuestionsStep({
         }}
       >
         <span>
-          {lang === "tr"
-            ? `Soru ${currentQuestionIndex + 1} / ${totalQuizLength}`
-            : `Question ${currentQuestionIndex + 1} / ${totalQuizLength}`}
+          {`${t.kpss_quiz_questions} ${currentQuestionIndex + 1} / ${totalQuizLength}`}
         </span>
       </div>
 
@@ -208,14 +204,12 @@ export function KpssQuizQuestionsStep({
               marginBottom: "4px",
             }}
           >
-            {lang === "tr" ? "Çözüm Açıklaması:" : "Solution & Explanation:"}
+            {t.kpss_quiz_solution}
           </div>
           <MathRenderer
             text={
               currentQ.solution ||
-              (lang === "tr"
-                ? "Çözüm bilgisi bulunmuyor."
-                : "No solution provided.")
+              t.kpss_quiz_no_solution
             }
           />
         </div>
@@ -228,7 +222,7 @@ export function KpssQuizQuestionsStep({
           disabled={currentQuestionIndex === 0}
           onClick={onPreviousQuestion}
         >
-          {lang === "tr" ? "Önceki" : "Previous"}
+          {t.kpss_quiz_previous}
         </button>
         {currentQuestionIndex < totalQuizLength - 1 ? (
           <button
@@ -250,14 +244,10 @@ export function KpssQuizQuestionsStep({
                 }}
               >
                 <span className="kpss-btn-loader" />
-                {lang === "tr"
-                  ? "Sonraki (Yükleniyor...)"
-                  : "Next (Loading...)"}
+                {t.kpss_quiz_next_loading}
               </span>
-            ) : lang === "tr" ? (
-              "Sonraki"
             ) : (
-              "Next"
+              t.kpss_quiz_next
             )}
           </button>
         ) : (
@@ -267,7 +257,7 @@ export function KpssQuizQuestionsStep({
             disabled={selectedAnswers[currentQuestionIndex] === -1}
             onClick={onFinishQuiz}
           >
-            {lang === "tr" ? "Sınavı Bitir" : "Finish Quiz"}
+            {t.kpss_quiz_finish}
           </button>
         )}
       </div>

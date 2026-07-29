@@ -1,7 +1,5 @@
-import { Language } from "@/types/types.js";
-
 interface KpssNetEstimationCardProps {
-  lang: Language;
+  t: Record<string, string>;
   goalType: "net" | "score";
   targetNet: number;
   targetScore: number;
@@ -16,7 +14,7 @@ interface KpssNetEstimationCardProps {
 }
 
 export function KpssNetEstimationCard({
-  lang,
+  t,
   goalType,
   targetNet,
   targetScore,
@@ -73,9 +71,7 @@ export function KpssNetEstimationCard({
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
           <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
-            {lang === "tr"
-              ? "KPSS Lisans Tahmini Net Skoru"
-              : "KPSS Estimated Net Score"}
+            {t.kpss_estimated_score_title}
           </span>
         </div>
         <div
@@ -128,25 +124,13 @@ export function KpssNetEstimationCard({
               <circle cx="12" cy="12" r="6"></circle>
               <circle cx="12" cy="12" r="2"></circle>
             </svg>
-            {isNetMode
-              ? lang === "tr"
-                ? "Net Hedefi:"
-                : "Net Target:"
-              : lang === "tr"
-                ? "Puan Hedefi:"
-                : "Score Target:"}
+            {isNetMode ? t.kpss_net_target : t.kpss_score_target}
           </span>
           <span
             style={{ fontSize: "1.4rem", fontWeight: "800", color: "white" }}
           >
             {activeTarget}{" "}
-            {isNetMode
-              ? lang === "tr"
-                ? "Net"
-                : "Nets"
-              : lang === "tr"
-                ? "Puan"
-                : "Points"}
+            {isNetMode ? t.kpss_net_label : t.kpss_score_label}
           </span>
         </div>
 
@@ -185,7 +169,7 @@ export function KpssNetEstimationCard({
                   <line x1="12" y1="20" x2="12" y2="4"></line>
                   <line x1="6" y1="20" x2="6" y2="14"></line>
                 </svg>
-                {lang === "tr" ? "Mevcut Toplam Net:" : "Current Total Net:"}
+                {t.kpss_current_total_net}
               </span>
               <span
                 style={{
@@ -222,7 +206,7 @@ export function KpssNetEstimationCard({
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
-                {lang === "tr" ? "Tahmini KPSS Puanı:" : "Estimated Score:"}
+                {t.kpss_estimated_score_label}
               </span>
               <span
                 style={{
@@ -257,7 +241,7 @@ export function KpssNetEstimationCard({
             }}
           >
             <span style={{ color: "var(--text-secondary)" }}>
-              {lang === "tr" ? "Hedef İlerleme" : "Goal Progress"}
+              {t.kpss_goal_progress}
             </span>
             <span
               style={{
@@ -296,9 +280,7 @@ export function KpssNetEstimationCard({
               }}
             >
               🎉{" "}
-              {lang === "tr"
-                ? "Tebrikler! Hedefinize ulaştınız."
-                : "Congrats! You achieved your target."}
+              {t.kpss_goal_achieved}
             </span>
           )}
         </div>
@@ -322,11 +304,7 @@ export function KpssNetEstimationCard({
             <div
               key={subKey}
               onClick={() => onSelectSubject?.(subKey)}
-              title={
-                lang === "tr"
-                  ? `${labels[subKey] || subKey} dersinin konularını aşağıda göster`
-                  : `Show topics for ${labels[subKey] || subKey}`
-              }
+              title={`${t.kpss_show_topics.replace('{subject}', labels[subKey] || subKey)}`}
               style={{
                 background: isSelected
                   ? "rgba(124, 58, 237, 0.14)"
@@ -359,7 +337,7 @@ export function KpssNetEstimationCard({
                 <span>{labels[subKey] || subKey}</span>
                 {isSelected && (
                   <span style={{ fontSize: "0.65rem", color: "var(--accent-color)", fontWeight: "800" }}>
-                    ✓ Seçili
+                    ✓ {t.kpss_selected}
                   </span>
                 )}
               </span>

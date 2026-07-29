@@ -8,6 +8,7 @@ import { kpssSrsService } from "@/services/kpssSrsService.js";
 import { kpssQuizFlowService } from "@/services/kpssQuizFlowService.js";
 import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
+import { getTranslation } from "@/utils/i18n.js";
 import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
 import {
   calculateKpssCountdown,
@@ -64,6 +65,7 @@ export function KpssView({
   targetNet,
   targetScore,
 }: KpssViewProps) {
+  const t = getTranslation(lang);
   const labels = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
 
   const [currentSubject, setCurrentSubject] = useState("turkce");
@@ -330,11 +332,7 @@ export function KpssView({
       }
     } catch (err: any) {
       console.error("AI quiz generation error:", err);
-      setQuizError(
-        lang === "tr"
-          ? "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin."
-          : "AI failed to generate quiz questions. Please try again.",
-      );
+      setQuizError(t.kpss_quiz_error);
       setQuizLoading(false);
       setIsBackgroundLoading(false);
     }
@@ -389,13 +387,9 @@ export function KpssView({
     const questions = getPastExamQuestions(year, subject);
 
     if (questions.length === 0) {
-      setQuizError(
-        lang === "tr"
-          ? "Bu kategori için çıkmış soru bulunamadı."
-          : "No past questions found for this category.",
-      );
+      setQuizError(t.kpss_quiz_no_past);
       setQuizStep("questions");
-      setActiveQuizTopic(lang === "tr" ? "Hata" : "Error");
+      setActiveQuizTopic(t.kpss_quiz_error_title);
       return;
     }
 
@@ -407,31 +401,19 @@ export function KpssView({
 
     const subjectName =
       subject === "all"
-        ? lang === "tr"
-          ? "GY-GK Karma"
-          : "GY-GK Mixed"
+        ? t.kpss_subject_mixed
         : subject === "cografya"
-          ? lang === "tr"
-            ? "Coğrafya"
-            : "Geography"
+          ? t.kpss_subject_geography
           : subject === "tarih"
-            ? lang === "tr"
-              ? "Tarih"
-              : "History"
+            ? t.kpss_subject_history
             : "Matematik";
 
     const yearName =
       year === "karma"
-        ? lang === "tr"
-          ? "Karma Yıllar"
-          : "Mixed Years"
+        ? t.kpss_exam_mixed_years
         : year;
 
-    setActiveQuizTopic(
-      lang === "tr"
-        ? `${yearName} KPSS Çıkmış Sorular (${subjectName})`
-        : `${yearName} KPSS Past Questions (${subjectName})`,
-    );
+    setActiveQuizTopic(`${yearName} KPSS Past Questions (${subjectName})`);
     setQuizLoading(false);
     setIsBackgroundLoading(false);
   };
@@ -500,9 +482,10 @@ export function KpssView({
       <div className="kpss-container">
         {/* Header & Sub-Tab Navigation */}
         <KpssHeaderBar
-          title="KPSS Hazırlık"
+          title={t.kpss_header_title}
           activeTab={activeTab}
           lang={lang}
+          t={t}
           onTabChange={setActiveTab}
         />
 
@@ -510,13 +493,14 @@ export function KpssView({
           <>
             <KpssCountdownBanner
               lang={lang}
+              t={t}
               kpssTimeLeft={kpssTimeLeft}
               estimatedTimeLeft={estimatedTimeLeft}
               remainingCount={remainingCount}
             />
 
             <KpssAutoPlannerCard
-              lang={lang}
+              t={t}
               kpssProgress={kpssProgress}
               onStartQuiz={(subject, topicTitle) =>
                 handleStartQuiz(topicTitle, subject)
@@ -526,6 +510,7 @@ export function KpssView({
 
             <KpssDailyStatsCard
               lang={lang}
+              t={t}
               questionsInput={questionsInput}
               videosInput={videosInput}
               subjectInput={subjectInput}
@@ -550,7 +535,7 @@ export function KpssView({
             />
 
             <KpssNetEstimationCard
-              lang={lang}
+              t={t}
               goalType={goalType}
               targetNet={targetNet}
               targetScore={targetScore}
@@ -566,6 +551,7 @@ export function KpssView({
 
             <KpssTopicList
               lang={lang}
+              t={t}
               topics={topics}
               kpssProgress={kpssProgress}
               currentSubject={currentSubject}
@@ -576,10 +562,10 @@ export function KpssView({
             />
           </>
         ) : activeTab === "notes" ? (
-          <KpssNotesDashboard lang={lang} />
+          <KpssNotesDashboard lang={lang} t={t} />
         ) : activeTab === "srs" ? (
           <KpssSrsCard
-            lang={lang}
+            t={t}
             srsLoading={srsLoading}
             srsQueue={srsQueue}
             srsIndex={srsIndex}
@@ -592,7 +578,7 @@ export function KpssView({
           />
         ) : (
           <KpssPastExamsDashboard
-            lang={lang}
+            t={t}
             onStartPastExam={handleStartPastExam}
           />
         )}
@@ -608,6 +594,7 @@ export function KpssView({
 
       <KpssQuizModal
         lang={lang}
+        t={t}
         currentSubject={currentSubject}
         activeQuizTopic={activeQuizTopic}
         quizStep={quizStep}

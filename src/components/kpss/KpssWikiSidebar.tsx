@@ -8,6 +8,7 @@ import { KpssWikiNote, getSubjectLabel, extractTitleFromContent } from "@/servic
 
 interface KpssWikiSidebarProps {
   lang: Language;
+  t: Record<string, string>;
   notes: KpssWikiNote[];
   selectedNoteId: string | null;
   searchQuery: string;
@@ -20,6 +21,7 @@ interface KpssWikiSidebarProps {
 
 export function KpssWikiSidebar({
   lang,
+  t,
   notes,
   selectedNoteId,
   searchQuery,
@@ -76,7 +78,7 @@ export function KpssWikiSidebar({
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
-        <span>{lang === "tr" ? "Yeni Ders Notu Ekle" : "New Study Note"}</span>
+        <span>{t.kpss_wiki_new_note}</span>
       </button>
 
       {/* Search Box */}
@@ -85,7 +87,7 @@ export function KpssWikiSidebar({
           type="text"
           value={searchQuery}
           onInput={(e) => onSearchChange((e.target as HTMLInputElement).value)}
-          placeholder={lang === "tr" ? "Ders notlarında ara..." : "Search notes..."}
+          placeholder={t.kpss_wiki_search}
           style={{
             width: "100%",
             background: "rgba(0, 0, 0, 0.35)",
@@ -145,7 +147,7 @@ export function KpssWikiSidebar({
           notes.map((n) => {
             const isSelected = n.id === selectedNoteId;
             const displayTitle =
-              n.title.trim() || extractTitleFromContent(n.content) || (lang === "tr" ? "Başlıksız Ders Notu" : "Untitled Note");
+              n.title.trim() || extractTitleFromContent(n.content) || t.kpss_wiki_untitled;
             return (
               <div
                 key={n.id}

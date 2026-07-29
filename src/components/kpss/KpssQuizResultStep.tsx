@@ -8,6 +8,7 @@ import type { QuizQuestion } from "@/components/kpss/KpssQuizQuestionsStep.js";
 
 interface KpssQuizResultStepProps {
   lang: string;
+  t: Record<string, string>;
   currentSubject: string;
   activeQuizTopic: string | null;
   quizResultScore: number;
@@ -20,6 +21,7 @@ interface KpssQuizResultStepProps {
 
 export function KpssQuizResultStep({
   lang,
+  t,
   currentSubject,
   activeQuizTopic,
   quizResultScore,
@@ -73,7 +75,7 @@ export function KpssQuizResultStep({
           marginBottom: "16px",
         }}
       >
-        {lang === "tr" ? "Sınav Tamamlandı!" : "Quiz Completed!"}
+        {t.kpss_quiz_completed}
       </h4>
       <div
         style={{
@@ -98,9 +100,7 @@ export function KpssQuizResultStep({
           marginBottom: "20px",
         }}
       >
-        {lang === "tr"
-          ? `Bu konuda %${quizResultScore} oranında yetkinlik gösterdiniz.`
-          : `You demonstrated a %${quizResultScore} proficiency in this topic.`}
+        {t.kpss_quiz_proficiency}
         <br />
         <span
           style={{
@@ -111,16 +111,10 @@ export function KpssQuizResultStep({
           }}
         >
           {quizResultScore >= 80
-            ? lang === "tr"
-              ? "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi."
-              : "Congratulations! Topic successfully marked as 'Completed'."
+            ? t.kpss_srs_great_job
             : quizResultScore >= 40
-              ? lang === "tr"
-                ? "Konu 'Çalışılıyor' durumuna getirildi."
-                : "Topic set to 'Working' status."
-              : lang === "tr"
-                ? "Konu 'Çalışılmadı' olarak sıfırlandı."
-                : "Topic reset to 'Not Started'."}
+              ? t.kpss_status_working
+              : t.kpss_status_not_started}
         </span>
       </p>
 
@@ -145,7 +139,7 @@ export function KpssQuizResultStep({
             fontWeight: "600",
           }}
         >
-          {lang === "tr" ? "Soruları İncele:" : "Review Questions:"}
+          {t.kpss_quiz_review}
         </h5>
         {quizQuestions.map((q, qIdx) => {
           const userAns = selectedAnswers[qIdx];
@@ -204,13 +198,9 @@ export function KpssQuizResultStep({
                     >
                       {letter}) <MathRenderer text={opt} />{" "}
                       {isSelectedOpt &&
-                        (lang === "tr"
-                          ? " (Sizin Cevabınız)"
-                          : " (Your Answer)")}{" "}
+                        t.kpss_quiz_retry}{" "}
                       {isCorrectOpt &&
-                        (lang === "tr"
-                          ? " (Doğru Cevap)"
-                          : " (Correct Answer)")}
+                        t.kpss_quiz_solution}
                     </span>
                   );
                 })}
@@ -225,13 +215,11 @@ export function KpssQuizResultStep({
                   borderLeft: "3px solid var(--accent-color)",
                 }}
               >
-                <strong>{lang === "tr" ? "Çözüm: " : "Solution: "}</strong>{" "}
+                <strong>{t.kpss_quiz_solution_label}</strong>{" "}
                 <MathRenderer
                   text={
                     q.solution ||
-                    (lang === "tr"
-                      ? "Çözüm bilgisi bulunmuyor."
-                      : "No solution provided.")
+                    t.kpss_quiz_solution_label
                   }
                 />
               </div>
@@ -255,14 +243,14 @@ export function KpssQuizResultStep({
             style={{ flex: 1 }}
             onClick={onRetakeQuiz}
           >
-            {lang === "tr" ? "Seviyeni Tekrar Çöz" : "Re-take Test"}
+            {t.kpss_quiz_retake}
           </button>
           <button
             className="kpss-qcount-btn"
             style={{ flex: 1 }}
             onClick={handleExportTxt}
           >
-            {lang === "tr" ? "Dışarı Aktar" : "Export"}
+            {t.kpss_quiz_export}
           </button>
         </div>
         <button
@@ -270,7 +258,7 @@ export function KpssQuizResultStep({
           style={{ width: "100%", padding: 0 }}
           onClick={onClose}
         >
-          {lang === "tr" ? "Kapat" : "Close"}
+          {t.kpss_quiz_close}
         </button>
       </div>
     </div>

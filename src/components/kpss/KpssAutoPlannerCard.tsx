@@ -1,16 +1,16 @@
 import { useState } from "preact/hooks";
-import { Language, KpssProgress } from "@/types/types.js";
+import { KpssProgress } from "@/types/types.js";
 import { kpssData } from "@/services/kpssService.js";
 
 interface KpssAutoPlannerCardProps {
-  lang: Language;
+  t: Record<string, string>;
   kpssProgress: KpssProgress[];
   onStartQuiz: (subject: string, topicTitle: string) => void;
   labels: Record<string, string>;
 }
 
 export function KpssAutoPlannerCard({
-  lang,
+  t,
   kpssProgress,
   onStartQuiz,
   labels,
@@ -74,21 +74,18 @@ export function KpssAutoPlannerCard({
   const getWorkloadWarning = () => {
     if (workloadRate > 3.0) {
       return {
-        text:
-          lang === "tr"
-            ? "Yoğun Çalışma Gerekli (Hızlanmalısınız)"
-            : "Heavy Study Required (Speed up)",
+        text: t.kpss_pace_heavy,
         color: "#ef4444",
       };
     }
     if (workloadRate > 1.5) {
       return {
-        text: lang === "tr" ? "Orta Düzey Çalışma Hızı" : "Moderate Study Pace",
+        text: t.kpss_pace_moderate,
         color: "var(--accent-color)",
       };
     }
     return {
-      text: lang === "tr" ? "İdeal Çalışma Hızı" : "Optimal Study Pace",
+      text: t.kpss_pace_optimal,
       color: "#10b981",
     };
   };
@@ -133,9 +130,7 @@ export function KpssAutoPlannerCard({
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
           <span style={{ fontSize: "0.95rem", fontWeight: "700" }}>
-            {lang === "tr"
-              ? "KPSS Günlük Konu Planlayıcı"
-              : "KPSS Daily Auto-Planner"}
+            {t.kpss_planner_title}
           </span>
         </div>
         <button
@@ -155,7 +150,7 @@ export function KpssAutoPlannerCard({
             outline: "none",
             transition: "all 0.2s ease",
           }}
-          title={lang === "tr" ? "Sistem Nasıl Çalışır?" : "How does it work?"}
+          title={t.kpss_planner_how_works}
         >
           <svg
             width="12"
@@ -187,10 +182,7 @@ export function KpssAutoPlannerCard({
             fontSize: "0.85rem",
           }}
         >
-          🎉{" "}
-          {lang === "tr"
-            ? "Tebrikler! Tüm KPSS konularını başarıyla tamamladınız."
-            : "Congrats! You successfully completed all KPSS topics."}
+          🎉 {t.kpss_planner_all_done}
         </div>
       ) : (
         <>
@@ -202,9 +194,7 @@ export function KpssAutoPlannerCard({
               lineHeight: 1.5,
             }}
           >
-            {lang === "tr"
-              ? "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular (Başlatmak için tıklayın):"
-              : "Recommended topics to review today based on remaining time and topic density (Click to start):"}
+            {t.kpss_planner_desc}
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -274,7 +264,7 @@ export function KpssAutoPlannerCard({
                           fontWeight: "600",
                         }}
                       >
-                        {lang === "tr" ? "Çalışılıyor" : "Working"}
+                        {t.kpss_status_working}
                       </span>
                     ) : (
                       <span
@@ -287,7 +277,7 @@ export function KpssAutoPlannerCard({
                           fontWeight: "600",
                         }}
                       >
-                        {lang === "tr" ? "Başlanmadı" : "Not Started"}
+                        {t.kpss_status_not_started}
                       </span>
                     )}
                   </div>
@@ -319,17 +309,15 @@ export function KpssAutoPlannerCard({
               }}
             >
               <span>
-                <strong>{lang === "tr" ? "Kalan Gün:" : "Days Left:"}</strong>{" "}
+                <strong>{t.kpss_days_left}</strong>{" "}
                 {daysRemaining}
               </span>
               <span>
-                <strong>
-                  {lang === "tr" ? "Kalan Konu:" : "Topics Left:"}
-                </strong>{" "}
+                <strong>{t.kpss_topics_left}</strong>{" "}
                 {totalUncompleted}
               </span>
               <span>
-                <strong>{lang === "tr" ? "Günlük Hız:" : "Daily Rate:"}</strong>{" "}
+                <strong>{t.kpss_daily_rate}</strong>{" "}
                 {workloadRate.toFixed(1)}/gün
               </span>
             </div>
@@ -402,9 +390,7 @@ export function KpssAutoPlannerCard({
                   color: "var(--accent-color)",
                 }}
               >
-                {lang === "tr"
-                  ? "KPSS Planlayıcı Nasıl Çalışır?"
-                  : "How KPSS Planner Works?"}
+                {t.kpss_planner_info_title}
               </span>
               <button
                 onClick={() => setShowInfoModal(false)}
@@ -421,6 +407,7 @@ export function KpssAutoPlannerCard({
               </button>
             </div>
 
+            {/* Info content stays language-aware via the `t` object */}
             <div
               style={{
                 fontSize: "0.85rem",
@@ -429,103 +416,10 @@ export function KpssAutoPlannerCard({
                 flexDirection: "column",
                 gap: "12px",
               }}
-            >
-              {lang === "tr" ? (
-                <>
-                  <p>
-                    <strong>1. Kalan Gün Hesabı:</strong> Sınav tarihi (6 Eylül
-                    2026) ile bugün arasındaki kalan gün sayısını hesaplar.
-                  </p>
-                  <p>
-                    <strong>2. Konu Dağıtımı:</strong> Henüz tamamlanmamış
-                    (durumu "Tamamlandı" olmayan) tüm konularınızı kalan gün
-                    sayısına dengeli bir şekilde böler ve her güne eşit iş yükü
-                    çıkarır.
-                  </p>
-                  <p>
-                    <strong>3. Günlük Çalışma Hızı:</strong> Kalan toplam konu
-                    sayısının kalan gün sayısına oranıdır (Konu/Gün). Bu oran
-                    1.5'in üstündeyse mor, 3.0'ın üstündeyse kırmızı renkli
-                    uyarı gösterilir.
-                  </p>
-                  <p>
-                    <strong>4. Günlük Soru Hedefi:</strong> Ayarlarda
-                    belirlediğiniz hedef nete ulaşabilmeniz için çözmeniz
-                    gereken toplam soru sayısı KPSS konu ağırlıklarına göre
-                    dağıtılır. Günlük soru hedefiniz: <br />
-                    <code
-                      style={{
-                        background: "rgba(0,0,0,0.3)",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      (Kalan Hedef Soru / Kalan Gün Sayısı)
-                    </code>{" "}
-                    formülüyle dinamik olarak her gün güncellenir.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <strong>1. Days Left Calculation:</strong> Calculates the
-                    exact days remaining until the exam date (September 6,
-                    2026).
-                  </p>
-                  <p>
-                    <strong>2. Topic Distribution:</strong> Filters all
-                    uncompleted topics and spreads them evenly across the
-                    remaining days to keep you on track.
-                  </p>
-                  <p>
-                    <strong>3. Daily Study Pace:</strong> Calculated by dividing
-                    remaining topics by remaining days. Rates above 1.5
-                    highlight moderate pace, and above 3.0 require high
-                    intensity.
-                  </p>
-                  <p>
-                    <strong>4. Daily Question Target:</strong> Based on your
-                    target net configured in settings, total required questions
-                    are distributed by subject weights. Your daily target
-                    updates using: <br />
-                    <code
-                      style={{
-                        background: "rgba(0,0,0,0.3)",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      (Target Questions Left / Days Remaining)
-                    </code>{" "}
-                    dynamically each day.
-                  </p>
-                </>
-              )}
-            </div>
-
-            <button
-              onClick={() => setShowInfoModal(false)}
-              style={{
-                alignSelf: "flex-end",
-                background: "var(--accent-color)",
-                border: "none",
-                borderRadius: "8px",
-                padding: "8px 16px",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "0.85rem",
-                cursor: "pointer",
-                transition: "opacity 0.2s",
+              dangerouslySetInnerHTML={{
+                __html: t.kpss_planner_how_step1 + t.kpss_planner_how_step2 + t.kpss_planner_how_step3 + t.kpss_planner_how_step4
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.opacity = "0.9")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.opacity = "1")
-              }
-            >
-              {lang === "tr" ? "Kapat" : "Close"}
-            </button>
+            />
           </div>
         </div>
       )}
