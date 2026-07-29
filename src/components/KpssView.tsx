@@ -143,7 +143,7 @@ export function KpssView({
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
     const reviewData = srsQueue[srsIndex];
-    if (!reviewData) return;
+    if (!reviewData) {return;}
 
     await kpssSrsService.saveSrsReview(reviewData, quality);
 

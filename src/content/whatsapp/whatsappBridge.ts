@@ -59,7 +59,7 @@ export function initWhatsappBridge(): void {
  * Inject safe CSS styles into page head for buttons and notifications.
  */
 function injectWhatsappStyles(): void {
-  if (document.getElementById("life-os-wp-styles")) return;
+  if (document.getElementById("life-os-wp-styles")) {return;}
 
   const styleEl = document.createElement("style");
   styleEl.id = "life-os-wp-styles";
@@ -127,7 +127,7 @@ function injectWhatsappStyles(): void {
  * Show a safe temporary toast message on screen.
  */
 function showToast(messageText: string): void {
-  if (!document.body) return;
+  if (!document.body) {return;}
   const toast = document.createElement("div");
   toast.className = "life-os-wp-toast";
   toast.textContent = messageText;
@@ -171,14 +171,14 @@ function setupRemoteAiAssistantObserver(): void {
   }
 
   const scanAllMessagesForPrompts = async () => {
-    if (isProcessingAi) return;
+    if (isProcessingAi) {return;}
 
     // Scan all message elements in active chat window
     const allMessageNodes = Array.from(
       document.querySelectorAll("div.message-out, div.message-in, div[role='row'], div.copyable-text"),
     );
 
-    if (allMessageNodes.length === 0) return;
+    if (allMessageNodes.length === 0) {return;}
 
     // Iterate backwards starting from latest messages
     for (let i = allMessageNodes.length - 1; i >= Math.max(0, allMessageNodes.length - 8); i--) {
@@ -188,7 +188,7 @@ function setupRemoteAiAssistantObserver(): void {
         msgNode.querySelector("div.copyable-text") ||
         msgNode.querySelector("span._ao3e");
 
-      if (!textEl) continue;
+      if (!textEl) {continue;}
 
       const rawText = textEl.textContent || "";
       const trimmed = rawText.trim();
@@ -213,11 +213,11 @@ function setupRemoteAiAssistantObserver(): void {
         lower === "@ai" ||
         lower === "/ai";
 
-      if (!isAiTrigger) continue;
+      if (!isAiTrigger) {continue;}
 
       // Unique hash ID for message to avoid duplicate replies
       const msgHash = `${trimmed}_${i}`;
-      if (processedAiMessages.has(msgHash)) continue;
+      if (processedAiMessages.has(msgHash)) {continue;}
 
       // Mark as processed immediately
       processedAiMessages.add(msgHash);
@@ -228,7 +228,7 @@ function setupRemoteAiAssistantObserver(): void {
         .replace(/^@9router\s*/i, "")
         .trim();
 
-      if (!cleanPrompt) continue;
+      if (!cleanPrompt) {continue;}
 
       isProcessingAi = true;
       showToast(`📱 Telefondan İstek Geldi: "${cleanPrompt.slice(0, 25)}..."`);

@@ -57,7 +57,7 @@ export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
  * Generates an accurate, context-aware Turkish/English summary for executed tool actions.
  */
 export function formatActionExecutionSummary(actions: AgentActionPayload[], lang: "tr" | "en"): string {
-  if (!actions || actions.length === 0) return "";
+  if (!actions || actions.length === 0) {return "";}
 
   const isTr = lang === "tr";
 

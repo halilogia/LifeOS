@@ -59,7 +59,7 @@ export function PopupPomoTab({
   }
 
   const playSoundInEngine = (soundType: AmbientSoundType, vol: number) => {
-    if (!audioEngineRef.current) return;
+    if (!audioEngineRef.current) {return;}
     if (soundType === "none") {
       audioEngineRef.current.stopAllSounds();
     } else if (soundType === "rain") {

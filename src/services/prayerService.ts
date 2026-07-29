@@ -141,7 +141,7 @@ export const prayerService = {
       }
 
       // Final fallback if no cache exists at all
-      if (this._cache) return this._cache.times;
+      if (this._cache) {return this._cache.times;}
       throw error;
     }
   },

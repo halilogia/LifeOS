@@ -342,7 +342,7 @@ export async function executeAIAction(
   aiResult: AIResponseData,
   lang: string = "tr",
 ): Promise<void> {
-  if (!aiResult.action || aiResult.action === "none") return;
+  if (!aiResult.action || aiResult.action === "none") {return;}
 
   if (aiResult.action === "create_task" && aiResult.params?.text) {
     const text = aiResult.params.text;
@@ -434,7 +434,7 @@ export async function handleAddNoteFromAI(
 export async function handleUpdateMemoryFromAI(
   newFact: string,
 ): Promise<void> {
-  if (!newFact || !newFact.trim()) return;
+  if (!newFact || !newFact.trim()) {return;}
 
   const currentMemory: string = await new Promise<string>((r) =>
     chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>

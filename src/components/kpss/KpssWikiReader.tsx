@@ -44,13 +44,13 @@ export function KpssWikiReader({
 
   // Extract key-value summary pairs from content lines containing ":" (only concise metadata, not prose)
   const keySummaryRows = useMemo(() => {
-    if (!note || !note.content) return [];
+    if (!note || !note.content) {return [];}
     const lines = note.content.split("\n");
     const rows: { key: string; val: string }[] = [];
 
     for (const l of lines) {
       const trimmed = l.trim();
-      if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("http") || trimmed.startsWith("![")) continue;
+      if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("http") || trimmed.startsWith("![")) {continue;}
       const colonIdx = trimmed.indexOf(":");
       if (colonIdx > 0 && colonIdx < 30) {
         const key = trimmed.slice(0, colonIdx).replace(/^[\-\*\_\`\s]+/, "").trim();
@@ -58,7 +58,7 @@ export function KpssWikiReader({
         // Strict filter: value must be a concise fact (<= 40 chars) and not a full sentence
         if (key && val && key.length < 25 && val.length <= 40 && !val.includes(". ")) {
           rows.push({ key, val });
-          if (rows.length >= 5) break;
+          if (rows.length >= 5) {break;}
         }
       }
     }
@@ -67,7 +67,7 @@ export function KpssWikiReader({
 
   // Extract outbound wikilinks from article content [[Target Title]]
   const outboundWikilinks = useMemo(() => {
-    if (!note || !note.content) return [];
+    if (!note || !note.content) {return [];}
     const regex = /\[\[(.*?)\]\]/g;
     const matches: string[] = [];
     let match;
@@ -82,7 +82,7 @@ export function KpssWikiReader({
 
   // Calculate word count & estimated reading time
   const wordCount = useMemo(() => {
-    if (!note || !note.content) return 0;
+    if (!note || !note.content) {return 0;}
     return note.content.trim().split(/\s+/).filter(Boolean).length;
   }, [note.content]);
 
@@ -92,10 +92,10 @@ export function KpssWikiReader({
 
   // Calculate Backlinks: find other notes that reference this note's title
   const backlinks = useMemo(() => {
-    if (!note || !note.title || note.title.trim().length < 3) return [];
+    if (!note || !note.title || note.title.trim().length < 3) {return [];}
     const cleanTitle = note.title.trim().toLowerCase();
     return allNotes.filter((n) => {
-      if (n.id === note.id) return false;
+      if (n.id === note.id) {return false;}
       return n.content.toLowerCase().includes(cleanTitle);
     });
   }, [note, allNotes]);

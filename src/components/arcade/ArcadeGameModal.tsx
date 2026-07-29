@@ -2,15 +2,11 @@ import { useState, useEffect } from "preact/hooks";
 import { GameEntry, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
-import { SnakeGame } from "./builtin/SnakeGame.js";
-import { KnightRunner } from "./builtin/KnightRunner.js";
-import { SpaceShooter } from "./builtin/SpaceShooter.js";
 
 interface ArcadeGameModalProps {
   game: GameEntry;
   lang: Language;
   onClose: () => void;
-  onUpdateScore: (gameId: string, score: number) => void;
   onUpdateStatus?: (gameId: string, status: GameEntry["status"]) => void;
   onUpdateIframeUrl?: (gameId: string, url: string) => void;
   onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[]) => void;
@@ -21,7 +17,6 @@ export function ArcadeGameModal({
   game,
   lang,
   onClose,
-  onUpdateScore,
   onUpdateStatus,
   onUpdateIframeUrl,
   onUpdateDevNotes,
@@ -44,10 +39,6 @@ export function ArcadeGameModal({
 
   const triggerCopyCmd = (cmd: string) => {
     void navigator.clipboard?.writeText(cmd);
-  };
-
-  const handleScoreUpdate = (newScore: number) => {
-    onUpdateScore(game.id, newScore);
   };
 
   const handleSaveDevNotes = () => {
@@ -82,18 +73,6 @@ export function ArcadeGameModal({
   };
 
   const renderGameCanvas = () => {
-    if (game.embedType === "builtin") {
-      if (game.builtinKey === "snake") {
-        return <SnakeGame onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
-      }
-      if (game.builtinKey === "knight") {
-        return <KnightRunner onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
-      }
-      if (game.builtinKey === "space") {
-        return <SpaceShooter onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
-      }
-    }
-
     if (game.embedType === "iframe" && game.iframeUrl) {
       const devCmd = `cd "${game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\" + game.title}" && npm run dev`;
       return (

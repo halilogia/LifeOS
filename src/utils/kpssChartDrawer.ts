@@ -21,8 +21,8 @@ export interface KpssChartParams {
 }
 
 function getFormattedDateLabel(dateStr?: string): string {
-  if (!dateStr) return "";
-  if (dateStr.includes("/")) return dateStr;
+  if (!dateStr) {return "";}
+  if (dateStr.includes("/")) {return dateStr;}
   const parts = dateStr.split("-");
   if (parts.length === 3) {
     return `${parts[2] || "01"}/${parts[1] || "01"}`;
@@ -69,10 +69,10 @@ export function drawKpssStatsChart(
   params: KpssChartParams
 ): void {
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) {return;}
 
   const rect = canvas.getBoundingClientRect();
-  if (rect.width === 0) return;
+  if (rect.width === 0) {return;}
 
   const dpr = window.devicePixelRatio || 1;
   canvas.width = rect.width * dpr;
@@ -116,7 +116,7 @@ export function drawKpssStatsChart(
 
   const statsMap = new Map<string, KpssDailyStats>();
   (dailyStats || []).forEach((s) => {
-    if (!s.date) return;
+    if (!s.date) {return;}
     let key = s.date;
     if (s.date.includes("-")) {
       const parts = s.date.split("-");
@@ -404,8 +404,8 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYQ(lastNDays[i].questions);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) {ctx.moveTo(x, y);}
+        else {ctx.lineTo(x, y);}
       }
       ctx.stroke();
     }
@@ -432,8 +432,8 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYV(lastNDays[i].videos || 0);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) {ctx.moveTo(x, y);}
+        else {ctx.lineTo(x, y);}
       }
       ctx.stroke();
     }

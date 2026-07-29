@@ -102,7 +102,7 @@ export function AiChatMessageItem({
   const [showSources, setShowSources] = useState(true);
 
   const handleCopy = () => {
-    if (!message.text) return;
+    if (!message.text) {return;}
     navigator.clipboard.writeText(message.text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

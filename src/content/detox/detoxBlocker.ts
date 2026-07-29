@@ -16,7 +16,7 @@ export function initDetoxBlocker(): void {
 
   function checkScreenTimeLimits(): void {
     try {
-      if (!chrome.runtime?.id) return;
+      if (!chrome.runtime?.id) {return;}
 
       chrome.storage.sync.get(
         [
@@ -30,12 +30,12 @@ export function initDetoxBlocker(): void {
           "detoxLimits",
         ],
         (settings) => {
-          if (chrome.runtime.lastError || !chrome.runtime?.id) return;
+          if (chrome.runtime.lastError || !chrome.runtime?.id) {return;}
 
           chrome.storage.local.get(
             ["pomodoro_timer_state", "screen_time_stats"],
             (localRes) => {
-              if (chrome.runtime.lastError || !chrome.runtime?.id) return;
+              if (chrome.runtime.lastError || !chrome.runtime?.id) {return;}
 
               const enabled = (settings.detox_enabled as boolean) || false;
               const blockedSites = (settings.detox_blocked_sites as string[]) || [];

@@ -16,8 +16,7 @@ export interface GameEntry {
   status: GameStatus;
   isBuiltIn?: boolean;
   coverImage?: string; // Data URL or SVG string or external URL
-  embedType: "builtin" | "iframe" | "external";
-  builtinKey?: "snake" | "knight" | "space";
+  embedType: "iframe" | "external";
   iframeUrl?: string; // e.g. http://localhost:5173
   devPath?: string; // e.g. C:\Users\emre_\Desktop\GitHub\In Progress\2D şovalye
   techStack?: string[]; // e.g. ['Canvas', 'Preact', 'Phaser', 'Three.js']

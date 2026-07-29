@@ -94,8 +94,8 @@ export function buildStockContextPrompt(params: BuildStockContextParams): string
         const slice14 = history.slice(-15);
         for (let i = 1; i < slice14.length; i++) {
           const diff = slice14[i].close - slice14[i - 1].close;
-          if (diff >= 0) gains += diff;
-          else losses -= diff;
+          if (diff >= 0) {gains += diff;}
+          else {losses -= diff;}
         }
         const avgGain = gains / 14;
         const avgLoss = losses / 14;

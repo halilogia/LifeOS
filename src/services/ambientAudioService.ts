@@ -157,7 +157,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
         for (let s = 0; s < decaySamples; s++) {
           const idx = dropStart + s;
-          if (idx >= bufferSize) break;
+          if (idx >= bufferSize) {break;}
           const t = s / ctx.sampleRate;
           const env = Math.exp(-s / (decaySamples / 4.0));
           const dropSample = Math.sin(2 * Math.PI * dropFreq * t) * dropAmp * env;

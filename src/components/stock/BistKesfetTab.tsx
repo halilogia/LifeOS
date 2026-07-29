@@ -186,14 +186,14 @@ export function BistKesfetTab({
     };
   })
     .sort((a, b) => {
-      if (a.isUp !== b.isUp) return a.isUp ? -1 : 1;
+      if (a.isUp !== b.isUp) {return a.isUp ? -1 : 1;}
       return b.tlVolume - a.tlVolume || b.changePercent - a.changePercent;
     })
     .slice(0, 3);
 
   const handleCreateAndAdd = (e: Event) => {
     e.preventDefault();
-    if (!newListName.trim() || !watchlistModalSymbol) return;
+    if (!newListName.trim() || !watchlistModalSymbol) {return;}
     onCreateWatchlist(newListName.trim());
     setNewListName("");
   };

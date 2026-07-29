@@ -117,7 +117,7 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
   };
 
   const handleClearHistory = () => {
-    if (!data) return;
+    if (!data) {return;}
     const confirmMsg =
       lang === "tr"
         ? "Süreç geçmişini tamamen temizlemek istediğinizden emin misiniz? Bu işlem geri alınamaz."
