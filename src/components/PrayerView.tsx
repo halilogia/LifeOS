@@ -1,5 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
-import { prayerService, PrayerTimes } from "@/services/prayerService.js";
+import { prayerService } from "@/services/prayerService.js";
+import type { PrayerTimes } from "@/types/prayer.js";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 
