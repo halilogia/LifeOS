@@ -168,6 +168,11 @@ export function Sidebar({
         return (
           t.view_detox || (lang === "tr" ? "Dijital Detoks" : "Digital Detox")
         );
+      case "arcade":
+        return (
+          t.sidebar_arcade ||
+          (lang === "tr" ? "Arcade" : "Arcade")
+        );
       case "free-games":
         return (
           t.view_free_games ||

@@ -11,6 +11,7 @@ interface ArcadeGameModalProps {
   lang: Language;
   onClose: () => void;
   onUpdateScore: (gameId: string, score: number) => void;
+  onUpdateStatus?: (gameId: string, status: GameEntry["status"]) => void;
   onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[]) => void;
   onDeleteGame?: (gameId: string) => void;
 }
@@ -20,6 +21,7 @@ export function ArcadeGameModal({
   lang,
   onClose,
   onUpdateScore,
+  onUpdateStatus,
   onUpdateDevNotes,
   onDeleteGame,
 }: ArcadeGameModalProps) {
@@ -174,7 +176,19 @@ export function ArcadeGameModal({
                 </div>
                 <div className="steam-stat-card">
                   <span className="stat-label">Geliştirme Durumu</span>
-                  <span className="stat-val status-val">{game.status.toUpperCase()}</span>
+                  {onUpdateStatus ? (
+                    <select
+                      className="steam-status-select"
+                      value={game.status}
+                      onChange={(e) => onUpdateStatus(game.id, (e.target as HTMLSelectElement).value as any)}
+                    >
+                      <option value="playable">Oynanabilir (Playable)</option>
+                      <option value="in_progress">Geliştiriliyor (In Progress)</option>
+                      <option value="concept">Konsept (Concept)</option>
+                    </select>
+                  ) : (
+                    <span className="stat-val status-val">{game.status.toUpperCase()}</span>
+                  )}
                 </div>
               </div>
 
@@ -251,7 +265,7 @@ export function ArcadeGameModal({
                 </div>
               </div>
 
-              {!game.isBuiltIn && onDeleteGame && (
+              {onDeleteGame && (
                 <div className="steam-danger-zone">
                   <button className="delete-game-btn" onClick={() => onDeleteGame(game.id)}>
                     Oyunu Kütüphaneden Sil
@@ -265,3 +279,4 @@ export function ArcadeGameModal({
     </div>
   );
 }
+
