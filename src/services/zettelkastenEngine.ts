@@ -68,13 +68,13 @@ export function extractTags(content: string): string[] {
 /**
  * Determine node color based on KPSS subject tags or category.
  */
-export function getNodeColor(tags: string[]): string {
-  const tagStr = tags.join(" ");
-  if (tagStr.includes("kpss/tarih") || tagStr.includes("tarih")) return "#a855f7"; // Purple
-  if (tagStr.includes("kpss/cografya") || tagStr.includes("cografya")) return "#10b981"; // Emerald
-  if (tagStr.includes("kpss/vatandaslik") || tagStr.includes("vatandaslik")) return "#3b82f6"; // Blue
-  if (tagStr.includes("kpss/turkce") || tagStr.includes("turkce")) return "#f59e0b"; // Amber
-  if (tagStr.includes("kpss/matematik") || tagStr.includes("matematik")) return "#ef4444"; // Red
+export function getNodeColor(tags: string[] = [], subject?: string, title?: string): string {
+  const tagStr = (tags.join(" ") + " " + (subject || "") + " " + (title || "")).toLowerCase();
+  if (tagStr.includes("tarih")) return "#a855f7"; // Purple
+  if (tagStr.includes("cografya") || tagStr.includes("coğrafya")) return "#10b981"; // Emerald
+  if (tagStr.includes("vatandaslik") || tagStr.includes("vatandaşlık")) return "#3b82f6"; // Blue
+  if (tagStr.includes("turkce") || tagStr.includes("türkçe")) return "#f59e0b"; // Amber
+  if (tagStr.includes("matematik")) return "#ef4444"; // Red
   if (tagStr.includes("kpss")) return "#8b5cf6"; // Violet
   return "#6366f1"; // Default Indigo
 }
@@ -160,7 +160,7 @@ export function buildKnowledgeGraph(
       vx: 0,
       vy: 0,
       radius: Math.max(16, Math.min(32, 16 + linkDeg * 4)),
-      color: getNodeColor(tags),
+      color: getNodeColor(tags, (n as any).subject || (n as any).category, n.title),
       linksCount: linkDeg,
     };
   });

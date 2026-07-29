@@ -8,10 +8,10 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 
 ## 🚀 Öne Çıkan Özellikler
 
-- **🎯 Gelişmiş Odaklanma (Pomodoro, Kronometre ve Alarmlar)**:
+- **🎯 Gelişmiş Odaklanma**:
   - Verimli çalışma seansları için özelleştirilebilir odaklanma zamanlayıcısı (Focus, Kısa Mola, Uzun Mola modları) ve dairesel SVG ilerleme çubuğu.
   - **Fiziksel Ses Sentezleyiciler**: Pomodoro seansları için harici site bağımlılığı olmayan çevrimdışı Web Audio API sentezleyicileri (LFO dalgalanmalı Rüzgar, stokastik tıkırtılı Yağmur damlaları, vinyl çıtırtılı warm Lo-Fi piyano döngüsü ve saç kurutma makinesi gürültüsü).
-  - **Telefon Tipi Alarmlar**: Klasik alarm arayüzleri gibi çalışabilen, aktif/pasif hale getirilebilen, listeden silinebilen ve çaldığında otomatik kapanan çoklu alarm modülü.
+  - **Alarmlar**: Klasik alarm arayüzleri gibi çalışabilen, aktif/pasif hale getirilebilen, listeden silinebilen ve çaldığında otomatik kapanan çoklu alarm modülü.
   - **Senkronize Kronometre**: Sekmeler ve sağ üst pop-up penceresi arasında canlı olarak senkronize olan entegre kronometre.
 - **📋 Görev Yönetimi (To-Do & Kanban)**:
   - Günlük hedefleri yönettiğiniz ve ortalanmış şık odak kartına sahip **Odağım** bölümü.
@@ -33,8 +33,6 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Özel Mum (Candlestick) Grafiği**: BIST hisseleri için 1M, 3M, 6M, 1Y zaman aralığı filtreli ve fare takipli crosshair mum grafik ekranı.
 - **✍️ Günlüğüm (Notlar & Ders Notları & .md İndirme)**:
   - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" kayıtları ekleme. Her karta eklenen **`📥 .md İndir`** butonu ile notları bilgisayara `.md` formatında dışa aktarabilme.
-- **🎵 Kesintisiz Arka Plan Odak Sesleri & Kısayollar**:
-  - Web Audio API ses sentezleyicileri (Yağmur, Rüzgar, Lo-Fi) `backgroundMain.ts` servisine taşınarak Popup kapansa dahi kesintisiz çalma sağlandı. `Ctrl + Shift + E` kısayoluyla Companion AI Yan Paneli anında tetiklenebilir.
 - **🕌 Namaz Vakitleri**:
   - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
@@ -46,24 +44,17 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
 - **✍️ Günlüğüm (Notlar & Ders Notları)**:
   - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" türünde kayıtlar ekleme desteği. Premium pill segment butonları ile şık arayüz geçişleri. Yapay zeka sohbetinden doğrudan komutla günlük/not ekleyebilme desteği.
-- **🎛️ Dinamik Menü Sıralaması (Drag-and-Drop Sidebar)**:
-  - Sol sidebar üzerindeki navigasyon butonlarını sürükleyip bırakarak özelleştirilebilir sıralama. Sıralamadaki en üst sekmeye göre yer değiştiren akıllı Hero Saat widget'ı.
 - **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
   - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
   - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.
 - **🚫 Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:
   - **Derin Bloklama**: Twitter/X, Instagram, YouTube, TikTok ve Facebook platformlarını veya manuel girdiğiniz siteleri tamamen engeller. Hydration/SPA güncellemelerini `MutationObserver` ile izleyerek engelin aşılmasını önler.
-  - **Popup Hızlı Seçim Grid**: Pop-up panelinde, manuel site yazmak yerine logoları (SVG ikonları) ile popüler sosyal ağları hızlıca kilitlemenizi sağlayan 5 sütunlu görsel seçim tablosu.
   - **Ekran Süresi Sayacı**: Günlük hangi sitede kaç dakika geçirdiğinizi arkaplanda (`background.js`) takip edip Detox panelinde grafiksel bar şeklinde listeler.
 - **🛡️ Güvenlik Hardening**:
   - **DOM XSS Koruması**: Detoks bloke ekranına basılan metinlerin DOM XSS oluşturmaması için güvenli `escapeHtml` filtreleri.
   - **Zod Şema Doğrulaması**: Veri yedeklerini geri yüklerken zararlı kod enjeksiyonunu engellemek amacıyla Zod kütüphanesi ile veri şeması kontrolü.
 - **🌐 Evrensel Dil Desteği & Temiz Mimari**:
   - **Proxy Fallback Yerelleştirme**: Tüm eklenti panelleri (KPSS, Pomodoro, Detoks, SRS vb.) Türkçe ve İngilizce dillerini destekler. ES6 Proxy altyapısı sayesinde çevirisi eksik kalan anahtarlar otomatik olarak İngilizce'ye fallback yapar.
-  - **Clean Architecture Modüler Pop-up**: Pop-up ekranı (`popup.tsx`) katmanlı mimariye kavuşturularak zamanlayıcı ve storage mantığı `usePopup` hook'una, görsel sekmeler ise prop tabanlı alt bileşenlere ayrılmıştır.
-- **✨ Premium Tasarım**:
-  - Gri sistem pencereleri (`confirm()`) yerine tasarlanmış, mor gradientli glassmorphic **ConfirmModal** onay kutusu.
-  - Glassmorphism (buzlu cam) estetiği, yanıp sönen durum ışıkları, yumuşak hover efektleri ve eklentiye özel marka logosu.
 
 ---
 

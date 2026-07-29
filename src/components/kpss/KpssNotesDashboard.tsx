@@ -284,27 +284,7 @@ export function KpssNotesDashboard({ lang }: KpssNotesDashboardProps) {
                     <span>.md İndir</span>
                   </button>
 
-                  {/* Infobox Help Button */}
-                  <button
-                    type="button"
-                    onClick={() => setShowInfoboxHelp(true)}
-                    title={lang === "tr" ? "Dinamik Bilgi Kutusu Nasıl Çalışır?" : "Infobox Guide"}
-                    style={{
-                      background: "rgba(59, 130, 246, 0.15)",
-                      border: "1px solid rgba(59, 130, 246, 0.35)",
-                      color: "#60a5fa",
-                      borderRadius: "6px",
-                      padding: "5px 9px",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.78rem",
-                      fontWeight: 800,
-                    }}
-                  >
-                    !
-                  </button>
+
 
                   {/* Icon-Only Neural Graph Button */}
                   <button
