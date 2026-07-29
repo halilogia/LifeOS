@@ -3,7 +3,7 @@
  * BIST Hisseleri için Kural Değerlendirme Motoru (Pure Functions).
  */
 
-import type { StockQuote } from "@/services/bistService.js";
+import type { StockQuote } from "@/types/bist.js";
 import type {
   StockPortfolioItem,
   StockRule,

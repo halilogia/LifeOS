@@ -1,97 +1,42 @@
 import { GameEntry } from "@/types/game.js";
-
-const STORAGE_KEY_GAMES = "lifeos_arcade_games_v1";
-const LEGACY_SYNC_KEY_GAMES = STORAGE_KEY_GAMES;
-const IDB_NAME = "lifeos_arcade_handles";
-const IDB_STORE = "directory_handles";
-const IDB_KEY = (id: string) => `handle_${id}`;
+import type { IArcadeRepository } from "@/domain/repositories/IArcadeRepository.js";
 
 /* ------------------------------------------------------------------ */
-/* IndexedDB helpers for FileSystemDirectoryHandle persistence        */
+/* Generic helpers (pure — no persistence, no chrome.*)                */
 /* ------------------------------------------------------------------ */
 
-const openHandlesDB = (): Promise<IDBDatabase> =>
-  new Promise((resolve, reject) => {
-    const req = indexedDB.open(IDB_NAME, 1);
-    req.onupgradeneeded = () => {
-      const db = req.result;
-      if (!db.objectStoreNames.contains(IDB_STORE)) {
-        db.createObjectStore(IDB_STORE);
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+/** Minimal interface for FileSystemDirectoryHandle operations used in this module. */
+interface DirHandle {
+  getDirectoryHandle(name: string): Promise<DirHandle>;
+  getFileHandle(name: string): Promise<FileHandle>;
+  values(): AsyncIterableIterator<DirHandle | FileHandle>;
+}
 
-const putHandle = async (id: string, handle: any): Promise<void> => {
-  const db = await openHandlesDB();
-  await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, "readwrite");
-    tx.objectStore(IDB_STORE).put(handle, IDB_KEY(id));
-    tx.oncomplete = () => { db.close(); resolve(); };
-    tx.onerror = () => { db.close(); reject(tx.error); };
-  });
-};
+interface FileHandle {
+  getFile(): Promise<File>;
+}
 
-const isValidDirHandle = (h: any): boolean =>
-  h !== null &&
-  h !== undefined &&
-  typeof h === "object" &&
-  typeof h.name === "string" &&
-  typeof h.values === "function" &&
-  typeof h.getDirectoryHandle === "function" &&
-  typeof h.getFileHandle === "function";
-
-const getHandle = async (id: string): Promise<any | null> => {
-  const db = await openHandlesDB();
-  return new Promise<any | null>((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, "readonly");
-    const req = tx.objectStore(IDB_STORE).get(IDB_KEY(id));
-    req.onsuccess = () => {
-      db.close();
-      const raw = req.result ?? null;
-      // SECURITY: validate that the stored value is actually a directory handle.
-      resolve(isValidDirHandle(raw) ? raw : null);
-    };
-    req.onerror = () => { db.close(); reject(req.error); };
-  });
-};
-
-const deleteHandle = async (id: string): Promise<void> => {
-  const db = await openHandlesDB();
-  await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, "readwrite");
-    tx.objectStore(IDB_STORE).delete(IDB_KEY(id));
-    tx.oncomplete = () => { db.close(); resolve(); };
-    tx.onerror = () => { db.close(); reject(tx.error); };
-  });
-};
-
-const ensurePermission = async (handle: any): Promise<boolean> => {
-  if (handle.queryPermission) {
-    const state = await handle.queryPermission({ mode: "read" });
+const ensurePermission = async (handle: unknown): Promise<boolean> => {
+  const h = handle as { queryPermission?: (opts: { mode: string }) => Promise<string>; requestPermission?: (opts: { mode: string }) => Promise<string> };
+  if (h.queryPermission) {
+    const state = await h.queryPermission({ mode: "read" });
     if (state === "granted") {return true;}
-    if (handle.requestPermission) {
-      const next = await handle.requestPermission({ mode: "read" });
+    if (h.requestPermission) {
+      const next = await h.requestPermission({ mode: "read" });
       return next === "granted";
     }
   }
   return false;
 };
 
-/* ------------------------------------------------------------------ */
-/* Generic helpers                                                     */
-/* ------------------------------------------------------------------ */
-
 const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
   let binary = "";
   const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
   const chunkSize = 0x8000;
-  for (let i = 0; i < len; i += chunkSize) {
+  for (let i = 0; i < bytes.byteLength; i += chunkSize) {
     binary += String.fromCharCode.apply(
       null,
-      bytes.subarray(i, Math.min(i + chunkSize, len)) as unknown as number[],
+      bytes.subarray(i, Math.min(i + chunkSize, bytes.byteLength)) as unknown as number[],
     );
   }
   return btoa(binary);
@@ -100,45 +45,24 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
 const getMimeType = (filename: string, fallbackType?: string): string => {
   const ext = filename.split(".").pop()?.toLowerCase() ?? "";
   switch (ext) {
-    case "js":
-    case "mjs":
-      return "text/javascript;charset=utf-8";
-    case "css":
-      return "text/css;charset=utf-8";
-    case "html":
-    case "htm":
-      return "text/html;charset=utf-8";
-    case "json":
-      return "application/json;charset=utf-8";
-    case "png":
-      return "image/png";
-    case "jpg":
-    case "jpeg":
-      return "image/jpeg";
-    case "gif":
-      return "image/gif";
-    case "webp":
-      return "image/webp";
-    case "svg":
-      return "image/svg+xml;charset=utf-8";
-    case "woff":
-      return "font/woff";
-    case "woff2":
-      return "font/woff2";
-    case "ttf":
-      return "font/ttf";
-    case "otf":
-      return "font/otf";
-    case "mp3":
-      return "audio/mpeg";
-    case "wav":
-      return "audio/wav";
-    case "ogg":
-      return "audio/ogg";
-    case "mp4":
-      return "video/mp4";
-    default:
-      return fallbackType || "application/octet-stream";
+    case "js": case "mjs": return "text/javascript;charset=utf-8";
+    case "css": return "text/css;charset=utf-8";
+    case "html": case "htm": return "text/html;charset=utf-8";
+    case "json": return "application/json;charset=utf-8";
+    case "png": return "image/png";
+    case "jpg": case "jpeg": return "image/jpeg";
+    case "gif": return "image/gif";
+    case "webp": return "image/webp";
+    case "svg": return "image/svg+xml;charset=utf-8";
+    case "woff": return "font/woff";
+    case "woff2": return "font/woff2";
+    case "ttf": return "font/ttf";
+    case "otf": return "font/otf";
+    case "mp3": return "audio/mpeg";
+    case "wav": return "audio/wav";
+    case "ogg": return "audio/ogg";
+    case "mp4": return "video/mp4";
+    default: return fallbackType || "application/octet-stream";
   }
 };
 
@@ -170,31 +94,39 @@ const detectTechStack = (name: string): string[] => {
   return stack;
 };
 
-const isDirHandle = (entry: any): boolean =>
-  entry && typeof entry.values === "function" && typeof entry.getDirectoryHandle === "function";
+const isDirHandle = (entry: unknown): boolean =>
+  entry !== null &&
+  typeof entry === "object" &&
+  typeof (entry as Record<string, unknown>).values === "function" &&
+  typeof (entry as Record<string, unknown>).getDirectoryHandle === "function";
 
-const isFileHandle = (entry: any): boolean =>
-  entry && typeof entry.getFile === "function" && !isDirHandle(entry);
+const isFileHandle = (entry: unknown): boolean =>
+  entry !== null &&
+  typeof entry === "object" &&
+  typeof (entry as Record<string, unknown>).getFile === "function" &&
+  !isDirHandle(entry);
 
-const walkDirectory = async function* (
-  dir: any,
+async function* walkDirectory(
+  dir: unknown,
   prefix = "",
-): AsyncGenerator<{ path: string; handle: any }> {
-  for await (const entry of dir.values()) {
-    const relPath = prefix ? `${prefix}/${entry.name}` : entry.name;
+): AsyncGenerator<{ path: string; handle: unknown }> {
+  const dirVal = dir as { values: () => AsyncIterableIterator<unknown> };
+  for await (const entry of dirVal.values()) {
+    const entryVal = entry as { name: string };
+    const relPath = prefix ? `${prefix}/${entryVal.name}` : entryVal.name;
     if (isDirHandle(entry)) {
       yield* walkDirectory(entry, relPath);
     } else if (isFileHandle(entry)) {
       yield { path: relPath, handle: entry };
     }
   }
-};
+}
 
 const coverPattern = /(^|\/)(cover|thumbnail|screenshot|icon|logo)[^/]*\.(png|jpe?g|webp|gif|svg)$/i;
 const imagePattern = /\.(png|jpe?g|webp|gif|svg)$/i;
 
-const findCoverImage = async (rootDir: any): Promise<string | undefined> => {
-  const candidates: any[] = [];
+const findCoverImage = async (rootDir: unknown): Promise<string | undefined> => {
+  const candidates: unknown[] = [];
   for await (const { path, handle } of walkDirectory(rootDir)) {
     if (imagePattern.test(path)) {
       if (coverPattern.test(path)) {candidates.unshift(handle);}
@@ -202,7 +134,7 @@ const findCoverImage = async (rootDir: any): Promise<string | undefined> => {
     }
   }
   if (candidates.length === 0) {return undefined;}
-  const preferred = candidates.find((h) => coverPattern.test(h.name)) ?? candidates[0];
+  const preferred = (candidates.find((h) => coverPattern.test((h as { name: string }).name)) ?? candidates[0]) as { getFile: () => Promise<File> };
   try {
     const file = await preferred.getFile();
     return await new Promise<string>((resolve, reject) => {
@@ -217,14 +149,15 @@ const findCoverImage = async (rootDir: any): Promise<string | undefined> => {
   }
 };
 
-const findEntryHTMLPath = async (rootDir: any): Promise<string | undefined> => {
+const findEntryHTMLPath = async (rootDir: unknown): Promise<string | undefined> => {
+  const dirVal = rootDir as { getDirectoryHandle: (name: string) => Promise<unknown>; getFileHandle: (name: string) => Promise<unknown> };
   for (const rel of ["dist/index.html", "index.html"]) {
     const parts = rel.split("/");
-    let dir = rootDir;
+    let dir: unknown = rootDir;
     let ok = true;
     for (let i = 0; i < parts.length - 1; i++) {
       try {
-        dir = await dir.getDirectoryHandle(parts[i]);
+        dir = await (dir as { getDirectoryHandle: (name: string) => Promise<unknown> }).getDirectoryHandle(parts[i]);
       } catch {
         ok = false;
         break;
@@ -232,7 +165,7 @@ const findEntryHTMLPath = async (rootDir: any): Promise<string | undefined> => {
     }
     if (!ok) {continue;}
     try {
-      await dir.getFileHandle(parts[parts.length - 1]);
+      await (dir as { getFileHandle: (name: string) => Promise<unknown> }).getFileHandle(parts[parts.length - 1]);
       return rel;
     } catch {
       // try next
@@ -241,40 +174,16 @@ const findEntryHTMLPath = async (rootDir: any): Promise<string | undefined> => {
   return undefined;
 };
 
-const readJSON = async <T,>(key: string, fallback: T): Promise<T> => {
-  try {
-    if (typeof chrome !== "undefined" && chrome.storage?.local) {
-      return new Promise<T>((resolve) => {
-        chrome.storage.local.get([key], (res) => {
-          const v = res?.[key];
-          if (v !== undefined && v !== null) {resolve(v as T);}
-          else {resolve(fallback);}
-        });
-      });
-    }
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) as T : fallback;
-  } catch (e) {
-    console.error(`Failed to read ${key}:`, e);
-    return fallback;
-  }
-};
-
-const writeJSON = async (key: string, value: unknown): Promise<void> => {
-  try {
-    if (typeof chrome !== "undefined" && chrome.storage?.local) {
-      chrome.storage.local.set({ [key]: value });
-    } else {
-      localStorage.setItem(key, JSON.stringify(value));
-    }
-  } catch (e) {
-    console.error(`Failed to write ${key}:`, e);
-  }
-};
-
 /* ------------------------------------------------------------------ */
-/* HTML rewriting                                                      */
+/* HTML rewriting (pure helpers)                                       */
 /* ------------------------------------------------------------------ */
+
+const isExternal = (value: string): boolean => {
+  if (!value) {return true;}
+  if (/^(https?:|data:|blob:|javascript:)/i.test(value)) {return true;}
+  if (value.startsWith("#")) {return true;}
+  return false;
+};
 
 const joinPath = (base: string, rel: string): string => {
   let cleanRel = rel;
@@ -286,13 +195,6 @@ const joinPath = (base: string, rel: string): string => {
     else {stack.push(part);}
   }
   return stack.join("/");
-};
-
-const isExternal = (value: string): boolean => {
-  if (!value) {return true;}
-  if (/^(https?:|data:|blob:|javascript:)/i.test(value)) {return true;}
-  if (value.startsWith("#")) {return true;}
-  return false;
 };
 
 const rewriteHTML = async (
@@ -357,7 +259,7 @@ export interface GamePackage {
   files: Record<string, ArrayBuffer>;
 }
 
-export type ImportMode = "dist" | "dev" | "missing";
+export type ImportMode = "dist" | "dev";
 
 export interface ImportResult {
   game: GameEntry;
@@ -365,299 +267,279 @@ export interface ImportResult {
   missingDist: boolean;
 }
 
-export const arcadeService = {
-  async loadGames(): Promise<GameEntry[]> {
-    const games = await readJSON<GameEntry[]>(STORAGE_KEY_GAMES, []);
-    if (games.length > 0) {return games;}
+export function createArcadeService(repo: IArcadeRepository) {
+  return {
+    async loadGames(): Promise<GameEntry[]> {
+      return repo.getAllGames();
+    },
 
-    if (typeof chrome !== "undefined" && chrome.storage?.sync) {
-      const legacy = await new Promise<unknown>((resolve) => {
-        chrome.storage.sync.get([LEGACY_SYNC_KEY_GAMES], (res) => {
-          resolve(res?.[LEGACY_SYNC_KEY_GAMES]);
-        });
-      });
-      if (Array.isArray(legacy)) {
-        const migrated = (legacy as GameEntry[]).map((g) => ({
-          ...g,
-          folderPath: g.folderPath ?? "",
-          handleId: g.handleId ?? "",
-          mode: "dist" as const,
-        }));
-        await writeJSON(STORAGE_KEY_GAMES, migrated);
-        return migrated;
+    async importFolder(): Promise<ImportResult | null> {
+      if (typeof window === "undefined" || typeof window.showDirectoryPicker !== "function") {
+        throw new Error("Bu tarayıcı File System Access API'ı desteklemiyor. Lütfen Chrome veya Edge'in güncel sürümünü kullanın.");
       }
-    }
-    return [];
-  },
+      const dir = await window.showDirectoryPicker({ mode: "read" });
+      const folderName = dir.name;
 
-  async importFolder(): Promise<ImportResult | null> {
-    if (typeof window === "undefined" || typeof window.showDirectoryPicker !== "function") {
-      throw new Error("Bu tarayıcı File System Access API'ı desteklemiyor. Lütfen Chrome veya Edge'in güncel sürümünü kullanın.");
-    }
-    const dir = await window.showDirectoryPicker({ mode: "read" });
-    const folderName = dir.name;
+      const handleId = `h_${crypto.randomUUID()}`;
+      await repo.saveDirectoryHandle(handleId, dir);
 
-    const handleId = `h_${crypto.randomUUID()}`;
-    await putHandle(handleId, dir);
+      const entryHTMLPath = await findEntryHTMLPath(dir);
+      const coverImage = await findCoverImage(dir);
+      const isPlayable = Boolean(entryHTMLPath);
 
-    const entryHTMLPath = await findEntryHTMLPath(dir);
-    const coverImage = await findCoverImage(dir);
-    const isPlayable = Boolean(entryHTMLPath);
+      let displayTitle = formatFolderName(folderName);
+      if (folderName.toLowerCase() === "dist" || folderName.toLowerCase() === "build") {
+        displayTitle = `Oyun Projesi (${folderName})`;
+      }
 
-    let displayTitle = formatFolderName(folderName);
-    if (folderName.toLowerCase() === "dist" || folderName.toLowerCase() === "build") {
-      displayTitle = "Oyun Projesi (" + folderName + ")";
-    }
+      const game: GameEntry = {
+        id: `import_${handleId.slice(2, 14)}`,
+        title: displayTitle,
+        description: isPlayable
+          ? `${displayTitle} (çalıştırmaya hazır).`
+          : `${displayTitle} geliştirme aşamasında. Oynamak için npm run dev çalıştırın.`,
+        category: detectCategory(folderName),
+        status: isPlayable ? "playable" : "in_progress",
+        coverImage,
+        folderPath: folderName,
+        handleId,
+        entryHTMLPath,
+        mode: isPlayable ? "dist" : "dev",
+        techStack: detectTechStack(folderName),
+        devNotes: "",
+        isFavorite: false,
+        createdAt: new Date().toISOString(),
+      };
 
-    const game: GameEntry = {
-      id: `import_${handleId.slice(2, 14)}`,
-      title: displayTitle,
-      description: isPlayable
-        ? `${displayTitle} (çalıştırmaya hazır).`
-        : `${displayTitle} geliştirme aşamasında. Oynamak için npm run dev çalıştırın.`,
-      category: detectCategory(folderName),
-      status: isPlayable ? "playable" : "in_progress",
-      coverImage,
-      folderPath: folderName,
-      handleId,
-      entryHTMLPath,
-      mode: isPlayable ? "dist" : "dev",
-      techStack: detectTechStack(folderName),
-      devNotes: "",
-      isFavorite: false,
-      createdAt: new Date().toISOString(),
-    };
+      const games = await repo.getAllGames();
+      const next = [game, ...games.filter((g) => g.handleId !== handleId && g.folderPath !== folderName)];
+      await repo.saveAllGames(next);
+      return { game, mode: isPlayable ? "dist" : "dev", missingDist: !isPlayable };
+    },
 
-    const games = await this.loadGames();
-    const next = [game, ...games.filter((g) => g.handleId !== handleId && g.folderPath !== folderName)];
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    return { game, mode: isPlayable ? "dist" : "dev", missingDist: !isPlayable };
-  },
+    async loadGamePackage(game: GameEntry): Promise<GamePackage | null> {
+      const handle = await repo.getDirectoryHandle(game.handleId);
+      if (!handle) {return null;}
+      const ok = await ensurePermission(handle);
+      if (!ok) {return null;}
 
-  async loadGamePackage(game: GameEntry): Promise<GamePackage | null> {
-    const handle = await getHandle(game.handleId);
-    if (!handle) {return null;}
-    const ok = await ensurePermission(handle);
-    if (!ok) {return null;}
-
-    const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
-    const candidate = game.entryHTMLPath ?? "dist/index.html";
-    if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
-      console.warn("Disallowed entryHTMLPath:", candidate);
-      return null;
-    }
-
-    const parts = candidate.split("/");
-    const fileName = parts.pop()!;
-    let folderDir = handle;
-    for (const part of parts) {
-      try {
-        folderDir = await folderDir.getDirectoryHandle(part);
-      } catch {
+      const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
+      const candidate = game.entryHTMLPath ?? "dist/index.html";
+      if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
+        console.warn("Disallowed entryHTMLPath:", candidate);
         return null;
       }
-    }
 
-    let htmlFile: File;
-    try {
-      const fileHandle = await folderDir.getFileHandle(fileName);
-      htmlFile = await fileHandle.getFile();
-    } catch {
-      return null;
-    }
-
-    const html = await htmlFile.text();
-    const files: Record<string, ArrayBuffer> = {};
-
-    for await (const { path, handle: fHandle } of walkDirectory(folderDir)) {
-      if (path === fileName) {continue;}
-      try {
-        const file = await fHandle.getFile();
-        files[path] = await file.arrayBuffer();
-      } catch (e) {
-        console.warn("Failed reading asset:", path, e);
-      }
-    }
-
-    return { html, files };
-  },
-
-  async resolveGameURL(game: GameEntry): Promise<string | null> {
-    const handle = await getHandle(game.handleId);
-    if (!handle) {return null;}
-    const ok = await ensurePermission(handle);
-    if (!ok) {return null;}
-
-    // SECURITY: validate entryHTMLPath before any FS access.
-    // Only allow either "dist/index.html" or "index.html" literal paths.
-    // Anything else (e.g. user-controlled paths) is rejected outright.
-    const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
-    const candidate = game.entryHTMLPath ?? "dist/index.html";
-    if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
-      console.warn("Refusing to resolve disallowed entryHTMLPath:", candidate);
-      return null;
-    }
-    const rootPath = candidate;
-    const parts = rootPath.split("/");
-    const fileName = parts.pop()!;
-    // SECURITY: reject any path component that escapes the root.
-    if (parts.some((p) => p === "" || p === "." || p === "..")) {return null;}
-    let folderDir = handle;
-    for (const part of parts) {
-      try {
-        folderDir = await folderDir.getDirectoryHandle(part);
-      } catch {
-        return null;
-      }
-    }
-
-    let htmlFile: File;
-    try {
-      const fileHandle = await folderDir.getFileHandle(fileName);
-      htmlFile = await fileHandle.getFile();
-    } catch {
-      return null;
-    }
-
-    const html = await htmlFile.text();
-    const folderPrefix = parts.join("/") + (parts.length ? "/" : "");
-
-    const cache = new Map<string, string>();
-    const resolveAsset = async (relPath: string): Promise<string | null> => {
-      const clean = relPath.split("#")[0].split("?")[0];
-      if (!clean) {return null;}
-      // SECURITY: reject path traversal segments outright.
-      const segments = clean.split("/");
-      if (segments.some((p) => p === "..")) {return null;}
-      if (cache.has(clean)) {return cache.get(clean)!;}
-      let parent = handle;
-      for (let i = 0; i < segments.length - 1; i++) {
-        const seg = segments[i];
-        if (seg === "" || seg === ".") {continue;}
+      const parts = candidate.split("/");
+      const fileName = parts.pop()!;
+      let folderDir = handle as DirHandle;
+      for (const part of parts) {
         try {
-          parent = await parent.getDirectoryHandle(seg);
+          folderDir = await folderDir.getDirectoryHandle(part);
         } catch {
           return null;
         }
       }
-      const targetName = segments[segments.length - 1];
-      // SECURITY: reject filenames that contain path separators or dots.
-      if (!targetName || targetName.includes("/") || targetName.includes("\\") || targetName === "." || targetName === "..") {
-        return null;
-      }
+
+      let htmlFile: File;
       try {
-        const fileHandle = await parent.getFileHandle(targetName);
-        const file = await fileHandle.getFile();
-        const buffer = await file.arrayBuffer();
-        const mime = getMimeType(targetName, file.type);
-        const base64 = arrayBufferToBase64(buffer);
-        const url = `data:${mime};base64,${base64}`;
-        cache.set(clean, url);
-        return url;
+        const fileHandle = await folderDir.getFileHandle(fileName);
+        htmlFile = await fileHandle.getFile();
       } catch {
         return null;
       }
-    };
 
-    let rewritten = await rewriteHTML(html, folderPrefix, resolveAsset);
-    // SECURITY: strip <meta http-equiv="refresh"> tags that could redirect the iframe
-    // to attacker-controlled URLs.
-    rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi, "");
-    // SECURITY: strip "X-Frame-Options" / "Content-Security-Policy" meta tags that
-    // could break the iframe sandbox or grant extra permissions.
-    rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?(x-frame-options|content-security-policy)["']?[^>]*>/gi, "");
-    // SECURITY: strip inline event handlers like onclick="..." that could leak
-    // a parent frame reference.
-    rewritten = rewritten.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
-    return rewritten;
-  },
+      const html = await htmlFile.text();
+      const files: Record<string, ArrayBuffer> = {};
 
-  async resolveGameHTML(game: GameEntry): Promise<string | null> {
-    return this.resolveGameURL(game);
-  },
+      for await (const { path, handle: fHandle } of walkDirectory(folderDir)) {
+        if (path === fileName) {continue;}
+        try {
+          const file = await (fHandle as FileHandle).getFile();
+          files[path] = await file.arrayBuffer();
+        } catch (e) {
+          console.warn("Failed reading asset:", path, e);
+        }
+      }
 
-  async deleteGame(gameId: string): Promise<GameEntry[]> {
-    const games = await this.loadGames();
-    const target = games.find((g) => g.id === gameId);
-    const next = games.filter((g) => g.id !== gameId);
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    if (target?.handleId) {
-      try { await deleteHandle(target.handleId); } catch (_) { /* ignore */ }
-    }
-    return next;
-  },
+      return { html, files };
+    },
 
-  async toggleFavorite(gameId: string): Promise<GameEntry[]> {
-    const games = await this.loadGames();
-    const next = games.map((g) => (g.id === gameId ? { ...g, isFavorite: !g.isFavorite } : g));
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    return next;
-  },
+    async resolveGameURL(game: GameEntry): Promise<string | null> {
+      const handle = await repo.getDirectoryHandle(game.handleId);
+      if (!handle) {return null;}
+      const ok = await ensurePermission(handle);
+      if (!ok) {return null;}
 
-  async updateGameStatus(gameId: string, status: GameEntry["status"]): Promise<GameEntry[]> {
-    const games = await this.loadGames();
-    const next = games.map((g) => (g.id === gameId ? { ...g, status } : g));
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    return next;
-  },
+      const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
+      const candidate = game.entryHTMLPath ?? "dist/index.html";
+      if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
+        console.warn("Refusing to resolve disallowed entryHTMLPath:", candidate);
+        return null;
+      }
 
-  async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"], title?: string): Promise<GameEntry[]> {
-    const games = await this.loadGames();
-    const next = games.map((g) =>
-      g.id === gameId ? { ...g, devNotes: notes, todoList: todoList ?? g.todoList, title: title?.trim() || g.title } : g,
-    );
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    return next;
-  },
+      const rootPath = candidate;
+      const parts = rootPath.split("/");
+      const fileName = parts.pop()!;
+      if (parts.some((p) => p === "" || p === "." || p === "..")) {return null;}
+      let folderDir = handle as DirHandle;
+      for (const part of parts) {
+        try {
+          folderDir = await folderDir.getDirectoryHandle(part);
+        } catch {
+          return null;
+        }
+      }
 
-  async recheckGame(gameId: string): Promise<GameEntry | null> {
-    const games = await this.loadGames();
-    const g = games.find((x) => x.id === gameId);
-    if (!g) {return null;}
-    const handle = await getHandle(g.handleId);
-    if (!handle) {return g;}
+      let htmlFile: File;
+      try {
+        const fileHandle = await folderDir.getFileHandle(fileName);
+        htmlFile = await fileHandle.getFile();
+      } catch {
+        return null;
+      }
 
-    const hasDist = await hasDirectoryNamed(handle, "dist");
-    const updated: GameEntry = {
-      ...g,
-      mode: hasDist ? "dist" : "dev",
-      status: hasDist ? "playable" : "in_progress",
-      entryHTMLPath: await findEntryHTMLPath(handle),
-    };
-    const next = games.map((x) => (x.id === gameId ? updated : x));
-    await writeJSON(STORAGE_KEY_GAMES, next);
-    return updated;
-  },
+      const html = await htmlFile.text();
+      const folderPrefix = parts.join("/") + (parts.length ? "/" : "");
 
-  async ensurePermissionForGame(gameId: string): Promise<boolean> {
-    const games = await this.loadGames();
-    const g = games.find((x) => x.id === gameId);
-    if (!g) {return false;}
-    const handle = await getHandle(g.handleId);
-    if (!handle) {return false;}
-    return ensurePermission(handle);
-  },
+      const cache = new Map<string, string>();
+      const resolveAsset = async (relPath: string): Promise<string | null> => {
+        const clean = relPath.split("#")[0].split("?")[0];
+        if (!clean) {return null;}
+        const segments = clean.split("/");
+        if (segments.some((p) => p === "..")) {return null;}
+        if (cache.has(clean)) {return cache.get(clean)!;}
+        let parent = handle as DirHandle;
+        for (let i = 0; i < segments.length - 1; i++) {
+          const seg = segments[i];
+          if (seg === "" || seg === ".") {continue;}
+          try {
+            parent = await parent.getDirectoryHandle(seg);
+          } catch {
+            return null;
+          }
+        }
+        const targetName = segments[segments.length - 1];
+        if (!targetName || targetName.includes("/") || targetName.includes("\\") || targetName === "." || targetName === "..") {
+          return null;
+        }
+        try {
+          const fileHandle = await parent.getFileHandle(targetName);
+          const file = await fileHandle.getFile();
+          const buffer = await file.arrayBuffer();
+          const mime = getMimeType(targetName, file.type);
+          const base64 = arrayBufferToBase64(buffer);
+          const url = `data:${mime};base64,${base64}`;
+          cache.set(clean, url);
+          return url;
+        } catch {
+          return null;
+        }
+      };
 
-  async listGamesWithAccess(): Promise<GameEntry[]> {
-    const games = await this.loadGames();
-    const result: GameEntry[] = [];
-    for (const g of games) {
-      const handle = await getHandle(g.handleId);
-      if (handle) {result.push(g);}
-    }
-    return result;
-  },
-};
+      let rewritten = await rewriteHTML(html, folderPrefix, resolveAsset);
+      rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi, "");
+      rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?(x-frame-options|content-security-policy)["']?[^>]*>/gi, "");
+      rewritten = rewritten.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
+      return rewritten;
+    },
+
+    async resolveGameHTML(game: GameEntry): Promise<string | null> {
+      return this.resolveGameURL(game);
+    },
+
+    async deleteGame(gameId: string): Promise<GameEntry[]> {
+      const games = await repo.getAllGames();
+      const target = games.find((g) => g.id === gameId);
+      const next = games.filter((g) => g.id !== gameId);
+      await repo.saveAllGames(next);
+      if (target?.handleId) {
+        try { await repo.deleteDirectoryHandle(target.handleId); } catch { /* ignore */ }
+      }
+      return next;
+    },
+
+    async toggleFavorite(gameId: string): Promise<GameEntry[]> {
+      const games = await repo.getAllGames();
+      const next = games.map((g) => (g.id === gameId ? { ...g, isFavorite: !g.isFavorite } : g));
+      await repo.saveAllGames(next);
+      return next;
+    },
+
+    async updateGameStatus(gameId: string, status: GameEntry["status"]): Promise<GameEntry[]> {
+      const games = await repo.getAllGames();
+      const next = games.map((g) => (g.id === gameId ? { ...g, status } : g));
+      await repo.saveAllGames(next);
+      return next;
+    },
+
+    async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"], title?: string): Promise<GameEntry[]> {
+      const games = await repo.getAllGames();
+      const next = games.map((g) =>
+        g.id === gameId ? { ...g, devNotes: notes, todoList: todoList ?? g.todoList, title: title?.trim() || g.title } : g,
+      );
+      await repo.saveAllGames(next);
+      return next;
+    },
+
+    async recheckGame(gameId: string): Promise<GameEntry | null> {
+      const games = await repo.getAllGames();
+      const g = games.find((x) => x.id === gameId);
+      if (!g) {return null;}
+      const handle = await repo.getDirectoryHandle(g.handleId);
+      if (!handle) {return g;}
+
+      const hasDist = await hasDirectoryNamed(handle, "dist");
+      const updated: GameEntry = {
+        ...g,
+        mode: hasDist ? "dist" : "dev",
+        status: hasDist ? "playable" : "in_progress",
+        entryHTMLPath: await findEntryHTMLPath(handle),
+      };
+      const next = games.map((x) => (x.id === gameId ? updated : x));
+      await repo.saveAllGames(next);
+      return updated;
+    },
+
+    async ensurePermissionForGame(gameId: string): Promise<boolean> {
+      const games = await repo.getAllGames();
+      const g = games.find((x) => x.id === gameId);
+      if (!g) {return false;}
+      const handle = await repo.getDirectoryHandle(g.handleId);
+      if (!handle) {return false;}
+      return ensurePermission(handle);
+    },
+
+    async listGamesWithAccess(): Promise<GameEntry[]> {
+      const games = await repo.getAllGames();
+      const result: GameEntry[] = [];
+      for (const g of games) {
+        const handle = await repo.getDirectoryHandle(g.handleId);
+        if (handle) {result.push(g);}
+      }
+      return result;
+    },
+  };
+}
+
+export type ArcadeService = ReturnType<typeof createArcadeService>;
 
 /* ------------------------------------------------------------------ */
-/* Misc                                                                */
+/* Misc (module-private)                                                */
 /* ------------------------------------------------------------------ */
 
-async function hasDirectoryNamed(root: any, name: string): Promise<boolean> {
+async function hasDirectoryNamed(root: unknown, name: string): Promise<boolean> {
   try {
-    await root.getDirectoryHandle(name);
+    await (root as { getDirectoryHandle: (name: string) => Promise<unknown> }).getDirectoryHandle(name);
     return true;
   } catch {
     return false;
   }
 }
+
+/**
+ * Singleton instance with the default storage-backed repository.
+ */
+import { ChromeStorageArcadeRepository } from "@/infrastructure/persistence/ChromeStorageArcadeRepository.js";
+const _defaultRepo = new ChromeStorageArcadeRepository();
+export const arcadeService = createArcadeService(_defaultRepo);

@@ -3,7 +3,7 @@
  * Oyun fırsatları üst filtre barı (Platform & Tür seçimleri, Hızlı Talep bağlantıları ve Kaynak Hariç Tutma kutuları).
  */
 
-import { ExclusionSettings } from "@/services/gamesService.js";
+import { ExclusionSettings } from "@/types/games.js";
 
 interface FreeGamesFilterBarProps {
   t: Record<string, string>;

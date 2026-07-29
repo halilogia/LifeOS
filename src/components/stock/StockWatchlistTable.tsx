@@ -3,7 +3,7 @@
  * Kullanıcının özel Takip Listeleri (Favoriler, Temettü, Halka Arz vb.) canlı izleme tablosu.
  */
 
-import type { StockQuote } from "@/services/bistService.js";
+import type { StockQuote } from "@/types/bist.js";
 import { formatPrice } from "@/services/bistService.js";
 import type { StockWatchlist } from "@/types/stock.js";
 import { WatchlistSelectorBar } from "./WatchlistSelectorBar.js";

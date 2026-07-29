@@ -2,32 +2,11 @@
  * bistService.ts
  * BIST (Borsa İstanbul) hisse fiyat servisi.
  * Yahoo Finance'in unofficial v8/chart endpoint'ini kullanır.
- * Veriler 5 dakika chrome.storage.local'da cache'lenir.
+ * Cache persistence IBistCacheRepository üzerinden yapılır.
  */
 
-export interface StockQuote {
-  symbol: string;
-  shortName: string;
-  price: number;
-  previousClose: number;
-  change: number;
-  changePercent: number;
-  dayHigh: number;
-  dayLow: number;
-  volume: number;
-  currency: string;
-  marketCap?: number;
-  error?: boolean;
-}
-
-export interface BISTSearchResult {
-  symbol: string;
-  cleanSymbol: string;
-  shortName: string;
-  longName: string;
-  sector?: string;
-  exchange: string;
-}
+import type { IBistCacheRepository } from "@/domain/repositories/IBistCacheRepository.js";
+import type { StockQuote, BISTSearchResult, StockHistoryItem } from "@/types/bist.js";
 
 // ── Dynamic BIST Ticker Discovery (NO hardcoded arrays) ───
 export async function fetchDynamicBistTickers(): Promise<string[]> {
@@ -64,41 +43,29 @@ export async function fetchDynamicBistTickers(): Promise<string[]> {
 
 /**
  * Yahoo Finance Canlı Arama API'si.
- * Hiçbir hisse adı veya bilgisi manuel yazılmaz, doğrudan Borsa İstanbul / Yahoo veritabanından çekilir.
  */
 export async function searchBistStocks(query: string): Promise<BISTSearchResult[]> {
-  if (!query || query.trim().length === 0) {return [];}
+  if (!query || query.trim().length === 0) { return []; }
 
   try {
     const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query.trim())}&quotesCount=15&newsCount=0`;
     const res = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        Accept: "application/json",
-      },
+      headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
       signal: AbortSignal.timeout(6000),
     });
 
-    if (!res.ok) {return [];}
+    if (!res.ok) { return []; }
 
     const json = await res.json();
     const quotes = (json?.quotes as Array<{
-      symbol?: string;
-      shortname?: string;
-      longname?: string;
-      exchange?: string;
-      sector?: string;
-      industry?: string;
+      symbol?: string; shortname?: string; longname?: string;
+      exchange?: string; sector?: string; industry?: string;
     }>) || [];
 
-    // BIST (Borsa İstanbul - IST exchange veya .IS uzantılı) filtreleme
     const bistQuotes = quotes.filter(
       (q) =>
         q.symbol &&
-        (q.exchange === "IST" ||
-          q.symbol.toUpperCase().endsWith(".IS") ||
-          q.exchange === "SE" ||
-          q.exchange === "TUR")
+        (q.exchange === "IST" || q.symbol.toUpperCase().endsWith(".IS") || q.exchange === "SE" || q.exchange === "TUR"),
     );
 
     return bistQuotes.map((q) => {
@@ -119,41 +86,6 @@ export async function searchBistStocks(query: string): Promise<BISTSearchResult[
   }
 }
 
-const CACHE_KEY = "bistStockCache";
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 dakika
-
-interface StockCache {
-  timestamp: number;
-  data: StockQuote[];
-}
-
-// ── Cache helpers ─────────────────────────────────────────────────────────────
-
-async function getCached(): Promise<StockQuote[] | null> {
-  try {
-    const result = await chrome.storage.local.get(CACHE_KEY);
-    const cached = result[CACHE_KEY] as StockCache | undefined;
-    if (!cached) {
-      return null;
-    }
-    if (Date.now() - cached.timestamp > CACHE_TTL_MS) {
-      return null;
-    }
-    return cached.data;
-  } catch {
-    return null;
-  }
-}
-
-async function setCache(data: StockQuote[]): Promise<void> {
-  try {
-    const payload: StockCache = { timestamp: Date.now(), data };
-    await chrome.storage.local.set({ [CACHE_KEY]: payload });
-  } catch {
-    // Storage yazma hatası — sessizce geç
-  }
-}
-
 // ── Fetch single quote ────────────────────────────────────────────────────────
 
 async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
@@ -162,22 +94,15 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
   try {
     const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d&includePrePost=false`;
     const res = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        Accept: "application/json",
-      },
+      headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
+    if (!res.ok) { throw new Error(`HTTP ${res.status}`); }
 
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
-    if (!meta) {
-      throw new Error("No meta data");
-    }
+    if (!meta) { throw new Error("No meta data"); }
 
     const price: number = meta.regularMarketPrice ?? 0;
     const prev: number = meta.previousClose ?? meta.chartPreviousClose ?? price;
@@ -214,105 +139,80 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
   }
 }
 
-// ── Public API ────────────────────────────────────────────────────────────────
+// ── Factory ───────────────────────────────────────────────────────────────────
 
-/**
- * Tek bir hisse kodu için fiyat verisi çeker.
- * ".IS" soneki yoksa otomatik ekler.
- */
-export async function fetchStockQuote(symbol: string): Promise<StockQuote> {
-  const fullSymbol = symbol.toUpperCase().endsWith(".IS")
-    ? symbol.toUpperCase()
-    : `${symbol.toUpperCase()}.IS`;
-  return fetchSingleQuote(fullSymbol);
+export function createBistService(cacheRepo: IBistCacheRepository) {
+  return {
+    /** Tek bir hisse kodu için fiyat verisi çeker. */
+    async fetchStockQuote(symbol: string): Promise<StockQuote> {
+      const fullSymbol = symbol.toUpperCase().endsWith(".IS")
+        ? symbol.toUpperCase()
+        : `${symbol.toUpperCase()}.IS`;
+      return fetchSingleQuote(fullSymbol);
+    },
+
+    /** Popüler BIST hisselerinin fiyatlarını çeker. Cache geçerliyse cache'den döner. */
+    async fetchStockPrices(symbols?: string[]): Promise<StockQuote[]> {
+      const targetSymbols = symbols ?? (await fetchDynamicBistTickers());
+
+      // Cache check (only for full list — not when symbols are explicitly provided)
+      if (!symbols) {
+        const cached = await cacheRepo.getCached();
+        if (cached) { return cached; }
+      }
+
+      const quotes = await Promise.all(targetSymbols.map(fetchSingleQuote));
+
+      // Write to cache (only for full list)
+      if (!symbols) {
+        await cacheRepo.setCache(quotes);
+      }
+
+      return quotes;
+    },
+
+    /** Cache'i geçersiz kılarak zorla yenile. */
+    async refreshStockPrices(): Promise<StockQuote[]> {
+      await cacheRepo.clearCache();
+      return this.fetchStockPrices();
+    },
+  };
 }
 
-/**
- * Popüler BIST hisselerinin fiyatlarını çeker.
- * Cache geçerliyse doğrudan cache'den döner.
- */
-export async function fetchStockPrices(
-  symbols?: string[],
-): Promise<StockQuote[]> {
-  const targetSymbols = symbols ?? (await fetchDynamicBistTickers());
+export type BistService = ReturnType<typeof createBistService>;
 
-  // Cache kontrolü (sadece tam liste için)
-  if (!symbols) {
-    const cached = await getCached();
-    if (cached) {
-      return cached;
-    }
-  }
+/* ------------------------------------------------------------------ */
+/* Singleton instance with the default storage-backed cache repository  */
+/* ------------------------------------------------------------------ */
 
-  // Paralel fetch (her hisse ayrı istek — rate limit riski az)
-  const quotes = await Promise.all(targetSymbols.map(fetchSingleQuote));
+import { ChromeStorageBistCacheRepository } from "@/infrastructure/persistence/ChromeStorageBistCacheRepository.js";
 
-  // Cache'e yaz (tam liste için)
-  if (!symbols) {
-    await setCache(quotes);
-  }
+const _defaultCacheRepo = new ChromeStorageBistCacheRepository();
+const _defaultService = createBistService(_defaultCacheRepo);
 
-  return quotes;
-}
+export const { fetchStockQuote, fetchStockPrices, refreshStockPrices } = _defaultService;
 
-/**
- * Cache'i geçersiz kılarak zorla yenile.
- */
-export async function refreshStockPrices(): Promise<StockQuote[]> {
-  try {
-    await chrome.storage.local.remove(CACHE_KEY);
-  } catch {
-    // ignore
-  }
-  return fetchStockPrices();
-}
-
-// ── Format helpers (UI tarafında da kullanılabilir) ────────────────────────────
+// ── Format helpers (pure) ──────────────────────────────────────────
 
 export function formatPrice(price: number, currency = "TRY"): string {
-  if (price === 0) {
-    return "—";
-  }
+  if (price === 0) { return "—"; }
   const symbol = currency === "TRY" ? "₺" : currency;
   return `${price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
 }
 
 export function formatVolume(vol: number): string {
-  if (vol === 0) {
-    return "—";
-  }
-  if (vol >= 1_000_000_000) {
-    return `${(vol / 1_000_000_000).toFixed(2)}B`;
-  }
-  if (vol >= 1_000_000) {
-    return `${(vol / 1_000_000).toFixed(2)}M`;
-  }
-  if (vol >= 1_000) {
-    return `${(vol / 1_000).toFixed(1)}K`;
-  }
+  if (vol === 0) { return "—"; }
+  if (vol >= 1_000_000_000) { return `${(vol / 1_000_000_000).toFixed(2)}B`; }
+  if (vol >= 1_000_000) { return `${(vol / 1_000_000).toFixed(2)}M`; }
+  if (vol >= 1_000) { return `${(vol / 1_000).toFixed(1)}K`; }
   return vol.toLocaleString("tr-TR");
 }
 
 export function formatMarketCap(mc?: number): string {
-  if (!mc) {
-    return "—";
-  }
-  if (mc >= 1_000_000_000) {
-    return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;
-  }
-  if (mc >= 1_000_000) {
-    return `${(mc / 1_000_000).toFixed(2)}M ₺`;
-  }
+  if (!mc) { return "—"; }
+  if (mc >= 1_000_000_000) { return `${(mc / 1_000_000_000).toFixed(2)}B ₺`; }
+  if (mc >= 1_000_000) { return `${(mc / 1_000_000).toFixed(2)}M ₺`; }
   return `${mc.toLocaleString("tr-TR")} ₺`;
-}
-
-export interface StockHistoryItem {
-  timestamp: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
 }
 
 export async function fetchStockHistory(
@@ -321,26 +221,19 @@ export async function fetchStockHistory(
   interval?: string,
 ): Promise<StockHistoryItem[]> {
   const fullSymbol = symbol.endsWith(".IS") ? symbol : `${symbol}.IS`;
-  const effectiveInterval = interval ? interval : range === "1d" ? "15m" : "1d";
+  const effectiveInterval = interval || (range === "1d" ? "15m" : "1d");
   try {
     const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(fullSymbol)}?interval=${effectiveInterval}&range=${range}&includePrePost=false`;
     const res = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        Accept: "application/json",
-      },
+      headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
+    if (!res.ok) { throw new Error(`HTTP ${res.status}`); }
 
     const json = await res.json();
     const result = json?.chart?.result?.[0];
-    if (!result) {
-      throw new Error("No chart result");
-    }
+    if (!result) { throw new Error("No chart result"); }
 
     const timestamps: number[] = result.timestamp || [];
     const quotes = result.indicators?.quote?.[0] || {};
@@ -352,12 +245,7 @@ export async function fetchStockHistory(
 
     const history: StockHistoryItem[] = [];
     for (let i = 0; i < timestamps.length; i++) {
-      if (
-        opens[i] !== undefined &&
-        opens[i] !== null &&
-        closes[i] !== undefined &&
-        closes[i] !== null
-      ) {
+      if (opens[i] !== undefined && opens[i] !== null && closes[i] !== undefined && closes[i] !== null) {
         history.push({
           timestamp: timestamps[i] * 1000,
           open: opens[i],

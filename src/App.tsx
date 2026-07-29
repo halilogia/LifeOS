@@ -143,7 +143,6 @@ export function App() {
     handleImportBackup,
   } = useTodos(
     todoRepository,
-    syncSettings,
     triggerCloudBackup,
     showAlert,
     t as Record<string, string>,

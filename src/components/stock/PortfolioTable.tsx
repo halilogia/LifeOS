@@ -3,7 +3,7 @@
  * Kullanıcının sahip olduğu BIST hisselerinin canlı portföy tablosu parçası.
  */
 
-import type { StockQuote } from "@/services/bistService.js";
+import type { StockQuote } from "@/types/bist.js";
 import { formatPrice } from "@/services/bistService.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
 

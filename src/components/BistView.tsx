@@ -11,8 +11,8 @@ import { getTranslation } from "@/utils/i18n.js";
 import {
   fetchStockPrices,
   fetchStockQuote,
-  StockQuote,
 } from "@/services/bistService.js";
+import type { StockQuote } from "@/types/bist.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
 import { evaluateStockRules } from "@/services/stockRuleEngine.js";
 import type {
