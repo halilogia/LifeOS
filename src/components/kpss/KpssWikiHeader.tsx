@@ -7,10 +7,11 @@ import { Language } from "@/types/types.js";
 
 interface KpssWikiHeaderProps {
   lang: Language;
+  t: Record<string, string>;
   onCreateNewNote: () => void;
 }
 
-export function KpssWikiHeader({ lang, onCreateNewNote }: KpssWikiHeaderProps) {
+export function KpssWikiHeader({ lang, t, onCreateNewNote }: KpssWikiHeaderProps) {
   return (
     <div
       style={{
@@ -80,7 +81,7 @@ export function KpssWikiHeader({ lang, onCreateNewNote }: KpssWikiHeaderProps) {
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
-        <span>{lang === "tr" ? "Yeni Ders Notu Ekle" : "New Study Note"}</span>
+        <span>{t.kpss_wiki_new_note}</span>
       </button>
     </div>
   );

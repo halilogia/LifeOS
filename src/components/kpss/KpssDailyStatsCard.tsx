@@ -2,8 +2,10 @@ import { useRef, useEffect, useState } from "preact/hooks";
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { drawKpssStatsChart } from "@/utils/kpssChartDrawer.js";
 
+
 interface KpssDailyStatsCardProps {
   lang: Language;
+  t: Record<string, string>;
   questionsInput: string;
   videosInput: string;
   subjectInput: string;
@@ -30,6 +32,7 @@ interface KpssDailyStatsCardProps {
 
 export function KpssDailyStatsCard({
   lang,
+  t,
   questionsInput,
   videosInput,
   subjectInput,
@@ -117,7 +120,7 @@ export function KpssDailyStatsCard({
           </div>
           <div className="kpss-input-group">
             <label htmlFor="kpss-videos-input">
-              {lang === "tr" ? "İzlenen Video" : "Videos Watched"}
+              {t.kpss_videos_watched}
             </label>
             <input
               type="number"
@@ -199,11 +202,11 @@ export function KpssDailyStatsCard({
               <line x1="12" y1="20" x2="12" y2="4"></line>
               <line x1="6" y1="20" x2="6" y2="14"></line>
             </svg>
-            {lang === "tr" ? "İlerleme Grafiği" : "Progress Chart"}
+            {t.kpss_progress_chart}
           </span>
 
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
-            {/* Metric Mode Filter Pills: Tümü / Soru / Video (Clean Text, No Emojis) */}
+            {/* Metric Mode Filter Pills */}
             <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.3)", padding: "2px", borderRadius: "6px", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
               <button
                 type="button"
@@ -220,7 +223,7 @@ export function KpssDailyStatsCard({
                   transition: "all 0.2s ease",
                 }}
               >
-                {lang === "tr" ? "Tümü" : "All"}
+                {t.kpss_filter_all}
               </button>
               <button
                 type="button"
@@ -237,7 +240,7 @@ export function KpssDailyStatsCard({
                   transition: "all 0.2s ease",
                 }}
               >
-                {lang === "tr" ? "Soru" : "Questions"}
+                {t.kpss_filter_questions}
               </button>
               <button
                 type="button"
@@ -254,7 +257,7 @@ export function KpssDailyStatsCard({
                   transition: "all 0.2s ease",
                 }}
               >
-                {lang === "tr" ? "Video" : "Videos"}
+                {t.kpss_filter_videos}
               </button>
             </div>
 
@@ -308,7 +311,7 @@ export function KpssDailyStatsCard({
                 transition: "background 0.2s",
               }}
             >
-              {lang === "tr" ? "Çizgi" : "Line"}
+              {t.kpss_chart_line}
             </button>
             <button
               onClick={() => onChartTypeChange("bar")}
@@ -325,7 +328,7 @@ export function KpssDailyStatsCard({
                 transition: "background 0.2s",
               }}
             >
-              {lang === "tr" ? "Sütun" : "Bar"}
+              {t.kpss_chart_bar}
             </button>
           </div>
         </div>
@@ -339,7 +342,7 @@ export function KpssDailyStatsCard({
         {dailyStats && dailyStats.length > 0 && (
           <div style={{ marginTop: "6px", display: "flex", flexDirection: "column", gap: "6px" }}>
             <span style={{ fontSize: "0.72rem", color: "#94a3b8", fontWeight: 700 }}>
-              {lang === "tr" ? "Kaydedilen Günlük Veriler:" : "Saved Daily Logs:"}
+              {t.kpss_saved_logs}
             </span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
               {dailyStats.map((stat) => (
@@ -360,14 +363,14 @@ export function KpssDailyStatsCard({
                 >
                   <span style={{ color: "#a855f7", fontWeight: 700 }}>{stat.date}</span>
                   <span style={{ color: "#cbd5e1" }}>
-                    {stat.questions > 0 && `${stat.questions} Soru `}
-                    {stat.videos ? `${stat.videos} Video` : ""}
+                    {stat.questions > 0 && `${stat.questions} ${t.kpss_filter_questions} `}
+                    {stat.videos ? `${stat.videos} ${t.kpss_filter_videos}` : ""}
                   </span>
                   {onDeleteStat && (
                     <button
                       type="button"
                       onClick={() => onDeleteStat(stat.date)}
-                      title={lang === "tr" ? "Bu günü sil" : "Delete day"}
+                      title={t.kpss_delete_day}
                       style={{
                         background: "rgba(239, 68, 68, 0.15)",
                         border: "none",

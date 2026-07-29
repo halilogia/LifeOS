@@ -186,6 +186,7 @@ export function SettingsDrawer({
         {settingsTab === "kpss" && (
           <KpssSettingsTab
             lang={lang}
+            t={t}
             kpssGoalType={kpssGoalType}
             kpssTargetNet={kpssTargetNet}
             kpssTargetScore={kpssTargetScore}

@@ -43,7 +43,7 @@ function formatDate(dateStr: string, lang: Language): string {
   }
 }
 
-export function IpoCard({ ipo, lang, t: _t }: IpoCardProps) {
+export function IpoCard({ ipo, lang, t }: IpoCardProps) {
   const isCompleted = ipo.status === "completed";
   const isUpcoming = ipo.status === "upcoming";
 
@@ -96,10 +96,10 @@ export function IpoCard({ ipo, lang, t: _t }: IpoCardProps) {
           }`}
         >
           {isCompleted
-            ? "Tamamlandı"
+            ? t.ipo_label_completed
             : isUpcoming
-              ? "Yakında"
-              : "Aktif Halka Arz"}
+              ? t.ipo_label_upcoming
+              : t.ipo_label_active}
         </span>
       </div>
 
@@ -113,7 +113,7 @@ export function IpoCard({ ipo, lang, t: _t }: IpoCardProps) {
       >
         <div>
           <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
-            Halka Arz Fiyatı
+            {t.ipo_offer_price}
           </div>
           <div style={{ fontWeight: 600, color: "#f8fafc" }}>
             {ipo.priceRange}
@@ -121,15 +121,15 @@ export function IpoCard({ ipo, lang, t: _t }: IpoCardProps) {
         </div>
 
         <div>
-          <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>Sektör</div>
+          <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>{t.ipo_sector_label}</div>
           <div style={{ fontWeight: 600, color: "#f8fafc" }}>
-            {ipo.sector || "Genel"}
+            {ipo.sector || t.ipo_general}
           </div>
         </div>
 
         <div>
           <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
-            Talep Tarihleri
+            {t.ipo_request_dates}
           </div>
           <div style={{ fontWeight: 600, color: "#cbd5e1" }}>
             {formatDate(ipo.startDate, lang)} - {formatDate(ipo.endDate, lang)}
@@ -138,7 +138,7 @@ export function IpoCard({ ipo, lang, t: _t }: IpoCardProps) {
 
         <div>
           <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
-            Borsa Kodu
+            {t.ipo_exchange_code}
           </div>
           <div style={{ fontWeight: 600, color: "#cbd5e1" }}>{ipo.ticker}</div>
         </div>

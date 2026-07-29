@@ -3,6 +3,7 @@ import { KpssTopic } from "@/services/kpssService.js";
 
 interface KpssTopicListProps {
   lang: Language;
+  t: Record<string, string>;
   topics: KpssTopic[];
   kpssProgress: KpssProgress[];
   currentSubject: string;
@@ -14,6 +15,7 @@ interface KpssTopicListProps {
 
 export function KpssTopicList({
   lang,
+  t,
   topics,
   kpssProgress,
   currentSubject,
@@ -45,9 +47,7 @@ export function KpssTopicList({
             fontWeight: "600",
           }}
         >
-          {lang === "tr"
-            ? "Konu Dağılımı ve Çalışma Takibi"
-            : "Topic Syllabus & Progress"}
+          {t.kpss_topic_syllabus}
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -75,7 +75,7 @@ export function KpssTopicList({
                 fontWeight: "600",
               }}
             >
-              {lang === "tr" ? "Sıralama:" : "Sort By:"}
+              {t.kpss_sort_by}
             </span>
           </div>
           <select
@@ -95,32 +95,30 @@ export function KpssTopicList({
             }}
           >
             <option value="default">
-              {lang === "tr" ? "Müfredat Sırası" : "Syllabus Order"}
+              {t.kpss_sort_syllabus}
             </option>
             <option value="questions">
-              {lang === "tr"
-                ? "Soru Sıklığı (Çoktan Aza)"
-                : "Question Frequency"}
+              {t.kpss_topic_frequency}
             </option>
             <option value="status">
-              {lang === "tr" ? "Tamamlanma Durumu" : "Completion Status"}
+              {t.kpss_sort_completion}
             </option>
           </select>
         </div>
       </div>
 
       <div id="kpss-topic-list" className="kpss-topic-list">
-        {topics.map((t) => {
+        {topics.map((topic) => {
           const progress = kpssProgress.find(
-            (p) => p.subject === currentSubject && p.topic === t.title,
+            (p) => p.subject === currentSubject && p.topic === topic.title,
           );
           const status = progress ? progress.status : 0;
           return (
             <div
-              key={t.title}
+              key={topic.title}
               className="kpss-topic-item"
               data-status={status.toString()}
-              onClick={() => onStartQuiz(t.title)}
+              onClick={() => onStartQuiz(topic.title)}
               style={{ cursor: "pointer" }}
             >
               <div className="kpss-status-indicator">
@@ -168,7 +166,7 @@ export function KpssTopicList({
                     fontWeight: "600",
                   }}
                 >
-                  {t.questionsCount} {lang === "tr" ? "Soru" : "Q"}
+                  {topic.questionsCount} {t.kpss_quiz_questions}
                 </span>
                 {progress && progress.score !== undefined && (
                   <span className="kpss-topic-score-badge">
@@ -181,9 +179,7 @@ export function KpssTopicList({
               <button
                 className="kpss-exam-btn"
                 title={
-                  lang === "tr"
-                    ? "Seviye Tespit Sınavı Çöz"
-                    : "Solve Proficiency Test"
+                  t.kpss_topic_proficiency_test
                 }
                 onClick={(e) => {
                   e.stopPropagation();

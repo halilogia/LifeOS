@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 import {
   fetchStockPrices,
@@ -44,6 +45,7 @@ interface BistViewProps {
 const stockRepository = new ChromeStorageStockRepository();
 
 export function BistView({ lang }: BistViewProps) {
+  const t = getTranslation(lang);
   const [activeTab, setActiveTab] = useState<BistTabId>("portfolio");
 
   // Portfolio & Watchlists & Rules states
@@ -384,16 +386,16 @@ export function BistView({ lang }: BistViewProps) {
                 >
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                 </svg>
-                <span>{selectedChartSymbol.toUpperCase()} Canlı BİST Grafiği</span>
+                <span>{t.stock_chart_title_live.replace("{symbol}", selectedChartSymbol.toUpperCase())}</span>
               </h2>
               <button
                 className="chart-close-btn"
                 onClick={() => setSelectedChartSymbol(null)}
               >
-                Kapat
+                {t.chart_close}
               </button>
             </div>
-            <CustomStockChart symbol={selectedChartSymbol} lang="tr" />
+            <CustomStockChart symbol={selectedChartSymbol} lang={lang} />
           </div>
         </div>
       )}

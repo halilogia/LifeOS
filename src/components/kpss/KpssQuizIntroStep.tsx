@@ -4,7 +4,7 @@
  */
 
 interface KpssQuizIntroStepProps {
-  lang: string;
+  t: Record<string, string>;
   selectedQuizCount: number;
   aiApiKey: string;
   aiEndpoint: string;
@@ -13,7 +13,7 @@ interface KpssQuizIntroStepProps {
 }
 
 export function KpssQuizIntroStep({
-  lang,
+  t,
   selectedQuizCount,
   aiApiKey,
   aiEndpoint,
@@ -28,12 +28,10 @@ export function KpssQuizIntroStep({
   return (
     <div style={{ textAlign: "center", padding: "12px" }}>
       <h4 style={{ color: "var(--accent-color)", marginBottom: "12px" }}>
-        {lang === "tr" ? "Seviye Tespit Sınavı" : "Proficiency Quiz"}
+        {t.kpss_quiz_proficiency}
       </h4>
       <p style={{ fontSize: "0.95rem", opacity: 0.8, lineHeight: 1.5 }}>
-        {lang === "tr"
-          ? "Seçtiğiniz konu hakkında yapay zekâ tarafından hazırlanan çoktan seçmeli bir test çözerek yetkinliğinizi ölçün. Soru sayısını seçip testi başlatabilirsiniz:"
-          : "Measure your proficiency by solving a multiple-choice test prepared by AI. Choose the question count to start:"}
+        {t.kpss_quiz_proficiency}
       </p>
 
       <div className="kpss-question-count-grid">
@@ -43,7 +41,7 @@ export function KpssQuizIntroStep({
             className={`kpss-qcount-btn ${selectedQuizCount === count ? "active" : ""}`}
             onClick={() => onSetSelectedQuizCount(count)}
           >
-            {count} {lang === "tr" ? "Soru" : "Q"}
+            {count} {t.kpss_quiz_questions}
           </button>
         ))}
       </div>
@@ -72,9 +70,7 @@ export function KpssQuizIntroStep({
             <line x1="12" y1="9" x2="12" y2="13" />
             <line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
-          {lang === "tr"
-            ? "Yapay zekâ testini başlatmak için Ayarlar panelinden bir AI API Anahtarı girmelisiniz."
-            : "You must enter an AI API Key in the Settings panel to start the AI test."}
+          {t.kpss_quiz_proficiency}
         </div>
       )}
 
@@ -88,7 +84,7 @@ export function KpssQuizIntroStep({
           disabled={!isAiConfigured}
           onClick={onStartQuiz}
         >
-          {lang === "tr" ? "Sınavı Başlat" : "Start Test"}
+          {t.kpss_quiz_proficiency}
         </button>
       </div>
     </div>

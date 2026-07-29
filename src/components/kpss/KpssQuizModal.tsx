@@ -15,6 +15,7 @@ import { KpssQuizResultStep } from "@/components/kpss/KpssQuizResultStep.js";
 
 interface KpssQuizModalProps {
   lang: string;
+  t: Record<string, string>;
   currentSubject: string;
   activeQuizTopic: string | null;
   quizStep: "intro" | "questions" | "result";
@@ -41,6 +42,7 @@ interface KpssQuizModalProps {
 
 export function KpssQuizModal({
   lang,
+  t,
   currentSubject,
   activeQuizTopic,
   quizStep,
@@ -102,11 +104,7 @@ export function KpssQuizModal({
                   fontSize: "0.85rem",
                   transition: "all 0.2s ease",
                 }}
-                title={
-                  lang === "tr"
-                    ? "KPSS Yeni Nesil Bilgilendirmesi"
-                    : "KPSS New Generation Info"
-                }
+                title={t.kpss_quiz_new_gen_info}
                 className="kpss-info-toggle-btn"
               >
                 !
@@ -132,14 +130,14 @@ export function KpssQuizModal({
 
         {/* Reform Milatları Bilgilendirme Modal'ı */}
         {showInfo && (
-          <KpssQuizInfoModal lang={lang} onClose={() => setShowInfo(false)} />
+          <KpssQuizInfoModal t={t} onClose={() => setShowInfo(false)} />
         )}
 
         {/* Body Content */}
         <div className="settings-body" style={{ padding: "20px" }}>
           {quizStep === "intro" && (
             <KpssQuizIntroStep
-              lang={lang}
+              t={t}
               selectedQuizCount={selectedQuizCount}
               aiApiKey={aiApiKey}
               aiEndpoint={aiEndpoint}
@@ -150,7 +148,7 @@ export function KpssQuizModal({
 
           {quizStep === "questions" && (
             <KpssQuizQuestionsStep
-              lang={lang}
+              t={t}
               quizLoading={quizLoading}
               quizError={quizError}
               quizQuestions={quizQuestions}
@@ -168,6 +166,7 @@ export function KpssQuizModal({
           {quizStep === "result" && (
             <KpssQuizResultStep
               lang={lang}
+              t={t}
               currentSubject={currentSubject}
               activeQuizTopic={activeQuizTopic}
               quizResultScore={quizResultScore}

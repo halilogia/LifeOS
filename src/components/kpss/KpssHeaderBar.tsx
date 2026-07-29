@@ -7,6 +7,7 @@ interface KpssHeaderBarProps {
   title: string;
   activeTab: "progress" | "srs" | "past-exams" | "notes";
   lang: string;
+  t: Record<string, string>;
   onTabChange: (tab: "progress" | "srs" | "past-exams" | "notes") => void;
 }
 
@@ -14,6 +15,7 @@ export function KpssHeaderBar({
   title,
   activeTab,
   lang,
+  t,
   onTabChange,
 }: KpssHeaderBarProps) {
   return (
@@ -37,31 +39,25 @@ export function KpssHeaderBar({
           className={`pomo-tab-link ${activeTab === "progress" ? "active" : ""}`}
           onClick={() => onTabChange("progress")}
         >
-          {lang === "tr" ? "Konular & İlerleme" : "Topics & Progress"}
+          {t.kpss_tab_progress}
         </button>
         <button
           className={`pomo-tab-link ${activeTab === "notes" ? "active" : ""}`}
           onClick={() => onTabChange("notes")}
         >
-          {lang === "tr"
-            ? "KPSS Ders Notları"
-            : "KPSS Notes"}
+          {t.kpss_tab_notes}
         </button>
         <button
           className={`pomo-tab-link ${activeTab === "srs" ? "active" : ""}`}
           onClick={() => onTabChange("srs")}
         >
-          {lang === "tr"
-            ? "KPSS Bilgi Kartları (SRS)"
-            : "KPSS Flashcards (SRS)"}
+          {t.kpss_tab_srs}
         </button>
         <button
           className={`pomo-tab-link ${activeTab === "past-exams" ? "active" : ""}`}
           onClick={() => onTabChange("past-exams")}
         >
-          {lang === "tr"
-            ? "Çıkmış Sorular (2006-2021)"
-            : "Past Questions (2006-2021)"}
+          {t.kpss_tab_past_exams}
         </button>
       </div>
     </>

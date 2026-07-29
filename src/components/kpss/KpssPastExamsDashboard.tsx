@@ -1,14 +1,13 @@
 import { useState } from "preact/hooks";
-import { Language } from "@/types/types.js";
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 
 interface KpssPastExamsDashboardProps {
-  lang: Language;
+  t: Record<string, string>;
   onStartPastExam: (year: string, subject: string) => void;
 }
 
 export function KpssPastExamsDashboard({
-  lang,
+  t,
   onStartPastExam,
 }: KpssPastExamsDashboardProps) {
   const [selectedYear, setSelectedYear] = useState<string>("2019");
@@ -29,11 +28,11 @@ export function KpssPastExamsDashboard({
     { id: "2009", label: "2009 KPSS" },
     {
       id: "tarih_arsivi",
-      label: lang === "tr" ? "Tarih Soru Arşivi" : "History Q Archive",
+      label: t.kpss_past_exams_history_q,
     },
     {
       id: "karma",
-      label: lang === "tr" ? "Karma Sınav (Karışık)" : "Mixed Past Exam",
+      label: t.kpss_past_exams_mixed,
     },
   ];
 
@@ -74,22 +73,22 @@ export function KpssPastExamsDashboard({
   const subjects = [
     {
       id: "cografya",
-      label: lang === "tr" ? "Coğrafya" : "Geography",
+      label: t.kpss_past_exams_geography,
       count: getSubjectCount(selectedYear, "cografya"),
     },
     {
       id: "tarih",
-      label: lang === "tr" ? "Tarih" : "History",
+      label: t.kpss_past_exams_history,
       count: getSubjectCount(selectedYear, "tarih"),
     },
     {
       id: "matematik",
-      label: lang === "tr" ? "Matematik / Geometri" : "Math / Geometry",
+      label: t.kpss_past_exams_math,
       count: getSubjectCount(selectedYear, "matematik"),
     },
     {
       id: "all",
-      label: lang === "tr" ? "Tüm Dersler (GY-GK)" : "All Subjects (GY-GK)",
+      label: t.kpss_past_exams_all,
       count: getSubjectCount(selectedYear, "all"),
     },
   ];
@@ -122,14 +121,10 @@ export function KpssPastExamsDashboard({
             color: "var(--accent-color)",
           }}
         >
-          {lang === "tr"
-            ? "ÖSYM Çıkmış Sorular Sınav Salonu"
-            : "ÖSYM Past Exams Practice Room"}
+          {t.kpss_past_exams_title}
         </h3>
         <p style={{ fontSize: "0.85rem", opacity: 0.7, marginTop: "4px" }}>
-          {lang === "tr"
-            ? "Yıllara göre orijinal çıkmış KPSS Lisans sorularını veya tüm yılların karışımından oluşan karma denemeleri çözün."
-            : "Solve original past KPSS Lisans exam questions by year or practice with randomly mixed questions from all years."}
+          {t.kpss_past_exams_desc}
         </p>
       </div>
 
@@ -151,7 +146,7 @@ export function KpssPastExamsDashboard({
               opacity: 0.9,
             }}
           >
-            {lang === "tr" ? "1. Sınav Yılını Seçin" : "1. Select Exam Year"}
+            {t.kpss_past_exams_step1}
           </label>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {years.map((y) => (
@@ -206,7 +201,7 @@ export function KpssPastExamsDashboard({
               opacity: 0.9,
             }}
           >
-            {lang === "tr" ? "2. Ders Seçin" : "2. Select Subject"}
+            {t.kpss_past_exams_step2}
           </label>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {subjects.map((sub) => (
@@ -246,7 +241,7 @@ export function KpssPastExamsDashboard({
                     opacity: 0.8,
                   }}
                 >
-                  {sub.count} {lang === "tr" ? "Soru" : "Q"}
+                  {sub.count} {t.kpss_quiz_questions}
                 </span>
               </div>
             ))}
@@ -287,7 +282,7 @@ export function KpssPastExamsDashboard({
           >
             <polygon points="5 3 19 12 5 21 5 3" />
           </svg>
-          {lang === "tr" ? "Sınavı Başlat" : "Start Exam"}
+          {t.kpss_past_exams_start}
         </button>
       </div>
     </div>

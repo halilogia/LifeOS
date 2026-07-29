@@ -4,11 +4,11 @@
  */
 
 interface KpssQuizInfoModalProps {
-  lang: string;
+  t: Record<string, string>;
   onClose: () => void;
 }
 
-export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
+export function KpssQuizInfoModal({ t, onClose }: KpssQuizInfoModalProps) {
   return (
     <div
       className="settings-panel active"
@@ -27,9 +27,7 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
       >
         <div className="settings-header">
           <h3>
-            {lang === "tr"
-              ? "KPSS Soru Sistemi Değişim Milatları"
-              : "KPSS Question System Evolution"}
+            {t.kpss_past_exams_history_q}
           </h3>
           <button className="close-btn" onClick={onClose}>
             &times;
@@ -60,9 +58,7 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
                 marginBottom: "8px",
               }}
             >
-              {lang === "tr"
-                ? "ÖSYM çıkmış sorularını çözerken hazırlık stratejinizi aşağıdaki reform yıllarına göre belirleyebilirsiniz:"
-                : "When practicing past exam questions, customize your strategy based on these key reform milestones:"}
+              {t.kpss_past_exams_history_q}
             </p>
           </div>
 
@@ -86,14 +82,10 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
               <strong
                 style={{ display: "block", color: "var(--text-primary)" }}
               >
-                {lang === "tr"
-                  ? "Geçiş / Deneme Dönemi"
-                  : "Transition / Pilot Era"}
+                {t.kpss_past_exams_step1}
               </strong>
               <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                {lang === "tr"
-                  ? "İlk kez Lisans sınavında yorumsal, öncüllü sorular ve Çağdaş Türk ve Dünya Tarihi müfredata girdi."
-                  : "Interpretation-based questions and Contemporary Turkish/World History introduced first time for Undergraduate."}
+                {t.kpss_past_exams_mixed}
               </span>
             </div>
           </div>
@@ -118,14 +110,10 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
               <strong
                 style={{ display: "block", color: "var(--text-primary)" }}
               >
-                {lang === "tr"
-                  ? "Resmi Başlangıç / Standartlaşma"
-                  : "Official Launch / Standardization"}
+                {t.kpss_past_exams_step2}
               </strong>
               <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                {lang === "tr"
-                  ? "Tüm düzeylerde (Lisans, Önlisans, Ortaöğretim) Sözel/Sayısal Mantık resmileşti ve bugünkü 120 soruluk şablon kalıcı hale geldi."
-                  : "Verbal/Numerical Logic standardized across all levels; the modern 120-question template became permanent."}
+                {t.kpss_past_exams_all}
               </span>
             </div>
           </div>
@@ -150,14 +138,10 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
               <strong
                 style={{ display: "block", color: "var(--text-primary)" }}
               >
-                {lang === "tr"
-                  ? "Nihai Dönem / Yeni Nesil Çağı"
-                  : "Final Era / New Generation"}
+                {t.kpss_past_exams_history_q}
               </strong>
               <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>
-                {lang === "tr"
-                  ? "ÖSYM soru havuzu tamamen YKS/ALES paralelinde uzun paragraflara, günlük hayat senaryolarına ve yoğun muhakemeye evrildi."
-                  : "Question database evolved fully parallel to YKS/ALES, shifting toward long reading passages and intense reasoning."}
+                {t.kpss_past_exams_geography}
               </span>
             </div>
           </div>
@@ -168,7 +152,7 @@ export function KpssQuizInfoModal({ lang, onClose }: KpssQuizInfoModalProps) {
             style={{ width: "auto", padding: "0 24px" }}
             onClick={onClose}
           >
-            {lang === "tr" ? "Anladım" : "Got it"}
+            {t.kpss_quiz_got_it}
           </button>
         </div>
       </div>

@@ -17,6 +17,7 @@ import {
 
 interface KpssWikiReaderProps {
   lang: Language;
+  t: Record<string, string>;
   note: KpssWikiNote;
   allNotes: KpssWikiNote[];
   tableOfContents: HeadingItem[];
@@ -25,6 +26,7 @@ interface KpssWikiReaderProps {
 
 export function KpssWikiReader({
   lang,
+  t,
   note,
   allNotes,
   tableOfContents,
@@ -33,7 +35,7 @@ export function KpssWikiReader({
   const [showToc, setShowToc] = useState(true);
 
   const displayTitle =
-    note.title.trim() || extractTitleFromContent(note.content) || (lang === "tr" ? "Başlıksız Ders Notu" : "Untitled Note");
+    note.title.trim() || extractTitleFromContent(note.content) || t.kpss_wiki_untitled;
 
   // Extract first image URL for Infobox Featured Media
   const imageUrl = useMemo(() => {

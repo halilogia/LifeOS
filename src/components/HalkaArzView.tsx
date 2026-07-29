@@ -84,27 +84,27 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
             className={`stock-btn ${activeTab === "active" ? "stock-btn-primary" : "stock-btn-secondary"}`}
             onClick={() => setActiveTab("active")}
           >
-            🎯 Aktif & Yaklaşan Halka Arzlar ({activeIPOs.length})
+            {t.ipo_tab_active_and_upcoming.replace("{count}", String(activeIPOs.length))}
           </button>
           <button
             className={`stock-btn ${activeTab === "history" ? "stock-btn-primary" : "stock-btn-secondary"}`}
             onClick={() => setActiveTab("history")}
           >
-            📜 Halka Arz Geçmişi ({historyIPOs.length})
+            {t.ipo_tab_history_label.replace("{count}", String(historyIPOs.length))}
           </button>
         </div>
 
         <button
           className="stock-btn stock-btn-secondary"
           onClick={loadIPOs}
-          title="Yenile"
+          title={t.ipo_refresh_title}
         >
           <IconRefresh />
-          <span>{loading ? "Yükleniyor..." : "Yenile"}</span>
+          <span>{loading ? t.ipo_loading : t.ipo_refresh_title}</span>
         </button>
       </div>
 
-      {/* Aktif vs Yakında Filtreleme Hapları (İlki Aktif, Tümü En Sağa) */}
+      {/* Aktif vs Yakında Filtreleme Hapları */}
       {activeTab === "active" && !loading && (
         <div
           style={{
@@ -134,7 +134,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               color: subFilter === "active_only" ? "#34d399" : "#94a3b8",
             }}
           >
-            🟢 Talep Toplayanlar / Aktif ({activeOnlyCount})
+            {t.ipo_wip_filter_active.replace("{count}", String(activeOnlyCount))}
           </button>
           <button
             onClick={() => setSubFilter("upcoming_only")}
@@ -155,7 +155,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               color: subFilter === "upcoming_only" ? "#fbbf24" : "#94a3b8",
             }}
           >
-            ⏳ Yakında Başlayacaklar ({upcomingOnlyCount})
+            {t.ipo_wip_filter_upcoming.replace("{count}", String(upcomingOnlyCount))}
           </button>
           <button
             onClick={() => setSubFilter("all")}
@@ -176,7 +176,7 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               color: subFilter === "all" ? "#c084fc" : "#94a3b8",
             }}
           >
-            Tümü ({activeIPOs.length})
+            {t.ipo_wip_filter_all.replace("{count}", String(activeIPOs.length))}
           </button>
         </div>
       )}
@@ -186,14 +186,14 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
         <div
           style={{ textAlign: "center", padding: "60px 0", color: "#94a3b8" }}
         >
-          <span>Halka arz verileri çekiliyor...</span>
+          <span>{t.ipo_loading}</span>
         </div>
       ) : activeTab === "active" ? (
         displayedActiveList.length === 0 ? (
           <div
             style={{ textAlign: "center", padding: "60px 0", color: "#64748b" }}
           >
-            Seçilen filtrede gösterilecek halka arz bulunmuyor.
+            {t.ipo_empty_filter}
           </div>
         ) : (
           <div
