@@ -19,25 +19,17 @@ export function ArcadeGameCard({
   onToggleFavorite,
   onDeleteGame,
 }: ArcadeGameCardProps) {
-
   const t = translations[lang];
   const tr = t as Record<string, string>;
 
-  // Category SVG or Badge color
   const getCategoryColor = (cat: GameEntry["category"]) => {
     switch (cat) {
-      case "action":
-        return "#ef4444";
-      case "rpg":
-        return "#a855f7";
-      case "simulation":
-        return "#3b82f6";
-      case "puzzle":
-        return "#f59e0b";
-      case "ai":
-        return "#10b981";
-      default:
-        return "#8b5cf6";
+      case "action": return "#ef4444";
+      case "rpg": return "#a855f7";
+      case "simulation": return "#3b82f6";
+      case "puzzle": return "#f59e0b";
+      case "ai": return "#10b981";
+      default: return "#8b5cf6";
     }
   };
 
@@ -68,12 +60,16 @@ export function ArcadeGameCard({
 
   return (
     <div className="arcade-game-card">
-      {/* Top Banner / Cover */}
       <div className="arcade-card-cover" onClick={() => onPlay(game)}>
         {game.coverImage ? (
           <img src={game.coverImage} alt={game.title} className="arcade-cover-img" />
         ) : (
-          <div className="arcade-cover-placeholder" style={{ background: `linear-gradient(135deg, ${getCategoryColor(game.category)}22, rgba(15,23,42,0.95))` }}>
+          <div
+            className="arcade-cover-placeholder"
+            style={{
+              background: `linear-gradient(135deg, ${getCategoryColor(game.category)}22, rgba(15,23,42,0.95))`,
+            }}
+          >
             <div className="arcade-placeholder-icon">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={getCategoryColor(game.category)} strokeWidth="1.5">
                 <rect x="2" y="6" width="20" height="12" rx="4" />
@@ -110,7 +106,6 @@ export function ArcadeGameCard({
         {statusBadge(game.status)}
       </div>
 
-      {/* Card Info Content */}
       <div className="arcade-card-content">
         <div className="arcade-card-header">
           <h3 className="arcade-card-title">{game.title}</h3>
@@ -118,7 +113,6 @@ export function ArcadeGameCard({
 
         <p className="arcade-card-desc">{game.description}</p>
 
-        {/* Tech Badges */}
         {game.techStack && game.techStack.length > 0 && (
           <div className="arcade-tech-badges">
             {game.techStack.slice(0, 3).map((tech, idx) => (
@@ -129,16 +123,12 @@ export function ArcadeGameCard({
           </div>
         )}
 
-        {/* Card Footer Actions */}
         <div className="arcade-card-footer">
-          <div className="arcade-score-info">
-            {game.highScore > 0 ? (
-              <span className="high-score-text">
-                {tr.arcade_score_label} <strong>{game.highScore}</strong>
-              </span>
-            ) : (
-              <span className="no-score-text">{tr.arcade_new_game_label}</span>
-            )}
+          <div className="arcade-folder-info" title={game.folderPath}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+            <span>{game.folderPath}</span>
           </div>
 
           <div className="arcade-action-btns">
@@ -174,7 +164,6 @@ export function ArcadeGameCard({
               <span>{tr.arcade_play_btn}</span>
             </button>
           </div>
-
         </div>
       </div>
     </div>
