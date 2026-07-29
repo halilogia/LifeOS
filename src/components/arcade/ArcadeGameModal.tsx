@@ -55,21 +55,17 @@ export function ArcadeGameModal({
   // Display a sanitized version for the user; never inject raw.
   const devCmdDisplay = `cd "${game.folderPath}" && npm run dev`;
 
-  useEffect(() => {
-    if (!gamePkg) {return;}
-    const sendPkg = () => {
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
-      }
-    };
-    sendPkg();
-    const t1 = setTimeout(sendPkg, 150);
-    const t2 = setTimeout(sendPkg, 400);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [gamePkg]);
+  // Send gamePkg to sandbox iframe once it has fully loaded (onLoad callback).
+  // messageSentRef ensures we only send once — after document.write() the iframe
+  // fires a second load event which would re-trigger sandbox.js if we sent again.
+  const messageSentRef = useRef(false);
+  const handleSandboxLoad = () => {
+    if (messageSentRef.current) return; // already sent once
+    if (gamePkg && iframeRef.current?.contentWindow) {
+      messageSentRef.current = true;
+      iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
+    }
+  };
 
   useEffect(() => {
     if (game.mode !== "dist") {return;}
@@ -249,11 +245,7 @@ export function ArcadeGameModal({
                       src={sandboxUrl}
                       className="arcade-game-iframe"
                       title={game.title}
-                      onLoad={() => {
-                        if (iframeRef.current?.contentWindow && gamePkg) {
-                          iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
-                        }
-                      }}
+                      onLoad={handleSandboxLoad}
                     />
                   )}
                 </>
