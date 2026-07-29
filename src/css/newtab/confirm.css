@@ -18,7 +18,7 @@
   background: rgba(30, 30, 46, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
-  padding: 32px 24px;
+  padding: var(--space-10) var(--space-9);
   max-width: 420px;
   width: 90%;
   text-align: center;
@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px auto;
+  margin: 0 auto var(--space-8) auto;
   color: var(--accent-color);
 }
 
@@ -50,12 +50,12 @@
 
 .confirm-modal-actions {
   display: flex;
-  gap: 12px;
+  gap: var(--space-5);
   justify-content: center;
 }
 
 .confirm-modal-btn {
-  padding: 12px 28px;
+  padding: var(--space-5) 28px;
   border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 600;

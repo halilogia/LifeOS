@@ -3,7 +3,7 @@
 .arcade-games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: var(--space-8);
   width: 100%;
 }
 
@@ -46,7 +46,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .arcade-cover-cat {
@@ -138,10 +138,10 @@
   left: 10px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-sm);
   background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(4px);
@@ -170,8 +170,8 @@
 .arcade-card-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px;
+  gap: var(--space-4);
+  padding: var(--space-7);
   flex: 1;
 }
 
@@ -195,7 +195,7 @@
 .arcade-tech-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .arcade-tech-tag {
@@ -203,7 +203,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--card-border);
   color: var(--text-muted);
-  padding: 2px 8px;
+  padding: 2px var(--space-3);
   border-radius: 4px;
 }
 
@@ -212,7 +212,7 @@
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 10px;
+  padding-top: var(--space-4);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -233,7 +233,7 @@
 .arcade-action-btns {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .arcade-details-btn {
@@ -258,11 +258,11 @@
 .arcade-play-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   background: var(--accent-color);
   color: #fff;
   border: none;
-  padding: 6px 14px;
+  padding: var(--space-2) var(--space-6);
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;

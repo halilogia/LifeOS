@@ -4,14 +4,14 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-9);
 }
 
 /* Sub-Tabs Navigation */
 .free-games-tabs {
   display: flex;
   gap: 0.5rem;
-  padding: 4px;
+  padding: var(--space-1);
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--card-border);
   border-radius: 14px;
@@ -23,7 +23,7 @@
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  padding: 8px 20px;
+  padding: var(--space-3) var(--space-8);
   border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -47,8 +47,8 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1rem;
-  padding-bottom: 1rem;
+  gap: var(--space-7);
+  padding-bottom: var(--space-7);
   border-bottom: 1px solid var(--card-border);
 }
 
@@ -60,7 +60,7 @@
 
 .free-games-filters {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-7);
   align-items: center;
   flex-wrap: wrap;
 }
@@ -111,7 +111,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 1rem;
+  padding: var(--space-7);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -138,7 +138,7 @@
   gap: 0.5rem;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
-  padding: 6px 14px;
+  padding: var(--space-2) var(--space-6);
   border-radius: 50px;
   font-size: 0.82rem;
   color: var(--text-secondary);
@@ -191,7 +191,7 @@
 .free-games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: var(--space-9);
   width: 100%;
 }
 
@@ -234,7 +234,7 @@
   top: 12px;
   right: 12px;
   display: flex;
-  gap: 6px;
+  gap: var(--space-2);
   z-index: 2;
 }
 
@@ -242,7 +242,7 @@
   background: rgba(15, 15, 20, 0.85);
   color: var(--text-secondary);
   text-decoration: line-through;
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-4);
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -266,7 +266,7 @@
 
 .game-platforms-container {
   display: flex;
-  gap: 6px;
+  gap: var(--space-2);
   margin-bottom: 0.75rem;
   flex-wrap: wrap;
 }
@@ -274,7 +274,7 @@
 .game-platform-badge {
   font-size: 0.65rem;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 2px var(--space-3);
   border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -361,7 +361,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .game-expiry {
@@ -387,7 +387,7 @@
   color: white;
   font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: var(--space-2) var(--space-5);
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -408,7 +408,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem 0;
-  gap: 1rem;
+  gap: var(--space-7);
   width: 100%;
 }
 
@@ -438,7 +438,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem 0;
-  gap: 1rem;
+  gap: var(--space-7);
   width: 100%;
 }
 
@@ -451,7 +451,7 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
-  padding: 6px 16px;
+  padding: var(--space-2) var(--space-7);
   border-radius: 10px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -475,8 +475,8 @@
 
 /* Attribution styling */
 .gamerpower-attribution {
-  margin-top: 2rem;
-  padding-top: 1rem;
+  margin-top: var(--space-9);
+  padding-top: var(--space-7);
   border-top: 1px solid rgba(255, 255, 255, 0.03);
   text-align: center;
 }

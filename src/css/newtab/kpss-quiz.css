@@ -3,8 +3,8 @@
 .kpss-quiz-question-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
 }
 
 .kpss-quiz-question-text {
@@ -13,7 +13,7 @@
   color: var(--text-primary);
   font-weight: 500;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
-  padding: 16px;
+  padding: var(--space-7);
   border-radius: var(--radius-md, 12px);
   border: 1px solid var(--card-border);
 }
@@ -21,14 +21,14 @@
 .kpss-quiz-options-grid {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-4);
 }
 
 .kpss-quiz-option-card {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 12px 16px;
+  padding: var(--space-5) var(--space-7);
   text-align: left;
   color: var(--text-secondary);
   font-size: 0.95rem;
@@ -36,7 +36,7 @@
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .kpss-quiz-option-card:hover {
@@ -103,7 +103,7 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-8);
 }
 
 .kpss-quiz-progress-fill {
@@ -116,15 +116,15 @@
 .kpss-question-count-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  margin: 16px 0;
+  gap: var(--space-4);
+  margin: var(--space-7) 0;
 }
 
 .kpss-qcount-btn {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  padding: 10px 0;
+  padding: var(--space-4) 0;
   border-radius: var(--radius-sm, 8px);
   font-size: 0.9rem;
   font-weight: 600;

@@ -3,18 +3,18 @@
 .kpss-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--space-8);
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-7);
 }
 
 .kpss-header {
   margin-bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .kpss-header h2 {
@@ -26,16 +26,16 @@
 
 .kpss-subject-nav {
   display: flex;
-  gap: 12px;
+  gap: var(--space-5);
   flex-wrap: wrap;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
-  padding: 8px;
+  padding: var(--space-3);
   border-radius: 16px;
   border: 1px solid var(--card-border);
 }
 
 .kpss-subject-btn {
-  padding: 12px 24px;
+  padding: var(--space-5) var(--space-9);
   border-radius: var(--radius-md, 12px);
   border: 1px solid var(--card-border);
   background: transparent;
@@ -46,7 +46,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .kpss-subject-btn:hover {
@@ -65,7 +65,7 @@
 .kpss-content {
   flex: 1;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: var(--space-4);
 }
 
 /* Scrollbar adjustment */
@@ -85,17 +85,17 @@
 .kpss-topic-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap: var(--space-7);
 }
 
 .kpss-topic-item {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 16px 20px;
+  padding: var(--space-7) var(--space-8);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-7);
   cursor: pointer;
   transition: all 0.3s ease;
   user-select: none;
@@ -202,7 +202,7 @@
 }
 
 .kpss-progress-bar-container {
-  padding: 20px;
+  padding: var(--space-8);
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   border-radius: 12px;
   margin-top: 0;
@@ -212,7 +212,7 @@
 .kpss-progress-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-3);
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
@@ -235,7 +235,7 @@
 .kpss-daily-stats-section {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 16px;
+  gap: var(--space-7);
   margin-bottom: 0;
 }
 
@@ -249,7 +249,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   backdrop-filter: blur(var(--glass-blur, 10px));
   border-radius: var(--radius-xl, 20px);
-  padding: 24px;
+  padding: var(--space-9);
   border: 1px solid var(--card-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
@@ -258,27 +258,27 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin-bottom: var(--space-8);
   letter-spacing: -0.02em;
 }
 
 .kpss-stats-inputs {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-7);
 }
 
 .kpss-input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .kpss-input-group label {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-secondary);
-  padding-left: 4px;
+  padding-left: var(--space-1);
 }
 
 .kpss-input-group input,
@@ -286,7 +286,7 @@
   background: var(--bg-color);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 12px 16px;
+  padding: var(--space-5) var(--space-7);
   color: var(--text-primary);
   width: 100%;
   outline: none;
@@ -302,7 +302,7 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 18px;
-  padding-right: 40px;
+  padding-right: var(--space-11);
 }
 
 .kpss-input-group input:focus,
@@ -331,13 +331,13 @@
 .kpss-action-btns {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 12px;
-  margin-top: 10px;
+  gap: var(--space-5);
+  margin-top: var(--space-4);
 }
 
 #kpss-save-stats-btn,
 #kpss-reset-stats-btn {
-  padding: 12px;
+  padding: var(--space-5);
   border-radius: var(--radius-md, 12px);
   border: none;
   font-weight: 600;
@@ -372,7 +372,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   backdrop-filter: blur(var(--glass-blur, 10px));
   border-radius: var(--radius-xl, 20px);
-  padding: 24px;
+  padding: var(--space-9);
   border: 1px solid var(--card-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -400,7 +400,7 @@
 .kpss-countdowns-banner {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  gap: var(--space-7);
   margin-bottom: 0;
 }
 
@@ -410,10 +410,10 @@
   -webkit-backdrop-filter: blur(var(--glass-blur, 12px));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 16px 20px;
+  padding: var(--space-7) var(--space-8);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
 }
@@ -481,9 +481,9 @@
   color: var(--text-primary);
   background: rgba(var(--accent-color-rgb), 0.2);
   border: 1px solid rgba(var(--accent-color-rgb), 0.4);
-  padding: 2px 6px;
+  padding: 2px var(--space-2);
   border-radius: 6px;
-  margin-left: 8px;
+  margin-left: var(--space-3);
 }
 
 /* ── KPSS Question Canvas Container ────────────────── */
@@ -493,8 +493,8 @@
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 12px;
-  margin: 0 auto 16px;
+  padding: var(--space-5);
+  margin: 0 auto var(--space-7);
   max-width: 460px;
   width: 100%;
   box-shadow:
@@ -571,7 +571,7 @@
   border-radius: 50%;
   animation: kpssSpin 0.8s linear infinite;
   display: inline-block;
-  margin-right: 8px;
+  margin-right: var(--space-3);
   vertical-align: middle;
 }
 

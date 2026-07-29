@@ -3,41 +3,41 @@
 .arcade-view-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-9);
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: 40px;
+  padding-bottom: var(--space-11);
 }
 
 .arcade-header-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-7);
   background: var(--card-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: var(--space-9);
 }
 
 .arcade-title-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .arcade-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   font-size: 12px;
   font-weight: 600;
   color: var(--accent-color);
   background: rgba(139, 92, 246, 0.12);
   border: 1px solid rgba(139, 92, 246, 0.25);
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-4);
   border-radius: 20px;
   width: fit-content;
 }
@@ -57,18 +57,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-7);
   flex-wrap: wrap;
 }
 
 .arcade-search-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  padding: 8px 14px;
+  padding: var(--space-3) var(--space-6);
   min-width: 220px;
   color: var(--text-muted);
 }
@@ -85,14 +85,14 @@
 .arcade-category-chips {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .arcade-chip {
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 500;
@@ -115,11 +115,11 @@
 .arcade-add-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
   color: #fff;
   border: none;
-  padding: 10px 18px;
+  padding: var(--space-4) 18px;
   border-radius: var(--radius-md);
   font-size: 14px;
   font-weight: 600;
@@ -138,7 +138,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  gap: 12px;
+  padding: var(--space-12) var(--space-8);
+  gap: var(--space-5);
   color: var(--text-muted);
 }

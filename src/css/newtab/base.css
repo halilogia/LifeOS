@@ -34,6 +34,20 @@
   --stock-accent: #818cf8;
   --stock-badge-bg: rgba(99, 102, 241, 0.2);
 
+  /* ── Spacing Tokens ───────────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 20px;
+  --space-9: 24px;
+  --space-10: 32px;
+  --space-11: 40px;
+  --space-12: 60px;
+
   /* ── Radius Tokens ────────────────────────────────────────────────── */
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -130,12 +144,12 @@ body {
 .container {
   width: 100%;
   max-width: 1200px;
-  padding: 2rem;
+  padding: var(--space-9);
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin: 40px auto 0 auto;
+  gap: var(--space-9);
+  margin: var(--space-11) auto 0 auto;
   transition: padding-left 0.4s ease;
   align-self: stretch;
 }
@@ -267,7 +281,7 @@ body {
   -webkit-backdrop-filter: blur(25px);
   border: 1px solid var(--card-border);
   border-radius: 24px;
-  padding: 2rem;
+  padding: var(--space-9);
   width: 100%;
   max-width: 450px;
   max-height: 90vh;
@@ -292,10 +306,10 @@ body {
 
 .settings-tabs {
   display: flex;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 10px;
+  padding-bottom: var(--space-4);
 }
 
 .settings-tab-btn {
@@ -304,7 +318,7 @@ body {
   color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: var(--space-2) var(--space-5);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -324,7 +338,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-9);
 }
 
 .settings-header h2 {
@@ -372,13 +386,13 @@ body {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--card-border);
   border-radius: 12px;
-  padding: 1rem;
+  padding: var(--space-7);
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -399,8 +413,8 @@ body {
 
 .settings-input-group {
   display: flex;
-  gap: 8px;
-  margin-bottom: 1rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-7);
 }
 
 #new-cat-input {
@@ -408,7 +422,7 @@ body {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--card-border);
   border-radius: 12px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem var(--space-7);
   color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;
@@ -440,17 +454,17 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
   max-height: 150px;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: var(--space-1);
 }
 
 .settings-list-item {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: var(--space-3) var(--space-5);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -463,7 +477,7 @@ body {
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px;
+  padding: var(--space-1);
   opacity: 0.6;
   transition: all 0.2s ease;
 }
@@ -531,7 +545,7 @@ body {
 /* Empty States */
 .empty-state {
   text-align: center;
-  padding: 2rem 0;
+  padding: var(--space-9) 0;
   display: none;
 }
 
@@ -546,12 +560,12 @@ body {
 
 /* Card generic structures */
 .card-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  margin-top: var(--space-9);
+  padding-top: var(--space-7);
   border-top: 1px solid var(--card-border);
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: var(--space-7);
 }
 
 .text-btn {
@@ -563,8 +577,8 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   border-radius: 8px;
   transition: all 0.2s ease;
 }
@@ -581,7 +595,7 @@ body {
 /* Responsive Split Grids (SRS, Calendar sidebars) */
 .split-view-container {
   display: flex;
-  gap: 2rem;
+  gap: var(--space-9);
   width: 100%;
   align-items: flex-start;
 }
@@ -623,7 +637,7 @@ body.sidebar-open .container {
 
 @media (max-width: 1199px) {
   body.sidebar-open .container {
-    padding-left: 2rem;
+    padding-left: var(--space-9);
   }
 }
 
@@ -631,7 +645,7 @@ body.sidebar-open .container {
 select option {
   background-color: #161622 !important;
   color: #ffffff !important;
-  padding: 8px !important;
+  padding: var(--space-3) !important;
 }
 
 /* Hide number input spinners globally */
