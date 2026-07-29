@@ -24,7 +24,9 @@ import { DetoxView } from "@/components/DetoxView.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 import { BistView } from "@/components/BistView.js";
 import { AIChatView } from "@/components/AIChatView.js";
+import { ArcadeView } from "@/components/ArcadeView.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
+
 import { EisenhowerView } from "@/components/EisenhowerView.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
@@ -289,8 +291,11 @@ export function App() {
             targetScore={kpssTargetScore}
           />
         );
+      case "arcade":
+        return <ArcadeView lang={lang as Language} />;
       case "free-games":
         return <FreeGamesView lang={lang as Language} />;
+
       case "detox":
         return <DetoxView lang={lang as Language} />;
       case "bist":

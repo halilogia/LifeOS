@@ -360,4 +360,22 @@ export const en = {
   stock_load_more: "Load More BIST Stocks",
   stock_ai_featured_title: "✦ AI Weekly Featured BIST Stocks",
   popup_detox_tab_title: "Detox Limits",
+  view_arcade: "Games (Life OS Arcade)",
+
+  sidebar_arcade: "Games & Dev Hub",
+  arcade_main_title: "Game Library & Laboratory",
+  arcade_subtitle: "Manage, play, and develop your custom game projects and built-in micro-games in one unified place.",
+  arcade_search_placeholder: "Search games or projects...",
+  arcade_cat_all: "All Games",
+  arcade_cat_playable: "Playable",
+  arcade_cat_in_progress: "In Progress",
+  arcade_cat_favorites: "Favorites",
+  arcade_add_game_btn: "+ Add Game / Project",
+  arcade_status_playable: "Playable",
+  arcade_status_in_progress: "In Progress",
+  arcade_status_concept: "Concept",
+  arcade_play_btn: "Play",
+  arcade_tab_play: "Play",
+  arcade_tab_dev: "Steam Dev Log",
 };
+

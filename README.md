@@ -44,7 +44,14 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
 - **✍️ Günlüğüm (Notlar & Ders Notları)**:
   - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" türünde kayıtlar ekleme desteği. Premium pill segment butonları ile şık arayüz geçişleri. Yapay zeka sohbetinden doğrudan komutla günlük/not ekleyebilme desteği.
+- **🕹️ Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Laboratuvarı)**:
+
+  - **YouTube Playables Estetiği**: YouTube "Hazır Oyunlar" tasarımından ilham alan büyük visual kapak posterleri, filtreleme çipleri (`Oynanabilir`, `Geliştirilenler`, `Favoriler`), arama çubuğu ve hızlı Oyna butonları.
+  - **Steam Tarzı Geliştirici & İstatistik Paneli**: Her oyun için en yüksek skor, oynanma sayısı, `C:\Users\emre_\Desktop\GitHub\In Progress` proje klasör yolu, güncellenebilir geliştirici notları ve interaktif To-Do checklist paneli.
+  - **Dahili HTML5 Mini Oyunlar**: Retro Neon Yılan (Snake), 2D Şövalye Runner ve Galaxy Defender 2D uzay savaşı oyunları.
+  - **Yerel Geliştirici Oyun Entegrasyonu**: `In Progress` klasöründeki bağımsız projeler ve yerel dev sunucuları (`http://localhost:5173`) için canlı iframe oynatıcı ve kütüphane kaydedici.
 - **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
+
   - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
   - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.
 - **🚫 Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:

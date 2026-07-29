@@ -80,4 +80,22 @@ Bu doküman, **ZenTodo / Life OS Chrome Extension** projesinin gelecekteki sür�
 
 ---
 
+## 🕹️ 5. Life OS Arcade & Oyun Geliştirme Laboratuvarı İnovasyonları
+
+
+### 5.1 📡 Otomatik Yerel Dev Sunucu Tespiti (Port Auto-Scanner)
+* **Fikir**: Eklenti açıkken arkaplanda `http://localhost:5173`, `3000`, `8080`, `5174` gibi popüler Vite / Next.js / React portlarını periyodik tarayarak yayında olan yerel oyunu otomatik tespit etme.
+* **Katma Değer**: `C:\Users\emre_\Desktop\GitHub\In Progress` altında `npm run dev` yaptığınızda oyun kartında otomatik olarak yeşil canlı **"Dev Sunucusu Aktif 🟢"** ikazı belirir ve tek tıkla canlı teste geçilir.
+
+### 5.2 🏆 Genel Başarım Engine & Rozet Sistemi (Game Achievements)
+* **Fikir**: Gömülü oyunlarda ve yerel oyun projelerinizde elde edilen skorlara/tamamlanan to-do maddelerine göre eklenti genelinde kilit açan Steam tarzı koleksiyon rozetleri.
+* **Katma Değer**: "Yılan Ustası", "Şövalye Katili", "Indie Dev Master" rozetleri ile oyun geliştirme motivasyonunu üst seviyeye taşır.
+
+### 5.3 📸 Oyun İçi GIF & Ekran Görüntüsü Kaydedici (Game Screenshot & Clip Tool)
+* **Fikir**: Modal oyuncuda oyun oynarken veya geliştirirken tek tıkla HTML5 Canvas ekran görüntüsü veya 5 saniyelik GIF klip alabilme.
+* **Katma Değer**: Oyun projelerinizin sosyal medya ve devlog paylaşımları için anında görsel içerik üretmenizi sağlar.
+
+---
+
 *Bu doküman ZenTodo / Life OS projesi geliştirme sürecinde ilham kaynağı ve vizyon belgesi olarak güncel tutulmaktadır.* 🚀
+

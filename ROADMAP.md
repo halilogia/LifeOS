@@ -31,11 +31,15 @@ A lightweight widget to capture content across the web.
 - [ ] **Floating Widget**: Keyboard-triggered floating glassmorphic popup that overlays on any website.
 - [ ] **Quick Capture**: Instantly save highlighted webpage text directly to notes or add tasks to the dashboard without opening the New Tab page.
 
-### 6. 📚 Wikipedia-Style KPSS Knowledge Studio & Wikilink Graph
-Modular study note archiving with cross-note Wikilinks, Backlinks, and dynamic Infobox.
-- [ ] **In-Article Search & Keyword Highlight**: Real-time `Ctrl+F` text search bar inside long study notes.
+### 7. 🕹️ Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Dev Hub)
+
+Unified indie game showcase, HTML5 arcade player, and Steam-style developer laboratory.
+- [x] **YouTube Playables & Steam Hybrid Hub**: Glassmorphic visual gallery cards, embedded canvas games (Snake, Knight Runner, Space Shooter), and dev logs (v4.0.0).
+- [ ] **Game Achievement Engine (Başarım Sistemi)**: Custom unlockable achievement badges for built-in and local indie games.
+- [ ] **Local Dev Server Ping Detector**: Automatically pinging `http://localhost:5173`, `3000`, `8080` ports to display a live "Dev Server Ready" indicator.
 
 ---
+
 
 ## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
 

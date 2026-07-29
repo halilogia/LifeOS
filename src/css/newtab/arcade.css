@@ -1,0 +1,812 @@
+/* ── Life OS Arcade & Dev Game Hub Styling ────────────────────────────────── */
+
+
+.arcade-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* ── Header Section ────────────────────────────────────────────────────────── */
+.arcade-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.arcade-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arcade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-color);
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.arcade-title-section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.arcade-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ── Controls Row ──────────────────────────────────────────────────────────── */
+.arcade-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.arcade-search-box {
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  min-width: 220px;
+  color: var(--text-muted);
+}
+
+.arcade-search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  width: 100%;
+}
+
+.arcade-category-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arcade-chip {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arcade-chip:hover {
+  background: var(--card-bg-hover);
+  color: var(--text-primary);
+}
+
+.arcade-chip.active {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.arcade-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arcade-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+/* ── Games Grid ────────────────────────────────────────────────────────────── */
+.arcade-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* ── Game Card ─────────────────────────────────────────────────────────────── */
+.arcade-game-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.arcade-game-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.arcade-card-cover {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.arcade-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.arcade-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.arcade-cover-cat {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.arcade-fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease;
+}
+
+.arcade-fav-btn:hover {
+  transform: scale(1.1);
+}
+
+.arcade-card-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.arcade-game-card:hover .arcade-card-play-overlay {
+  opacity: 1;
+}
+
+.play-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow: 0 0 20px var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Badges */
+.arcade-status-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-dot.green {
+  background: var(--success);
+}
+
+.status-dot.amber {
+  background: var(--warning);
+}
+
+.status-dot.purple {
+  background: var(--accent-color);
+}
+
+/* Content */
+.arcade-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  flex: 1;
+}
+
+.arcade-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.arcade-card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-linerc-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.arcade-tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.arcade-tech-tag {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.arcade-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.high-score-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.high-score-text strong {
+  color: var(--success);
+}
+
+.no-score-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.arcade-action-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arcade-details-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.arcade-details-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+.arcade-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.arcade-play-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ── Modal & Steam Panel ──────────────────────────────────────────────────── */
+.arcade-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.arcade-modal-content {
+  background: #0f172a;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.arcade-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(30, 41, 59, 0.6);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.arcade-modal-title-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arcade-modal-title-box h3 {
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.arcade-modal-cat {
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-color);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.arcade-modal-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.modal-tab-btn.active {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+}
+
+.arcade-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.arcade-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.arcade-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.arcade-game-view-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Steam Panel Elements */
+.arcade-steam-dev-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.steam-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.steam-stat-card {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.stat-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-val.highlight {
+  color: var(--success);
+}
+
+.steam-dev-path-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.box-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.path-string {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-color);
+  word-break: break-all;
+}
+
+.tech-tags-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.tech-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--text-primary);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.steam-notes-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+  margin-top: 6px;
+}
+
+.steam-notes-textarea:focus {
+  border-color: var(--accent-color);
+}
+
+/* Steam Todo Section */
+.steam-todo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.steam-todo-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.steam-todo-input-row input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.todo-add-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.steam-todo-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.steam-todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.steam-todo-item.completed {
+  opacity: 0.6;
+}
+
+.steam-todo-item.completed .todo-text {
+  text-decoration: line-through;
+}
+
+.todo-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.todo-del-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.todo-del-btn:hover {
+  color: #ef4444;
+}
+
+/* Add Modal Form */
+.add-modal {
+  max-width: 540px;
+}
+
+.add-game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.arcade-btn-primary {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.arcade-btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.arcade-iframe-container {
+  width: 100%;
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.arcade-iframe-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: #0f172a;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 12px;
+}
+
+.arcade-url-label {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.arcade-open-tab-btn {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.arcade-game-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.arcade-no-embed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.arcade-cmd-hint {
+  background: #090d16;
+  border: 1px solid var(--card-border);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+
+.arcade-cmd-hint code {
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.delete-game-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.arcade-loading-state,
+.arcade-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+  color: var(--text-muted);
+}
