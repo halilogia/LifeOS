@@ -9,6 +9,7 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import { isRepeating } from "@/domain/value-objects/RepeatType.js";
+import { logger } from "@/utils/logger.js";
 
 export interface DeleteTodoRequest {
   readonly index: number;
@@ -50,7 +51,7 @@ export class DeleteTodoUseCase {
 
         await this.syncPort.deleteTask(token, listId, item.id);
       } catch (err) {
-        console.error("Failed to delete Google Task:", err);
+        logger.error("Failed to delete Google Task:", err);
       }
     }
 

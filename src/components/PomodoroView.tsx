@@ -4,13 +4,14 @@ import {
   pomodoroManager,
   AlarmItem,
 } from "@/infrastructure/services/PomodoroManagerService.js";
-import { translations } from "@/utils/i18n.js";
+import { getTranslation } from "@/utils/i18n.js";
 import { PomoSidePanel } from "@/components/PomoSidePanel.js";
 import { PomoTimerCard } from "@/components/pomodoro/PomoTimerCard.js";
 import { PomoZenGardenCard } from "@/components/pomodoro/PomoZenGardenCard.js";
 import { PomoZenHistoryCard } from "@/components/pomodoro/PomoZenHistoryCard.js";
 import { PomoHeaderTabs } from "@/components/pomodoro/PomoHeaderTabs.js";
 import { renderZenElementSvg } from "@/components/pomodoro/PomoZenElementSvgs.js";
+import { logger } from "@/utils/logger.js";
 
 interface PomodoroViewProps {
   lang: Language;
@@ -20,7 +21,7 @@ const MODE_LABELS = { focus: "FOCUS", short: "SHORT", long: "LONG" };
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 110;
 
 export function PomodoroView({ lang }: PomodoroViewProps) {
-  const t = translations[lang];
+  const t = getTranslation(lang);
 
   // Tab navigation
   const [activeTab, setActiveTab] = useState<"timer" | "zen">("timer");
@@ -202,9 +203,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
         if (alarm.enabled && alarm.time === currentHHMM) {
           await pomodoroManager.toggleAlarm(alarm.id, false);
           notify(
-            lang === "tr"
-              ? `Alarm Zamanı: ${alarm.time}`
-              : `Alarm Triggered: ${alarm.time}`,
+            `${t.alarm_time_label} ${alarm.time}`,
           );
         }
       });
@@ -333,7 +332,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
       audio.volume = 0.4;
       audio.play();
     } catch (e) {
-      console.error(e);
+      logger.error(e);
     }
     if (Notification.permission === "granted") {
       new Notification("Life OS", { body: msg });

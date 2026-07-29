@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { WillpowerStreak, Language } from "@/types/types.js";
-import { translations } from "@/utils/i18n.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface WillpowerViewProps {
   lang: Language;
@@ -8,7 +8,7 @@ interface WillpowerViewProps {
 }
 
 export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
-  const t = translations[lang];
+  const t = getTranslation(lang);
 
   const [data, setData] = useState<WillpowerStreak | null>(null);
   const [note, setNote] = useState("");
@@ -118,10 +118,7 @@ export function WillpowerView({ lang, onShowConfirm }: WillpowerViewProps) {
 
   const handleClearHistory = () => {
     if (!data) {return;}
-    const confirmMsg =
-      lang === "tr"
-        ? "Süreç geçmişini tamamen temizlemek istediğinizden emin misiniz? Bu işlem geri alınamaz."
-        : "Are you sure you want to clear your streak history? This cannot be undone.";
+    const confirmMsg = t.willpower_clear_history_confirm;
     onShowConfirm(confirmMsg, async () => {
       const updatedData: WillpowerStreak = {
         ...data,

@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * runtimeMessageHandler.ts
  * Clean Architecture - Background Domain Handler for Runtime Messages (Translation, Tab Context, AI Dispatching).
@@ -57,7 +59,7 @@ export function handleRuntimeMessage(
           sendResponse({ error: "Invalid translation response" });
         }
       } catch (err: any) {
-        console.error("Translation query failed:", err);
+        logger.error("Translation query failed:", err);
         sendResponse({ error: err?.message || "Error" });
       }
     });

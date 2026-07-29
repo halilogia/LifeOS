@@ -3,6 +3,7 @@ import { prayerService } from "@/services/prayerService.js";
 import type { PrayerTimes } from "@/types/prayer.js";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { logger } from "@/utils/logger.js";
 
 interface PrayerViewProps {
   lang: Language;
@@ -147,7 +148,7 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
       calculateHighlight(prayerTimes);
       setLoading(false);
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       setError(true);
       setLoading(false);
     }

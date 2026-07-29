@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * ipoService.ts
  * Halka Arz (IPO) veri servisi.
@@ -258,7 +260,7 @@ export async function fetchAllIPOs(): Promise<{
       }
     }
   } catch (e) {
-    console.error("Failed to fetch from halkarz.com:", e);
+    logger.error("Failed to fetch from halkarz.com:", e);
   }
 
   return { data: FALLBACK_IPOS, isFallback: true };

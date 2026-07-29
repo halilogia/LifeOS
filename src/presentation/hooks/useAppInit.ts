@@ -14,6 +14,7 @@ import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
 import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
+import { logger } from "@/utils/logger.js";
 
 function createSyncPort() {
   const tasksApi = new GoogleTasksApi();
@@ -101,7 +102,7 @@ export function useAppInit(callbacks: AppInitCallbacks) {
           await syncUC.execute();
         }
       } catch (e) {
-        console.warn("Silent Google OAuth login failed on startup:", e);
+        logger.warn("Silent Google OAuth login failed on startup:", e);
       }
     }
 

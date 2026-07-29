@@ -66,7 +66,7 @@ function PopupApp() {
           className={`popup-tab-btn ${popupTab === "volume" ? "active" : ""}`}
           onClick={() => setPopupTab("volume")}
         >
-          {lang === "tr" ? "Ses Boost" : "Volume"}
+          {t.popup_volume_label}
         </button>
       </div>
 

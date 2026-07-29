@@ -5,6 +5,7 @@
  */
 
 import { SYNC_ALL_KEYS } from "@/infrastructure/storage/keys.js";
+import { logger } from "@/utils/logger.js";
 
 const SYNC_KEYS = SYNC_ALL_KEYS;
 
@@ -29,9 +30,9 @@ export class LocalToSyncMigration {
               if (Object.keys(filteredData).length > 0) {
                 try {
                   await chrome.storage.sync.set(filteredData);
-                  console.log("Data migrated to sync storage.");
+                  logger.log("Data migrated to sync storage.");
                 } catch (error) {
-                  console.error("Migration to sync storage failed:", error);
+                  logger.error("Migration to sync storage failed:", error);
                 }
               }
             }

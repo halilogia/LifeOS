@@ -11,6 +11,7 @@ import type { Todo } from "@/domain/entities/Todo.js";
 import type { TodoStatus } from "@/domain/value-objects/TodoStatus.js";
 import { isRepeating } from "@/domain/value-objects/RepeatType.js";
 import { isCompleted } from "@/domain/value-objects/TodoStatus.js";
+import { logger } from "@/utils/logger.js";
 import {
   moveTaskWithStatus,
   getUpdatedStatuses,
@@ -104,7 +105,7 @@ export class MoveTaskUseCase {
         completed: isCompleted(newStatus) ? new Date().toISOString() : null,
       });
     } catch (err) {
-      console.error("Failed to sync task status change:", err);
+      logger.error("Failed to sync task status change:", err);
     }
   }
 }

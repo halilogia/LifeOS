@@ -1,7 +1,12 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * alarmNotificationHandler.ts
  * Clean Architecture - Background Domain Handler for Alarms and Notifications (Free Games, Calendar Tasks, BIST Stock Alerts).
  */
+
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 async function checkFreeGames(): Promise<void> {
   chrome.storage.sync.get(
@@ -14,6 +19,7 @@ async function checkFreeGames(): Promise<void> {
       }
 
       const lang = (syncRes.lang as string) || "tr";
+      const t = getTranslation(lang as Language);
 
       try {
         const response = await fetch(
@@ -53,14 +59,8 @@ async function checkFreeGames(): Promise<void> {
 
           newGiveaways.forEach(
             (item: { id: number; title: string; worth: string }) => {
-              const title =
-                lang === "tr"
-                  ? `Ücretsiz Oyun: ${item.title}`
-                  : `Free Game: ${item.title}`;
-              const message =
-                lang === "tr"
-                  ? `Değeri: ${item.worth}. Almak için tıkla!`
-                  : `Worth: ${item.worth}. Click to claim!`;
+              const title = t.notif_free_game_title.replace("{title}", item.title);
+              const message = t.notif_free_game_msg.replace("{worth}", item.worth);
 
               chrome.notifications.create(String(item.id), {
                 type: "basic",
@@ -79,7 +79,7 @@ async function checkFreeGames(): Promise<void> {
           chrome.storage.local.set({ notified_giveaway_ids: updatedIds });
         });
       } catch (err) {
-        console.error("Failed to check free games:", err);
+        logger.error("Failed to check free games:", err);
       }
     },
   );
@@ -96,6 +96,7 @@ async function checkCalendarTasks(): Promise<void> {
       }
 
       const lang = (syncRes.lang as string) || "tr";
+      const t = getTranslation(lang as Language);
       const todos =
         (syncRes.todos as Array<{ completed: boolean; dueDate?: string }>) ||
         [];
@@ -117,14 +118,8 @@ async function checkCalendarTasks(): Promise<void> {
             return;
           }
 
-          const title =
-            lang === "tr"
-              ? "Bugün Yapılacak Görevleriniz Var"
-              : "You Have Tasks Due Today";
-          const message =
-            lang === "tr"
-              ? `Bugün tamamlamanız gereken ${dueToday.length} adet görev bulunuyor. Görmek için tıklayın!`
-              : `You have ${dueToday.length} tasks to complete today. Click to view!`;
+          const title = t.notif_calendar_title;
+          const message = t.notif_calendar_msg.replace("{count}", String(dueToday.length));
 
           chrome.notifications.create("calendar_tasks_due_today", {
             type: "basic",

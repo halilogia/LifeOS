@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * whatsappBridge.ts
  * WhatsApp Web OpenClaw / 9Router AI & Life OS Integration.
@@ -22,7 +24,7 @@ function safeObserve(observer: MutationObserver, options: MutationObserverInit):
       try {
         observer.observe(targetNode, options);
       } catch (err) {
-        console.warn("[Life OS WhatsApp Bridge] Observer attach error:", err);
+        logger.warn("[Life OS WhatsApp Bridge] Observer attach error:", err);
       }
     }
   };
@@ -291,7 +293,7 @@ function setupRemoteAiAssistantObserver(): void {
         // Process only one AI prompt per scan pass
         break;
       } catch (err) {
-        console.error("[Life OS WhatsApp Bridge] AI Error:", err);
+        logger.error("[Life OS WhatsApp Bridge] AI Error:", err);
         isProcessingAi = false;
       }
     }
@@ -319,7 +321,7 @@ function sendTextToWhatsappChat(replyText: string): void {
     document.querySelector('div[contenteditable="true"]');
 
   if (!inputArea) {
-    console.warn("[Life OS WhatsApp Bridge] Input area not found");
+    logger.warn("[Life OS WhatsApp Bridge] Input area not found");
     return;
   }
 

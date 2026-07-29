@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * aiCommandParser.ts
  * Natural language command parser and JSON response cleaner/parser for AI Chat.
@@ -396,7 +398,7 @@ export function cleanAndParseJSON(text: string): any {
         .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
       return JSON.parse(patched);
     } catch {
-      console.warn(
+      logger.warn(
         "[cleanAndParseJSON Fallback] JSON parsing failed twice. Raw text was:",
         text,
       );

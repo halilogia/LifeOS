@@ -21,6 +21,7 @@ export interface QuizQuestion {
 }
 
 import { Language } from "@/types/types.js";
+import { logger } from "@/utils/logger.js";
 
 export interface KpssAiConfig {
   aiProvider: string;
@@ -42,7 +43,7 @@ export const fetchQuestionsSubsetFromAI = async (
   const { aiProvider, aiModel, aiApiKey, aiEndpoint, lang, SUBJECT_NAMES } =
     config;
   const tStart = performance.now();
-  console.log(
+  logger.log(
     `%c[AI Fetch - Start] Requesting ${count} questions for "${topicName}"`,
     "color: #a78bfa; font-weight: bold;",
   );
@@ -87,7 +88,7 @@ export const fetchQuestionsSubsetFromAI = async (
     });
 
     const tNetworkEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Network] Ollama HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`,
     );
 
@@ -106,7 +107,7 @@ export const fetchQuestionsSubsetFromAI = async (
     const tReadStart = performance.now();
     const data = await res.json();
     const tReadEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`,
     );
     responseText = data.choices?.[0]?.message?.content || "";
@@ -152,7 +153,7 @@ export const fetchQuestionsSubsetFromAI = async (
     });
 
     const tNetworkEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Network] 9Router/OpenRouter HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`,
     );
 
@@ -171,7 +172,7 @@ export const fetchQuestionsSubsetFromAI = async (
     const tReadStart = performance.now();
     const data = await res.json();
     const tReadEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`,
     );
     responseText = data.choices?.[0]?.message?.content || "";
@@ -206,7 +207,7 @@ export const fetchQuestionsSubsetFromAI = async (
     });
 
     const tNetworkEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Network] Gemini API HTTP status ${res.status} in ${Math.round(tNetworkEnd - tNetworkStart)} ms`,
     );
 
@@ -225,7 +226,7 @@ export const fetchQuestionsSubsetFromAI = async (
     const tReadStart = performance.now();
     const data = await res.json();
     const tReadEnd = performance.now();
-    console.log(
+    logger.log(
       `[AI Fetch - Parse JSON Payload] Read body in ${Math.round(tReadEnd - tReadStart)} ms`,
     );
     responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
@@ -303,7 +304,7 @@ export const fetchQuestionsSubsetFromAI = async (
         .replace(/(["\d])\s*\n\s*"/g, '$1,\n"');
       parsed = JSON.parse(patched);
     } catch {
-      console.warn(
+      logger.warn(
         "[KpssView JSON parse Fallback] Failed twice. Substring was:",
         cleaned,
       );
@@ -320,12 +321,12 @@ export const fetchQuestionsSubsetFromAI = async (
   }
 
   const tCleanEnd = performance.now();
-  console.log(
+  logger.log(
     `[AI Fetch - Clean & Parse] Extract JSON in ${Math.round(tCleanEnd - tCleanStart)} ms`,
   );
 
   const tTotal = performance.now() - tStart;
-  console.log(
+  logger.log(
     `%c[AI Fetch - Complete] Successfully loaded ${count} questions in ${Math.round(tTotal)} ms`,
     "color: #10b981; font-weight: bold;",
   );

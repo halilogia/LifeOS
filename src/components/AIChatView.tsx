@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Todo, Language } from "@/types/types.js";
-import { translations } from "@/utils/i18n.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 import { AiChatHeaderBar } from "./aichat/AiChatHeaderBar.js";
 import {
@@ -16,6 +16,7 @@ import {
 } from "@/services/aiChatService.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
+import { logger } from "@/utils/logger.js";
 
 interface AIChatViewProps {
   lang: Language;
@@ -50,7 +51,7 @@ export function AIChatView({
   aiShowThinking = true,
   onSettingsOpen,
 }: AIChatViewProps) {
-  const t = translations[lang];
+  const t = getTranslation(lang);
 
   // Component States
   const [messages, setMessages] = useState<MessageItemData[]>([]);
@@ -172,21 +173,12 @@ export function AIChatView({
 
               const typeLabel =
                 type === "diary"
-                  ? lang === "tr"
-                    ? "günlük yazısını"
-                    : "diary entry"
+                  ? t.aichat_type_label_diary
                   : type === "cornell"
-                    ? lang === "tr"
-                      ? "Cornell ders notunu"
-                      : "Cornell study note"
-                    : lang === "tr"
-                      ? "notu"
-                      : "note";
+                    ? t.aichat_type_label_cornell
+                    : t.aichat_type_label_note;
 
-              replyText =
-                lang === "tr"
-                  ? `Harika! İstediğiniz ${typeLabel} Günlüğüm sekmesine başarıyla ekledim. ✓`
-                  : `Sure! I have successfully added the ${typeLabel} to your My Diary tab. ✓`;
+              replyText = t.aichat_added_note_success.replace('{type_label}', typeLabel);
             } else if (
               localParsed.action === "create_task" &&
               localParsed.text
@@ -197,10 +189,9 @@ export function AIChatView({
               await onAddTodo(localParsed.text, "none", localParsed.date);
               await onManualSync();
 
-              replyText =
-                lang === "tr"
-                  ? `Tamamdır! "${localParsed.text}" görevini${dueDateFormatted} takviminize ekledim. ✓`
-                  : `Sure! I have added "${localParsed.text}" to your tasks list${dueDateFormatted}. ✓`;
+              replyText = t.aichat_added_task_success
+                .replace('{task_text}', localParsed.text)
+                .replace('{date_part}', dueDateFormatted);
             } else if (
               localParsed.action === "add_stock" &&
               localParsed.stock
@@ -220,16 +211,16 @@ export function AIChatView({
               const updatedPortfolio = [...currentPortfolio, newStock];
               await stockRepo.savePortfolio(updatedPortfolio);
 
-              replyText =
-                lang === "tr"
-                  ? `📈 Harika! ${lotCount} lot ${displayName} (${symbol.replace(".IS", "")}) ₺${buyPrice.toFixed(2)} fiyattan BIST portföyünüze başarıyla eklendi! ✓`
-                  : `📈 Great! Added ${lotCount} shares of ${displayName} (${symbol.replace(".IS", "")}) @ ₺${buyPrice.toFixed(2)} to your BIST portfolio! ✓`;
+              const cleanSymbol = symbol.replace(".IS", "");
+              const price = buyPrice.toFixed(2);
+              replyText = t.aichat_added_stock_success
+                .replace('{lot_count}', String(lotCount))
+                .replace('{display_name}', displayName)
+                .replace('{symbol}', cleanSymbol)
+                .replace('{price}', price);
             }
           } else {
-            replyText =
-              lang === "tr"
-                ? "Üzgünüm, bu komutu yerel olarak çözümleyemedim. Lütfen 'günlük ekle: ...', 'not ekle: ...' veya 'ders notu ekle: ...' formatında yazmayı deneyin."
-                : "I couldn't parse this command locally. Try: 'günlük ekle: ...', 'not ekle: ...' or 'ders notu ekle: ...'";
+            replyText = t.aichat_parse_failed;
           }
 
           setMessages((prev) => [
@@ -249,7 +240,7 @@ export function AIChatView({
         }, 800);
       }
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       setIsBotTyping(false);
 
       const localParsed = parseLocalCommand(query);
@@ -260,37 +251,24 @@ export function AIChatView({
           await handleAddNoteFromAI(type, localParsed.content, lang);
           const typeLabel =
             type === "diary"
-              ? lang === "tr"
-                ? "günlük yazısını"
-                : "diary entry"
+              ? t.aichat_type_label_diary
               : type === "cornell"
-                ? lang === "tr"
-                  ? "Cornell ders notunu"
-                  : "Cornell study note"
-                : lang === "tr"
-                  ? "notu"
-                  : "note";
-          replyText =
-            lang === "tr"
-              ? `[Yerel Fallback] İstediğiniz ${typeLabel} Günlüğüm sekmesine ekledim. ✓`
-              : `[Local Fallback] Added the ${typeLabel} successfully. ✓`;
+                ? t.aichat_type_label_cornell
+                : t.aichat_type_label_note;
+          replyText = t.aichat_fallback_added_note.replace('{type_label}', typeLabel);
         } else if (localParsed.action === "create_task" && localParsed.text) {
           const dueDateFormatted = localParsed.date
             ? ` (${localParsed.date})`
             : "";
           await onAddTodo(localParsed.text, "none", localParsed.date);
           await onManualSync();
-          replyText =
-            lang === "tr"
-              ? `[Yerel Fallback] "${localParsed.text}" görevini${dueDateFormatted} ekledim. ✓`
-              : `[Local Fallback] Added "${localParsed.text}" task${dueDateFormatted}. ✓`;
+          replyText = t.aichat_fallback_added_task
+            .replace('{task_text}', localParsed.text)
+            .replace('{date_part}', dueDateFormatted);
         }
       } else {
         const errorMsg = e instanceof Error ? e.message : String(e);
-        replyText =
-          lang === "tr"
-            ? `Yapay zeka servisine bağlanırken bir sorun oluştu: ${errorMsg}`
-            : `Error connecting to the AI service: ${errorMsg}`;
+        replyText = t.aichat_connection_error.replace('{error_msg}', errorMsg);
       }
 
       setMessages((prev) => [

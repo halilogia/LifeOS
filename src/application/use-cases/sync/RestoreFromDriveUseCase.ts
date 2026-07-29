@@ -7,6 +7,7 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { INoteRepository } from "@/domain/repositories/INoteRepository.js";
+import { logger } from "@/utils/logger.js";
 
 export interface RestoreResult {
   readonly restored: boolean;
@@ -50,7 +51,7 @@ export class RestoreFromDriveUseCase {
 
       return { restored: true, data: restored };
     } catch (e) {
-      console.error("Restore from Drive failed:", e);
+      logger.error("Restore from Drive failed:", e);
       return { restored: false };
     }
   }

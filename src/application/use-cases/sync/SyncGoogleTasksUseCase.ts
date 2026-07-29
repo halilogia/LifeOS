@@ -10,6 +10,7 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import { parseRepeatFromNotes } from "@/domain/services/TaskService.js";
 import type { Todo } from "@/domain/entities/Todo.js";
+import { logger } from "@/utils/logger.js";
 
 export interface SyncResult {
   todos: Todo[];
@@ -99,14 +100,14 @@ export class SyncGoogleTasksUseCase {
           localTodo.id = createdRemote.id;
           mergedTodos.push(localTodo);
         } catch (err) {
-          console.error("Failed to upload offline task:", err);
+          logger.error("Failed to upload offline task:", err);
         }
       }
 
       await this.todoRepository.saveAll(mergedTodos);
       return { todos: mergedTodos };
     } catch (err) {
-      console.warn("SyncGoogleTasksUseCase failed:", err);
+      logger.warn("SyncGoogleTasksUseCase failed:", err);
       const localTodos = await this.todoRepository.getAll();
       return { todos: localTodos, error: String(err) };
     }

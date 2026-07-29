@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * aiCompanionService.ts
  * LifeOS: AI Companion Service.
@@ -119,7 +121,7 @@ export async function fetchYoutubeTranscript(
 
     return { title, items };
   } catch (error) {
-    console.error("fetchYoutubeTranscript error:", error);
+    logger.error("fetchYoutubeTranscript error:", error);
     throw error;
   }
 }

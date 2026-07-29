@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 /**
  * mediaAndTabHandler.ts
  * Clean Architecture - Background Domain Handler for Tab Audio Boosters and Offscreen Ambient Sound engine playback.
@@ -112,7 +114,7 @@ export function handleMediaAndTabMessage(
       })
       .then(() => sendResponse({ success: true }))
       .catch((err) => {
-        console.warn("[Background VolumeBoost] executeScript failed:", err);
+        logger.warn("[Background VolumeBoost] executeScript failed:", err);
         sendResponse({ success: false, error: String(err) });
       });
 

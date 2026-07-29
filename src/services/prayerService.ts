@@ -78,7 +78,7 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
 
         throw new Error("No timings found in calendar API");
       } catch (error) {
-        console.warn("Prayer service API fetch failed (Offline mode). Attempting fallback:", error);
+        logger.warn("Prayer service API fetch failed (Offline mode). Attempting fallback:", error);
 
         // Fallback: search any available stored month
         const allLocalStorage = await cacheRepo.getAllKeys();
@@ -107,6 +107,7 @@ export type PrayerService = ReturnType<typeof createPrayerService>;
 /* ------------------------------------------------------------------ */
 
 import { ChromeStoragePrayerCacheRepository } from "@/infrastructure/persistence/ChromeStoragePrayerCacheRepository.js";
+import { logger } from "@/utils/logger.js";
 
 const _defaultPrayerRepo = new ChromeStoragePrayerCacheRepository();
 const _defaultPrayerService = createPrayerService(_defaultPrayerRepo);

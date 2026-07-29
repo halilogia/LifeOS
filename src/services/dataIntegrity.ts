@@ -1,3 +1,5 @@
+import { logger } from "@/utils/logger.js";
+
 export function safeValidate<T>(
   data: unknown,
   _schema: unknown,
@@ -8,7 +10,7 @@ export function safeValidate<T>(
   if (data !== undefined && data !== null) {
     return data as T;
   }
-  console.error(
+  logger.error(
     `[Data Integrity Error] ${contextName}: Validation failed (simple check)!`,
   );
   return fallback;
@@ -21,7 +23,7 @@ export function safeValidateList<T>(
   _options: { strict?: boolean } = { strict: true },
 ): T[] {
   if (!Array.isArray(data)) {
-    console.error(
+    logger.error(
       `[Data Integrity Error] ${contextName}: Expected array, got ${typeof data}`,
     );
     return [];

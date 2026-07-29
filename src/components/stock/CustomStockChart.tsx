@@ -250,9 +250,7 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
           </>
         ) : (
           <span style={{ color: "#64748b" }}>
-            {lang === "tr"
-              ? "Detay görmek için imleci grafik üzerine getirin."
-              : "Hover over the chart to see details."}
+            {t.stock_chart_hover_hint}
           </span>
         )}
       </div>
@@ -295,9 +293,7 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
               {symbol.toUpperCase()} — {t.stock_chart_no_data}
             </div>
             <div style={{ fontSize: "0.82rem", color: "#94a3b8", maxWidth: "420px" }}>
-              {lang === "tr"
-                ? "Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır."
-                : "This stock has not yet started trading on Borsa Istanbul; historical candlestick data will begin plotting live on the opening day."}
+              {t.stock_chart_no_data_hint}
             </div>
           </div>
         ) : null}

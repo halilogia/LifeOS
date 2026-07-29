@@ -7,6 +7,7 @@
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import { logger } from "@/utils/logger.js";
 
 export interface GoogleAuthResponse {
   readonly success: boolean;
@@ -37,7 +38,7 @@ export class GoogleAuthUseCase {
       return { success: true, email: info };
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
-      console.error("Google sign in failed:", e);
+      logger.error("Google sign in failed:", e);
       return { success: false, error: errMsg };
     }
   }
@@ -47,7 +48,7 @@ export class GoogleAuthUseCase {
       const token = await this.syncPort.getAuthToken(false);
       await this.syncPort.removeCachedAuthToken(token);
     } catch (e) {
-      console.warn("Cached token remove skipped:", e);
+      logger.warn("Cached token remove skipped:", e);
     }
 
     const nextSettings: GoogleSyncSettings = {

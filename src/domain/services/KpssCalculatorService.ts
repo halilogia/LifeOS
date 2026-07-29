@@ -6,15 +6,17 @@
 
 import type { KpssTopic } from "@/domain/constants/kpssCurriculum.js";
 import { KpssProgress } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 export function calculateKpssCountdown(
   targetDate: number,
   now: number,
   lang: string,
 ): string {
+  const t = getTranslation(lang as any);
   const diffKpss = targetDate - now;
   if (diffKpss <= 0) {
-    return lang === "tr" ? "Sınav Başladı!" : "Exam Started!";
+    return t.kpss_exam_started;
   }
   const days = Math.floor(diffKpss / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
@@ -22,9 +24,11 @@ export function calculateKpssCountdown(
   );
   const mins = Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60));
   const secs = Math.floor((diffKpss % (1000 * 60)) / 1000);
-  return lang === "tr"
-    ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
-    : `${days}d, ${hours}h, ${mins}m, ${secs}s`;
+  return t.kpss_time_format
+    .replace("{days}", String(days))
+    .replace("{hours}", String(hours))
+    .replace("{mins}", String(mins))
+    .replace("{secs}", String(secs));
 }
 
 export function calculateEstimatedCompletionTime(
@@ -32,8 +36,9 @@ export function calculateEstimatedCompletionTime(
   now: number,
   lang: string,
 ): string {
+  const t = getTranslation(lang as any);
   if (remainingCount === 0) {
-    return lang === "tr" ? "Tebrikler, bitti!" : "Completed!";
+    return t.kpss_completed;
   }
   const estimatedRemainingDays = remainingCount * 2;
   const estimatedTargetDate =
@@ -46,9 +51,11 @@ export function calculateEstimatedCompletionTime(
   );
   const mins = Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60));
   const secs = Math.floor((diffEst % (1000 * 60)) / 1000);
-  return lang === "tr"
-    ? `${days} Gün, ${hours} Saat, ${mins} Dk, ${secs} Sn`
-    : `${days}d, ${hours}h, ${mins}m, ${secs}s`;
+  return t.kpss_time_format
+    .replace("{days}", String(days))
+    .replace("{hours}", String(hours))
+    .replace("{mins}", String(mins))
+    .replace("{secs}", String(secs));
 }
 
 export function getSubjectNets(
