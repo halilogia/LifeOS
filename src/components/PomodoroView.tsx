@@ -352,7 +352,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
   const percent = pomoTimeLeft / pomoTotalTime;
   const progressOffset = CIRCLE_CIRCUMFERENCE * (1 - percent);
 
-  const gridCells: any[] = [];
+  const gridCells: preact.JSX.Element[] = [];
   for (let i = 0; i < 25; i++) {
     const log = pomodoroHistory.find((h) => h.position === i);
     gridCells.push(

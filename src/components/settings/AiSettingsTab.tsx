@@ -2,7 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { logger } from "@/utils/logger.js";
 
 interface AiSettingsTabProps {
-  t: any;
+  t: Record<string, string>;
   aiApiKey: string;
   aiModel: string;
   aiEndpoint: string;
@@ -87,7 +87,7 @@ export function AiSettingsTab({
       } else {
         throw new Error("Invalid format");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error("Failed to fetch models:", err);
       setModelError(t.settings_ai_failed_models);
     } finally {

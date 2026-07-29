@@ -1,13 +1,18 @@
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 
+interface YeterlikItem {
+  title: string;
+  description: string;
+}
+
 interface HifizYeterliklerCardProps {
   lang: Language;
   yeterliklerPercent: number;
   yeterlikler: number[];
-  YETERLIKLER_DATA: any[];
+  YETERLIKLER_DATA: YeterlikItem[];
   onToggleYeterlik: (index: number) => void;
-  onOpenYeterlikDetail: (item: any) => void;
+  onOpenYeterlikDetail: (item: YeterlikItem) => void;
 }
 
 export function HifizYeterliklerCard({

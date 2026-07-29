@@ -50,9 +50,9 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
         setImportToast(tr.arcade_import_success_dev);
       }
       window.setTimeout(() => setImportToast(null), 4000);
-    } catch (err: any) {
-      if (err?.name !== "AbortError") {
-        const message = err?.message ?? "Klasör okunamadı.";
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name !== "AbortError") {
+        const message = err.message ?? "Klasör okunamadı.";
         setImportError(message);
       }
     } finally {

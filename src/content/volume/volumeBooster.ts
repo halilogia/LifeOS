@@ -13,7 +13,7 @@ const connectedMediaSet = new WeakSet<HTMLMediaElement>();
 function getOrCreateContentAudioContext(): AudioContext | null {
   if (!contentAudioCtx) {
     const AudioCtxClass =
-      window.AudioContext || (window as any).webkitAudioContext;
+      window.AudioContext || window.webkitAudioContext;
     if (!AudioCtxClass) {return null;}
     contentAudioCtx = new AudioCtxClass();
     contentGainNode = contentAudioCtx.createGain();

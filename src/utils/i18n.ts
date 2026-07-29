@@ -42,7 +42,7 @@ export function getTranslation(lang: Language): Record<string, string> {
         return target[prop];
       }
       if (prop in translations.en) {
-        return (translations.en as any)[prop];
+        return (translations.en as Record<string, string>)[prop];
       }
       return prop;
     },

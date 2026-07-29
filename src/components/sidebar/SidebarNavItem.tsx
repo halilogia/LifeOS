@@ -12,11 +12,11 @@ interface SidebarNavItemProps {
   isDragging: boolean;
   isDragOver?: boolean;
   onClick: () => void;
-  onDragStart: (e: any) => void;
+  onDragStart: (e: DragEvent) => void;
   onDragEnd: () => void;
-  onDragOver: (e: any) => void;
-  onDragLeave?: (e: any) => void;
-  onDrop: (e: any) => void;
+  onDragOver: (e: DragEvent) => void;
+  onDragLeave?: (e: DragEvent) => void;
+  onDrop: (e: DragEvent) => void;
 }
 
 export function SidebarNavItem({

@@ -1,8 +1,19 @@
 import { Language } from "@/types/types.js";
 
+interface DetoxSite {
+  id: string;
+  domains: string[];
+  label: string;
+}
+
+interface DetoxDuration {
+  value: number;
+  labelKey: string;
+}
+
 interface DetoxStatusCardProps {
   lang: Language;
-  t: any;
+  t: Record<string, string>;
   enabled: boolean;
   endTime: number;
   timeLeft: number;
@@ -10,8 +21,8 @@ interface DetoxStatusCardProps {
   blockedSites: string[];
   selectedDuration: number;
   customBlockedSites: string[];
-  SUPPORTED_SITES: any[];
-  DURATIONS: any[];
+  SUPPORTED_SITES: DetoxSite[];
+  DURATIONS: DetoxDuration[];
   formatTime: (secs: number) => string;
   onDisableDetox: () => void;
   onEnableDetox: () => void;

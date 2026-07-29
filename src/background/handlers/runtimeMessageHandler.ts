@@ -11,23 +11,35 @@ import {
   executeAIAction,
 } from "@/services/aiChatService.js";
 
+export interface RuntimeMessage {
+  type: string;
+  text?: string;
+  prompt?: string;
+  payload?: Record<string, unknown>;
+  tabId?: number;
+  volumeLevel?: number;
+  [key: string]: unknown;
+}
+
 /**
  * Main runtime message dispatcher for translation, agent actions, tab context, tab grouping, and AI response generation.
  * Returns true if message was handled asynchronously.
  */
-export function handleRuntimeMessage(
-  message: any,
-  _sender: chrome.runtime.MessageSender,
-  sendResponse: (response?: any) => void,
-): boolean {
+export async function handleRuntimeMessage(
+  message: Record<string, unknown>,
+  sender: chrome.runtime.MessageSender,
+  sendResponse: (response?: Record<string, unknown>) => void,
+): Promise<boolean> {
   // Translation Relay Service
-  if (message.type === "translate_text") {
-    chrome.storage.sync.get(["lang"], async (res) => {
-      const targetLang = res.lang === "tr" ? "tr" : "en";
-      try {
-        let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
-          message.text,
-        )}`;
+    if (message.type === "translate_text") {
+      const textToTranslate = message.text ?? "";
+      chrome.storage.sync.get(["lang"], async (res) => {
+              const targetLang = res.lang === "tr" ? "tr" : "en";
+              try {
+                const textToTranslate = String(message.text ?? "");
+                let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
+                  textToTranslate,
+                )}`;
         let response = await fetch(url);
         if (!response.ok) {
           sendResponse({ error: "Translation fetch failed" });
@@ -37,10 +49,10 @@ export function handleRuntimeMessage(
         if (data && data[0]) {
           const detectedLang = data[2];
           if (detectedLang === targetLang) {
-            const swappedLang = targetLang === "tr" ? "en" : "tr";
-            url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
-              message.text,
-            )}`;
+                      const swappedLang = targetLang === "tr" ? "en" : "tr";
+                      url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
+                        textToTranslate,
+                      )}`;
             response = await fetch(url);
             if (response.ok) {
               data = await response.json();
@@ -58,9 +70,9 @@ export function handleRuntimeMessage(
         } else {
           sendResponse({ error: "Invalid translation response" });
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         logger.error("Translation query failed:", err);
-        sendResponse({ error: err?.message || "Error" });
+        sendResponse({ error: err instanceof Error ? (err.message || "Error") : "Error" });
       }
     });
     return true;
@@ -187,11 +199,12 @@ export function handleRuntimeMessage(
   }
 
   // AI Response Generation Service
-  if (message.type === "GENERATE_AI_RESPONSE") {
-    getAIConfigFromStorage().then(async (aiConfig) => {
+    if (message.type === "GENERATE_AI_RESPONSE") {
+      const prompt = (message.prompt as string) ?? "";
+      getAIConfigFromStorage().then(async (aiConfig) => {
       try {
         const aiResult = await callAIConfigured({
-          userPrompt: message.prompt,
+          userPrompt: prompt,
           aiProvider: aiConfig.aiProvider,
           aiApiKey: aiConfig.aiApiKey,
           aiModel: aiConfig.aiModel,
@@ -203,8 +216,8 @@ export function handleRuntimeMessage(
         await executeAIAction(aiResult);
 
         sendResponse({ response: aiResult.reply });
-      } catch (err: any) {
-        const errMsg = err?.message || String(err);
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
         sendResponse({ response: `Hata: ${errMsg}` });
       }
     });

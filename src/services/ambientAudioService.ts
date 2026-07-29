@@ -42,9 +42,9 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       audioContextRef.close();
       audioContextRef = null;
     }
-    if ((window as any).lofiTimer) {
-      clearInterval((window as any).lofiTimer);
-      (window as any).lofiTimer = null;
+    if (window.lofiTimer) {
+      clearInterval(window.lofiTimer);
+      window.lofiTimer = null;
     }
   };
 
@@ -61,7 +61,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
     stopAllSounds();
     try {
       const AudioCtx =
-        window.AudioContext || (window as any).webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -113,7 +113,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
     stopAllSounds();
     try {
       const AudioCtx =
-        window.AudioContext || (window as any).webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -201,7 +201,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
     stopAllSounds();
     try {
       const AudioCtx =
-        window.AudioContext || (window as any).webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -260,7 +260,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
     stopAllSounds();
     try {
       const AudioCtx =
-        window.AudioContext || (window as any).webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -334,7 +334,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
       playNextChord();
       const timer = setInterval(playNextChord, 4000);
-      (window as any).lofiTimer = timer;
+      window.lofiTimer = timer;
 
       masterGain.connect(ctx.destination);
     } catch (e) {

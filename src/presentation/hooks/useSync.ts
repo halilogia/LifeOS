@@ -6,11 +6,12 @@
 
 import { useState, useCallback } from "preact/hooks";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import type { RemoteTask } from "@/application/ports/ITodoSyncPort.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
 import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
 import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
 import { GoogleDriveApi } from "@/infrastructure/api/GoogleDriveApi.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { GoogleAuthUseCase } from "@/application/use-cases/sync/GoogleAuthUseCase.js";
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
 import { BackupToDriveUseCase } from "@/application/use-cases/sync/BackupToDriveUseCase.js";
@@ -27,13 +28,13 @@ function createSyncPort() {
       tasksApi.getOrCreateTaskList(token, title),
     getTasks: (token: string, taskListId: string) =>
       tasksApi.getTasks(token, taskListId),
-    createTask: (token: string, taskListId: string, task: any) =>
+    createTask: (token: string, taskListId: string, task: RemoteTask) =>
       tasksApi.createTask(token, taskListId, task),
     updateTask: (
       token: string,
       taskListId: string,
       taskId: string,
-      task: any,
+      task: RemoteTask,
     ) => tasksApi.updateTask(token, taskListId, taskId, task),
     deleteTask: (token: string, taskListId: string, taskId: string) =>
       tasksApi.deleteTask(token, taskListId, taskId),

@@ -7,6 +7,7 @@ import { useSettings } from "@/presentation/hooks/useSettings.js";
 import { useUI } from "@/presentation/hooks/useUI.js";
 import { useAppInit } from "@/presentation/hooks/useAppInit.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { kpssService } from "@/services/kpssService.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
@@ -140,11 +141,11 @@ export function App() {
       document.body.classList.toggle("sidebar-open", config.sidebarOpen);
       loadSettings(); // Load AI/KPSS/Detox settings too
     },
-    onTodosLoaded: (loadedTodos) => {
-      setTodos(loadedTodos as any);
+    onTodosLoaded: (loadedTodos: Todo[]) => {
+      setTodos(loadedTodos);
     },
-    onSyncSettingsLoaded: (settings) => {
-      setSyncSettingsState(settings as any);
+    onSyncSettingsLoaded: (settings: GoogleSyncSettings) => {
+      setSyncSettingsState(settings);
     },
     onGoogleUserEmail: (email) => {
       setGoogleUserEmail(email);
@@ -331,7 +332,7 @@ export function App() {
         isSyncing={isSyncing}
         onGoogleLogin={handleGoogleLogin}
         onGoogleLogout={handleGoogleLogout}
-        syncSettings={syncSettings as any}
+        syncSettings={syncSettings}
         onBackupToGoogleDrive={handleBackupToGoogleDrive}
         onRestoreFromGoogleDrive={handleRestoreFromGoogleDrive}
         kpssGoalType={kpssGoalType}

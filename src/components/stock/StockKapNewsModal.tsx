@@ -150,12 +150,12 @@ export function StockKapNewsModal({
         ...prev,
         [item.id]: { loading: false, text: result },
       }));
-    } catch (e: any) {
+    } catch (e: unknown) {
       setAiAnalysisMap((prev) => ({
         ...prev,
         [item.id]: {
           loading: false,
-          text: t.stock_kap_news_analysis_error.replace("{message}", e?.message || t.stock_error_occurred),
+          text: t.stock_kap_news_analysis_error.replace("{message}", e instanceof Error ? (e?.message || t.stock_error_occurred) : String(e)),
         },
       }));
     }

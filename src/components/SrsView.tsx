@@ -32,16 +32,16 @@ export function SrsView({ lang }: SrsViewProps) {
   }, []);
 
   const loadSrsQueue = async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const data = await getAllWords();
-      setWordsData(data);
-      const progress: any[] = await new Promise((resolve) =>
-        chrome.storage.sync.get(["srsProgress"], (res) =>
-          resolve((res.srsProgress as any[]) || []),
-        ),
-      );
+      setLoading(true);
+      setError(false);
+      try {
+        const data = await getAllWords();
+        setWordsData(data);
+        const progress: WordReviewData[] = await new Promise((resolve) =>
+          chrome.storage.sync.get(["srsProgress"], (res) =>
+            resolve((res.srsProgress as WordReviewData[]) || []),
+          ),
+        );
 
       const progressMap = new Map<string, WordReviewData>();
       progress.forEach((p) => progressMap.set(p.wordId, p));
@@ -85,20 +85,20 @@ export function SrsView({ lang }: SrsViewProps) {
   };
 
   const handleReview = async (quality: ReviewQuality) => {
-    const reviewData = currentQueue[currentWordIndex];
-    if (!reviewData) {
-      return;
-    }
+      const reviewData = currentQueue[currentWordIndex];
+      if (!reviewData) {
+        return;
+      }
 
-    const outcome = calculateSM2(reviewData, quality, new Date());
+      const outcome = calculateSM2(reviewData, quality, new Date());
 
-    const progress: any[] = await new Promise((resolve) =>
-      chrome.storage.sync.get(["srsProgress"], (res) =>
-        resolve((res.srsProgress as any[]) || []),
-      ),
-    );
+      const progress: WordReviewData[] = await new Promise((resolve) =>
+        chrome.storage.sync.get(["srsProgress"], (res) =>
+          resolve((res.srsProgress as WordReviewData[]) || []),
+        ),
+      );
 
-    const idx = progress.findIndex((p: any) => p.wordId === outcome.wordId);
+      const idx = progress.findIndex((p: WordReviewData) => p.wordId === outcome.wordId);
     if (idx >= 0) {
       progress[idx] = outcome;
     } else {

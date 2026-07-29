@@ -31,7 +31,7 @@ export class GoogleTasksApi implements Pick<
       );
     }
     const data = await listsResponse.json();
-    const existingList = data.items?.find((list: any) => list.title === title);
+    const existingList = (data.items as Array<{ id: string; title: string }> | undefined)?.find((list) => list.title === title);
 
     if (existingList) {
       return existingList.id;

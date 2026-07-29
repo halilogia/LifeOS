@@ -62,7 +62,7 @@ export function SidePanelApp() {
 
   const toggleVoiceInput = () => {
     const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       alert(t.speech_not_supported);
@@ -84,7 +84,7 @@ export function SidePanelApp() {
         setIsListening(true);
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript));
         setIsListening(false);
@@ -130,7 +130,7 @@ export function SidePanelApp() {
     chrome.tabs.onUpdated.addListener(tabUpdatedListener);
 
     // Listen for automatic prompts from right-click context menus
-    const copilotAutoPromptListener = (msg: any) => {
+    const copilotAutoPromptListener = (msg: { type?: string; prompt?: string }) => {
       if (msg && msg.type === "copilot_auto_prompt" && msg.prompt) {
         handleSendMessage(msg.prompt);
       }
@@ -391,7 +391,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             }
 
             const rawBody = await resp.text();
-            let data: any = {};
+            let data: Record<string, any> = {};
             try {
               data = JSON.parse(rawBody);
             } catch {
@@ -490,12 +490,12 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           };
 
           setMessages((prev) => [...prev, assistantMsg]);
-        } catch (err: any) {
+        } catch (err: unknown) {
           setAgentStatus(null);
           const errorMsg: ChatMessage = {
             id: (Date.now() + 1).toString(),
             role: "assistant",
-            content: `⚠️ ${t.failed_response}\nError: ${err?.message || "Unknown error"}`,
+            content: `⚠️ ${t.failed_response}\nError: ${err instanceof Error ? err.message : "Unknown error"}`,
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           };
           setMessages((prev) => [...prev, errorMsg]);

@@ -1,3 +1,5 @@
+import { CSSProperties } from "preact";
+
 /**
  * KpssQuizQuestionsStep.tsx
  * KPSS Sınavı sorularının gösterim ekranı (İlerleme çubuğu, Canvas, Harita, Şıklar, Çözüm kutusu ve Navigasyon).

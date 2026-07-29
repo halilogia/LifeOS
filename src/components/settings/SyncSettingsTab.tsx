@@ -2,7 +2,7 @@ import { Language } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 
 interface SyncSettingsTabProps {
-  t: any;
+  t: Record<string, string>;
   lang: Language;
   googleUserEmail: string;
   isSyncing: boolean;
@@ -12,7 +12,7 @@ interface SyncSettingsTabProps {
   onBackupToGoogleDrive: () => void;
   onRestoreFromGoogleDrive: () => void;
   onExportBackup: () => void;
-  onImportBackup: (e: any) => void;
+  onImportBackup: (e: Event) => void;
   onClearAllData: () => void;
 }
 

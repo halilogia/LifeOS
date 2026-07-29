@@ -16,6 +16,8 @@ import type { IAiConfigRepository } from "@/domain/repositories/IAiConfigReposit
 import type { IMemoryRepository } from "@/domain/repositories/IMemoryRepository.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { INoteRepository, Note } from "@/domain/repositories/INoteRepository.js";
+import type { Todo } from "@/domain/entities/Todo.js";
+import type { Language } from "@/domain/value-objects/Language.js";
 
 export interface AICallParams {
   userPrompt: string;
@@ -276,7 +278,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         category: "general",
         createdAt: new Date().toISOString(),
       };
-      todos.unshift(newTodo as any);
+      todos.unshift(newTodo as Todo);
       await todoRepo.saveAll(todos);
     } else if (aiResult.action === "add_note" && aiResult.params?.note_content) {
       await handleAddNoteFromAI(
@@ -302,7 +304,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     summary?: string,
   ): Promise<void> {
     const currentNotes = await noteRepo.getAll();
-    const t = getTranslation(lang as any);
+    const t = getTranslation(lang as Language);
     const formattedDate = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
     const defaultTitle =
       title ||

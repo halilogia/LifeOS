@@ -5,7 +5,7 @@ interface PomoZenHistoryCardProps {
   searchQuery: string;
   onSearchQueryInput: (val: string) => void;
   filteredHistory: PomodoroLog[];
-  t: any;
+  t: Record<string, string>;
   renderZenElementSvg: (element: PomodoroLog["element"]) => any;
 }
 
