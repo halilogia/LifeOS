@@ -10,7 +10,6 @@ Thumbs.db
 
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build and Production
 dist/
@@ -19,16 +18,15 @@ build/
 *.crx
 *.pem
 
-# Local Environment
+# Local Environment & Keys
 .env
 .env.local
+zentodo_private_key.pem
 
-# Logs
+# Logs & Agent Workspace Scratch
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 aichathistory/
 archives/
-scripts/
 brain/
-icons/

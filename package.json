@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "vite",
-    "build": "vite build && node postbuild.js",
+    "build": "vite build",
     "count-lines": "node scripts/countLines.js",
     "lint": "eslint src --ext .ts,.tsx"
   },
@@ -16,7 +16,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@preact/preset-vite": "^2.10.5",

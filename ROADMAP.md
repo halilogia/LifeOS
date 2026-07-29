@@ -56,5 +56,13 @@ Gelişmiş teknik indikatör kuralları tanımlama.
 
 ---
 
-## ✅ Completed Features Archive (Tamamlanan Özellikler Arşivi)
+## 🔮 Gelecek Yol Haritası & Planlanan Özellikler (Roadmap)
 
+1. **🔮 Wikipedia Tarzı Popover Önizleme Kartları (Hover Cards)**: Fareyle `[[Wikilink]]` bağlantısı üzerine gelindiğinde tıklamadan o notun görselini ve ilk 2 cümlesini gösteren minik önizleme penceresi.
+2. **🤖 Nota Özel AI Soru & Flashcard Üretici (`✨ AI Soru Üret`)**: Ders notunu okurken tek tıkla o nottan 3 KPSS test sorusu veya Spaced Repetition (SRS) bilgi kartı ürettirme.
+3. **💡 KPSS Akrostiş & Şifre Kutusu (Mnemonics Box)**: Infobox içerisine konunun meşhur KPSS hafıza kodlamalarını (Örn. *ZADEM*) gösteren özel mor renkli akrostiş kutusu.
+4. **🕸️ Gelişmiş Konu İlişki Haritası (Graph View)**: Notların kategorilerine göre (Coğrafya, Tarih vb.) otomatik renk gruplaması ve görsel Obsidian Zettelkasten ilişki ağı.
+5. **🔥 ÖSYM Çıkma Sıklığı Rozeti (Exam Relevance Score)**: Infobox'ın en üstüne konunun ÖSYM sınavlarında çıkma ağırlığını gösteren derlenmiş gösterge (`🔥🔥🔥 ÖSYM Favorisi`).
+6. **🎧 Sesli Not Dinleme (Text-to-Speech Reader)**: Web Speech API altyapısıyla ders notlarını yolda/otobüste sesli dinleme butonu (`▶️ Dinle`).
+
+---
