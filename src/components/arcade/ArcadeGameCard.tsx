@@ -8,6 +8,7 @@ interface ArcadeGameCardProps {
   onPlay: (game: GameEntry) => void;
   onOpenDetails: (game: GameEntry) => void;
   onToggleFavorite: (gameId: string) => void;
+  onDeleteGame?: (gameId: string) => void;
 }
 
 export function ArcadeGameCard({
@@ -16,7 +17,9 @@ export function ArcadeGameCard({
   onPlay,
   onOpenDetails,
   onToggleFavorite,
+  onDeleteGame,
 }: ArcadeGameCardProps) {
+
   const t = translations[lang];
   const tr = t as Record<string, string>;
 
@@ -83,6 +86,8 @@ export function ArcadeGameCard({
           </div>
         )}
 
+
+
         <button
           className={`arcade-fav-btn ${game.isFavorite ? "fav" : ""}`}
           onClick={(e) => {
@@ -139,6 +144,22 @@ export function ArcadeGameCard({
           </div>
 
           <div className="arcade-action-btns">
+            {onDeleteGame && (
+              <button
+                className="arcade-details-btn arcade-delete-action-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteGame(game.id);
+                }}
+                title="Oyunu Kütüphaneden Sil"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              </button>
+            )}
+
             <button className="arcade-details-btn" onClick={() => onOpenDetails(game)} title="Steam Dev Detayları">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -148,13 +169,14 @@ export function ArcadeGameCard({
               </svg>
             </button>
 
-            <button className="arcade-play-btn" onClick={() => onPlay(game)}>
+            <button className="arcade-play-btn" onClick={() => onPlay(game)} title="Oyunu Başlat">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
               <span>{tr.arcade_play_btn || "Oyna"}</span>
             </button>
           </div>
+
         </div>
       </div>
     </div>

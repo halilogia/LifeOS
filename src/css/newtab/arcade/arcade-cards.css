@@ -73,9 +73,38 @@
   transition: transform 0.15s ease;
 }
 
+.arcade-card-del-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(239, 68, 68, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.arcade-card-del-btn:hover {
+  transform: scale(1.1);
+  background: rgba(239, 68, 68, 0.3);
+}
+
 .arcade-fav-btn:hover {
   transform: scale(1.1);
 }
+
+.arcade-delete-action-btn:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
 
 .arcade-card-play-overlay {
   position: absolute;
