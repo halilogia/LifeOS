@@ -4,10 +4,12 @@
  */
 
 import { CustomQuote } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 interface CustomQuotesSectionProps {
   quotes: CustomQuote[];
-  lang: string;
+  lang: Language;
   onDeleteQuote: (index: number) => void;
 }
 
@@ -16,6 +18,7 @@ export function CustomQuotesSection({
   lang,
   onDeleteQuote,
 }: CustomQuotesSectionProps) {
+  const t = getTranslation(lang);
   if (quotes.length === 0) {
     return null;
   }
@@ -31,7 +34,7 @@ export function CustomQuotesSection({
           marginBottom: "10px",
         }}
       >
-        {lang === "tr" ? "Eklediğim Sözler" : "My Custom Quotes"}
+        {t.notes_quotes_title}
       </h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {quotes.map((q, idx) => (

@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface HifizYeterliklerCardProps {
   lang: Language;
@@ -17,6 +18,8 @@ export function HifizYeterliklerCard({
   onToggleYeterlik,
   onOpenYeterlikDetail,
 }: HifizYeterliklerCardProps) {
+  const t = getTranslation(lang);
+
   return (
     <div id="yeterlikler-content" className="hifiz-sub-view active">
       <div className="hifiz-header">
@@ -26,7 +29,7 @@ export function HifizYeterliklerCard({
       <div className="hifiz-overall-progress-container">
         <div className="hifiz-overall-info">
           <span>
-            {lang === "tr" ? "Müfredat İlerlemesi" : "Checklist Progress"}
+            {t.hifiz_progress}
           </span>
           <span id="yeterlikler-overall-percent">{yeterliklerPercent}%</span>
         </div>

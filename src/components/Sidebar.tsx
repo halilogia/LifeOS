@@ -126,64 +126,57 @@ export function Sidebar({
     switch (key) {
       case "list":
         return (
-          t.view_todos ||
-          (lang === "tr" ? "Odağım (Görev Listesi)" : "My Focus")
+          t.sidebar_focus
         );
       case "willpower":
         return (
-          t.view_willpower || (lang === "tr" ? "Kişisel Disiplin" : "Willpower")
+          t.sidebar_willpower
         );
       case "pomodoro":
         return t.view_pomodoro || "Pomodoro";
       case "eisenhower":
         return (
-          t.view_eisenhower ||
-          (lang === "tr" ? "Kanban" : "Kanban Board")
+          t.sidebar_kanban
         );
       case "ai-chat":
         return (
-          t.view_ai_chat || (lang === "tr" ? "AI Asistan" : "AI Assistant")
+          t.sidebar_ai_chat
         );
       case "notes":
-        return t.view_notes || (lang === "tr" ? "Günlüğüm" : "My Diary");
+        return t.sidebar_notes;
       case "calendar":
-        return t.view_calendar || (lang === "tr" ? "Takvim" : "Calendar");
+        return t.sidebar_calendar;
       case "srs":
         return (
-          t.view_srs ||
-          (lang === "tr" ? "Aralıklı Tekrar" : "Spaced Repetition")
+          t.sidebar_srs
         );
       case "hifiz":
         return (
-          t.view_hifiz ||
-          (lang === "tr" ? "Aday Din Görevlisi Yeterlilikleri" : "Competencies")
+          t.sidebar_hifiz
         );
       case "prayer":
         return (
-          t.view_prayer || (lang === "tr" ? "Namaz Vakitleri" : "Prayer Times")
+          t.sidebar_prayer
         );
       case "kpss":
-        return t.view_kpss || (lang === "tr" ? "KPSS Ders Takip" : "KPSS Prep");
+        return t.sidebar_kpss;
       case "detox":
         return (
-          t.view_detox || (lang === "tr" ? "Dijital Detoks" : "Digital Detox")
+          t.sidebar_detox
         );
       case "arcade":
         return (
-          t.sidebar_arcade ||
-          (lang === "tr" ? "Arcade" : "Arcade")
+          t.sidebar_arcade
         );
       case "free-games":
         return (
-          t.view_free_games ||
-          (lang === "tr" ? "Ücretsiz Oyunlar" : "Free Games")
+          t.sidebar_free_games
         );
       case "bist":
-        return lang === "tr" ? "BIST & Halka Arz OS" : "BIST & IPOs OS";
+        return t.sidebar_bist;
       case "halka-arz":
         return (
-          t.view_halka_arz ||
-          (lang === "tr" ? "Halka Arz & Hisse" : "IPOs & Stocks")
+          t.sidebar_bist_short
         );
       default:
         return key;

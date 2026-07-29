@@ -1,12 +1,14 @@
 import { useState } from "preact/hooks";
 import { Note } from "@/types/types.js";
 import { extractInternalLinks } from "@/services/zettelkastenEngine.js";
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 export type NoteType = "note" | "diary" | "cornell";
 
 interface NoteEditorModalProps {
   isOpen: boolean;
-  lang: string;
+  lang: Language;
   noteType: NoteType;
   noteTitle: string;
   noteContent: string;
@@ -46,6 +48,7 @@ export function NoteEditorModal({
   const [showLinkSuggestions, setShowLinkSuggestions] = useState(false);
   const [linkQuery, setLinkQuery] = useState("");
 
+  const t = getTranslation(lang);
   if (!isOpen) {
     return null;
   }
@@ -121,7 +124,7 @@ export function NoteEditorModal({
                   fontWeight: 600,
                 }}
               >
-                {lang === "tr" ? "Kayıt Türü:" : "Entry Type:"}
+                {t.notes_editor_title_label}
               </label>
               <div
                 style={{
@@ -134,16 +137,16 @@ export function NoteEditorModal({
                   gap: "4px",
                 }}
               >
-                {(["note", "diary", "cornell"] as const).map((t) => (
+                {(["note", "diary", "cornell"] as const).map((type) => (
                   <button
-                    key={t}
+                    key={type}
                     type="button"
-                    onClick={() => onNoteTypeChange(t)}
+                    onClick={() => onNoteTypeChange(type)}
                     style={{
                       background:
-                        noteType === t ? "var(--accent-color)" : "transparent",
+                        noteType === type ? "var(--accent-color)" : "transparent",
                       color:
-                        noteType === t
+                        noteType === type
                           ? "#fff"
                           : "var(--text-secondary, #94a3b8)",
                       border: "none",
@@ -154,22 +157,16 @@ export function NoteEditorModal({
                       cursor: "pointer",
                       transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                       boxShadow:
-                        noteType === t
+                        noteType === type
                           ? "0 4px 10px rgba(139, 92, 246, 0.3)"
                           : "none",
                     }}
                   >
-                    {t === "note"
-                      ? lang === "tr"
-                        ? "Not"
-                        : "Note"
-                      : t === "diary"
-                        ? lang === "tr"
-                          ? "Günlük"
-                          : "Diary"
-                        : lang === "tr"
-                          ? "Ders Notu"
-                          : "Cornell Note"}
+                    {type === "note"
+                      ? t.notes_editor_type_note
+                      : type === "diary"
+                        ? t.notes_editor_type_diary
+                        : t.notes_editor_type_cornell}
                   </button>
                 ))}
               </div>
@@ -192,9 +189,7 @@ export function NoteEditorModal({
             }
             placeholder={
               noteType === "diary"
-                ? lang === "tr"
-                  ? "Bugün nasıl hissediyorsun? veya Başlık..."
-                  : "How do you feel today? or Title..."
+                ? t.notes_editor_diary_placeholder
                 : notesPlaceholder
             }
           />
@@ -231,20 +226,14 @@ export function NoteEditorModal({
                       fontWeight: 600,
                     }}
                   >
-                    {lang === "tr"
-                      ? "Anahtar Kelimeler / Sorular (Cues):"
-                      : "Keywords / Questions (Cues):"}
+                    {t.notes_editor_cues_label}
                   </label>
                   <textarea
                     value={noteCues}
                     onInput={(e) =>
                       onNoteCuesChange((e.target as HTMLTextAreaElement).value)
                     }
-                    placeholder={
-                      lang === "tr"
-                        ? "Temel fikirler, anahtar kelimeler veya olası sınav sorularını buraya yazın..."
-                        : "Write core ideas, keywords, or potential exam questions here..."
-                    }
+                    placeholder={t.notes_editor_cues_placeholder}
                     style={{
                       background: "rgba(0, 0, 0, 0.2)",
                       border: "1px solid var(--card-border)",
@@ -272,20 +261,14 @@ export function NoteEditorModal({
                       fontWeight: 600,
                     }}
                   >
-                    {lang === "tr"
-                      ? "Not Alma Alanı (Notes):"
-                      : "Note-taking Column (Notes):"}
+                    {t.notes_editor_notes_label}
                   </label>
                   <textarea
                     value={noteContent}
                     onInput={(e) =>
                       handleContentInput((e.target as HTMLTextAreaElement).value)
                     }
-                    placeholder={
-                      lang === "tr"
-                        ? "Ders esnasındaki ayrıntılı notlarınızı, [[İç Bağlantı]] ve #kpss/tarih etiketlerinizi yazın..."
-                        : "Write detailed lecture notes, [[Internal Links]], and #kpss/tarih tags here..."
-                    }
+                    placeholder={t.notes_editor_notes_placeholder}
                     style={{
                       background: "rgba(0, 0, 0, 0.2)",
                       border: "1px solid var(--card-border)",
@@ -314,18 +297,14 @@ export function NoteEditorModal({
                     fontWeight: 600,
                   }}
                 >
-                  {lang === "tr" ? "Özet (Summary):" : "Summary:"}
+                  {t.notes_editor_summary_label}
                 </label>
                 <textarea
                   value={noteSummary}
                   onInput={(e) =>
                     onNoteSummaryChange((e.target as HTMLTextAreaElement).value)
                   }
-                  placeholder={
-                    lang === "tr"
-                      ? "Bu çalışma sayfasındaki bilgilerin kısa ve net bir özetini buraya yazın..."
-                      : "Write a brief and clear summary of the page details here..."
-                  }
+                  placeholder={t.notes_editor_summary_placeholder}
                   style={{
                     background: "rgba(0, 0, 0, 0.2)",
                     border: "1px solid var(--card-border)",
@@ -350,9 +329,7 @@ export function NoteEditorModal({
               }
               placeholder={
                 noteType === "diary"
-                  ? lang === "tr"
-                    ? "Sevgili günlük, bugün..."
-                    : "Dear diary, today..."
+                  ? t.notes_editor_diary_content_placeholder
                   : notesContentPlaceholder
               }
             />
@@ -478,7 +455,7 @@ export function NoteEditorModal({
             style={{ width: "auto", padding: "0 20px" }}
             onClick={onSave}
           >
-            {lang === "tr" ? "Kaydet" : "Save"}
+            {t.notes_editor_save}
           </button>
         </div>
       </div>

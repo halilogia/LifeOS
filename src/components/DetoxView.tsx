@@ -203,12 +203,12 @@ export function DetoxView({ lang }: DetoxViewProps) {
     const m = Math.floor((totalSecs % 3600) / 60);
     const s = totalSecs % 60;
     if (h > 0) {
-      return lang === "tr" ? `${h} sa ${m} dk` : `${h}h ${m}m`;
+      return t.detox_time_hours.replace("{h}", String(h)).replace("{m}", String(m));
     }
     if (m > 0) {
-      return lang === "tr" ? `${m} dk ${s} sn` : `${m}m ${s}s`;
+      return t.detox_time_minutes.replace("{m}", String(m)).replace("{s}", String(s));
     }
-    return lang === "tr" ? `${s} sn` : `${s}s`;
+    return t.detox_time_seconds.replace("{s}", String(s));
   };
 
   // Screen time details calculations

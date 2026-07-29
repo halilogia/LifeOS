@@ -307,8 +307,7 @@ export function PomodoroView({ lang }: PomodoroViewProps) {
       duration: lastCompletedDuration,
       mode: "focus",
       note:
-        focusNote.trim() ||
-        (lang === "tr" ? "Odaklanma Seansı" : "Focus Session"),
+        focusNote.trim() || t.pomodoro_session_title,
       element: selectedElement,
       position,
     };

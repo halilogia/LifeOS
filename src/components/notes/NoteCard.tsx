@@ -4,6 +4,7 @@ import {
   extractTags,
   getNodeColor,
 } from "@/services/zettelkastenEngine.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface NoteCardProps {
   note: Note;
@@ -43,7 +44,8 @@ export function NoteCard({
   renderMarkdown,
 }: NoteCardProps) {
   const currentType = note.type || "note";
-  const title = note.title || (lang === "tr" ? "Başlıksız" : "Untitled");
+  const t = getTranslation(lang);
+  const title = note.title || t.notes_card_untitled;
 
   return (
     <div
@@ -85,7 +87,7 @@ export function NoteCard({
               fontWeight: "bold",
               outline: "none",
             }}
-            placeholder={lang === "tr" ? "Başlık..." : "Title..."}
+            placeholder={t.notes_card_title_placeholder}
           />
 
           {currentType === "cornell" ? (
@@ -114,9 +116,7 @@ export function NoteCard({
                     resize: "none",
                     outline: "none",
                   }}
-                  placeholder={
-                    lang === "tr" ? "Anahtar Kelimeler..." : "Cues..."
-                  }
+                  placeholder={t.notes_card_cues_placeholder}
                 />
                 <textarea
                   value={inlineContent}
@@ -135,11 +135,7 @@ export function NoteCard({
                     resize: "none",
                     outline: "none",
                   }}
-                  placeholder={
-                    lang === "tr"
-                      ? "Notlar (Markdown)..."
-                      : "Notes (Markdown)..."
-                  }
+                  placeholder={t.notes_card_content_notes_placeholder}
                 />
               </div>
               <textarea
@@ -159,7 +155,7 @@ export function NoteCard({
                   resize: "none",
                   outline: "none",
                 }}
-                placeholder={lang === "tr" ? "Özet..." : "Summary..."}
+                placeholder={t.notes_card_summary_placeholder}
               />
             </>
           ) : (
@@ -180,11 +176,7 @@ export function NoteCard({
                 resize: "none",
                 outline: "none",
               }}
-              placeholder={
-                lang === "tr"
-                  ? "Not içeriği (Markdown)..."
-                  : "Content (Markdown)..."
-              }
+              placeholder={t.notes_card_content_placeholder}
             />
           )}
 
@@ -210,7 +202,7 @@ export function NoteCard({
                 cursor: "pointer",
               }}
             >
-              {lang === "tr" ? "İptal" : "Cancel"}
+              {t.notes_card_cancel}
             </button>
             <button
               type="button"
@@ -226,7 +218,7 @@ export function NoteCard({
                 cursor: "pointer",
               }}
             >
-              {lang === "tr" ? "Kaydet" : "Save"}
+              {t.notes_card_save}
             </button>
           </div>
         </div>
@@ -243,16 +235,10 @@ export function NoteCard({
             >
               <span className={`note-type-badge ${currentType}`}>
                 {currentType === "diary"
-                  ? lang === "tr"
-                    ? "Günlük"
-                    : "Diary"
+                  ? t.notes_editor_type_diary
                   : currentType === "cornell"
-                    ? lang === "tr"
-                      ? "Cornell Notu"
-                      : "Cornell Note"
-                    : lang === "tr"
-                      ? "Not"
-                      : "Note"}
+                    ? t.notes_card_type_cornell
+                    : t.notes_editor_type_note}
               </span>
               <h3 className="note-card-title">{title}</h3>
             </div>
@@ -296,7 +282,7 @@ export function NoteCard({
                       color: "var(--accent-color)",
                     }}
                   >
-                    {lang === "tr" ? "İpuçları:" : "Cues:"}
+                    {t.notes_card_cues_label}
                   </strong>
                   <div
                     style={{
@@ -316,7 +302,7 @@ export function NoteCard({
                       color: "var(--accent-color)",
                     }}
                   >
-                    {lang === "tr" ? "Notlar:" : "Notes:"}
+                    {t.notes_card_notes_label}
                   </strong>
                   <div
                     style={{
@@ -345,7 +331,7 @@ export function NoteCard({
                       color: "var(--accent-color)",
                     }}
                   >
-                    {lang === "tr" ? "Özet:" : "Summary:"}
+                    {t.notes_card_summary_label}
                   </strong>
                   <div
                     style={{
@@ -477,7 +463,7 @@ export function NoteCard({
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                title={lang === "tr" ? ".md Olarak İndir" : "Export .md"}
+                title={t.notes_card_export_md}
               >
                 <svg
                   width="12"
@@ -493,7 +479,7 @@ export function NoteCard({
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                <span>.md İndir</span>
+                <span>{t.notes_card_export_md}</span>
               </button>
             </div>
           </div>
