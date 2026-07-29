@@ -10,24 +10,8 @@ import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/Chrome
 import { kpssService } from "@/services/kpssService.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
-import { ListView } from "@/components/ListView.js";
-import { NotesView } from "@/components/NotesView.js";
-import { PomodoroView } from "@/components/PomodoroView.js";
-import { WillpowerView } from "@/components/WillpowerView.js";
-import { HifizView } from "@/components/HifizView.js";
-import { SrsView } from "@/components/SrsView.js";
-import { CalendarView } from "@/components/CalendarView.js";
-import { PrayerView } from "@/components/PrayerView.js";
-import { KpssView } from "@/components/KpssView.js";
-import { FreeGamesView } from "@/components/FreeGamesView.js";
-import { DetoxView } from "@/components/DetoxView.js";
-import { HalkaArzView } from "@/components/HalkaArzView.js";
-import { BistView } from "@/components/BistView.js";
-import { AIChatView } from "@/components/AIChatView.js";
-import { ArcadeView } from "@/components/ArcadeView.js";
+import { ViewRouter } from "@/components/ViewRouter.js";
 import { ConfirmModal } from "@/components/ConfirmModal.js";
-
-import { EisenhowerView } from "@/components/EisenhowerView.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
@@ -220,99 +204,6 @@ export function App() {
   };
 
   // ─── View Router ───────────────────────────────────────────────────────────
-  const renderActiveViewComponent = () => {
-    switch (activeView) {
-      case "list":
-        return (
-          <ListView
-            todos={todos}
-            activeTab={activeTab}
-            lang={lang as Language}
-            onTabChange={handleTabChange}
-            onToggleTodo={handleToggleTodo}
-            onDeleteTodo={handleDeleteTodo}
-            googleSyncActive={syncSettings.enabled && syncSettings.tasksEnabled}
-            isSyncing={isSyncing}
-            onManualSync={handleManualSyncTasks}
-          />
-        );
-      case "kanban":
-      case "eisenhower":
-        return (
-          <EisenhowerView
-            todos={todos as any}
-            lang={lang as Language}
-            defaultTab="kanban"
-            onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
-            onMoveTaskStatus={handleMoveTaskStatus as any}
-            onMoveTaskDirection={handleMoveTaskDirection as any}
-          />
-        );
-      case "notes":
-        return (
-          <NotesView lang={lang as Language} onShowConfirm={showConfirm} />
-        );
-      case "pomodoro":
-        return <PomodoroView lang={lang as Language} />;
-      case "willpower":
-        return (
-          <WillpowerView lang={lang as Language} onShowConfirm={showConfirm} />
-        );
-      case "hifiz":
-        return <HifizView lang={lang as Language} />;
-      case "srs":
-        return <SrsView lang={lang as Language} />;
-      case "calendar":
-        return <CalendarView todos={todos} lang={lang as Language} />;
-      case "prayer":
-        return <PrayerView lang={lang as Language} />;
-      case "kpss":
-        return (
-          <KpssView
-            lang={lang as Language}
-            onShowConfirm={showConfirm}
-            aiProvider={aiProvider}
-            aiApiKey={aiApiKey}
-            aiModel={aiModel}
-            aiEndpoint={aiEndpoint}
-            goalType={kpssGoalType}
-            targetNet={kpssTargetNet}
-            targetScore={kpssTargetScore}
-          />
-        );
-      case "arcade":
-        return <ArcadeView lang={lang as Language} />;
-      case "free-games":
-        return <FreeGamesView lang={lang as Language} />;
-
-      case "detox":
-        return <DetoxView lang={lang as Language} />;
-      case "bist":
-        return <BistView lang={lang as Language} />;
-      case "halka-arz":
-        return <HalkaArzView lang={lang as Language} />;
-      case "ai-chat":
-        return (
-          <AIChatView
-            lang={lang as Language}
-            todos={todos}
-            onAddTodo={handleAddTodo}
-            onToggleTodo={handleToggleTodo}
-            onDeleteTodo={handleDeleteTodo}
-            onManualSync={handleManualSyncTasks}
-            aiProvider={aiProvider}
-            aiApiKey={aiApiKey}
-            aiModel={aiModel}
-            aiEndpoint={aiEndpoint}
-            aiShowThinking={aiShowThinking}
-            onSettingsOpen={() => handleOpenSettings("ai")}
-          />
-        );
-      default:
-        return <FreeGamesView lang={lang as Language} />;
-    }
-  };
-
   // ─── JSX Template ─────────────────────────────────────────────────────────
   return (
     <>
@@ -459,7 +350,32 @@ export function App() {
         {sidebarOrder.length > 0 && activeView === sidebarOrder[0] && (
           <HeroHeader clockText={clockText} dateText={dateText} />
         )}
-        {renderActiveViewComponent()}
+        <ViewRouter
+          activeView={activeView}
+          lang={lang as Language}
+          todos={todos}
+          activeTab={activeTab}
+          syncSettings={syncSettings}
+          isSyncing={isSyncing}
+          aiProvider={aiProvider}
+          aiApiKey={aiApiKey}
+          aiModel={aiModel}
+          aiEndpoint={aiEndpoint}
+          aiShowThinking={aiShowThinking}
+          kpssGoalType={kpssGoalType}
+          kpssTargetNet={kpssTargetNet}
+          kpssTargetScore={kpssTargetScore}
+          onTabChange={handleTabChange}
+          onToggleTodo={handleToggleTodo}
+          onDeleteTodo={handleDeleteTodo}
+          onMoveTaskStatus={handleMoveTaskStatus}
+          onMoveTaskDirection={handleMoveTaskDirection}
+          onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
+          onAddTodo={handleAddTodo}
+          onManualSync={handleManualSyncTasks}
+          onShowConfirm={showConfirm}
+          onSettingsOpen={handleOpenSettings}
+        />
         {quoteText && activeView !== "ai-chat" && (
           <FooterQuote quoteText={quoteText} />
         )}
