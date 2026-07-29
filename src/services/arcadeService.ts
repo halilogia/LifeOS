@@ -165,6 +165,32 @@ export const arcadeService = {
   },
 
   /**
+   * Import scanned games from directory scan, avoiding duplicates
+   */
+  async importScannedGames(scannedGames: GameEntry[]): Promise<GameEntry[]> {
+    const existing = await this.loadGames();
+    const mergedMap = new Map<string, GameEntry>();
+
+    // Put existing games first (to preserve user notes, status edits)
+    existing.forEach((g) => {
+      const key = (g.devPath || g.title).toLowerCase().trim();
+      mergedMap.set(key, g);
+    });
+
+    // Add newly scanned games if not already present
+    scannedGames.forEach((sg) => {
+      const key = (sg.devPath || sg.title).toLowerCase().trim();
+      if (!mergedMap.has(key)) {
+        mergedMap.set(key, sg);
+      }
+    });
+
+    const result = Array.from(mergedMap.values());
+    await this.saveGames(result);
+    return result;
+  },
+
+  /**
    * Update game dev notes or todo list
    */
   async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"]): Promise<GameEntry[]> {
@@ -183,4 +209,5 @@ export const arcadeService = {
     return updated;
   },
 };
+
 

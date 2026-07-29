@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "count-lines": "node scripts/countLines.js",
+    "generate:tree": "node scripts/automated_project_tree.cjs",
     "lint": "eslint src --ext .ts,.tsx"
   },
   "repository": {

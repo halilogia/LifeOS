@@ -8,7 +8,7 @@ interface ArcadeHeaderProps {
   searchQuery: string;
   onCategoryChange: (cat: GameCategory) => void;
   onSearchChange: (q: string) => void;
-  onOpenAddModal: () => void;
+  onScanFolder: () => void;
 }
 
 export function ArcadeHeader({
@@ -17,7 +17,7 @@ export function ArcadeHeader({
   searchQuery,
   onCategoryChange,
   onSearchChange,
-  onOpenAddModal,
+  onScanFolder,
 }: ArcadeHeaderProps) {
   const t = translations[lang];
   const tr = t as Record<string, string>;
@@ -38,7 +38,6 @@ export function ArcadeHeader({
             <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span>Life OS Arcade & Indie Dev Hub</span>
-
         </div>
         <h2>{tr.arcade_main_title || "Oyun Kütüphanesi & Laboratuvarı"}</h2>
         <p className="arcade-subtitle">
@@ -72,13 +71,14 @@ export function ArcadeHeader({
           ))}
         </div>
 
-        <button className="arcade-add-btn" onClick={onOpenAddModal}>
+        <button className="arcade-add-btn" onClick={onScanFolder}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 5v14m-7-7h14" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <span>{tr.arcade_add_game_btn || "+ Oyun / Proje Ekle"}</span>
+          <span>{tr.arcade_scan_folder_btn || "Klasör Tara"}</span>
         </button>
       </div>
     </div>
   );
 }
+
