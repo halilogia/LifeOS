@@ -3,8 +3,8 @@
 .stock-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 24px;
+  gap: var(--space-8);
+  padding: var(--space-9);
   color: var(--text-primary);
   width: 100%;
   max-width: 1200px;
@@ -14,7 +14,7 @@
 .stock-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: var(--space-7);
 }
 
 @media (max-width: 768px) {
@@ -29,10 +29,10 @@
   -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 18px 20px;
+  padding: 18px var(--space-8);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   transition:
     transform 0.2s ease,
@@ -60,10 +60,10 @@
 .stock-card-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
   font-size: 0.78rem;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: 3px var(--space-4);
   border-radius: 20px;
   width: fit-content;
 }
@@ -101,20 +101,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-5);
   flex-wrap: wrap;
   background: var(--card-bg);
   backdrop-filter: blur(var(--glass-blur, 16px));
   border-radius: var(--radius-lg, 16px);
-  padding: 14px 18px;
+  padding: var(--space-6) 18px;
   border: 1px solid var(--card-border);
 }
 
 .stock-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
+  gap: var(--space-3);
+  padding: 9px var(--space-7);
   border-radius: var(--radius-md, 12px);
   font-size: 0.88rem;
   font-weight: 600;
@@ -160,7 +160,7 @@
   backdrop-filter: blur(var(--glass-blur, 16px));
   border-radius: var(--radius-lg, 16px);
   border: 1px solid var(--card-border);
-  padding: 18px 20px;
+  padding: 18px var(--space-8);
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--card-border) transparent;
@@ -175,7 +175,7 @@
 
 .stock-table th {
   background: var(--card-bg-subtle);
-  padding: 12px 14px;
+  padding: var(--space-5) var(--space-6);
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -192,7 +192,7 @@
 }
 
 .stock-table td {
-  padding: 12px 14px;
+  padding: var(--space-5) var(--space-6);
   font-size: 0.88rem;
   border-bottom: 1px solid var(--card-bg-subtle);
   color: var(--text-primary);
@@ -211,7 +211,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: var(--space-8);
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -219,7 +219,7 @@
   background: var(--bg-color, #0d0d12);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-xl, 24px);
-  padding: 24px;
+  padding: var(--space-9);
   width: 100%;
   max-width: 480px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
@@ -233,7 +233,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--card-border);
-  padding-bottom: 14px;
+  padding-bottom: var(--space-6);
 }
 
 .stock-modal-title {
@@ -245,7 +245,7 @@
 .stock-form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .stock-form-label {
@@ -259,7 +259,7 @@
   background: var(--card-bg-subtle);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 10px 14px;
+  padding: var(--space-4) var(--space-6);
   color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;
@@ -277,8 +277,8 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 4px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-1);
 }
 
 .stock-delay-note {
@@ -287,7 +287,7 @@
   opacity: 0.65;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .stock-last-updated {
@@ -299,17 +299,17 @@
 .stock-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .stock-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 16px;
+  padding: var(--space-7);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-4);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
@@ -341,7 +341,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .stock-symbol-group {
@@ -373,7 +373,7 @@
   font-weight: 500;
   background: var(--card-bg-hover);
   color: var(--text-secondary);
-  padding: 2px 6px;
+  padding: 2px var(--space-2);
   border-radius: 5px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -403,7 +403,7 @@
 .stock-change-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .stock-change-value {
@@ -446,8 +446,8 @@
 .stock-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-top: 8px;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
   border-top: 1px solid var(--card-border);
 }
 
@@ -519,11 +519,11 @@ body:has(#sidebar.open) .stock-modal-overlay,
   border-radius: var(--radius-xl, 24px);
   width: 90%;
   max-width: 900px;
-  padding: 24px;
+  padding: var(--space-9);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-7);
   animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -545,7 +545,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
   border-radius: var(--radius-sm, 6px);
-  padding: 6px 12px;
+  padding: var(--space-2) var(--space-5);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -560,15 +560,15 @@ body:has(#sidebar.open) .stock-modal-overlay,
 
 /* WatchlistSelectorBar (Midas Style Custom Watchlists Bar) */
 .watchlist-selector-container {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-7);
 }
 
 .watchlist-selector-scroll {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding-bottom: var(--space-2);
   scrollbar-width: thin;
   scrollbar-color: var(--card-border) transparent;
 }
@@ -591,8 +591,8 @@ body:has(#sidebar.open) .stock-modal-overlay,
 .watchlist-tab-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-6);
   border-radius: 20px;
   background: var(--card-bg-subtle);
   border: 1px solid var(--card-border);
@@ -620,7 +620,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
 
 .watchlist-chip-count {
   font-size: 0.72rem;
-  padding: 1px 6px;
+  padding: 1px var(--space-2);
   border-radius: 10px;
   background: var(--card-bg-hover);
   color: var(--text-secondary);
@@ -636,7 +636,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px 6px;
+  padding: var(--space-1) var(--space-2);
   margin-left: -4px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -663,10 +663,10 @@ body:has(#sidebar.open) .stock-modal-overlay,
 .watchlist-add-form {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   background: var(--card-bg);
   border: 1px solid var(--accent-color);
-  padding: 3px 8px;
+  padding: 3px var(--space-3);
   border-radius: 20px;
 }
 
@@ -677,7 +677,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
   color: var(--text-primary);
   font-size: 0.8rem;
   width: 140px;
-  padding: 3px 6px;
+  padding: 3px var(--space-2);
 }
 
 .watchlist-add-submit-btn {
@@ -685,7 +685,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
   color: var(--text-primary);
   border: none;
   border-radius: 12px;
-  padding: 3px 10px;
+  padding: 3px var(--space-4);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -697,7 +697,7 @@ body:has(#sidebar.open) .stock-modal-overlay,
   border: none;
   font-size: 0.75rem;
   cursor: pointer;
-  padding: 3px 6px;
+  padding: 3px var(--space-2);
 }
 
 .watchlist-add-cancel-btn:hover {

@@ -35,7 +35,6 @@ export function ArcadeGameModal({
   const [todoItems, setTodoItems] = useState<DevTodoItem[]>(game.todoList || []);
   const [newTodoInput, setNewTodoInput] = useState("");
   const [editingUrl, setEditingUrl] = useState(game.iframeUrl || "http://localhost:5173");
-  const [copiedToast, setCopiedToast] = useState(false);
 
   useEffect(() => {
     setDevNotesText(game.devNotes || "");
@@ -44,9 +43,7 @@ export function ArcadeGameModal({
   }, [game]);
 
   const triggerCopyCmd = (cmd: string) => {
-    navigator.clipboard.writeText(cmd);
-    setCopiedToast(true);
-    setTimeout(() => setCopiedToast(false), 3000);
+    void navigator.clipboard?.writeText(cmd);
   };
 
   const handleScoreUpdate = (newScore: number) => {
@@ -58,7 +55,7 @@ export function ArcadeGameModal({
   };
 
   const handleAddTodo = () => {
-    if (!newTodoInput.trim()) return;
+    if (!newTodoInput.trim()) {return;}
     const newItem: DevTodoItem = {
       id: "todo_" + Date.now(),
       text: newTodoInput.trim(),
@@ -122,25 +119,12 @@ export function ArcadeGameModal({
               )}
             </div>
             <div className="arcade-bar-actions">
-              <button
-                className="arcade-copy-cmd-btn"
-                onClick={() => triggerCopyCmd(devCmd)}
-                title={tr.arcade_copy_cmd}
-              >
-                📋 {tr.arcade_copy_cmd}
-              </button>
               <a href={game.iframeUrl} target="_blank" rel="noreferrer" className="arcade-open-tab-btn">
                 {tr.arcade_open_in_tab}
               </a>
             </div>
           </div>
 
-          {/* Copied Toast Banner */}
-          {copiedToast && (
-            <div className="arcade-toast-banner">
-              <span>{tr.arcade_cmd_copied}</span>
-            </div>
-          )}
 
           <iframe
             src={game.iframeUrl}
@@ -156,7 +140,7 @@ export function ArcadeGameModal({
             </div>
             <div className="helper-cmd-row">
               <code>{devCmd}</code>
-              <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(devCmd)}>
+              <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(devCmd)} title={tr.arcade_copy_cmd}>
                 📋 {tr.arcade_copy_cmd}
               </button>
             </div>
@@ -174,12 +158,7 @@ export function ArcadeGameModal({
         </svg>
         <p>{tr.arcade_dev_proj_desc}</p>
         <p className="path-code">{game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress"}</p>
-        <div className="arcade-cmd-hint">
-          <code>{fallbackCmd}</code>
-          <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(fallbackCmd)}>
-            📋 {tr.arcade_copy_cmd}
-          </button>
-        </div>
+        <div className="arcade-cmd-hint"><code>{fallbackCmd}</code></div>
       </div>
     );
   };

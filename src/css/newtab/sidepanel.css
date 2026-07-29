@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: var(--space-5) var(--space-7);
   background: rgba(18, 18, 28, 0.75);
   border-bottom: 1px solid rgba(139, 92, 246, 0.15);
   backdrop-filter: blur(20px);
@@ -28,7 +28,7 @@
 .sidepanel-header-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -40,7 +40,7 @@
 
 .sidepanel-header-badge {
   font-size: 0.65rem;
-  padding: 2px 8px;
+  padding: 2px var(--space-3);
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid rgba(139, 92, 246, 0.35);
   color: #c084fc;
@@ -52,13 +52,13 @@
 
 /* Active Tab Context Bar */
 .sidepanel-tab-status {
-  padding: 10px 16px;
+  padding: var(--space-4) var(--space-7);
   background: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-4);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -89,7 +89,7 @@
   text-overflow: ellipsis;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .sidepanel-refresh-btn {
@@ -117,8 +117,8 @@
 /* Action Chips Bar */
 .sidepanel-chips {
   display: flex;
-  gap: 6px;
-  padding: 10px 14px;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
   overflow-x: auto;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(0, 0, 0, 0.2);
@@ -133,11 +133,11 @@
 .sidepanel-chip {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 6px 12px;
+  padding: var(--space-2) var(--space-5);
   font-size: 0.73rem;
   font-weight: 600;
   color: var(--text-secondary, #cbd5e1);
@@ -159,10 +159,10 @@
 .sidepanel-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: var(--space-7);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-6);
   box-sizing: border-box;
 }
 
@@ -177,9 +177,9 @@
 .sidepanel-msg {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
   max-width: 88%;
-  padding: 12px 15px;
+  padding: var(--space-5) 15px;
   border-radius: 14px;
   font-size: 0.83rem;
   line-height: 1.55;
@@ -207,13 +207,13 @@
 
 /* Premium Empty State */
 .sidepanel-empty-state {
-  padding: 30px 16px;
+  padding: 30px var(--space-7);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: var(--space-6);
   margin: auto;
 }
 
@@ -289,17 +289,17 @@
 .sidepanel-starter-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: var(--space-4);
   width: 100%;
   max-width: 280px;
-  margin-top: 10px;
+  margin-top: var(--space-4);
 }
 
 .starter-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-6);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
@@ -361,7 +361,7 @@
 }
 
 .sidepanel-agent-status {
-  padding: 8px 14px;
+  padding: var(--space-3) var(--space-6);
   background: rgba(16, 185, 129, 0.12);
   border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 10px;
@@ -370,18 +370,18 @@
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
 /* Input Area */
 .sidepanel-input-container {
-  padding: 12px 16px;
+  padding: var(--space-5) var(--space-7);
   background: rgba(15, 15, 25, 0.95);
   border-top: 1px solid rgba(139, 92, 246, 0.15);
   backdrop-filter: blur(16px);
   display: flex;
-  gap: 10px;
+  gap: var(--space-4);
   align-items: center;
   flex-shrink: 0;
 }
@@ -391,7 +391,7 @@
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  padding: 11px 14px;
+  padding: 11px var(--space-6);
   color: #ffffff;
   font-size: 0.83rem;
   outline: none;

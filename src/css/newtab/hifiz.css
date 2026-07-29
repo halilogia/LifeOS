@@ -3,7 +3,7 @@
 .hifiz-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-9);
   padding-bottom: 4rem;
 }
 
@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  gap: var(--space-9);
 }
 
 .hifiz-header h2 {
@@ -39,7 +39,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 10px 12px 10px 40px;
+  padding: var(--space-4) var(--space-5) var(--space-4) var(--space-11);
   color: var(--text-primary);
   font-size: 0.95rem;
   outline: none;
@@ -54,14 +54,14 @@
 .hifiz-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  gap: var(--space-9);
 }
 
 .hifiz-stat-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-xl, 20px);
-  padding: 1.5rem;
+  padding: var(--space-9);
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -118,7 +118,7 @@
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scrollbar-width: none;
-  margin-top: 2rem;
+  margin-top: var(--space-9);
 }
 
 .hifiz-filters::-webkit-scrollbar {
@@ -129,7 +129,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   border-radius: 10px;
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
@@ -153,15 +153,15 @@
 .hifiz-level-filters {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-9);
 }
 
 .hifiz-level-btn {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   border-radius: 10px;
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
@@ -195,8 +195,8 @@
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
   padding: 1.25rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: var(--space-9);
+  margin-bottom: var(--space-9);
 }
 
 .hifiz-overall-info {
@@ -234,7 +234,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-7);
 }
 
 .hifiz-card:hover {
@@ -254,7 +254,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-3);
   background: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   color: var(--text-secondary);
@@ -293,14 +293,14 @@
 .hifiz-desc {
   font-size: 0.8rem;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: var(--space-1);
 }
 
 .hifiz-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1rem;
+  padding-top: var(--space-7);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -308,7 +308,7 @@
 
 .hifiz-actions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .hifiz-action-btn {
@@ -333,7 +333,7 @@
 
 /* Page Progress Styles */
 .hifiz-pages-container {
-  margin-top: 1rem;
+  margin-top: var(--space-7);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -356,7 +356,7 @@
 .hifiz-pages-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .hifiz-page-box {
@@ -404,10 +404,10 @@
 
 .hifiz-sub-nav {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: var(--space-7);
+  margin-bottom: var(--space-9);
   border-bottom: 1px solid var(--card-border);
-  padding-bottom: 1rem;
+  padding-bottom: var(--space-7);
 }
 
 .hifiz-nav-btn {
@@ -416,7 +416,7 @@
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
-  padding: 8px 20px;
+  padding: var(--space-3) var(--space-8);
   border-radius: var(--radius-md, 12px);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -447,18 +447,18 @@
 /* Hifiz Tabs */
 .hifiz-tabs {
   display: flex;
-  gap: 12px;
+  gap: var(--space-5);
   margin-bottom: 30px;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
-  padding: 8px;
+  padding: var(--space-3);
   border-radius: 16px;
   width: fit-content;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: 10px;
+  margin-top: var(--space-4);
 }
 
 .hifiz-tab-btn {
-  padding: 12px 24px;
+  padding: var(--space-5) var(--space-9);
   border-radius: var(--radius-md, 12px);
   border: 1px solid var(--card-border);
   background: transparent;
@@ -486,17 +486,17 @@
 .yeterlikler-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-4);
   max-height: 60vh;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: var(--space-4);
 }
 
 .yeterlik-item {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 1rem 1.25rem;
+  padding: var(--space-7) 1.25rem;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--card-border);
   border-radius: 15px;

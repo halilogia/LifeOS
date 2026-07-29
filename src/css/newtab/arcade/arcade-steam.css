@@ -3,23 +3,23 @@
 .arcade-steam-dev-panel {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-8);
 }
 
 .steam-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .steam-stat-card {
   background: rgba(30, 41, 59, 0.4);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .stat-label {
@@ -47,7 +47,7 @@
   color: var(--accent-color);
   font-weight: 700;
   font-size: 12px;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-sm);
   outline: none;
   cursor: pointer;
@@ -62,10 +62,10 @@
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .box-title {
@@ -83,16 +83,16 @@
 
 .tech-tags-list {
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
   flex-wrap: wrap;
-  margin-top: 6px;
+  margin-top: var(--space-2);
 }
 
 .tech-badge {
   background: rgba(139, 92, 246, 0.15);
   color: var(--text-primary);
   border: 1px solid rgba(139, 92, 246, 0.3);
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-4);
   border-radius: 6px;
   font-size: 12px;
 }
@@ -103,12 +103,12 @@
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: var(--space-5);
   color: var(--text-primary);
   font-size: 13px;
   resize: vertical;
   outline: none;
-  margin-top: 6px;
+  margin-top: var(--space-2);
 }
 
 .steam-notes-textarea:focus {
@@ -118,12 +118,12 @@
 .steam-todo-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-4);
 }
 
 .steam-todo-input-row {
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .steam-todo-input-row input {
@@ -131,7 +131,7 @@
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: var(--space-3) var(--space-5);
   color: var(--text-primary);
   font-size: 13px;
   outline: none;
@@ -141,7 +141,7 @@
   background: var(--accent-color);
   color: #fff;
   border: none;
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   border-radius: var(--radius-sm);
   font-size: 13px;
   cursor: pointer;
@@ -150,7 +150,7 @@
 .steam-todo-items-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .steam-todo-item {
@@ -159,7 +159,7 @@
   justify-content: space-between;
   background: rgba(15, 23, 42, 0.4);
   border: 1px solid var(--card-border);
-  padding: 8px 12px;
+  padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-sm);
 }
 
@@ -174,7 +174,7 @@
 .todo-checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   cursor: pointer;
   font-size: 13px;
 }
@@ -197,13 +197,13 @@
 .add-game-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-6);
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
 }
 
 .form-group label {
@@ -218,7 +218,7 @@
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: var(--space-3) var(--space-5);
   color: var(--text-primary);
   font-size: 13px;
   outline: none;
@@ -227,21 +227,21 @@
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .btn-cancel {
   background: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
@@ -250,7 +250,7 @@
   background: var(--accent-color);
   color: #fff;
   border: none;
-  padding: 8px 20px;
+  padding: var(--space-3) var(--space-8);
   border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 13px;
@@ -265,7 +265,7 @@
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.3);
   color: #ef4444;
-  padding: 8px 16px;
+  padding: var(--space-3) var(--space-7);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }

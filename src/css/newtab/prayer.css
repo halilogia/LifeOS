@@ -5,14 +5,14 @@
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--card-border);
   border-radius: 24px;
-  padding: 1.5rem;
+  padding: var(--space-9);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .prayer-widget-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-9);
   border-bottom: 1px solid var(--card-border);
-  padding-bottom: 1rem;
+  padding-bottom: var(--space-7);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,7 +28,7 @@
   font-size: 0.75rem;
   color: var(--accent-color);
   background: rgba(139, 92, 246, 0.1);
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-4);
   border-radius: 100px;
   font-weight: 600;
 }
@@ -36,14 +36,14 @@
 .prayer-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .prayer-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
+  padding: var(--space-4) var(--space-6);
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
   border: 1px solid transparent;
@@ -89,7 +89,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 2rem;
+  padding: var(--space-9);
   width: 100%;
 }
 

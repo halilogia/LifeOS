@@ -1,11 +1,11 @@
 /* ── Pomodoro Timer & Alarm Styles ────────────────────────────────── */
 
 .pomodoro-container {
-  padding: 1rem;
+  padding: var(--space-7);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-9);
   background: transparent;
   animation: fadeIn 0.8s ease-out;
 }
@@ -100,14 +100,14 @@
   display: flex;
   gap: 0.5rem;
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
-  padding: 6px;
+  padding: var(--space-2);
   border-radius: 20px;
   border: 1px solid var(--card-border);
   margin-top: 0.5rem;
 }
 
 .pomodoro-mode-btn {
-  padding: 10px 24px;
+  padding: var(--space-4) var(--space-9);
   border-radius: var(--radius-lg, 16px);
   border: none;
   background: transparent;
@@ -141,14 +141,14 @@
   gap: 2.5rem;
   width: 100%;
   margin: 0 auto;
-  padding: 10px;
+  padding: var(--space-4);
 }
 
 .pomodoro-main-card {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-xl, 24px);
-  padding: 2rem;
+  padding: var(--space-9);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-9);
 }
 
 .progress-ring-main {
@@ -201,14 +201,14 @@
 .pomodoro-main-card .pomodoro-controls {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: var(--space-9);
+  margin-bottom: var(--space-9);
 }
 
 .pomodoro-side-panel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-9);
   width: 260px;
   flex-shrink: 0;
 }
@@ -228,20 +228,20 @@
 .mini-tool-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-3);
   color: var(--text-secondary);
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-7);
 }
 
 .mini-tool-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-7);
 }
 
 .mini-time {
@@ -257,7 +257,7 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md, 12px);
-  padding: 8px 14px;
+  padding: var(--space-3) var(--space-6);
   color: var(--text-primary);
   font-family: inherit;
   font-size: 0.95rem;
@@ -344,8 +344,8 @@
 .pomodoro-tab-header {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: var(--space-5);
+  margin-bottom: var(--space-9);
   width: 100%;
 }
 
@@ -353,7 +353,7 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.03));
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  padding: 10px 20px;
+  padding: var(--space-4) var(--space-8);
   border-radius: 14px;
   cursor: pointer;
   font-weight: 600;

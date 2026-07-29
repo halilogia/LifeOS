@@ -1,6 +1,7 @@
 import { GameEntry } from "@/types/game.js";
 
 const STORAGE_KEY_GAMES = "lifeos_arcade_games_v1";
+const LEGACY_SYNC_KEY_GAMES = STORAGE_KEY_GAMES;
 
 
 export const DEFAULT_GAMES: GameEntry[] = [];
@@ -13,15 +14,24 @@ export const arcadeService = {
   async loadGames(): Promise<GameEntry[]> {
     return new Promise((resolve) => {
       try {
-        if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-          chrome.storage.sync.get([STORAGE_KEY_GAMES], (res) => {
+        if (typeof chrome !== "undefined" && chrome.storage?.local) {
+          chrome.storage.local.get([STORAGE_KEY_GAMES], (res) => {
             const saved = res[STORAGE_KEY_GAMES] as GameEntry[];
             if (saved !== undefined && Array.isArray(saved)) {
               resolve(saved);
             } else {
-              // First time init: save and return default starter built-ins
-              this.saveGames(DEFAULT_GAMES);
-              resolve(DEFAULT_GAMES);
+              // Migrate existing data from the old sync storage once.
+              if (chrome.storage?.sync) {
+                chrome.storage.sync.get([LEGACY_SYNC_KEY_GAMES], (legacyRes) => {
+                  const legacy = legacyRes[LEGACY_SYNC_KEY_GAMES] as GameEntry[];
+                  const initial = Array.isArray(legacy) ? legacy : DEFAULT_GAMES;
+                  void this.saveGames(initial);
+                  resolve(initial);
+                });
+              } else {
+                void this.saveGames(DEFAULT_GAMES);
+                resolve(DEFAULT_GAMES);
+              }
             }
           });
         } else {
@@ -47,8 +57,8 @@ export const arcadeService = {
   async saveGames(games: GameEntry[]): Promise<void> {
     return new Promise((resolve) => {
       try {
-        if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-          chrome.storage.sync.set({ [STORAGE_KEY_GAMES]: games }, () => resolve());
+        if (typeof chrome !== "undefined" && chrome.storage?.local) {
+          chrome.storage.local.set({ [STORAGE_KEY_GAMES]: games }, () => resolve());
         } else {
           localStorage.setItem(STORAGE_KEY_GAMES, JSON.stringify(games));
           resolve();

@@ -6,8 +6,8 @@
 .halka-arz-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px 24px;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-9);
   height: 100%;
   overflow-y: auto;
   max-width: 1300px;
@@ -19,14 +19,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-5);
   flex-wrap: wrap;
 }
 
 .halka-arz-title-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-5);
 }
 
 .halka-arz-icon {
@@ -59,20 +59,20 @@
 .halka-arz-fallback-notice {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
   background: rgba(245, 158, 11, 0.12);
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 10px;
   font-size: 0.8rem;
   color: var(--warning, #f59e0b);
-  margin-bottom: 4px;
+  margin-bottom: var(--space-1);
 }
 
 /* ── Tab navigation ───────────────────────────────────── */
 .halka-arz-tabs {
   display: flex;
-  gap: 6px;
+  gap: var(--space-2);
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--card-border);
   border-radius: 14px;
@@ -81,7 +81,7 @@
 }
 
 .ha-tab-btn {
-  padding: 9px 20px;
+  padding: 9px var(--space-8);
   border-radius: 10px;
   border: none;
   background: transparent;
@@ -117,7 +117,7 @@
   color: var(--stock-up, #10b981);
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 1px 6px;
+  padding: 1px var(--space-2);
   border-radius: 20px;
   min-width: 18px;
   text-align: center;
@@ -127,8 +127,8 @@
 .ha-refresh-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
   border: 1px solid rgba(16, 185, 129, 0.35);
   border-radius: 10px;
   background: rgba(16, 185, 129, 0.1);
@@ -165,8 +165,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 60px 20px;
+  gap: var(--space-6);
+  padding: var(--space-12) var(--space-8);
   color: var(--text-secondary);
   font-size: 0.95rem;
   text-align: center;
@@ -202,8 +202,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 52px 24px;
+  gap: var(--space-5);
+  padding: 52px var(--space-9);
   color: var(--text-secondary);
   font-size: 0.92rem;
   text-align: center;
@@ -217,17 +217,17 @@
 .ipo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 14px;
+  gap: var(--space-6);
 }
 
 .ipo-card {
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg, 16px);
-  padding: 18px 20px;
+  padding: 18px var(--space-8);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-6);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -275,7 +275,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-4);
 }
 
 .ipo-company-info {
@@ -304,7 +304,7 @@
   font-family: var(--font-mono, monospace);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
-  padding: 2px 8px;
+  padding: 2px var(--space-3);
   border-radius: 6px;
   letter-spacing: 0.05em;
   width: fit-content;
@@ -317,7 +317,7 @@
   gap: 5px;
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: var(--space-1) var(--space-4);
   border-radius: 20px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -379,14 +379,14 @@
 .ipo-card-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .ipo-detail-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-3);
   font-size: 0.82rem;
 }
 
@@ -411,7 +411,7 @@
   font-weight: 500;
   background: rgba(255, 255, 255, 0.06);
   color: var(--text-secondary);
-  padding: 2px 8px;
+  padding: 2px var(--space-3);
   border-radius: 6px;
 }
 
@@ -427,7 +427,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 7px 12px;
+  padding: 7px var(--space-5);
   border-radius: var(--radius-sm, 8px);
   background: rgba(99, 102, 241, 0.12);
   color: var(--stock-accent, #818cf8);

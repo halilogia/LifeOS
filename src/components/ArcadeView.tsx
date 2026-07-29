@@ -20,11 +20,11 @@ const formatFolderName = (name: string): string => {
 
 const detectCategory = (name: string): GameEntry["category"] => {
   const lower = name.toLowerCase();
-  if (lower.includes("rpg") || lower.includes("adventure") || lower.includes("isekai") || lower.includes("quest")) return "rpg";
-  if (lower.includes("sim") || lower.includes("manager") || lower.includes("survival") || lower.includes("tycoon") || lower.includes("market") || lower.includes("stardew")) return "simulation";
-  if (lower.includes("ai") || lower.includes("focus")) return "ai";
-  if (lower.includes("puzzle") || lower.includes("match") || lower.includes("tarot") || lower.includes("card")) return "puzzle";
-  if (lower.includes("race") || lower.includes("moto") || lower.includes("runner") || lower.includes("wave")) return "casual";
+  if (lower.includes("rpg") || lower.includes("adventure") || lower.includes("isekai") || lower.includes("quest")) {return "rpg";}
+  if (lower.includes("sim") || lower.includes("manager") || lower.includes("survival") || lower.includes("tycoon") || lower.includes("market") || lower.includes("stardew")) {return "simulation";}
+  if (lower.includes("ai") || lower.includes("focus")) {return "ai";}
+  if (lower.includes("puzzle") || lower.includes("match") || lower.includes("tarot") || lower.includes("card")) {return "puzzle";}
+  if (lower.includes("race") || lower.includes("moto") || lower.includes("runner") || lower.includes("wave")) {return "casual";}
   return "action";
 };
 
@@ -32,11 +32,30 @@ const detectCategory = (name: string): GameEntry["category"] => {
 const detectTechStack = (name: string): string[] => {
   const lower = name.toLowerCase();
   const stack: string[] = [];
-  if (lower.includes("3d") || lower.includes("voxel") || lower.includes("webgl")) stack.push("Three.js");
-  if (lower.includes("2d") || lower.includes("canvas") || lower.includes("phaser")) stack.push("Canvas / 2D");
-  if (lower.includes("ai")) stack.push("Gemini API");
-  if (stack.length === 0) stack.push("TypeScript", "Vite");
+  if (lower.includes("3d") || lower.includes("voxel") || lower.includes("webgl")) {stack.push("Three.js");}
+  if (lower.includes("2d") || lower.includes("canvas") || lower.includes("phaser")) {stack.push("Canvas / 2D");}
+  if (lower.includes("ai")) {stack.push("Gemini API");}
+  if (stack.length === 0) {stack.push("TypeScript", "Vite");}
   return stack;
+};
+
+const coverPattern = /(^|\/)(cover|thumbnail|screenshot|icon|logo)[^/]*\.(png|jpe?g|webp|gif|svg)$/i;
+const fileToDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(String(reader.result));
+  reader.onerror = () => reject(reader.error);
+  reader.readAsDataURL(file);
+});
+const findCoverInDirectory = async (handle: any): Promise<string | undefined> => {
+  const candidates: any[] = [];
+  for await (const entry of handle.values()) {
+    if (entry.kind === "file" && /\\.(png|jpe?g|webp|gif|svg)$/i.test(entry.name)) {candidates.push(entry);}
+    if (entry.kind === "directory" && /^(public|assets|images?|src)$/i.test(entry.name)) {
+      for await (const child of entry.values()) {if (child.kind === "file" && coverPattern.test(`${entry.name}/${child.name}`)) {candidates.push(child);}}
+    }
+  }
+  const preferred = candidates.find((entry) => coverPattern.test(entry.name)) || candidates[0];
+  return preferred ? fileToDataUrl(await preferred.getFile()) : undefined;
 };
 
 export function ArcadeView({ lang }: ArcadeViewProps) {
@@ -129,6 +148,7 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
             const title = formatFolderName(folderName);
             const devPath = `C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\${folderName}`;
             const id = `scan_${folderName.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase()}`;
+            const coverImage = await findCoverInDirectory(entry);
 
             scannedGames.push({
               id,
@@ -138,6 +158,7 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
               status: "in_progress",
               embedType: "iframe",
               iframeUrl: `http://localhost:${port++}`,
+              coverImage,
               devPath,
               techStack: detectTechStack(folderName),
               highScore: 0,
@@ -170,7 +191,7 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
   // Fallback webkitdirectory Input Handler
   const handleFolderInputChange = async (e: Event) => {
     const input = e.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+    if (!input.files || input.files.length === 0) {return;}
 
     setScanning(true);
     const folderSet = new Set<string>();
@@ -227,9 +248,9 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
 
   // Filter games based on Category & Search Query
   const filteredGames = games.filter((game) => {
-    if (activeCategory === "playable" && game.status !== "playable") return false;
-    if (activeCategory === "in_progress" && game.status !== "in_progress") return false;
-    if (activeCategory === "favorites" && !game.isFavorite) return false;
+    if (activeCategory === "playable" && game.status !== "playable") {return false;}
+    if (activeCategory === "in_progress" && game.status !== "in_progress") {return false;}
+    if (activeCategory === "favorites" && !game.isFavorite) {return false;}
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -248,7 +269,7 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
       <input
         ref={folderInputRef}
         type="file"
-        // @ts-ignore
+        // @ts-expect-error webkitdirectory is a non-standard HTML input attribute.
         webkitdirectory="true"
         directory="true"
         style={{ display: "none" }}
