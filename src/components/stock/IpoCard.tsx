@@ -16,24 +16,7 @@ function formatDate(dateStr: string, lang: Language): string {
     if (isNaN(d.getTime())) {
       return dateStr;
     }
-    if (lang === "tr") {
-      const months = [
-        "Oca",
-        "Şub",
-        "Mar",
-        "Nis",
-        "May",
-        "Haz",
-        "Tem",
-        "Ağu",
-        "Eyl",
-        "Ekim",
-        "Kas",
-        "Ara",
-      ];
-      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-    }
-    return d.toLocaleDateString("en-US", {
+    return d.toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US", {
       day: "numeric",
       month: "short",
       year: "numeric",

@@ -7,12 +7,15 @@ import { useState, useEffect } from "preact/hooks";
 import { analyzeStockWithAI } from "@/services/stockAiService.js";
 import type { StockQuote } from "@/services/bistService.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 interface StockAiAnalysisModalProps {
   symbol: string;
   quote?: StockQuote;
   portfolioItems?: StockPortfolioItem[];
   onClose: () => void;
+  lang: Language;
 }
 
 function IconX() {
@@ -55,7 +58,9 @@ export function StockAiAnalysisModal({
   quote,
   portfolioItems,
   onClose,
+  lang,
 }: StockAiAnalysisModalProps) {
+  const t = getTranslation(lang);
   const [analysisText, setAnalysisText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -94,8 +99,8 @@ export function StockAiAnalysisModal({
             <IconSparkles />
             <span>
               {isAllPortfolio
-                ? "Sabah BİST Açılış & Takip Listesi Raporu"
-                : `AI Borsa Analizi — ${symbol.toUpperCase()}`}
+                ? t.stock_analysis_morning_report
+                : t.stock_analysis_for_symbol.replace("{symbol}", symbol.toUpperCase())}
             </span>
           </div>
           <button
@@ -142,8 +147,7 @@ export function StockAiAnalysisModal({
                 }}
               />
               <span>
-                Yapay zeka {symbol} hissesini ve canlı piyasa verilerini analiz
-                ediyor...
+                {t.stock_analysis_analyzing_symbol.replace("{symbol}", symbol)}
               </span>
             </div>
           ) : (
@@ -172,7 +176,7 @@ export function StockAiAnalysisModal({
           }}
         >
           <button className="stock-btn stock-btn-primary" onClick={onClose}>
-            Tamam
+            {t.stock_close_btn}
           </button>
         </div>
       </div>

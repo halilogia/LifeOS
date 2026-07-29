@@ -1,27 +1,19 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { fetchStockHistory, StockHistoryItem } from "@/services/bistService.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface CustomStockChartProps {
   symbol: string;
   lang: Language;
 }
 
-const RANGE_LABELS: Record<string, string> = {
-  "1d": "1 Gün",
-  "1mo": "1 Ay",
-  "3mo": "3 Ay",
-  "6mo": "6 Ay",
-  "1y": "1 Yıl",
-};
-
-export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps) {
+export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
+  const t = getTranslation(lang);
   const [range, setRange] = useState<"1d" | "1mo" | "3mo" | "6mo" | "1y">("1d");
   const [history, setHistory] = useState<StockHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(
-    null,
-  );
+  const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -199,7 +191,7 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
       >
         <div>
           <h3 style={{ margin: 0, color: "#f8fafc" }}>
-            {symbol.toUpperCase()} — Canlı Mum Grafiği
+            {t.stock_chart_title_live.replace("{symbol}", symbol.toUpperCase())}
           </h3>
           <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
             Yahoo Finance BIST Veri Akışı
@@ -214,7 +206,11 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
               style={{ padding: "4px 10px", fontSize: "0.75rem" }}
               onClick={() => setRange(r)}
             >
-              {RANGE_LABELS[r]}
+              {r === "1d" ? t.stock_chart_period_1d
+                : r === "1mo" ? t.stock_chart_period_1m
+                : r === "3mo" ? t.stock_chart_period_3m
+                : r === "6mo" ? "6A"
+                : t.stock_chart_period_1y}
             </button>
           ))}
         </div>
@@ -232,26 +228,30 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
         {hoveredPoint ? (
           <>
             <span>
-              {range === "1d" ? "Saat: " : "Tarih: "}
+              {range === "1d" ? `${t.stock_chart_interval}: ` : `${t.stock_card_open}: `}
               {range === "1d"
-                ? new Date(hoveredPoint.timestamp).toLocaleTimeString("tr-TR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : new Date(hoveredPoint.timestamp).toLocaleDateString("tr-TR")}
+                ? new Date(hoveredPoint.timestamp).toLocaleTimeString(
+                    lang === "tr" ? "tr-TR" : "en-US",
+                    { hour: "2-digit", minute: "2-digit" },
+                  )
+                : new Date(hoveredPoint.timestamp).toLocaleDateString(
+                    lang === "tr" ? "tr-TR" : "en-US",
+                  )}
             </span>
-            <span>Açılış: ₺{hoveredPoint.open.toFixed(2)}</span>
+            <span>{t.stock_card_open}: ₺{hoveredPoint.open.toFixed(2)}</span>
             <span style={{ color: "#4ade80" }}>
-              Yüksek: ₺{hoveredPoint.high.toFixed(2)}
+              {t.stock_card_high}: ₺{hoveredPoint.high.toFixed(2)}
             </span>
             <span style={{ color: "#f87171" }}>
-              Düşük: ₺{hoveredPoint.low.toFixed(2)}
+              {t.stock_card_low}: ₺{hoveredPoint.low.toFixed(2)}
             </span>
-            <span>Kapanış: ₺{hoveredPoint.close.toFixed(2)}</span>
+            <span>{t.stock_card_close_price}: ₺{hoveredPoint.close.toFixed(2)}</span>
           </>
         ) : (
           <span style={{ color: "#64748b" }}>
-            Detay görmek için imleci grafik üzerine getirin.
+            {lang === "tr"
+              ? "Detay görmek için imleci grafik üzerine getirin."
+              : "Hover over the chart to see details."}
           </span>
         )}
       </div>
@@ -270,7 +270,7 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
               color: "#94a3b8",
             }}
           >
-            <span>Grafik verisi çekiliyor...</span>
+            <span>{t.stock_loading}</span>
           </div>
         ) : history.length === 0 ? (
           <div
@@ -291,10 +291,12 @@ export function CustomStockChart({ symbol, lang: _lang }: CustomStockChartProps)
             }}
           >
             <div style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc" }}>
-              {symbol.toUpperCase()} Grafik Verisi Henüz Oluşmadı
+              {symbol.toUpperCase()} — {t.stock_chart_no_data}
             </div>
             <div style={{ fontSize: "0.82rem", color: "#94a3b8", maxWidth: "420px" }}>
-              Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır.
+              {lang === "tr"
+                ? "Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır."
+                : "This stock has not yet started trading on Borsa Istanbul; historical candlestick data will begin plotting live on the opening day."}
             </div>
           </div>
         ) : null}

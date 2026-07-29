@@ -8,6 +8,8 @@ import { useState, useEffect } from "preact/hooks";
 import { fetchDynamicBistTickers, StockQuote } from "@/services/bistService.js";
 import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
 import type { StockWatchlist } from "@/types/stock.js";
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
 
 interface BistKesfetTabProps {
   searchQuery: string;
@@ -19,6 +21,7 @@ interface BistKesfetTabProps {
   onCreateWatchlist: (name: string) => void;
   onOpenChart: (symbol: string) => void;
   onOpenAiModal: (symbol: string) => void;
+  lang: Language;
 }
 
 function IconPlus() {
@@ -117,7 +120,9 @@ export function BistKesfetTab({
   onCreateWatchlist,
   onOpenChart,
   onOpenAiModal,
+  lang,
 }: BistKesfetTabProps) {
+  const t = getTranslation(lang);
   // Modal for adding a stock to a watchlist
   const [watchlistModalSymbol, setWatchlistModalSymbol] = useState<string | null>(null);
   const [newListName, setNewListName] = useState("");
@@ -220,7 +225,7 @@ export function BistKesfetTab({
           }}
         >
           <IconSparkles />
-          <span>✦ AI Haftalık Öne Çıkan BİST Hisseleri</span>
+          <span>{t.stock_ai_featured_title}</span>
         </div>
 
         <div
@@ -232,31 +237,31 @@ export function BistKesfetTab({
         >
           {featuredStocks.map((item, idx) => {
             const scoreLabel = item.changePercent >= 5
-              ? "90/100 🐂 Boğa"
+              ? t.stock_featured_score_bull_high
               : item.changePercent > 0
-                ? "75/100 🐂 Boğa"
+                ? t.stock_featured_score_bull
                 : item.changePercent === 0
-                  ? "50/100 ⚖️ Nötr"
-                  : "35/100 🐻 Ayı";
+                  ? t.stock_featured_score_neutral
+                  : t.stock_featured_score_bear;
 
-            let tagLabel = "⚡ BİST İşlem Akışı";
+            let tagLabel = t.stock_tag_normal_flow;
             let tagBg = "rgba(139, 92, 246, 0.15)";
             let tagColor = "#c084fc";
 
             if (idx === 0 && item.tlVolume > 0) {
-              tagLabel = "💰 TL Hacim Lideri";
+              tagLabel = t.stock_tag_volume_leader;
               tagBg = "rgba(59, 130, 246, 0.15)";
               tagColor = "#60a5fa";
             } else if (item.changePercent >= 3.0) {
-              tagLabel = "🚀 Güçlü Yükseliş İvmesi";
+              tagLabel = t.stock_tag_strong_momentum;
               tagBg = "rgba(16, 185, 129, 0.15)";
               tagColor = "#34d399";
             } else if (item.changePercent > 0) {
-              tagLabel = "📈 Pozitif Trend";
+              tagLabel = t.stock_tag_positive_trend;
               tagBg = "rgba(16, 185, 129, 0.15)";
               tagColor = "#34d399";
             } else if (item.changePercent < 0) {
-              tagLabel = "📉 Düzeltme & Volatilite";
+              tagLabel = t.stock_tag_correction;
               tagBg = "rgba(239, 68, 68, 0.15)";
               tagColor = "#f87171";
             }
@@ -338,13 +343,13 @@ export function BistKesfetTab({
                     onClick={() => onOpenAiModal(item.sym)}
                   >
                     <IconSparkles />
-                    <span>AI Analiz</span>
+                    <span>{t.stock_ai_analysis}</span>
                   </button>
                   <button
                     className="stock-btn stock-btn-secondary"
                     style={{ padding: "4px 8px", fontSize: "0.72rem" }}
                     onClick={() => setWatchlistModalSymbol(item.sym)}
-                    title="Takip Listeme Ekle"
+                    title={t.stock_add_watchlist}
                   >
                     <IconBookmark />
                   </button>
@@ -352,7 +357,7 @@ export function BistKesfetTab({
                     className="stock-btn stock-btn-secondary"
                     style={{ padding: "4px 8px", fontSize: "0.72rem" }}
                     onClick={() => onOpenChart(item.sym)}
-                    title="Grafik"
+                    title={t.stock_chart}
                   >
                     <IconChart />
                   </button>
@@ -388,7 +393,7 @@ export function BistKesfetTab({
           const price = quote ? quote.price : null;
           const changePercent = quote ? quote.changePercent : 0;
           const isUp = changePercent >= 0;
-          const companyName = quote?.shortName || `${symClean} Hissesi`;
+          const companyName = quote?.shortName || t.stock_company_name_fallback.replace("{symbol}", symClean);
 
           return (
             <div
@@ -502,7 +507,7 @@ export function BistKesfetTab({
                     alignItems: "center",
                     gap: "4px",
                   }}
-                  title="Takip Listesine Ekle"
+                  title={t.stock_add_watchlist}
                 >
                   <IconBookmark />
                 </button>
@@ -522,10 +527,10 @@ export function BistKesfetTab({
                     alignItems: "center",
                     gap: "4px",
                   }}
-                  title="Portföye Ekle"
+                  title={t.stock_add_portfolio}
                 >
                   <IconPlus />
-                  <span>Portföye Ekle</span>
+                  <span>{t.stock_add_portfolio}</span>
                 </button>
 
                 <button
@@ -543,7 +548,7 @@ export function BistKesfetTab({
                     alignItems: "center",
                     gap: "4px",
                   }}
-                  title="Grafik"
+                  title={t.stock_chart}
                 >
                   <IconChart />
                 </button>
@@ -563,7 +568,7 @@ export function BistKesfetTab({
                     alignItems: "center",
                     gap: "4px",
                   }}
-                  title="AI Analiz"
+                  title={t.stock_ai_analysis}
                 >
                   <IconSparkles />
                 </button>
@@ -581,7 +586,7 @@ export function BistKesfetTab({
             style={{ padding: "8px 24px", fontSize: "0.85rem" }}
             onClick={() => setVisibleCount((prev) => Math.min(prev + 24, filteredTickers.length))}
           >
-            Daha Fazla BİST Hissesi Yükle ({filteredTickers.length - visibleCount} kaldı)
+            {t.stock_load_more} {t.stock_load_more_remaining.replace("{count}", String(filteredTickers.length - visibleCount))}
           </button>
         </div>
       )}
@@ -599,7 +604,7 @@ export function BistKesfetTab({
           >
             <div className="stock-modal-header">
               <div className="stock-modal-title">
-                {watchlistModalSymbol.toUpperCase()} — Hangi Takip Listesine Eklensin?
+                {t.stock_watchlist_add_title.replace("{symbol}", watchlistModalSymbol.toUpperCase())}
               </div>
               <button
                 type="button"
@@ -613,7 +618,7 @@ export function BistKesfetTab({
                   cursor: "pointer",
                   padding: "4px 8px",
                 }}
-                title="Kapat"
+                title={t.stock_close_btn}
               >
                 &times;
               </button>
@@ -629,7 +634,7 @@ export function BistKesfetTab({
                     fontSize: "0.85rem",
                   }}
                 >
-                  Henüz bir takip listeniz yok. "Takip Listelerim" sekmesinden yeni liste oluşturabilirsiniz.
+                  {t.stock_no_watchlist}
                 </div>
               ) : (
                 watchlists.map((wl) => {
@@ -656,7 +661,7 @@ export function BistKesfetTab({
                         onToggleWatchlistSymbol(wl.id, watchlistModalSymbol);
                       }}
                     >
-                      <span>{wl.name} ({wl.symbols.length} varlık)</span>
+                      <span>{t.stock_watchlist_asset_count.replace("{name}", wl.name).replace("{count}", String(wl.symbols.length))}</span>
                       {isAdded && (
                         <span style={{ color: "#818cf8", display: "flex", alignItems: "center" }}>
                           <IconCheck />
