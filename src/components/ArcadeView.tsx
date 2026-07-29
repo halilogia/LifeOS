@@ -83,6 +83,15 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
+  const handleUpdateIframeUrl = async (gameId: string, url: string) => {
+    const updated = await arcadeService.updateIframeUrl(gameId, url);
+    setGames(updated);
+    if (activeGame && activeGame.id === gameId) {
+      setActiveGame(updated.find((g) => g.id === gameId) || null);
+    }
+  };
+
+
   const handleUpdateDevNotes = async (
     gameId: string,
     notes: string,
@@ -276,7 +285,9 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
               onPlay={(g) => setActiveGame(g)}
               onOpenDetails={(g) => setActiveGame(g)}
               onToggleFavorite={handleToggleFavorite}
+              onDeleteGame={handleDeleteGame}
             />
+
           ))}
         </div>
       )}
@@ -289,8 +300,10 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
           onClose={() => setActiveGame(null)}
           onUpdateScore={handleUpdateScore}
           onUpdateStatus={handleUpdateStatus}
+          onUpdateIframeUrl={handleUpdateIframeUrl}
           onUpdateDevNotes={handleUpdateDevNotes}
           onDeleteGame={handleDeleteGame}
+
         />
       )}
     </div>

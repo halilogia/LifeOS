@@ -53,7 +53,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
 
 ---
 
-## 🎯 `src/domain/ — İş Mantığı Çekirdeği (Hiç dış bağımlılığı yok!)`
+## 🎯 `src/domain/ — İş Mantığı Çekirdeği`
 
 **domain/**
   **constants/** → Domain sabitleri (KPSS ders, müfredat, flashcard).

@@ -116,21 +116,130 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 12px;
+  padding: 8px 14px;
   background: #0f172a;
   border-bottom: 1px solid var(--card-border);
   font-size: 12px;
+  gap: 12px;
 }
 
-.arcade-url-label {
-  color: var(--text-muted);
+.arcade-url-edit-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.arcade-url-icon {
+  font-size: 14px;
+}
+
+.arcade-url-input {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  color: var(--accent-color);
   font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 8px;
+  outline: none;
+  min-width: 180px;
+}
+
+.arcade-url-input:focus {
+  border-color: var(--accent-color);
+}
+
+.arcade-save-url-btn {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--accent-color);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.arcade-toast-banner {
+  background: rgba(16, 185, 129, 0.15);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--success);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.arcade-iframe-helper-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border-top: 1px solid var(--card-border);
+}
+
+.helper-info-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.helper-cmd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #090d16;
+  border: 1px solid var(--card-border);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.helper-cmd-row code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--success);
+  word-break: break-all;
+}
+
+
+.arcade-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arcade-copy-cmd-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.arcade-copy-cmd-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--text-primary);
 }
 
 .arcade-open-tab-btn {
-  color: var(--accent-color);
+  background: var(--accent-color);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
   text-decoration: none;
+  transition: background 0.15s ease;
 }
+
+.arcade-open-tab-btn:hover {
+  background: var(--accent-hover);
+}
+
 
 .arcade-game-iframe {
   width: 100%;

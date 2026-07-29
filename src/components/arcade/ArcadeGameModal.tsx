@@ -12,6 +12,7 @@ interface ArcadeGameModalProps {
   onClose: () => void;
   onUpdateScore: (gameId: string, score: number) => void;
   onUpdateStatus?: (gameId: string, status: GameEntry["status"]) => void;
+  onUpdateIframeUrl?: (gameId: string, url: string) => void;
   onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[]) => void;
   onDeleteGame?: (gameId: string) => void;
 }
@@ -22,6 +23,7 @@ export function ArcadeGameModal({
   onClose,
   onUpdateScore,
   onUpdateStatus,
+  onUpdateIframeUrl,
   onUpdateDevNotes,
   onDeleteGame,
 }: ArcadeGameModalProps) {
@@ -32,11 +34,21 @@ export function ArcadeGameModal({
   const [devNotesText, setDevNotesText] = useState(game.devNotes || "");
   const [todoItems, setTodoItems] = useState<DevTodoItem[]>(game.todoList || []);
   const [newTodoInput, setNewTodoInput] = useState("");
+  const [editingUrl, setEditingUrl] = useState(game.iframeUrl || "http://localhost:5173");
+  const [copiedToast, setCopiedToast] = useState(false);
 
   useEffect(() => {
     setDevNotesText(game.devNotes || "");
     setTodoItems(game.todoList || []);
+    setEditingUrl(game.iframeUrl || "http://localhost:5173");
   }, [game]);
+
+  const triggerCopyCmd = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopiedToast(true);
+    setTimeout(() => setCopiedToast(false), 3000);
+  };
+
 
   const handleScoreUpdate = (newScore: number) => {
     onUpdateScore(game.id, newScore);
@@ -87,38 +99,93 @@ export function ArcadeGameModal({
     }
 
     if (game.embedType === "iframe" && game.iframeUrl) {
+      const devCmd = `cd "${game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\" + game.title}" && npm run dev`;
       return (
         <div className="arcade-iframe-container">
+          {/* Top Bar Controls */}
           <div className="arcade-iframe-bar">
-            <span className="arcade-url-label">{game.iframeUrl}</span>
-            <a href={game.iframeUrl} target="_blank" rel="noreferrer" className="arcade-open-tab-btn">
-              Yeni Sekmede Aç ↗
-            </a>
+            <div className="arcade-url-edit-box">
+              <span className="arcade-url-icon">🌐</span>
+              <input
+                type="text"
+                className="arcade-url-input"
+                value={editingUrl}
+                onInput={(e) => setEditingUrl((e.target as HTMLInputElement).value)}
+                placeholder="http://localhost:5173"
+              />
+              {editingUrl !== game.iframeUrl && onUpdateIframeUrl && (
+                <button
+                  className="arcade-save-url-btn"
+                  onClick={() => onUpdateIframeUrl(game.id, editingUrl.trim())}
+                >
+                  Portu Kaydet
+                </button>
+              )}
+            </div>
+            <div className="arcade-bar-actions">
+              <button
+                className="arcade-copy-cmd-btn"
+                onClick={() => triggerCopyCmd(devCmd)}
+                title="Başlatma komutunu kopyala"
+              >
+                📋 Komutu Kopyala
+              </button>
+              <a href={game.iframeUrl} target="_blank" rel="noreferrer" className="arcade-open-tab-btn">
+                🚀 Sekmede Aç ↗
+              </a>
+            </div>
           </div>
+
+          {/* Copied Toast Banner */}
+          {copiedToast && (
+            <div className="arcade-toast-banner">
+              <span>✓ Komut panoya kopyalandı! Terminal açıp (Ctrl+V) ile oyunu başlatın.</span>
+            </div>
+          )}
+
           <iframe
             src={game.iframeUrl}
             title={game.title}
             className="arcade-game-iframe"
             allow="fullscreen; autoplay; gamepad"
           />
+
+          {/* Diagnostic Footer */}
+          <div className="arcade-iframe-helper-footer">
+            <div className="helper-info-text">
+              <strong>⚠️ localhost bağlanmayı reddetti mi?</strong> Oyunu oynayabilmek için projenin yerel sunucusunu (Vite / React / Node) başlatmanız gerekir.
+            </div>
+            <div className="helper-cmd-row">
+              <code>{devCmd}</code>
+              <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(devCmd)}>
+                📋 Komutu Kopyala
+              </button>
+            </div>
+          </div>
         </div>
       );
     }
 
+    const fallbackCmd = `cd "${game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress"}" && npm run dev`;
     return (
       <div className="arcade-no-embed">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
           <rect x="2" y="6" width="20" height="12" rx="4" />
           <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" />
         </svg>
-        <p>Bu proje yerel geliştirme sunucusu üzerinden çalıştırılır.</p>
+        <p>Bu proje yerel geliştirme sunucusu (localhost) üzerinden çalıştırılır.</p>
         <p className="path-code">{game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress"}</p>
         <div className="arcade-cmd-hint">
-          <code>cd "{game.devPath}" && npm run dev</code>
+          <code>{fallbackCmd}</code>
+          <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(fallbackCmd)}>
+            📋 Komutu Kopyala
+          </button>
         </div>
       </div>
     );
   };
+
+
 
   return (
     <div className="arcade-modal-backdrop" onClick={onClose}>

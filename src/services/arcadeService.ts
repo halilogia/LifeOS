@@ -157,6 +157,22 @@ export const arcadeService = {
   },
 
   /**
+   * Update game dev server iframe URL
+   */
+  async updateIframeUrl(gameId: string, iframeUrl: string): Promise<GameEntry[]> {
+    const games = await this.loadGames();
+    const updated = games.map((g) => {
+      if (g.id === gameId) {
+        return { ...g, iframeUrl };
+      }
+      return g;
+    });
+    await this.saveGames(updated);
+    return updated;
+  },
+
+
+  /**
    * Reset game library to default list
    */
   async resetToDefaults(): Promise<GameEntry[]> {
