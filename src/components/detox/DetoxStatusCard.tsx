@@ -146,11 +146,7 @@ export function DetoxStatusCard({
               paddingTop: "1.5rem",
             }}
           >
-            <h3>
-              {lang === "tr"
-                ? "Özel Adres Engelle (Manuel)"
-                : "Block Custom Address (Manual)"}
-            </h3>
+            <h3>{t.detox_custom_address_block}</h3>
             <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}>
               <input
                 type="text"
@@ -161,11 +157,7 @@ export function DetoxStatusCard({
                   padding: "0 15px",
                   background: "rgba(255,255,255,0.02)",
                 }}
-                placeholder={
-                  lang === "tr"
-                    ? "Örn: reddit.com, linkedin.com..."
-                    : "E.g. reddit.com, linkedin.com..."
-                }
+                placeholder={t.detox_custom_placeholder}
                 value={customSiteInput}
                 onInput={(e) =>
                   onCustomSiteInput((e.target as HTMLInputElement).value)

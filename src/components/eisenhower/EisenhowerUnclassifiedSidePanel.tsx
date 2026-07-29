@@ -4,6 +4,7 @@
  */
 
 import { Todo } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 interface EisenhowerUnclassifiedSidePanelProps {
   lang: string;
@@ -24,6 +25,7 @@ export function EisenhowerUnclassifiedSidePanel({
   onDrop,
   onDragStart,
 }: EisenhowerUnclassifiedSidePanelProps) {
+  const t = translations[lang as "tr" | "en"];
   return (
     <div
       className={`eisenhower-quadrant ${isDragOver ? "drag-over" : ""}`}
@@ -49,7 +51,7 @@ export function EisenhowerUnclassifiedSidePanel({
           <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
           <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
         </svg>
-        <span>{lang === "tr" ? "Sınıflandırılmamış" : "Unclassified"}</span>
+        <span>{t.eisenhower_unclassified}</span>
         <span
           className="quadrant-header-tag"
           style={{
@@ -57,7 +59,7 @@ export function EisenhowerUnclassifiedSidePanel({
             color: "var(--text-secondary)",
           }}
         >
-          {unclassified.length} {lang === "tr" ? "Görev" : "Tasks"}
+          {unclassified.length} {t.eisenhower_unclassified_count}
         </span>
       </div>
       <div
@@ -78,9 +80,7 @@ export function EisenhowerUnclassifiedSidePanel({
               padding: "20px",
             }}
           >
-            {lang === "tr"
-              ? "Tüm görevler önceliklendirildi!"
-              : "All tasks prioritized!"}
+            {t.eisenhower_all_classified}
           </div>
         ) : (
           unclassified.map(({ t, idx }) => (

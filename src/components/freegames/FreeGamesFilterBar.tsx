@@ -6,7 +6,6 @@
 import { ExclusionSettings } from "@/services/gamesService.js";
 
 interface FreeGamesFilterBarProps {
-  lang: string;
   t: Record<string, string>;
   platform: string;
   type: string;
@@ -17,7 +16,6 @@ interface FreeGamesFilterBarProps {
 }
 
 export function FreeGamesFilterBar({
-  lang,
   t,
   platform,
   type,
@@ -90,7 +88,7 @@ export function FreeGamesFilterBar({
             marginRight: "10px",
           }}
         >
-          {lang === "tr" ? "Hızlı Talep Sayfaları:" : "Quick Claim Pages:"}
+          {t.free_games_quick_claim}
         </span>
         <a
           href="https://store.epicgames.com/free-games"
@@ -201,9 +199,7 @@ export function FreeGamesFilterBar({
                 : siteKey === "humble"
                   ? "Humble Bundle"
                   : siteKey === "other"
-                    ? lang === "tr"
-                      ? "Diğer"
-                      : "Other"
+                    ? t.cat_other
                     : siteKey.toUpperCase();
             return (
               <label key={siteKey} className="source-label">

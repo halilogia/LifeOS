@@ -78,7 +78,7 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
     <div className="arcade-modal-backdrop" onClick={onClose}>
       <div className="arcade-modal-content add-modal" onClick={(e) => e.stopPropagation()}>
         <div className="arcade-modal-header">
-          <h3>Yeni Oyun Projesi Ekle</h3>
+          <h3>{tr.arcade_add_game}</h3>
           <button className="arcade-modal-close" onClick={onClose}>
             ✕
           </button>
@@ -86,7 +86,7 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
 
         <form onSubmit={handleSubmit} className="add-game-form">
           <div className="form-group">
-            <label>Oyun Tipi</label>
+            <label>{tr.arcade_game_category}</label>
             <select
               value={embedType}
               onChange={(e) => {
@@ -104,7 +104,7 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
 
           {embedType === "builtin" && (
             <div className="form-group">
-              <label>Dahili Mini Oyun Seçimi</label>
+              <label>{tr.arcade_add_game}</label>
               <select
                 value={builtinKey}
                 onChange={(e) => handleBuiltinPresetChange((e.target as HTMLSelectElement).value as any)}
@@ -117,21 +117,21 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
           )}
 
           <div className="form-group">
-            <label>Oyun Adı *</label>
+            <label>{tr.arcade_game_name} *</label>
             <input
               type="text"
               required
-              placeholder="Örn: 2D Şövalye Macerası"
+              placeholder={tr.arcade_game_name}
               value={title}
               onInput={(e) => setTitle((e.target as HTMLInputElement).value)}
             />
           </div>
 
           <div className="form-group">
-            <label>Kısa Açıklama</label>
+            <label>{tr.arcade_game_description}</label>
             <input
               type="text"
-              placeholder="Örn: Piksellerle hayat bulan aksiyon simülasyonu"
+              placeholder={tr.arcade_game_description}
               value={description}
               onInput={(e) => setDescription((e.target as HTMLInputElement).value)}
             />
@@ -139,7 +139,7 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Kategori</label>
+              <label>{tr.arcade_game_category}</label>
               <select
                 value={category}
                 onChange={(e) => setCategory((e.target as HTMLSelectElement).value as any)}
@@ -155,21 +155,21 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
             </div>
 
             <div className="form-group">
-              <label>Durum</label>
+              <label>{tr.arcade_dev_status}</label>
               <select
                 value={status}
                 onChange={(e) => setStatus((e.target as HTMLSelectElement).value as any)}
               >
-                <option value="in_progress">Geliştiriliyor (In Progress)</option>
-                <option value="playable">Tamamlandı / Oynanabilir</option>
-                <option value="concept">Konsept / Fikir</option>
+                <option value="in_progress">{tr.arcade_status_in_progress_text}</option>
+                <option value="playable">{tr.arcade_status_playable_text}</option>
+                <option value="concept">{tr.arcade_status_concept_text}</option>
               </select>
             </div>
           </div>
 
           {embedType === "iframe" && (
             <div className="form-group">
-              <label>Yerel Dev Sunucu URL'i (iframe)</label>
+              <label>{tr.arcade_game_url}</label>
               <input
                 type="text"
                 placeholder="http://localhost:5173"
@@ -180,17 +180,17 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
           )}
 
           <div className="form-group">
-            <label>In Progress Proje Klasör Yolu</label>
+            <label>{tr.arcade_in_progress_folder}</label>
             <input
               type="text"
-              placeholder="C:\Users\emre_\Desktop\GitHub\In Progress\proje-adi"
+              placeholder="C:\\Users\\emre_\\Desktop\\GitHub\\In Progress\\proje-adi"
               value={devPath}
               onInput={(e) => setDevPath((e.target as HTMLInputElement).value)}
             />
           </div>
 
           <div className="form-group">
-            <label>Teknolojiler (Virgülle ayırın)</label>
+            <label>{tr.arcade_technologies}</label>
             <input
               type="text"
               placeholder="Canvas, Phaser 3, TypeScript"
@@ -200,10 +200,10 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
           </div>
 
           <div className="form-group">
-            <label>Geliştirici Notları</label>
+            <label>{tr.arcade_dev_notes}</label>
             <textarea
               rows={3}
-              placeholder="Proje başlangıç notları..."
+              placeholder={tr.arcade_dev_notes_placeholder}
               value={devNotes}
               onInput={(e) => setDevNotes((e.target as HTMLTextAreaElement).value)}
             />
@@ -211,10 +211,10 @@ export function AddGameModal({ lang, onClose, onAddGame }: AddGameModalProps) {
 
           <div className="form-actions">
             <button type="button" className="btn-cancel" onClick={onClose}>
-              İptal
+              {tr.arcade_cancel_btn}
             </button>
             <button type="submit" className="arcade-btn-primary">
-              Kütüphaneye Kaydet
+              {tr.arcade_save_to_library_btn}
             </button>
           </div>
         </form>

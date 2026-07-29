@@ -32,35 +32,12 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const monthNamesTr = [
-    "Ocak",
-    "Şubat",
-    "Mart",
-    "Nisan",
-    "Mayıs",
-    "Haziran",
-    "Temmuz",
-    "Ağustos",
-    "Eylül",
-    "Ekim",
-    "Kasım",
-    "Aralık",
+  const monthNames = [
+    t.month_jan, t.month_feb, t.month_mar, t.month_apr,
+    t.month_may, t.month_jun, t.month_jul, t.month_aug,
+    t.month_sep, t.month_oct, t.month_nov, t.month_dec,
   ];
-  const monthNamesEn = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const monthName = lang === "tr" ? monthNamesTr[month] : monthNamesEn[month];
+  const monthName = monthNames[month];
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(year, month - 1, 1));
@@ -214,28 +191,28 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
       completed?: boolean;
       time?: string;
     }[] = [
-      ...dayTasks.map((t) => ({
-        type: "task" as const,
-        text: t.text,
-        completed: t.completed,
-      })),
-      ...dayEvents.map((ev) => {
-        const timeStr = ev.start.dateTime
-          ? new Date(ev.start.dateTime).toLocaleTimeString(
+        ...dayTasks.map((t) => ({
+          type: "task" as const,
+          text: t.text,
+          completed: t.completed,
+        })),
+        ...dayEvents.map((ev) => {
+          const timeStr = ev.start.dateTime
+            ? new Date(ev.start.dateTime).toLocaleTimeString(
               lang === "tr" ? "tr-TR" : "en-US",
               {
                 hour: "2-digit",
                 minute: "2-digit",
               },
             )
-          : undefined;
-        return {
-          type: "event" as const,
-          text: ev.summary || "",
-          time: timeStr,
-        };
-      }),
-    ];
+            : undefined;
+          return {
+            type: "event" as const,
+            text: ev.summary || "",
+            time: timeStr,
+          };
+        }),
+      ];
 
     dayCells.push(
       <div
@@ -269,12 +246,12 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
             {dayEvents.map((ev, idx) => {
               const timeStr = ev.start.dateTime
                 ? new Date(ev.start.dateTime).toLocaleTimeString(
-                    lang === "tr" ? "tr-TR" : "en-US",
-                    {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    },
-                  )
+                  lang === "tr" ? "tr-TR" : "en-US",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  },
+                )
                 : "";
               return (
                 <li
@@ -363,9 +340,7 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
                       padding: "20px",
                     }}
                   >
-                    {lang === "tr"
-                      ? "Bu güne ait görev veya etkinlik yok."
-                      : "No tasks or events for this day."}
+                    {t.calendar_no_events}
                   </p>
                 ) : (
                   activeModalData.items.map((item, idx) => {

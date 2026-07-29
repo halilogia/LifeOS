@@ -6,11 +6,11 @@
 interface AiChatHeaderBarProps {
   title: string;
   aiApiKey?: string;
-  lang: string;
   noKeyWarning: string;
   keySavedText: string;
   keyTitleText: string;
   settingsTitle: string;
+  offlineModeLabel: string;
   onSettingsOpen: () => void;
 }
 
@@ -35,11 +35,11 @@ function IconSettings() {
 export function AiChatHeaderBar({
   title,
   aiApiKey,
-  lang,
   noKeyWarning,
   keySavedText: _keySavedText,
   keyTitleText: _keyTitleText,
   settingsTitle,
+  offlineModeLabel,
   onSettingsOpen,
 }: AiChatHeaderBarProps) {
   return (
@@ -48,7 +48,7 @@ export function AiChatHeaderBar({
         <h2>{title}</h2>
         {!aiApiKey && (
           <span className="local-mode-badge" title={noKeyWarning}>
-            {lang === "tr" ? "Çevrimdışı/Komut Modu" : "Offline Command Mode"}
+            {offlineModeLabel}
           </span>
         )}
       </div>

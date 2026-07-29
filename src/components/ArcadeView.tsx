@@ -5,6 +5,7 @@ import { Language } from "@/types/types.js";
 import { ArcadeHeader } from "@/components/arcade/ArcadeHeader.js";
 import { ArcadeGameCard } from "@/components/arcade/ArcadeGameCard.js";
 import { ArcadeGameModal } from "@/components/arcade/ArcadeGameModal.js";
+import { translations } from "@/utils/i18n.js";
 
 interface ArcadeViewProps {
   lang: Language;
@@ -45,6 +46,9 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
   const [activeGame, setActiveGame] = useState<GameEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
+
+  const t = translations[lang];
+  const tr = t as Record<string, string>;
 
   const folderInputRef = useRef<HTMLInputElement>(null);
 
@@ -265,15 +269,15 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
       {loading || scanning ? (
         <div className="arcade-loading-state">
           <div className="arcade-spinner" />
-          <p>{scanning ? "Oyun Klasörleri Taranıyor..." : "Oyun Kütüphanesi Yükleniyor..."}</p>
+          <p>{scanning ? tr.arcade_scanning : tr.arcade_loading}</p>
         </div>
       ) : filteredGames.length === 0 ? (
         <div className="arcade-empty-state">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <h3>Henüz Taranmış Oyun Bulunamadı</h3>
-          <p>Sağ üstteki <strong>"Klasör Tara"</strong> butonuna basıp <code>C:\Users\emre_\Desktop\GitHub\In Progress</code> klasörünü seçerek projelerini otomatik yükle.</p>
+          <h3>{tr.arcade_no_games}</h3>
+          <p>{tr.arcade_no_games_hint}</p>
         </div>
       ) : (
         <div className="arcade-games-grid">

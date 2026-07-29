@@ -7,6 +7,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { Todo, Language } from "@/types/types.js";
 import { KanbanView } from "@/components/KanbanView.js";
+import { translations } from "@/utils/i18n.js";
 
 // Extracted Sub-components
 import { EisenhowerQuadrantCard } from "@/components/eisenhower/EisenhowerQuadrantCard.js";
@@ -33,6 +34,7 @@ export function EisenhowerView({
   onMoveTaskStatus,
   onMoveTaskDirection,
 }: EisenhowerViewProps) {
+  const t = translations[lang];
   const [activeTab, setActiveTab] = useState<"matrix" | "kanban">(defaultTab);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverQuad, setDragOverQuad] = useState<string | null>(null);
@@ -114,8 +116,7 @@ export function EisenhowerView({
     setDraggedIndex(null);
   };
 
-  const emptyText =
-    lang === "tr" ? "Buraya görev sürükleyin" : "Drag tasks here";
+  const emptyText = t.eisenhower_drag_hint;
 
   return (
     <div
@@ -205,7 +206,7 @@ export function EisenhowerView({
           className={`pomo-tab-link ${activeTab === "kanban" ? "active" : ""}`}
           onClick={() => setActiveTab("kanban")}
         >
-          {lang === "tr" ? "Kanban Tahtası" : "Kanban Board"}
+          {t.eisenhower_kanban_title}
         </button>
       </div>
 
@@ -233,7 +234,7 @@ export function EisenhowerView({
             <EisenhowerQuadrantCard
               quadId="q1"
               title={lang === "tr" ? "Hemen Yap" : "Do First"}
-              headerTag={lang === "tr" ? "Acil & Önemli" : "Urgent & Important"}
+              headerTag={t.eisenhower_urgent_important}
               headerColor="#ef4444"
               tagBg="rgba(239, 68, 68, 0.1)"
               icon={
@@ -263,9 +264,7 @@ export function EisenhowerView({
             <EisenhowerQuadrantCard
               quadId="q2"
               title={lang === "tr" ? "Planla" : "Schedule"}
-              headerTag={
-                lang === "tr" ? "Acil Değil & Önemli" : "Not Urgent & Important"
-              }
+              headerTag={t.eisenhower_not_urgent_important}
               headerColor="#8b5cf6"
               tagBg="rgba(139, 92, 246, 0.1)"
               icon={
@@ -298,9 +297,7 @@ export function EisenhowerView({
             <EisenhowerQuadrantCard
               quadId="q3"
               title={lang === "tr" ? "Delege Et" : "Delegate"}
-              headerTag={
-                lang === "tr" ? "Acil & Önemli Değil" : "Urgent & Not Important"
-              }
+              headerTag={t.eisenhower_urgent_not_important}
               headerColor="#f59e0b"
               tagBg="rgba(245, 158, 11, 0.1)"
               icon={
@@ -333,11 +330,7 @@ export function EisenhowerView({
             <EisenhowerQuadrantCard
               quadId="q4"
               title={lang === "tr" ? "Ele / Ertele" : "Eliminate"}
-              headerTag={
-                lang === "tr"
-                  ? "Acil Değil & Önemli Değil"
-                  : "Not Urgent & Not Important"
-              }
+              headerTag={t.eisenhower_not_urgent_not_important}
               headerColor="#3b82f6"
               tagBg="rgba(59, 130, 246, 0.1)"
               icon={
