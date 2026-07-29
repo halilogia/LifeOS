@@ -324,11 +324,11 @@ export function AIChatView({
         <AiChatHeaderBar
           title={t.ai_chat_title}
           aiApiKey={aiApiKey}
-          lang={lang}
           noKeyWarning={t.ai_chat_no_key_warning}
           keySavedText={t.ai_chat_key_saved}
           keyTitleText={t.ai_chat_key_title}
           settingsTitle={t.settings_title}
+          offlineModeLabel={t.aichat_offline_mode}
           onSettingsOpen={onSettingsOpen}
         />
 
@@ -341,7 +341,7 @@ export function AIChatView({
               index={idx}
               aiShowThinking={aiShowThinking}
               isThinkingOpen={openThinkingIndexes[idx] !== false}
-              lang={lang}
+              t={t}
               onToggleThinking={handleToggleThinking}
             />
           ))}
@@ -354,7 +354,7 @@ export function AIChatView({
                 <div className="typing-dot"></div>
                 {enableWebSearch && (
                   <span style={{ fontSize: "0.75rem", color: "#34d399", fontWeight: 600, marginLeft: "6px" }}>
-                    🌐 Google Canlı İnternet Arama & Araştırma Yapılıyor...
+                    {t.aichat_web_search_active}
                   </span>
                 )}
               </div>
@@ -372,6 +372,8 @@ export function AIChatView({
           suggestion2={t.ai_chat_suggestion_2}
           suggestion3={t.ai_chat_suggestion_3}
           enableWebSearch={enableWebSearch}
+          webSearchTitle={t.aichat_web_search_title}
+          webSearchLabel={enableWebSearch ? t.aichat_web_search_on : t.aichat_web_search_off}
           onInputChange={setInputVal}
           onSendMessage={handleSendMessage}
           onToggleWebSearch={() => setEnableWebSearch((prev) => !prev)}

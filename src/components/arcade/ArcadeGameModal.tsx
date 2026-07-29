@@ -49,7 +49,6 @@ export function ArcadeGameModal({
     setTimeout(() => setCopiedToast(false), 3000);
   };
 
-
   const handleScoreUpdate = (newScore: number) => {
     onUpdateScore(game.id, newScore);
   };
@@ -88,13 +87,13 @@ export function ArcadeGameModal({
   const renderGameCanvas = () => {
     if (game.embedType === "builtin") {
       if (game.builtinKey === "snake") {
-        return <SnakeGame onScoreUpdate={handleScoreUpdate} highScore={game.highScore} />;
+        return <SnakeGame onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
       }
       if (game.builtinKey === "knight") {
-        return <KnightRunner onScoreUpdate={handleScoreUpdate} highScore={game.highScore} />;
+        return <KnightRunner onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
       }
       if (game.builtinKey === "space") {
-        return <SpaceShooter onScoreUpdate={handleScoreUpdate} highScore={game.highScore} />;
+        return <SpaceShooter onScoreUpdate={handleScoreUpdate} highScore={game.highScore} t={tr} />;
       }
     }
 
@@ -118,7 +117,7 @@ export function ArcadeGameModal({
                   className="arcade-save-url-btn"
                   onClick={() => onUpdateIframeUrl(game.id, editingUrl.trim())}
                 >
-                  Portu Kaydet
+                  {tr.arcade_save_port}
                 </button>
               )}
             </div>
@@ -126,12 +125,12 @@ export function ArcadeGameModal({
               <button
                 className="arcade-copy-cmd-btn"
                 onClick={() => triggerCopyCmd(devCmd)}
-                title="Başlatma komutunu kopyala"
+                title={tr.arcade_copy_cmd}
               >
-                📋 Komutu Kopyala
+                📋 {tr.arcade_copy_cmd}
               </button>
               <a href={game.iframeUrl} target="_blank" rel="noreferrer" className="arcade-open-tab-btn">
-                🚀 Sekmede Aç ↗
+                {tr.arcade_open_in_tab}
               </a>
             </div>
           </div>
@@ -139,7 +138,7 @@ export function ArcadeGameModal({
           {/* Copied Toast Banner */}
           {copiedToast && (
             <div className="arcade-toast-banner">
-              <span>✓ Komut panoya kopyalandı! Terminal açıp (Ctrl+V) ile oyunu başlatın.</span>
+              <span>{tr.arcade_cmd_copied}</span>
             </div>
           )}
 
@@ -153,12 +152,12 @@ export function ArcadeGameModal({
           {/* Diagnostic Footer */}
           <div className="arcade-iframe-helper-footer">
             <div className="helper-info-text">
-              <strong>⚠️ localhost bağlanmayı reddetti mi?</strong> Oyunu oynayabilmek için projenin yerel sunucusunu (Vite / React / Node) başlatmanız gerekir.
+              <strong>{tr.arcade_localhost_warning}</strong> {tr.arcade_localhost_help}
             </div>
             <div className="helper-cmd-row">
               <code>{devCmd}</code>
               <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(devCmd)}>
-                📋 Komutu Kopyala
+                📋 {tr.arcade_copy_cmd}
               </button>
             </div>
           </div>
@@ -173,19 +172,17 @@ export function ArcadeGameModal({
           <rect x="2" y="6" width="20" height="12" rx="4" />
           <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" />
         </svg>
-        <p>Bu proje yerel geliştirme sunucusu (localhost) üzerinden çalıştırılır.</p>
+        <p>{tr.arcade_dev_proj_desc}</p>
         <p className="path-code">{game.devPath || "C:\\Users\\emre_\\Desktop\\GitHub\\In Progress"}</p>
         <div className="arcade-cmd-hint">
           <code>{fallbackCmd}</code>
           <button className="arcade-copy-cmd-btn" onClick={() => triggerCopyCmd(fallbackCmd)}>
-            📋 Komutu Kopyala
+            📋 {tr.arcade_copy_cmd}
           </button>
         </div>
       </div>
     );
   };
-
-
 
   return (
     <div className="arcade-modal-backdrop" onClick={onClose}>
@@ -205,7 +202,7 @@ export function ArcadeGameModal({
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
-              <span>{tr.arcade_tab_play || "Oyna"}</span>
+              <span>{tr.arcade_tab_play}</span>
             </button>
 
             <button
@@ -216,7 +213,7 @@ export function ArcadeGameModal({
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
               </svg>
-              <span>{tr.arcade_tab_dev || "Steam Dev Log"}</span>
+              <span>{tr.arcade_tab_dev}</span>
             </button>
           </div>
 
@@ -234,24 +231,24 @@ export function ArcadeGameModal({
               {/* Top Stats Grid */}
               <div className="steam-stats-grid">
                 <div className="steam-stat-card">
-                  <span className="stat-label">En Yüksek Skor</span>
+                  <span className="stat-label">{tr.arcade_high_score}</span>
                   <span className="stat-val highlight">{game.highScore}</span>
                 </div>
                 <div className="steam-stat-card">
-                  <span className="stat-label">Oynanma Sayısı</span>
+                  <span className="stat-label">{tr.arcade_play_count}</span>
                   <span className="stat-val">{game.playCount || 0}</span>
                 </div>
                 <div className="steam-stat-card">
-                  <span className="stat-label">Geliştirme Durumu</span>
+                  <span className="stat-label">{tr.arcade_dev_status}</span>
                   {onUpdateStatus ? (
                     <select
                       className="steam-status-select"
                       value={game.status}
                       onChange={(e) => onUpdateStatus(game.id, (e.target as HTMLSelectElement).value as any)}
                     >
-                      <option value="playable">Oynanabilir (Playable)</option>
-                      <option value="in_progress">Geliştiriliyor (In Progress)</option>
-                      <option value="concept">Konsept (Concept)</option>
+                      <option value="playable">{tr.arcade_status_playable_text}</option>
+                      <option value="in_progress">{tr.arcade_status_in_progress_text}</option>
+                      <option value="concept">{tr.arcade_status_concept_text}</option>
                     </select>
                   ) : (
                     <span className="stat-val status-val">{game.status.toUpperCase()}</span>
@@ -262,7 +259,7 @@ export function ArcadeGameModal({
               {/* Dev Path Info */}
               {game.devPath && (
                 <div className="steam-dev-path-box">
-                  <span className="box-title">Proje Klasör Yolu (In Progress)</span>
+                  <span className="box-title">{tr.arcade_dev_path_title}</span>
                   <code className="path-string">{game.devPath}</code>
                 </div>
               )}
@@ -270,7 +267,7 @@ export function ArcadeGameModal({
               {/* Tech Stack Badges */}
               {game.techStack && game.techStack.length > 0 && (
                 <div className="steam-tech-stack">
-                  <span className="box-title">Kullanılan Teknolojiler & Kütüphaneler</span>
+                  <span className="box-title">{tr.arcade_tech_title}</span>
                   <div className="tech-tags-list">
                     {game.techStack.map((tech, idx) => (
                       <span key={idx} className="tech-badge">
@@ -283,11 +280,11 @@ export function ArcadeGameModal({
 
               {/* Dev Notes Text Area */}
               <div className="steam-notes-section">
-                <span className="box-title">Geliştirici Notları & Yama Geçmişi</span>
+                <span className="box-title">{tr.arcade_dev_notes_title}</span>
                 <textarea
                   className="steam-notes-textarea"
                   value={devNotesText}
-                  placeholder="Oyun güncellemeleri, tasarım fikirleri ve mekanik notları..."
+                  placeholder={tr.arcade_dev_notes_placeholder}
                   onInput={(e) => setDevNotesText((e.target as HTMLTextAreaElement).value)}
                   onBlur={handleSaveDevNotes}
                 />
@@ -295,23 +292,23 @@ export function ArcadeGameModal({
 
               {/* Dev Todo List */}
               <div className="steam-todo-section">
-                <span className="box-title">Geliştirme Yapılacaklar Listesi (To-Do)</span>
+                <span className="box-title">{tr.arcade_todo_title}</span>
                 <div className="steam-todo-input-row">
                   <input
                     type="text"
-                    placeholder="Yeni yapılacak görev ekle..."
+                    placeholder={tr.arcade_todo_placeholder}
                     value={newTodoInput}
                     onInput={(e) => setNewTodoInput((e.target as HTMLInputElement).value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddTodo()}
                   />
                   <button onClick={handleAddTodo} className="todo-add-btn">
-                    Ekle
+                    {tr.arcade_add_btn}
                   </button>
                 </div>
 
                 <div className="steam-todo-items-list">
                   {todoItems.length === 0 ? (
-                    <p className="no-todo-text">Henüz yapılacak görev eklenmedi.</p>
+                    <p className="no-todo-text">{tr.arcade_no_todo}</p>
                   ) : (
                     todoItems.map((item) => (
                       <div key={item.id} className={`steam-todo-item ${item.completed ? "completed" : ""}`}>
@@ -335,7 +332,7 @@ export function ArcadeGameModal({
               {onDeleteGame && (
                 <div className="steam-danger-zone">
                   <button className="delete-game-btn" onClick={() => onDeleteGame(game.id)}>
-                    Oyunu Kütüphaneden Sil
+                    {tr.arcade_delete_game}
                   </button>
                 </div>
               )}
@@ -346,4 +343,3 @@ export function ArcadeGameModal({
     </div>
   );
 }
-

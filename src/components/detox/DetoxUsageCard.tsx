@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 import { DetoxMotivationCard } from "@/components/detox/DetoxMotivationCard.js";
 
 interface DetoxUsageCardProps {
@@ -20,6 +21,8 @@ export function DetoxUsageCard({
   formatDurationText,
   onToggleShowAllStats,
 }: DetoxUsageCardProps) {
+  const t = translations[lang];
+
   return (
     <div className="detox-card" style={{ padding: "2rem" }}>
       <div
@@ -27,16 +30,8 @@ export function DetoxUsageCard({
         style={{ borderBottom: "none", paddingBottom: 0 }}
       >
         <div className="detox-title-group">
-          <h2>
-            {lang === "tr"
-              ? "Bugün Chrome'da Ne Kadar Vakit Geçirdin?"
-              : "Screen Time on Chrome Today"}
-          </h2>
-          <p>
-            {lang === "tr"
-              ? "Tarayıcıda harcadığınız aktif süreyi takip edin."
-              : "Track your active time spent on domains."}
-          </p>
+          <h2>{t.detox_usage_today}</h2>
+          <p>{t.detox_usage_desc}</p>
         </div>
         <div
           className="detox-status-badge active"
@@ -62,9 +57,7 @@ export function DetoxUsageCard({
             fontStyle: "italic",
           }}
         >
-          {lang === "tr"
-            ? "Bugün henüz başka sitelerde aktif vakit geçirmediniz."
-            : "No active domain usage recorded today yet."}
+          {t.detox_no_activity}
         </div>
       ) : (
         <div
@@ -168,12 +161,8 @@ export function DetoxUsageCard({
               }}
             >
               {showAllStats
-                ? lang === "tr"
-                  ? "Daha Az Göster"
-                  : "Show Less"
-                : lang === "tr"
-                  ? `Tümünü Göster (${sortedScreenTimeSites.length})`
-                  : `Show All (${sortedScreenTimeSites.length})`}
+                ? t.detox_show_less
+                : t.detox_show_all.replace("{count}", String(sortedScreenTimeSites.length))}
             </button>
           )}
         </div>

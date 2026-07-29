@@ -3,9 +3,10 @@ import { useState, useEffect, useRef } from "preact/hooks";
 interface KnightRunnerProps {
   onScoreUpdate: (score: number) => void;
   highScore: number;
+  t: Record<string, string>;
 }
 
-export function KnightRunner({ onScoreUpdate, highScore }: KnightRunnerProps) {
+export function KnightRunner({ onScoreUpdate, highScore, t }: KnightRunnerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -225,8 +226,8 @@ export function KnightRunner({ onScoreUpdate, highScore }: KnightRunnerProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: "480px", color: "var(--text-secondary)" }}>
-        <div>Skor: <strong style={{ color: "#a78bfa" }}>{score}</strong></div>
-        <div>En Yüksek: <strong style={{ color: "var(--success)" }}>{Math.max(highScore, score)}</strong></div>
+        <div>{t.arcade_score_label_short} <strong style={{ color: "#a78bfa" }}>{score}</strong></div>
+        <div>{t.arcade_high_score_label} <strong style={{ color: "var(--success)" }}>{Math.max(highScore, score)}</strong></div>
       </div>
 
       <div
@@ -245,22 +246,22 @@ export function KnightRunner({ onScoreUpdate, highScore }: KnightRunnerProps) {
 
         {!gameStarted && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(15, 23, 42, 0.85)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-            <h3 style={{ color: "#fff" }}>2D Knight Runner</h3>
+            <h3 style={{ color: "#fff" }}>{t.arcade_knight_title}</h3>
             <p style={{ color: "var(--text-muted)", fontSize: "14px", textAlign: "center", padding: "0 20px" }}>
-              Zıplamak için Boşluk (Space), Yukarı Tuşu veya Tıkla!
+              {t.arcade_knight_controls}
             </p>
             <button onClick={startGame} className="arcade-btn-primary">
-              Maceraya Başla
+              {t.arcade_start_adventure}
             </button>
           </div>
         )}
 
         {gameOver && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(15, 23, 42, 0.9)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-            <h3 style={{ color: "#ef4444" }}>Şövalye Düştü!</h3>
-            <p style={{ color: "#fff" }}>Skor: {score}</p>
+            <h3 style={{ color: "#ef4444" }}>{t.arcade_knight_fallen}</h3>
+            <p style={{ color: "#fff" }}>{t.arcade_score_label_short} {score}</p>
             <button onClick={startGame} className="arcade-btn-primary">
-              Tekrar Dene
+              {t.arcade_retry}
             </button>
           </div>
         )}

@@ -23,10 +23,10 @@ export function ArcadeHeader({
   const tr = t as Record<string, string>;
 
   const categories: { key: GameCategory; label: string }[] = [
-    { key: "all", label: tr.arcade_cat_all || "Tüm Oyunlar" },
-    { key: "playable", label: tr.arcade_cat_playable || "Oynanabilir" },
-    { key: "in_progress", label: tr.arcade_cat_in_progress || "Geliştirilenler" },
-    { key: "favorites", label: tr.arcade_cat_favorites || "Favoriler" },
+    { key: "all", label: tr.arcade_cat_all },
+    { key: "playable", label: tr.arcade_cat_playable },
+    { key: "in_progress", label: tr.arcade_cat_in_progress },
+    { key: "favorites", label: tr.arcade_cat_favorites },
   ];
 
   return (
@@ -37,11 +37,11 @@ export function ArcadeHeader({
             <rect x="2" y="6" width="20" height="12" rx="4" />
             <path d="M6 12h4m-2-2v4m9-2h.01m3-2h.01" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span>Life OS Arcade & Indie Dev Hub</span>
+          <span>{tr.arcade_badge_title}</span>
         </div>
-        <h2>{tr.arcade_main_title || "Oyun Kütüphanesi & Laboratuvarı"}</h2>
+        <h2>{tr.arcade_main_title}</h2>
         <p className="arcade-subtitle">
-          {tr.arcade_subtitle || "Kendi geliştirdiğin oyun projelerini ve hazır mini oyunları tek bir yerde yönet, oyna ve geliştir."}
+          {tr.arcade_subtitle}
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export function ArcadeHeader({
           </svg>
           <input
             type="text"
-            placeholder={tr.arcade_search_placeholder || "Oyunlarda ara..."}
+            placeholder={tr.arcade_search_placeholder}
             value={searchQuery}
             onInput={(e) => onSearchChange((e.target as HTMLInputElement).value)}
           />
@@ -75,10 +75,9 @@ export function ArcadeHeader({
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
-          <span>{tr.arcade_scan_folder_btn || "Klasör Tara"}</span>
+          <span>{tr.arcade_scan_folder_btn}</span>
         </button>
       </div>
     </div>
   );
 }
-

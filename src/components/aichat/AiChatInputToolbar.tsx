@@ -11,6 +11,8 @@ interface AiChatInputToolbarProps {
   suggestion2: string;
   suggestion3: string;
   enableWebSearch: boolean;
+  webSearchTitle: string;
+  webSearchLabel: string;
   onInputChange: (val: string) => void;
   onSendMessage: (text?: string) => void;
   onToggleWebSearch: () => void;
@@ -52,6 +54,8 @@ export function AiChatInputToolbar({
   suggestion2,
   suggestion3,
   enableWebSearch,
+  webSearchTitle,
+  webSearchLabel,
   onInputChange,
   onSendMessage,
   onToggleWebSearch,
@@ -75,12 +79,12 @@ export function AiChatInputToolbar({
             fontWeight: 600,
           }}
           onClick={onToggleWebSearch}
-          title="Google Canlı Arama (Search Grounding) Modu"
+          title={webSearchTitle}
         >
           <span style={{ display: "inline-flex", alignItems: "center" }}>
             <IconGlobe />
           </span>
-          <span>Google Canlı Arama: {enableWebSearch ? "AÇIK" : "KAPALI"}</span>
+          <span>{webSearchLabel}</span>
         </button>
 
         <button className="chip-btn" onClick={() => onSendMessage(suggestion1)}>

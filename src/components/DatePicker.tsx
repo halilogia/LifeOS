@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 interface DatePickerProps {
   value: string; // "YYYY-MM-DD"
@@ -8,6 +9,7 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ value, onChange, lang }: DatePickerProps) {
+  const t = translations[lang];
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,33 +47,10 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
     };
   }, [isOpen]);
 
-  const monthsTr = [
-    "Ocak",
-    "Şubat",
-    "Mart",
-    "Nisan",
-    "Mayıs",
-    "Haziran",
-    "Temmuz",
-    "Ağustos",
-    "Eylül",
-    "Ekim",
-    "Kasım",
-    "Aralık",
-  ];
-  const monthsEn = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+  const monthNames = [
+    t.month_jan, t.month_feb, t.month_mar, t.month_apr,
+    t.month_may, t.month_jun, t.month_jul, t.month_aug,
+    t.month_sep, t.month_oct, t.month_nov, t.month_dec,
   ];
 
   const weekdaysTr = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pa"];
@@ -163,10 +142,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
       return lang === "tr" ? "Son Tarih" : "Due Date";
     }
     const [y, m, d] = dateStr.split("-").map(Number);
-    const mName =
-      lang === "tr"
-        ? monthsTr[m - 1].substring(0, 3)
-        : monthsEn[m - 1].substring(0, 3);
+    const mName = monthNames[m - 1].substring(0, 3);
     return lang === "tr" ? `${d} ${mName} ${y}` : `${mName} ${d}, ${y}`;
   };
 
@@ -192,7 +168,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
         type="button"
         className={`datepicker-trigger ${value ? "has-val" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
-        title={lang === "tr" ? "Son Tarih Seç" : "Select Due Date"}
+        title={t.datepicker_select_date}
       >
         <svg
           width="14"
@@ -234,9 +210,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
               </svg>
             </button>
             <span className="datepicker-title">
-              {lang === "tr"
-                ? `${monthsTr[currentMonth]} ${currentYear}`
-                : `${monthsEn[currentMonth]} ${currentYear}`}
+              {monthNames[currentMonth]} {currentYear}
             </span>
             <button
               type="button"
@@ -289,7 +263,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
               className="datepicker-footer-btn today-btn"
               onClick={handleToday}
             >
-              {lang === "tr" ? "Bugün" : "Today"}
+              {t.datepicker_today}
             </button>
             <button
               type="button"

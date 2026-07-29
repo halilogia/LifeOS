@@ -20,7 +20,7 @@ interface AiChatMessageItemProps {
   index: number;
   aiShowThinking?: boolean;
   isThinkingOpen: boolean;
-  lang: string;
+  t: Record<string, string>;
   onToggleThinking: (idx: number) => void;
 }
 
@@ -94,7 +94,7 @@ export function AiChatMessageItem({
   index,
   aiShowThinking = true,
   isThinkingOpen,
-  lang,
+  t,
   onToggleThinking,
 }: AiChatMessageItemProps) {
   const isUser = message.sender === "user";
@@ -136,7 +136,7 @@ export function AiChatMessageItem({
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <IconSearch />
-                <span>🔍 Google AI Arama: "{message.searchQuery || "Web Araştırması"}"</span>
+                <span>{t.aichat_search_query.replace("{query}", message.searchQuery || t.aichat_web_research)}</span>
               </div>
               <button
                 type="button"
@@ -149,7 +149,7 @@ export function AiChatMessageItem({
                 }}
                 onClick={() => setShowSources((prev) => !prev)}
               >
-                {showSources ? "▼ Gizle" : "▲ Kaynaklar"}
+                {showSources ? t.aichat_sources_hide : t.aichat_sources_show}
               </button>
             </div>
 
@@ -157,7 +157,7 @@ export function AiChatMessageItem({
               <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "6px" }}>
                 <div style={{ fontSize: "0.72rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
                   <IconGlobe />
-                  <span>İncelenen ve Doğrulanan Web Kaynakları ({message.sources.length}):</span>
+                  <span>{t.aichat_sources.replace("{count}", String(message.sources.length))}</span>
                 </div>
 
                 <div
@@ -244,7 +244,7 @@ export function AiChatMessageItem({
             >
               <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <IconInfoCircle />
-                {lang === "tr" ? "Düşünme Süreci" : "Thinking Process"}
+                {t.aichat_thinking_process}
               </span>
               <span style={{ fontSize: "0.7rem", opacity: 0.8 }}>
                 {isThinkingOpen ? "▲" : "▼"}
@@ -291,12 +291,12 @@ export function AiChatMessageItem({
                   }}
                 >
                   <IconGlobe />
-                  🌐 Google AI Canlı Doğrulandı
+                  {t.aichat_verified_badge}
                 </span>
               )}
               <button
                 onClick={handleCopy}
-                title={copied ? (lang === "tr" ? "Kopyalandı!" : "Copied!") : (lang === "tr" ? "Kopyala" : "Copy")}
+                title={copied ? t.aichat_copied : t.aichat_copy}
                 style={{
                   background: "transparent",
                   border: "none",
@@ -314,7 +314,7 @@ export function AiChatMessageItem({
               >
                 {copied ? <IconCheck /> : <IconCopy />}
                 <span style={{ fontSize: "0.68rem" }}>
-                  {copied ? (lang === "tr" ? "Kopyalandı" : "Copied") : (lang === "tr" ? "Kopyala" : "Copy")}
+                  {copied ? t.aichat_copied : t.aichat_copy}
                 </span>
               </button>
             </div>

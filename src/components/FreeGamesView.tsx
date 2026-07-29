@@ -274,7 +274,6 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
         {tab === "giveaways" && (
           <div id="fg-live-container">
             <FreeGamesFilterBar
-              lang={lang}
               t={t}
               platform={platform}
               type={type}
@@ -331,9 +330,7 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
                         fontSize: "0.95rem",
                       }}
                     >
-                      {lang === "tr"
-                        ? "Eşleşen fırsat bulunamadı."
-                        : "No matching giveaways found."}
+                      {t.free_games_no_match}
                     </p>
                   </div>
                 ) : (
@@ -342,9 +339,7 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
                     const expiryText =
                       game.end_date && game.end_date !== "N/A"
                         ? `${t.ends_in} ${game.end_date}`
-                        : lang === "tr"
-                          ? "Kalıcı / Süresiz"
-                          : "Keep Forever / Permanent";
+                        : t.free_games_permanent
                     const displayPlatforms = getCleanerPlatforms(
                       game.platforms,
                       game.title,

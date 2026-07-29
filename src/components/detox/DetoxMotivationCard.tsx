@@ -4,6 +4,7 @@
  */
 
 import { calculateMotivationalAchievements } from "@/domain/services/detoxMotivationalService.js";
+import { translations } from "@/utils/i18n.js";
 
 interface DetoxMotivationCardProps {
   durationMinutes: number;
@@ -18,7 +19,7 @@ export function DetoxMotivationCard({
 
   if (achievements.length === 0) return null;
 
-  const isTr = lang === "tr";
+  const t = translations[lang as "tr" | "en"];
 
   return (
     <div
@@ -40,7 +41,7 @@ export function DetoxMotivationCard({
           <line x1="9" y1="21" x2="15" y2="21"></line>
         </svg>
         <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: 700, color: "#f8fafc" }}>
-          {isTr ? "Bu Süreyle Ne Yapabilirdin?" : "What Could You Achieve With This Time?"}
+          {t.detox_what_could_you_do}
         </h4>
       </div>
 

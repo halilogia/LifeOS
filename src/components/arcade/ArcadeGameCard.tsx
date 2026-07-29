@@ -46,7 +46,7 @@ export function ArcadeGameCard({
       return (
         <span className="arcade-status-badge playable">
           <span className="status-dot green"></span>
-          {tr.arcade_status_playable || "Oynanabilir"}
+          {tr.arcade_status_playable}
         </span>
       );
     }
@@ -54,14 +54,14 @@ export function ArcadeGameCard({
       return (
         <span className="arcade-status-badge in-progress">
           <span className="status-dot amber"></span>
-          {tr.arcade_status_in_progress || "Geliştiriliyor"}
+          {tr.arcade_status_in_progress}
         </span>
       );
     }
     return (
       <span className="arcade-status-badge concept">
         <span className="status-dot purple"></span>
-        {tr.arcade_status_concept || "Konsept"}
+        {tr.arcade_status_concept}
       </span>
     );
   };
@@ -86,15 +86,13 @@ export function ArcadeGameCard({
           </div>
         )}
 
-
-
         <button
           className={`arcade-fav-btn ${game.isFavorite ? "fav" : ""}`}
           onClick={(e) => {
             e.stopPropagation();
             onToggleFavorite(game.id);
           }}
-          title={game.isFavorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
+          title={game.isFavorite ? tr.arcade_favorites_remove : tr.arcade_favorites_add}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill={game.isFavorite ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -136,10 +134,10 @@ export function ArcadeGameCard({
           <div className="arcade-score-info">
             {game.highScore > 0 ? (
               <span className="high-score-text">
-                Skor: <strong>{game.highScore}</strong>
+                {tr.arcade_score_label} <strong>{game.highScore}</strong>
               </span>
             ) : (
-              <span className="no-score-text">Yeni Oyun</span>
+              <span className="no-score-text">{tr.arcade_new_game_label}</span>
             )}
           </div>
 
@@ -151,7 +149,7 @@ export function ArcadeGameCard({
                   e.stopPropagation();
                   onDeleteGame(game.id);
                 }}
-                title="Oyunu Kütüphaneden Sil"
+                title={tr.arcade_delete_title}
               >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
                   <polyline points="3 6 5 6 21 6" />
@@ -160,7 +158,7 @@ export function ArcadeGameCard({
               </button>
             )}
 
-            <button className="arcade-details-btn" onClick={() => onOpenDetails(game)} title="Steam Dev Detayları">
+            <button className="arcade-details-btn" onClick={() => onOpenDetails(game)} title={tr.arcade_details_title}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
@@ -169,11 +167,11 @@ export function ArcadeGameCard({
               </svg>
             </button>
 
-            <button className="arcade-play-btn" onClick={() => onPlay(game)} title="Oyunu Başlat">
+            <button className="arcade-play-btn" onClick={() => onPlay(game)} title={tr.arcade_play_title}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
-              <span>{tr.arcade_play_btn || "Oyna"}</span>
+              <span>{tr.arcade_play_btn}</span>
             </button>
           </div>
 

@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { translations } from "@/utils/i18n.js";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -21,8 +22,9 @@ export function ConfirmModal({
     return null;
   }
 
-  const okLabel = lang === "tr" ? "Tamam" : "OK";
-  const cancelLabel = lang === "tr" ? "İptal" : "Cancel";
+  const t = translations[lang];
+  const okLabel = t.confirm_ok;
+  const cancelLabel = t.confirm_cancel;
 
   const handleOverlayClick = () => {
     if (isAlert) {

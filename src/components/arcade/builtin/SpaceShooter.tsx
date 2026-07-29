@@ -3,9 +3,10 @@ import { useState, useEffect, useRef } from "preact/hooks";
 interface SpaceShooterProps {
   onScoreUpdate: (score: number) => void;
   highScore: number;
+  t: Record<string, string>;
 }
 
-export function SpaceShooter({ onScoreUpdate, highScore }: SpaceShooterProps) {
+export function SpaceShooter({ onScoreUpdate, highScore, t }: SpaceShooterProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -218,8 +219,8 @@ export function SpaceShooter({ onScoreUpdate, highScore }: SpaceShooterProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: "480px", color: "var(--text-secondary)" }}>
-        <div>Skor: <strong style={{ color: "#a78bfa" }}>{score}</strong></div>
-        <div>En Yüksek: <strong style={{ color: "var(--success)" }}>{Math.max(highScore, score)}</strong></div>
+        <div>{t.arcade_score_label_short} <strong style={{ color: "#a78bfa" }}>{score}</strong></div>
+        <div>{t.arcade_high_score_label} <strong style={{ color: "var(--success)" }}>{Math.max(highScore, score)}</strong></div>
       </div>
 
       <div style={{ position: "relative", width: "480px", height: "400px", borderRadius: "12px", overflow: "hidden", border: "2px solid var(--card-border)" }}>
@@ -227,22 +228,22 @@ export function SpaceShooter({ onScoreUpdate, highScore }: SpaceShooterProps) {
 
         {!gameStarted && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(15, 23, 42, 0.85)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-            <h3 style={{ color: "#fff" }}>Galaxy Defender 2D</h3>
+            <h3 style={{ color: "#fff" }}>{t.arcade_space_title}</h3>
             <p style={{ color: "var(--text-muted)", fontSize: "14px", textAlign: "center", padding: "0 20px" }}>
-              Sol/Sağ Ok Tuşları veya A/D ile hareket et. Boşluk (Space) tuşu ile ateş et!
+              {t.arcade_space_controls}
             </p>
             <button onClick={startGame} className="arcade-btn-primary">
-              Savaşa Katıl
+              {t.arcade_join_battle}
             </button>
           </div>
         )}
 
         {gameOver && (
           <div style={{ position: "absolute", inset: 0, background: "rgba(15, 23, 42, 0.9)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-            <h3 style={{ color: "#ef4444" }}>Uzay Gemisi Yok Oldu!</h3>
-            <p style={{ color: "#fff" }}>Skor: {score}</p>
+            <h3 style={{ color: "#ef4444" }}>{t.arcade_ship_destroyed}</h3>
+            <p style={{ color: "#fff" }}>{t.arcade_score_label_short} {score}</p>
             <button onClick={startGame} className="arcade-btn-primary">
-              Yeniden Başla
+              {t.arcade_restart}
             </button>
           </div>
         )}
