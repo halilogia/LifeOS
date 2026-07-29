@@ -76,8 +76,8 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-  const handleUpdateDevNotes = async (gameId: string, notes: string, todoList: DevTodoItem[]) => {
-    const updated = await arcadeService.updateDevNotes(gameId, notes, todoList);
+  const handleUpdateDevNotes = async (gameId: string, notes: string, todoList: DevTodoItem[], title?: string) => {
+    const updated = await arcadeService.updateDevNotes(gameId, notes, todoList, title);
     setGames(updated);
     if (activeGame && activeGame.id === gameId) {
       setActiveGame(updated.find((g) => g.id === gameId) || null);

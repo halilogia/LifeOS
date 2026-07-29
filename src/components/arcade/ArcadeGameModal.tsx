@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import { GameEntry, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
-import { arcadeService } from "@/services/arcadeService.js";
+import { arcadeService, GamePackage } from "@/services/arcadeService.js";
 import { translations } from "@/utils/i18n.js";
 
 interface ArcadeGameModalProps {
@@ -9,7 +9,7 @@ interface ArcadeGameModalProps {
   lang: Language;
   onClose: () => void;
   onUpdateStatus: (gameId: string, status: GameEntry["status"]) => void;
-  onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[]) => void;
+  onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[], title?: string) => void;
   onDeleteGame: (gameId: string) => void;
 }
 
@@ -27,18 +27,24 @@ export function ArcadeGameModal({
   onDeleteGame,
 }: ArcadeGameModalProps) {
   const [tab, setTab] = useState<Tab>(game.mode === "dist" ? "play" : "dev");
-  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [gamePkg, setGamePkg] = useState<GamePackage | null>(null);
   const [loading, setLoading] = useState(game.mode === "dist");
   const [error, setError] = useState<string | null>(null);
   const [permissionNeeded, setPermissionNeeded] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
   const [devCmdCopied, setDevCmdCopied] = useState(false);
   const [notes, setNotes] = useState(game.devNotes ?? "");
+  const [title, setTitle] = useState(game.title ?? "");
   const [todoList, setTodoList] = useState<DevTodoItem[]>(game.todoList ?? STARTER_TODO);
   const toastTimerRef = useRef<number | null>(null);
 
   const t = translations[lang];
   const tr = t as Record<string, string>;
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const sandboxUrl = typeof chrome !== "undefined" && chrome.runtime?.getURL
+    ? chrome.runtime.getURL("sandbox.html")
+    : "sandbox.html";
 
   // SECURITY: escape folderPath before embedding in shell command. The path
   // comes from chrome.fileSystem's display name and is not user-editable, but
@@ -48,6 +54,22 @@ export function ArcadeGameModal({
   const devCmd = `cd "${safeFolderPath}" && npm run dev`;
   // Display a sanitized version for the user; never inject raw.
   const devCmdDisplay = `cd "${game.folderPath}" && npm run dev`;
+
+  useEffect(() => {
+    if (!gamePkg) {return;}
+    const sendPkg = () => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
+      }
+    };
+    sendPkg();
+    const t1 = setTimeout(sendPkg, 150);
+    const t2 = setTimeout(sendPkg, 400);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [gamePkg]);
 
   useEffect(() => {
     if (game.mode !== "dist") {return;}
@@ -65,9 +87,9 @@ export function ArcadeGameModal({
           }
           return;
         }
-        const url = await arcadeService.resolveGameURL(game);
+        const pkg = await arcadeService.loadGamePackage(game);
         if (cancelled) {return;}
-        if (url) {setIframeUrl(url);}
+        if (pkg) {setGamePkg(pkg);}
         else {setError(tr.arcade_iframe_error);}
       } catch (err: any) {
         if (!cancelled) {setError(err?.message ?? tr.arcade_iframe_error);}
@@ -88,9 +110,9 @@ export function ArcadeGameModal({
         setError(tr.arcade_permission_denied);
         return;
       }
-      const url = await arcadeService.resolveGameURL(game);
-      if (url) {
-        setIframeUrl(url);
+      const pkg = await arcadeService.loadGamePackage(game);
+      if (pkg) {
+        setGamePkg(pkg);
         setPermissionNeeded(false);
       } else {
         setError(tr.arcade_iframe_error);
@@ -114,13 +136,8 @@ export function ArcadeGameModal({
     if (toastTimerRef.current) {window.clearTimeout(toastTimerRef.current);}
   }, []);
 
-  // SECURITY: blob URL cleanup on unmount or URL change to prevent memory leak.
-  useEffect(() => () => {
-    if (iframeUrl) {URL.revokeObjectURL(iframeUrl);}
-  }, [iframeUrl]);
-
   const handleSaveDevNotes = () => {
-    onUpdateDevNotes(game.id, notes, todoList);
+    onUpdateDevNotes(game.id, notes, todoList, title);
     showToast({ kind: "info", text: tr.arcade_dev_notes_saved });
   };
 
@@ -226,12 +243,17 @@ export function ArcadeGameModal({
                       <p className="arcade-error-hint">{tr.arcade_iframe_error_hint}</p>
                     </div>
                   )}
-                  {iframeUrl && !loading && !error && (
+                  {gamePkg && !loading && !error && (
                     <iframe
-                      src={iframeUrl}
+                      ref={iframeRef}
+                      src={sandboxUrl}
                       className="arcade-game-iframe"
-                      sandbox="allow-scripts allow-forms allow-popups"
                       title={game.title}
+                      onLoad={() => {
+                        if (iframeRef.current?.contentWindow && gamePkg) {
+                          iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
+                        }
+                      }}
                     />
                   )}
                 </>
@@ -260,6 +282,17 @@ export function ArcadeGameModal({
 
           {tab === "dev" && (
             <div className="arcade-dev-panel">
+              <div className="arcade-dev-section">
+                <h3>Oyun Adı</h3>
+                <input
+                  type="text"
+                  className="arcade-title-input"
+                  value={title}
+                  onInput={(e) => setTitle((e.target as HTMLInputElement).value)}
+                  placeholder="Oyun Adı"
+                />
+              </div>
+
               <div className="arcade-dev-section">
                 <h3>{tr.arcade_dev_status}</h3>
                 <div className="arcade-status-buttons">

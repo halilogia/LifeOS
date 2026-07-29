@@ -17,6 +17,8 @@ export default defineConfig({
         popup: path.resolve(__dirname, 'popup.html'),
         sidepanel: path.resolve(__dirname, 'sidepanel.html'),
         offscreen: path.resolve(__dirname, 'offscreen.html'),
+        sandbox: path.resolve(__dirname, 'sandbox.html'),
+        sandboxJs: path.resolve(__dirname, 'sandbox.js'),
         content: path.resolve(__dirname, 'src/content/contentMain.ts'),
         background: path.resolve(__dirname, 'src/background/backgroundMain.ts'),
       },
@@ -24,6 +26,7 @@ export default defineConfig({
         entryFileNames: (chunkInfo) => {
           if (chunkInfo.name === 'content') return 'content.js';
           if (chunkInfo.name === 'background') return 'background.js';
+          if (chunkInfo.name === 'sandboxJs') return 'sandbox.js';
           return 'assets/[name]-[hash].js';
         },
       },

@@ -10,8 +10,11 @@
   "side_panel": {
     "default_path": "sidepanel.html"
   },
+  "sandbox": {
+    "pages": ["sandbox.html"]
+  },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; frame-src 'self' blob: data:; img-src 'self' blob: data:;"
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-src 'self' blob: data:; img-src 'self' blob: data: https:;"
   },
   "host_permissions": [
     "https://www.gamerpower.com/*",
