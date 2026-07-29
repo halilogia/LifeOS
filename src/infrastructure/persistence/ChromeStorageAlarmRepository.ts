@@ -8,8 +8,9 @@ import type {
   IAlarmRepository,
   AlarmItem,
 } from "../../application/use-cases/pomodoro/AlarmUseCase.js";
+import { SYNC_ALARMS } from "@/infrastructure/storage/keys.js";
 
-const ALARM_STORAGE_KEY = "alarms";
+const ALARM_STORAGE_KEY = SYNC_ALARMS;
 
 type StateChangeCallback = (alarms: AlarmItem[]) => void;
 

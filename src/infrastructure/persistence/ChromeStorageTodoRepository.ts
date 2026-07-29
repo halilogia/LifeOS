@@ -6,19 +6,20 @@
 
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { Todo } from "@/domain/entities/Todo.js";
+import { SYNC_TODOS } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageTodoRepository implements ITodoRepository {
   async getAll(): Promise<Todo[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["todos"], (result) => {
-        resolve((result.todos as Todo[]) || []);
+      chrome.storage.sync.get([SYNC_TODOS], (result) => {
+        resolve((result[SYNC_TODOS] as Todo[]) || []);
       });
     });
   }
 
   async saveAll(todos: Todo[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ todos }, resolve);
+      chrome.storage.sync.set({ [SYNC_TODOS]: todos }, resolve);
     });
   }
 

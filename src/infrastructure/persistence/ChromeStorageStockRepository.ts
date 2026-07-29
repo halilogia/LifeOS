@@ -9,11 +9,12 @@ import type {
   StockAlertLog,
   StockWatchlist,
 } from "@/types/stock.js";
+import { SYNC_STOCK_PORTFOLIO, SYNC_STOCK_RULES, SYNC_STOCK_ALERT_LOGS, SYNC_STOCK_WATCHLISTS } from "@/infrastructure/storage/keys.js";
 
-const PORTFOLIO_KEY = "stockPortfolio";
-const RULES_KEY = "stockRules";
-const LOGS_KEY = "stockAlertLogs";
-const WATCHLISTS_KEY = "stockWatchlists";
+const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
+const RULES_KEY = SYNC_STOCK_RULES;
+const LOGS_KEY = SYNC_STOCK_ALERT_LOGS;
+const WATCHLISTS_KEY = SYNC_STOCK_WATCHLISTS;
 
 const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
 

@@ -4,10 +4,11 @@
  * Reads from chrome.storage.sync first, falls back to chrome.storage.local, then defaults.
  */
 
-import type { AiConfig, IAiConfigRepository } from "@/domain/repositories/IAiConfigRepository.js";
+import type { IAiConfigRepository, AiConfig } from "@/domain/repositories/IAiConfigRepository.js";
 import { DEFAULT_AI_CONFIG } from "@/domain/repositories/IAiConfigRepository.js";
+import { SYNC_AI_KEYS } from "@/infrastructure/storage/keys.js";
 
-const AI_KEYS = ["aiProvider", "aiApiKey", "geminiApiKey", "aiModel", "aiEndpoint", "aiShowThinking"] as const;
+const AI_KEYS = SYNC_AI_KEYS;
 
 export class ChromeStorageAiConfigRepository implements IAiConfigRepository {
   async getConfig(): Promise<AiConfig> {

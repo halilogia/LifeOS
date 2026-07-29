@@ -9,8 +9,9 @@
 
 import type { IArcadeRepository } from "@/domain/repositories/IArcadeRepository.js";
 import type { GameEntry } from "@/types/game.js";
+import { LOCAL_ARCADE_GAMES } from "@/infrastructure/storage/keys.js";
 
-const STORAGE_KEY_GAMES = "lifeos_arcade_games_v1";
+const STORAGE_KEY_GAMES = LOCAL_ARCADE_GAMES;
 const LEGACY_SYNC_KEY_GAMES = STORAGE_KEY_GAMES;
 
 /* ------------------------------------------------------------------ */

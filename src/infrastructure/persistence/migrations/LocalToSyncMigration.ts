@@ -4,50 +4,9 @@
  * Standalone implementation without legacy core/storage dependency.
  */
 
-const SYNC_KEYS = [
-  "todos",
-  "notes",
-  "hifizProgress",
-  "srsProgress",
-  "customCategories",
-  "kpssProgress",
-  "kpssSrsProgress",
-  "customQuotes",
-  "yeterlikler",
-  "kpssDailyStats",
-  "lang",
-  "sidebarOpen",
-  "prayerCity",
-  "prayerCountry",
-  "willpowerStreak",
-  "freeGamesNotificationsEnabled",
-  "calendarNotificationsEnabled",
-  "pomoBlockEnabled",
-  "pomoCustomTimes",
-  "kpssTargetScore",
-  "kpssGoalType",
-  "kpssTargetNet",
-  "kpssChartType",
-  "kpssChartDays",
-  "kpss_chart_metric_mode",
-  "universalInfoBoxEnabled",
-  "universalInfoBoxHotkey",
-  "pomodoroHistory",
-  "syncSettings",
-  "geminiApiKey",
-  "aiProvider",
-  "aiModel",
-  "aiEndpoint",
-  "sidebarOrder",
-  "detox_limits",
-  "aiShowThinking",
-  "stockPortfolio",
-  "stockRules",
-  "stockAlertLogs",
-  "alarms",
-  "stockWatchlists",
-  "aiUserMemory",
-];
+import { SYNC_ALL_KEYS } from "@/infrastructure/storage/keys.js";
+
+const SYNC_KEYS = SYNC_ALL_KEYS;
 
 export class LocalToSyncMigration {
   /**

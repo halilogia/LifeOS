@@ -7,7 +7,9 @@
 import type { IBistCacheRepository } from "@/domain/repositories/IBistCacheRepository.js";
 import type { StockQuote, StockCache } from "@/types/bist.js";
 
-const CACHE_KEY = "bistStockCache";
+import { LOCAL_BIST_CACHE } from "@/infrastructure/storage/keys.js";
+
+const CACHE_KEY = LOCAL_BIST_CACHE;
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 export class ChromeStorageBistCacheRepository implements IBistCacheRepository {

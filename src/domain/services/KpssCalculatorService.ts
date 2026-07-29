@@ -4,7 +4,7 @@
  * Pure functions — no external dependencies beyond domain types.
  */
 
-import { KpssTopic } from "@/services/kpssService.js";
+import type { KpssTopic } from "@/domain/constants/kpssCurriculum.js";
 import { KpssProgress } from "@/types/types.js";
 
 export function calculateKpssCountdown(

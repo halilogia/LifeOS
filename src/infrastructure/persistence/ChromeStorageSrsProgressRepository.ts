@@ -5,8 +5,9 @@
  */
 
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
+import { SYNC_KPSS_SRS } from "@/infrastructure/storage/keys.js";
 
-const SRS_KEY = "kpssSrsProgress";
+const SRS_KEY = SYNC_KPSS_SRS;
 
 export class ChromeStorageSrsProgressRepository implements ISrsProgressRepository {
   async getAll(): Promise<Record<string, unknown>[]> {
