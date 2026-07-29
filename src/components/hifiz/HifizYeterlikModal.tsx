@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface HifizYeterlikModalProps {
   lang: Language;
@@ -11,6 +12,8 @@ export function HifizYeterlikModal({
   activeYeterlik,
   onClose,
 }: HifizYeterlikModalProps) {
+  const t = getTranslation(lang);
+
   return (
     <div className="settings-panel active" onClick={onClose}>
       <div
@@ -42,7 +45,7 @@ export function HifizYeterlikModal({
             style={{ width: "auto", padding: "0 30px" }}
             onClick={onClose}
           >
-            {lang === "tr" ? "Anladım" : "Got it"}
+            {t.hifiz_got_it}
           </button>
         </div>
       </div>

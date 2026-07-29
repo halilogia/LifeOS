@@ -200,7 +200,7 @@ export function EisenhowerView({
           className={`pomo-tab-link ${activeTab === "matrix" ? "active" : ""}`}
           onClick={() => setActiveTab("matrix")}
         >
-          {lang === "tr" ? "Eisenhower Matrisi" : "Eisenhower Matrix"}
+          {t.eisenhower_title}
         </button>
         <button
           className={`pomo-tab-link ${activeTab === "kanban" ? "active" : ""}`}
@@ -233,7 +233,7 @@ export function EisenhowerView({
             {/* Q1: Urgent & Important */}
             <EisenhowerQuadrantCard
               quadId="q1"
-              title={lang === "tr" ? "Hemen Yap" : "Do First"}
+              title={t.eisenhower_do_first}
               headerTag={t.eisenhower_urgent_important}
               headerColor="#ef4444"
               tagBg="rgba(239, 68, 68, 0.1)"
@@ -263,7 +263,7 @@ export function EisenhowerView({
             {/* Q2: Important & Not Urgent */}
             <EisenhowerQuadrantCard
               quadId="q2"
-              title={lang === "tr" ? "Planla" : "Schedule"}
+              title={t.eisenhower_schedule}
               headerTag={t.eisenhower_not_urgent_important}
               headerColor="#8b5cf6"
               tagBg="rgba(139, 92, 246, 0.1)"
@@ -296,7 +296,7 @@ export function EisenhowerView({
             {/* Q3: Urgent & Not Important */}
             <EisenhowerQuadrantCard
               quadId="q3"
-              title={lang === "tr" ? "Delege Et" : "Delegate"}
+              title={t.eisenhower_delegate}
               headerTag={t.eisenhower_urgent_not_important}
               headerColor="#f59e0b"
               tagBg="rgba(245, 158, 11, 0.1)"
@@ -329,7 +329,7 @@ export function EisenhowerView({
             {/* Q4: Not Urgent & Not Important */}
             <EisenhowerQuadrantCard
               quadId="q4"
-              title={lang === "tr" ? "Ele / Ertele" : "Eliminate"}
+              title={t.eisenhower_eliminate}
               headerTag={t.eisenhower_not_urgent_not_important}
               headerColor="#3b82f6"
               tagBg="rgba(59, 130, 246, 0.1)"

@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface PomoTimerCardProps {
   lang: Language;
@@ -33,6 +34,8 @@ export function PomoTimerCard({
   onPomoModeChange,
   onCustomTimeChange,
 }: PomoTimerCardProps) {
+  const t = getTranslation(lang);
+
   return (
     <div className="pomodoro-main-card">
       <div className="pomodoro-visual-container">
@@ -121,19 +124,19 @@ export function PomoTimerCard({
           className={`pomodoro-mode-btn ${pomoMode === "focus" ? "active" : ""}`}
           onClick={() => onPomoModeChange("focus")}
         >
-          {lang === "tr" ? "Odaklanma" : "Focus"}
+          {t.pomodoro_focus}
         </button>
         <button
           className={`pomodoro-mode-btn ${pomoMode === "short" ? "active" : ""}`}
           onClick={() => onPomoModeChange("short")}
         >
-          {lang === "tr" ? "Kısa Mola" : "Short"}
+          {t.pomodoro_short}
         </button>
         <button
           className={`pomodoro-mode-btn ${pomoMode === "long" ? "active" : ""}`}
           onClick={() => onPomoModeChange("long")}
         >
-          {lang === "tr" ? "Uzun Mola" : "Long"}
+          {t.pomodoro_long}
         </button>
       </div>
 
@@ -175,7 +178,7 @@ export function PomoTimerCard({
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
-          {lang === "tr" ? "Süre Ayarı (Dk):" : "Durations (Min):"}
+          {t.pomodoro_duration_label}
         </span>
 
         <div
@@ -201,7 +204,7 @@ export function PomoTimerCard({
                 fontWeight: "600",
               }}
             >
-              {lang === "tr" ? "Odak" : "Focus"}
+              {t.pomodoro_focus_btn}
             </span>
             <input
               type="number"
@@ -242,7 +245,7 @@ export function PomoTimerCard({
                 fontWeight: "600",
               }}
             >
-              {lang === "tr" ? "Kısa" : "Short"}
+              {t.pomodoro_short_btn}
             </span>
             <input
               type="number"
@@ -283,7 +286,7 @@ export function PomoTimerCard({
                 fontWeight: "600",
               }}
             >
-              {lang === "tr" ? "Uzun" : "Long"}
+              {t.pomodoro_long_btn}
             </span>
             <input
               type="number"

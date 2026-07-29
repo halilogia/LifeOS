@@ -95,7 +95,7 @@ export function KanbanView({
                     <div className="kanban-controls">
                       <button
                         className="move-btn move-left"
-                        title={lang === "tr" ? "Sola Taşı" : "Move Left"}
+                        title={t.kanban_move_left}
                         disabled={col.status === "todo"}
                         onClick={() => onMoveTaskDirection(originalIndex, -1)}
                       >
@@ -114,7 +114,7 @@ export function KanbanView({
                       </button>
                       <button
                         className="move-btn move-right"
-                        title={lang === "tr" ? "Sağa Taşı" : "Move Right"}
+                        title={t.kanban_move_right}
                         disabled={col.status === "done"}
                         onClick={() => onMoveTaskDirection(originalIndex, 1)}
                       >

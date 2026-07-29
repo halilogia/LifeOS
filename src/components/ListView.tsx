@@ -87,20 +87,14 @@ export function ListView({
                 className={`sync-dot ${isSyncing ? "syncing" : "synced"}`}
               ></span>
               <span>
-                {isSyncing
-                  ? lang === "tr"
-                    ? "Google Görevler eşitleniyor..."
-                    : "Syncing Google Tasks..."
-                  : lang === "tr"
-                    ? "Google Görevler ile eşitlendi"
-                    : "Synced with Google Tasks"}
+                {isSyncing ? t.list_syncing : t.list_synced}
               </span>
             </div>
             <button
               className="sync-action-btn"
               onClick={onManualSync}
               disabled={isSyncing}
-              title={lang === "tr" ? "Şimdi Eşitle" : "Sync Now"}
+              title={t.list_sync_now}
             >
               <svg
                 className={isSyncing ? "sync-spinner" : ""}

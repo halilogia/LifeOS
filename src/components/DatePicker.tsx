@@ -139,7 +139,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
   // Format label for trigger button
   const formatDateLabel = (dateStr: string) => {
     if (!dateStr) {
-      return lang === "tr" ? "Son Tarih" : "Due Date";
+      return t.datepicker_due_date;
     }
     const [y, m, d] = dateStr.split("-").map(Number);
     const mName = monthNames[m - 1].substring(0, 3);
@@ -270,7 +270,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
               className="datepicker-footer-btn clear-btn"
               onClick={handleClear}
             >
-              {lang === "tr" ? "Temizle" : "Clear"}
+              {t.datepicker_clear}
             </button>
           </div>
         </div>

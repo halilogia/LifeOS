@@ -229,9 +229,7 @@ export function GeneralSettingsTab({
                 <rect x="3" y="14" width="7" height="7" rx="1"></rect>
               </svg>
               <span>
-                {lang === "tr"
-                  ? "Yan Panel Açıldığında Sekmeyi Otomatik Grupla"
-                  : "Auto-group Active Tab on Side Panel Open"}
+                {t.settings_auto_group_tabs}
               </span>
               <span
                 style={{
@@ -339,10 +337,10 @@ export function GeneralSettingsTab({
               </svg>
               <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "white" }}>
-                  {lang === "tr" ? "Web Copilot Yan Panel Kısayolu" : "Web Copilot Side Panel Shortcut"}
+                  {t.settings_shortcut_title}
                 </span>
                 <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)" }}>
-                  {lang === "tr" ? "Varsayılan: Ctrl + Shift + E" : "Default: Ctrl + Shift + E"}
+                  {t.settings_shortcut_default}
                 </span>
               </div>
             </div>
@@ -363,7 +361,7 @@ export function GeneralSettingsTab({
                 transition: "all 0.2s ease",
               }}
             >
-              {lang === "tr" ? "Kısayolu Değiştir" : "Configure Shortcut"}
+              {t.settings_shortcut_configure}
             </button>
           </div>
         </div>

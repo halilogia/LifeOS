@@ -3,9 +3,12 @@
  * Notlar başlığı ve Yeni Not / Yeni Söz ekleme butonları.
  */
 
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
+
 interface NotesHeaderBarProps {
   title: string;
-  lang: string;
+  lang: Language;
   onOpenQuoteModal: () => void;
   onOpenNoteModal: () => void;
   onOpenGraphModal?: () => void;
@@ -53,6 +56,7 @@ export function NotesHeaderBar({
   onOpenNoteModal,
   onOpenGraphModal,
 }: NotesHeaderBarProps) {
+  const t = getTranslation(lang);
   return (
     <div className="notes-header">
       <h2>{title}</h2>
@@ -69,7 +73,7 @@ export function NotesHeaderBar({
             }}
           >
             <span style={{ fontSize: "1.1rem" }}>🕸️</span>
-            <span>{lang === "tr" ? "Düşünce Ağı (Graph View)" : "Graph View"}</span>
+            <span>{t.notes_header_graph}</span>
           </button>
         )}
         <button
@@ -78,7 +82,7 @@ export function NotesHeaderBar({
           onClick={onOpenQuoteModal}
         >
           <IconMessageSquare />
-          <span>{lang === "tr" ? "Yeni Söz" : "New Quote"}</span>
+          <span>{t.notes_header_new_quote}</span>
         </button>
         <button
           id="add-note-btn"
@@ -86,7 +90,7 @@ export function NotesHeaderBar({
           onClick={onOpenNoteModal}
         >
           <IconPlus />
-          <span>{lang === "tr" ? "Yeni Not" : "New Note"}</span>
+          <span>{t.notes_header_new_note}</span>
         </button>
       </div>
     </div>

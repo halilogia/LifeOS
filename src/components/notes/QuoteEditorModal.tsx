@@ -3,9 +3,12 @@
  * Yeni Özlü Söz ekleme modali.
  */
 
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
+
 interface QuoteEditorModalProps {
   isOpen: boolean;
-  lang: string;
+  lang: Language;
   quoteContent: string;
   quoteAuthor: string;
   onClose: () => void;
@@ -24,6 +27,7 @@ export function QuoteEditorModal({
   onQuoteAuthorChange,
   onSave,
 }: QuoteEditorModalProps) {
+  const t = getTranslation(lang);
   if (!isOpen) {
     return null;
   }
@@ -36,7 +40,7 @@ export function QuoteEditorModal({
         onClick={(e) => e.stopPropagation()}
       >
         <header className="settings-header">
-          <h3>{lang === "tr" ? "Yeni Özlü Söz" : "New Quote"}</h3>
+          <h3>{t.notes_quote_title}</h3>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -50,11 +54,7 @@ export function QuoteEditorModal({
             onInput={(e) =>
               onQuoteContentChange((e.target as HTMLTextAreaElement).value)
             }
-            placeholder={
-              lang === "tr"
-                ? "Özlü sözü buraya yazın..."
-                : "Write the quote here..."
-            }
+            placeholder={t.notes_quote_content_placeholder}
           />
           <input
             type="text"
@@ -65,9 +65,7 @@ export function QuoteEditorModal({
             onInput={(e) =>
               onQuoteAuthorChange((e.target as HTMLInputElement).value)
             }
-            placeholder={
-              lang === "tr" ? "Yazar (Opsiyonel)" : "Author (Optional)"
-            }
+            placeholder={t.notes_quote_author_placeholder}
           />
         </div>
         <div className="settings-footer">
@@ -77,7 +75,7 @@ export function QuoteEditorModal({
             style={{ width: "auto", padding: "0 20px" }}
             onClick={onSave}
           >
-            {lang === "tr" ? "Ekle" : "Add"}
+            {t.notes_quote_add}
           </button>
         </div>
       </div>

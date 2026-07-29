@@ -1,10 +1,12 @@
 import { useState, useEffect } from "preact/hooks";
+import { getTranslation } from "@/utils/i18n.js";
 
 interface PopupVolumeTabProps {
   lang: "tr" | "en";
 }
 
 export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
+  const t = getTranslation(lang);
   const [volumeLevel, setVolumeLevel] = useState<number>(100);
   const [activeTabId, setActiveTabId] = useState<number | null>(null);
   const [tabTitle, setTabTitle] = useState<string>("");
@@ -74,7 +76,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
           </svg>
           <span style={{ fontWeight: 700, fontSize: "0.82rem", color: "white" }}>
-            {lang === "tr" ? "Sekme Özel Ses Boost" : "Tab Volume Booster"}
+            {t.popup_volume_tab_title}
           </span>
         </div>
         <span
@@ -103,7 +105,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
           }}
           title={tabTitle}
         >
-          🎵 <strong>{lang === "tr" ? "Sekme:" : "Tab:"}</strong> {tabTitle}
+          🎵 <strong>{t.popup_tab_label}</strong> {tabTitle}
         </div>
       )}
 
@@ -126,13 +128,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
       >
         <span>{isDangerZone ? "⚠️" : "🟢"}</span>
         <span>
-          {isDangerZone
-            ? lang === "tr"
-              ? "Hoparlör Donanımına Dikkat Edin (%300 Üstü Sınır)!"
-              : "Warning: High volume boost may strain speakers!"
-            : lang === "tr"
-            ? "Güvenli Ses Aralığı (%100 - %300)"
-            : "Safe volume range (100% - 300%)"}
+          {isDangerZone ? t.popup_volume_warning : t.popup_volume_safe}
         </span>
       </div>
 
