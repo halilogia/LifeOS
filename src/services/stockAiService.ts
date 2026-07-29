@@ -3,7 +3,8 @@
  * BIST hisse ve portföy verileri için Yapay Zeka (9Router / OpenRouter / Gemini) analiz servisi.
  */
 
-import { fetchStockHistory, type StockQuote, type StockHistoryItem } from "@/services/bistService.js";
+import { fetchStockHistory } from "@/services/bistService.js";
+import type { StockQuote, StockHistoryItem } from "@/types/bist.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
 import {
   YTD_DISCLAIMER,

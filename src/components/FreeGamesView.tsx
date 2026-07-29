@@ -7,11 +7,13 @@
 import { useState, useEffect } from "preact/hooks";
 import {
   gamesService,
+} from "@/services/gamesService.js";
+import {
   Giveaway,
   HistoricalEpicGame,
   ExclusionSettings,
   defaultExclusions,
-} from "@/services/gamesService.js";
+} from "@/types/games.js";
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { GameCard } from "@/components/GameCard.js";

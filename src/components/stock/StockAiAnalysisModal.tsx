@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from "preact/hooks";
 import { analyzeStockWithAI } from "@/services/stockAiService.js";
-import type { StockQuote } from "@/services/bistService.js";
+import type { StockQuote } from "@/types/bist.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";

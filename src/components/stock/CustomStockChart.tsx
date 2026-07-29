@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import { fetchStockHistory, StockHistoryItem } from "@/services/bistService.js";
+import { fetchStockHistory } from "@/services/bistService.js";
+import type { StockHistoryItem } from "@/types/bist.js";
 import { getTranslation } from "@/utils/i18n.js";
 
 interface CustomStockChartProps {

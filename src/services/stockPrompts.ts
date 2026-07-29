@@ -3,7 +3,7 @@
  * BIST Hisse ve Portföy Yapay Zeka (AI) Sistem ve Kullanıcı Prompt Şablonları.
  */
 
-import type { StockHistoryItem, StockQuote } from "@/services/bistService.js";
+import type { StockHistoryItem, StockQuote } from "@/types/bist.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
 import type { Language } from "@/types/types.js";
 

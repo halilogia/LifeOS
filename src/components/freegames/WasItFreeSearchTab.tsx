@@ -3,7 +3,7 @@
  * Epic Games geçmiş ücretsiz oyun sorgulama sekmesi (Arama girdisi, yüklenme/boş durumları ve HistoryCard listesi).
  */
 
-import { HistoricalEpicGame } from "@/services/gamesService.js";
+import { HistoricalEpicGame } from "@/types/games.js";
 import { HistoryCard } from "@/components/HistoryCard.js";
 
 interface WasItFreeSearchTabProps {

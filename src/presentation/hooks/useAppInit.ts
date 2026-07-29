@@ -1,17 +1,17 @@
 /**
  * useAppInit Hook
  * Presentation hook that wraps the application initialization logic.
- * Uses repositories directly instead of legacy core/storage.
+ * Uses use cases for domain operations instead of direct calls.
  */
 
 import { useEffect, useCallback } from "preact/hooks";
 import type { Language } from "@/domain/value-objects/Language.js";
-import { checkAndResetRepeatingTasks } from "@/domain/services/TaskService.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
 import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
 import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
 import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
 
@@ -78,16 +78,10 @@ export function useAppInit(callbacks: AppInitCallbacks) {
     // Apply body class for legacy CSS
     document.body.classList.toggle("sidebar-open", config.sidebarOpen ?? true);
 
-    // 3. Load and clean task items
-    const loadedTodos = await todoRepo.getAll();
-    const clone = JSON.parse(JSON.stringify(loadedTodos));
-    const hasResets = checkAndResetRepeatingTasks(clone as any);
-    if (hasResets.modified) {
-      await todoRepo.saveAll(hasResets.todos as any);
-      callbacks.onTodosLoaded(hasResets.todos as any);
-    } else {
-      callbacks.onTodosLoaded(loadedTodos);
-    }
+    // 3. Load and clean task items (via use case)
+    const resetUC = new ResetRepeatingTodosUseCase(todoRepo);
+    const { todos } = await resetUC.execute();
+    callbacks.onTodosLoaded(todos as any);
 
     // 4. Trigger background task sync if Google Sync is enabled
     const syncConfig = await syncRepo.getSyncSettings();

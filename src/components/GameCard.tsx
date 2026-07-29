@@ -1,5 +1,5 @@
 import { Language } from "@/types/types.js";
-import { Giveaway } from "@/services/gamesService.js";
+import { Giveaway } from "@/types/games.js";
 
 interface GameCardProps {
   game: Giveaway;

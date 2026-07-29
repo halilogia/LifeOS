@@ -6,10 +6,12 @@
 import { useState, useEffect } from "preact/hooks";
 import {
   searchBistStocks,
-  BISTSearchResult,
-  StockQuote,
   formatPrice,
 } from "@/services/bistService.js";
+import type {
+  BISTSearchResult,
+  StockQuote,
+} from "@/types/bist.js";
 
 interface BistSearchBarProps {
   searchQuery: string;
