@@ -8,8 +8,9 @@ import type {
   PomoState,
   IPomoTimerRepository,
 } from "../../application/use-cases/pomodoro/TimerUseCase.js";
+import { LOCAL_POMO_STATE } from "@/infrastructure/storage/keys.js";
 
-const POMO_STORAGE_KEY = "pomoState";
+const POMO_STORAGE_KEY = LOCAL_POMO_STATE;
 
 type StateChangeCallback = (state: PomoState) => void;
 

@@ -5,6 +5,7 @@
  */
 
 import type { IPrayerCacheRepository } from "@/domain/repositories/IPrayerCacheRepository.js";
+import { prayerCalendarKey } from "@/infrastructure/storage/keys.js";
 import type { DayPrayerData } from "@/types/prayer.js";
 
 export class ChromeStoragePrayerCacheRepository implements IPrayerCacheRepository {

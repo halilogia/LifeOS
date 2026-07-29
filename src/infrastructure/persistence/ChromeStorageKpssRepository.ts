@@ -6,9 +6,10 @@
 
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
+import { SYNC_KPSS_PROGRESS, SYNC_KPSS_DAILY_STATS, SYNC_KPSS_SRS, LOCAL_KPSS_PAST_QUIZZES } from "@/infrastructure/storage/keys.js";
 
-const KPSS_PROGRESS_KEY = "kpssProgress";
-const KPSS_DAILY_STATS_KEY = "kpssDailyStats";
+const KPSS_PROGRESS_KEY = SYNC_KPSS_PROGRESS;
+const KPSS_DAILY_STATS_KEY = SYNC_KPSS_DAILY_STATS;
 
 export class ChromeStorageKpssRepository implements IKpssRepository {
   async getAllProgress(): Promise<KpssProgress[]> {
@@ -45,7 +46,7 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
         [
           KPSS_PROGRESS_KEY,
           KPSS_DAILY_STATS_KEY,
-          "kpssSrsProgress",
+          SYNC_KPSS_SRS,
           "kpssGoalType",
           "kpssTargetNet",
           "kpssTargetScore",
@@ -54,13 +55,13 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
       );
     });
     await new Promise<void>((resolve) => {
-      chrome.storage.local.remove(["kpss_past_quizzes"], () => resolve());
+      chrome.storage.local.remove([LOCAL_KPSS_PAST_QUIZZES], () => resolve());
     });
   }
 
   async savePastQuizzes(quizzes: Record<string, unknown>): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ kpss_past_quizzes: quizzes }, resolve);
+      chrome.storage.local.set({ [LOCAL_KPSS_PAST_QUIZZES]: quizzes }, resolve);
     });
   }
 }

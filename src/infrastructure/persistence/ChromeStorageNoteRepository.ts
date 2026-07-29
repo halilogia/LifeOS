@@ -8,19 +8,20 @@ import type {
   INoteRepository,
   Note,
 } from "../../domain/repositories/INoteRepository.js";
+import { SYNC_NOTES } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageNoteRepository implements INoteRepository {
   async getAll(): Promise<Note[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["notes"], (result) => {
-        resolve((result.notes as Note[]) || []);
+      chrome.storage.sync.get([SYNC_NOTES], (result) => {
+        resolve((result[SYNC_NOTES] as Note[]) || []);
       });
     });
   }
 
   async saveAll(notes: Note[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ notes }, resolve);
+      chrome.storage.sync.set({ [SYNC_NOTES]: notes }, resolve);
     });
   }
 }

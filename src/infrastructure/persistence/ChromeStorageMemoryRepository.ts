@@ -5,8 +5,9 @@
  */
 
 import type { IMemoryRepository } from "@/domain/repositories/IMemoryRepository.js";
+import { SYNC_AI_USER_MEMORY } from "@/infrastructure/storage/keys.js";
 
-const MEMORY_KEY = "aiUserMemory";
+const MEMORY_KEY = SYNC_AI_USER_MEMORY;
 
 export class ChromeStorageMemoryRepository implements IMemoryRepository {
   async getMemory(): Promise<string> {

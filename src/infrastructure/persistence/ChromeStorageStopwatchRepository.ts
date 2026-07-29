@@ -8,8 +8,9 @@ import type {
   IStopwatchRepository,
   StopwatchState,
 } from "../../application/use-cases/pomodoro/StopwatchUseCase.js";
+import { LOCAL_STOPWATCH_STATE } from "@/infrastructure/storage/keys.js";
 
-const STOPWATCH_STORAGE_KEY = "stopwatchState";
+const STOPWATCH_STORAGE_KEY = LOCAL_STOPWATCH_STATE;
 
 type StateChangeCallback = (state: StopwatchState) => void;
 

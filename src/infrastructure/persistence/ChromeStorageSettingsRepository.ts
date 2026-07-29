@@ -6,6 +6,7 @@
 
 import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
 import type { Language } from "@/domain/value-objects/Language.js";
+import { SYNC_SETTINGS_KEYS, SYNC_SIDEBAR_ORDER, SYNC_LANG, SYNC_SIDEBAR_OPEN, SYNC_FREE_GAMES_NOTIFICATIONS, SYNC_CALENDAR_NOTIFICATIONS, SYNC_POMO_BLOCK_ENABLED, SYNC_UNIVERSAL_INFOBOX_ENABLED, SYNC_UNIVERSAL_INFOBOX_HOTKEY } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageSettingsRepository implements ISettingsRepository {
   async getSettings(): Promise<{
@@ -19,26 +20,18 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
   }> {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
-        [
-          "lang",
-          "sidebarOpen",
-          "freeGamesNotificationsEnabled",
-          "calendarNotificationsEnabled",
-          "pomoBlockEnabled",
-          "universalInfoBoxEnabled",
-          "universalInfoBoxHotkey",
-        ],
+        [...SYNC_SETTINGS_KEYS],
         (result: any) => {
           resolve({
-            lang: (result.lang as Language) || "tr",
-            sidebarOpen: result.sidebarOpen ?? true,
+            lang: (result[SYNC_LANG] as Language) || "tr",
+            sidebarOpen: result[SYNC_SIDEBAR_OPEN] ?? true,
             freeGamesNotificationsEnabled:
-              result.freeGamesNotificationsEnabled ?? true,
+              result[SYNC_FREE_GAMES_NOTIFICATIONS] ?? true,
             calendarNotificationsEnabled:
-              result.calendarNotificationsEnabled ?? true,
-            pomoBlockEnabled: result.pomoBlockEnabled ?? true,
-            universalInfoBoxEnabled: result.universalInfoBoxEnabled ?? true,
-            universalInfoBoxHotkey: result.universalInfoBoxHotkey || "none",
+              result[SYNC_CALENDAR_NOTIFICATIONS] ?? true,
+            pomoBlockEnabled: result[SYNC_POMO_BLOCK_ENABLED] ?? true,
+            universalInfoBoxEnabled: result[SYNC_UNIVERSAL_INFOBOX_ENABLED] ?? true,
+            universalInfoBoxHotkey: result[SYNC_UNIVERSAL_INFOBOX_HOTKEY] || "none",
           });
         },
       );
@@ -47,15 +40,15 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async getSidebarOrder(): Promise<string[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["sidebarOrder"], (result) => {
-        resolve((result.sidebarOrder as string[]) || []);
+      chrome.storage.sync.get([SYNC_SIDEBAR_ORDER], (result) => {
+        resolve((result[SYNC_SIDEBAR_ORDER] as string[]) || []);
       });
     });
   }
 
   async setSidebarOrder(order: string[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ sidebarOrder: order }, resolve);
+      chrome.storage.sync.set({ [SYNC_SIDEBAR_ORDER]: order }, resolve);
     });
   }
 
@@ -67,14 +60,14 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setSidebarOpen(isOpen: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ sidebarOpen: isOpen }, resolve);
+      chrome.storage.sync.set({ [SYNC_SIDEBAR_OPEN]: isOpen }, resolve);
     });
   }
 
   async setFreeGamesNotificationsEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
-        { freeGamesNotificationsEnabled: enabled },
+        { [SYNC_FREE_GAMES_NOTIFICATIONS]: enabled },
         resolve,
       );
     });
@@ -83,7 +76,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
   async setCalendarNotificationsEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
-        { calendarNotificationsEnabled: enabled },
+        { [SYNC_CALENDAR_NOTIFICATIONS]: enabled },
         resolve,
       );
     });
@@ -91,14 +84,14 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setPomoBlockEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ pomoBlockEnabled: enabled }, resolve);
+      chrome.storage.sync.set({ [SYNC_POMO_BLOCK_ENABLED]: enabled }, resolve);
     });
   }
 
   async setUniversalInfoBox(enabled: boolean, hotkey: string): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
-        { universalInfoBoxEnabled: enabled, universalInfoBoxHotkey: hotkey },
+        { [SYNC_UNIVERSAL_INFOBOX_ENABLED]: enabled, [SYNC_UNIVERSAL_INFOBOX_HOTKEY]: hotkey },
         resolve,
       );
     });
