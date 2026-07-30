@@ -118,8 +118,6 @@ export function KpssTopicList({
               key={topic.title}
               className="kpss-topic-item"
               data-status={status.toString()}
-              onClick={() => onStartQuiz(topic.title)}
-              style={{ cursor: "pointer" }}
             >
               <div className="kpss-status-indicator">
                 {status === 1 && (

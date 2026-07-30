@@ -1,6 +1,7 @@
 /**
  * KpssQuizResultStep.tsx
  * KPSS Sınavı tamamlanma ekranı (Skor yüzdesi, soru inceleme listesi, TXT rapor aktarımı).
+ * Premium tipografi ile güncellendi.
  */
 
 import { MathRenderer } from "@/components/kpss/MathRenderer.js";
@@ -19,6 +20,21 @@ interface KpssQuizResultStepProps {
   onClose: () => void;
 }
 
+function getScoreColor(score: number): string {
+  if (score >= 80) return "#10b981";
+  if (score >= 60) return "#f59e0b";
+  if (score >= 40) return "#f97316";
+  return "#ef4444";
+}
+
+function getScoreEmoji(score: number): string {
+  if (score >= 90) return "🏆";
+  if (score >= 80) return "🌟";
+  if (score >= 60) return "👍";
+  if (score >= 40) return "💪";
+  return "📚";
+}
+
 export function KpssQuizResultStep({
   lang,
   t,
@@ -31,6 +47,9 @@ export function KpssQuizResultStep({
   onRetakeQuiz,
   onClose,
 }: KpssQuizResultStepProps) {
+  const scoreColor = getScoreColor(quizResultScore);
+  const emoji = getScoreEmoji(quizResultScore);
+
   const handleExportTxt = () => {
     let text = `KPSS Sınav Raporu\n`;
     text += `Ders: ${subjectNames[currentSubject] || currentSubject}\n`;
@@ -66,111 +85,114 @@ export function KpssQuizResultStep({
     URL.revokeObjectURL(url);
   };
 
+  const correctCount = selectedAnswers.filter(
+    (ans, idx) => ans === quizQuestions[idx]?.correctAnswer,
+  ).length;
+  const totalQuestions = quizQuestions.length;
+
   return (
-    <div style={{ textAlign: "center", padding: "12px" }}>
-      <h4
-        style={{
-          color: "var(--accent-color)",
-          fontSize: "1.4rem",
-          marginBottom: "16px",
-        }}
-      >
-        {t.kpss_quiz_completed}
-      </h4>
+    <div style={{ padding: "4px" }}>
+      {/* ─── Score Hero ─── */}
       <div
         style={{
-          fontSize: "3.5rem",
-          fontWeight: 800,
-          color:
-            quizResultScore >= 80
-              ? "#10b981"
-              : quizResultScore >= 40
-                ? "#ffc107"
-                : "#ef4444",
-          marginBottom: "12px",
-        }}
-      >
-        %{quizResultScore}
-      </div>
-      <p
-        style={{
-          opacity: 0.8,
-          fontSize: "0.95rem",
-          lineHeight: 1.5,
+          textAlign: "center",
+          padding: "24px 16px 20px",
+          background: "linear-gradient(135deg, rgba(139,92,246,0.08), rgba(99,102,241,0.04))",
+          borderRadius: "16px",
+          border: "1px solid rgba(139,92,246,0.12)",
           marginBottom: "20px",
         }}
       >
-        {t.kpss_quiz_proficiency}
-        <br />
-        <span
+        <div style={{ fontSize: "2.2rem", marginBottom: "4px" }}>{emoji}</div>
+        <div
           style={{
-            fontSize: "0.85rem",
-            opacity: 0.6,
-            marginTop: "8px",
-            display: "inline-block",
+            fontSize: "3.8rem",
+            fontWeight: 800,
+            color: scoreColor,
+            lineHeight: 1.1,
+            letterSpacing: "-2px",
+            marginBottom: "4px",
           }}
         >
-          {quizResultScore >= 80
-            ? t.kpss_srs_great_job
-            : quizResultScore >= 40
-              ? t.kpss_status_working
-              : t.kpss_status_not_started}
-        </span>
-      </p>
+          %{quizResultScore}
+        </div>
+        <div
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--text-secondary)",
+            fontWeight: 500,
+            letterSpacing: "0.3px",
+          }}
+        >
+          {correctCount}/{totalQuestions} {t.kpss_quiz_questions}
+        </div>
+      </div>
 
-      {/* Scrollable Questions Review list */}
+      {/* ─── Scrollable Questions Review ─── */}
       <div
         style={{
-          maxHeight: "220px",
+          maxHeight: "240px",
           overflowY: "auto",
           textAlign: "left",
-          marginBottom: "24px",
-          background: "rgba(0, 0, 0, 0.2)",
-          borderRadius: "12px",
-          padding: "12px",
+          marginBottom: "20px",
+          background: "rgba(0, 0, 0, 0.18)",
+          borderRadius: "14px",
+          padding: "14px",
           border: "1px solid rgba(255, 255, 255, 0.05)",
         }}
       >
         <h5
           style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.88rem",
+            margin: "0 0 14px 0",
+            fontSize: "0.85rem",
             color: "var(--accent-color)",
-            fontWeight: "600",
+            fontWeight: 700,
+            letterSpacing: "0.3px",
+            textTransform: "uppercase",
           }}
         >
           {t.kpss_quiz_review}
         </h5>
         {quizQuestions.map((q, qIdx) => {
           const userAns = selectedAnswers[qIdx];
+          const isCorrect = userAns === q.correctAnswer;
           return (
             <div
               key={qIdx}
               style={{
-                paddingBottom: "12px",
-                marginBottom: "12px",
-                borderBottom:
-                  qIdx < quizQuestions.length - 1
-                    ? "1px solid rgba(255, 255, 255, 0.05)"
-                    : "none",
+                padding: "12px",
+                marginBottom: "10px",
+                background: isCorrect
+                  ? "rgba(16, 185, 129, 0.05)"
+                  : userAns === -1
+                    ? "rgba(255, 255, 255, 0.01)"
+                    : "rgba(239, 68, 68, 0.05)",
+                borderRadius: "10px",
+                borderLeft: `3px solid ${
+                  isCorrect ? "#10b981" : userAns === -1 ? "rgba(255,255,255,0.15)" : "#ef4444"
+                }`,
               }}
             >
               <p
                 style={{
                   margin: "0 0 8px 0",
-                  fontWeight: "600",
-                  fontSize: "0.82rem",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
                   color: "#ffffff",
+                  lineHeight: 1.5,
                 }}
               >
-                {qIdx + 1}. <MathRenderer text={q.question} />
+                <span style={{ color: "var(--accent-color)", fontWeight: 700, marginRight: "6px" }}>
+                  #{qIdx + 1}
+                </span>
+                <MathRenderer text={q.question} />
               </p>
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "4px",
-                  paddingLeft: "8px",
+                  gap: "3px",
+                  paddingLeft: "4px",
                   marginBottom: "8px",
                 }}
               >
@@ -179,7 +201,7 @@ export function KpssQuizResultStep({
                   const isCorrectOpt = oIdx === q.correctAnswer;
                   const isSelectedOpt = userAns === oIdx;
                   let color = "var(--text-secondary)";
-                  let weight = "normal";
+                  let weight = "400";
                   if (isCorrectOpt) {
                     color = "#10b981";
                     weight = "600";
@@ -191,16 +213,34 @@ export function KpssQuizResultStep({
                     <span
                       key={oIdx}
                       style={{
-                        fontSize: "0.78rem",
+                        fontSize: "0.8rem",
                         color,
                         fontWeight: weight,
+                        lineHeight: 1.5,
                       }}
                     >
-                      {letter}) <MathRenderer text={opt} />{" "}
-                      {isSelectedOpt &&
-                        t.kpss_quiz_retry}{" "}
-                      {isCorrectOpt &&
-                        t.kpss_quiz_solution}
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          width: "18px",
+                          height: "18px",
+                          borderRadius: "4px",
+                          background: isCorrectOpt
+                            ? "rgba(16,185,129,0.15)"
+                            : isSelectedOpt
+                              ? "rgba(239,68,68,0.15)"
+                              : "rgba(255,255,255,0.04)",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "0.65rem",
+                          fontWeight: 700,
+                          marginRight: "6px",
+                          color,
+                        }}
+                      >
+                        {letter}
+                      </span>
+                      <MathRenderer text={opt} />
                     </span>
                   );
                 })}
@@ -208,18 +248,20 @@ export function KpssQuizResultStep({
               <div
                 style={{
                   fontSize: "0.78rem",
-                  color: "rgba(255, 255, 255, 0.65)",
+                  color: "rgba(255, 255, 255, 0.7)",
                   background: "rgba(255, 255, 255, 0.02)",
-                  padding: "8px",
-                  borderRadius: "6px",
+                  padding: "8px 10px",
+                  borderRadius: "8px",
                   borderLeft: "3px solid var(--accent-color)",
+                  lineHeight: 1.6,
                 }}
               >
-                <strong>{t.kpss_quiz_solution_label}</strong>{" "}
+                <strong style={{ color: "var(--accent-color)" }}>
+                  {t.kpss_quiz_solution_label}
+                </strong>{" "}
                 <MathRenderer
                   text={
-                    q.solution ||
-                    t.kpss_quiz_solution_label
+                    q.solution || t.kpss_quiz_solution_label
                   }
                 />
               </div>
@@ -228,6 +270,7 @@ export function KpssQuizResultStep({
         })}
       </div>
 
+      {/* ─── Actions ─── */}
       <div
         className="settings-footer"
         style={{
@@ -240,14 +283,14 @@ export function KpssQuizResultStep({
         <div style={{ display: "flex", gap: "10px", width: "100%" }}>
           <button
             className="kpss-qcount-btn"
-            style={{ flex: 1 }}
+            style={{ flex: 1, padding: "12px 0", fontWeight: 600, fontSize: "0.9rem" }}
             onClick={onRetakeQuiz}
           >
             {t.kpss_quiz_retake}
           </button>
           <button
             className="kpss-qcount-btn"
-            style={{ flex: 1 }}
+            style={{ flex: 1, padding: "12px 0", fontWeight: 600, fontSize: "0.9rem" }}
             onClick={handleExportTxt}
           >
             {t.kpss_quiz_export}
@@ -255,7 +298,7 @@ export function KpssQuizResultStep({
         </div>
         <button
           className="settings-add-btn"
-          style={{ width: "100%", padding: 0 }}
+          style={{ width: "100%", padding: "14px 20px", fontSize: "1rem", fontWeight: 700 }}
           onClick={onClose}
         >
           {t.kpss_quiz_close}

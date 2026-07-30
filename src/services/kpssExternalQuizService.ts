@@ -2,6 +2,10 @@
  * kpssExternalQuizService.ts
  * Harici AI servisleri (Gemini, ChatGPT, Claude, Copilot) için KPSS sınav prompt üretici
  * ve yeni sekme açma servisini yönetir.
+ *
+ * Prompt: yerel AI ile aynı gelişmiş system+user prompt birleşimini kullanır
+ * (getKpssSystemPrompt + userPrompt) — ancak JSON çıktısı yerine
+ * okunabilir soru formatında üretmesi istenir.
  */
 
 import { Language } from "@/types/types.js";
@@ -9,22 +13,30 @@ import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
 
 export type ExternalAIService = "gemini" | "chatgpt" | "claude" | "copilot";
 
-/** Harici AI servislerinin URL şablonları */
+/** Harici AI servislerinin yeni sekme URL'leri */
 const SERVICE_URLS: Record<ExternalAIService, string> = {
-  gemini: "https://gemini.google.com/app",
+  gemini:  "https://gemini.google.com/app",
   chatgpt: "https://chatgpt.com/",
-  claude: "https://claude.ai/new",
-  copilot: "https://copilot.microsoft.com/",
+  claude:  "https://claude.ai/new",
+  copilot: "https://copilot.microsoft.com/chat",
 };
 
-/** URL destekleyen servisler için query param adları */
+/**
+ * URL pre-fill parametresini destekleyen servisler.
+ * Gemini: ?q=   → input alanına yazar VE otomatik gönderir
+ * Claude: ?q=   → input alanına yazar ama göndermez (Enter gerekir)
+ * ChatGPT / Copilot: ?q= desteği yok → clipboard fallback
+ */
 const SERVICE_QUERY_PARAMS: Partial<Record<ExternalAIService, string>> = {
   gemini: "q",
-  chatgpt: "q",
   claude: "q",
 };
 
-/** Sınav prompt'u oluşturur */
+/**
+ * Yerel AI ile aynı gelişmiş prompt metnini oluşturur.
+ * System rules + user talebi tek mesaj olarak birleştirilir.
+ * Çıktı formatı okunabilir metin (JSON değil).
+ */
 export function buildKpssQuizPrompt(
   subjectKey: string,
   topicName: string,
@@ -34,35 +46,59 @@ export function buildKpssQuizPrompt(
   const subjectNames = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
   const subjectLabel = subjectNames[subjectKey] || subjectKey;
 
-  if (lang === "en") {
-    return `Create ${count} multiple-choice questions from the "${topicName}" topic in the KPSS ${subjectLabel} subject.
+  // Konu bazlı gelişmiş kurallar (yerel AI prompt'undan alınmıştır)
+  let subjectRules = "";
 
-For each question provide:
-- Question text
-- Options A, B, C, D, E (each on a separate line)
-- Correct answer (e.g., "Correct Answer: C")
-- Brief solution explanation
-
-Questions should match real KPSS exam difficulty and format.
-Please write in Turkish.`;
+  switch (subjectKey) {
+    case "geometri":
+    case "matematik":
+      subjectRules = `
+Matematik/Geometri soruları için: Eğer grafik okuma, tablo, çizgi grafik veya geometri sorusu ise sorunun hemen altında şeklin nasıl göründüğünü metin olarak tarif et (örn: "Şekilde ABC üçgeninde A=60°, B=x, C=80° verilmiştir.").`;
+      break;
+    case "cografya":
+      subjectRules = `
+Coğrafya soruları için: Bilimsel ve akademik doğruluk şart. Türkiye'de doğu-batı sıcaklık farklarını enlemle açıklama — bu yanlıştır. "Matematik (Mutlak) Konum" ile "Göreceli (Özel) Konum" ayrımını net belirt. Eğer harita gerektiren soru soruyorsan haritada hangi bölgenin numaralandırıldığını yazıyla tarif et.`;
+      break;
+    case "turkce":
+      subjectRules = `
+Türkçe soruları için: Paragraf sorularında edebi/felsefi derinlik içeren, ÖSYM'nin uzun sınav paragraflarına tam uyumlu zengin metinler oluştur. Şıklar arasında anlamsal çelişki olmamalıdır.`;
+      break;
+    case "tarih":
+      subjectRules = `
+Tarih soruları için: Kronolojik olarak tamamen doğru, bilimsel literatüre uygun olmalı. Padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihine yönelik bağlamları kusursuz kurgula. Uydurma/kurgusal olaylar kesinlikle yasak.`;
+      break;
+    case "vatandaslik":
+      subjectRules = `
+Vatandaşlık soruları için: TC Anayasası, idare hukuku ve temel hukuk kavramlarına %100 sadık kal. Güncel olmayan anayasa kuralları veya uydurulmuş maddeler kesinlikle kullanılmamalı.`;
+      break;
   }
 
-  return `KPSS ${subjectLabel} dersinden, "${topicName}" konusunda ${count} adet çoktan seçmeli soru hazırla.
+  return `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Aşağıdaki talimatlara göre sınav soruları hazırla.
 
-Her soru için şunları ver:
-- Soru metni
-- A, B, C, D, E şıkları (her şık ayrı satırda)
-- Doğru cevap (örn: "Doğru Cevap: C")
-- Kısa çözüm açıklaması
+### ÖSYM Formatı ve Soru Kalitesi Kuralları:
+1. Sorular ÖSYM'nin KPSS Lisans sınavlarındaki gibi zengin, ayrıntılı, paragraflı veya öncüllü (I, II, III şeklinde maddeler içeren) olmalıdır. Çok kısa, tek cümlelik yüzeysel sorulardan KESİNLİKLE kaçın.
+2. Soru kökleri yoruma kapalı, neyi sorduğu %100 açık olmalıdır.
+3. Her sorunun A, B, C, D, E olmak üzere tam 5 seçeneği olmalıdır.
+4. Diğer 4 yanlış seçenek akademik olarak tamamen yanlış olmalı, doğru seçenek ise tartışmaya yer bırakmayacak şekilde kesin olmalıdır.
+5. Her sorunun sonunda "Doğru Cevap: X — Açıklama: ..." formatında çözüm açıklaması yaz.${subjectRules}
 
-Sorular gerçek KPSS sınav formatında ve zorluk düzeyinde olsun.
-Türkçe olarak hazırla.`;
+### Görev:
+${subjectLabel} dersinin "${topicName}" konusu hakkında tam ${count} adet zorlayıcı KPSS seviye tespit sorusu oluştur.
+
+Soru formatı:
+**Soru 1:** [Soru metni]
+A) ...  B) ...  C) ...  D) ...  E) ...
+✓ Doğru Cevap: [Harf] — [Kısa çözüm açıklaması]
+
+---`;
 }
 
 /**
  * Harici AI servisini yeni sekmede açar.
- * URL kısa ise (≤ 2000 char) doğrudan URL param ile gönderir.
- * Uzun ise prompt'u panoya kopyalar ve servisi boş olarak açar.
+ *
+ * Strateji:
+ * - Gemini & Claude: ?q= parametresi ile prompt pre-fill edilir (otomasyon)
+ * - ChatGPT & Copilot: URL param desteği yok → prompt panoya kopyalanır
  *
  * @returns "url" — URL param ile açıldı | "clipboard" — panoya kopyalandı
  */
@@ -80,14 +116,14 @@ export async function openExternalAIService(
     const encoded = encodeURIComponent(prompt);
     const fullUrl = `${baseUrl}?${queryParam}=${encoded}`;
 
-    // URL 2000 karakterden kısaysa doğrudan kullan
-    if (fullUrl.length <= 2000) {
+    // KPSS promptları genellikle 400-600 karakter — URL limitine sığar
+    if (fullUrl.length <= 8000) {
       targetUrl = fullUrl;
       method = "url";
     }
   }
 
-  // Clipboard fallback — prompt panoya kopyalanır
+  // ChatGPT ve Copilot için clipboard fallback
   if (method === "clipboard") {
     try {
       await navigator.clipboard.writeText(prompt);

@@ -1015,4 +1015,6 @@ export const en = {
   kpss_external_quiz_back: "Back",
   kpss_external_quiz_select_service: "Select AI Service",
   kpss_external_quiz_copy_prompt: "Copy Prompt",
-}
+  kpss_external_quiz_clipboard_hint: "Prompt copied! Paste it (Ctrl+V) after the AI tab opens.",
+}
+

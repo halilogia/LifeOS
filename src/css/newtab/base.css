@@ -275,6 +275,10 @@ body {
   display: flex;
 }
 
+.settings-panel.top-priority {
+  z-index: 1002;
+}
+
 .settings-content {
   background: rgba(15, 15, 22, 0.98);
   backdrop-filter: blur(25px);
