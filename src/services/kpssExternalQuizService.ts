@@ -3,9 +3,10 @@
  * Harici AI servisleri (Gemini, ChatGPT, Claude, Copilot) için KPSS sınav prompt üretici
  * ve yeni sekme açma servisini yönetir.
  *
- * Prompt: yerel AI ile aynı gelişmiş system+user prompt birleşimini kullanır
- * (getKpssSystemPrompt + userPrompt) — ancak JSON çıktısı yerine
- * okunabilir soru formatında üretmesi istenir.
+ * Strateji: Tüm servislerde URL açılır + prompt panoya kopyalanır + 
+ * sayfa yüklendiğinde otomatik olarak textarea'ya doldurulur.
+ * Bu sayede Claude, Gemini, ChatGPT, Copilot ve diğer tüm AI sitelerinde
+ * kullanıcının hiçbir şey yapmasına gerek kalmaz.
  */
 
 import { Language } from "@/types/types.js";
@@ -18,24 +19,19 @@ const SERVICE_URLS: Record<ExternalAIService, string> = {
   gemini:  "https://gemini.google.com/app",
   chatgpt: "https://chatgpt.com/",
   claude:  "https://claude.ai/new",
-  copilot: "https://copilot.microsoft.com/chat",
+  copilot: "https://copilot.microsoft.com/",
 };
 
-/**
- * URL pre-fill parametresini destekleyen servisler.
- * Gemini: ?q=   → input alanına yazar VE otomatik gönderir
- * Claude: ?q=   → input alanına yazar ama göndermez (Enter gerekir)
- * ChatGPT / Copilot: ?q= desteği yok → clipboard fallback
- */
-const SERVICE_QUERY_PARAMS: Partial<Record<ExternalAIService, string>> = {
-  gemini: "q",
-  claude: "q",
+/** Kullanıcıya gösterilecek servis isimleri */
+const SERVICE_NAMES: Record<ExternalAIService, string> = {
+  gemini:  "Gemini",
+  chatgpt: "ChatGPT",
+  claude:  "Claude",
+  copilot: "Copilot",
 };
 
 /**
  * Yerel AI ile aynı gelişmiş prompt metnini oluşturur.
- * System rules + user talebi tek mesaj olarak birleştirilir.
- * Çıktı formatı okunabilir metin (JSON değil).
  */
 export function buildKpssQuizPrompt(
   subjectKey: string,
@@ -46,7 +42,6 @@ export function buildKpssQuizPrompt(
   const subjectNames = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
   const subjectLabel = subjectNames[subjectKey] || subjectKey;
 
-  // Konu bazlı gelişmiş kurallar (yerel AI prompt'undan alınmıştır)
   let subjectRules = "";
 
   switch (subjectKey) {
@@ -94,50 +89,124 @@ A) ...  B) ...  C) ...  D) ...  E) ...
 }
 
 /**
- * Harici AI servisini yeni sekmede açar.
+ * Yeni açılan sekmede AI sohbet textarea'sını bulup prompt'u otomatik doldurur.
+ * Background script (service worker) context'inde çalışır.
+ */
+function autoFillPromptOnTab(tabId: number, prompt: string): void {
+  const onUpdated = (
+    updatedTabId: number,
+    info: { status?: string; url?: string },
+    _tab: chrome.tabs.Tab,
+  ) => {
+    if (updatedTabId !== tabId) return;
+    if (info.status !== "complete") return;
+
+    // Listener'ı bir kere çalıştır, sonra kaldır
+    chrome.tabs.onUpdated.removeListener(onUpdated);
+
+    // Kısa bir gecikme — SPA framework'lerin input'u hazır hale getirmesi için
+    setTimeout(() => {
+      chrome.scripting.executeScript({
+        target: { tabId },
+        world: "MAIN",
+        func: (text: string) => {
+          // Tüm AI siteleri için ortak seçiciler
+          const selectors = [
+            "textarea",
+            "[contenteditable='true']",
+            "[role='textbox']",
+            ".ProseMirror",          // Claude
+            "div[contenteditable='true']",
+            "textarea[placeholder*='Message']",
+            "textarea[placeholder*='prompt']",
+            "textarea[placeholder*='yaz']",
+            "textarea[placeholder*='sor']",
+          ];
+
+          for (const sel of selectors) {
+            const el = document.querySelector(sel) as HTMLElement | null;
+            if (!el || !el.isConnected) continue;
+
+            try {
+              // Textarea / input
+              if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
+                const inputEl = el as HTMLTextAreaElement;
+                inputEl.value = text;
+              }
+              // Contenteditable (Claude, ChatGPT, Gemini)
+              else if (el.isContentEditable) {
+                el.focus();
+                el.innerText = text;
+
+                // React/Vue state güncellemesi için native input setter
+                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                  window.HTMLTextAreaElement?.prototype || window.HTMLInputElement?.prototype,
+                  "value",
+                )?.set;
+                if (nativeInputValueSetter) {
+                  nativeInputValueSetter.call(el, text);
+                }
+              }
+
+              // Event'leri dispatch et (React state güncellemesi için)
+              el.focus();
+              el.dispatchEvent(new Event("focus", { bubbles: true }));
+              el.dispatchEvent(new Event("input", { bubbles: true }));
+              el.dispatchEvent(new Event("change", { bubbles: true }));
+              el.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
+            } catch {
+              // Sessizce dene — bir seçici çalışmazsa diğerine geç
+            }
+          }
+        },
+        args: [prompt],
+      }).catch(() => {
+        // executeScript fail olursa (sayfa henüz hazır değilse) sessizce devam et
+        // Kullanıcı zaten clipboard'dan yapıştırabilir
+      });
+    }, 1200);
+  };
+
+  chrome.tabs.onUpdated.addListener(onUpdated);
+}
+
+/**
+ * Harici AI servisini yeni sekmede açar, prompt'u panoya kopyalar,
+ * VE sayfa yüklendiğinde textarea'ya otomatik doldurur.
  *
- * Strateji:
- * - Gemini & Claude: ?q= parametresi ile prompt pre-fill edilir (otomasyon)
- * - ChatGPT & Copilot: URL param desteği yok → prompt panoya kopyalanır
- *
- * @returns "url" — URL param ile açıldı | "clipboard" — panoya kopyalandı
+ * @returns "clipboard"
  */
 export async function openExternalAIService(
   service: ExternalAIService,
   prompt: string,
-): Promise<"url" | "clipboard"> {
+): Promise<"clipboard"> {
   const baseUrl = SERVICE_URLS[service];
-  const queryParam = SERVICE_QUERY_PARAMS[service];
 
+  // 1. Prompt'u her zaman panoya kopyala (yedek)
+  try {
+    await navigator.clipboard.writeText(prompt);
+  } catch {
+    // Clipboard erişimi yoksa sessizce devam et
+  }
+
+  // 2. URL'yi hazırla (?q= Claude'da pre-fill dener)
   let targetUrl = baseUrl;
-  let method: "url" | "clipboard" = "clipboard";
-
-  if (queryParam) {
-    const encoded = encodeURIComponent(prompt);
-    const fullUrl = `${baseUrl}?${queryParam}=${encoded}`;
-
-    // KPSS promptları genellikle 400-600 karakter — URL limitine sığar
-    if (fullUrl.length <= 8000) {
-      targetUrl = fullUrl;
-      method = "url";
-    }
+  const encoded = encodeURIComponent(prompt);
+  const fullUrl = `${baseUrl}?q=${encoded}`;
+  if (fullUrl.length <= 8000) {
+    targetUrl = fullUrl;
   }
 
-  // ChatGPT ve Copilot için clipboard fallback
-  if (method === "clipboard") {
-    try {
-      await navigator.clipboard.writeText(prompt);
-    } catch {
-      // Clipboard erişimi yoksa sessizce devam et
-    }
-  }
-
-  // Chrome Extension ortamında chrome.tabs.create kullanılır
+  // 3. Sekmeyi aç + otomatik doldur
   if (typeof chrome !== "undefined" && chrome.tabs) {
-    chrome.tabs.create({ url: targetUrl, active: true });
+    chrome.tabs.create({ url: targetUrl, active: true }, (tab) => {
+      if (tab?.id) {
+        autoFillPromptOnTab(tab.id, prompt);
+      }
+    });
   } else {
     window.open(targetUrl, "_blank");
   }
 
-  return method;
+  return "clipboard";
 }
