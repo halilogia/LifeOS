@@ -2,6 +2,7 @@
  * KpssQuizModal.tsx
  * KPSS Seviye Tespit Sınavı Modal Bileşeni.
  * Layout Assembly Pattern ile parçalarına ayrıştırılmıştır.
+ * Hem Yerel AI hem Harici AI (Gemini, ChatGPT, Claude, Copilot) modunu destekler.
  */
 
 import { useState } from "preact/hooks";
@@ -12,9 +13,12 @@ import {
   QuizQuestion,
 } from "@/components/kpss/KpssQuizQuestionsStep.js";
 import { KpssQuizResultStep } from "@/components/kpss/KpssQuizResultStep.js";
+import { KpssExternalQuizLauncher } from "@/components/kpss/KpssExternalQuizLauncher.js";
+import { KpssExternalResultModal } from "@/components/kpss/KpssExternalResultModal.js";
+import { Language } from "@/types/types.js";
 
 interface KpssQuizModalProps {
-  lang: string;
+  lang: Language;
   t: Record<string, string>;
   currentSubject: string;
   activeQuizTopic: string | null;
@@ -37,6 +41,7 @@ interface KpssQuizModalProps {
   onNextQuestion: () => void;
   onFinishQuiz: () => void;
   onRetakeQuiz: () => void;
+  onSaveExternalResult: (correct: number, total: number) => void;
   subjectNames: Record<string, string>;
 }
 
@@ -64,6 +69,7 @@ export function KpssQuizModal({
   onNextQuestion,
   onFinishQuiz,
   onRetakeQuiz,
+  onSaveExternalResult,
   subjectNames,
 }: KpssQuizModalProps) {
   if (!activeQuizTopic) {
@@ -71,9 +77,19 @@ export function KpssQuizModal({
   }
 
   const [showInfo, setShowInfo] = useState(false);
+  // "local-intro" | "external-launcher" | "external-result"
+  const [internalMode, setInternalMode] = useState<
+    "local-intro" | "external-launcher" | "external-result"
+  >("local-intro");
+
   const totalQuizLength = isBackgroundLoading
     ? selectedQuizCount
     : quizQuestions.length;
+
+  // Mevcut quiz adımı değişince (yani sınav başladı / bitti), iç modu sıfırla
+  const isInExternalFlow =
+    internalMode === "external-launcher" ||
+    internalMode === "external-result";
 
   return (
     <div className="settings-panel active" onClick={onClose}>
@@ -135,47 +151,80 @@ export function KpssQuizModal({
 
         {/* Body Content */}
         <div className="settings-body" style={{ padding: "20px" }}>
-          {quizStep === "intro" && (
-            <KpssQuizIntroStep
-              t={t}
-              selectedQuizCount={selectedQuizCount}
-              aiApiKey={aiApiKey}
-              aiEndpoint={aiEndpoint}
-              onSetSelectedQuizCount={onSetSelectedQuizCount}
-              onStartQuiz={onStartQuiz}
-            />
-          )}
 
-          {quizStep === "questions" && (
-            <KpssQuizQuestionsStep
+          {/* ── Harici AI Launcher ── */}
+          {isInExternalFlow && internalMode === "external-launcher" && (
+            <KpssExternalQuizLauncher
               t={t}
-              quizLoading={quizLoading}
-              quizError={quizError}
-              quizQuestions={quizQuestions}
-              currentQuestionIndex={currentQuestionIndex}
-              selectedAnswers={selectedAnswers}
-              totalQuizLength={totalQuizLength}
-              onStartQuiz={onStartQuiz}
-              onSelectAnswer={onSelectAnswer}
-              onPreviousQuestion={onPreviousQuestion}
-              onNextQuestion={onNextQuestion}
-              onFinishQuiz={onFinishQuiz}
-            />
-          )}
-
-          {quizStep === "result" && (
-            <KpssQuizResultStep
               lang={lang}
-              t={t}
-              currentSubject={currentSubject}
-              activeQuizTopic={activeQuizTopic}
-              quizResultScore={quizResultScore}
-              quizQuestions={quizQuestions}
-              selectedAnswers={selectedAnswers}
-              subjectNames={subjectNames}
-              onRetakeQuiz={onRetakeQuiz}
-              onClose={onClose}
+              subjectKey={currentSubject}
+              topicName={activeQuizTopic}
+              questionCount={selectedQuizCount}
+              onEnterResult={() => setInternalMode("external-result")}
+              onBack={() => setInternalMode("local-intro")}
             />
+          )}
+
+          {/* ── Harici AI Sonuç Girişi ── */}
+          {isInExternalFlow && internalMode === "external-result" && (
+            <KpssExternalResultModal
+              t={t}
+              totalCount={selectedQuizCount}
+              onSave={(correct, total) => {
+                onSaveExternalResult(correct, total);
+                setInternalMode("local-intro");
+              }}
+              onBack={() => setInternalMode("external-launcher")}
+            />
+          )}
+
+          {/* ── Yerel AI Akışı ── */}
+          {!isInExternalFlow && (
+            <>
+              {quizStep === "intro" && (
+                <KpssQuizIntroStep
+                  t={t}
+                  selectedQuizCount={selectedQuizCount}
+                  aiApiKey={aiApiKey}
+                  aiEndpoint={aiEndpoint}
+                  onSetSelectedQuizCount={onSetSelectedQuizCount}
+                  onStartQuiz={onStartQuiz}
+                  onOpenExternal={() => setInternalMode("external-launcher")}
+                />
+              )}
+
+              {quizStep === "questions" && (
+                <KpssQuizQuestionsStep
+                  t={t}
+                  quizLoading={quizLoading}
+                  quizError={quizError}
+                  quizQuestions={quizQuestions}
+                  currentQuestionIndex={currentQuestionIndex}
+                  selectedAnswers={selectedAnswers}
+                  totalQuizLength={totalQuizLength}
+                  onStartQuiz={onStartQuiz}
+                  onSelectAnswer={onSelectAnswer}
+                  onPreviousQuestion={onPreviousQuestion}
+                  onNextQuestion={onNextQuestion}
+                  onFinishQuiz={onFinishQuiz}
+                />
+              )}
+
+              {quizStep === "result" && (
+                <KpssQuizResultStep
+                  lang={lang}
+                  t={t}
+                  currentSubject={currentSubject}
+                  activeQuizTopic={activeQuizTopic}
+                  quizResultScore={quizResultScore}
+                  quizQuestions={quizQuestions}
+                  selectedAnswers={selectedAnswers}
+                  subjectNames={subjectNames}
+                  onRetakeQuiz={onRetakeQuiz}
+                  onClose={onClose}
+                />
+              )}
+            </>
           )}
         </div>
       </div>

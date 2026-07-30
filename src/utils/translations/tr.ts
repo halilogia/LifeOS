@@ -932,6 +932,34 @@ export const tr = {
   stock_chart_hover_hint: "Detay görmek için imleci grafik üzerine getirin.",
   stock_chart_no_data_hint: "Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır.",
   sync_detail_label: "Detay",
+  /* DETOX MOTIVATIONAL KEYS */
+  detox_motiv_unlimited_focus: "Süresiz Odaklanma: Tüm hedeflerini başarmak için önünde sınırsız zaman var!",
+  detox_motiv_kpss_questions: "$count KPSS / Test Sorusu Çözebilirdin",
+  detox_motiv_book_pages: "$count Sayfa Kitap Okuyabilirdin",
+  detox_motiv_pomodoro: "$count Odaklanmış Pomodoro Tamamlayabilirdin",
+  detox_motiv_vocabulary: "$count İngilizce / KPSS Kelimesi Ezberleyebilirdin",
+  detox_motiv_exercise: "$count km Yürüyüş / Spor Yapabilirdin",
+
+  /* AGENT TOOL KEYS */
+  agent_tool_filled_form_fields: "✓ $count adet form alanı dolduruldu.",
+  agent_tool_typing_label: "$count yazma",
+  agent_tool_click_label: "$count tıklama",
+  agent_tool_executed_template: "✓ $count adet işlem başarıyla yürütüldü ($details).",
+
+  /* AGENT TOOL SINGLE ACTION KEYS */
+  agent_tool_clicked: '✓ "$target" bağlantısına/sekmesine tıklandı.',
+  agent_tool_typed: '✓ "$target" alanına metin yazıldı.',
+  agent_tool_scrolled: "✓ Sayfa $direction kaydırıldı.",
+  agent_tool_scrolled_up: "yukarı",
+  agent_tool_scrolled_down: "aşağı",
+  agent_tool_extracted: "✓ Sayfa verileri başarıyla analiz edildi.",
+  agent_tool_highlighted: '✓ "$target" öğesi vurgulandı.',
+  agent_tool_executed_single: "✓ $count adet işlem yürütüldü.",
+  agent_tool_element: "Öğe",
+
+  /* STOCK REPORT PROMPT KEY */
+  stock_report_user_prompt: "Portföyümün bugünkü/bu haftaki genel durumunu, risklerini ve dikkat edilmesi gereken konuları Türkçe sade bir gazete özeti olarak çıkar.",
+
   // -- SidePanelApp keys --
   answer_language: "Türkçe",
   agent_analyze_desc: "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
@@ -973,4 +1001,18 @@ export const tr = {
   summarize_video: "Videoyu Özetle",
   video_quiz: "5 Soruluk Test",
   voice_command_tooltip: "Sesli Komut Ver",
-}
+  kpss_external_quiz_title: "Harici AI ile Sınav Oluştur",
+  kpss_external_quiz_desc: "Seçtiğiniz AI asistanında KPSS soruları hazır prompt ile oluşturun. Sınav bittikten sonra sonuçlarınızı buraya girin.",
+  kpss_external_quiz_open: "Harici AI ile Sınav",
+  kpss_external_quiz_prompt_copied: "Prompt panoya kopyalandı! AI'ya yapıştırın.",
+  kpss_external_quiz_opened_url: "Yeni sekme açıldı, prompt hazır gönderildi!",
+  kpss_external_quiz_enter_result: "Sınav Sonucunu Gir",
+  kpss_external_quiz_result_desc: "Sınav bitti mi? Kaç soru yapıp kaç doğru yaptığınızı girin.",
+  kpss_external_quiz_total: "Toplam Soru",
+  kpss_external_quiz_correct: "Doğru Sayısı",
+  kpss_external_quiz_wrong: "Yanlış",
+  kpss_external_quiz_save: "Sonucu Kaydet",
+  kpss_external_quiz_back: "Geri",
+  kpss_external_quiz_select_service: "AI Servisini Seçin",
+  kpss_external_quiz_copy_prompt: "Promptu Kopyala",
+}

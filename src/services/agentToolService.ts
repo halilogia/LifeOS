@@ -3,6 +3,9 @@
  * Clean Architecture Domain Service for AI Agent Tools & Action Parsing.
  */
 
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
+
 export interface AgentActionPayload {
   actionType: "click" | "type" | "scroll" | "extract" | "highlight";
   selector?: string;
@@ -59,43 +62,31 @@ export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
 export function formatActionExecutionSummary(actions: AgentActionPayload[], lang: "tr" | "en"): string {
   if (!actions || actions.length === 0) {return "";}
 
-  const isTr = lang === "tr";
+  const t = getTranslation(lang as Language);
 
   // Single action execution formatting
   if (actions.length === 1) {
     const act = actions[0];
-    const targetName = act.targetText || act.selector || (isTr ? "Öğe" : "Element");
+    const targetName = act.targetText || act.selector || t.agent_tool_element;
 
     switch (act.actionType) {
       case "click":
-        return isTr
-          ? `✓ "${targetName}" bağlantısına/sekmesine tıklandı.`
-          : `✓ Clicked on "${targetName}".`;
+        return t.agent_tool_clicked.replace("$target", targetName);
 
       case "type":
-        return isTr
-          ? `✓ "${targetName}" alanına metin yazıldı.`
-          : `✓ Typed value into "${targetName}".`;
+        return t.agent_tool_typed.replace("$target", targetName);
 
       case "scroll":
-        return isTr
-          ? `✓ Sayfa ${act.direction === "up" ? "yukarı" : "aşağı"} kaydırıldı.`
-          : `✓ Scrolled page ${act.direction || "down"}.`;
+        return t.agent_tool_scrolled.replace("$direction", act.direction === "up" ? t.agent_tool_scrolled_up : t.agent_tool_scrolled_down);
 
       case "extract":
-        return isTr
-          ? `✓ Sayfa verileri başarıyla analiz edildi.`
-          : `✓ Page content extracted successfully.`;
+        return t.agent_tool_extracted;
 
       case "highlight":
-        return isTr
-          ? `✓ "${targetName}" öğesi vurgulandı.`
-          : `✓ Highlighted "${targetName}".`;
+        return t.agent_tool_highlighted.replace("$target", targetName);
 
       default:
-        return isTr
-          ? `✓ ${actions.length} adet işlem yürütüldü.`
-          : `✓ Executed ${actions.length} actions.`;
+        return t.agent_tool_executed_single.replace("$count", String(actions.length));
     }
   }
 
@@ -104,12 +95,13 @@ export function formatActionExecutionSummary(actions: AgentActionPayload[], lang
   const typeCount = actions.filter((a) => a.actionType === "type").length;
 
   if (typeCount > 0 && clickCount === 0) {
-    return isTr
-      ? `✓ ${typeCount} adet form alanı dolduruldu.`
-      : `✓ Filled ${typeCount} form fields.`;
+    return t.agent_tool_filled_form_fields.replace("$count", String(typeCount));
   }
 
-  return isTr
-    ? `✓ ${actions.length} adet işlem başarıyla yürütüldü (${typeCount > 0 ? `${typeCount} yazma` : ""}${clickCount > 0 ? `, ${clickCount} tıklama` : ""}).`
-    : `✓ Successfully executed ${actions.length} actions (${typeCount > 0 ? `${typeCount} typing` : ""}${clickCount > 0 ? `, ${clickCount} clicks` : ""}).`;
+  const parts: string[] = [];
+  if (typeCount > 0) {parts.push(t.agent_tool_typing_label.replace("$count", String(typeCount)));}
+  if (clickCount > 0) {parts.push(t.agent_tool_click_label.replace("$count", String(clickCount)));}
+  const details = parts.join(", ");
+
+  return t.agent_tool_executed_template.replace("$count", String(actions.length)).replace("$details", details);
 }

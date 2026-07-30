@@ -48,6 +48,46 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       );
     },
 
+    /**
+     * Saves result from an externally-taken quiz (Gemini, ChatGPT, Claude…).
+     * No question array — only correct / total counts and score are persisted.
+     */
+    async saveExternalQuizResult(params: {
+      currentSubject: string;
+      activeQuizTopic: string;
+      correctCount: number;
+      totalCount: number;
+      pastQuizzes: Record<string, KpssPastQuiz>;
+    }): Promise<{ scorePercentage: number; updatedPastQuizzes: Record<string, KpssPastQuiz> }> {
+      const { currentSubject, activeQuizTopic, correctCount, totalCount, pastQuizzes } = params;
+
+      const scorePercentage = totalCount > 0
+        ? Math.round((correctCount / totalCount) * 100)
+        : 0;
+      const newStatus: 0 | 1 | 2 = scorePercentage >= 80 ? 2 : scorePercentage >= 40 ? 1 : 0;
+
+      const isRegularTopic = (kpssData[currentSubject] || []).some((t) => t.title === activeQuizTopic);
+      if (isRegularTopic) {
+        await kpssService.updateTopicStatus(currentSubject, activeQuizTopic, newStatus, scorePercentage);
+      }
+
+      const quizKey = `${currentSubject}_${activeQuizTopic}`;
+      const newQuizRecord: KpssPastQuiz = {
+        subject: currentSubject,
+        topic: activeQuizTopic,
+        score: scorePercentage,
+        questions: [],
+        selectedAnswers: [],
+        date: new Date().toISOString().split("T")[0],
+      };
+
+      const updatedPastQuizzes = { ...pastQuizzes, [quizKey]: newQuizRecord };
+      await kpssRepo.savePastQuizzes(updatedPastQuizzes as unknown as Record<string, unknown>);
+      await kpssService.saveKpssDailyStats(totalCount, 0, currentSubject);
+
+      return { scorePercentage, updatedPastQuizzes };
+    },
+
     /** Evaluates quiz score, updates topic status, saves past quiz to repo. */
     async evaluateAndSaveQuizResult(params: {
       currentSubject: string;

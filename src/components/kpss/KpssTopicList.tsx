@@ -153,7 +153,7 @@ export function KpssTopicList({
                 className="kpss-topic-name"
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
-                <span>{t.title}</span>
+                <span>{topic.title}</span>
                 <span
                   className="kpss-topic-q-badge"
                   style={{
@@ -183,7 +183,7 @@ export function KpssTopicList({
                 }
                 onClick={(e) => {
                   e.stopPropagation();
-                  onStartQuiz(t.title);
+                  onStartQuiz(topic.title);
                 }}
               >
                 <svg
@@ -211,8 +211,8 @@ export function KpssTopicList({
                 onClick={(e) => {
                   e.stopPropagation();
                   onShowDetail({
-                    title: t.title,
-                    description: t.description,
+                    title: topic.title,
+                    description: topic.description,
                   });
                 }}
               >

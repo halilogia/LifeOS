@@ -1,0 +1,279 @@
+/* ================================================================
+   kpss-external-quiz.css
+   Harici AI Quiz Launcher – Servis seçim kartları ve sonuç giriş ekranı
+   ================================================================ */
+
+/* ---------- Servis Seçim Ekranı ---------- */
+.kpss-external-launcher {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px 0;
+  text-align: center;
+}
+
+.kpss-external-launcher__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.kpss-external-launcher__desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.kpss-external-service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.kpss-external-service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpss-external-service-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--card-glow, transparent);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  border-radius: inherit;
+}
+
+.kpss-external-service-card:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.18);
+}
+
+.kpss-external-service-card:hover::before {
+  opacity: 1;
+}
+
+.kpss-external-service-card:active {
+  transform: translateY(0);
+}
+
+/* Gemini kart */
+.kpss-external-service-card[data-service="gemini"] {
+  --card-glow: radial-gradient(ellipse at center, rgba(66, 133, 244, 0.08), transparent 70%);
+}
+.kpss-external-service-card[data-service="gemini"]:hover {
+  border-color: #4285f4;
+  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.2);
+}
+
+/* ChatGPT kart */
+.kpss-external-service-card[data-service="chatgpt"] {
+  --card-glow: radial-gradient(ellipse at center, rgba(16, 163, 127, 0.08), transparent 70%);
+}
+.kpss-external-service-card[data-service="chatgpt"]:hover {
+  border-color: #10a37f;
+  box-shadow: 0 8px 24px rgba(16, 163, 127, 0.2);
+}
+
+/* Claude kart */
+.kpss-external-service-card[data-service="claude"] {
+  --card-glow: radial-gradient(ellipse at center, rgba(209, 91, 51, 0.08), transparent 70%);
+}
+.kpss-external-service-card[data-service="claude"]:hover {
+  border-color: #d15b33;
+  box-shadow: 0 8px 24px rgba(209, 91, 51, 0.2);
+}
+
+/* Copilot kart */
+.kpss-external-service-card[data-service="copilot"] {
+  --card-glow: radial-gradient(ellipse at center, rgba(0, 120, 212, 0.08), transparent 70%);
+}
+.kpss-external-service-card[data-service="copilot"]:hover {
+  border-color: #0078d4;
+  box-shadow: 0 8px 24px rgba(0, 120, 212, 0.2);
+}
+
+.kpss-external-service-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpss-external-service-card__name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Prompt preview kutusu */
+.kpss-external-prompt-preview {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+/* Toast bildirimi */
+.kpss-external-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  animation: kpss-toast-in 0.3s ease;
+}
+
+.kpss-external-toast--success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.kpss-external-toast--info {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--accent-color);
+}
+
+@keyframes kpss-toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Sonuç Giriş Ekranı ---------- */
+.kpss-external-result {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px 0;
+}
+
+.kpss-external-result__title {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin: 0;
+}
+
+.kpss-external-result__desc {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.kpss-external-result__inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.kpss-external-result__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kpss-external-result__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.kpss-external-result__input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 10px 12px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.kpss-external-result__input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+/* Canlı skor önizlemesi */
+.kpss-external-result__score-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.kpss-external-result__score-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.kpss-external-result__score-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Harici sınav butonu (intro ekranında) */
+.kpss-external-open-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 10px;
+  color: var(--accent-color);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.kpss-external-open-btn:hover {
+  background: rgba(139, 92, 246, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
+}
