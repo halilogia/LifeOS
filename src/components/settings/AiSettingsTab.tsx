@@ -82,7 +82,7 @@ export function AiSettingsTab({
       }
       const data = await res.json();
       if (data && Array.isArray(data.data)) {
-        const list = data.data.map((m: any) => m.id).sort();
+        const list = (data.data as { id: string }[]).map((m: { id: string }) => m.id).sort();
         setModels(list);
       } else {
         throw new Error("Invalid format");

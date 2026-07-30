@@ -5,7 +5,7 @@ interface PomoZenGardenCardProps {
   showPlantModal: boolean;
   focusNote: string;
   selectedElement: PomodoroLog["element"];
-  t: any;
+  t: Record<string, string>;
   onSetFocusNote: (val: string) => void;
   onSetSelectedElement: (el: PomodoroLog["element"]) => void;
   onPlantElement: () => void;

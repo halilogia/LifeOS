@@ -6,9 +6,9 @@
  */
 
 import type { IPrayerCacheRepository } from "@/domain/repositories/IPrayerCacheRepository.js";
-import type { PrayerTimes, DayPrayerData } from "@/types/prayer.js";
+import type { PrayerTimes, DayPrayerData, PrayerDay, PrayerApiDay } from "@/types/prayer.js";
 
-export type { PrayerTimes, DayPrayerData } from "@/types/prayer.js";
+export type { PrayerTimes, DayPrayerData, PrayerDay, PrayerApiDay } from "@/types/prayer.js";
 
 export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
   let _cache: { date: string; city: string; country: string; times: PrayerTimes } | null = null;
@@ -47,10 +47,10 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
         if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
 
         const json = await response.json();
-        const monthDays: any[] = json.data || [];
+        const monthDays: PrayerDay[] = json.data || [];
         const newCacheMap: Record<string, DayPrayerData> = {};
 
-        monthDays.forEach((dayData: any) => {
+        monthDays.forEach((dayData: PrayerApiDay) => {
           const [d, m, y] = dayData.date.gregorian.date.split("-");
           const formattedDate = `${y}-${m}-${d}`;
           const rawTimings = dayData.timings;

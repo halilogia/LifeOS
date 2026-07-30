@@ -3,7 +3,7 @@ import { HifizProgress, HifizItem } from "@/types/types.js";
 interface HifizMemorizationCardProps {
   category: "surahs" | "duas";
   hifizProgress: HifizProgress[];
-  t: any;
+  t: Record<string, string>;
   memorizedCount: number;
   inProgressCount: number;
   totalCount: number;

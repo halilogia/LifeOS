@@ -127,7 +127,7 @@ export function KpssQuizQuestionsStep({
           const isSelected = selectedAnswers[currentQuestionIndex] === oIdx;
           const isCorrect = oIdx === currentQ.correctAnswer;
 
-          let cardStyle: any = {
+          let cardStyle: Record<string, string | number> = {
             transition: "all 0.2s ease",
           };
 

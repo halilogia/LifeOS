@@ -31,7 +31,7 @@ export interface AICallParams {
 export interface AIResponseData {
   reply: string;
   action?: string;
-  params?: any;
+  params: Record<string, unknown> | null;
   thinking?: string;
   searchQuery?: string;
   sources?: WebSearchSource[];
@@ -213,7 +213,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           : "https://generativelanguage.googleapis.com/v1beta";
       const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
 
-      const reqPayload: any = {
+      const reqPayload: Record<string, unknown> = {
         contents: [
           {
             role: "user",
@@ -270,27 +270,31 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
       const todos = await todoRepo.getAll();
       const newTodo = {
         id: `task-${Date.now()}`,
-        text: aiResult.params.text,
+        text: String(aiResult.params?.text ?? ""),
         completed: false,
-        repeat: aiResult.params.repeat || "none",
-        dueDate: aiResult.params.dueDate || "",
+        repeat: String(aiResult.params?.repeat ?? "none") as Todo["repeat"],
+        dueDate: String(aiResult.params?.dueDate ?? ""),
         status: "todo",
         category: "general",
         createdAt: new Date().toISOString(),
       };
-      todos.unshift(newTodo as Todo);
+      todos.unshift({
+        ...newTodo,
+        status: "todo" as const,
+        lastCompletedDate: null,
+      });
       await todoRepo.saveAll(todos);
     } else if (aiResult.action === "add_note" && aiResult.params?.note_content) {
       await handleAddNoteFromAI(
-        aiResult.params.note_type || "note",
-        aiResult.params.note_content,
+        (String(aiResult.params.note_type) || "note") as "note" | "diary" | "cornell",
+        aiResult.params.note_content as string,
         lang,
-        aiResult.params.note_title,
-        aiResult.params.note_cues,
-        aiResult.params.note_summary,
+        aiResult.params.note_title as string,
+        aiResult.params.note_cues as string,
+        aiResult.params.note_summary as string,
       );
     } else if (aiResult.action === "update_memory" && aiResult.params?.memory_fact) {
-      await handleUpdateMemoryFromAI(aiResult.params.memory_fact);
+      await handleUpdateMemoryFromAI(String(aiResult.params.memory_fact));
     }
   }
 

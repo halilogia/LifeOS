@@ -3,7 +3,7 @@ import { Language } from "@/types/types.js";
 export function getKpssSystemPrompt(
   subjectKey: string,
   lang: Language,
-  dynamicExamples?: any[],
+  dynamicExamples?: unknown[],
 ): string {
   // Baseline prompt detailing the structure and ÖSYM rules
   const baseRules = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.

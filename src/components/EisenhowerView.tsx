@@ -19,8 +19,8 @@ interface EisenhowerViewProps {
   defaultTab?: "matrix" | "kanban";
   onUpdateTodoUrgentImportant: (
     originalIndex: number,
-    urgent: any,
-    important: any,
+    urgent: boolean | undefined,
+    important: boolean | undefined,
   ) => void;
   onMoveTaskStatus: (index: number, newStatus: Todo["status"]) => void;
   onMoveTaskDirection: (index: number, direction: number) => void;
@@ -95,8 +95,8 @@ export function EisenhowerView({
       return;
     }
 
-    let urgent: any = undefined;
-    let important: any = undefined;
+    let urgent: boolean | undefined = undefined;
+    let important: boolean | undefined = undefined;
 
     if (quadId === "q1") {
       urgent = true;
