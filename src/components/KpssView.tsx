@@ -362,7 +362,30 @@ export function KpssView({
     }
   };
 
+  const handleSaveExternalResult = async (correct: number, total: number) => {
+    try {
+      const { scorePercentage, updatedPastQuizzes } =
+        await kpssQuizFlowService.saveExternalQuizResult({
+          currentSubject,
+          activeQuizTopic: activeQuizTopic!,
+          correctCount: correct,
+          totalCount: total,
+          pastQuizzes,
+        });
+
+      setQuizResultScore(scorePercentage);
+      setQuizQuestions([]);
+      setSelectedAnswers([]);
+      setQuizStep("result");
+      setPastQuizzes(updatedPastQuizzes);
+      await loadKpssData();
+    } catch (err) {
+      logger.error("Failed to save external quiz result:", err);
+    }
+  };
+
   const handleStartQuiz = (topic: string, subject?: string) => {
+
     const targetSubject = subject || currentSubject;
     if (subject && subject !== currentSubject) {
       setCurrentSubject(subject);
@@ -638,6 +661,7 @@ export function KpssView({
           setSelectedAnswers([]);
           setQuizError(null);
         }}
+        onSaveExternalResult={handleSaveExternalResult}
         subjectNames={SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr}
       />
     </div>

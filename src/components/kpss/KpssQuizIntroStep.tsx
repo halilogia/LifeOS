@@ -10,6 +10,7 @@ interface KpssQuizIntroStepProps {
   aiEndpoint: string;
   onSetSelectedQuizCount: (count: number) => void;
   onStartQuiz: () => void;
+  onOpenExternal: () => void;
 }
 
 export function KpssQuizIntroStep({
@@ -19,6 +20,7 @@ export function KpssQuizIntroStep({
   aiEndpoint,
   onSetSelectedQuizCount,
   onStartQuiz,
+  onOpenExternal,
 }: KpssQuizIntroStepProps) {
   const isAiConfigured =
     aiApiKey ||
@@ -76,7 +78,7 @@ export function KpssQuizIntroStep({
 
       <div
         className="settings-footer"
-        style={{ padding: "16px 0 0 0", marginTop: "24px" }}
+        style={{ padding: "16px 0 0 0", marginTop: "24px", display: "flex", flexDirection: "column", gap: "10px" }}
       >
         <button
           className="settings-add-btn"
@@ -86,7 +88,30 @@ export function KpssQuizIntroStep({
         >
           {t.kpss_quiz_proficiency}
         </button>
+
+        {/* Harici AI seçeneği — her zaman aktif */}
+        <button
+          className="kpss-external-open-btn"
+          onClick={onOpenExternal}
+        >
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+          {t.kpss_external_quiz_open}
+        </button>
       </div>
     </div>
   );
 }
+

@@ -932,6 +932,34 @@ export const en = {
   stock_chart_hover_hint: "Hover over the chart to see details.",
   stock_chart_no_data_hint: "This stock has not yet started trading on Borsa Istanbul; historical candlestick data will begin plotting live on the opening day.",
   sync_detail_label: "Detail",
+  /* DETOX MOTIVATIONAL KEYS */
+  detox_motiv_unlimited_focus: "Unlimited Focus: Endless time to achieve all your goals!",
+  detox_motiv_kpss_questions: "Solve $count Practice Exam Questions",
+  detox_motiv_book_pages: "Read $count Book Pages",
+  detox_motiv_pomodoro: "Complete $count Focused Pomodoro Sessions",
+  detox_motiv_vocabulary: "Memorize $count Vocabulary / Flashcards",
+  detox_motiv_exercise: "Walk / Exercise $count km",
+
+  /* AGENT TOOL KEYS */
+  agent_tool_filled_form_fields: "✓ Filled $count form fields.",
+  agent_tool_typing_label: "$count typing",
+  agent_tool_click_label: "$count clicks",
+  agent_tool_executed_template: "✓ Successfully executed $count actions ($details).",
+
+  /* AGENT TOOL SINGLE ACTION KEYS */
+  agent_tool_clicked: '✓ Clicked on "$target".',
+  agent_tool_typed: '✓ Typed value into "$target".',
+  agent_tool_scrolled: "✓ Scrolled page $direction.",
+  agent_tool_scrolled_up: "up",
+  agent_tool_scrolled_down: "down",
+  agent_tool_extracted: "✓ Page content extracted successfully.",
+  agent_tool_highlighted: '✓ Highlighted "$target".',
+  agent_tool_executed_single: "✓ Executed $count actions.",
+  agent_tool_element: "Element",
+
+  /* STOCK REPORT PROMPT KEY */
+  stock_report_user_prompt: "Provide a concise Turkish newspaper-style summary of my portfolio's current state, risks, and points to watch for today/this week.",
+
   // -- SidePanelApp keys --
   answer_language: "Turkish",
   agent_analyze_desc: "Analyze the active web page, ask questions, or use quick action triggers.",
@@ -973,4 +1001,18 @@ export const en = {
   summarize_video: "Summarize Video",
   video_quiz: "5-Q Video Quiz",
   voice_command_tooltip: "Voice Command",
-}
+  kpss_external_quiz_title: "Create Quiz with External AI",
+  kpss_external_quiz_desc: "Generate KPSS questions with a ready-made prompt in your preferred AI assistant. Enter your results after finishing.",
+  kpss_external_quiz_open: "External AI Quiz",
+  kpss_external_quiz_prompt_copied: "Prompt copied to clipboard! Paste it into the AI.",
+  kpss_external_quiz_opened_url: "New tab opened with prompt pre-filled!",
+  kpss_external_quiz_enter_result: "Enter Quiz Result",
+  kpss_external_quiz_result_desc: "Finished the quiz? Enter how many questions you answered and how many were correct.",
+  kpss_external_quiz_total: "Total Questions",
+  kpss_external_quiz_correct: "Correct Answers",
+  kpss_external_quiz_wrong: "Wrong",
+  kpss_external_quiz_save: "Save Result",
+  kpss_external_quiz_back: "Back",
+  kpss_external_quiz_select_service: "Select AI Service",
+  kpss_external_quiz_copy_prompt: "Copy Prompt",
+}

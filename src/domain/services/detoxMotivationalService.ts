@@ -4,6 +4,9 @@
  * based on saved detox minutes.
  */
 
+import { getTranslation } from "@/utils/i18n.js";
+import type { Language } from "@/types/types.js";
+
 export interface MotivationalAchievement {
   icon: string;
   text: string;
@@ -14,31 +17,26 @@ export function calculateMotivationalAchievements(
   durationMinutes: number,
   lang: string = "tr",
 ): MotivationalAchievement[] {
-  const isTr = lang === "tr";
+  const t = getTranslation(lang as Language);
+  const mins = Math.max(1, Math.round(durationMinutes));
+  const achievements: MotivationalAchievement[] = [];
 
   if (durationMinutes <= 0) {
     return [
       {
         icon: "👑",
-        text: isTr
-          ? "Süresiz Odaklanma: Tüm hedeflerini başarmak için önünde sınırsız zaman var!"
-          : "Unlimited Focus: Endless time to achieve all your goals!",
+        text: t.detox_motiv_unlimited_focus,
         color: "#a855f7",
       },
     ];
   }
-
-  const mins = Math.max(1, Math.round(durationMinutes));
-  const achievements: MotivationalAchievement[] = [];
 
   // 1. KPSS / Sınav Sorusu (Yaklaşık 1 dakikada 1 soru)
   const kpssQuestions = Math.round(mins * 0.9);
   if (kpssQuestions >= 5) {
     achievements.push({
       icon: "✍️",
-      text: isTr
-        ? `${kpssQuestions} KPSS / Test Sorusu Çözebilirdin`
-        : `Solve ${kpssQuestions} Practice Exam Questions`,
+      text: t.detox_motiv_kpss_questions.replace("$count", String(kpssQuestions)),
       color: "#3b82f6",
     });
   }
@@ -48,9 +46,7 @@ export function calculateMotivationalAchievements(
   if (bookPages >= 3) {
     achievements.push({
       icon: "📚",
-      text: isTr
-        ? `${bookPages} Sayfa Kitap Okuyabilirdin`
-        : `Read ${bookPages} Book Pages`,
+      text: t.detox_motiv_book_pages.replace("$count", String(bookPages)),
       color: "#10b981",
     });
   }
@@ -60,9 +56,7 @@ export function calculateMotivationalAchievements(
   if (pomodoros >= 0.5) {
     achievements.push({
       icon: "🎯",
-      text: isTr
-        ? `${pomodoros} Odaklanmış Pomodoro Tamamlayabilirdin`
-        : `Complete ${pomodoros} Focused Pomodoro Sessions`,
+      text: t.detox_motiv_pomodoro.replace("$count", String(pomodoros)),
       color: "#f59e0b",
     });
   }
@@ -72,9 +66,7 @@ export function calculateMotivationalAchievements(
   if (words >= 10) {
     achievements.push({
       icon: "🎴",
-      text: isTr
-        ? `${words} İngilizce / KPSS Kelimesi Ezberleyebilirdin`
-        : `Memorize ${words} Vocabulary / Flashcards`,
+      text: t.detox_motiv_vocabulary.replace("$count", String(words)),
       color: "#ec4899",
     });
   }
@@ -84,9 +76,7 @@ export function calculateMotivationalAchievements(
   if (distanceKm >= 0.5) {
     achievements.push({
       icon: "🏃",
-      text: isTr
-        ? `${distanceKm} km Yürüyüş / Spor Yapabilirdin`
-        : `Walk / Exercise ${distanceKm} km`,
+      text: t.detox_motiv_exercise.replace("$count", String(distanceKm)),
       color: "#06b6d4",
     });
   }
