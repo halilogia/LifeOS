@@ -116,18 +116,13 @@ export function KpssExternalQuizLauncher({
   const handleServiceSelect = async (service: ExternalAIService) => {
     setIsLoading(service);
     try {
-      const method = await openExternalAIService(service, prompt);
-      if (method === "clipboard") {
-        // ChatGPT / Copilot — panoya kopyalandı
-        setToastMessage(t.kpss_external_quiz_clipboard_hint);
-      } else {
-        // Gemini / Claude — URL param ile pre-fill edildi
-        setToastMessage(t.kpss_external_quiz_opened_url);
-      }
+      await openExternalAIService(service, prompt);
+      // Prompt her zaman panoya kopyalanır
+      setToastMessage(t.kpss_external_quiz_clipboard_hint);
     } finally {
       setIsLoading(null);
     }
-    setTimeout(() => setToastMessage(null), 5000);
+    setTimeout(() => setToastMessage(null), 6000);
   };
 
   const handleCopyPrompt = async () => {
