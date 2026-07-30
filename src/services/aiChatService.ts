@@ -53,24 +53,17 @@ export function createAiChatService(deps: AiChatDependencies) {
     return aiConfigRepo.getConfig();
   }
 
-  async function callAIConfigured({
-    userPrompt,
-    aiProvider,
-    aiApiKey,
-    aiModel,
-    aiEndpoint,
-    enableWebSearch = true,
-    conversationHistory = [],
-  }: AICallParams): Promise<AIResponseData> {
+  /** Builds the system prompt with web search context and user memory. */
+  async function buildSystemPrompt(
+    userPrompt: string,
+    enableWebSearch: boolean,
+  ): Promise<{
+    systemPrompt: string;
+    webSearchData: { query: string; sources: WebSearchSource[] } | null;
+  }> {
     const todayStr = new Date().toISOString().split("T")[0];
 
-    // Build message list from conversation history
-    const historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
-    for (const msg of conversationHistory) {
-      historyMessages.push({ role: msg.role, content: msg.content });
-    }
-
-    // 1. Google AI Mode Autonomous Web Search Agent Step
+    // Web search step
     let webSearchData: { query: string; sources: WebSearchSource[] } | null = null;
     const shouldSearch = enableWebSearch && detectNeedsWebSearch(userPrompt);
 
@@ -98,7 +91,6 @@ export function createAiChatService(deps: AiChatDependencies) {
 
     // Fetch Personal AI Memory (memory.md) context
     const userMemory: string = await memoryRepo.getMemory();
-
     let memoryContextPrompt = "";
     if (userMemory && userMemory.trim()) {
       memoryContextPrompt = `\n\n--- 🧠 KİŞİSEL KULLANICI HAFIZASI & KİŞİSEL BAĞLAM (memory.md) ---\n${userMemory.trim()}\n\nÖNEMLİ: Tüm yanıtlarında yukarıdaki kişisel kullanıcı hafızasını ve tercihlerini her zaman göz önünde bulundur.`;
@@ -128,140 +120,178 @@ Format your final output ONLY as a JSON object matching this schema:
 }
 Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
-    let responseData: AIResponseData;
+    return { systemPrompt, webSearchData };
+  }
 
-    if (aiProvider === "ollama") {
-      const baseUrl =
-        aiEndpoint && aiEndpoint.trim()
-          ? aiEndpoint.trim().replace(/\/$/, "")
-          : "http://localhost:11434";
-      const url = baseUrl.includes("/v1")
-        ? `${baseUrl}/chat/completions`
-        : `${baseUrl}/v1/chat/completions`;
-      const modelName = aiModel || "llama3";
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...historyMessages,
-            { role: "user", content: userPrompt },
-          ],
-          stream: false,
-        }),
-      });
-
-      if (!res.ok) {
-        let errBody = "";
-        try { errBody = await res.text(); } catch { /* ignore */ }
-        throw new Error(`Ollama returned status ${res.status}: ${errBody || res.statusText}`);
-      }
-
-      const data = await res.json();
-      const textResponse = data?.choices?.[0]?.message?.content;
-      if (!textResponse) { throw new Error("Empty response from Ollama"); }
-      responseData = parseAIResponse(textResponse);
-    } else if (aiProvider === "openrouter" || aiProvider === "9router") {
-      const baseUrl =
-        aiEndpoint && aiEndpoint.trim()
-          ? aiEndpoint.trim().replace(/\/$/, "")
-          : "http://localhost:20128/v1";
-      const url = `${baseUrl}/chat/completions`;
-      const modelName = aiModel && aiModel.trim() ? aiModel.trim() : "free";
-      const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
-
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-
-      if (aiApiKey && aiApiKey.trim()) {
-        headers["Authorization"] = `Bearer ${aiApiKey.trim()}`;
-      }
-
-      if (!isLocal) {
-        headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
-        headers["X-Title"] = "Life OS Dashboard";
-      }
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...historyMessages,
-            { role: "user", content: userPrompt },
-          ],
-          stream: false,
-        }),
-      });
-
-      if (!res.ok) {
-        let errBody = "";
-        try { errBody = await res.text(); } catch { /* ignore */ }
-        if (res.status === 401) {
-          throw new Error("9Router / OpenRouter API anahtarı geçersiz veya eksik. Lütfen Ayarlar > AI Asistan menüsünden API anahtarınızı kontrol edin.");
-        }
-        throw new Error(`OpenRouter / 9Router Hata Döndü (${res.status}): ${errBody || res.statusText}`);
-      }
-
-      const data = await res.json();
-      const textResponse = data?.choices?.[0]?.message?.content;
-      if (!textResponse) { throw new Error("Empty response from OpenRouter"); }
-      responseData = parseAIResponse(textResponse);
-    } else {
-      // Gemini API with Native Google Search Grounding Tool support
-      const modelName = aiModel || "gemini-1.5-flash";
-      const baseUrl =
-        aiEndpoint && aiEndpoint.trim()
-          ? aiEndpoint.trim().replace(/\/$/, "")
-          : "https://generativelanguage.googleapis.com/v1beta";
-      const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
-
-      const reqPayload: Record<string, unknown> = {
-        contents: [
-          ...historyMessages.map((m) => ({
-            role: m.role === "assistant" ? "model" : "user",
-            parts: [{ text: m.content }],
-          })),
-          {
-            role: "user",
-            parts: [{ text: userPrompt }],
-          },
+  /** Calls Ollama API and returns parsed response. */
+  async function callOllama(
+    systemPrompt: string,
+    historyMessages: Array<{ role: "user" | "assistant"; content: string }>,
+    userPrompt: string,
+    aiEndpoint: string,
+    aiModel: string,
+  ): Promise<AIResponseData> {
+    const baseUrl =
+      aiEndpoint && aiEndpoint.trim()
+        ? aiEndpoint.trim().replace(/\/$/, "")
+        : "http://localhost:11434";
+    const url = baseUrl.includes("/v1")
+      ? `${baseUrl}/chat/completions`
+      : `${baseUrl}/v1/chat/completions`;
+    const modelName = aiModel || "llama3";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...historyMessages,
+          { role: "user", content: userPrompt },
         ],
-        systemInstruction: {
-          parts: [{ text: systemPrompt }],
-        },
-        generationConfig: {
-          responseMimeType: "application/json",
-        },
-      };
+        stream: false,
+      }),
+    });
+    if (!res.ok) {
+      let errBody = "";
+      try { errBody = await res.text(); } catch { /* ignore */ }
+      throw new Error(`Ollama returned status ${res.status}: ${errBody || res.statusText}`);
+    }
+    const data = await res.json();
+    const textResponse = data?.choices?.[0]?.message?.content;
+    if (!textResponse) { throw new Error("Empty response from Ollama"); }
+    return parseAIResponse(textResponse);
+  }
 
-      if (enableWebSearch) {
-        reqPayload.tools = [{ googleSearch: {} }];
+  /** Calls OpenRouter / 9Router API and returns parsed response. */
+  async function callOpenRouter(
+    systemPrompt: string,
+    historyMessages: Array<{ role: "user" | "assistant"; content: string }>,
+    userPrompt: string,
+    aiEndpoint: string,
+    aiModel: string,
+    aiApiKey: string,
+  ): Promise<AIResponseData> {
+    const baseUrl =
+      aiEndpoint && aiEndpoint.trim()
+        ? aiEndpoint.trim().replace(/\/$/, "")
+        : "http://localhost:20128/v1";
+    const url = `${baseUrl}/chat/completions`;
+    const modelName = aiModel && aiModel.trim() ? aiModel.trim() : "free";
+    const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (aiApiKey && aiApiKey.trim()) {
+      headers["Authorization"] = `Bearer ${aiApiKey.trim()}`;
+    }
+    if (!isLocal) {
+      headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
+      headers["X-Title"] = "Life OS Dashboard";
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        model: modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...historyMessages,
+          { role: "user", content: userPrompt },
+        ],
+        stream: false,
+      }),
+    });
+    if (!res.ok) {
+      let errBody = "";
+      try { errBody = await res.text(); } catch { /* ignore */ }
+      if (res.status === 401) {
+        throw new Error("9Router / OpenRouter API anahtarı geçersiz veya eksik. Lütfen Ayarlar > AI Asistan menüsünden API anahtarınızı kontrol edin.");
       }
+      throw new Error(`OpenRouter / 9Router Hata Döndü (${res.status}): ${errBody || res.statusText}`);
+    }
+    const data = await res.json();
+    const textResponse = data?.choices?.[0]?.message?.content;
+    if (!textResponse) { throw new Error("Empty response from OpenRouter"); }
+    return parseAIResponse(textResponse);
+  }
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reqPayload),
-      });
+  /** Calls Google Gemini API and returns parsed response. */
+  async function callGemini(
+    systemPrompt: string,
+    historyMessages: Array<{ role: "user" | "assistant"; content: string }>,
+    userPrompt: string,
+    aiEndpoint: string,
+    aiModel: string,
+    aiApiKey: string,
+    enableWebSearch: boolean,
+  ): Promise<AIResponseData> {
+    const modelName = aiModel || "gemini-1.5-flash";
+    const baseUrl =
+      aiEndpoint && aiEndpoint.trim()
+        ? aiEndpoint.trim().replace(/\/$/, "")
+        : "https://generativelanguage.googleapis.com/v1beta";
+    const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
 
-      if (!res.ok) {
-        let errBody = "";
-        try { errBody = await res.text(); } catch { /* ignore */ }
-        throw new Error(`Gemini API returned status ${res.status}: ${errBody || res.statusText}`);
-      }
+    const reqPayload: Record<string, unknown> = {
+      contents: [
+        ...historyMessages.map((m) => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }],
+        })),
+        { role: "user", parts: [{ text: userPrompt }] },
+      ],
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      generationConfig: { responseMimeType: "application/json" },
+    };
 
-      const data = await res.json();
-      const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!textResponse) { throw new Error("Empty response from Gemini"); }
-      responseData = parseAIResponse(textResponse);
+    if (enableWebSearch) {
+      reqPayload.tools = [{ googleSearch: {} }];
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reqPayload),
+    });
+    if (!res.ok) {
+      let errBody = "";
+      try { errBody = await res.text(); } catch { /* ignore */ }
+      throw new Error(`Gemini API returned status ${res.status}: ${errBody || res.statusText}`);
+    }
+    const data = await res.json();
+    const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!textResponse) { throw new Error("Empty response from Gemini"); }
+    return parseAIResponse(textResponse);
+  }
+
+  /** Main orchestrator: builds prompt, calls the appropriate provider, attaches telemetry. */
+  async function callAIConfigured({
+    userPrompt,
+    aiProvider,
+    aiApiKey,
+    aiModel,
+    aiEndpoint,
+    enableWebSearch = true,
+    conversationHistory = [],
+  }: AICallParams): Promise<AIResponseData> {
+    // Build message list from conversation history
+    const historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
+    for (const msg of conversationHistory) {
+      historyMessages.push({ role: msg.role, content: msg.content });
+    }
+
+    // Build system prompt with web search + memory context
+    const { systemPrompt, webSearchData } = await buildSystemPrompt(userPrompt, enableWebSearch);
+
+    // Route to the correct provider
+    let responseData: AIResponseData;
+    if (aiProvider === "ollama") {
+      responseData = await callOllama(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel);
+    } else if (aiProvider === "openrouter" || aiProvider === "9router") {
+      responseData = await callOpenRouter(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel, aiApiKey);
+    } else {
+      responseData = await callGemini(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel, aiApiKey, enableWebSearch);
     }
 
     // Attach search telemetry
@@ -379,7 +409,8 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 export type AiChatService = ReturnType<typeof createAiChatService>;
 
 /* ------------------------------------------------------------------ */
-/* Singleton instance with the default storage-backed repositories.    */
+/* Lazy singleton — infrastructure is NOT created at module import.   */
+/* The first function call triggers instantiation.                    */
 /* ------------------------------------------------------------------ */
 
 import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/ChromeStorageAiConfigRepository.js";
@@ -388,17 +419,43 @@ import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/Chrome
 import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/ChromeStorageNoteRepository.js";
 import { logger } from "@/utils/logger.js";
 
-const _defaultRepos: AiChatDependencies = {
-  aiConfigRepo: new ChromeStorageAiConfigRepository(),
-  memoryRepo: new ChromeStorageMemoryRepository(),
-  todoRepo: new ChromeStorageTodoRepository(),
-  noteRepo: new ChromeStorageNoteRepository(),
-};
+let _aiChatInstance: AiChatService | null = null;
+function getAiChatService(): AiChatService {
+  if (!_aiChatInstance) {
+    _aiChatInstance = createAiChatService({
+      aiConfigRepo: new ChromeStorageAiConfigRepository(),
+      memoryRepo: new ChromeStorageMemoryRepository(),
+      todoRepo: new ChromeStorageTodoRepository(),
+      noteRepo: new ChromeStorageNoteRepository(),
+    });
+  }
+  return _aiChatInstance;
+}
 
-export const {
-  getAIConfigFromStorage,
-  callAIConfigured,
-  executeAIAction,
-  handleAddNoteFromAI,
-  handleUpdateMemoryFromAI,
-} = createAiChatService(_defaultRepos);
+export function getAIConfigFromStorage() {
+  return getAiChatService().getAIConfigFromStorage();
+}
+export function callAIConfigured(
+  params: AICallParams,
+): Promise<AIResponseData> {
+  return getAiChatService().callAIConfigured(params);
+}
+export function executeAIAction(
+  aiResult: AIResponseData,
+  lang?: string,
+): Promise<void> {
+  return getAiChatService().executeAIAction(aiResult, lang);
+}
+export function handleAddNoteFromAI(
+  type: "note" | "diary" | "cornell",
+  content: string,
+  lang: string,
+  title?: string,
+  cues?: string,
+  summary?: string,
+): Promise<void> {
+  return getAiChatService().handleAddNoteFromAI(type, content, lang, title, cues, summary);
+}
+export function handleUpdateMemoryFromAI(newFact: string): Promise<void> {
+  return getAiChatService().handleUpdateMemoryFromAI(newFact);
+}

@@ -2,63 +2,100 @@
  * KpssCalculatorService
  * Domain service for KPSS calculation utilities.
  * Pure functions — no external dependencies beyond domain types.
+ * Clean Architecture: Domain layer has zero external dependencies.
  */
 
 import type { KpssTopic } from "@/domain/constants/kpssCurriculum.js";
-import { KpssProgress } from "@/types/types.js";
-import { getTranslation } from "@/utils/i18n.js";
-import type { Language } from "@/types/types.js";
 
+/**
+ * KpssProgress type — defined locally in domain layer
+ * to avoid dependency on @/types/types.ts
+ */
+export interface KpssProgress {
+  subject: string;
+  topic: string;
+  status: 0 | 1 | 2; // 0: reset, 1: working, 2: finished
+  score?: number; // test percentage score (0-100)
+}
+
+/** Raw countdown result — no formatting, no translation dependency */
+export interface KpssCountdownResult {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+/**
+ * Calculates the KPSS countdown.
+ * Returns raw time data or null if exam date has passed.
+ * Domain layer — pure function, no external dependencies.
+ */
 export function calculateKpssCountdown(
   targetDate: number,
   now: number,
-  lang: string,
-): string {
-  const t = getTranslation(lang as Language);
+): KpssCountdownResult | null {
   const diffKpss = targetDate - now;
   if (diffKpss <= 0) {
-    return t.kpss_exam_started;
+    return null;
   }
-  const days = Math.floor(diffKpss / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(
-    (diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-  );
-  const mins = Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((diffKpss % (1000 * 60)) / 1000);
-  return t.kpss_time_format
-    .replace("{days}", String(days))
-    .replace("{hours}", String(hours))
-    .replace("{mins}", String(mins))
-    .replace("{secs}", String(secs));
+  return {
+    days: Math.floor(diffKpss / (1000 * 60 * 60 * 24)),
+    hours: Math.floor(
+      (diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    ),
+    minutes: Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((diffKpss % (1000 * 60)) / 1000),
+  };
 }
 
+/**
+ * Calculates estimated completion time based on remaining count.
+ * Returns raw time data or null if already completed.
+ * Domain layer — pure function, no external dependencies.
+ */
 export function calculateEstimatedCompletionTime(
   remainingCount: number,
   now: number,
-  lang: string,
-): string {
-  const t = getTranslation(lang as Language);
+): KpssCountdownResult | null {
   if (remainingCount === 0) {
-    return t.kpss_completed;
+    return null;
   }
   const estimatedRemainingDays = remainingCount * 2;
   const estimatedTargetDate =
     now + estimatedRemainingDays * 24 * 60 * 60 * 1000;
   const diffEst = estimatedTargetDate - now;
 
-  const days = Math.floor(diffEst / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(
-    (diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-  );
-  const mins = Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((diffEst % (1000 * 60)) / 1000);
-  return t.kpss_time_format
-    .replace("{days}", String(days))
-    .replace("{hours}", String(hours))
-    .replace("{mins}", String(mins))
-    .replace("{secs}", String(secs));
+  return {
+    days: Math.floor(diffEst / (1000 * 60 * 60 * 24)),
+    hours: Math.floor(
+      (diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    ),
+    minutes: Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((diffEst % (1000 * 60)) / 1000),
+  };
 }
 
+/**
+ * Formats a KpssCountdownResult into a localized string.
+ * This is a presentation-layer helper, NOT part of the domain service.
+ * It's kept here for convenience but callers should use their own i18n.
+ */
+export function formatKpssCountdown(
+  result: KpssCountdownResult,
+  timeFormat: string,
+): string {
+  return timeFormat
+    .replace("{days}", String(result.days))
+    .replace("{hours}", String(result.hours))
+    .replace("{mins}", String(result.minutes))
+    .replace("{secs}", String(result.seconds));
+}
+
+/**
+ * Calculates subject net scores.
+ * Pure function — no external dependencies.
+ */
 export function getSubjectNets(
   subKey: string,
   kpssData: Record<string, KpssTopic[]>,
@@ -86,6 +123,10 @@ export function getSubjectNets(
   return { net: Math.round(totalNet * 10) / 10, max: totalQuestions };
 }
 
+/**
+ * Calculates overall net scores across all subjects.
+ * Pure function — no external dependencies.
+ */
 export function getOverallNets(
   kpssData: Record<string, KpssTopic[]>,
   kpssProgress: KpssProgress[],

@@ -147,9 +147,20 @@ export function createKpssService(kpssRepo: IKpssRepository) {
 export type KpssService = ReturnType<typeof createKpssService>;
 
 /**
- * Singleton instance with the default storage-backed repository.
+ * Lazy singleton — infrastructure is NOT created at module import time.
+ * The first property access triggers instantiation; subsequent calls reuse the instance.
  * Components that need testability can import `createKpssService` instead.
  */
 import { ChromeStorageKpssRepository } from "@/infrastructure/persistence/ChromeStorageKpssRepository.js";
-const _defaultRepo = new ChromeStorageKpssRepository();
-export const kpssService = createKpssService(_defaultRepo);
+let _kpssServiceInstance: KpssService | null = null;
+function getKpssService(): KpssService {
+  if (!_kpssServiceInstance) {
+    _kpssServiceInstance = createKpssService(new ChromeStorageKpssRepository());
+  }
+  return _kpssServiceInstance;
+}
+export const kpssService: KpssService = new Proxy({} as KpssService, {
+  get(_, prop: keyof KpssService) {
+    return getKpssService()[prop];
+  },
+});

@@ -2,46 +2,30 @@
  * useAppInit Hook
  * Presentation hook that wraps the application initialization logic.
  * Uses use cases for domain operations instead of direct calls.
+ *
+ * Dependencies are injected from the composition root (App.tsx) —
+ * the hook never instantiates infrastructure directly.
  */
 
 import { useEffect, useCallback } from "preact/hooks";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
-import type { RemoteTask } from "@/application/ports/ITodoSyncPort.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
-import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
-import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
-import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
+import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
 import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
 import { logger } from "@/utils/logger.js";
 
-function createSyncPort() {
-  const tasksApi = new GoogleTasksApi();
-  const authApi = new GoogleAuthApi();
-  return {
-    getAuthToken: (interactive: boolean) => authApi.getAuthToken(interactive),
-    getUserEmail: (token: string) => authApi.getUserEmail(token),
-    getOrCreateTaskList: (token: string, title: string) =>
-      tasksApi.getOrCreateTaskList(token, title),
-    getTasks: (token: string, taskListId: string) =>
-      tasksApi.getTasks(token, taskListId),
-    createTask: (token: string, taskListId: string, task: RemoteTask) =>
-      tasksApi.createTask(token, taskListId, task),
-    updateTask: (
-      token: string,
-      taskListId: string,
-      taskId: string,
-      task: RemoteTask,
-    ) => tasksApi.updateTask(token, taskListId, taskId, task),
-    deleteTask: (token: string, taskListId: string, taskId: string) =>
-      tasksApi.deleteTask(token, taskListId, taskId),
-    removeCachedAuthToken: (token: string) =>
-      authApi.removeCachedAuthToken(token),
-  };
+export interface AppInitDependencies {
+  settingsRepo: ISettingsRepository;
+  todoRepo: ITodoRepository;
+  syncRepo: ISyncRepository;
+  syncPort: ITodoSyncPort;
+  migration: LocalToSyncMigration;
 }
 
 export interface AppInitCallbacks {
@@ -62,14 +46,14 @@ export interface AppInitCallbacks {
   onClockStarted: () => void;
 }
 
-export function useAppInit(callbacks: AppInitCallbacks) {
-  const initializeApp = useCallback(async () => {
-    const settingsRepo = new ChromeStorageSettingsRepository();
-    const todoRepo = new ChromeStorageTodoRepository();
-    const syncRepo = new ChromeStorageSyncRepository();
+export function useAppInit(
+  deps: AppInitDependencies,
+  callbacks: AppInitCallbacks,
+) {
+  const { settingsRepo, todoRepo, syncRepo, syncPort, migration } = deps;
 
+  const initializeApp = useCallback(async () => {
     // 1. Run storage migrations
-    const migration = new LocalToSyncMigration();
     await migration.migrate();
 
     // 2. Load configurations
@@ -93,12 +77,9 @@ export function useAppInit(callbacks: AppInitCallbacks) {
 
     if (syncConfig.enabled) {
       try {
-        const syncPort = createSyncPort();
         const syncUC = new SyncGoogleTasksUseCase(todoRepo, syncRepo, syncPort);
-
-        const authApi = new GoogleAuthApi();
-        const token = await authApi.getAuthToken(false);
-        const email = await authApi.getUserEmail(token);
+        const token = await syncPort.getAuthToken(false);
+        const email = await syncPort.getUserEmail(token);
         callbacks.onGoogleUserEmail(email);
 
         if (syncConfig.tasksEnabled) {

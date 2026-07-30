@@ -7,15 +7,16 @@
  *
  * The hook only manages local state and side effects (cloud backup triggers);
  * all business logic and external sync lives in the use cases / domain layer.
+ *
+ * Dependencies (repository, syncPort) are injected from the composition root
+ * (App.tsx) — the hook never instantiates infrastructure directly.
  */
 
 import { useState, useCallback } from "preact/hooks";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
-import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
-import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
-import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import { AddTodoUseCase } from "@/application/use-cases/todo/AddTodoUseCase.js";
 import { ToggleTodoUseCase } from "@/application/use-cases/todo/ToggleTodoUseCase.js";
 import { DeleteTodoUseCase } from "@/application/use-cases/todo/DeleteTodoUseCase.js";
@@ -24,25 +25,10 @@ import { UpdatePrioritiesUseCase } from "@/application/use-cases/todo/UpdatePrio
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
 import { logger } from "@/utils/logger.js";
 
-// ---- helpers scoped to module (not duplicated per hook instance) ----
-
-const syncRepo = new ChromeStorageSyncRepository();
-const authApi = new GoogleAuthApi();
-const tasksApi = new GoogleTasksApi();
-
-const syncPort: ITodoSyncPort = {
-  getAuthToken: (interactive) => authApi.getAuthToken(interactive),
-  getUserEmail: (token) => authApi.getUserEmail(token),
-  getOrCreateTaskList: (token, title) => tasksApi.getOrCreateTaskList(token, title),
-  getTasks: (token, taskListId) => tasksApi.getTasks(token, taskListId),
-  createTask: (token, taskListId, task) => tasksApi.createTask(token, taskListId, task),
-  updateTask: (token, taskListId, taskId, task) => tasksApi.updateTask(token, taskListId, taskId, task),
-  deleteTask: (token, taskListId, taskId) => tasksApi.deleteTask(token, taskListId, taskId),
-  removeCachedAuthToken: (token) => authApi.removeCachedAuthToken(token),
-};
-
 export function useTodos(
   todoRepository: ITodoRepository,
+  syncPort: ITodoSyncPort,
+  syncRepo: ISyncRepository,
   triggerCloudBackup: () => Promise<void>,
   showAlert?: (message: string, onConfirm?: () => void) => void,
   t?: Record<string, string>,

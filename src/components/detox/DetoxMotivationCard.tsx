@@ -3,7 +3,7 @@
  * Glassmorphic Motivational Card showing "Bu Süreyle Ne Yapabilirdin?"
  */
 
-import { calculateMotivationalAchievements } from "@/domain/services/detoxMotivationalService.js";
+import { calculateMotivationalAchievements, type AchievementType } from "@/domain/services/detoxMotivationalService.js";
 import { translations } from "@/utils/i18n.js";
 
 interface DetoxMotivationCardProps {
@@ -11,13 +11,31 @@ interface DetoxMotivationCardProps {
   lang: string;
 }
 
+/** Maps achievement type to translation key and formats the text */
+function formatAchievementText(
+  type: AchievementType,
+  count: number,
+  t: Record<string, string>,
+): string {
+  const keyMap: Record<AchievementType, string> = {
+    kpss_questions: t.detox_motiv_kpss_questions,
+    book_pages: t.detox_motiv_book_pages,
+    pomodoro: t.detox_motiv_pomodoro,
+    vocabulary: t.detox_motiv_vocabulary,
+    exercise: t.detox_motiv_exercise,
+    unlimited_focus: t.detox_motiv_unlimited_focus,
+  };
+  const template = keyMap[type] || "";
+  return template.replace("$count", String(count));
+}
+
 export function DetoxMotivationCard({
   durationMinutes,
   lang,
 }: DetoxMotivationCardProps) {
-  const achievements = calculateMotivationalAchievements(durationMinutes, lang);
+  const achievements = calculateMotivationalAchievements(durationMinutes);
 
-  if (achievements.length === 0) {return null;}
+  if (achievements.length === 0) { return null; }
 
   const t = translations[lang as "tr" | "en"];
 
@@ -78,7 +96,7 @@ export function DetoxMotivationCard({
             }}
           >
             <span style={{ fontSize: "1.2rem" }}>{item.icon}</span>
-            <span>{item.text}</span>
+            <span>{formatAchievementText(item.type, item.count, t)}</span>
           </div>
         ))}
       </div>
