@@ -15,6 +15,7 @@ interface StockAiAnalysisModalProps {
   quote?: StockQuote;
   portfolioItems?: StockPortfolioItem[];
   onClose: () => void;
+  onContinueToChat?: () => void;
   lang: Language;
 }
 
@@ -58,6 +59,7 @@ export function StockAiAnalysisModal({
   quote,
   portfolioItems,
   onClose,
+  onContinueToChat,
   lang,
 }: StockAiAnalysisModalProps) {
   const t = getTranslation(lang);
@@ -172,9 +174,22 @@ export function StockAiAnalysisModal({
           style={{
             display: "flex",
             justifyContent: "flex-end",
+            gap: "8px",
             marginTop: "10px",
           }}
         >
+          {onContinueToChat && (
+            <button
+              className="stock-btn stock-btn-ai"
+              onClick={onContinueToChat}
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              <span>AI Chat'te Devam Et</span>
+            </button>
+          )}
           <button className="stock-btn stock-btn-primary" onClick={onClose}>
             {t.stock_close_btn}
           </button>

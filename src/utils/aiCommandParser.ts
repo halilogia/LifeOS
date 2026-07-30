@@ -63,7 +63,7 @@ export const BIST_ALIASES: Record<string, { symbol: string; displayName: string 
 
 export interface LocalParsedResult {
   parsed: boolean;
-  action?: "create_task" | "add_note" | "add_stock";
+  action?: "create_task" | "add_note" | "add_stock" | "ask_stock";
   text?: string;
   date?: string;
   note_type?: "note" | "diary" | "cornell";
@@ -74,6 +74,10 @@ export interface LocalParsedResult {
     buyPrice: number;
     lotCount: number;
   };
+  stockQuery?: {
+    symbol: string;
+    question?: string;
+  };
 }
 
 /**
@@ -82,6 +86,48 @@ export interface LocalParsedResult {
 export function parseLocalCommand(query: string): LocalParsedResult {
   const textLower = query.toLowerCase().trim();
   const today = new Date();
+
+  // 0a. Stock Analysis Query (e.g. "THYAO analiz et", "THYAO alınır mı", "garanti yorumla")
+  const stockAnalysisPatterns = [
+    /(\b[A-ZÇĞİÖŞÜ]{3,6}\b)\s*(?:analiz\s*et|yorumla|alınır\s*mı|satılır\s*mı|değerlendir|nasıl|durumu\s*nasıl)/i,
+    /(?:analiz\s*et|yorumla|değerlendir)\s+(\b[A-ZÇĞİÖŞÜ]{3,6}\b)/i,
+  ];
+  for (const pattern of stockAnalysisPatterns) {
+    const match = query.match(pattern);
+    if (match) {
+      const symbol = match[1].toUpperCase();
+      // Check alias dictionary
+      let foundSymbol = symbol;
+      let question = query;
+      for (const key of Object.keys(BIST_ALIASES)) {
+        if (textLower.includes(key)) {
+          foundSymbol = BIST_ALIASES[key].symbol.replace(".IS", "");
+          break;
+        }
+      }
+      return {
+        parsed: true,
+        action: "ask_stock",
+        stockQuery: {
+          symbol: foundSymbol,
+          question,
+        },
+      };
+    }
+  }
+  // Check for Turkish alias pattern: "thy alınır mı", "garanti nasıl"
+  for (const key of Object.keys(BIST_ALIASES)) {
+    if (textLower.includes(key) && (textLower.includes("alınır") || textLower.includes("nasıl") || textLower.includes("yorum") || textLower.includes("analiz") || textLower.includes("durum"))) {
+      return {
+        parsed: true,
+        action: "ask_stock",
+        stockQuery: {
+          symbol: BIST_ALIASES[key].symbol.replace(".IS", ""),
+          question: query,
+        },
+      };
+    }
+  }
 
   // 0. Dynamic Stock Buy Command (e.g. "20 lot Kardemir 28.50 TL'den aldım" or "100 lot MIATK 45 TL'den aldım")
   if (

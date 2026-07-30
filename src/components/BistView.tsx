@@ -45,7 +45,7 @@ interface BistViewProps {
 
 const stockRepository = new ChromeStorageStockRepository();
 
-export function BistView({ lang }: BistViewProps) {
+export function BistView({ lang, onContinueToChat }: BistViewProps & { onContinueToChat?: (symbol: string) => void }) {
   const t = getTranslation(lang);
   const [activeTab, setActiveTab] = useState<BistTabId>("portfolio");
 
@@ -363,6 +363,11 @@ export function BistView({ lang }: BistViewProps) {
           }
           portfolioItems={portfolio}
           onClose={() => setAiModalSymbol(null)}
+          onContinueToChat={onContinueToChat ? () => {
+            const sym = aiModalSymbol;
+            setAiModalSymbol(null);
+            onContinueToChat(sym);
+          } : undefined}
         />
       )}
 

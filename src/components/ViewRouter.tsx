@@ -50,6 +50,7 @@ export interface ViewRouterProps {
   onManualSync: () => Promise<void>;
   onShowConfirm: (message: string, onConfirm: () => void) => void;
   onSettingsOpen: (tab: "general" | "kpss" | "detox" | "ai" | "sync") => void;
+  onContinueToChat?: (symbol: string) => void;
 }
 
 export function ViewRouter(props: ViewRouterProps) {
@@ -115,7 +116,7 @@ export function ViewRouter(props: ViewRouterProps) {
     case "detox":
       return <DetoxView lang={props.lang} />;
     case "bist":
-      return <BistView lang={props.lang} />;
+      return <BistView lang={props.lang} onContinueToChat={props.onContinueToChat} />;
     case "halka-arz":
       return <HalkaArzView lang={props.lang} />;
     case "ai-chat":

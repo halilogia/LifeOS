@@ -25,6 +25,7 @@
     "https://halkarz.com/*",
     "https://www.youtube.com/*",
     "https://web.whatsapp.com/*",
+    "https://web.telegram.org/*",
     "http://localhost/*",
     "http://127.0.0.1/*"
   ],
