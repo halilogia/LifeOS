@@ -26,6 +26,7 @@ export interface AICallParams {
   aiModel: string;
   aiEndpoint: string;
   enableWebSearch?: boolean;
+  conversationHistory?: Array<{ role: "user" | "assistant"; content: string }>;
 }
 
 export interface AIResponseData {
@@ -59,8 +60,15 @@ export function createAiChatService(deps: AiChatDependencies) {
     aiModel,
     aiEndpoint,
     enableWebSearch = true,
+    conversationHistory = [],
   }: AICallParams): Promise<AIResponseData> {
     const todayStr = new Date().toISOString().split("T")[0];
+
+    // Build message list from conversation history
+    const historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
+    for (const msg of conversationHistory) {
+      historyMessages.push({ role: msg.role, content: msg.content });
+    }
 
     // 1. Google AI Mode Autonomous Web Search Agent Step
     let webSearchData: { query: string; sources: WebSearchSource[] } | null = null;
@@ -140,6 +148,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           model: modelName,
           messages: [
             { role: "system", content: systemPrompt },
+            ...historyMessages,
             { role: "user", content: userPrompt },
           ],
           stream: false,
@@ -185,6 +194,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
           model: modelName,
           messages: [
             { role: "system", content: systemPrompt },
+            ...historyMessages,
             { role: "user", content: userPrompt },
           ],
           stream: false,
@@ -215,6 +225,10 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
       const reqPayload: Record<string, unknown> = {
         contents: [
+          ...historyMessages.map((m) => ({
+            role: m.role === "assistant" ? "model" : "user",
+            parts: [{ text: m.content }],
+          })),
           {
             role: "user",
             parts: [{ text: userPrompt }],

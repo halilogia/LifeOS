@@ -23,7 +23,7 @@ KURALLAR VE İLKELER:
    - [85/100 🐂 Boğa]
    - [50/100 ⚖️ Nötr]
    - [35/100 🐻 Ayı]
-3. Analizi karmaşık terimler kullanmadan, sade Türkçe ile 4 DERİNLEMESİNE BÖLÜMDE SUN:
+3. Analizi **basit, anlaşılır Türkçe** ile yaz. Teknik terimleri (stop-loss, volatilite, RSI, direnç gibi) kullanıyorsan yanında kısaca ne anlama geldiğini parantez içinde belirt. 4 DERİNLEMESİNE BÖLÜMDE SUN:
    - 📊 **30 Günlük Tarihsel Trend & Performans**: 1 aylık getiri %, 30 günlük zirve/dip aralığı.
    - 🎯 **Günün Seyri & Volatilite**: Anlık fiyat, % değişim ve gün içi bandı.
    - 🛡️ **Kritik Destek & Direnç Seviyeleri**: Otomatik hesaplanan 30 günlük dip (destek) ve zirve (direnç) seviyeleri.
@@ -74,69 +74,110 @@ export interface BuildStockContextParams {
 /**
  * BİST telemetry ve piyasa verilerini yapay zekaya aktarılacak metne dönüştürür.
  */
+export interface StockTelemetry {
+  monthChangePct: number;
+  monthHigh: number;
+  monthLow: number;
+  rsi: number | null;
+  rsiStatus: string;
+  sma20: number | null;
+  sma20Status: string;
+  volRatio: number;
+  totalDays: number;
+}
+
+/**
+ * Hisse geçmiş verilerinden RSI, SMA, hacim gibi teknik göstergeleri hesaplar.
+ * Hem AI prompt'unda hem de fallback metinlerinde kullanılır.
+ */
+export function computeStockTelemetry(
+  history: StockHistoryItem[],
+  currentPrice: number,
+): StockTelemetry | null {
+  if (!history || history.length === 0) return null;
+
+  const monthOpen = history[0].open;
+  const monthChangePct =
+    monthOpen > 0 ? ((currentPrice - monthOpen) / monthOpen) * 100 : 0;
+  const monthHigh = Math.max(...history.map((h) => h.high));
+  const monthLow = Math.min(...history.map((h) => h.low));
+
+  // RSI (14)
+  let rsi: number | null = null;
+  if (history.length >= 14) {
+    let gains = 0;
+    let losses = 0;
+    const slice14 = history.slice(-15);
+    for (let i = 1; i < slice14.length; i++) {
+      const diff = slice14[i].close - slice14[i - 1].close;
+      if (diff >= 0) gains += diff;
+      else losses -= diff;
+    }
+    const avgGain = gains / 14;
+    const avgLoss = losses / 14;
+    const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+    rsi = 100 - 100 / (1 + rs);
+  }
+
+  const rsiStatus =
+    rsi !== null
+      ? rsi > 70
+        ? "Aşırı Alım (satış baskısı yakın)"
+        : rsi < 30
+          ? "Aşırı Satım (dip fırsatı)"
+          : "Dengeli"
+      : "N/A";
+
+  // SMA 20
+  let sma20: number | null = null;
+  if (history.length >= 20) {
+    const slice20 = history.slice(-20);
+    sma20 = slice20.reduce((acc, h) => acc + h.close, 0) / 20;
+  }
+
+  const sma20Status =
+    sma20 !== null
+      ? `₺${sma20.toFixed(2)} (fiyat %${((currentPrice - sma20) / sma20 * 100).toFixed(1)} ${currentPrice >= sma20 ? "üstünde 📈" : "altında 📉"})`
+      : "N/A";
+
+  // Volume ratio
+  const avgVol = history.reduce((acc, h) => acc + h.volume, 0) / history.length;
+  const curVol = history[history.length - 1].volume;
+  const volRatio = avgVol > 0 ? curVol / avgVol : 1.0;
+
+  return {
+    monthChangePct,
+    monthHigh,
+    monthLow,
+    rsi,
+    rsiStatus,
+    sma20,
+    sma20Status,
+    volRatio,
+    totalDays: history.length,
+  };
+}
+
 export function buildStockContextPrompt(params: BuildStockContextParams): string {
   const { symbol, quote, history, portfolio } = params;
 
   if (symbol && symbol !== "ALL_PORTFOLIO") {
     let historyStatsPrompt = "";
     if (history && history.length > 0) {
-      const monthOpen = history[0].open;
       const currentPrice = quote?.price || history[history.length - 1].close;
-      const monthChangePctVal =
-        monthOpen > 0 ? ((currentPrice - monthOpen) / monthOpen) * 100 : 0;
-      const monthHighVal = Math.max(...history.map((h) => h.high));
-      const monthLowVal = Math.min(...history.map((h) => h.low));
+      const t = computeStockTelemetry(history, currentPrice);
 
-      // 1. RSI (14)
-      let rsiVal: number | null = null;
-      if (history.length >= 14) {
-        let gains = 0;
-        let losses = 0;
-        const slice14 = history.slice(-15);
-        for (let i = 1; i < slice14.length; i++) {
-          const diff = slice14[i].close - slice14[i - 1].close;
-          if (diff >= 0) {gains += diff;}
-          else {losses -= diff;}
-        }
-        const avgGain = gains / 14;
-        const avgLoss = losses / 14;
-        const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
-        rsiVal = 100 - 100 / (1 + rs);
+      if (t) {
+        historyStatsPrompt =
+          `\\n--- OTOMATİK HESAPLANAN MATEMATİKSEL & TEKNİK TELEMETRİ ---\\n` +
+          `- 1 Aylık Toplam Performans (Getiri): %${t.monthChangePct.toFixed(2)}\\n` +
+          `- 1 Aylık En Yüksek Zirve (Ana Direnç): ₺${t.monthHigh.toFixed(2)}\\n` +
+          `- 1 Aylık En Düşük Dip (Ana Destek): ₺${t.monthLow.toFixed(2)}\\n` +
+          `- RSI (14 Güç Endeksi): ${t.rsi !== null ? t.rsi.toFixed(1) : "N/A"} (${t.rsiStatus})\\n` +
+          `- 20 Günlük Hareketli Ortalama (SMA 20): ${t.sma20Status}\\n` +
+          `- Hacim İvmesi (30 Günlük Ortalama Hacme Oranı): ${t.volRatio.toFixed(1)}x\\n` +
+          `- İncelenen Seans Sayısı: ${t.totalDays} Günlük Mum`;
       }
-
-      // 2. SMA 20
-      let sma20Val: number | null = null;
-      if (history.length >= 20) {
-        const slice20 = history.slice(-20);
-        sma20Val = slice20.reduce((acc, h) => acc + h.close, 0) / 20;
-      }
-
-      // 3. Volume ratio
-      const avgVol = history.reduce((acc, h) => acc + h.volume, 0) / history.length;
-      const curVol = quote?.volume || history[history.length - 1].volume;
-      const volRatioVal = avgVol > 0 ? curVol / avgVol : 1.0;
-
-      const rsiStatus = rsiVal !== null
-        ? rsiVal > 70
-          ? "Aşırı Alım Bölgesi (Direnç Yakın)"
-          : rsiVal < 30
-            ? "Aşırı Satım Bölgesi (Dip/Fırsat)"
-            : "Dengeli Bölge"
-        : "N/A";
-
-      const smaStatus = sma20Val !== null
-        ? `₺${sma20Val.toFixed(2)} (Fiyat ortalamanın %${(((currentPrice - sma20Val) / sma20Val) * 100).toFixed(1)} ${currentPrice >= sma20Val ? "üzerinde" : "altında"})`
-        : "N/A";
-
-      historyStatsPrompt =
-        `\n--- OTOMATİK HESAPLANAN MATEMATİKSEL & TEKNİK TELEMETRİ ---\n` +
-        `- 1 Aylık Toplam Performans (Getiri): %${monthChangePctVal.toFixed(2)}\n` +
-        `- 1 Aylık En Yüksek Zirve (Ana Direnç): ₺${monthHighVal.toFixed(2)}\n` +
-        `- 1 Aylık En Düşük Dip (Ana Destek): ₺${monthLowVal.toFixed(2)}\n` +
-        `- RSI (14 Güç Endeksi): ${rsiVal !== null ? rsiVal.toFixed(1) : "N/A"} (${rsiStatus})\n` +
-        `- 20 Günlük Hareketli Ortalama (SMA 20): ${smaStatus}\n` +
-        `- Hacim İvmesi (30 Günlük Ortalama Hacme Oranı): ${volRatioVal !== null ? volRatioVal.toFixed(1) : "1.0"}x\n` +
-        `- İncelenen Seans Sayısı: ${history.length} Günlük Mum`;
     }
 
     if (quote && quote.price > 0) {

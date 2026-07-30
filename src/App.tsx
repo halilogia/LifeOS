@@ -172,6 +172,13 @@ export function App() {
   const { handleClearAllDataConfirm, handleResetKpssDataConfirm } =
     useAppConfirmActions({ showConfirm });
 
+  // ─── Continue to Chat callback ──────────────────────────────────────────────
+  const handleContinueToChat = useCallback((symbol: string) => {
+    // Stock bilgisini sessionStorage'a yaz ki AI Chat okusun
+    sessionStorage.setItem("hermes_pending_stock", symbol);
+    handleViewChange("ai-chat");
+  }, [handleViewChange]);
+
   // ─── JSX Template ─────────────────────────────────────────────────────────
   const t = getTranslation(lang as Language);
   return (
@@ -329,6 +336,7 @@ export function App() {
           onManualSync={handleManualSyncTasks}
           onShowConfirm={showConfirm}
           onSettingsOpen={handleOpenSettings}
+          onContinueToChat={handleContinueToChat}
         />
         {quoteText && activeView !== "ai-chat" && (
           <FooterQuote quoteText={quoteText} />
