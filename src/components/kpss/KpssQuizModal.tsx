@@ -81,6 +81,8 @@ export function KpssQuizModal({
   const [internalMode, setInternalMode] = useState<
     "local-intro" | "external-launcher" | "external-result"
   >("local-intro");
+  // Launcher'dan seçilen soru sayısı (harici akış için)
+  const [externalQuizCount, setExternalQuizCount] = useState(selectedQuizCount);
 
   const totalQuizLength = isBackgroundLoading
     ? selectedQuizCount
@@ -160,7 +162,10 @@ export function KpssQuizModal({
               subjectKey={currentSubject}
               topicName={activeQuizTopic}
               questionCount={selectedQuizCount}
-              onEnterResult={() => setInternalMode("external-result")}
+              onEnterResult={(count) => {
+                setExternalQuizCount(count);
+                setInternalMode("external-result");
+              }}
               onBack={() => setInternalMode("local-intro")}
             />
           )}
@@ -169,7 +174,7 @@ export function KpssQuizModal({
           {isInExternalFlow && internalMode === "external-result" && (
             <KpssExternalResultModal
               t={t}
-              totalCount={selectedQuizCount}
+              totalCount={externalQuizCount}
               onSave={(correct, total) => {
                 onSaveExternalResult(correct, total);
                 setInternalMode("local-intro");

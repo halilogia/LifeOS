@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-7);
-  cursor: pointer;
+  cursor: default;
   transition: all 0.3s ease;
   user-select: none;
 }
@@ -139,6 +139,13 @@
   transition: all 0.2s ease;
   flex-shrink: 0;
   opacity: 0.5;
+  position: relative;
+  z-index: 2;
+}
+
+.kpss-info-btn svg {
+  pointer-events: none;
+  display: block;
 }
 
 .kpss-topic-item:hover .kpss-info-btn {
@@ -451,17 +458,25 @@
   background: var(--card-bg-subtle, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  opacity: 0.5;
+  opacity: 0.65;
   margin-left: auto;
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.kpss-exam-btn svg {
+  pointer-events: none;
+  display: block;
 }
 
 .kpss-topic-item:hover .kpss-exam-btn {
@@ -469,11 +484,14 @@
 }
 
 .kpss-exam-btn:hover {
-  background: rgba(var(--accent-color-rgb), 0.2);
+  background: rgba(139, 92, 246, 0.18);
   color: var(--accent-color);
-  border-color: rgba(var(--accent-color-rgb), 0.4);
-  transform: scale(1.1);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: scale(1.08);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2);
 }
+
+/* Info button */
 
 .kpss-topic-score-badge {
   font-size: 0.75rem;
@@ -578,5 +596,95 @@
 @keyframes kpssSpin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ── KPSS Topic Detail Modal (Premium Popup) ────────────────────── */
+.kpss-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: kpssModalFadeIn 0.2s ease;
+}
+
+.kpss-modal-content {
+  position: relative;
+  background: var(--card-bg, rgba(30, 41, 59, 0.92));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  max-width: 520px;
+  width: 92%;
+  max-height: 75vh;
+  overflow-y: auto;
+  animation: kpssModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kpss-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-9) var(--space-5);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.kpss-modal-header h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.kpss-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.kpss-close-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+.kpss-modal-body {
+  padding: var(--space-7) var(--space-9) var(--space-9);
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+@keyframes kpssModalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes kpssModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

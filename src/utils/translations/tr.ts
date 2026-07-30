@@ -1015,4 +1015,6 @@ export const tr = {
   kpss_external_quiz_back: "Geri",
   kpss_external_quiz_select_service: "AI Servisini Seçin",
   kpss_external_quiz_copy_prompt: "Promptu Kopyala",
-}
+  kpss_external_quiz_clipboard_hint: "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
+}
+

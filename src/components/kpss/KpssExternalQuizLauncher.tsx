@@ -1,6 +1,7 @@
 /**
  * KpssExternalQuizLauncher.tsx
  * Harici AI servis seçim ekranı — Gemini, ChatGPT, Claude, Copilot kartları.
+ * Soru sayısı seçici dahildir, prompt canlı olarak güncellenir.
  * Seçilen serviste KPSS quiz prompt'u hazır gönderilir ya da panoya kopyalanır.
  */
 
@@ -18,7 +19,7 @@ interface KpssExternalQuizLauncherProps {
   subjectKey: string;
   topicName: string;
   questionCount: number;
-  onEnterResult: () => void;
+  onEnterResult: (count: number) => void;
   onBack: () => void;
 }
 
@@ -94,6 +95,8 @@ const SERVICES: ServiceDef[] = [
   { id: "copilot", name: "Copilot", icon: <CopilotIcon /> },
 ];
 
+const QUESTION_COUNTS = [5, 10, 15, 20, 25];
+
 export function KpssExternalQuizLauncher({
   t,
   lang,
@@ -105,22 +108,26 @@ export function KpssExternalQuizLauncher({
 }: KpssExternalQuizLauncherProps) {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<ExternalAIService | null>(null);
+  const [selectedCount, setSelectedCount] = useState(questionCount);
 
-  const prompt = buildKpssQuizPrompt(subjectKey, topicName, questionCount, lang);
+  // Prompt, soru sayısı değiştikçe canlı güncellenir
+  const prompt = buildKpssQuizPrompt(subjectKey, topicName, selectedCount, lang);
 
   const handleServiceSelect = async (service: ExternalAIService) => {
     setIsLoading(service);
     try {
       const method = await openExternalAIService(service, prompt);
       if (method === "clipboard") {
-        setToastMessage(t.kpss_external_quiz_prompt_copied);
+        // ChatGPT / Copilot — panoya kopyalandı
+        setToastMessage(t.kpss_external_quiz_clipboard_hint);
       } else {
+        // Gemini / Claude — URL param ile pre-fill edildi
         setToastMessage(t.kpss_external_quiz_opened_url);
       }
     } finally {
       setIsLoading(null);
     }
-    setTimeout(() => setToastMessage(null), 4000);
+    setTimeout(() => setToastMessage(null), 5000);
   };
 
   const handleCopyPrompt = async () => {
@@ -137,6 +144,19 @@ export function KpssExternalQuizLauncher({
     <div class="kpss-external-launcher">
       <p class="kpss-external-launcher__title">{t.kpss_external_quiz_title}</p>
       <p class="kpss-external-launcher__desc">{t.kpss_external_quiz_desc}</p>
+
+      {/* Soru sayısı seçici */}
+      <div class="kpss-question-count-grid">
+        {QUESTION_COUNTS.map((count) => (
+          <button
+            key={count}
+            class={`kpss-qcount-btn ${selectedCount === count ? "active" : ""}`}
+            onClick={() => setSelectedCount(count)}
+          >
+            {count} {t.kpss_quiz_questions}
+          </button>
+        ))}
+      </div>
 
       {/* Servis kartları */}
       <div class="kpss-external-service-grid">
@@ -194,7 +214,7 @@ export function KpssExternalQuizLauncher({
         <button
           class="settings-add-btn"
           style={{ flex: 2, padding: "0 16px" }}
-          onClick={onEnterResult}
+          onClick={() => onEnterResult(selectedCount)}
         >
           {t.kpss_external_quiz_enter_result}
         </button>

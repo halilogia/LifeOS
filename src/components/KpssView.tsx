@@ -391,6 +391,8 @@ export function KpssView({
       setCurrentSubject(subject);
     }
     setActiveQuizTopic(topic);
+    // Detail modal'ı kapat (çakışmaması için)
+    setActiveTopic(null);
     const quizKey = `${targetSubject}_${topic}`;
     const pastQuiz = pastQuizzes[quizKey];
     if (pastQuiz) {

@@ -28,11 +28,25 @@ export function KpssQuizIntroStep({
       (aiEndpoint.includes("localhost") || aiEndpoint.includes("127.0.0.1")));
 
   return (
-    <div style={{ textAlign: "center", padding: "12px" }}>
-      <h4 style={{ color: "var(--accent-color)", marginBottom: "12px" }}>
+    <div style={{ textAlign: "center", padding: "8px 4px" }}>
+      <h4 style={{
+        color: "var(--accent-color)",
+        marginBottom: "16px",
+        fontSize: "1.3rem",
+        fontWeight: "800",
+        letterSpacing: "-0.5px",
+      }}>
         {t.kpss_quiz_proficiency}
       </h4>
-      <p style={{ fontSize: "0.95rem", opacity: 0.8, lineHeight: 1.5 }}>
+      <p style={{
+        fontSize: "0.95rem",
+        color: "var(--text-secondary)",
+        lineHeight: "1.7",
+        marginBottom: "20px",
+        maxWidth: "420px",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}>
         {t.kpss_quiz_proficiency}
       </p>
 
@@ -78,11 +92,11 @@ export function KpssQuizIntroStep({
 
       <div
         className="settings-footer"
-        style={{ padding: "16px 0 0 0", marginTop: "24px", display: "flex", flexDirection: "column", gap: "10px" }}
+        style={{ padding: "16px 0 0 0", marginTop: "24px", display: "flex", flexDirection: "column", gap: "12px" }}
       >
         <button
           className="settings-add-btn"
-          style={{ width: "100%" }}
+          style={{ width: "100%", padding: "14px 20px", fontSize: "1rem", fontWeight: "700" }}
           disabled={!isAiConfigured}
           onClick={onStartQuiz}
         >

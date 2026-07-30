@@ -429,7 +429,7 @@ body.sidebar-open .top-header {
   backdrop-filter: blur(10px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-xl, 24px);
-  padding: 1.var(--space-7);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: var(--space-7);
@@ -445,9 +445,11 @@ body.sidebar-open .top-header {
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--text-secondary);
+  padding-top: 4px;
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--card-border);
   text-align: center;
+  flex-shrink: 0;
 }
 
 .kanban-list {
