@@ -150,8 +150,6 @@ body {
   flex-direction: column;
   gap: var(--space-9);
   margin: var(--space-11) auto 0 auto;
-  transition: padding-left 0.4s ease;
-  align-self: stretch;
 }
 
 .hidden {
@@ -297,13 +295,16 @@ body {
 .settings-content::-webkit-scrollbar {
   width: 6px;
 }
+
 .settings-content::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .settings-content::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
+
 .settings-content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
@@ -635,15 +636,6 @@ body {
   }
 }
 
-body.sidebar-open .container {
-  padding-left: 300px;
-}
-
-@media (max-width: 1199px) {
-  body.sidebar-open .container {
-    padding-left: var(--space-9);
-  }
-}
 
 /* --- Global Legibility Fix for Select Option Dropdowns --- */
 select option {

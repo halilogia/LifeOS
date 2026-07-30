@@ -2,22 +2,35 @@
  * detoxMotivationalService.ts
  * Calculates dynamic motivational achievements ("Bu Süreyle Ne Yapabilirdin?")
  * based on saved detox minutes.
+ * 
+ * Domain layer — pure function, no external dependencies.
+ * Returns raw data without translations. Caller handles formatting.
  */
 
-import { getTranslation } from "@/utils/i18n.js";
-import type { Language } from "@/types/types.js";
+export type AchievementType =
+  | "kpss_questions"
+  | "book_pages"
+  | "pomodoro"
+  | "vocabulary"
+  | "exercise"
+  | "unlimited_focus";
 
 export interface MotivationalAchievement {
   icon: string;
-  text: string;
+  type: AchievementType;
+  /** Calculated count (questions, pages, etc.) */
+  count: number;
   color?: string;
 }
 
+/**
+ * Calculates motivational achievements based on detox duration.
+ * Pure function — no external dependencies.
+ * Returns raw achievement data; formatting is left to the presentation layer.
+ */
 export function calculateMotivationalAchievements(
   durationMinutes: number,
-  lang: string = "tr",
 ): MotivationalAchievement[] {
-  const t = getTranslation(lang as Language);
   const mins = Math.max(1, Math.round(durationMinutes));
   const achievements: MotivationalAchievement[] = [];
 
@@ -25,7 +38,8 @@ export function calculateMotivationalAchievements(
     return [
       {
         icon: "👑",
-        text: t.detox_motiv_unlimited_focus,
+        type: "unlimited_focus",
+        count: 0,
         color: "#a855f7",
       },
     ];
@@ -36,7 +50,8 @@ export function calculateMotivationalAchievements(
   if (kpssQuestions >= 5) {
     achievements.push({
       icon: "✍️",
-      text: t.detox_motiv_kpss_questions.replace("$count", String(kpssQuestions)),
+      type: "kpss_questions",
+      count: kpssQuestions,
       color: "#3b82f6",
     });
   }
@@ -46,7 +61,8 @@ export function calculateMotivationalAchievements(
   if (bookPages >= 3) {
     achievements.push({
       icon: "📚",
-      text: t.detox_motiv_book_pages.replace("$count", String(bookPages)),
+      type: "book_pages",
+      count: bookPages,
       color: "#10b981",
     });
   }
@@ -56,7 +72,8 @@ export function calculateMotivationalAchievements(
   if (pomodoros >= 0.5) {
     achievements.push({
       icon: "🎯",
-      text: t.detox_motiv_pomodoro.replace("$count", String(pomodoros)),
+      type: "pomodoro",
+      count: pomodoros,
       color: "#f59e0b",
     });
   }
@@ -66,7 +83,8 @@ export function calculateMotivationalAchievements(
   if (words >= 10) {
     achievements.push({
       icon: "🎴",
-      text: t.detox_motiv_vocabulary.replace("$count", String(words)),
+      type: "vocabulary",
+      count: words,
       color: "#ec4899",
     });
   }
@@ -76,7 +94,8 @@ export function calculateMotivationalAchievements(
   if (distanceKm >= 0.5) {
     achievements.push({
       icon: "🏃",
-      text: t.detox_motiv_exercise.replace("$count", String(distanceKm)),
+      type: "exercise",
+      count: distanceKm,
       color: "#06b6d4",
     });
   }

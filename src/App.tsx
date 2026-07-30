@@ -9,7 +9,15 @@ import { useAppInit } from "@/presentation/hooks/useAppInit.js";
 import { useAppTodoInput } from "@/presentation/hooks/useAppTodoInput.js";
 import { useAppConfirmActions } from "@/presentation/hooks/useAppConfirmActions.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
+import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
+import { createSyncPort } from "@/application/ports/createSyncPort.js";
+import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
+import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
+import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
+import type { AppInitDependencies } from "@/presentation/hooks/useAppInit.js";
 import { kpssService } from "@/services/kpssService.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
@@ -21,8 +29,19 @@ import { FooterQuote } from "@/components/FooterQuote.js";
 import { DatePicker } from "@/components/DatePicker.js";
 import type { Todo } from "@/types/types.js";
 
-// Singleton repository — created once outside component to avoid re-instantiation
+// Singleton instances — created once outside component to avoid re-instantiation
 const todoRepository = new ChromeStorageTodoRepository();
+const syncRepo: ISyncRepository = new ChromeStorageSyncRepository();
+const syncPort: ITodoSyncPort = createSyncPort();
+const settingsRepo: ISettingsRepository = new ChromeStorageSettingsRepository();
+const migration = new LocalToSyncMigration();
+const appInitDeps: AppInitDependencies = {
+  settingsRepo,
+  todoRepo: todoRepository,
+  syncRepo,
+  syncPort,
+  migration,
+};
 
 export function App() {
   // ─── Settings Hook ────────────────────────────────────────────────────────
@@ -124,10 +143,10 @@ export function App() {
     handleMoveTaskDirection,
     handleUpdateTodoUrgentImportant,
     initTodos,
-  } = useTodos(todoRepository, triggerCloudBackup, showAlert, getTranslation(lang as Language));
+  } = useTodos(todoRepository, syncPort, syncRepo, triggerCloudBackup, showAlert, getTranslation(lang as Language));
 
   // ─── App Init Hook ────────────────────────────────────────────────────────
-  useAppInit({
+  useAppInit(appInitDeps, {
     onSettingsLoaded: loadSettings,
     onTodosLoaded: initTodos,
     onSyncSettingsLoaded: (settings) => setSyncSettings(settings),

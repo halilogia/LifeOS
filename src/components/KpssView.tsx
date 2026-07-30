@@ -6,13 +6,15 @@ import {
 } from "@/services/kpssService.js";
 import { kpssSrsService } from "@/services/kpssSrsService.js";
 import { kpssQuizFlowService } from "@/services/kpssQuizFlowService.js";
-import { KpssProgress, KpssDailyStats, Language } from "@/types/types.js";
+import { KpssDailyStats, Language } from "@/types/types.js";
+import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
 import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
 import {
   calculateKpssCountdown,
   calculateEstimatedCompletionTime,
+  formatKpssCountdown,
   getSubjectNets as getSubjectNets_logic,
   getOverallNets as getOverallNets_logic,
 } from "@/domain/services/KpssCalculatorService.js";
@@ -144,7 +146,7 @@ export function KpssView({
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
     const reviewData = srsQueue[srsIndex];
-    if (!reviewData) {return;}
+    if (!reviewData) { return; }
 
     await kpssSrsService.saveSrsReview(reviewData, quality);
 
@@ -218,9 +220,17 @@ export function KpssView({
 
     const updateCountdown = () => {
       const now = Date.now();
-      setKpssTimeLeft(calculateKpssCountdown(KPSS_TARGET_DATE, now, lang));
+      const countdown = calculateKpssCountdown(KPSS_TARGET_DATE, now);
+      setKpssTimeLeft(
+        countdown
+          ? formatKpssCountdown(countdown, t.kpss_time_format)
+          : t.kpss_exam_started,
+      );
+      const estimated = calculateEstimatedCompletionTime(remaining, now);
       setEstimatedTimeLeft(
-        calculateEstimatedCompletionTime(remaining, now, lang),
+        estimated
+          ? formatKpssCountdown(estimated, t.kpss_time_format)
+          : t.kpss_completed,
       );
     };
 
