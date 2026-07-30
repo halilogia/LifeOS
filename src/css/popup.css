@@ -19,7 +19,6 @@
 }
 
 body {
-  width: 360px;
   background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%);
   color: var(--text-primary);
   padding: 0.6rem;
