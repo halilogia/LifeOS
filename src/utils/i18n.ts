@@ -37,7 +37,7 @@ export function applyI18n(
 
 export function getTranslation(lang: Language): Record<string, string> {
   const handler = {
-    get(target: any, prop: string) {
+    get(target: Record<string, string>, prop: string) {
       if (prop in target) {
         return target[prop];
       }

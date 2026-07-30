@@ -11,29 +11,12 @@ function formatDueDate(dateStr: string, lang: Language): string {
     const m = parseInt(parts[1], 10) - 1;
     const d = parseInt(parts[2], 10);
     const dateObj = new Date(y, m, d);
-    if (lang === "tr") {
-      const months = [
-        "Oca",
-        "Şub",
-        "Mar",
-        "Nis",
-        "May",
-        "Haz",
-        "Tem",
-        "Ağu",
-        "Eyl",
-        "Eki",
-        "Kas",
-        "Ara",
-      ];
-      return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-    } else {
-      return dateObj.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    }
+    const locale = lang === "tr" ? "tr-TR" : "en-US";
+    return dateObj.toLocaleDateString(locale, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   } catch {
     return dateStr;
   }

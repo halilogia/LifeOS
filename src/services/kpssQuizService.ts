@@ -27,9 +27,10 @@ export function getLocalQuestionsForTopic(
   Object.values(KPSS_YEARLY_DATA).forEach((yearData) => {
     const list = yearData[subjectKey];
     if (Array.isArray(list)) {
-      list.forEach((q: any) => {
-        if (q.topic === topicName) {
-          aggregated.push(q);
+      list.forEach((q: unknown) => {
+        const quizQ = q as KpssPastQuiz;
+        if (quizQ.topic === topicName) {
+          aggregated.push(quizQ as unknown as QuizQuestion);
         }
       });
     }
@@ -50,15 +51,15 @@ export function getPastExamQuestions(
     Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
       const yearData = KPSS_YEARLY_DATA[y];
       if (subject === "all") {
-        Object.values(yearData).forEach((list: any) => {
+        Object.values(yearData).forEach((list: unknown) => {
           if (Array.isArray(list)) {
-            questions.push(...list);
+            questions.push(...(list as unknown as QuizQuestion[]));
           }
         });
       } else {
         const list = yearData[subject];
         if (Array.isArray(list)) {
-          questions.push(...list);
+          questions.push(...(list as unknown as QuizQuestion[]));
         }
       }
     });
@@ -67,13 +68,13 @@ export function getPastExamQuestions(
     const yearData = KPSS_YEARLY_DATA[year];
     if (yearData) {
       if (subject === "all") {
-        Object.values(yearData).forEach((list: any) => {
+        Object.values(yearData).forEach((list: unknown) => {
           if (Array.isArray(list)) {
-            questions.push(...list);
+            questions.push(...(list as unknown as QuizQuestion[]));
           }
         });
       } else {
-        questions = yearData[subject] || [];
+        questions = (yearData[subject] || []) as unknown as QuizQuestion[];
       }
     }
   }

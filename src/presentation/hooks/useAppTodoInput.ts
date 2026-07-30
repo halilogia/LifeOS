@@ -7,7 +7,7 @@
 import { useState, useCallback } from "preact/hooks";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
-import type { ChangeEvent, KeyboardEvent } from "preact";
+import type { JSX } from "preact";
 
 interface UseAppTodoInputProps {
   lang: Language;
@@ -39,7 +39,7 @@ export function useAppTodoInput({
   }, [todoText, todoRepeat, todoDueDate, onAddTodo]);
 
   const handleKeyPress = useCallback(
-    (e: KeyboardEvent<HTMLInputElement>) => {
+    (e: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && todoText.trim()) {
         onAddTodo(todoText.trim(), todoRepeat, todoDueDate);
         setTodoText("");
@@ -50,8 +50,8 @@ export function useAppTodoInput({
   );
 
   const handleRepeatChange = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      const val = e.target.value as Todo["repeat"];
+    (e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
+      const val = (e.target as HTMLSelectElement).value as Todo["repeat"];
       setTodoRepeat(val);
       setActiveTab(val === "none" ? "focus" : "routines");
     },

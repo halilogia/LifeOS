@@ -52,7 +52,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const [inlineCues, setInlineCues] = useState("");
   const [inlineSummary, setInlineSummary] = useState("");
 
-  let clickTimer: any = null;
+  let clickTimer: ReturnType<typeof setTimeout> | null = null;
 
   useEffect(() => {
     loadData();

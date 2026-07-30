@@ -92,6 +92,10 @@ export function App() {
     showConfirm,
     handleTabChangeUI,
     handleOpenSettings,
+    loadSidebarOrder,
+    handleViewChange,
+    refreshClock,
+    refreshQuote,
   } = useUI();
 
   // ─── Sync Hook ────────────────────────────────────────────────────────────
@@ -103,7 +107,12 @@ export function App() {
     handleImportBackup,
     handleBackupToGoogleDrive,
     handleRestoreFromGoogleDrive,
-  } = useSync();
+    triggerCloudBackup,
+  } = useSync({
+    showAlert,
+    errorLabel: "Sync error",
+    detailLabel: "Detail",
+  });
 
   // ─── Todos Hook ───────────────────────────────────────────────────────────
   const {
@@ -115,32 +124,18 @@ export function App() {
     handleMoveTaskDirection,
     handleUpdateTodoUrgentImportant,
     initTodos,
-  } = useTodos();
+  } = useTodos(todoRepository, triggerCloudBackup, showAlert, getTranslation(lang as Language));
 
   // ─── App Init Hook ────────────────────────────────────────────────────────
   useAppInit({
     onSettingsLoaded: loadSettings,
     onTodosLoaded: initTodos,
-    onSyncSettingsLoaded: setSyncSettings,
-    onGoogleUserEmail: setGoogleUserEmail,
-    onSidebarOrderLoaded: setSidebarOrder,
+    onSyncSettingsLoaded: (settings) => setSyncSettings(settings),
+    onGoogleUserEmail: (email) => setGoogleUserEmail(email),
+    onSidebarOrderLoaded: (order) => setSidebarOrder(order),
     onQuoteRefreshed: (l: Language) => refreshQuote(l),
     onClockStarted: () => refreshClock(lang as Language),
   });
-
-  // ─── Helper functions ─────────────────────────────────────────────────────
-  const refreshClock = useCallback((l: Language) => {
-    const now = new Date();
-    const time = now.toLocaleTimeString(l === "tr" ? "tr-TR" : "en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    // Clock is handled by useUI's internal state
-  }, []);
-
-  const refreshQuote = useCallback((l: Language) => {
-    // Quote is handled by useUI's internal state
-  }, []);
 
   // Sync initTodos into the DI-backed useAppInit flow
   useEffect(() => {

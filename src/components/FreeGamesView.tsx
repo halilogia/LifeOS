@@ -203,30 +203,13 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
         return dateStr;
       }
 
-      if (lang === "tr") {
-        const months = [
-          "Ocak",
-          "Şubat",
-          "Mart",
-          "Nisan",
-          "Mayıs",
-          "Haziran",
-          "Temmuz",
-          "Ağustos",
-          "Eylül",
-          "Ekim",
-          "Kasım",
-          "Aralık",
-        ];
-        return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-      } else {
-        const options: Intl.DateTimeFormatOptions = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        return date.toLocaleDateString("en-US", options);
-      }
+      const locale = lang === "tr" ? "tr-TR" : "en-US";
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return date.toLocaleDateString(locale, options);
     } catch {
       return dateStr;
     }

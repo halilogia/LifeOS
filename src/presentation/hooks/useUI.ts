@@ -8,6 +8,7 @@ import { useState, useCallback } from "preact/hooks";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { translations } from "@/utils/i18n.js";
 import type { CustomQuote } from "@/types/types.js";
+import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
@@ -20,6 +21,15 @@ export function useUI() {
   const [settingsInitialTab, setSettingsInitialTab] = useState<
     "general" | "kpss" | "detox" | "ai" | "sync"
   >("general");
+
+  // Sync-related state (moved here from useSync for App.tsx destructuring)
+  const [googleUserEmail, setGoogleUserEmail] = useState<string>("");
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncSettings, setSyncSettings] = useState<GoogleSyncSettings>({
+    enabled: false,
+    tasksEnabled: false,
+    calendarEnabled: false,
+  });
 
   // Time & Date
   const [clockText, setClockText] = useState("00:00");
@@ -125,6 +135,8 @@ export function useUI() {
     setActiveTab(tabVal);
   }, []);
 
+  const handleTabChangeUI = handleTabChange;
+
   const handleOpenSettings = useCallback(
     (tab: "general" | "kpss" | "detox" | "ai" | "sync" = "general") => {
       setSettingsInitialTab(tab);
@@ -175,7 +187,15 @@ export function useUI() {
     refreshQuote,
     handleViewChange,
     handleTabChange,
+    handleTabChangeUI,
     handleOpenSettings,
     loadSidebarOrder,
+    // Sync state (for App.tsx destructuring)
+    googleUserEmail,
+    setGoogleUserEmail,
+    isSyncing,
+    setIsSyncing,
+    syncSettings,
+    setSyncSettings,
   };
 }

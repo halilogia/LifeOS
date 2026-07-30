@@ -429,7 +429,11 @@ export function parseAIResponse(rawText: string): {
   }
 
   try {
-    const parsed = cleanAndParseJSON(rawText);
+    const parsed = cleanAndParseJSON(rawText) as {
+      reply?: string;
+      action?: string;
+      params?: Record<string, unknown> | null;
+    };
     return {
       reply: parsed.reply || "",
       action: parsed.action || "none",

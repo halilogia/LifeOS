@@ -75,7 +75,7 @@ export function ViewRouter(props: ViewRouterProps) {
           todos={props.todos}
           lang={props.lang}
           defaultTab="kanban"
-          onUpdateTodoUrgentImportant={props.onUpdateTodoUrgentImportant}
+          onUpdateTodoUrgentImportant={props.onUpdateTodoUrgentImportant as any}
           onMoveTaskStatus={props.onMoveTaskStatus}
           onMoveTaskDirection={props.onMoveTaskDirection as any}
         />

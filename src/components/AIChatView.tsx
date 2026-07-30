@@ -119,9 +119,9 @@ export function AIChatView({
         setIsBotTyping(false);
 
         if (aiResponse.action === "create_task" && aiResponse.params?.text) {
-          const taskText = aiResponse.params.text;
-          const repeat = aiResponse.params.repeat || "none";
-          const dueDate = aiResponse.params.dueDate;
+          const taskText = aiResponse.params.text as string;
+          const repeat = (aiResponse.params.repeat as Todo["repeat"]) || "none";
+          const dueDate = aiResponse.params.dueDate as string | undefined;
 
           await onAddTodo(taskText, repeat, dueDate);
           await onManualSync();
@@ -129,17 +129,17 @@ export function AIChatView({
           aiResponse.action === "add_note" &&
           aiResponse.params?.note_content
         ) {
-          const type = aiResponse.params.note_type || "note";
-          const content = aiResponse.params.note_content;
-          const title = aiResponse.params.note_title;
-          const cues = aiResponse.params.note_cues;
-          const summary = aiResponse.params.note_summary;
+          const type = aiResponse.params.note_type as "note" | "diary" | "cornell" || "note";
+          const content = aiResponse.params.note_content as string;
+          const title = aiResponse.params.note_title !== undefined ? String(aiResponse.params.note_title) : "";
+          const cues = aiResponse.params.note_cues !== undefined ? String(aiResponse.params.note_cues) : "";
+          const summary = aiResponse.params.note_summary !== undefined ? String(aiResponse.params.note_summary) : "";
           await handleAddNoteFromAI(type, content, lang, title, cues, summary);
         } else if (
           aiResponse.action === "update_memory" &&
           aiResponse.params?.memory_fact
         ) {
-          await handleUpdateMemoryFromAI(aiResponse.params.memory_fact);
+          await handleUpdateMemoryFromAI(String(aiResponse.params.memory_fact));
         }
 
         setMessages((prev) => [

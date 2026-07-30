@@ -53,8 +53,10 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
     t.month_sep, t.month_oct, t.month_nov, t.month_dec,
   ];
 
-  const weekdaysTr = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pa"];
-  const weekdaysEn = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+  const weekdays = [
+    t.day_mon, t.day_tue, t.day_wed, t.day_thu,
+    t.day_fri, t.day_sat, t.day_sun,
+  ];
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
@@ -233,7 +235,7 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
           </div>
 
           <div className="datepicker-weekdays">
-            {(lang === "tr" ? weekdaysTr : weekdaysEn).map((day) => (
+            {weekdays.map((day) => (
               <span key={day} className="datepicker-weekday">
                 {day}
               </span>

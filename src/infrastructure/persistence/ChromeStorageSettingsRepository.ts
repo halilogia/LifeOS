@@ -21,7 +21,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
         [...SYNC_SETTINGS_KEYS],
-        (result: any) => {
+        (result: Record<string, any>) => {
           resolve({
             lang: (result[SYNC_LANG] as Language) || "tr",
             sidebarOpen: result[SYNC_SIDEBAR_OPEN] ?? true,

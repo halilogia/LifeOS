@@ -331,7 +331,7 @@ export function KpssView({
           setIsBackgroundLoading(false);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error("AI quiz generation error:", err);
       setQuizError(t.kpss_quiz_error);
       setQuizLoading(false);

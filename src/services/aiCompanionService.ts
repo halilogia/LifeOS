@@ -20,6 +20,14 @@ export interface CompanionSummaryResult {
   rawTranscript?: TranscriptItem[];
 }
 
+/** YouTube caption track shape from ytInitialPlayerResponse */
+export interface CaptionTrack {
+  baseUrl: string;
+  languageCode: string;
+  kind?: string;
+  name?: { simpleText: string };
+}
+
 /**
  * YouTube URL'sinden Video ID'sini çıkarır
  */
@@ -78,7 +86,7 @@ export async function fetchYoutubeTranscript(
     }
 
     const playerResponse = JSON.parse(playerResponseMatch[1]);
-    const captionTracks =
+    const captionTracks: Array<{ languageCode: string; baseUrl: string }> | undefined =
       playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
 
     if (!captionTracks || captionTracks.length === 0) {
@@ -89,8 +97,8 @@ export async function fetchYoutubeTranscript(
 
     // Türkçe (tr) veya varsayılan ilk alt yazıyı seç
     const track =
-      captionTracks.find((t: any) => t.languageCode === "tr") ||
-      captionTracks.find((t: any) => t.languageCode === "en") ||
+      captionTracks.find((t: CaptionTrack) => t.languageCode === "tr") ||
+      captionTracks.find((t: CaptionTrack) => t.languageCode === "en") ||
       captionTracks[0];
 
     const xmlRes = await fetch(track.baseUrl);
