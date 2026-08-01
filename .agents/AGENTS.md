@@ -157,6 +157,22 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **CSS dosyası ≤ 400 satır**: `src/css/newtab/<feature>.css` 400 satırı aşarsa `src/css/newtab/<feature>/` alt klasörüne bölünür (bkz. 5.6).
 * **App.tsx ≤ 300 satır**: Ana bileşen şişerse presentational parçalar (`HeroHeader`, `FooterQuote` vb.) ayrı dosyalara çekilir.
 
+### 6.4 Ölü Dosya Önleme Kuralı (Dead File Prevention)
+* **Yeni dosya yazınca ESKİSİNİ SİL**: Bir dosyayı yeni dosyayla değiştirirken (refactor, hook extraction, mimari değişim) eski dosya KESİNLİKLE silinir. "Yeni dosya çalışıyor, eskisi dursun" yasaktır — ölü dosya birikir.
+* **Sıfır Ölü Dosya Garantisi**: Her iş sonunda `node scripts/findDeadFiles.mjs` çalıştırılır ve çıktı "Toplam: 0 dosya" olmalıdır. 0 değilse kalanlar silinir (entry noktaları hariç).
+* **İhlal tespiti**: Bir refactor commit'inde eski dosya hâlâ duruyorsa iş eksiktir.
+
+### 6.5 Klasör Dosya Limiti (Folder File Limit)
+* **Klasör ≤ 15 dosya**: Bir klasör 15+ `.ts/.tsx` dosya içeriyorsa, dosyalar tek sorumluluğa sahip değilse feature alt klasörlerine bölünür (örn. `components/kpss/` → `quiz/` + `wiki/` + `srs/`).
+* **İstisna**: Klasörün kendisi tek sorumluluk ise (örn. `presentation/hooks/` = "state management", `domain/repositories/` = "interface'ler") dosya sayısı bakım kuralı değildir — bölünmez.
+* **Bölme kuralı**: Alt klasör oluştururken import'lar `@/` alias ile güncellenir, `findDeadFiles.mjs` ile 0 ölü dosya doğrulanır.
+* **Kök vs Klasör Kararı (Folder Placement)**: Her feature'ın kendi klasörü olması YANLIŞ kuraldır. Dosya yerleşimi:
+  * **Çok dosyalı feature** (>3 dosya, aynı domain) → `feature/` klasörü (örn. `services/kpss/`, `components/kpss/quiz/`)
+  * **Tek dosyalık feature / giriş noktası** → kökte durur (örn. `ListView.tsx`, `prayerService.ts` — klasör 1 dosyalık şişkinlik olur)
+  * **Paylaşılan parçalar** (ConfirmModal, DatePicker) → kök, feature klasörüne gömülmez
+  * **View kökleri** (`components/`): ana view'lar `ViewRouter`'dan yönlendirilir, birbirini import etmez — kökte durur = "route listesi" tek bakışta görünür
+  * **Alt domain'ler** (kpss: quiz/wiki/srs) → `feature/<domain>/` klasörleri
+
 ### 6.2 Katman Bağımlılık Kuralı (Layer Dependency Rule)
 * **`components/` ASLA direkt `chrome.storage.*` çağırmaz**: Tüm storage erişimi `src/services/`, `src/infrastructure/persistence/` veya `src/presentation/hooks/` üzerinden yapılır. View component'leri veriyi **prop veya hook** olarak alır.
 * **`components/` ASLA direkt `fetch()` çağırmaz**: Network çağrıları `src/services/` içindeki servislerde yaşar.

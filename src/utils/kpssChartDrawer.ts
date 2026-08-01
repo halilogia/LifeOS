@@ -1,11 +1,11 @@
-/**
+﻿/**
  * kpssChartDrawer.ts
  * Pure Canvas 2D drawing utility for KPSS daily study progress charts (line & bar modes).
  * Supports metric filtering: "all" | "questions" | "videos".
  */
 
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
-import { kpssData } from "@/services/kpssService.js";
+import { kpssData } from "@/services/kpss/kpssService.js";
 import { getTranslation } from "@/utils/i18n.js";
 
 export interface KpssChartParams {

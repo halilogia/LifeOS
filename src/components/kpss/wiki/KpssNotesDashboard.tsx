@@ -13,10 +13,10 @@ import {
   getAutoTitleSetting,
   extractTitleFromContent,
   extractHeadings,
-} from "@/services/kpssWikiService.js";
-import { KpssWikiSidebar } from "@/components/kpss/KpssWikiSidebar.js";
-import { KpssWikiReader } from "@/components/kpss/KpssWikiReader.js";
-import { KpssWikiEditor } from "@/components/kpss/KpssWikiEditor.js";
+} from "@/services/kpss/kpssWikiService.js";
+import { KpssWikiSidebar } from "@/components/kpss/wiki/KpssWikiSidebar.js";
+import { KpssWikiReader } from "@/components/kpss/wiki/KpssWikiReader.js";
+import { KpssWikiEditor } from "@/components/kpss/wiki/KpssWikiEditor.js";
 import { ZettelkastenGraphModal } from "@/components/notes/ZettelkastenGraphModal.js";
 
 interface KpssNotesDashboardProps {

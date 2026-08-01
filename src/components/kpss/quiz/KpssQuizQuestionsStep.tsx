@@ -7,7 +7,7 @@ import { CSSProperties } from "preact";
 
 import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
 import { KpssQuestionMap } from "@/components/kpss/KpssQuestionMap.js";
-import { MathRenderer } from "@/components/kpss/MathRenderer.js";
+import { MathRenderer } from "@/components/kpss/quiz/MathRenderer.js";
 
 export interface QuizQuestion {
   question: string;

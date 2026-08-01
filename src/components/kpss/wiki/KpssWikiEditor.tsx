@@ -1,11 +1,11 @@
-/**
+﻿/**
  * KpssWikiEditor.tsx
  * Presentational Article Editor Component.
  * Controls Title input, Subject category dropdown, Content textarea, and Save bar.
  */
 
 import { Language } from "@/types/types.js";
-import { extractTitleFromContent } from "@/services/kpssWikiService.js";
+import { extractTitleFromContent } from "@/services/kpss/kpssWikiService.js";
 
 interface KpssWikiEditorProps {
   lang: Language;
@@ -42,7 +42,7 @@ export function KpssWikiEditor({
           type="text"
           value={editorTitle}
           onInput={(e) => onTitleChange((e.target as HTMLInputElement).value)}
-          placeholder="Ders Notu Başlığı (örneğin: Çorum)..."
+          placeholder="Ders Notu BaÅŸlÄ±ÄŸÄ± (Ã¶rneÄŸin: Ã‡orum)..."
           style={{
             flex: 1,
             background: "rgba(0, 0, 0, 0.4)",
@@ -74,9 +74,9 @@ export function KpssWikiEditor({
           }}
         >
           <option value="tarih">Tarih</option>
-          <option value="cografya">Coğrafya</option>
-          <option value="vatandaslik">Vatandaşlık</option>
-          <option value="turkce">Türkçe</option>
+          <option value="cografya">CoÄŸrafya</option>
+          <option value="vatandaslik">VatandaÅŸlÄ±k</option>
+          <option value="turkce">TÃ¼rkÃ§e</option>
           <option value="matematik">Matematik</option>
         </select>
       </div>
@@ -87,7 +87,7 @@ export function KpssWikiEditor({
         onInput={(e) =>
           onContentChange((e.target as HTMLTextAreaElement).value)
         }
-        placeholder="Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz..."
+        placeholder="Ders notunuzu yazÄ±n. DiÄŸer notlarÄ±nÄ±za baÄŸlantÄ± vermek iÃ§in [[Ã‡orum]] ÅŸeklinde yazabilirsiniz..."
         style={{
           width: "100%",
           flex: 1,
@@ -123,8 +123,8 @@ export function KpssWikiEditor({
           }}
         >
           {saveStatus
-            ? "✓ Değişiklikler başarıyla kaydedildi!"
-            : "Değişikliklerinizi kaydetmeyi unutmayın."}
+            ? "âœ“ DeÄŸiÅŸiklikler baÅŸarÄ±yla kaydedildi!"
+            : "DeÄŸiÅŸikliklerinizi kaydetmeyi unutmayÄ±n."}
         </span>
 
         <button
@@ -143,7 +143,7 @@ export function KpssWikiEditor({
             transition: "all 0.2s ease",
           }}
         >
-          Değişiklikleri Kaydet
+          DeÄŸiÅŸiklikleri Kaydet
         </button>
       </div>
     </div>

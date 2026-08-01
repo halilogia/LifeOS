@@ -7,8 +7,8 @@
 import { useState, useCallback } from "preact/hooks";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import type { RemoteTask } from "@/application/ports/ITodoSyncPort.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
 import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
 import { GoogleDriveApi } from "@/infrastructure/api/GoogleDriveApi.js";

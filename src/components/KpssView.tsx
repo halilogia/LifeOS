@@ -1,10 +1,10 @@
-import { useState, useEffect } from "preact/hooks";
+﻿import { useState, useEffect } from "preact/hooks";
 import {
   kpssService,
   kpssData,
   kpssDummyFlashcards,
-} from "@/services/kpssService.js";
-import { kpssSrsService } from "@/services/kpssSrsService.js";
+} from "@/services/kpss/kpssService.js";
+import { kpssSrsService } from "@/services/kpss/kpssSrsService.js";
 import { KpssDailyStats, Language } from "@/types/types.js";
 import { useKpssQuiz } from "@/presentation/hooks/useKpssQuiz.js";
 import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
@@ -27,16 +27,16 @@ import {
   subjectsList,
   KPSS_TARGET_DATE,
 } from "@/domain/constants/kpssConstants.js";
-import { KpssPastQuiz } from "@/services/kpssQuizService.js";
+import { KpssPastQuiz } from "@/services/kpss/kpssQuizService.js";
 
 // Extracted Presentational Sub-components
 import { KpssHeaderBar } from "@/components/kpss/KpssHeaderBar.js";
 import { KpssTopicDetailModal } from "@/components/kpss/KpssTopicDetailModal.js";
 import { KpssProgressSection } from "@/components/kpss/KpssProgressSection.js";
-import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
-import { KpssQuizModal } from "@/components/kpss/KpssQuizModal.js";
+import { KpssSrsCard } from "@/components/kpss/srs/KpssSrsCard.js";
+import { KpssQuizModal } from "@/components/kpss/quiz/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
-import { KpssNotesDashboard } from "@/components/kpss/KpssNotesDashboard.js";
+import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import { logger } from "@/utils/logger.js";
 
 interface KpssViewProps {
@@ -80,7 +80,7 @@ export function KpssView({
     description: string;
   } | null>(null);
 
-  // Quiz state ve handler'lar useKpssQuiz hook'unda yaşar (aşağıda, bağımlılıklardan sonra çağrılır)
+  // Quiz state ve handler'lar useKpssQuiz hook'unda yaÅŸar (aÅŸaÄŸÄ±da, baÄŸÄ±mlÄ±lÄ±klardan sonra Ã§aÄŸrÄ±lÄ±r)
 
   // Countdown Banners States
   const [kpssTimeLeft, setKpssTimeLeft] = useState("");

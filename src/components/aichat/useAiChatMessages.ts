@@ -14,10 +14,10 @@ import {
   handleAddNoteFromAI,
   handleUpdateMemoryFromAI,
 } from "@/services/aiChatService.js";
-import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
+import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 import { fetchStockQuote } from "@/services/bistService.js";
-import { analyzeStockWithAI } from "@/services/stockAiService.js";
+import { analyzeStockWithAI } from "@/services/stock/stockAiService.js";
 import { logger } from "@/utils/logger.js";
 
 export interface UseAiChatMessagesParams {

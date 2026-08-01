@@ -1,9 +1,9 @@
-import { useState, useEffect } from "preact/hooks";
+﻿import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import {
   getAutoTitleSetting,
   saveAutoTitleSetting,
-} from "@/services/kpssWikiService.js";
+} from "@/services/kpss/kpssWikiService.js";
 
 interface KpssSettingsTabProps {
   lang: Language;
@@ -245,7 +245,7 @@ export function KpssSettingsTab({
         </div>
       </div>
 
-      {/* Wiki Notları Ayarları */}
+      {/* Wiki NotlarÄ± AyarlarÄ± */}
       <div className="settings-group">
         <h3>{t.settings_kpss_notes_wiki}</h3>
         <div

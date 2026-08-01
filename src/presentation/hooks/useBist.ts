@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { fetchStockPrices, fetchStockQuote } from "@/services/bistService.js";
 import type { StockQuote } from "@/types/bist.js";
-import { ChromeStorageStockRepository } from "@/infrastructure/persistence/ChromeStorageStockRepository.js";
-import { evaluateStockRules } from "@/services/stockRuleEngine.js";
+import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
+import { evaluateStockRules } from "@/services/stock/stockRuleEngine.js";
 import type {
   StockPortfolioItem,
   StockRule,

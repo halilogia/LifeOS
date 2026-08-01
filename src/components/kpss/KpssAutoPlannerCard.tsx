@@ -1,6 +1,6 @@
-import { useState } from "preact/hooks";
+﻿import { useState } from "preact/hooks";
 import { KpssProgress } from "@/types/types.js";
-import { kpssData } from "@/services/kpssService.js";
+import { kpssData } from "@/services/kpss/kpssService.js";
 
 interface KpssAutoPlannerCardProps {
   t: Record<string, string>;
@@ -182,7 +182,7 @@ export function KpssAutoPlannerCard({
             fontSize: "0.85rem",
           }}
         >
-          🎉 {t.kpss_planner_all_done}
+          ğŸ‰ {t.kpss_planner_all_done}
         </div>
       ) : (
         <>
@@ -316,7 +316,7 @@ export function KpssAutoPlannerCard({
               </span>
               <span>
                 <strong>{t.kpss_daily_rate}</strong> {workloadRate.toFixed(1)}
-                /gün
+                /gÃ¼n
               </span>
             </div>
             <span

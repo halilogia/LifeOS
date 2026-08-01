@@ -1,13 +1,13 @@
-import { useState } from "preact/hooks";
+﻿import { useState } from "preact/hooks";
 import {
   kpssQuizFlowService,
   AIConfig,
-} from "@/services/kpssQuizFlowService.js";
+} from "@/services/kpss/kpssQuizFlowService.js";
 import {
   getPastExamQuestions,
   KpssPastQuiz,
-} from "@/services/kpssQuizService.js";
-import { QuizQuestion } from "@/services/kpssAiService.js";
+} from "@/services/kpss/kpssQuizService.js";
+import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 import { logger } from "@/utils/logger.js";
 
 interface UseKpssQuizOptions {
@@ -57,12 +57,12 @@ export function useKpssQuiz({
     setQuizQuestions([]);
 
     try {
-      // Geçmişte çözülen AI soruları (pastQuizzes) — tekrar sorulmaması için exclude
+      // GeÃ§miÅŸte Ã§Ã¶zÃ¼len AI sorularÄ± (pastQuizzes) â€” tekrar sorulmamasÄ± iÃ§in exclude
       const quizKey = `${subjectKey}_${topicName}`;
       const pastQuiz = pastQuizzes[quizKey];
       const pastQuestions: QuizQuestion[] = pastQuiz?.questions ?? [];
 
-      // İlk soru AI'dan beklenir (boş ekran görünmez), kalanlar arka planda üretilir
+      // Ä°lk soru AI'dan beklenir (boÅŸ ekran gÃ¶rÃ¼nmez), kalanlar arka planda Ã¼retilir
       const firstList = await kpssQuizFlowService.fetchQuestionsSubsetFromAI(
         subjectKey,
         topicName,
@@ -72,7 +72,7 @@ export function useKpssQuiz({
         pastQuestions.length > 0 ? pastQuestions : [],
       );
       if (firstList.length === 0) {
-        throw new Error("Soru üretilemedi.");
+        throw new Error("Soru Ã¼retilemedi.");
       }
 
       const firstQuestion = firstList[0];
@@ -166,7 +166,7 @@ export function useKpssQuiz({
       onSubjectChange?.(subject);
     }
     setActiveQuizTopic(topic);
-    // Detail modal'ı kapat (çakışmaması için)
+    // Detail modal'Ä± kapat (Ã§akÄ±ÅŸmamasÄ± iÃ§in)
     onCloseDetail?.();
     const quizKey = `${targetSubject}_${topic}`;
     const pastQuiz = pastQuizzes[quizKey];

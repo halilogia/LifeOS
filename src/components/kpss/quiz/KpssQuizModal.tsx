@@ -6,15 +6,15 @@
  */
 
 import { useState } from "preact/hooks";
-import { KpssQuizInfoModal } from "@/components/kpss/KpssQuizInfoModal.js";
-import { KpssQuizIntroStep } from "@/components/kpss/KpssQuizIntroStep.js";
+import { KpssQuizInfoModal } from "@/components/kpss/quiz/KpssQuizInfoModal.js";
+import { KpssQuizIntroStep } from "@/components/kpss/quiz/KpssQuizIntroStep.js";
 import {
   KpssQuizQuestionsStep,
   QuizQuestion,
-} from "@/components/kpss/KpssQuizQuestionsStep.js";
-import { KpssQuizResultStep } from "@/components/kpss/KpssQuizResultStep.js";
-import { KpssExternalQuizLauncher } from "@/components/kpss/KpssExternalQuizLauncher.js";
-import { KpssExternalResultModal } from "@/components/kpss/KpssExternalResultModal.js";
+} from "@/components/kpss/quiz/KpssQuizQuestionsStep.js";
+import { KpssQuizResultStep } from "@/components/kpss/quiz/KpssQuizResultStep.js";
+import { KpssExternalQuizLauncher } from "@/components/kpss/quiz/KpssExternalQuizLauncher.js";
+import { KpssExternalResultModal } from "@/components/kpss/quiz/KpssExternalResultModal.js";
 import { Language } from "@/types/types.js";
 
 interface KpssQuizModalProps {

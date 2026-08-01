@@ -218,7 +218,7 @@ export type KpssWikiService = ReturnType<typeof createKpssWikiService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageWikiNoteRepository } from "@/infrastructure/persistence/ChromeStorageWikiNoteRepository.js";
+import { ChromeStorageWikiNoteRepository } from "@/infrastructure/persistence/repositories/ChromeStorageWikiNoteRepository.js";
 
 const _defaultWikiRepo = new ChromeStorageWikiNoteRepository();
 const _defaultWikiService = createKpssWikiService(_defaultWikiRepo);

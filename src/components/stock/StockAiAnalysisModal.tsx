@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from "preact/hooks";
-import { analyzeStockWithAI } from "@/services/stockAiService.js";
+import { analyzeStockWithAI } from "@/services/stock/stockAiService.js";
 import type { StockQuote } from "@/types/bist.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 import { getTranslation } from "@/utils/i18n.js";
@@ -104,9 +104,9 @@ export function StockAiAnalysisModal({
               {isAllPortfolio
                 ? t.stock_analysis_morning_report
                 : t.stock_analysis_for_symbol.replace(
-                    "{symbol}",
-                    symbol.toUpperCase(),
-                  )}
+                  "{symbol}",
+                  symbol.toUpperCase(),
+                )}
             </span>
           </div>
           <button

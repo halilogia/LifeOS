@@ -397,7 +397,7 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     ) {
       await handleAddNoteFromAI(
         (String(aiResult.params.note_type) || "note") as
-          "note" | "diary" | "cornell",
+        "note" | "diary" | "cornell",
         aiResult.params.note_content as string,
         lang,
         aiResult.params.note_title as string,
@@ -489,10 +489,10 @@ export type AiChatService = ReturnType<typeof createAiChatService>;
 /* The first function call triggers instantiation.                    */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/ChromeStorageAiConfigRepository.js";
-import { ChromeStorageMemoryRepository } from "@/infrastructure/persistence/ChromeStorageMemoryRepository.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/ChromeStorageNoteRepository.js";
+import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/repositories/ChromeStorageAiConfigRepository.js";
+import { ChromeStorageMemoryRepository } from "@/infrastructure/persistence/repositories/ChromeStorageMemoryRepository.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
+import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/repositories/ChromeStorageNoteRepository.js";
 import { logger } from "@/utils/logger.js";
 
 let _aiChatInstance: AiChatService | null = null;
