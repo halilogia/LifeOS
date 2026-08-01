@@ -61,7 +61,7 @@ export function ArcadeGameModal({
   // fires a second load event which would re-trigger sandbox.js if we sent again.
   const messageSentRef = useRef(false);
   const handleSandboxLoad = () => {
-    if (messageSentRef.current) return; // already sent once
+    if (messageSentRef.current) {return;} // already sent once
     if (gamePkg && iframeRef.current?.contentWindow) {
       messageSentRef.current = true;
       iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");

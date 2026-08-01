@@ -2,27 +2,30 @@
  * telegramBridge.ts
  * Telegram Web bridge — @ai komutlarını AI'ya yönlendirir.
  * WhatsApp Web köprüsünün aynısı, Telegram Web DOM'u için uyarlanmıştır.
- * 
+ *
  * KULLANIM: web.telegram.org'da herhangi bir sohbette "@ai sorunuz" yazın.
  * AI cevabı aynı sohbete otomatik yazılır.
- * 
+ *
  * Clean Architecture & Strict Security (0 Vulnerability, 0 Backdoor).
  */
-import { logger } from "@/utils/logger.js";
+import { contentWarn, contentError } from "@/content/contentLogger.js";
 
 const processedAiMessages = new Set<string>();
 
 /**
  * Safe helper to observe document body or documentElement.
  */
-function safeObserve(observer: MutationObserver, options: MutationObserverInit): void {
+function safeObserve(
+  observer: MutationObserver,
+  options: MutationObserverInit,
+): void {
   const attach = () => {
     const targetNode = document.body || document.documentElement;
     if (targetNode) {
       try {
         observer.observe(targetNode, options);
       } catch (err) {
-        logger.warn("[Life OS Telegram Bridge] Observer attach error:", err);
+        contentWarn("[Life OS Telegram Bridge] Observer attach error:", err);
       }
     }
   };
@@ -55,7 +58,9 @@ export function initTelegramBridge(): void {
  * Inject minimal styles for toast notifications on Telegram Web.
  */
 function injectTelegramStyles(): void {
-  if (document.getElementById("life-os-tg-styles")) return;
+  if (document.getElementById("life-os-tg-styles")) {
+    return;
+  }
 
   const styleEl = document.createElement("style");
   styleEl.id = "life-os-tg-styles";
@@ -92,7 +97,9 @@ function injectTelegramStyles(): void {
  * Show a safe temporary toast message on screen.
  */
 function showToast(messageText: string): void {
-  if (!document.body) return;
+  if (!document.body) {
+    return;
+  }
   const toast = document.createElement("div");
   toast.className = "life-os-tg-toast";
   toast.textContent = messageText;
@@ -127,13 +134,19 @@ function setupRemoteAiAssistantObserver(): void {
   };
 
   if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", markExistingMessagesAsProcessed, { once: true });
+    window.addEventListener(
+      "DOMContentLoaded",
+      markExistingMessagesAsProcessed,
+      { once: true },
+    );
   } else {
     markExistingMessagesAsProcessed();
   }
 
   const scanAllMessagesForPrompts = async () => {
-    if (isProcessingAi) return;
+    if (isProcessingAi) {
+      return;
+    }
 
     const allMessageNodes = Array.from(
       document.querySelectorAll(
@@ -141,15 +154,23 @@ function setupRemoteAiAssistantObserver(): void {
       ),
     );
 
-    if (allMessageNodes.length === 0) return;
+    if (allMessageNodes.length === 0) {
+      return;
+    }
 
-    for (let i = allMessageNodes.length - 1; i >= Math.max(0, allMessageNodes.length - 8); i--) {
+    for (
+      let i = allMessageNodes.length - 1;
+      i >= Math.max(0, allMessageNodes.length - 8);
+      i--
+    ) {
       const msgNode = allMessageNodes[i];
       const textEl = msgNode.querySelector(
         ".text, .message-text, [class*='text'], .translatable-message, .i18n",
       );
 
-      if (!textEl) continue;
+      if (!textEl) {
+        continue;
+      }
 
       const rawText = textEl.textContent || "";
       const trimmed = rawText.trim();
@@ -172,11 +193,15 @@ function setupRemoteAiAssistantObserver(): void {
         lower === "/ai" ||
         lower.startsWith("@lifeos ");
 
-      if (!isAiTrigger) continue;
+      if (!isAiTrigger) {
+        continue;
+      }
 
       // Unique hash ID for message to avoid duplicates
       const msgHash = `${trimmed}_${i}`;
-      if (processedAiMessages.has(msgHash)) continue;
+      if (processedAiMessages.has(msgHash)) {
+        continue;
+      }
 
       processedAiMessages.add(msgHash);
 
@@ -186,7 +211,9 @@ function setupRemoteAiAssistantObserver(): void {
         .replace(/^@lifeos\s*/i, "")
         .trim();
 
-      if (!cleanPrompt) continue;
+      if (!cleanPrompt) {
+        continue;
+      }
 
       isProcessingAi = true;
       showToast(`📱 Telegram'dan İstek: "${cleanPrompt.slice(0, 25)}..."`);
@@ -210,7 +237,11 @@ function setupRemoteAiAssistantObserver(): void {
             },
             (res) => {
               if (chrome.runtime.lastError) {
-                if (chrome.runtime.lastError.message?.includes("Extension context invalidated")) {
+                if (
+                  chrome.runtime.lastError.message?.includes(
+                    "Extension context invalidated",
+                  )
+                ) {
                   resolve("");
                 } else {
                   reject(chrome.runtime.lastError);
@@ -218,7 +249,9 @@ function setupRemoteAiAssistantObserver(): void {
               } else if (res && res.response) {
                 resolve(res.response);
               } else {
-                resolve("Üzgünüm, AI yanıtı oluşturulamadı. Lütfen eklenti ayarlarından API anahtarınızı kontrol edin.");
+                resolve(
+                  "Üzgünüm, AI yanıtı oluşturulamadı. Lütfen eklenti ayarlarından API anahtarınızı kontrol edin.",
+                );
               }
             },
           );
@@ -245,7 +278,7 @@ function setupRemoteAiAssistantObserver(): void {
 
         break;
       } catch (err) {
-        logger.error("[Life OS Telegram Bridge] AI Error:", err);
+        contentError("[Life OS Telegram Bridge] AI Error:", err);
         isProcessingAi = false;
       }
     }
@@ -268,11 +301,13 @@ function setupRemoteAiAssistantObserver(): void {
 function sendTextToTelegramChat(replyText: string): void {
   const inputArea =
     document.querySelector('div[contenteditable="true"][role="textbox"]') ||
-    document.querySelector('.input-message-container div[contenteditable="true"]') ||
+    document.querySelector(
+      '.input-message-container div[contenteditable="true"]',
+    ) ||
     document.querySelector('div[contenteditable="true"]');
 
   if (!inputArea) {
-    logger.warn("[Life OS Telegram Bridge] Input area not found");
+    contentWarn("[Life OS Telegram Bridge] Input area not found");
     return;
   }
 
@@ -300,7 +335,7 @@ function sendTextToTelegramChat(replyText: string): void {
     const sendButton =
       document.querySelector('button[aria-label="Send"]') ||
       document.querySelector('button[aria-label="Gönder"]') ||
-      document.querySelector('.send') ||
+      document.querySelector(".send") ||
       document.querySelector('[class*="send"] button') ||
       document.querySelector('button[class*="send"]');
 

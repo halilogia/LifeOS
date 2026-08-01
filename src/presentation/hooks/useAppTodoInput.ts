@@ -78,5 +78,5 @@ export function useAppTodoInput({
       handleKeyPress,
       handleRepeatChange,
       handleTabChange,
-    }
+    };
 }

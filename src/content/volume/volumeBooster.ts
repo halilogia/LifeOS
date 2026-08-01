@@ -12,9 +12,10 @@ const connectedMediaSet = new WeakSet<HTMLMediaElement>();
 
 function getOrCreateContentAudioContext(): AudioContext | null {
   if (!contentAudioCtx) {
-    const AudioCtxClass =
-      window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtxClass) {return null;}
+    const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtxClass) {
+      return null;
+    }
     contentAudioCtx = new AudioCtxClass();
     contentGainNode = contentAudioCtx.createGain();
     contentGainNode.connect(contentAudioCtx.destination);
@@ -26,15 +27,19 @@ function getOrCreateContentAudioContext(): AudioContext | null {
 }
 
 function attachContentGainToElement(el: HTMLMediaElement): void {
-  if (!el || connectedMediaSet.has(el)) {return;}
+  if (!el || connectedMediaSet.has(el)) {
+    return;
+  }
   const ctx = getOrCreateContentAudioContext();
-  if (!ctx || !contentGainNode) {return;}
+  if (!ctx || !contentGainNode) {
+    return;
+  }
 
   try {
     const source = ctx.createMediaElementSource(el);
     source.connect(contentGainNode);
     connectedMediaSet.add(el);
-  } catch (e) {
+  } catch {
     // Ignore if already connected or restricted
   }
 
@@ -42,7 +47,9 @@ function attachContentGainToElement(el: HTMLMediaElement): void {
     if (contentGainNode) {
       contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
     }
-  } catch (e) {}
+  } catch {
+    // gain set can throw when context is closed — ignore
+  }
 }
 
 export function setVolumeBoostLevel(boostMultiplier: number): void {
@@ -60,7 +67,9 @@ export function setVolumeBoostLevel(boostMultiplier: number): void {
   if (contentGainNode && ctx) {
     try {
       contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
-    } catch (e) {}
+    } catch {
+      // gain set can throw when context is closed — ignore
+    }
   }
 }
 

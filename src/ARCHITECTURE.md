@@ -66,6 +66,7 @@ flowchart TB
         infobox["infobox/ (universalInfoBox)"]
         detox["detox/ (detoxBlocker)"]
         whatsapp["whatsapp/ (whatsappBridge)"]
+        quiz["quiz/ (quizPanel — harici AI overlay)"]
     end
 
     subgraph Bg["background/ (Service worker)"]
@@ -108,7 +109,7 @@ flowchart TB
 | `src/infrastructure/services/` | Altyapı servisleri | PomodoroManagerService | — |
 | `src/infrastructure/storage/` | Storage key sabitleri | keys.ts | — |
 | `src/background/` | Service worker | backgroundMain, handlers/ | DOM |
-| `src/content/` | Content script'ler | infobox/, detox/, agent/, whatsapp/, telegram/, volume/ | — |
+| `src/content/` | Content script'ler | infobox/, detox/, agent/, whatsapp/, telegram/, volume/, quiz/ | — |
 | `src/utils/` | Genel yardımcılar | i18n, logger, formatlayıcılar | İş mantığı |
 | `src/utils/translations/` | UI metinleri | en.ts, tr.ts | — |
 | `src/types/` | Tip tanımları | types.ts, kpss.ts, stock.ts, bist.ts... | — |

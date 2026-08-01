@@ -42,7 +42,9 @@ export function getPageContext(): PageContext {
   const selectedText = window.getSelection()?.toString().trim() || "";
 
   // Extract clean visible text content (exclude scripts, styles, boilerplate headers & footers)
-  const cloneBody = document.body ? (document.body.cloneNode(true) as HTMLElement) : null;
+  const cloneBody = document.body
+    ? (document.body.cloneNode(true) as HTMLElement)
+    : null;
   let pageText = "";
   if (cloneBody) {
     const junkElements = cloneBody.querySelectorAll(
@@ -54,26 +56,38 @@ export function getPageContext(): PageContext {
 
   // Find interactive elements and form inputs (supports Google Forms, HTML5 forms & custom React/Vue inputs)
   const elements: PageElementInfo[] = [];
-  const query = "input, textarea, select, button, a[href], [role='button'], [role='textbox'], [contenteditable='true']";
+  const query =
+    "input, textarea, select, button, a[href], [role='button'], [role='textbox'], [contenteditable='true']";
   const nodes = Array.from(document.querySelectorAll(query)).slice(0, 75);
 
   nodes.forEach((node, idx) => {
     const el = node as HTMLElement;
     const tag = el.tagName.toLowerCase();
-    const isFormInput = tag === "input" || tag === "textarea" || tag === "select";
-    
+    const isFormInput =
+      tag === "input" || tag === "textarea" || tag === "select";
+
     // Skip hidden elements except form inputs that might be dynamically styled
     if (!isFormInput && !el.offsetWidth && !el.offsetHeight) {
       return;
     }
-    if (el.style.display === "none" || (el as HTMLInputElement).type === "hidden") {
+    if (
+      el.style.display === "none" ||
+      (el as HTMLInputElement).type === "hidden"
+    ) {
       return;
     }
 
     const id = el.id ? `#${el.id}` : "";
     const placeholder = (el as HTMLInputElement).placeholder || "";
     const type = (el as HTMLInputElement).type || "";
-    const text = (el.innerText || (el as HTMLInputElement).value || placeholder || "").trim().slice(0, 40);
+    const text = (
+      el.innerText ||
+      (el as HTMLInputElement).value ||
+      placeholder ||
+      ""
+    )
+      .trim()
+      .slice(0, 40);
 
     // Detect field label (Aria, Label tag, or nearby text wrapper)
     let label = "";
@@ -81,14 +95,20 @@ export function getPageContext(): PageContext {
       label = el.getAttribute("aria-label") || "";
     } else if (el.id) {
       const lblEl = document.querySelector(`label[for="${el.id}"]`);
-      if (lblEl) {label = (lblEl as HTMLElement).innerText || "";}
+      if (lblEl) {
+        label = (lblEl as HTMLElement).innerText || "";
+      }
     }
 
     if (!label) {
       const container = el.closest(".form-group, .field, label, div, p");
       if (container) {
-        const heading = container.querySelector("label, span, p, h1, h2, h3, h4, h5, h6");
-        if (heading && heading !== el) {label = (heading as HTMLElement).innerText || "";}
+        const heading = container.querySelector(
+          "label, span, p, h1, h2, h3, h4, h5, h6",
+        );
+        if (heading && heading !== el) {
+          label = (heading as HTMLElement).innerText || "";
+        }
       }
     }
 
@@ -140,7 +160,9 @@ export function getPageContext(): PageContext {
  */
 export function showScanningSweep(): void {
   const existing = document.getElementById("browser-use-scan-overlay");
-  if (existing) {existing.remove();}
+  if (existing) {
+    existing.remove();
+  }
 
   const scanOverlay = document.createElement("div");
   scanOverlay.id = "browser-use-scan-overlay";
@@ -162,7 +184,8 @@ export function showScanningSweep(): void {
   beam.style.left = "0";
   beam.style.width = "100%";
   beam.style.height = "3px";
-  beam.style.background = "linear-gradient(90deg, transparent, #3b82f6, #60a5fa, #3b82f6, transparent)";
+  beam.style.background =
+    "linear-gradient(90deg, transparent, #3b82f6, #60a5fa, #3b82f6, transparent)";
   beam.style.boxShadow = "0 0 15px #3b82f6, 0 0 30px #60a5fa";
   beam.style.animation = "browserUseSweep 0.8s ease-in-out forwards";
 
@@ -198,7 +221,10 @@ export function showScanningSweep(): void {
 /**
  * Renders glowing floating bounding box and target action badge overlay over target DOM element.
  */
-export function highlightElement(target: HTMLElement, actionLabel?: string): void {
+export function highlightElement(
+  target: HTMLElement,
+  actionLabel?: string,
+): void {
   // Trigger blue scanning sweep effect
   showScanningSweep();
 
@@ -251,7 +277,8 @@ export function highlightElement(target: HTMLElement, actionLabel?: string): voi
   cursorDot.style.width = "18px";
   cursorDot.style.height = "18px";
   cursorDot.style.borderRadius = "50%";
-  cursorDot.style.background = "radial-gradient(circle, #8b5cf6 0%, #3b82f6 100%)";
+  cursorDot.style.background =
+    "radial-gradient(circle, #8b5cf6 0%, #3b82f6 100%)";
   cursorDot.style.border = "2px solid #ffffff";
   cursorDot.style.boxShadow = "0 0 15px #8b5cf6, 0 0 30px #3b82f6";
   cursorDot.style.zIndex = "9999999";
@@ -282,11 +309,16 @@ export function highlightElement(target: HTMLElement, actionLabel?: string): voi
 /**
  * Finds element by selector, aria-label, or matching text content.
  */
-function findTargetElement(selector?: string, targetText?: string): HTMLElement | null {
+function findTargetElement(
+  selector?: string,
+  targetText?: string,
+): HTMLElement | null {
   if (selector) {
     try {
       const el = document.querySelector(selector) as HTMLElement;
-      if (el) {return el;}
+      if (el) {
+        return el;
+      }
     } catch {
       // Ignore invalid CSS selector syntax
     }
@@ -302,12 +334,24 @@ function findTargetElement(selector?: string, targetText?: string): HTMLElement 
 
     for (const el of all) {
       const htmlEl = el as HTMLElement;
-      const aria = (htmlEl.getAttribute("aria-label") || "").toLowerCase().trim();
-      const placeholder = (htmlEl.getAttribute("placeholder") || "").toLowerCase().trim();
+      const aria = (htmlEl.getAttribute("aria-label") || "")
+        .toLowerCase()
+        .trim();
+      const placeholder = (htmlEl.getAttribute("placeholder") || "")
+        .toLowerCase()
+        .trim();
       const nameAttr = (htmlEl.getAttribute("name") || "").toLowerCase().trim();
       const idAttr = (htmlEl.id || "").toLowerCase().trim();
-      const val = (htmlEl.innerText || (htmlEl as HTMLInputElement).value || "").toLowerCase().trim();
-      const parentText = ((htmlEl.parentElement || htmlEl.closest("label, div, p")) as HTMLElement)?.innerText?.toLowerCase().trim() || "";
+      const val = (htmlEl.innerText || (htmlEl as HTMLInputElement).value || "")
+        .toLowerCase()
+        .trim();
+      const parentText =
+        (
+          (htmlEl.parentElement ||
+            htmlEl.closest("label, div, p")) as HTMLElement
+        )?.innerText
+          ?.toLowerCase()
+          .trim() || "";
 
       if (
         aria.includes(textLower) ||
@@ -334,7 +378,11 @@ export interface ExtractedPageData {
 /**
  * Executes requested browser action or form autofill on active DOM with Claude / Browser-Use overlays.
  */
-export function executeAgentAction(payload: AgentActionPayload): { success: boolean; message: string; extractedData?: ExtractedPageData } {
+export function executeAgentAction(payload: AgentActionPayload): {
+  success: boolean;
+  message: string;
+  extractedData?: ExtractedPageData;
+} {
   const { actionType, selector, targetText, textValue, direction } = payload;
 
   if (actionType === "scroll") {
@@ -361,18 +409,34 @@ export function executeAgentAction(payload: AgentActionPayload): { success: bool
   const targetEl = findTargetElement(selector, targetText);
 
   if (!targetEl) {
-    return { success: false, message: `Target element not found: ${selector || targetText}` };
+    return {
+      success: false,
+      message: `Target element not found: ${selector || targetText}`,
+    };
   }
 
-  const labelText = targetText || (targetEl as HTMLInputElement).placeholder || targetEl.innerText || "Öğe";
-  highlightElement(targetEl, `${actionType.toUpperCase()}: ${labelText.slice(0, 25)}`);
+  const labelText =
+    targetText ||
+    (targetEl as HTMLInputElement).placeholder ||
+    targetEl.innerText ||
+    "Öğe";
+  highlightElement(
+    targetEl,
+    `${actionType.toUpperCase()}: ${labelText.slice(0, 25)}`,
+  );
 
   if (actionType === "click" || actionType === "highlight") {
     if (actionType === "click") {
       targetEl.click();
-      return { success: true, message: `Clicked element: ${selector || targetText}` };
+      return {
+        success: true,
+        message: `Clicked element: ${selector || targetText}`,
+      };
     }
-    return { success: true, message: `Highlighted element: ${selector || targetText}` };
+    return {
+      success: true,
+      message: `Highlighted element: ${selector || targetText}`,
+    };
   }
 
   if (actionType === "type") {
@@ -388,10 +452,16 @@ export function executeAgentAction(payload: AgentActionPayload): { success: bool
     inputEl.dispatchEvent(new Event("change", { bubbles: true }));
     inputEl.dispatchEvent(new Event("blur", { bubbles: true }));
 
-    return { success: true, message: `Typed text into element: ${selector || targetText}` };
+    return {
+      success: true,
+      message: `Typed text into element: ${selector || targetText}`,
+    };
   }
 
-  return { success: false, message: `Action type '${actionType}' could not be completed.` };
+  return {
+    success: false,
+    message: `Action type '${actionType}' could not be completed.`,
+  };
 }
 
 /**
@@ -407,10 +477,18 @@ export function initDomAgentEngine(): void {
 
     if (message.type === "agent_execute_action") {
       if (Array.isArray(message.payload)) {
-        const results = (message.payload as AgentActionPayload[]).map((action) => executeAgentAction(action));
-        sendResponse({ success: true, message: `Executed ${results.length} form actions`, results });
+        const results = (message.payload as AgentActionPayload[]).map(
+          (action) => executeAgentAction(action),
+        );
+        sendResponse({
+          success: true,
+          message: `Executed ${results.length} form actions`,
+          results,
+        });
       } else {
-        const result = executeAgentAction(message.payload as AgentActionPayload);
+        const result = executeAgentAction(
+          message.payload as AgentActionPayload,
+        );
         sendResponse(result);
       }
       return true;

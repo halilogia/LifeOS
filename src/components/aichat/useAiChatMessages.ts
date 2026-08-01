@@ -119,7 +119,7 @@ export function useAiChatMessages({
   const handleSendMessage = async (textToSend?: string) => {
     // State'ten en güncel input'u al
     const query = (textToSend || "").trim();
-    if (!query) return;
+    if (!query) {return;}
     if (!textToSend) {
       // stashed — inputVal ref'ten gelir, View kontrol eder
     }
