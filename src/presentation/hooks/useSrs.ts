@@ -12,6 +12,25 @@ import { Word } from "@/types/word.js";
 import { logger } from "@/utils/logger.js";
 
 /**
+ * Kelimenin banka seviyesinden gerçek wordType'ı çözer.
+ * AuraLingo'daki 4 ayrı koleksiyon mantığının tek-koleksiyon karşılığı:
+ *   idiom → idiom, phrasal → phrasal, irregular → verb, diğerleri → vocabulary.
+ */
+function resolveWordType(word: Word): "vocabulary" | "verb" | "phrasal" | "idiom" {
+  const level = (word.level || "").toLowerCase();
+  if (level === "idiom") {
+    return "idiom";
+  }
+  if (level === "phrasal") {
+    return "phrasal";
+  }
+  if (level === "irregular" || word.v1 || word.class === "IRREGULAR VERB") {
+    return "verb";
+  }
+  return "vocabulary";
+}
+
+/**
  * SRS flashcard state + SM2 review mantığı (AGENTS.md 6.3: presentation/hooks/).
  * View sadece JSX render eder.
  */
@@ -41,7 +60,7 @@ export function useSrs() {
 
       const srsUniverse: SRSWordWithInfo[] = data.slice(0, 1500).map((w) => {
         const p =
-          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+          progressMap.get(w.id) || createInitialSRSWord(w.id, resolveWordType(w));
         return {
           ...p,
           level: w.level || "unknown",
@@ -54,6 +73,8 @@ export function useSrs() {
         const wInfo = data.find((w) => w.id === p.wordId);
         return {
           ...p,
+          // Eski kayıtlar sabit "vocabulary" ile yazılmış olabilir — gerçek tipe düzelt
+          wordType: wInfo ? resolveWordType(wInfo) : p.wordType,
           level: wInfo?.level || "unknown",
           listType: "all",
           freq: wInfo?.freq || 0,

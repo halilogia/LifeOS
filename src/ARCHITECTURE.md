@@ -149,7 +149,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |
 | PrayerView            | prayerService, usePrayer (hook)                                 | sync       | prayer/ (1) — PrayerCityForm                            |
-| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | local      | stock/ (15) + services/stock/ (3)                       |
+| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | sync      | stock/ (19) + services/stock/ (3)                       |
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
 | NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
 | AIChatView            | aiChatService                                                   | sync+local | aichat/ (4)                                             |
@@ -157,7 +157,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
 | WillpowerView         | useWillpower (hook)                                             | sync       | —                                                       |
 | EisenhowerView        | todo repo, useEisenhower (hook)                                 | sync       | eisenhower/ (2) + eisenhower.css                        |
-| SettingsDrawer        | settings repos                                                  | sync       | settings/ (6)                                           |
+| SettingsDrawer        | settings repos                                                  | sync       | settings/ (9)                                           |
 | Sidebar               | useUI                                                           | sync       | sidebar/ (2)                                            |
 
 ---

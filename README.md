@@ -25,6 +25,7 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Dinamik Bitiş Tahmini**: Kalan KPSS konuları ve güncel çalışma hızına bağlı olarak sınav hazırlığının tahmini tamamlanma tarihini gösteren akıllı sayaç ile KPSS Lisans sınav tarihine (6 Eylül 2026) kalan süre sayacı.
 - **📈 Otomatik Borsa İstanbul (BIST) Yönetim & Strateji Sistemi**:
   - **Canlı Takip & Portföy Metrikleri**: Tüm BIST hisseleri ve Halka Arzlar için canlı fiyat akışı, maliyet, lot adedi, toplam portföy değeri ve anlık Kar/Zarar göstergesi.
+  - **Nakit & Toplam Varlık (Mal Varlığım)**: Manuel nakit ekleme; hisse alımında otomatik düşme, satışında otomatik eklenme. Toplam Varlık = Nakit + Hisse Değeri. Cyberpunk **Varlık Dağılımı pasta grafiği** ve **Satış Geçmişi** (gerçekleşen K/Z).
   - **30 Günlük Derinlemesine Yapay Zeka Analizi (`stockAiService.ts`)**: Hisselerin 30 günlük OHLC mum verileri, 1 aylık getiri %, 30 günlük zirve/dip aralığı ve destek/direnç seviyeleri otomatik hesaplanarak AI modeline sunulur. 4 derinlemesine bölüm halinde raporlanır (*30 Günlük Performans*, *Günün Seyri*, *Kritik Destek/Direnç*, *Risk Stratejisi*).
   - **Şeffaf Mor Glassmorphic Boğa / Ayı Rozetleri**: `85/100 🐂 Boğa`, `50/100 ⚖️ Nötr` ve `35/100 🐻 Ayı` rozetleri şeffaf mor cam estetiğiyle canlı sunulur.
   - **Dinamik TL İşlem Hacmi & Pozitif İvme Vitrini**: Öne çıkan BİST hisseleri ham lot yerine `Fiyat × Lot = TL Hacim` formülüyle taranır ve primli hisseler ilk sırada gösterilir.

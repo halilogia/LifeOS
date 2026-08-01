@@ -43,6 +43,13 @@ Unified indie game showcase, HTML5 arcade player, and Steam-style developer labo
 
 ## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
 
+### 1. 💰 Nakit & Toplam Varlık Takibi (Mal Varlığım) — ✅ TAMAMLANDI (v4.1.0)
+- [x] **Nakit Bakiyesi**: Manuel ekleme, hisse alımında otomatik düşme, satışında otomatik eklenme (sync'te).
+- [x] **Toplam Varlık**: Nakit + hisse değeri kırılımı özet kartı.
+- [x] **Varlık Dağılımı Pasta Grafiği**: Cyberpunk SVG grafik — Toplam Varlık kartından açılır.
+- [x] **Satış Geçmişi**: Gerçekleşen K/Z + tarih kaydı + toplam özet.
+- [ ] **Döviz & Kripto Desteği**: Nakit gibi USD/EUR/BTC bakiyesi ekleme (Toplam Varlık'a dahil).
+
 ### 2. 📊 Teknik İndikatör Sinyal Motoru (RSI, EMA 20/50, MACD)
 Gelişmiş teknik indikatör kuralları tanımlama.
 - [ ] **RSI Aşırı Alım/Satım Alarmları**: RSI 14 periyodu 30 altına inince "Aşırı Satım (Alım Fırsatı)", 70 üstüne çıkınca "Aşırı Alım (Kar Al)" uyarısı.
