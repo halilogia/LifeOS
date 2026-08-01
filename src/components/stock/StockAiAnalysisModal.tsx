@@ -71,9 +71,10 @@ export function StockAiAnalysisModal({
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    const reqPayload = isAllPortfolio && portfolioItems
-      ? { portfolio: portfolioItems }
-      : { symbol, quote };
+    const reqPayload =
+      isAllPortfolio && portfolioItems
+        ? { portfolio: portfolioItems }
+        : { symbol, quote };
 
     analyzeStockWithAI(reqPayload).then((res) => {
       if (isMounted) {
@@ -102,7 +103,10 @@ export function StockAiAnalysisModal({
             <span>
               {isAllPortfolio
                 ? t.stock_analysis_morning_report
-                : t.stock_analysis_for_symbol.replace("{symbol}", symbol.toUpperCase())}
+                : t.stock_analysis_for_symbol.replace(
+                    "{symbol}",
+                    symbol.toUpperCase(),
+                  )}
             </span>
           </div>
           <button
@@ -184,7 +188,16 @@ export function StockAiAnalysisModal({
               onClick={onContinueToChat}
               style={{ display: "flex", alignItems: "center", gap: "6px" }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
               <span>AI Chat'te Devam Et</span>

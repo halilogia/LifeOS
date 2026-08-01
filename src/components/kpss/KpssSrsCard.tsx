@@ -161,8 +161,7 @@ export function KpssSrsCard({
                 borderRadius: "20px",
               }}
             >
-              💡{" "}
-              {t.kpss_srs_click_to_see}
+              💡 {t.kpss_srs_click_to_see}
             </span>
           </div>
           <div

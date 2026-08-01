@@ -4,7 +4,13 @@
  * Domain layer — pure interface, no external dependencies.
  */
 
-import type { Giveaway, HistoricalEpicGame, ExclusionSettings, CachedLiveGames, CachedHistoryGames } from "@/types/games.js";
+import type {
+  Giveaway,
+  HistoricalEpicGame,
+  ExclusionSettings,
+  CachedLiveGames,
+  CachedHistoryGames,
+} from "@/types/games.js";
 
 export interface IGamesCacheRepository {
   getLiveCache(): Promise<CachedLiveGames | null>;

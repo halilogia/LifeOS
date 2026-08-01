@@ -86,7 +86,8 @@ export async function fetchYoutubeTranscript(
     }
 
     const playerResponse = JSON.parse(playerResponseMatch[1]);
-    const captionTracks: Array<{ languageCode: string; baseUrl: string }> | undefined =
+    const captionTracks:
+      Array<{ languageCode: string; baseUrl: string }> | undefined =
       playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
 
     if (!captionTracks || captionTracks.length === 0) {

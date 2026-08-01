@@ -42,7 +42,9 @@ export function ZettelkastenGraphModal({
 
   // Filtered / Highlighted Node IDs
   const activeNodeIds = useMemo(() => {
-    if (!filterQuery.trim()) {return null;}
+    if (!filterQuery.trim()) {
+      return null;
+    }
     const q = filterQuery.toLowerCase().trim();
     const set = new Set<string>();
     graph.nodes.forEach((n) => {
@@ -58,11 +60,17 @@ export function ZettelkastenGraphModal({
 
   // Connected nodes set for hover effect
   const connectedNodeIds = useMemo(() => {
-    if (!hoveredNodeId) {return null;}
+    if (!hoveredNodeId) {
+      return null;
+    }
     const set = new Set<string>([hoveredNodeId]);
     graph.edges.forEach((e) => {
-      if (e.source === hoveredNodeId) {set.add(e.target);}
-      if (e.target === hoveredNodeId) {set.add(e.source);}
+      if (e.source === hoveredNodeId) {
+        set.add(e.target);
+      }
+      if (e.target === hoveredNodeId) {
+        set.add(e.source);
+      }
     });
     return set;
   }, [graph, hoveredNodeId]);
@@ -192,29 +200,73 @@ export function ZettelkastenGraphModal({
             borderRadius: "10px",
           }}
         >
-          <span style={{ fontWeight: 600, color: "#94a3b8" }}>Kategoriler:</span>
+          <span style={{ fontWeight: 600, color: "#94a3b8" }}>
+            Kategoriler:
+          </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#a855f7" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#a855f7",
+              }}
+            ></span>
             KPSS Tarih
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#10b981" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#10b981",
+              }}
+            ></span>
             KPSS Coğrafya
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#3b82f6" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#3b82f6",
+              }}
+            ></span>
             KPSS Vatandaşlık
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#f59e0b" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#f59e0b",
+              }}
+            ></span>
             KPSS Türkçe
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ef4444" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#ef4444",
+              }}
+            ></span>
             KPSS Matematik
           </span>
           <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#6366f1" }}></span>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: "#6366f1",
+              }}
+            ></span>
             Genel Notlar
           </span>
         </div>
@@ -225,7 +277,8 @@ export function ZettelkastenGraphModal({
             position: "relative",
             width: "100%",
             height: `${CANVAS_HEIGHT}px`,
-            background: "radial-gradient(circle at center, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.95) 100%)",
+            background:
+              "radial-gradient(circle at center, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.95) 100%)",
             borderRadius: "16px",
             overflow: "hidden",
             border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -246,7 +299,8 @@ export function ZettelkastenGraphModal({
               <div style={{ fontSize: "2.5rem" }}>🕸️</div>
               <p style={{ margin: 0 }}>Henüz not eklenmemiş.</p>
               <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748b" }}>
-                Yeni not oluştururken [[Not Adı]] ve #kpss/tarih etiketleri ekleyerek bağlantı ağınızı kurabilirsiniz.
+                Yeni not oluştururken [[Not Adı]] ve #kpss/tarih etiketleri
+                ekleyerek bağlantı ağınızı kurabilirsiniz.
               </p>
             </div>
           ) : (
@@ -265,13 +319,20 @@ export function ZettelkastenGraphModal({
 
               {/* Render Edges (Connecting Lines) */}
               {graph.edges.map((edge, idx) => {
-                const sourceNode = graph.nodes.find((n) => n.id === edge.source);
-                const targetNode = graph.nodes.find((n) => n.id === edge.target);
-                if (!sourceNode || !targetNode) {return null;}
+                const sourceNode = graph.nodes.find(
+                  (n) => n.id === edge.source,
+                );
+                const targetNode = graph.nodes.find(
+                  (n) => n.id === edge.target,
+                );
+                if (!sourceNode || !targetNode) {
+                  return null;
+                }
 
                 const isConnectedToHover =
                   hoveredNodeId &&
-                  (edge.source === hoveredNodeId || edge.target === hoveredNodeId);
+                  (edge.source === hoveredNodeId ||
+                    edge.target === hoveredNodeId);
 
                 const strokeColor = isConnectedToHover
                   ? "#a855f7"
@@ -288,7 +349,9 @@ export function ZettelkastenGraphModal({
                     stroke={strokeColor}
                     strokeWidth={strokeWidth}
                     strokeDasharray={isConnectedToHover ? "none" : "4 2"}
-                    style={{ transition: "stroke 0.2s ease, stroke-width 0.2s ease" }}
+                    style={{
+                      transition: "stroke 0.2s ease, stroke-width 0.2s ease",
+                    }}
                   />
                 );
               })}
@@ -297,7 +360,9 @@ export function ZettelkastenGraphModal({
               {graph.nodes.map((node) => {
                 const isHovered = hoveredNodeId === node.id;
                 const isConnected = connectedNodeIds?.has(node.id);
-                const isFiltered = activeNodeIds ? activeNodeIds.has(node.id) : true;
+                const isFiltered = activeNodeIds
+                  ? activeNodeIds.has(node.id)
+                  : true;
 
                 const opacity =
                   activeNodeIds || hoveredNodeId
@@ -369,34 +434,52 @@ export function ZettelkastenGraphModal({
           )}
 
           {/* Hover Tooltip Overlay */}
-          {hoveredNodeId && (() => {
-            const hNode = graph.nodes.find((n) => n.id === hoveredNodeId);
-            if (!hNode) {return null;}
-            return (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "16px",
-                  left: "16px",
-                  background: "rgba(15, 23, 42, 0.9)",
-                  border: `1px solid ${hNode.color}`,
-                  borderRadius: "12px",
-                  padding: "10px 14px",
-                  color: "#f8fafc",
-                  fontSize: "0.8rem",
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
-                  pointerEvents: "none",
-                }}
-              >
-                <div style={{ fontWeight: 700, fontSize: "0.9rem", color: hNode.color }}>
-                  {hNode.title}
+          {hoveredNodeId &&
+            (() => {
+              const hNode = graph.nodes.find((n) => n.id === hoveredNodeId);
+              if (!hNode) {
+                return null;
+              }
+              return (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "16px",
+                    left: "16px",
+                    background: "rgba(15, 23, 42, 0.9)",
+                    border: `1px solid ${hNode.color}`,
+                    borderRadius: "12px",
+                    padding: "10px 14px",
+                    color: "#f8fafc",
+                    fontSize: "0.8rem",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: "0.9rem",
+                      color: hNode.color,
+                    }}
+                  >
+                    {hNode.title}
+                  </div>
+                  <div
+                    style={{
+                      color: "#94a3b8",
+                      fontSize: "0.75rem",
+                      marginTop: "2px",
+                    }}
+                  >
+                    {hNode.linksCount} Bağlantı •{" "}
+                    {hNode.tags.length > 0
+                      ? hNode.tags.join(", ")
+                      : "Etiketsiz"}
+                  </div>
                 </div>
-                <div style={{ color: "#94a3b8", fontSize: "0.75rem", marginTop: "2px" }}>
-                  {hNode.linksCount} Bağlantı • {hNode.tags.length > 0 ? hNode.tags.join(", ") : "Etiketsiz"}
-                </div>
-              </div>
-            );
-          })()}
+              );
+            })()}
         </div>
       </div>
     </div>

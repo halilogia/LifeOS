@@ -45,8 +45,16 @@ export interface ViewRouterProps {
   onDeleteTodo: (index: number) => Promise<void>;
   onMoveTaskStatus: (index: number, status: Todo["status"]) => void;
   onMoveTaskDirection: (index: number, direction: 1 | -1) => Promise<void>;
-  onUpdateTodoUrgentImportant: (index: number, urgent: boolean, important: boolean) => Promise<void>;
-  onAddTodo: (text: string, repeat: RepeatType, dueDate?: string) => Promise<void>;
+  onUpdateTodoUrgentImportant: (
+    index: number,
+    urgent: boolean,
+    important: boolean,
+  ) => Promise<void>;
+  onAddTodo: (
+    text: string,
+    repeat: RepeatType,
+    dueDate?: string,
+  ) => Promise<void>;
   onManualSync: () => Promise<void>;
   onShowConfirm: (message: string, onConfirm: () => void) => void;
   onSettingsOpen: (tab: "general" | "kpss" | "detox" | "ai" | "sync") => void;
@@ -64,7 +72,9 @@ export function ViewRouter(props: ViewRouterProps) {
           onTabChange={props.onTabChange}
           onToggleTodo={props.onToggleTodo}
           onDeleteTodo={props.onDeleteTodo}
-          googleSyncActive={props.syncSettings.enabled && props.syncSettings.tasksEnabled}
+          googleSyncActive={
+            props.syncSettings.enabled && props.syncSettings.tasksEnabled
+          }
           isSyncing={props.isSyncing}
           onManualSync={props.onManualSync}
         />
@@ -82,11 +92,15 @@ export function ViewRouter(props: ViewRouterProps) {
         />
       );
     case "notes":
-      return <NotesView lang={props.lang} onShowConfirm={props.onShowConfirm} />;
+      return (
+        <NotesView lang={props.lang} onShowConfirm={props.onShowConfirm} />
+      );
     case "pomodoro":
       return <PomodoroView lang={props.lang} />;
     case "willpower":
-      return <WillpowerView lang={props.lang} onShowConfirm={props.onShowConfirm} />;
+      return (
+        <WillpowerView lang={props.lang} onShowConfirm={props.onShowConfirm} />
+      );
     case "hifiz":
       return <HifizView lang={props.lang} />;
     case "srs":
@@ -116,7 +130,9 @@ export function ViewRouter(props: ViewRouterProps) {
     case "detox":
       return <DetoxView lang={props.lang} />;
     case "bist":
-      return <BistView lang={props.lang} onContinueToChat={props.onContinueToChat} />;
+      return (
+        <BistView lang={props.lang} onContinueToChat={props.onContinueToChat} />
+      );
     case "halka-arz":
       return <HalkaArzView lang={props.lang} />;
     case "ai-chat":

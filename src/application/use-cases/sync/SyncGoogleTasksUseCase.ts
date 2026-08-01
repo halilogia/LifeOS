@@ -7,7 +7,10 @@
 
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
-import type { ITodoSyncPort, RemoteTask } from "@/application/ports/ITodoSyncPort.js";
+import type {
+  ITodoSyncPort,
+  RemoteTask,
+} from "@/application/ports/ITodoSyncPort.js";
 import { parseRepeatFromNotes } from "@/domain/services/TaskService.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import { logger } from "@/utils/logger.js";
@@ -64,21 +67,23 @@ export class SyncGoogleTasksUseCase {
         };
       });
 
-      const mappedRoutines: Todo[] = remoteRoutinesTasks.map((t: RemoteTask) => {
-        const repeat = parseRepeatFromNotes(t.notes);
-        const status: "done" | "todo" =
-          t.status === "completed" ? "done" : "todo";
-        return {
-          id: t.id,
-          text: t.title,
-          completed: t.status === "completed",
-          status,
-          repeat: repeat === "none" ? "daily" : repeat,
-          category: "general",
-          lastCompletedDate: t.completed || null,
-          dueDate: t.due ? t.due.split("T")[0] : undefined,
-        };
-      });
+      const mappedRoutines: Todo[] = remoteRoutinesTasks.map(
+        (t: RemoteTask) => {
+          const repeat = parseRepeatFromNotes(t.notes);
+          const status: "done" | "todo" =
+            t.status === "completed" ? "done" : "todo";
+          return {
+            id: t.id,
+            text: t.title,
+            completed: t.status === "completed",
+            status,
+            repeat: repeat === "none" ? "daily" : repeat,
+            category: "general",
+            lastCompletedDate: t.completed || null,
+            dueDate: t.due ? t.due.split("T")[0] : undefined,
+          };
+        },
+      );
 
       const mergedTodos = [...mappedFocus, ...mappedRoutines];
 

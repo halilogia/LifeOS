@@ -48,14 +48,28 @@ export function DatePicker({ value, onChange, lang }: DatePickerProps) {
   }, [isOpen]);
 
   const monthNames = [
-    t.month_jan, t.month_feb, t.month_mar, t.month_apr,
-    t.month_may, t.month_jun, t.month_jul, t.month_aug,
-    t.month_sep, t.month_oct, t.month_nov, t.month_dec,
+    t.month_jan,
+    t.month_feb,
+    t.month_mar,
+    t.month_apr,
+    t.month_may,
+    t.month_jun,
+    t.month_jul,
+    t.month_aug,
+    t.month_sep,
+    t.month_oct,
+    t.month_nov,
+    t.month_dec,
   ];
 
   const weekdays = [
-    t.day_mon, t.day_tue, t.day_wed, t.day_thu,
-    t.day_fri, t.day_sat, t.day_sun,
+    t.day_mon,
+    t.day_tue,
+    t.day_wed,
+    t.day_thu,
+    t.day_fri,
+    t.day_sat,
+    t.day_sun,
   ];
 
   const handlePrevMonth = () => {

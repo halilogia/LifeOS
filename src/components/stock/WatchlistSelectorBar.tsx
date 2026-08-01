@@ -83,7 +83,9 @@ export function WatchlistSelectorBar({
 
   const handleCreateSubmit = (e: Event) => {
     e.preventDefault();
-    if (!newListName.trim()) {return;}
+    if (!newListName.trim()) {
+      return;
+    }
     onCreateWatchlist(newListName.trim());
     setNewListName("");
     setShowAddForm(false);
@@ -115,7 +117,9 @@ export function WatchlistSelectorBar({
               onClick={() => onSelectWatchlist(wl.id)}
             >
               <span>{wl.name}</span>
-              <span className="watchlist-chip-count">{wl.symbols.length} varlık</span>
+              <span className="watchlist-chip-count">
+                {wl.symbols.length} varlık
+              </span>
             </button>
             {activeWatchlistId === wl.id && (
               <button
@@ -150,7 +154,9 @@ export function WatchlistSelectorBar({
               className="watchlist-add-input"
               placeholder="Liste Adı (ör. Temettü)..."
               value={newListName}
-              onInput={(e) => setNewListName((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                setNewListName((e.target as HTMLInputElement).value)
+              }
               autoFocus
             />
             <button type="submit" className="watchlist-add-submit-btn">

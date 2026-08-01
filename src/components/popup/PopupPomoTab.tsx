@@ -59,7 +59,9 @@ export function PopupPomoTab({
   }
 
   const playSoundInEngine = (soundType: AmbientSoundType, vol: number) => {
-    if (!audioEngineRef.current) {return;}
+    if (!audioEngineRef.current) {
+      return;
+    }
     if (soundType === "none") {
       audioEngineRef.current.stopAllSounds();
     } else if (soundType === "rain") {
@@ -77,7 +79,9 @@ export function PopupPomoTab({
     if (audioEngineRef.current && isPlaying) {
       audioEngineRef.current.setVolume(volume);
     }
-    chrome.runtime.sendMessage({ type: "set_ambient_volume", volume }).catch(() => {});
+    chrome.runtime
+      .sendMessage({ type: "set_ambient_volume", volume })
+      .catch(() => {});
   }, [volume, isPlaying]);
 
   const handleSoundToggle = (soundType: AmbientSoundType) => {
@@ -85,20 +89,24 @@ export function PopupPomoTab({
       setActiveSound("none");
       setIsPlaying(false);
       playSoundInEngine("none", volume);
-      chrome.runtime.sendMessage({
-        type: "play_ambient_sound",
-        soundType: "none",
-        volume,
-      }).catch(() => {});
+      chrome.runtime
+        .sendMessage({
+          type: "play_ambient_sound",
+          soundType: "none",
+          volume,
+        })
+        .catch(() => {});
     } else {
       setActiveSound(soundType);
       setIsPlaying(true);
       playSoundInEngine(soundType, volume);
-      chrome.runtime.sendMessage({
-        type: "play_ambient_sound",
-        soundType,
-        volume,
-      }).catch(() => {});
+      chrome.runtime
+        .sendMessage({
+          type: "play_ambient_sound",
+          soundType,
+          volume,
+        })
+        .catch(() => {});
     }
   };
 

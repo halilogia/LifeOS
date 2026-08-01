@@ -4,7 +4,9 @@
  */
 
 function setupContextMenus(): void {
-  if (!chrome.contextMenus) {return;}
+  if (!chrome.contextMenus) {
+    return;
+  }
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: "lifeos_copilot_root",

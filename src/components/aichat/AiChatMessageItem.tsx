@@ -45,7 +45,16 @@ function IconInfoCircle() {
 
 function IconCopy() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
     </svg>
@@ -54,7 +63,16 @@ function IconCopy() {
 
 function IconCheck() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#10b981"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
@@ -62,7 +80,16 @@ function IconCheck() {
 
 function IconSearch() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <circle cx="11" cy="11" r="8" />
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
@@ -71,7 +98,16 @@ function IconSearch() {
 
 function IconGlobe() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <circle cx="12" cy="12" r="10" />
       <line x1="2" y1="12" x2="22" y2="12" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -81,7 +117,16 @@ function IconGlobe() {
 
 function IconExternal() {
   return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
@@ -102,7 +147,9 @@ export function AiChatMessageItem({
   const [showSources, setShowSources] = useState(true);
 
   const handleCopy = () => {
-    if (!message.text) {return;}
+    if (!message.text) {
+      return;
+    }
     navigator.clipboard.writeText(message.text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -130,9 +177,16 @@ export function AiChatMessageItem({
                 marginBottom: "6px",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              >
                 <IconSearch />
-                <span>{t.aichat_search_query.replace("{query}", message.searchQuery || t.aichat_web_research)}</span>
+                <span>
+                  {t.aichat_search_query.replace(
+                    "{query}",
+                    message.searchQuery || t.aichat_web_research,
+                  )}
+                </span>
               </div>
               <button
                 type="button"
@@ -150,16 +204,37 @@ export function AiChatMessageItem({
             </div>
 
             {showSources && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "6px" }}>
-                <div style={{ fontSize: "0.72rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+                  marginTop: "6px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.72rem",
+                    color: "#94a3b8",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
                   <IconGlobe />
-                  <span>{t.aichat_sources.replace("{count}", String(message.sources.length))}</span>
+                  <span>
+                    {t.aichat_sources.replace(
+                      "{count}",
+                      String(message.sources.length),
+                    )}
+                  </span>
                 </div>
 
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(180px, 1fr))",
                     gap: "6px",
                   }}
                 >
@@ -192,7 +267,9 @@ export function AiChatMessageItem({
                           overflow: "hidden",
                         }}
                       >
-                        <span style={{ color: "#818cf8", fontWeight: 700 }}>[{idx + 1}]</span>
+                        <span style={{ color: "#818cf8", fontWeight: 700 }}>
+                          [{idx + 1}]
+                        </span>
                         <span
                           style={{
                             whiteSpace: "nowrap",
@@ -234,7 +311,9 @@ export function AiChatMessageItem({
                 userSelect: "none",
               }}
             >
-              <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span
+                style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              >
                 <IconInfoCircle />
                 {t.aichat_thinking_process}
               </span>
@@ -264,7 +343,15 @@ export function AiChatMessageItem({
         <p className="msg-text">{message.text}</p>
 
         {/* Bottom Time & Actions Bar */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginTop: "6px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px",
+            marginTop: "6px",
+          }}
+        >
           <span className="msg-time">{message.time}</span>
           {!isUser && (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

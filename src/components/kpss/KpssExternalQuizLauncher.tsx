@@ -31,7 +31,13 @@ interface ServiceDef {
 
 function GeminiIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <defs>
         <linearGradient id="gemini-grad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stop-color="#4285f4" />
@@ -51,7 +57,13 @@ function GeminiIcon() {
 
 function ChatGPTIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="12" cy="12" r="11" fill="#10a37f" />
       <path
         d="M7 9.5C7 8.12 8.12 7 9.5 7h5C15.88 7 17 8.12 17 9.5v2C17 12.88 15.88 14 14.5 14H13l-2.5 3V14H9.5C8.12 14 7 12.88 7 11.5v-2z"
@@ -63,9 +75,23 @@ function ChatGPTIcon() {
 
 function ClaudeIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="12" cy="12" r="11" fill="#d15b33" />
-      <text x="12" y="16.5" text-anchor="middle" fill="white" font-size="12" font-weight="bold" font-family="serif">
+      <text
+        x="12"
+        y="16.5"
+        text-anchor="middle"
+        fill="white"
+        font-size="12"
+        font-weight="bold"
+        font-family="serif"
+      >
         C
       </text>
     </svg>
@@ -74,7 +100,13 @@ function ClaudeIcon() {
 
 function CopilotIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="12" cy="12" r="11" fill="#0078d4" />
       <path
         d="M8 8h8v8H8V8z"
@@ -83,15 +115,20 @@ function CopilotIcon() {
         stroke-width="1.5"
         stroke-linejoin="round"
       />
-      <path d="M10 11h4M10 13h4" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+      <path
+        d="M10 11h4M10 13h4"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
     </svg>
   );
 }
 
 const SERVICES: ServiceDef[] = [
-  { id: "gemini",  name: "Gemini",  icon: <GeminiIcon /> },
+  { id: "gemini", name: "Gemini", icon: <GeminiIcon /> },
   { id: "chatgpt", name: "ChatGPT", icon: <ChatGPTIcon /> },
-  { id: "claude",  name: "Claude",  icon: <ClaudeIcon /> },
+  { id: "claude", name: "Claude", icon: <ClaudeIcon /> },
   { id: "copilot", name: "Copilot", icon: <CopilotIcon /> },
 ];
 
@@ -111,7 +148,12 @@ export function KpssExternalQuizLauncher({
   const [selectedCount, setSelectedCount] = useState(questionCount);
 
   // Prompt, soru sayısı değiştikçe canlı güncellenir
-  const prompt = buildKpssQuizPrompt(subjectKey, topicName, selectedCount, lang);
+  const prompt = buildKpssQuizPrompt(
+    subjectKey,
+    topicName,
+    selectedCount,
+    lang,
+  );
 
   const handleServiceSelect = async (service: ExternalAIService) => {
     setIsLoading(service);
@@ -179,7 +221,16 @@ export function KpssExternalQuizLauncher({
           style={{ marginTop: "8px" }}
           onClick={handleCopyPrompt}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>
@@ -190,7 +241,16 @@ export function KpssExternalQuizLauncher({
       {/* Toast */}
       {toastMessage && (
         <div class="kpss-external-toast kpss-external-toast--success">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
           {toastMessage}
@@ -199,11 +259,7 @@ export function KpssExternalQuizLauncher({
 
       {/* Alt aksiyonlar */}
       <div style={{ display: "flex", gap: "10px" }}>
-        <button
-          class="kpss-qcount-btn"
-          style={{ flex: 1 }}
-          onClick={onBack}
-        >
+        <button class="kpss-qcount-btn" style={{ flex: 1 }} onClick={onBack}>
           {t.kpss_external_quiz_back}
         </button>
         <button

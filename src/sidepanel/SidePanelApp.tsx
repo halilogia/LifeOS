@@ -1,8 +1,15 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { PageContext, AgentActionPayload } from "@/content/agent/domAgentEngine.js";
-import { getAIConfigFromStorage, handleUpdateMemoryFromAI, executeAIAction } from "@/services/aiChatService.js";
+import {
+  PageContext,
+  AgentActionPayload,
+} from "@/content/agent/domAgentEngine.js";
+import {
+  getAIConfigFromStorage,
+  handleUpdateMemoryFromAI,
+  executeAIAction,
+} from "@/services/aiChatService.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 
 interface ChatMessage {
@@ -16,30 +23,74 @@ interface ChatMessage {
  * Robustly detects whether the active page contains personal registration/application form fields.
  */
 function isPersonalFormPage(context: PageContext | null): boolean {
-  if (!context || !context.interactiveElements || context.interactiveElements.length === 0) {
+  if (
+    !context ||
+    !context.interactiveElements ||
+    context.interactiveElements.length === 0
+  ) {
     return false;
   }
 
   // Keywords indicative of personal registration, application, or profile forms
   const personalKeywords = [
-    "ad", "soyad", "name", "email", "e-posta", "mail", "tel", "phone", "telefon",
-    "doğum", "birth", "tarih", "date", "adres", "address", "meslek", "job",
-    "tckn", "tc", "şifre", "password", "kayıt", "register", "signup", "başvuru",
-    "apply", "biyografi", "bio", "şehir", "city", "ülke", "country"
+    "ad",
+    "soyad",
+    "name",
+    "email",
+    "e-posta",
+    "mail",
+    "tel",
+    "phone",
+    "telefon",
+    "doğum",
+    "birth",
+    "tarih",
+    "date",
+    "adres",
+    "address",
+    "meslek",
+    "job",
+    "tckn",
+    "tc",
+    "şifre",
+    "password",
+    "kayıt",
+    "register",
+    "signup",
+    "başvuru",
+    "apply",
+    "biyografi",
+    "bio",
+    "şehir",
+    "city",
+    "ülke",
+    "country",
   ];
 
   const matchingFormInputs = context.interactiveElements.filter((el) => {
-    if (el.tag !== "input" && el.tag !== "textarea" && el.tag !== "select") {return false;}
-    
-    const type = (el.type || "").toLowerCase();
-    if (type === "hidden" || type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "search") {
+    if (el.tag !== "input" && el.tag !== "textarea" && el.tag !== "select") {
       return false;
     }
 
-    const identifier = `${el.text || ""} ${el.label || ""} ${el.placeholder || ""} ${el.id || ""} ${el.className || ""}`.toLowerCase();
-    
+    const type = (el.type || "").toLowerCase();
+    if (
+      type === "hidden" ||
+      type === "checkbox" ||
+      type === "radio" ||
+      type === "submit" ||
+      type === "button" ||
+      type === "search"
+    ) {
+      return false;
+    }
+
+    const identifier =
+      `${el.text || ""} ${el.label || ""} ${el.placeholder || ""} ${el.id || ""} ${el.className || ""}`.toLowerCase();
+
     // Ignore Wikipedia search bar, Google Search input, etc.
-    if (identifier.includes("search") || identifier.includes("wiki")) {return false;}
+    if (identifier.includes("search") || identifier.includes("wiki")) {
+      return false;
+    }
 
     // Check if element label/placeholder/name matches any personal form field keyword
     return personalKeywords.some((kw) => identifier.includes(kw));
@@ -109,7 +160,9 @@ export function SidePanelApp() {
   // Load language settings & initial page context
   useEffect(() => {
     chrome.storage.sync.get(["lang", "autoGroupTabs"], (res) => {
-      if (res.lang) {setLang(res.lang as Language);}
+      if (res.lang) {
+        setLang(res.lang as Language);
+      }
       // Group tab ONCE when sidepanel is opened
       if (res.autoGroupTabs !== false) {
         chrome.runtime.sendMessage({ type: "group_active_tab" });
@@ -120,8 +173,15 @@ export function SidePanelApp() {
 
     // Listen for tab activation and URL update changes to auto-sync context
     const tabActivatedListener = () => refreshPageContext();
-    const tabUpdatedListener = (_tabId: number, changeInfo: { status?: string; title?: string; url?: string }) => {
-      if (changeInfo.status === "complete" || changeInfo.title || changeInfo.url) {
+    const tabUpdatedListener = (
+      _tabId: number,
+      changeInfo: { status?: string; title?: string; url?: string },
+    ) => {
+      if (
+        changeInfo.status === "complete" ||
+        changeInfo.title ||
+        changeInfo.url
+      ) {
         refreshPageContext();
       }
     };
@@ -130,7 +190,10 @@ export function SidePanelApp() {
     chrome.tabs.onUpdated.addListener(tabUpdatedListener);
 
     // Listen for automatic prompts from right-click context menus
-    const copilotAutoPromptListener = (msg: { type?: string; prompt?: string }) => {
+    const copilotAutoPromptListener = (msg: {
+      type?: string;
+      prompt?: string;
+    }) => {
       if (msg && msg.type === "copilot_auto_prompt" && msg.prompt) {
         handleSendMessage(msg.prompt);
       }
@@ -155,40 +218,48 @@ export function SidePanelApp() {
   const refreshPageContext = () => {
     setAgentStatus(t.page_scanning);
     try {
-      chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (response) => {
-        setAgentStatus(null);
-        if (chrome.runtime.lastError || !response) {
-          return;
-        }
-        if (response.context) {
-          const newCtx: PageContext = response.context;
-          setPageContext(newCtx);
+      chrome.runtime.sendMessage(
+        { type: "get_active_tab_context" },
+        (response) => {
+          setAgentStatus(null);
+          if (chrome.runtime.lastError || !response) {
+            return;
+          }
+          if (response.context) {
+            const newCtx: PageContext = response.context;
+            setPageContext(newCtx);
 
-          chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const activeTab = tabs[0];
-            const groupId = activeTab && activeTab.groupId !== undefined && activeTab.groupId !== -1 ? activeTab.groupId : null;
-            const domain = newCtx.domain || "default";
-            const tabId = activeTab ? activeTab.id : 0;
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+              const activeTab = tabs[0];
+              const groupId =
+                activeTab &&
+                activeTab.groupId !== undefined &&
+                activeTab.groupId !== -1
+                  ? activeTab.groupId
+                  : null;
+              const domain = newCtx.domain || "default";
+              const tabId = activeTab ? activeTab.id : 0;
 
-            // Unique key per Chrome Tab Group (or per domain tab)
-            const sessionKey = groupId
-              ? `copilot_chat_group_${groupId}`
-              : `copilot_chat_domain_${domain}_${tabId}`;
+              // Unique key per Chrome Tab Group (or per domain tab)
+              const sessionKey = groupId
+                ? `copilot_chat_group_${groupId}`
+                : `copilot_chat_domain_${domain}_${tabId}`;
 
-            if (sessionKey !== activeSessionKey) {
-              setActiveSessionKey(sessionKey);
-              chrome.storage.local.get([sessionKey], (storeRes) => {
-                const savedMsgs = storeRes[sessionKey];
-                if (Array.isArray(savedMsgs)) {
-                  setMessages(savedMsgs);
-                } else {
-                  setMessages([]);
-                }
-              });
-            }
-          });
-        }
-      });
+              if (sessionKey !== activeSessionKey) {
+                setActiveSessionKey(sessionKey);
+                chrome.storage.local.get([sessionKey], (storeRes) => {
+                  const savedMsgs = storeRes[sessionKey];
+                  if (Array.isArray(savedMsgs)) {
+                    setMessages(savedMsgs);
+                  } else {
+                    setMessages([]);
+                  }
+                });
+              }
+            });
+          }
+        },
+      );
     } catch {
       setAgentStatus(null);
     }
@@ -201,61 +272,84 @@ export function SidePanelApp() {
     }
   };
 
-function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    if (!text) {return;}
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
+    const [copied, setCopied] = useState(false);
+    const handleCopy = () => {
+      if (!text) {
+        return;
+      }
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
 
-  return (
-    <button
-      onClick={handleCopy}
-      title={copied ? t.copy_title_copied : t.copy_title}
-      style={{
-        background: "transparent",
-        border: "none",
-        color: copied ? "#10b981" : "rgba(255, 255, 255, 0.5)",
-        cursor: "pointer",
-        padding: "2px 4px",
-        borderRadius: "4px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "4px",
-        fontSize: "0.68rem",
-        transition: "all 0.2s ease",
-      }}
-    >
-      {copied ? (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ) : (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-        </svg>
-      )}
-      <span>{copied ? t.copy_label_copied : t.copy_label}</span>
-    </button>
-  );
-}
+    return (
+      <button
+        onClick={handleCopy}
+        title={copied ? t.copy_title_copied : t.copy_title}
+        style={{
+          background: "transparent",
+          border: "none",
+          color: copied ? "#10b981" : "rgba(255, 255, 255, 0.5)",
+          cursor: "pointer",
+          padding: "2px 4px",
+          borderRadius: "4px",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "4px",
+          fontSize: "0.68rem",
+          transition: "all 0.2s ease",
+        }}
+      >
+        {copied ? (
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#10b981"
+            stroke-width="2.5"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        )}
+        <span>{copied ? t.copy_label_copied : t.copy_label}</span>
+      </button>
+    );
+  }
 
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
-    if (!textToSend || isProcessing) {return;}
+    if (!textToSend || isProcessing) {
+      return;
+    }
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
       content: textToSend,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    if (!promptOverride) {setInputText("");}
+    if (!promptOverride) {
+      setInputText("");
+    }
     setIsProcessing(true);
     setAgentStatus(t.agent_thinking);
 
@@ -263,14 +357,17 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
     let activeCtx = pageContext;
     if (!activeCtx || !activeCtx.pageText || activeCtx.pageText.length === 0) {
       activeCtx = await new Promise((resolve) => {
-        chrome.runtime.sendMessage({ type: "get_active_tab_context" }, (res) => {
-          if (res && res.context) {
-            setPageContext(res.context);
-            resolve(res.context);
-          } else {
-            resolve(pageContext);
-          }
-        });
+        chrome.runtime.sendMessage(
+          { type: "get_active_tab_context" },
+          (res) => {
+            if (res && res.context) {
+              setPageContext(res.context);
+              resolve(res.context);
+            } else {
+              resolve(pageContext);
+            }
+          },
+        );
       });
     }
 
@@ -295,7 +392,7 @@ function SidePanelCopyBtn({ text, lang }: { text: string; lang: string }) {
         ? JSON.stringify(activeCtx.interactiveElements.slice(0, 50))
         : "[]";
 
-        const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
+    const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
 Title: "${currentTitle}"
 URL: "${currentUrl}"
 
@@ -333,180 +430,222 @@ If the user asks to save, add, or remember a fact/email/detail about them (e.g. 
 
 Answer the user clearly, professionally, and concisely in ${t.answer_language}. Do not use low-quality emojis in output formatting.`;
 
-        try {
-          let responseText = "";
+    try {
+      let responseText = "";
 
-          if (provider === "gemini") {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            const reqBody = {
-              contents: [
-                {
-                  role: "user",
-                  parts: [
-                    { text: systemPrompt },
-                    { text: `User request: ${textToSend}` },
-                  ],
-                },
+      if (provider === "gemini") {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const reqBody = {
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: systemPrompt },
+                { text: `User request: ${textToSend}` },
               ],
-            };
+            },
+          ],
+        };
 
-            const resp = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(reqBody),
-            });
+        const resp = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reqBody),
+        });
 
-            if (!resp.ok) {
-              throw new Error(`API returned status ${resp.status}`);
-            }
-
-            const data = await resp.json();
-            responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
-          } else {
-            // 9Router, OpenRouter, Custom OpenAI-compatible endpoints
-            const baseUrl = rawEndpoint.replace(/\/+$/, "");
-            const targetEndpoint = baseUrl.endsWith("/chat/completions") ? baseUrl : `${baseUrl}/chat/completions`;
-            
-            const reqHeaders: Record<string, string> = {
-              "Content-Type": "application/json",
-            };
-            if (apiKey) {
-              reqHeaders["Authorization"] = `Bearer ${apiKey}`;
-            }
-
-            const resp = await fetch(targetEndpoint, {
-              method: "POST",
-              headers: reqHeaders,
-              body: JSON.stringify({
-                model: model,
-                messages: [
-                  { role: "system", content: systemPrompt },
-                  { role: "user", content: textToSend },
-                ],
-              }),
-            });
-
-            if (!resp.ok) {
-              throw new Error(`API returned status ${resp.status}`);
-            }
-
-            const rawBody = await resp.text();
-            let data: Record<string, any> = {};
-            try {
-              data = JSON.parse(rawBody);
-            } catch {
-              const jsonBlockMatch = rawBody.match(/\{[\s\S]*\}/);
-              if (jsonBlockMatch) {
-                try {
-                  data = JSON.parse(jsonBlockMatch[0]);
-                } catch {
-                  data = {};
-                }
-              }
-            }
-
-            responseText =
-              data.choices?.[0]?.message?.content ||
-              data.choices?.[0]?.text ||
-              (typeof data === "string" ? data : rawBody.slice(0, 2000)) ||
-              "No response received.";
-          }
-
-          // Check for JSON action code block in response
-          const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
-          let finalContent = responseText;
-
-          if (jsonMatch && jsonMatch[1]) {
-            try {
-              const actionPayload = JSON.parse(jsonMatch[1]);
-
-              // Handle Memory Update action directly
-              if (!Array.isArray(actionPayload) && actionPayload.action === "update_memory" && actionPayload.memory_fact) {
-                await handleUpdateMemoryFromAI(actionPayload.memory_fact);
-                finalContent = responseText.replace(/```json[\s\S]*?```/gi, "").trim();
-                if (!finalContent) {
-                  finalContent = t.memory_saved.replace("{fact}", actionPayload.memory_fact);
-                }
-              } else if (Array.isArray(actionPayload)) {
-                // Handle dynamic Agent tool actions (clicks, typing, scroll, extract)
-                const count = actionPayload.length;
-                const actionSummary = formatActionExecutionSummary(actionPayload, lang);
-
-                setAgentStatus(
-                  t.executing_actions.replace("{count}", String(count)),
-                );
-
-                let cleanPromptResponse = responseText
-                  .replace(/```json[\s\S]*?```/gi, "")
-                  .replace(/Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
-                  .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
-                  .trim();
-
-                if (!cleanPromptResponse || cleanPromptResponse.length < 5) {
-                  cleanPromptResponse = actionSummary;
-                } else {
-                  cleanPromptResponse = `${cleanPromptResponse}\n\n${actionSummary}`;
-                }
-
-                finalContent = cleanPromptResponse;
-
-                chrome.runtime.sendMessage(
-                  { type: "execute_agent_action", payload: actionPayload },
-                  (actRes) => {
-                    setAgentStatus(null);
-                    if (actRes && actRes.success) {
-                      setMessages((prev) =>
-                        prev.map((msg) =>
-                          msg.id === assistantMsgId
-                            ? {
-                                ...msg,
-                                content: cleanPromptResponse,
-                              }
-                            : msg,
-                        ),
-                      );
-                    }
-                  },
-                );
-              }
-            } catch {
-              setAgentStatus(null);
-            }
-          } else {
-            // Fallback: If user prompt asked to add email/memory but no JSON was generated, parse email directly
-            const emailMatch = textToSend.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
-            if ((textToSend.toLowerCase().includes("hafıza") || textToSend.toLowerCase().includes("mail")) && emailMatch) {
-              await handleUpdateMemoryFromAI(`E-posta: ${emailMatch[1]}`);
-            }
-            setAgentStatus(null);
-          }
-
-          const assistantMsgId = (Date.now() + 1).toString();
-          const assistantMsg: ChatMessage = {
-            id: assistantMsgId,
-            role: "assistant",
-            content: finalContent,
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          };
-
-          setMessages((prev) => [...prev, assistantMsg]);
-        } catch (err: unknown) {
-          setAgentStatus(null);
-          const errorMsg: ChatMessage = {
-            id: (Date.now() + 1).toString(),
-            role: "assistant",
-            content: `⚠️ ${t.failed_response}\nError: ${err instanceof Error ? err.message : "Unknown error"}`,
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          };
-          setMessages((prev) => [...prev, errorMsg]);
-        } finally {
-          setIsProcessing(false);
+        if (!resp.ok) {
+          throw new Error(`API returned status ${resp.status}`);
         }
+
+        const data = await resp.json();
+        responseText =
+          data.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "No response received.";
+      } else {
+        // 9Router, OpenRouter, Custom OpenAI-compatible endpoints
+        const baseUrl = rawEndpoint.replace(/\/+$/, "");
+        const targetEndpoint = baseUrl.endsWith("/chat/completions")
+          ? baseUrl
+          : `${baseUrl}/chat/completions`;
+
+        const reqHeaders: Record<string, string> = {
+          "Content-Type": "application/json",
+        };
+        if (apiKey) {
+          reqHeaders["Authorization"] = `Bearer ${apiKey}`;
+        }
+
+        const resp = await fetch(targetEndpoint, {
+          method: "POST",
+          headers: reqHeaders,
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: textToSend },
+            ],
+          }),
+        });
+
+        if (!resp.ok) {
+          throw new Error(`API returned status ${resp.status}`);
+        }
+
+        const rawBody = await resp.text();
+        let data: Record<string, any> = {};
+        try {
+          data = JSON.parse(rawBody);
+        } catch {
+          const jsonBlockMatch = rawBody.match(/\{[\s\S]*\}/);
+          if (jsonBlockMatch) {
+            try {
+              data = JSON.parse(jsonBlockMatch[0]);
+            } catch {
+              data = {};
+            }
+          }
+        }
+
+        responseText =
+          data.choices?.[0]?.message?.content ||
+          data.choices?.[0]?.text ||
+          (typeof data === "string" ? data : rawBody.slice(0, 2000)) ||
+          "No response received.";
+      }
+
+      // Check for JSON action code block in response
+      const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
+      let finalContent = responseText;
+
+      if (jsonMatch && jsonMatch[1]) {
+        try {
+          const actionPayload = JSON.parse(jsonMatch[1]);
+
+          // Handle Memory Update action directly
+          if (
+            !Array.isArray(actionPayload) &&
+            actionPayload.action === "update_memory" &&
+            actionPayload.memory_fact
+          ) {
+            await handleUpdateMemoryFromAI(actionPayload.memory_fact);
+            finalContent = responseText
+              .replace(/```json[\s\S]*?```/gi, "")
+              .trim();
+            if (!finalContent) {
+              finalContent = t.memory_saved.replace(
+                "{fact}",
+                actionPayload.memory_fact,
+              );
+            }
+          } else if (Array.isArray(actionPayload)) {
+            // Handle dynamic Agent tool actions (clicks, typing, scroll, extract)
+            const count = actionPayload.length;
+            const actionSummary = formatActionExecutionSummary(
+              actionPayload,
+              lang,
+            );
+
+            setAgentStatus(
+              t.executing_actions.replace("{count}", String(count)),
+            );
+
+            let cleanPromptResponse = responseText
+              .replace(/```json[\s\S]*?```/gi, "")
+              .replace(
+                /Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi,
+                "",
+              )
+              .replace(
+                /⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi,
+                "",
+              )
+              .trim();
+
+            if (!cleanPromptResponse || cleanPromptResponse.length < 5) {
+              cleanPromptResponse = actionSummary;
+            } else {
+              cleanPromptResponse = `${cleanPromptResponse}\n\n${actionSummary}`;
+            }
+
+            finalContent = cleanPromptResponse;
+
+            chrome.runtime.sendMessage(
+              { type: "execute_agent_action", payload: actionPayload },
+              (actRes) => {
+                setAgentStatus(null);
+                if (actRes && actRes.success) {
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === assistantMsgId
+                        ? {
+                            ...msg,
+                            content: cleanPromptResponse,
+                          }
+                        : msg,
+                    ),
+                  );
+                }
+              },
+            );
+          }
+        } catch {
+          setAgentStatus(null);
+        }
+      } else {
+        // Fallback: If user prompt asked to add email/memory but no JSON was generated, parse email directly
+        const emailMatch = textToSend.match(
+          /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/,
+        );
+        if (
+          (textToSend.toLowerCase().includes("hafıza") ||
+            textToSend.toLowerCase().includes("mail")) &&
+          emailMatch
+        ) {
+          await handleUpdateMemoryFromAI(`E-posta: ${emailMatch[1]}`);
+        }
+        setAgentStatus(null);
+      }
+
+      const assistantMsgId = (Date.now() + 1).toString();
+      const assistantMsg: ChatMessage = {
+        id: assistantMsgId,
+        role: "assistant",
+        content: finalContent,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+
+      setMessages((prev) => [...prev, assistantMsg]);
+    } catch (err: unknown) {
+      setAgentStatus(null);
+      const errorMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: `⚠️ ${t.failed_response}\nError: ${err instanceof Error ? err.message : "Unknown error"}`,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const isYoutube = pageContext?.url?.includes("youtube.com/watch");
 
-  const handleChipClick = (type: "summarize" | "key_takeaways" | "ask" | "extract" | "yt_summarize" | "yt_quiz") => {
+  const handleChipClick = (
+    type:
+      | "summarize"
+      | "key_takeaways"
+      | "ask"
+      | "extract"
+      | "yt_summarize"
+      | "yt_quiz",
+  ) => {
     let prompt = "";
     if (type === "yt_summarize") {
       prompt = t.prompt_yt_summarize;
@@ -529,7 +668,16 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
       {/* Header Bar */}
       <header className="sidepanel-header">
         <div className="sidepanel-header-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="9" y1="3" x2="9" y2="21"></line>
           </svg>
@@ -555,7 +703,14 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             }}
             title={t.new_chat_tooltip}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -568,9 +723,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
       {/* Active Tab Status Bar */}
       <div className="sidepanel-tab-status">
         <div className="sidepanel-tab-info">
-          <span className="sidepanel-tab-title">{pageContext?.title || t.page_loading}</span>
+          <span className="sidepanel-tab-title">
+            {pageContext?.title || t.page_loading}
+          </span>
           <span className="sidepanel-tab-url">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
             </svg>
@@ -582,7 +746,14 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           onClick={refreshPageContext}
           title={t.rescan_page}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <polyline points="23 4 23 10 17 10"></polyline>
             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
           </svg>
@@ -602,7 +773,14 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                 borderColor: "#8b5cf6",
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
@@ -617,7 +795,14 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                 borderColor: "rgba(139, 92, 246, 0.4)",
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <polyline points="9 11 12 14 22 4"></polyline>
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
               </svg>
@@ -630,14 +815,26 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           <button
             className="sidepanel-chip"
             style={{
-              background: "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))",
+              background:
+                "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))",
               borderColor: "rgba(139, 92, 246, 0.4)",
               color: "#34d399",
               fontWeight: 600,
             }}
-            onClick={() => handleSendMessage("Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.")}
+            onClick={() =>
+              handleSendMessage(
+                "Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.",
+              )
+            }
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M12 20h9"></path>
               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
             </svg>
@@ -645,8 +842,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           </button>
         )}
 
-        <button className="sidepanel-chip" onClick={() => handleChipClick("summarize")}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button
+          className="sidepanel-chip"
+          onClick={() => handleChipClick("summarize")}
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -655,8 +862,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           <span>{t.chip_summarize}</span>
         </button>
 
-        <button className="sidepanel-chip" onClick={() => handleChipClick("key_takeaways")}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button
+          className="sidepanel-chip"
+          onClick={() => handleChipClick("key_takeaways")}
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M12 16v-4"></path>
             <path d="M12 8h.01"></path>
@@ -664,8 +881,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           <span>{t.chip_takeaways}</span>
         </button>
 
-        <button className="sidepanel-chip" onClick={() => handleChipClick("extract")}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button
+          className="sidepanel-chip"
+          onClick={() => handleChipClick("extract")}
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -673,8 +900,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           <span>{t.chip_extract}</span>
         </button>
 
-        <button className="sidepanel-chip" onClick={() => handleChipClick("ask")}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button
+          className="sidepanel-chip"
+          onClick={() => handleChipClick("ask")}
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
@@ -691,7 +928,14 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
               <div className="ai-orb-ring-outer"></div>
               <div className="ai-orb-ring-inner"></div>
               <div className="ai-orb-core">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="2"
+                >
                   <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
                 </svg>
               </div>
@@ -699,19 +943,23 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             <div className="sidepanel-empty-title">
               <span>{t.agent_ready}</span>
             </div>
-            <p className="sidepanel-empty-desc">
-              {t.agent_analyze_desc}
-            </p>
+            <p className="sidepanel-empty-desc">{t.agent_analyze_desc}</p>
 
             <div className="sidepanel-starter-grid">
-              <button className="starter-card" onClick={() => handleChipClick("summarize")}>
+              <button
+                className="starter-card"
+                onClick={() => handleChipClick("summarize")}
+              >
                 <div className="starter-icon purple">✨</div>
                 <div className="starter-text">
                   <strong>{t.starter_summarize}</strong>
                   <span>{t.starter_summarize_desc}</span>
                 </div>
               </button>
-              <button className="starter-card" onClick={() => handleChipClick("key_takeaways")}>
+              <button
+                className="starter-card"
+                onClick={() => handleChipClick("key_takeaways")}
+              >
                 <div className="starter-icon green">💡</div>
                 <div className="starter-text">
                   <strong>{t.starter_takeaways}</strong>
@@ -724,7 +972,15 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           messages.map((msg) => (
             <div key={msg.id} className={`sidepanel-msg ${msg.role}`}>
               <div style={{ whiteSpace: "pre-wrap" }}>{msg.content}</div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginTop: "4px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "8px",
+                  marginTop: "4px",
+                }}
+              >
                 <span style={{ fontSize: "0.62rem", opacity: 0.6 }}>
                   {msg.timestamp}
                 </span>
@@ -738,8 +994,22 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
         {agentStatus && (
           <div className="sidepanel-agent-status">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style={{ animation: "spin 1s linear infinite" }}>
-              <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10"></circle>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              style={{ animation: "spin 1s linear infinite" }}
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke-dasharray="32"
+                stroke-dashoffset="10"
+              ></circle>
             </svg>
             <span>{agentStatus}</span>
           </div>
@@ -755,7 +1025,16 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           title={isListening ? t.listening_tooltip : t.voice_command_tooltip}
           disabled={isProcessing}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
             <line x1="12" y1="19" x2="12" y2="23"></line>
@@ -769,18 +1048,29 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           value={inputText}
           onInput={(e) => setInputText((e.target as HTMLInputElement).value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {handleSendMessage();}
+            if (e.key === "Enter") {
+              handleSendMessage();
+            }
           }}
           placeholder={
-            isListening
-              ? t.listening_placeholder
-              : t.question_placeholder
+            isListening ? t.listening_placeholder : t.question_placeholder
           }
           disabled={isProcessing}
         />
 
-        <button className="sidepanel-send-btn" onClick={() => handleSendMessage()} disabled={isProcessing}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <button
+          className="sidepanel-send-btn"
+          onClick={() => handleSendMessage()}
+          disabled={isProcessing}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>

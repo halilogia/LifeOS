@@ -90,8 +90,7 @@ export function KpssQuizModal({
 
   // Mevcut quiz adımı değişince (yani sınav başladı / bitti), iç modu sıfırla
   const isInExternalFlow =
-    internalMode === "external-launcher" ||
-    internalMode === "external-result";
+    internalMode === "external-launcher" || internalMode === "external-result";
 
   return (
     <div className="settings-panel active" onClick={onClose}>
@@ -153,7 +152,6 @@ export function KpssQuizModal({
 
         {/* Body Content */}
         <div className="settings-body" style={{ padding: "20px" }}>
-
           {/* ── Harici AI Launcher ── */}
           {isInExternalFlow && internalMode === "external-launcher" && (
             <KpssExternalQuizLauncher

@@ -46,7 +46,15 @@ export function NotesFilterBar({
           style={{ padding: "6px 12px", fontSize: "0.82rem", height: "auto" }}
           onClick={() => onFilterChange(f.id)}
         >
-          {f.id === "all" ? t.notes_filter_all : f.id === "note" ? t.notes_filter_notes : f.id === "diary" ? t.notes_filter_diary : f.id === "cornell" ? t.notes_filter_cornell : t.notes_filter_quotes}
+          {f.id === "all"
+            ? t.notes_filter_all
+            : f.id === "note"
+              ? t.notes_filter_notes
+              : f.id === "diary"
+                ? t.notes_filter_diary
+                : f.id === "cornell"
+                  ? t.notes_filter_cornell
+                  : t.notes_filter_quotes}
         </button>
       ))}
     </div>

@@ -9,7 +9,12 @@ import type {
   StockAlertLog,
   StockWatchlist,
 } from "@/types/stock.js";
-import { SYNC_STOCK_PORTFOLIO, SYNC_STOCK_RULES, SYNC_STOCK_ALERT_LOGS, SYNC_STOCK_WATCHLISTS } from "@/infrastructure/storage/keys.js";
+import {
+  SYNC_STOCK_PORTFOLIO,
+  SYNC_STOCK_RULES,
+  SYNC_STOCK_ALERT_LOGS,
+  SYNC_STOCK_WATCHLISTS,
+} from "@/infrastructure/storage/keys.js";
 
 const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
 const RULES_KEY = SYNC_STOCK_RULES;
@@ -86,7 +91,10 @@ export class ChromeStorageStockRepository {
     });
   }
 
-  async createWatchlist(name: string, description?: string): Promise<StockWatchlist[]> {
+  async createWatchlist(
+    name: string,
+    description?: string,
+  ): Promise<StockWatchlist[]> {
     const lists = await this.getWatchlists();
     const newList: StockWatchlist = {
       id: `wl-${Date.now()}`,
@@ -107,7 +115,10 @@ export class ChromeStorageStockRepository {
     return updated;
   }
 
-  async toggleSymbolInWatchlist(watchlistId: string, symbol: string): Promise<StockWatchlist[]> {
+  async toggleSymbolInWatchlist(
+    watchlistId: string,
+    symbol: string,
+  ): Promise<StockWatchlist[]> {
     const lists = await this.getWatchlists();
     const cleanSym = symbol.replace(/\.IS$/, "").toUpperCase();
     const updated = lists.map((list) => {
@@ -116,7 +127,9 @@ export class ChromeStorageStockRepository {
           (s) => s.replace(/\.IS$/, "").toUpperCase() === cleanSym,
         );
         const newSymbols = hasSymbol
-          ? list.symbols.filter((s) => s.replace(/\.IS$/, "").toUpperCase() !== cleanSym)
+          ? list.symbols.filter(
+              (s) => s.replace(/\.IS$/, "").toUpperCase() !== cleanSym,
+            )
           : [...list.symbols, cleanSym];
         return { ...list, symbols: newSymbols };
       }
@@ -126,4 +139,3 @@ export class ChromeStorageStockRepository {
     return updated;
   }
 }
-

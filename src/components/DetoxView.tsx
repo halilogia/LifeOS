@@ -203,10 +203,14 @@ export function DetoxView({ lang }: DetoxViewProps) {
     const m = Math.floor((totalSecs % 3600) / 60);
     const s = totalSecs % 60;
     if (h > 0) {
-      return t.detox_time_hours.replace("{h}", String(h)).replace("{m}", String(m));
+      return t.detox_time_hours
+        .replace("{h}", String(h))
+        .replace("{m}", String(m));
     }
     if (m > 0) {
-      return t.detox_time_minutes.replace("{m}", String(m)).replace("{s}", String(s));
+      return t.detox_time_minutes
+        .replace("{m}", String(m))
+        .replace("{s}", String(s));
     }
     return t.detox_time_seconds.replace("{s}", String(s));
   };

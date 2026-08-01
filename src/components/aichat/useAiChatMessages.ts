@@ -22,7 +22,11 @@ import { logger } from "@/utils/logger.js";
 
 export interface UseAiChatMessagesParams {
   lang: Language;
-  onAddTodo: (text: string, repeat: Todo["repeat"], dueDate?: string) => Promise<void>;
+  onAddTodo: (
+    text: string,
+    repeat: Todo["repeat"],
+    dueDate?: string,
+  ) => Promise<void>;
   onManualSync: () => Promise<void>;
   aiProvider: string;
   aiApiKey: string;
@@ -37,7 +41,9 @@ export interface UseAiChatMessagesReturn {
   openThinkingIndexes: Record<number, boolean>;
   handleSendMessage: (textToSend?: string) => Promise<void>;
   handleToggleThinking: (idx: number) => void;
-  setOpenThinkingIndexes: (fn: (prev: Record<number, boolean>) => Record<number, boolean>) => void;
+  setOpenThinkingIndexes: (
+    fn: (prev: Record<number, boolean>) => Record<number, boolean>,
+  ) => void;
   setEnableWebSearch: (fn: (prev: boolean) => boolean) => void;
 }
 
@@ -119,7 +125,9 @@ export function useAiChatMessages({
   const handleSendMessage = async (textToSend?: string) => {
     // State'ten en güncel input'u al
     const query = (textToSend || "").trim();
-    if (!query) {return;}
+    if (!query) {
+      return;
+    }
     if (!textToSend) {
       // stashed — inputVal ref'ten gelir, View kontrol eder
     }
@@ -155,7 +163,10 @@ export function useAiChatMessages({
           const conversationHistory = messages
             .filter((m) => m.sender === "user" || m.sender === "bot")
             .map((m) => ({
-              role: m.sender === "user" ? ("user" as const) : ("assistant" as const),
+              role:
+                m.sender === "user"
+                  ? ("user" as const)
+                  : ("assistant" as const),
               content: m.text,
             }));
 
@@ -187,7 +198,8 @@ export function useAiChatMessages({
         const conversationHistory = messages
           .filter((m) => m.sender === "user" || m.sender === "bot")
           .map((m) => ({
-            role: m.sender === "user" ? ("user" as const) : ("assistant" as const),
+            role:
+              m.sender === "user" ? ("user" as const) : ("assistant" as const),
             content: m.text,
           }));
 
@@ -208,14 +220,31 @@ export function useAiChatMessages({
           const dueDate = aiResponse.params.dueDate as string | undefined;
           await onAddTodo(taskText, repeat, dueDate);
           await onManualSync();
-        } else if (aiResponse.action === "add_note" && aiResponse.params?.note_content) {
-          const type = (aiResponse.params.note_type as "note" | "diary" | "cornell") || "note";
+        } else if (
+          aiResponse.action === "add_note" &&
+          aiResponse.params?.note_content
+        ) {
+          const type =
+            (aiResponse.params.note_type as "note" | "diary" | "cornell") ||
+            "note";
           const content = aiResponse.params.note_content as string;
-          const title = aiResponse.params.note_title !== undefined ? String(aiResponse.params.note_title) : "";
-          const cues = aiResponse.params.note_cues !== undefined ? String(aiResponse.params.note_cues) : "";
-          const summary = aiResponse.params.note_summary !== undefined ? String(aiResponse.params.note_summary) : "";
+          const title =
+            aiResponse.params.note_title !== undefined
+              ? String(aiResponse.params.note_title)
+              : "";
+          const cues =
+            aiResponse.params.note_cues !== undefined
+              ? String(aiResponse.params.note_cues)
+              : "";
+          const summary =
+            aiResponse.params.note_summary !== undefined
+              ? String(aiResponse.params.note_summary)
+              : "";
           await handleAddNoteFromAI(type, content, lang, title, cues, summary);
-        } else if (aiResponse.action === "update_memory" && aiResponse.params?.memory_fact) {
+        } else if (
+          aiResponse.action === "update_memory" &&
+          aiResponse.params?.memory_fact
+        ) {
           await handleUpdateMemoryFromAI(String(aiResponse.params.memory_fact));
         }
 
@@ -243,9 +272,14 @@ export function useAiChatMessages({
               : type === "cornell"
                 ? t.aichat_type_label_cornell
                 : t.aichat_type_label_note;
-          replyText = t.aichat_added_note_success.replace("{type_label}", typeLabel);
+          replyText = t.aichat_added_note_success.replace(
+            "{type_label}",
+            typeLabel,
+          );
         } else if (localParsed.action === "create_task" && localParsed.text) {
-          const dueDateFormatted = localParsed.date ? ` (${localParsed.date})` : "";
+          const dueDateFormatted = localParsed.date
+            ? ` (${localParsed.date})`
+            : "";
           await onAddTodo(localParsed.text, "none", localParsed.date);
           await onManualSync();
           replyText = t.aichat_added_task_success
@@ -269,11 +303,18 @@ export function useAiChatMessages({
             .replace("{display_name}", displayName)
             .replace("{symbol}", symbol.replace(".IS", ""))
             .replace("{price}", buyPrice.toFixed(2));
-        } else if (localParsed.action === "ask_stock" && localParsed.stockQuery) {
+        } else if (
+          localParsed.action === "ask_stock" &&
+          localParsed.stockQuery
+        ) {
           const { symbol, question } = localParsed.stockQuery;
           try {
             const quote = await fetchStockQuote(symbol);
-            replyText = await analyzeStockWithAI({ symbol, quote, userQuestion: question });
+            replyText = await analyzeStockWithAI({
+              symbol,
+              quote,
+              userQuestion: question,
+            });
           } catch {
             const quote2 = await fetchStockQuote(symbol).catch(() => null);
             const price = quote2?.price ?? 0;
@@ -302,14 +343,23 @@ export function useAiChatMessages({
               : type === "cornell"
                 ? t.aichat_type_label_cornell
                 : t.aichat_type_label_note;
-          replyText = t.aichat_fallback_added_note.replace("{type_label}", typeLabel);
+          replyText = t.aichat_fallback_added_note.replace(
+            "{type_label}",
+            typeLabel,
+          );
         } else if (localParsed.action === "create_task" && localParsed.text) {
           await onAddTodo(localParsed.text, "none", localParsed.date);
           await onManualSync();
           replyText = t.aichat_fallback_added_task
             .replace("{task_text}", localParsed.text)
-            .replace("{date_part}", localParsed.date ? ` (${localParsed.date})` : "");
-        } else if (localParsed.action === "ask_stock" && localParsed.stockQuery) {
+            .replace(
+              "{date_part}",
+              localParsed.date ? ` (${localParsed.date})` : "",
+            );
+        } else if (
+          localParsed.action === "ask_stock" &&
+          localParsed.stockQuery
+        ) {
           try {
             const quote = await fetchStockQuote(localParsed.stockQuery.symbol);
             replyText = await analyzeStockWithAI({
@@ -318,7 +368,9 @@ export function useAiChatMessages({
               userQuestion: localParsed.stockQuery.question,
             });
           } catch {
-            const q = await fetchStockQuote(localParsed.stockQuery.symbol).catch(() => null);
+            const q = await fetchStockQuote(
+              localParsed.stockQuery.symbol,
+            ).catch(() => null);
             const price = q?.price ?? 0;
             const change = q?.changePercent ?? 0;
             replyText = `🔍 **${localParsed.stockQuery.symbol.replace(".IS", "")}** ${change >= 0 ? "📈" : "📉"}\n\nCanlı Fiyat: **₺${price}**\nDeğişim: %${change.toFixed(2)}`;

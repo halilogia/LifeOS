@@ -4,7 +4,10 @@
  * for KAP news data caching.
  */
 
-import type { IKapNewsCacheRepository, KapNewsCache } from "@/domain/repositories/IKapNewsCacheRepository.js";
+import type {
+  IKapNewsCacheRepository,
+  KapNewsCache,
+} from "@/domain/repositories/IKapNewsCacheRepository.js";
 import { LOCAL_KAP_NEWS_CACHE } from "@/infrastructure/storage/keys.js";
 
 const KAP_CACHE_KEY = LOCAL_KAP_NEWS_CACHE;
@@ -13,7 +16,7 @@ export class ChromeStorageKapNewsCacheRepository implements IKapNewsCacheReposit
   async getCached(): Promise<KapNewsCache | null> {
     return new Promise((resolve) => {
       chrome.storage.local.get([KAP_CACHE_KEY], (res) => {
-        resolve(res[KAP_CACHE_KEY] as KapNewsCache | undefined ?? null);
+        resolve((res[KAP_CACHE_KEY] as KapNewsCache | undefined) ?? null);
       });
     });
   }

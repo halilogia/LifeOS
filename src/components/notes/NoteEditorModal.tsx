@@ -56,8 +56,9 @@ export function NoteEditorModal({
   const backlinks =
     availableNotes && noteTitle.trim()
       ? availableNotes.filter((n) => {
-          if (n.title.toLowerCase().trim() === noteTitle.toLowerCase().trim())
-            {return false;}
+          if (n.title.toLowerCase().trim() === noteTitle.toLowerCase().trim()) {
+            return false;
+          }
           const links = extractInternalLinks(n.content || "");
           return links.some(
             (l) => l.toLowerCase().trim() === noteTitle.toLowerCase().trim(),
@@ -74,7 +75,10 @@ export function NoteEditorModal({
   const handleContentInput = (val: string) => {
     onNoteContentChange(val);
     const lastDoubleBracket = val.lastIndexOf("[[");
-    if (lastDoubleBracket !== -1 && val.indexOf("]]", lastDoubleBracket) === -1) {
+    if (
+      lastDoubleBracket !== -1 &&
+      val.indexOf("]]", lastDoubleBracket) === -1
+    ) {
       const q = val.slice(lastDoubleBracket + 2);
       setLinkQuery(q);
       setShowLinkSuggestions(true);
@@ -144,7 +148,9 @@ export function NoteEditorModal({
                     onClick={() => onNoteTypeChange(type)}
                     style={{
                       background:
-                        noteType === type ? "var(--accent-color)" : "transparent",
+                        noteType === type
+                          ? "var(--accent-color)"
+                          : "transparent",
                       color:
                         noteType === type
                           ? "#fff"
@@ -195,7 +201,10 @@ export function NoteEditorModal({
           />
         </header>
 
-        <div className="note-editor-body" style={{ padding: "0 10px", position: "relative" }}>
+        <div
+          className="note-editor-body"
+          style={{ padding: "0 10px", position: "relative" }}
+        >
           {noteType === "cornell" ? (
             <div
               style={{
@@ -266,7 +275,9 @@ export function NoteEditorModal({
                   <textarea
                     value={noteContent}
                     onInput={(e) =>
-                      handleContentInput((e.target as HTMLTextAreaElement).value)
+                      handleContentInput(
+                        (e.target as HTMLTextAreaElement).value,
+                      )
                     }
                     placeholder={t.notes_editor_notes_placeholder}
                     style={{
@@ -386,8 +397,7 @@ export function NoteEditorModal({
                       "rgba(168, 85, 247, 0.2)")
                   }
                   onMouseLeave={(e) =>
-                    ((e.target as HTMLElement).style.background =
-                      "transparent")
+                    ((e.target as HTMLElement).style.background = "transparent")
                   }
                 >
                   [[{n.title}]]

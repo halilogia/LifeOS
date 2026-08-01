@@ -46,7 +46,7 @@ export function useAppTodoInput({
         setTodoDueDate("");
       }
     },
-    [todoText, todoRepeat, todoDueDate, onAddTodo]
+    [todoText, todoRepeat, todoDueDate, onAddTodo],
   );
 
   const handleRepeatChange = useCallback(
@@ -55,7 +55,7 @@ export function useAppTodoInput({
       setTodoRepeat(val);
       setActiveTab(val === "none" ? "focus" : "routines");
     },
-    [setActiveTab]
+    [setActiveTab],
   );
 
   const handleTabChange = useCallback(
@@ -65,18 +65,18 @@ export function useAppTodoInput({
       setTodoRepeat(tabVal === "focus" ? "none" : "daily");
       handleTabChangeUI(tabVal);
     },
-    [setActiveView, setActiveTab, handleTabChangeUI]
+    [setActiveView, setActiveTab, handleTabChangeUI],
   );
 
   return {
-      todoText,
-      setTodoText,
-      todoRepeat,
-      todoDueDate,
-      setTodoDueDate,
-      handleAddTodoClick,
-      handleKeyPress,
-      handleRepeatChange,
-      handleTabChange,
-    };
+    todoText,
+    setTodoText,
+    todoRepeat,
+    todoDueDate,
+    setTodoDueDate,
+    handleAddTodoClick,
+    handleKeyPress,
+    handleRepeatChange,
+    handleTabChange,
+  };
 }

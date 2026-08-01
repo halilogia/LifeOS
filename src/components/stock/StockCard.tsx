@@ -1,4 +1,8 @@
-import { formatPrice, formatVolume, formatMarketCap } from "@/services/bistService.js";
+import {
+  formatPrice,
+  formatVolume,
+  formatMarketCap,
+} from "@/services/bistService.js";
 import type { StockQuote } from "@/types/bist.js";
 
 interface StockCardProps {

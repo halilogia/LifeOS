@@ -55,7 +55,11 @@ export function PomoAmbientPlayerCard({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ flexShrink: 0, display: "inline-block", verticalAlign: "middle" }}
+          style={{
+            flexShrink: 0,
+            display: "inline-block",
+            verticalAlign: "middle",
+          }}
         >
           <path d="M9 18V5l12-2v13"></path>
           <circle cx="6" cy="18" r="3"></circle>

@@ -55,7 +55,10 @@ export function DetoxStatusCard({
   onSelectedDurationChange,
 }: DetoxStatusCardProps) {
   return (
-    <div className="detox-card" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+    <div
+      className="detox-card"
+      style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+    >
       <div className="detox-status-header">
         <div className="detox-title-group">
           <h2>{t.detox_title || "Sosyal Medya Detoksu"}</h2>
@@ -100,7 +103,10 @@ export function DetoxStatusCard({
             </div>
           </div>
 
-          <div className="detox-active-info" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <div
+            className="detox-active-info"
+            style={{ display: "flex", flexDirection: "column", gap: "14px" }}
+          >
             <h3>{t.detox_active_title || "Derin Odaklanma Modu"}</h3>
             <p>
               {t.detox_active_desc ||
@@ -234,10 +240,12 @@ export function DetoxStatusCard({
                         fontSize: "1rem",
                       }}
                       onMouseOver={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color = "var(--danger)")
+                        ((e.currentTarget as HTMLElement).style.color =
+                          "var(--danger)")
                       }
                       onMouseOut={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")
+                        ((e.currentTarget as HTMLElement).style.color =
+                          "var(--text-secondary)")
                       }
                     >
                       &times;

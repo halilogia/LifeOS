@@ -72,7 +72,9 @@ export function handleMediaAndTabMessage(
           if (!audioCtx) {
             const AudioCtxClass =
               window.AudioContext || window.webkitAudioContext;
-            if (!AudioCtxClass) {return;}
+            if (!AudioCtxClass) {
+              return;
+            }
             audioCtx = new AudioCtxClass();
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
@@ -84,8 +86,7 @@ export function handleMediaAndTabMessage(
             audioCtx.resume().catch(() => {});
           }
 
-          const connectedMap =
-            window._lifeosConnectedMap || new WeakMap();
+          const connectedMap = window._lifeosConnectedMap || new WeakMap();
           window._lifeosConnectedMap = connectedMap;
 
           const mediaEls = Array.from(
@@ -98,7 +99,9 @@ export function handleMediaAndTabMessage(
                 const source = audioCtx.createMediaElementSource(el);
                 source.connect(gainNode!);
                 connectedMap.set(el, source);
-              } catch (e) {}
+              } catch {
+                // element may already be connected — ignore
+              }
             }
           });
 
@@ -108,7 +111,9 @@ export function handleMediaAndTabMessage(
                 boostMultiplier,
                 audioCtx.currentTime,
               );
-            } catch (e) {}
+            } catch {
+              // gain set can throw when context is closed — ignore
+            }
           }
         },
         args: [multiplier],

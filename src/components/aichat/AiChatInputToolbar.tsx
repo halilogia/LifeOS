@@ -38,7 +38,16 @@ function IconSend() {
 
 function IconGlobe() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <circle cx="12" cy="12" r="10" />
       <line x1="2" y1="12" x2="22" y2="12" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -63,7 +72,15 @@ export function AiChatInputToolbar({
   return (
     <div className="chat-input-panel">
       {/* Quick Suggestions & Google AI Mode Search Chip */}
-      <div className="suggestion-chips-container" style={{ display: "flex", alignItems: "center", gap: "8px", overflowX: "auto" }}>
+      <div
+        className="suggestion-chips-container"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          overflowX: "auto",
+        }}
+      >
         <button
           type="button"
           className={`chip-btn ${enableWebSearch ? "active" : ""}`}
@@ -74,7 +91,9 @@ export function AiChatInputToolbar({
             background: enableWebSearch
               ? "linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(16, 185, 129, 0.25))"
               : "rgba(255, 255, 255, 0.04)",
-            borderColor: enableWebSearch ? "var(--accent-color)" : "rgba(255, 255, 255, 0.08)",
+            borderColor: enableWebSearch
+              ? "var(--accent-color)"
+              : "rgba(255, 255, 255, 0.08)",
             color: enableWebSearch ? "#34d399" : "var(--text-secondary)",
             fontWeight: 600,
           }}

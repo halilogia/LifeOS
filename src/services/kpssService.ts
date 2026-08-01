@@ -9,10 +9,7 @@
 
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
-import {
-  kpssData,
-  type KpssTopic,
-} from "@/domain/constants/kpssCurriculum.js";
+import { kpssData, type KpssTopic } from "@/domain/constants/kpssCurriculum.js";
 import {
   kpssDummyFlashcards,
   type KpssFlashcard,

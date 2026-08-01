@@ -14,7 +14,9 @@ interface KpssWikiEditorProps {
   editorContent: string;
   saveStatus: boolean;
   onTitleChange: (title: string) => void;
-  onSubjectChange: (subj: "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik") => void;
+  onSubjectChange: (
+    subj: "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik",
+  ) => void;
   onContentChange: (content: string) => void;
   onSave: () => void;
 }
@@ -31,7 +33,9 @@ export function KpssWikiEditor({
   onSave,
 }: KpssWikiEditorProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "12px", flex: 1 }}>
+    <div
+      style={{ display: "flex", flexDirection: "column", gap: "12px", flex: 1 }}
+    >
       {/* Article Form Controls */}
       <div style={{ display: "flex", gap: "10px" }}>
         <input
@@ -54,7 +58,9 @@ export function KpssWikiEditor({
 
         <select
           value={editorSubject}
-          onChange={(e) => onSubjectChange((e.target as HTMLSelectElement).value as any)}
+          onChange={(e) =>
+            onSubjectChange((e.target as HTMLSelectElement).value as any)
+          }
           style={{
             background: "rgba(0, 0, 0, 0.4)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -78,7 +84,9 @@ export function KpssWikiEditor({
       {/* Content Textarea */}
       <textarea
         value={editorContent}
-        onInput={(e) => onContentChange((e.target as HTMLTextAreaElement).value)}
+        onInput={(e) =>
+          onContentChange((e.target as HTMLTextAreaElement).value)
+        }
         placeholder="Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz..."
         style={{
           width: "100%",
@@ -90,7 +98,8 @@ export function KpssWikiEditor({
           padding: "14px",
           color: "#f8fafc",
           fontSize: "0.88rem",
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           lineHeight: 1.6,
           outline: "none",
           resize: "none",
@@ -99,9 +108,23 @@ export function KpssWikiEditor({
       />
 
       {/* Save Action Bar */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: "0.75rem", color: saveStatus ? "#4ade80" : "#94a3b8", fontWeight: 600 }}>
-          {saveStatus ? "✓ Değişiklikler başarıyla kaydedildi!" : "Değişikliklerinizi kaydetmeyi unutmayın."}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "0.75rem",
+            color: saveStatus ? "#4ade80" : "#94a3b8",
+            fontWeight: 600,
+          }}
+        >
+          {saveStatus
+            ? "✓ Değişiklikler başarıyla kaydedildi!"
+            : "Değişikliklerinizi kaydetmeyi unutmayın."}
         </span>
 
         <button

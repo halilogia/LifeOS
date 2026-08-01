@@ -31,15 +31,15 @@ export async function handleRuntimeMessage(
   sendResponse: (response?: Record<string, unknown>) => void,
 ): Promise<boolean> {
   // Translation Relay Service
-    if (message.type === "translate_text") {
-      const textToTranslate = message.text ?? "";
-      chrome.storage.sync.get(["lang"], async (res) => {
-              const targetLang = res.lang === "tr" ? "tr" : "en";
-              try {
-                const textToTranslate = String(message.text ?? "");
-                let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
-                  textToTranslate,
-                )}`;
+  if (message.type === "translate_text") {
+    const textToTranslate = message.text ?? "";
+    chrome.storage.sync.get(["lang"], async (res) => {
+      const targetLang = res.lang === "tr" ? "tr" : "en";
+      try {
+        const textToTranslate = String(message.text ?? "");
+        let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(
+          textToTranslate,
+        )}`;
         let response = await fetch(url);
         if (!response.ok) {
           sendResponse({ error: "Translation fetch failed" });
@@ -49,10 +49,10 @@ export async function handleRuntimeMessage(
         if (data && data[0]) {
           const detectedLang = data[2];
           if (detectedLang === targetLang) {
-                      const swappedLang = targetLang === "tr" ? "en" : "tr";
-                      url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
-                        textToTranslate,
-                      )}`;
+            const swappedLang = targetLang === "tr" ? "en" : "tr";
+            url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${swappedLang}&dt=t&q=${encodeURIComponent(
+              textToTranslate,
+            )}`;
             response = await fetch(url);
             if (response.ok) {
               data = await response.json();
@@ -72,7 +72,9 @@ export async function handleRuntimeMessage(
         }
       } catch (err: unknown) {
         logger.error("Translation query failed:", err);
-        sendResponse({ error: err instanceof Error ? (err.message || "Error") : "Error" });
+        sendResponse({
+          error: err instanceof Error ? err.message || "Error" : "Error",
+        });
       }
     });
     return true;
@@ -199,9 +201,9 @@ export async function handleRuntimeMessage(
   }
 
   // AI Response Generation Service
-    if (message.type === "GENERATE_AI_RESPONSE") {
-      const prompt = (message.prompt as string) ?? "";
-      getAIConfigFromStorage().then(async (aiConfig) => {
+  if (message.type === "GENERATE_AI_RESPONSE") {
+    const prompt = (message.prompt as string) ?? "";
+    getAIConfigFromStorage().then(async (aiConfig) => {
       try {
         const aiResult = await callAIConfigured({
           userPrompt: prompt,

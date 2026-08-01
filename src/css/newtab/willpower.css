@@ -175,7 +175,7 @@
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--card-border);
   border-radius: 14px;
-  padding: 0.8rem 1.var(--space-7);
+  padding: 0.8rem 1var (--space-7);
   color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;

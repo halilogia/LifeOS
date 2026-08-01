@@ -22,7 +22,6 @@ export function SidebarIcon({ itemKey }: { itemKey: string }) {
         </svg>
       );
     case "bist":
-
       return (
         <svg
           width="20"

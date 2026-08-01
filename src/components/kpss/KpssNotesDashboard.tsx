@@ -26,7 +26,8 @@ interface KpssNotesDashboardProps {
 
 export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   const [notes, setNotes] = useState<KpssWikiNote[]>([]);
-  const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("all");
+  const [selectedSubjectFilter, setSelectedSubjectFilter] =
+    useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [autoTitleEnabled, setAutoTitleEnabled] = useState<boolean>(false);
   const [showGraphModal, setShowGraphModal] = useState<boolean>(false);
@@ -35,7 +36,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"read" | "edit">("read");
   const [editorTitle, setEditorTitle] = useState("");
-  const [editorSubject, setEditorSubject] = useState<"tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik">("tarih");
+  const [editorSubject, setEditorSubject] = useState<
+    "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik"
+  >("tarih");
   const [editorContent, setEditorContent] = useState("");
   const [saveStatus, setSaveStatus] = useState(false);
 
@@ -70,7 +73,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleCreateNewNote = async () => {
-    const subjectTag = (selectedSubjectFilter === "all" ? "tarih" : selectedSubjectFilter) as any;
+    const subjectTag = (
+      selectedSubjectFilter === "all" ? "tarih" : selectedSubjectFilter
+    ) as any;
     const newNote: KpssWikiNote = {
       id: `note-${Date.now()}`,
       title: "",
@@ -92,7 +97,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleSaveArticle = async () => {
-    if (!selectedNoteId) {return;}
+    if (!selectedNoteId) {
+      return;
+    }
 
     let finalTitle = editorTitle.trim();
 
@@ -126,7 +133,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleDeleteArticle = async () => {
-    if (!selectedNoteId) {return;}
+    if (!selectedNoteId) {
+      return;
+    }
 
     const filtered = notes.filter((n) => n.id !== selectedNoteId);
     await saveKpssWikiNotes(filtered);
@@ -142,9 +151,13 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const handleDownloadMarkdown = () => {
-    if (!selectedNote) {return;}
+    if (!selectedNote) {
+      return;
+    }
     const filename = `${(selectedNote.title || "Ders-Notu").replace(/[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ]/g, "_")}.md`;
-    const blob = new Blob([selectedNote.content], { type: "text/markdown;charset=utf-8" });
+    const blob = new Blob([selectedNote.content], {
+      type: "text/markdown;charset=utf-8",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -172,21 +185,44 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   };
 
   const filteredNotes = notes.filter((n) => {
-    if (selectedSubjectFilter !== "all" && n.subject !== selectedSubjectFilter) {return false;}
+    if (
+      selectedSubjectFilter !== "all" &&
+      n.subject !== selectedSubjectFilter
+    ) {
+      return false;
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      return n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q);
+      return (
+        n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)
+      );
     }
     return true;
   });
 
   const selectedNote = notes.find((n) => n.id === selectedNoteId);
-  const tableOfContents = selectedNote ? extractHeadings(selectedNote.content) : [];
+  const tableOfContents = selectedNote
+    ? extractHeadings(selectedNote.content)
+    : [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "14px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "14px",
+        marginTop: "14px",
+      }}
+    >
       {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
-      <div style={{ display: "grid", gridTemplateColumns: "270px 1fr", gap: "16px", minHeight: "680px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "270px 1fr",
+          gap: "16px",
+          minHeight: "680px",
+        }}
+      >
         <KpssWikiSidebar
           lang={lang}
           t={t}
@@ -224,7 +260,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                   marginBottom: "4px",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
                   <button
                     type="button"
                     onClick={() => setViewMode("read")}
@@ -235,7 +273,10 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                       fontSize: "0.8rem",
                       cursor: "pointer",
                       fontWeight: viewMode === "read" ? 700 : 500,
-                      borderBottom: viewMode === "read" ? "2px solid #ffffff" : "2px solid transparent",
+                      borderBottom:
+                        viewMode === "read"
+                          ? "2px solid #ffffff"
+                          : "2px solid transparent",
                       paddingBottom: "8px",
                       marginBottom: "-9px",
                       transition: "all 0.2s ease",
@@ -253,7 +294,10 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                       fontSize: "0.8rem",
                       cursor: "pointer",
                       fontWeight: viewMode === "edit" ? 700 : 500,
-                      borderBottom: viewMode === "edit" ? "2px solid #ffffff" : "2px solid transparent",
+                      borderBottom:
+                        viewMode === "edit"
+                          ? "2px solid #ffffff"
+                          : "2px solid transparent",
                       paddingBottom: "8px",
                       marginBottom: "-9px",
                       transition: "all 0.2s ease",
@@ -263,7 +307,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                   </button>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
                   {/* Export Action: Download Markdown */}
                   <button
                     type="button"
@@ -286,8 +332,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                     <span>.md İndir</span>
                   </button>
 
-
-
                   {/* Icon-Only Neural Graph Button */}
                   <button
                     type="button"
@@ -306,7 +350,14 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                       transition: "all 0.2s ease",
                     }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <circle cx="6" cy="6" r="3"></circle>
                       <circle cx="18" cy="6" r="3"></circle>
                       <circle cx="12" cy="18" r="3"></circle>
@@ -331,7 +382,14 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                       alignItems: "center",
                     }}
                   >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                     </svg>
@@ -363,8 +421,11 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
               )}
             </>
           ) : (
-            <div style={{ margin: "auto", textAlign: "center", color: "#64748b" }}>
-              Sol menüden bir ders notu seçin veya "Yeni Ders Notu Ekle" butonuna tıklayın.
+            <div
+              style={{ margin: "auto", textAlign: "center", color: "#64748b" }}
+            >
+              Sol menüden bir ders notu seçin veya "Yeni Ders Notu Ekle"
+              butonuna tıklayın.
             </div>
           )}
         </div>
@@ -413,38 +474,81 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "10px", marginBottom: "14px" }}>
-              <h3 style={{ margin: 0, color: "#38bdf8", fontSize: "1.05rem", fontWeight: 800 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottom: "1px solid rgba(255,255,255,0.1)",
+                paddingBottom: "10px",
+                marginBottom: "14px",
+              }}
+            >
+              <h3
+                style={{
+                  margin: 0,
+                  color: "#38bdf8",
+                  fontSize: "1.05rem",
+                  fontWeight: 800,
+                }}
+              >
                 ℹ️ Dinamik Bilgi Kutusu Nasıl Çalışır?
               </h3>
               <button
                 type="button"
                 onClick={() => setShowInfoboxHelp(false)}
-                style={{ background: "none", border: "none", color: "#94a3b8", fontSize: "1.2rem", cursor: "pointer" }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#94a3b8",
+                  fontSize: "1.2rem",
+                  cursor: "pointer",
+                }}
               >
                 ✕
               </button>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "0.84rem", lineHeight: 1.6 }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                fontSize: "0.84rem",
+                lineHeight: 1.6,
+              }}
+            >
               <div>
-                <strong style={{ color: "#60a5fa" }}>🖼️ 1. Kapak Görseli:</strong>
+                <strong style={{ color: "#60a5fa" }}>
+                  🖼️ 1. Kapak Görseli:
+                </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Notunuza yapıştırdığınız resim adresi (örneğin Google Görsel linki) metin içinden gizlenir ve otomatik olarak Bilgi Kutusu'nun en üstüne yerleştirilir. 2. ve 3. görseller metin içinde kalır.
+                  Notunuza yapıştırdığınız resim adresi (örneğin Google Görsel
+                  linki) metin içinden gizlenir ve otomatik olarak Bilgi
+                  Kutusu'nun en üstüne yerleştirilir. 2. ve 3. görseller metin
+                  içinde kalır.
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: "#60a5fa" }}>📌 2. Dinamik Özet Satırları:</strong>
+                <strong style={{ color: "#60a5fa" }}>
+                  📌 2. Dinamik Özet Satırları:
+                </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Notunuzda <code>Başlık : Açıklama</code> (örneğin <code>Zeytin : Akdeniz ikliminin en net kanıtıdır</code>) formatında yazdığınız tanımlar otomatik taranıp Bilgi Kutusu'na özet olarak çekilir.
+                  Notunuzda <code>Başlık : Açıklama</code> (örneğin{" "}
+                  <code>Zeytin : Akdeniz ikliminin en net kanıtıdır</code>)
+                  formatında yazdığınız tanımlar otomatik taranıp Bilgi
+                  Kutusu'na özet olarak çekilir.
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: "#60a5fa" }}>🔗 3. Gelen Bağlantılar (Backlinks):</strong>
+                <strong style={{ color: "#60a5fa" }}>
+                  🔗 3. Gelen Bağlantılar (Backlinks):
+                </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Diğer notlarda bu notun adı geçtiğinde otomatik bağlantı kurulur ve kutunun altında listelenir.
+                  Diğer notlarda bu notun adı geçtiğinde otomatik bağlantı
+                  kurulur ve kutunun altında listelenir.
                 </p>
               </div>
             </div>

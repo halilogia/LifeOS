@@ -107,12 +107,15 @@ export function StockWatchlistTable({
   }
 
   // Active Watchlist
-  const activeWatchlist = watchlists.find((w) => w.id === activeWatchlistId) || watchlists[0];
+  const activeWatchlist =
+    watchlists.find((w) => w.id === activeWatchlistId) || watchlists[0];
 
   // Active symbols
   const activeSymbols = activeWatchlist ? activeWatchlist.symbols : [];
 
-  const activeListTitle = activeWatchlist ? activeWatchlist.name : "Takip Listem";
+  const activeListTitle = activeWatchlist
+    ? activeWatchlist.name
+    : "Takip Listem";
   const activeSymbolsToAnalyze = activeSymbols.join(",");
 
   return (
@@ -148,7 +151,9 @@ export function StockWatchlistTable({
           }}
         >
           <IconEye />
-          <span>BİST {activeListTitle} Takip Listesi ({activeSymbols.length})</span>
+          <span>
+            BİST {activeListTitle} Takip Listesi ({activeSymbols.length})
+          </span>
         </div>
         {activeSymbols.length > 0 && (
           <button
@@ -166,7 +171,9 @@ export function StockWatchlistTable({
               gap: "6px",
               boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
             }}
-            onClick={() => onAiAnalyzeClick(activeSymbolsToAnalyze || "ALL_PORTFOLIO")}
+            onClick={() =>
+              onAiAnalyzeClick(activeSymbolsToAnalyze || "ALL_PORTFOLIO")
+            }
           >
             <IconSparkles />
             <span>✦ Seans Açılış Öncesi Strateji & Açılış Tahmini Al</span>
@@ -197,8 +204,9 @@ export function StockWatchlistTable({
                   color: "#94a3b8",
                 }}
               >
-                Bu takip listesinde henüz hisse bulunmuyor.
-                Aşağıdaki "Keşfet & Hisse Ara" sekmesinden ilgilendiğiniz hisseleri ekleyebilirsiniz.
+                Bu takip listesinde henüz hisse bulunmuyor. Aşağıdaki "Keşfet &
+                Hisse Ara" sekmesinden ilgilendiğiniz hisseleri
+                ekleyebilirsiniz.
               </td>
             </tr>
           ) : (
@@ -246,12 +254,22 @@ export function StockWatchlistTable({
                     </span>
                   </td>
                   <td style={{ textAlign: "right", color: "#cbd5e1" }}>
-                    {quote?.dayHigh && quote.dayHigh > 0 ? formatPrice(quote.dayHigh) : "—"}
+                    {quote?.dayHigh && quote.dayHigh > 0
+                      ? formatPrice(quote.dayHigh)
+                      : "—"}
                   </td>
                   <td style={{ textAlign: "right", color: "#cbd5e1" }}>
-                    {quote?.dayLow && quote.dayLow > 0 ? formatPrice(quote.dayLow) : "—"}
+                    {quote?.dayLow && quote.dayLow > 0
+                      ? formatPrice(quote.dayLow)
+                      : "—"}
                   </td>
-                  <td style={{ textAlign: "right", color: "#94a3b8", fontSize: "0.85rem" }}>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      color: "#94a3b8",
+                      fontSize: "0.85rem",
+                    }}
+                  >
                     {quote?.volume && quote.volume > 0
                       ? `${(quote.volume / 1_000_000).toFixed(1)} M ₺`
                       : "—"}

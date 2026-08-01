@@ -21,7 +21,9 @@ export interface WebSearchResult {
  * Kullanıcı prompt'unun canlı internet araştırması gerektirip gerektirmediğini tespit eder.
  */
 export function detectNeedsWebSearch(prompt: string): boolean {
-  if (!prompt || prompt.trim().length < 3) {return false;}
+  if (!prompt || prompt.trim().length < 3) {
+    return false;
+  }
   const p = prompt.toLowerCase().trim();
 
   // Search intent keywords
@@ -153,13 +155,16 @@ function parseDuckDuckGoHTML(html: string): WebSearchSource[] {
         .split(/<div[^>]*class="[^"]*result[^"]*"[^>]*>/gi)
         .slice(1);
       for (const block of resultBlocks) {
-        if (sources.length >= 4) {break;}
+        if (sources.length >= 4) {
+          break;
+        }
         const hrefMatch = block.match(
           /href="([^"]*uddg=[^"]*)"|href="(https?:\/\/[^"]+)"/i,
         );
         const titleMatch =
-          block.match(/<a[^>]*class="[^"]*result__url[^"]*"[^>]*>([\s\S]*?)<\/a>/i) ||
-          block.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+          block.match(
+            /<a[^>]*class="[^"]*result__url[^"]*"[^>]*>([\s\S]*?)<\/a>/i,
+          ) || block.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
         const snippetMatch = block.match(
           /class="[^"]*result__snippet[^"]*"[^>]*>([\s\S]*?)<\/(?:a|td|div)>/i,
         );
@@ -168,7 +173,9 @@ function parseDuckDuckGoHTML(html: string): WebSearchSource[] {
           let rawUrl = hrefMatch[1] || hrefMatch[2] || "";
           if (rawUrl.includes("uddg=")) {
             const m = rawUrl.match(/uddg=([^&]+)/);
-            if (m && m[1]) {rawUrl = decodeURIComponent(m[1]);}
+            if (m && m[1]) {
+              rawUrl = decodeURIComponent(m[1]);
+            }
           }
           const cleanTitle = (titleMatch ? titleMatch[1] : "Arama Sonucu")
             .replace(/<[^>]+>/g, "")
@@ -194,7 +201,9 @@ function parseDuckDuckGoHTML(html: string): WebSearchSource[] {
     const results = doc.querySelectorAll(".result");
 
     results.forEach((el, index) => {
-      if (index >= 4) {return;}
+      if (index >= 4) {
+        return;
+      }
       const titleEl = el.querySelector(".result__title a");
       const snippetEl = el.querySelector(".result__snippet");
 

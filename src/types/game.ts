@@ -14,7 +14,8 @@ export interface GameEntry {
   id: string;
   title: string;
   description: string;
-  category: "action" | "rpg" | "simulation" | "puzzle" | "arcade" | "casual" | "ai";
+  category:
+    "action" | "rpg" | "simulation" | "puzzle" | "arcade" | "casual" | "ai";
   status: GameStatus;
   coverImage?: string;
   folderPath: string;

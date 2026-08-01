@@ -94,15 +94,9 @@ export function KpssTopicList({
               outline: "none",
             }}
           >
-            <option value="default">
-              {t.kpss_sort_syllabus}
-            </option>
-            <option value="questions">
-              {t.kpss_topic_frequency}
-            </option>
-            <option value="status">
-              {t.kpss_sort_completion}
-            </option>
+            <option value="default">{t.kpss_sort_syllabus}</option>
+            <option value="questions">{t.kpss_topic_frequency}</option>
+            <option value="status">{t.kpss_sort_completion}</option>
           </select>
         </div>
       </div>
@@ -176,9 +170,7 @@ export function KpssTopicList({
               {/* Seviye Tespit Sınavı button */}
               <button
                 className="kpss-exam-btn"
-                title={
-                  t.kpss_topic_proficiency_test
-                }
+                title={t.kpss_topic_proficiency_test}
                 onClick={(e) => {
                   e.stopPropagation();
                   onStartQuiz(topic.title);

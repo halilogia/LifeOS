@@ -3,7 +3,10 @@
  * Kamuyu Aydınlatma Platformu (KAP) ve BIST haberlerinin RSS üzerinden çekilmesi ve IKapNewsCacheRepository ile önbelleklenmesi.
  */
 
-import type { IKapNewsCacheRepository, KapNewsCache } from "@/domain/repositories/IKapNewsCacheRepository.js";
+import type {
+  IKapNewsCacheRepository,
+  KapNewsCache,
+} from "@/domain/repositories/IKapNewsCacheRepository.js";
 import type { KapNewsItem } from "@/types/kap.js";
 
 export type { KapNewsItem } from "@/types/kap.js";
@@ -16,14 +19,25 @@ export function createKapNewsService(cacheRepo: IKapNewsCacheRepository) {
       // Önce yerel cache kontrol et
       try {
         const cached = await cacheRepo.getCached();
-        if (cached && cached.timestamp && Date.now() - cached.timestamp < KAP_CACHE_TTL && cached.data) {
+        if (
+          cached &&
+          cached.timestamp &&
+          Date.now() - cached.timestamp < KAP_CACHE_TTL &&
+          cached.data
+        ) {
           const items: KapNewsItem[] = cached.data;
           if (targetSymbols && targetSymbols.length > 0) {
-            const uppercaseSyms = targetSymbols.map((s) => s.replace(/\.IS$/, "").toUpperCase());
-            const filtered = items.filter(
-              (item) => item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
+            const uppercaseSyms = targetSymbols.map((s) =>
+              s.replace(/\.IS$/, "").toUpperCase(),
             );
-            if (filtered.length > 0) { return filtered; }
+            const filtered = items.filter(
+              (item) =>
+                item.symbol &&
+                uppercaseSyms.includes(item.symbol.toUpperCase()),
+            );
+            if (filtered.length > 0) {
+              return filtered;
+            }
           }
           return items;
         }
@@ -42,15 +56,24 @@ export function createKapNewsService(cacheRepo: IKapNewsCacheRepository) {
           const items = parseKapRssXml(xmlText);
 
           if (items.length > 0) {
-            const cachePayload: KapNewsCache = { timestamp: Date.now(), data: items };
+            const cachePayload: KapNewsCache = {
+              timestamp: Date.now(),
+              data: items,
+            };
             await cacheRepo.setCached(cachePayload);
 
             if (targetSymbols && targetSymbols.length > 0) {
-              const uppercaseSyms = targetSymbols.map((s) => s.replace(/\.IS$/, "").toUpperCase());
-              const filtered = items.filter(
-                (item) => item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
+              const uppercaseSyms = targetSymbols.map((s) =>
+                s.replace(/\.IS$/, "").toUpperCase(),
               );
-              if (filtered.length > 0) { return filtered; }
+              const filtered = items.filter(
+                (item) =>
+                  item.symbol &&
+                  uppercaseSyms.includes(item.symbol.toUpperCase()),
+              );
+              if (filtered.length > 0) {
+                return filtered;
+              }
             }
             return items;
           }
@@ -91,7 +114,8 @@ function parseKapRssXml(xmlText: string): KapNewsItem[] {
     itemNodes.forEach((node, index) => {
       const title = node.querySelector("title")?.textContent || "";
       const link = node.querySelector("link")?.textContent || "";
-      const pubDate = node.querySelector("pubDate")?.textContent || new Date().toISOString();
+      const pubDate =
+        node.querySelector("pubDate")?.textContent || new Date().toISOString();
       const description = node.querySelector("description")?.textContent || "";
 
       const symbolMatch = title.match(/\b([A-Z]{4,5})\b/);
@@ -118,7 +142,8 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
       id: "kap-mock-1",
       symbol: "THYAO",
       title: "THYAO - Yeni Uçak Alım ve Filo Genişletme Sözleşmesi",
-      summary: "Türk Hava Yolları, filo genişletme stratejisi kapsamında yeni uçak siparişlerinin teslimatı konusunda anlaşmaya varıldığını bildirdi.",
+      summary:
+        "Türk Hava Yolları, filo genişletme stratejisi kapsamında yeni uçak siparişlerinin teslimatı konusunda anlaşmaya varıldığını bildirdi.",
       pubDate: new Date().toISOString(),
       link: "https://www.kap.org.tr",
     },
@@ -126,7 +151,8 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
       id: "kap-mock-2",
       symbol: "KRDMD",
       title: "KRDMD - İhracat Anlaşması ve Kapasite Artışı Bildirimi",
-      summary: "Kardemir, yeni ray ve ağır profil üretim hattından yurtdışına 500 milyon TL tutarında satış sözleşmesi imzalandığını bildirdi.",
+      summary:
+        "Kardemir, yeni ray ve ağır profil üretim hattından yurtdışına 500 milyon TL tutarında satış sözleşmesi imzalandığını bildirdi.",
       pubDate: new Date().toISOString(),
       link: "https://www.kap.org.tr",
     },
@@ -134,16 +160,24 @@ function getFallbackKapNews(targetSymbols?: string[]): KapNewsItem[] {
       id: "kap-mock-3",
       symbol: "EREGL",
       title: "EREGL - Temettü Dağıtım Kararı ve Yatırım Planı",
-      summary: "Ereğli Demir Çelik, yeni çelik tesisi yatırımı ve temettü ödeme takvimi hakkında kamuoyunu bilgilendirdi.",
+      summary:
+        "Ereğli Demir Çelik, yeni çelik tesisi yatırımı ve temettü ödeme takvimi hakkında kamuoyunu bilgilendirdi.",
       pubDate: new Date().toISOString(),
       link: "https://www.kap.org.tr",
     },
   ];
 
   if (targetSymbols && targetSymbols.length > 0) {
-    const uppercaseSyms = targetSymbols.map((s) => s.replace(/\.IS$/, "").toUpperCase());
-    const filtered = mockNews.filter((item) => item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()));
-    if (filtered.length > 0) { return filtered; }
+    const uppercaseSyms = targetSymbols.map((s) =>
+      s.replace(/\.IS$/, "").toUpperCase(),
+    );
+    const filtered = mockNews.filter(
+      (item) =>
+        item.symbol && uppercaseSyms.includes(item.symbol.toUpperCase()),
+    );
+    if (filtered.length > 0) {
+      return filtered;
+    }
   }
   return mockNews;
 }

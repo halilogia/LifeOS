@@ -15,7 +15,12 @@ interface PortfolioTableProps {
   onAddRuleClick: (symbol: string) => void;
   onDeleteRule?: (ruleId: string) => void;
   onDeleteItem: (id: string) => void;
-  onSellItem: (id: string, symbol: string, currentLot: number, currentPrice: number) => void;
+  onSellItem: (
+    id: string,
+    symbol: string,
+    currentLot: number,
+    currentPrice: number,
+  ) => void;
   onAiAnalyzeClick: (symbol: string) => void;
   onOpenChart: (symbol: string) => void;
 }
@@ -200,8 +205,8 @@ export function PortfolioTable({
                   color: "#94a3b8",
                 }}
               >
-                Henüz portföyünüze bir hisse eklemediniz.
-                Yukarıdaki "+ Hisse / Varlık Ekle" butonuna basarak ilk alışınızı kaydedebilirsiniz.
+                Henüz portföyünüze bir hisse eklemediniz. Yukarıdaki "+ Hisse /
+                Varlık Ekle" butonuna basarak ilk alışınızı kaydedebilirsiniz.
               </td>
             </tr>
           ) : (
@@ -397,7 +402,9 @@ export function PortfolioTable({
                       </button>
                       <button
                         className="stock-btn stock-btn-danger"
-                        onClick={() => onSellItem(item.id, sym, item.lotCount, currentPrice)}
+                        onClick={() =>
+                          onSellItem(item.id, sym, item.lotCount, currentPrice)
+                        }
                         title="Satış Yap"
                         style={{ padding: "6px 10px" }}
                       >

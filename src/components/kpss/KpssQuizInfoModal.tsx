@@ -26,9 +26,7 @@ export function KpssQuizInfoModal({ t, onClose }: KpssQuizInfoModalProps) {
         }}
       >
         <div className="settings-header">
-          <h3>
-            {t.kpss_past_exams_history_q}
-          </h3>
+          <h3>{t.kpss_past_exams_history_q}</h3>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>

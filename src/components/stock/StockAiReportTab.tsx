@@ -52,7 +52,11 @@ function IconSearch() {
   );
 }
 
-export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabProps) {
+export function StockAiReportTab({
+  portfolio,
+  quotes,
+  lang,
+}: StockAiReportTabProps) {
   const t = getTranslation(lang);
   const [subTab, setSubTab] = useState<"digest" | "advisor">("digest");
   const [reportText, setReportText] = useState<string>("");
@@ -83,7 +87,9 @@ export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabPr
   // Run Advisor Query
   const handleAskAdvisor = async (e: Event) => {
     e.preventDefault();
-    if (!querySymbol.trim()) {return;}
+    if (!querySymbol.trim()) {
+      return;
+    }
 
     setAdvisorLoading(true);
     const sym = querySymbol.trim().toUpperCase().replace(/\.IS$/, "");
@@ -169,7 +175,9 @@ export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabPr
             >
               <IconSparkles />
               <span>
-                {reportLoading ? t.stock_analysis_report_generating : t.stock_analysis_report_generate}
+                {reportLoading
+                  ? t.stock_analysis_report_generating
+                  : t.stock_analysis_report_generate}
               </span>
             </button>
           </div>
@@ -193,9 +201,7 @@ export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabPr
                   margin: "0 auto 12px",
                 }}
               />
-              <span>
-                {t.stock_ai_report_analyzing}
-              </span>
+              <span>{t.stock_ai_report_analyzing}</span>
             </div>
           ) : reportText ? (
             <div
@@ -268,7 +274,9 @@ export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabPr
               }}
             >
               <div className="stock-form-group">
-                <label className="stock-form-label">{t.stock_ai_advisor_symbol_label}</label>
+                <label className="stock-form-label">
+                  {t.stock_ai_advisor_symbol_label}
+                </label>
                 <input
                   type="text"
                   className="stock-input"
@@ -322,7 +330,10 @@ export function StockAiReportTab({ portfolio, quotes, lang }: StockAiReportTabPr
               }}
             >
               <span>
-                {t.stock_ai_advisor_analyzing.replace("{symbol}", querySymbol.toUpperCase())}
+                {t.stock_ai_advisor_analyzing.replace(
+                  "{symbol}",
+                  querySymbol.toUpperCase(),
+                )}
               </span>
             </div>
           ) : advisorResponse ? (

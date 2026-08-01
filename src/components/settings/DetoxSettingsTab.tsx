@@ -76,7 +76,7 @@ export function DetoxSettingsTab({
                   >
                     {limit === 0
                       ? t.settings_unlimited
-                      : t.detox_limit_format.replace('{limit}', String(limit))}
+                      : t.detox_limit_format.replace("{limit}", String(limit))}
                   </span>
                   <div
                     style={{

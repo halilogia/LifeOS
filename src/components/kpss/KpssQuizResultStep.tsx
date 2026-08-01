@@ -21,17 +21,31 @@ interface KpssQuizResultStepProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) {return "#10b981";}
-  if (score >= 60) {return "#f59e0b";}
-  if (score >= 40) {return "#f97316";}
+  if (score >= 80) {
+    return "#10b981";
+  }
+  if (score >= 60) {
+    return "#f59e0b";
+  }
+  if (score >= 40) {
+    return "#f97316";
+  }
   return "#ef4444";
 }
 
 function getScoreEmoji(score: number): string {
-  if (score >= 90) {return "🏆";}
-  if (score >= 80) {return "🌟";}
-  if (score >= 60) {return "👍";}
-  if (score >= 40) {return "💪";}
+  if (score >= 90) {
+    return "🏆";
+  }
+  if (score >= 80) {
+    return "🌟";
+  }
+  if (score >= 60) {
+    return "👍";
+  }
+  if (score >= 40) {
+    return "💪";
+  }
   return "📚";
 }
 
@@ -97,7 +111,8 @@ export function KpssQuizResultStep({
         style={{
           textAlign: "center",
           padding: "24px 16px 20px",
-          background: "linear-gradient(135deg, rgba(139,92,246,0.08), rgba(99,102,241,0.04))",
+          background:
+            "linear-gradient(135deg, rgba(139,92,246,0.08), rgba(99,102,241,0.04))",
           borderRadius: "16px",
           border: "1px solid rgba(139,92,246,0.12)",
           marginBottom: "20px",
@@ -169,7 +184,11 @@ export function KpssQuizResultStep({
                     : "rgba(239, 68, 68, 0.05)",
                 borderRadius: "10px",
                 borderLeft: `3px solid ${
-                  isCorrect ? "#10b981" : userAns === -1 ? "rgba(255,255,255,0.15)" : "#ef4444"
+                  isCorrect
+                    ? "#10b981"
+                    : userAns === -1
+                      ? "rgba(255,255,255,0.15)"
+                      : "#ef4444"
                 }`,
               }}
             >
@@ -182,7 +201,13 @@ export function KpssQuizResultStep({
                   lineHeight: 1.5,
                 }}
               >
-                <span style={{ color: "var(--accent-color)", fontWeight: 700, marginRight: "6px" }}>
+                <span
+                  style={{
+                    color: "var(--accent-color)",
+                    fontWeight: 700,
+                    marginRight: "6px",
+                  }}
+                >
                   #{qIdx + 1}
                 </span>
                 <MathRenderer text={q.question} />
@@ -259,11 +284,7 @@ export function KpssQuizResultStep({
                 <strong style={{ color: "var(--accent-color)" }}>
                   {t.kpss_quiz_solution_label}
                 </strong>{" "}
-                <MathRenderer
-                  text={
-                    q.solution || t.kpss_quiz_solution_label
-                  }
-                />
+                <MathRenderer text={q.solution || t.kpss_quiz_solution_label} />
               </div>
             </div>
           );
@@ -283,14 +304,24 @@ export function KpssQuizResultStep({
         <div style={{ display: "flex", gap: "10px", width: "100%" }}>
           <button
             className="kpss-qcount-btn"
-            style={{ flex: 1, padding: "12px 0", fontWeight: 600, fontSize: "0.9rem" }}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+            }}
             onClick={onRetakeQuiz}
           >
             {t.kpss_quiz_retake}
           </button>
           <button
             className="kpss-qcount-btn"
-            style={{ flex: 1, padding: "12px 0", fontWeight: 600, fontSize: "0.9rem" }}
+            style={{
+              flex: 1,
+              padding: "12px 0",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+            }}
             onClick={handleExportTxt}
           >
             {t.kpss_quiz_export}
@@ -298,7 +329,12 @@ export function KpssQuizResultStep({
         </div>
         <button
           className="settings-add-btn"
-          style={{ width: "100%", padding: "14px 20px", fontSize: "1rem", fontWeight: 700 }}
+          style={{
+            width: "100%",
+            padding: "14px 20px",
+            fontSize: "1rem",
+            fontWeight: 700,
+          }}
           onClick={onClose}
         >
           {t.kpss_quiz_close}

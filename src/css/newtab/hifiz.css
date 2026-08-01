@@ -221,7 +221,12 @@
 
 .hifiz-overall-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-color) 0%, var(--info) 50%, var(--success) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--accent-color) 0%,
+    var(--info) 50%,
+    var(--success) 100%
+  );
   width: 0%;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
@@ -352,7 +357,11 @@
 
 .hifiz-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--info, #3b82f6), var(--success, #10b981));
+  background: linear-gradient(
+    90deg,
+    var(--info, #3b82f6),
+    var(--success, #10b981)
+  );
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -43,7 +43,13 @@ export function AddStockModal({
   const [buyPrice, setBuyPrice] = useState<number>(0);
   const [lotCount, setLotCount] = useState<number>(0);
   const [note, setNote] = useState<string>("");
-  const [tickers, setTickers] = useState<string[]>(["THYAO.IS", "GARAN.IS", "AKBNK.IS", "EREGL.IS", "ASELS.IS"]);
+  const [tickers, setTickers] = useState<string[]>([
+    "THYAO.IS",
+    "GARAN.IS",
+    "AKBNK.IS",
+    "EREGL.IS",
+    "ASELS.IS",
+  ]);
 
   useEffect(() => {
     fetchDynamicBistTickers().then((list) => {
@@ -66,9 +72,7 @@ export function AddStockModal({
       fullSym += ".IS";
     }
 
-    const finalName =
-      displayName.trim() ||
-      fullSym.replace(".IS", "");
+    const finalName = displayName.trim() || fullSym.replace(".IS", "");
 
     onSave({
       symbol: fullSym,

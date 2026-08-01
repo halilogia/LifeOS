@@ -89,34 +89,34 @@ flowchart TB
 
 ## 2. Klasör Sorumlulukları
 
-| Klasör | Sorumluluk | Ne konur | Asla konmaz |
-|---|---|---|---|
-| `src/components/` | Saf UI görünümü | View'lar + `<feature>/` alt bileşenleri | `chrome.storage`, `fetch`, iş mantığı |
-| `src/components/<feature>/` | Feature'a özel UI parçaları | kpss/, settings/, stock/, pomodoro/, notes/... | — |
-| `src/presentation/hooks/` | State yönetimi, view-model | useSettings, useTodos, usePopup, useUI | DOM, fetch |
-| `src/presentation/view-models/` | UI'a hazır veri dönüşümü | TodoViewModel | — |
-| `src/services/` | Dış dünya iletişimi | Network fetch, chrome.storage, AI servisleri, kpssService, errorReportService | JSX |
-| `src/application/use-cases/` | Tek işlemli iş kuralları | AddTodoUseCase, SyncGoogleTasksUseCase | UI, storage detayı |
-| `src/application/ports/` | Dış dünya arayüz tanımları | ITodoSyncPort, IDriveBackupPort | — |
-| `src/domain/entities/` | Çekirdek iş nesneleri | Todo | — |
-| `src/domain/value-objects/` | Değer tipleri | Language, TodoStatus, RepeatType | — |
-| `src/domain/repositories/` | Depo arayüzleri (contract) | ITodoRepository, IKpssRepository | Implementasyon |
-| `src/domain/services/` | Saf hesaplama servisleri | KpssCalculatorService, SrsService, TaskService | chrome.* |
-| `src/domain/constants/` | Sabit veriler | kpssCurriculum, kpssConstants, kpssFlashcards | — |
-| `src/domain/data/` | Domain verisi | hifizData | — |
-| `src/infrastructure/persistence/` | chrome.storage implementasyonları | ChromeStorage*Repository | UI |
-| `src/infrastructure/api/` | Google API client'ları | GoogleTasksApi, GoogleDriveApi, GoogleAuthApi | — |
-| `src/infrastructure/services/` | Altyapı servisleri | PomodoroManagerService | — |
-| `src/infrastructure/storage/` | Storage key sabitleri | keys.ts | — |
-| `src/background/` | Service worker | backgroundMain, handlers/ | DOM |
-| `src/content/` | Content script'ler | infobox/, detox/, agent/, whatsapp/, telegram/, volume/, quiz/ | — |
-| `src/utils/` | Genel yardımcılar | i18n, logger, formatlayıcılar | İş mantığı |
-| `src/utils/translations/` | UI metinleri | en.ts, tr.ts | — |
-| `src/types/` | Tip tanımları | types.ts, kpss.ts, stock.ts, bist.ts... | — |
-| `src/data/` | Statik veri dosyaları | kpss/ (eski sınav JSON'ları) | — |
-| `src/offscreen/` | Offscreen doküman | offscreenAudio | — |
-| `src/sidepanel/` | Side panel UI | index, SidePanelApp | — |
-| `src/css/` | Stiller | popup.css + newtab/ feature CSS'leri | — |
+| Klasör                            | Sorumluluk                        | Ne konur                                                                      | Asla konmaz                           |
+| --------------------------------- | --------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------- |
+| `src/components/`                 | Saf UI görünümü                   | View'lar + `<feature>/` alt bileşenleri                                       | `chrome.storage`, `fetch`, iş mantığı |
+| `src/components/<feature>/`       | Feature'a özel UI parçaları       | kpss/, settings/, stock/, pomodoro/, notes/...                                | —                                     |
+| `src/presentation/hooks/`         | State yönetimi, view-model        | useSettings, useTodos, usePopup, useUI                                        | DOM, fetch                            |
+| `src/presentation/view-models/`   | UI'a hazır veri dönüşümü          | TodoViewModel                                                                 | —                                     |
+| `src/services/`                   | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpssService, errorReportService | JSX                                   |
+| `src/application/use-cases/`      | Tek işlemli iş kuralları          | AddTodoUseCase, SyncGoogleTasksUseCase                                        | UI, storage detayı                    |
+| `src/application/ports/`          | Dış dünya arayüz tanımları        | ITodoSyncPort, IDriveBackupPort                                               | —                                     |
+| `src/domain/entities/`            | Çekirdek iş nesneleri             | Todo                                                                          | —                                     |
+| `src/domain/value-objects/`       | Değer tipleri                     | Language, TodoStatus, RepeatType                                              | —                                     |
+| `src/domain/repositories/`        | Depo arayüzleri (contract)        | ITodoRepository, IKpssRepository                                              | Implementasyon                        |
+| `src/domain/services/`            | Saf hesaplama servisleri          | KpssCalculatorService, SrsService, TaskService                                | chrome.*                              |
+| `src/domain/constants/`           | Sabit veriler                     | kpssCurriculum, kpssConstants, kpssFlashcards                                 | —                                     |
+| `src/domain/data/`                | Domain verisi                     | hifizData                                                                     | —                                     |
+| `src/infrastructure/persistence/` | chrome.storage implementasyonları | ChromeStorage*Repository                                                      | UI                                    |
+| `src/infrastructure/api/`         | Google API client'ları            | GoogleTasksApi, GoogleDriveApi, GoogleAuthApi                                 | —                                     |
+| `src/infrastructure/services/`    | Altyapı servisleri                | PomodoroManagerService                                                        | —                                     |
+| `src/infrastructure/storage/`     | Storage key sabitleri             | keys.ts                                                                       | —                                     |
+| `src/background/`                 | Service worker                    | backgroundMain, handlers/                                                     | DOM                                   |
+| `src/content/`                    | Content script'ler                | infobox/, detox/, agent/, whatsapp/, telegram/, volume/, quiz/                | —                                     |
+| `src/utils/`                      | Genel yardımcılar                 | i18n, logger, formatlayıcılar                                                 | İş mantığı                            |
+| `src/utils/translations/`         | UI metinleri                      | en.ts, tr.ts                                                                  | —                                     |
+| `src/types/`                      | Tip tanımları                     | types.ts, kpss.ts, stock.ts, bist.ts...                                       | —                                     |
+| `src/data/`                       | Statik veri dosyaları             | kpss/ (eski sınav JSON'ları)                                                  | —                                     |
+| `src/offscreen/`                  | Offscreen doküman                 | offscreenAudio                                                                | —                                     |
+| `src/sidepanel/`                  | Side panel UI                     | index, SidePanelApp                                                           | —                                     |
+| `src/css/`                        | Stiller                           | popup.css + newtab/ feature CSS'leri                                          | —                                     |
 
 ---
 
@@ -140,25 +140,25 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 
 ## 4. Feature Haritası
 
-| View (component) | Ana service | Storage | Alt bileşenler |
-|---|---|---|---|
-| ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils | sync | — |
-| PomodoroView | PomodoroManagerService, usePomodoro (hook) | local | pomodoro/ (8) |
-| KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
-| HifizView | hifizData (domain/data), useHifiz (hook) | sync | hifiz/ (4) |
-| SrsView | kpssSrsService, SrsService, useSrs (hook) | sync | — |
-| CalendarView | todo repo, GoogleCalendarApi, useCalendar (hook) | sync | — |
-| PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
-| Stock/BistView | bistService, stockAiService, useBist (hook) | local | stock/ (17) |
-| FreeGamesView | gamesService, useFreeGames (hook) | local | freegames/ (2) |
-| NotesView | zettelkastenEngine, useNotes (hook) | sync | notes/ (7) |
-| AIChatView | aiChatService | sync+local | aichat/ (4) |
-| ArcadeView | arcadeService | local | arcade/ (3) |
-| DetoxView | detoxBlocker (content) | sync | detox/ (3) |
-| WillpowerView | useWillpower (hook) | sync | — |
-| EisenhowerView | todo repo, useEisenhower (hook) | sync | eisenhower/ (2) + eisenhower.css |
-| SettingsDrawer | settings repos | sync | settings/ (6) |
-| Sidebar | useUI | sync | sidebar/ (2) |
+| View (component)      | Ana service                                                     | Storage    | Alt bileşenler                                          |
+| --------------------- | --------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
+| ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils      | sync       | —                                                       |
+| PomodoroView          | PomodoroManagerService, usePomodoro (hook)                      | local      | pomodoro/ (8)                                           |
+| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
+| HifizView             | hifizData (domain/data), useHifiz (hook)                        | sync       | hifiz/ (4)                                              |
+| SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
+| CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |
+| PrayerView            | prayerService, usePrayer (hook)                                 | sync       | prayer/ (1) — PrayerCityForm                            |
+| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | local      | stock/ (17)                                             |
+| FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
+| NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
+| AIChatView            | aiChatService                                                   | sync+local | aichat/ (4)                                             |
+| ArcadeView            | arcadeService                                                   | local      | arcade/ (3)                                             |
+| DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
+| WillpowerView         | useWillpower (hook)                                             | sync       | —                                                       |
+| EisenhowerView        | todo repo, useEisenhower (hook)                                 | sync       | eisenhower/ (2) + eisenhower.css                        |
+| SettingsDrawer        | settings repos                                                  | sync       | settings/ (6)                                           |
+| Sidebar               | useUI                                                           | sync       | sidebar/ (2)                                            |
 
 ---
 

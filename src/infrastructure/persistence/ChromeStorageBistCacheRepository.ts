@@ -17,8 +17,12 @@ export class ChromeStorageBistCacheRepository implements IBistCacheRepository {
     try {
       const result = await chrome.storage.local.get(CACHE_KEY);
       const cached = result[CACHE_KEY] as StockCache | undefined;
-      if (!cached) { return null; }
-      if (Date.now() - cached.timestamp > CACHE_TTL_MS) { return null; }
+      if (!cached) {
+        return null;
+      }
+      if (Date.now() - cached.timestamp > CACHE_TTL_MS) {
+        return null;
+      }
       return cached.data;
     } catch {
       return null;

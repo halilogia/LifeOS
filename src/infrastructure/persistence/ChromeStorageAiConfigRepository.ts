@@ -4,7 +4,10 @@
  * Reads from chrome.storage.sync first, falls back to chrome.storage.local, then defaults.
  */
 
-import type { IAiConfigRepository, AiConfig } from "@/domain/repositories/IAiConfigRepository.js";
+import type {
+  IAiConfigRepository,
+  AiConfig,
+} from "@/domain/repositories/IAiConfigRepository.js";
 import { DEFAULT_AI_CONFIG } from "@/domain/repositories/IAiConfigRepository.js";
 import { SYNC_AI_KEYS } from "@/infrastructure/storage/keys.js";
 
@@ -27,7 +30,10 @@ export class ChromeStorageAiConfigRepository implements IAiConfigRepository {
       syncRes.aiApiKey ||
       localRes.geminiApiKey ||
       localRes.aiApiKey;
-    const apiKey = typeof rawApiKey === "string" ? rawApiKey.trim() : DEFAULT_AI_CONFIG.aiApiKey;
+    const apiKey =
+      typeof rawApiKey === "string"
+        ? rawApiKey.trim()
+        : DEFAULT_AI_CONFIG.aiApiKey;
 
     const rawModel =
       (typeof syncRes.aiModel === "string" && syncRes.aiModel) ||
@@ -39,7 +45,9 @@ export class ChromeStorageAiConfigRepository implements IAiConfigRepository {
       (typeof syncRes.aiEndpoint === "string" && syncRes.aiEndpoint) ||
       (typeof localRes.aiEndpoint === "string" && localRes.aiEndpoint) ||
       DEFAULT_AI_CONFIG.aiEndpoint;
-    const endpoint = rawEndpoint.trim() ? rawEndpoint.trim() : DEFAULT_AI_CONFIG.aiEndpoint;
+    const endpoint = rawEndpoint.trim()
+      ? rawEndpoint.trim()
+      : DEFAULT_AI_CONFIG.aiEndpoint;
 
     const showThinking =
       syncRes.aiShowThinking !== undefined
@@ -57,9 +65,12 @@ export class ChromeStorageAiConfigRepository implements IAiConfigRepository {
     };
   }
 
-  private getFromStorage(area: "sync" | "local"): Promise<Record<string, unknown>> {
+  private getFromStorage(
+    area: "sync" | "local",
+  ): Promise<Record<string, unknown>> {
     return new Promise((resolve) => {
-      const storage = area === "sync" ? chrome.storage.sync : chrome.storage.local;
+      const storage =
+        area === "sync" ? chrome.storage.sync : chrome.storage.local;
       storage.get([...AI_KEYS], (res: Record<string, unknown>) => resolve(res));
     });
   }

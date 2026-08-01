@@ -1,6 +1,9 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import { getAutoTitleSetting, saveAutoTitleSetting } from "@/services/kpssWikiService.js";
+import {
+  getAutoTitleSetting,
+  saveAutoTitleSetting,
+} from "@/services/kpssWikiService.js";
 
 interface KpssSettingsTabProps {
   lang: Language;
@@ -237,9 +240,7 @@ export function KpssSettingsTab({
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            <span>
-              {t.settings_kpss_net_score_info}
-            </span>
+            <span>{t.settings_kpss_net_score_info}</span>
           </div>
         </div>
       </div>
@@ -266,10 +267,22 @@ export function KpssSettingsTab({
             }}
           >
             <div>
-              <div style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  color: "white",
+                  fontWeight: "600",
+                }}
+              >
                 {t.settings_kpss_auto_title}
               </div>
-              <div style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: "2px" }}>
+              <div
+                style={{
+                  fontSize: "0.72rem",
+                  color: "var(--text-secondary)",
+                  marginTop: "2px",
+                }}
+              >
                 {t.settings_kpss_auto_title_desc}
               </div>
             </div>
@@ -301,7 +314,9 @@ export function KpssSettingsTab({
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundColor: autoTitleEnabled ? "var(--accent-color, #3b82f6)" : "rgba(255,255,255,0.15)",
+                  backgroundColor: autoTitleEnabled
+                    ? "var(--accent-color, #3b82f6)"
+                    : "rgba(255,255,255,0.15)",
                   transition: "0.3s",
                   borderRadius: "22px",
                 }}

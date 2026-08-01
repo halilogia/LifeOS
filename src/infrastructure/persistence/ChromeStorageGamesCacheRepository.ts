@@ -5,16 +5,24 @@
  */
 
 import type { IGamesCacheRepository } from "@/domain/repositories/IGamesCacheRepository.js";
-import type { Giveaway, HistoricalEpicGame, CachedLiveGames, CachedHistoryGames, ExclusionSettings } from "@/types/games.js";
+import type {
+  Giveaway,
+  HistoricalEpicGame,
+  CachedLiveGames,
+  CachedHistoryGames,
+  ExclusionSettings,
+} from "@/types/games.js";
 import { defaultExclusions } from "@/types/games.js";
-import { LOCAL_FREE_GAMES_CACHE, LOCAL_EPIC_HISTORY_CACHE, LOCAL_FG_EXCLUSIONS } from "@/infrastructure/storage/keys.js";
+import {
+  LOCAL_FREE_GAMES_CACHE,
+  LOCAL_EPIC_HISTORY_CACHE,
+  LOCAL_FG_EXCLUSIONS,
+} from "@/infrastructure/storage/keys.js";
 
 const LIVE_CACHE_KEY = LOCAL_FREE_GAMES_CACHE;
 const HISTORY_CACHE_KEY = LOCAL_EPIC_HISTORY_CACHE;
 
-export class ChromeStorageGamesCacheRepository
-  implements IGamesCacheRepository
-{
+export class ChromeStorageGamesCacheRepository implements IGamesCacheRepository {
   getLiveCache(): Promise<CachedLiveGames | null> {
     return new Promise((resolve) => {
       chrome.storage.local.get([LIVE_CACHE_KEY], (res) => {
@@ -55,7 +63,9 @@ export class ChromeStorageGamesCacheRepository
     return new Promise((resolve) => {
       chrome.storage.local.get([LOCAL_FG_EXCLUSIONS], (res) => {
         resolve(
-          (res[LOCAL_FG_EXCLUSIONS] as ExclusionSettings) || { ...defaultExclusions },
+          (res[LOCAL_FG_EXCLUSIONS] as ExclusionSettings) || {
+            ...defaultExclusions,
+          },
         );
       });
     });

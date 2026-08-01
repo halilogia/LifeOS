@@ -309,16 +309,14 @@ export function KpssAutoPlannerCard({
               }}
             >
               <span>
-                <strong>{t.kpss_days_left}</strong>{" "}
-                {daysRemaining}
+                <strong>{t.kpss_days_left}</strong> {daysRemaining}
               </span>
               <span>
-                <strong>{t.kpss_topics_left}</strong>{" "}
-                {totalUncompleted}
+                <strong>{t.kpss_topics_left}</strong> {totalUncompleted}
               </span>
               <span>
-                <strong>{t.kpss_daily_rate}</strong>{" "}
-                {workloadRate.toFixed(1)}/gün
+                <strong>{t.kpss_daily_rate}</strong> {workloadRate.toFixed(1)}
+                /gün
               </span>
             </div>
             <span
@@ -417,7 +415,11 @@ export function KpssAutoPlannerCard({
                 gap: "12px",
               }}
               dangerouslySetInnerHTML={{
-                __html: t.kpss_planner_how_step1 + t.kpss_planner_how_step2 + t.kpss_planner_how_step3 + t.kpss_planner_how_step4
+                __html:
+                  t.kpss_planner_how_step1 +
+                  t.kpss_planner_how_step2 +
+                  t.kpss_planner_how_step3 +
+                  t.kpss_planner_how_step4,
               }}
             />
           </div>

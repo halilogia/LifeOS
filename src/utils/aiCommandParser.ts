@@ -45,7 +45,10 @@ export const monthsMap: Record<string, number> = {
 };
 
 // Build comprehensive BIST Aliases dictionary dynamically from popular stocks dataset
-export const BIST_ALIASES: Record<string, { symbol: string; displayName: string }> = {
+export const BIST_ALIASES: Record<
+  string,
+  { symbol: string; displayName: string }
+> = {
   kardemir: { symbol: "KRDMD.IS", displayName: "Kardemir D" },
   "kardemir d": { symbol: "KRDMD.IS", displayName: "Kardemir D" },
   krdmd: { symbol: "KRDMD.IS", displayName: "Kardemir D" },
@@ -58,8 +61,6 @@ export const BIST_ALIASES: Record<string, { symbol: string; displayName: string 
   garanti: { symbol: "GARAN.IS", displayName: "Garanti BBVA" },
   işbank: { symbol: "ISCTR.IS", displayName: "İş Bankası C" },
 };
-
-
 
 export interface LocalParsedResult {
   parsed: boolean;
@@ -117,7 +118,14 @@ export function parseLocalCommand(query: string): LocalParsedResult {
   }
   // Check for Turkish alias pattern: "thy alınır mı", "garanti nasıl"
   for (const key of Object.keys(BIST_ALIASES)) {
-    if (textLower.includes(key) && (textLower.includes("alınır") || textLower.includes("nasıl") || textLower.includes("yorum") || textLower.includes("analiz") || textLower.includes("durum"))) {
+    if (
+      textLower.includes(key) &&
+      (textLower.includes("alınır") ||
+        textLower.includes("nasıl") ||
+        textLower.includes("yorum") ||
+        textLower.includes("analiz") ||
+        textLower.includes("durum"))
+    ) {
       return {
         parsed: true,
         action: "ask_stock",
@@ -136,7 +144,7 @@ export function parseLocalCommand(query: string): LocalParsedResult {
     textLower.includes("portföye ekle")
   ) {
     const lotMatch = textLower.match(/(\d+)\s*lot/);
-    const priceMatch = textLower.match(/(\d+(?:[\.,]\d+)?)\s*(?:tl|₺|lira)/);
+    const priceMatch = textLower.match(/(\d+(?:[.,]\d+)?)\s*(?:tl|₺|lira)/);
 
     let foundSymbol: string | null = null;
     let foundDisplayName: string | null = null;
@@ -381,10 +389,7 @@ export function cleanAndParseJSON(text: string): unknown {
   let isObject = false;
   let startIdx = -1;
 
-  if (
-    firstBrace !== -1 &&
-    (firstBracket === -1 || firstBrace < firstBracket)
-  ) {
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
     startIdx = firstBrace;
     isObject = true;
   } else if (firstBracket !== -1) {

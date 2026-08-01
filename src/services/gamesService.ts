@@ -83,8 +83,7 @@ export function createGamesService(cacheRepo: IGamesCacheRepository) {
               gameTitle: (item.gameTitle as string) || "",
               freeDate: (item.freeDate as string) || "",
               epicStoreLink: (item.epicStoreLink as string) || undefined,
-              metacriticScore:
-                (item.metacriticScore as number) || undefined,
+              metacriticScore: (item.metacriticScore as number) || undefined,
               metacriticUrl: (item.metacriticUrl as string) || undefined,
               steamDBRating: (item.steamDBRating as number) || undefined,
               steamUrl: (item.steamUrl as string) || undefined,

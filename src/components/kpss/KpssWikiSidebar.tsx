@@ -4,7 +4,11 @@
  */
 
 import { Language } from "@/types/types.js";
-import { KpssWikiNote, getSubjectLabel, extractTitleFromContent } from "@/services/kpssWikiService.js";
+import {
+  KpssWikiNote,
+  getSubjectLabel,
+  extractTitleFromContent,
+} from "@/services/kpssWikiService.js";
 
 interface KpssWikiSidebarProps {
   lang: Language;
@@ -74,7 +78,14 @@ export function KpssWikiSidebar({
           transition: "all 0.2s ease",
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+        >
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
@@ -122,7 +133,10 @@ export function KpssWikiSidebar({
             type="button"
             onClick={() => onFilterChange(f.id)}
             style={{
-              background: selectedSubjectFilter === f.id ? "#2563eb" : "rgba(255, 255, 255, 0.04)",
+              background:
+                selectedSubjectFilter === f.id
+                  ? "#2563eb"
+                  : "rgba(255, 255, 255, 0.04)",
               border: `1px solid ${selectedSubjectFilter === f.id ? "#3b82f6" : "rgba(255, 255, 255, 0.06)"}`,
               color: selectedSubjectFilter === f.id ? "#ffffff" : "#94a3b8",
               padding: "4px 8px",
@@ -138,23 +152,43 @@ export function KpssWikiSidebar({
       </div>
 
       {/* Note List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "6px", overflowY: "auto", flex: 1, maxHeight: "560px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "6px",
+          overflowY: "auto",
+          flex: 1,
+          maxHeight: "560px",
+        }}
+      >
         {notes.length === 0 ? (
-          <div style={{ padding: "20px 10px", textAlign: "center", color: "#64748b", fontSize: "0.75rem" }}>
+          <div
+            style={{
+              padding: "20px 10px",
+              textAlign: "center",
+              color: "#64748b",
+              fontSize: "0.75rem",
+            }}
+          >
             Kayıtlı ders notu bulunamadı.
           </div>
         ) : (
           notes.map((n) => {
             const isSelected = n.id === selectedNoteId;
             const displayTitle =
-              n.title.trim() || extractTitleFromContent(n.content) || t.kpss_wiki_untitled;
+              n.title.trim() ||
+              extractTitleFromContent(n.content) ||
+              t.kpss_wiki_untitled;
             return (
               <div
                 key={n.id}
                 onClick={() => onSelectNote(n)}
                 style={{
                   padding: "9px 12px",
-                  background: isSelected ? "rgba(37, 99, 235, 0.2)" : "rgba(255, 255, 255, 0.02)",
+                  background: isSelected
+                    ? "rgba(37, 99, 235, 0.2)"
+                    : "rgba(255, 255, 255, 0.02)",
                   border: `1px solid ${isSelected ? "#3b82f6" : "rgba(255, 255, 255, 0.05)"}`,
                   borderRadius: "8px",
                   cursor: "pointer",
@@ -176,9 +210,22 @@ export function KpssWikiSidebar({
                 >
                   {displayTitle}
                 </div>
-                <div style={{ fontSize: "0.65rem", color: "#64748b", display: "flex", justifyContent: "space-between" }}>
-                  <span>{new Date(n.updatedAt || n.createdAt).toLocaleDateString("tr-TR")}</span>
-                  <span style={{ color: "#60a5fa", fontWeight: 600 }}>{getSubjectLabel(n.subject)}</span>
+                <div
+                  style={{
+                    fontSize: "0.65rem",
+                    color: "#64748b",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>
+                    {new Date(n.updatedAt || n.createdAt).toLocaleDateString(
+                      "tr-TR",
+                    )}
+                  </span>
+                  <span style={{ color: "#60a5fa", fontWeight: 600 }}>
+                    {getSubjectLabel(n.subject)}
+                  </span>
                 </div>
               </div>
             );

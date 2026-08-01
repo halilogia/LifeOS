@@ -18,7 +18,10 @@ interface AICompanionModalProps {
 const noteRepo = new ChromeStorageNoteRepository();
 const todoRepo = new ChromeStorageTodoRepository();
 
-export function AICompanionModal({ lang: _lang, onClose }: AICompanionModalProps) {
+export function AICompanionModal({
+  lang: _lang,
+  onClose,
+}: AICompanionModalProps) {
   const [urlInput, setUrlInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
@@ -28,7 +31,9 @@ export function AICompanionModal({ lang: _lang, onClose }: AICompanionModalProps
   const [savedSuccessMsg, setSavedSuccessMsg] = useState("");
 
   const handleAnalyzeYoutube = async () => {
-    if (!urlInput.trim()) {return;}
+    if (!urlInput.trim()) {
+      return;
+    }
     const videoId = extractYoutubeVideoId(urlInput);
     if (!videoId) {
       setStatusMsg("Lütfen geçerli bir YouTube video linki girin.");
@@ -43,10 +48,14 @@ export function AICompanionModal({ lang: _lang, onClose }: AICompanionModalProps
       const { title, items } = await fetchYoutubeTranscript(videoId);
       setVideoTitle(title);
       setTranscript(items);
-      setStatusMsg("Transkript başarıyla alındı! Yapay zeka ile özetleniyor...");
+      setStatusMsg(
+        "Transkript başarıyla alındı! Yapay zeka ile özetleniyor...",
+      );
 
       // Transkript metnini birleştir
-      const fullText = items.map((i) => `[${i.timestamp}] ${i.text}`).join("\n");
+      const fullText = items
+        .map((i) => `[${i.timestamp}] ${i.text}`)
+        .join("\n");
 
       // Gemini / AI İsteyi Yap
       const res = await chrome.storage.sync.get([
@@ -59,7 +68,8 @@ export function AICompanionModal({ lang: _lang, onClose }: AICompanionModalProps
       const apiKey = (res.geminiApiKey as string) || "";
       const provider = (res.aiProvider as string) || "gemini";
       const modelName = (res.aiModel as string) || "gemini-1.5-flash";
-      const endpoint = (res.aiEndpoint as string) || "http://localhost:20128/v1";
+      const endpoint =
+        (res.aiEndpoint as string) || "http://localhost:20128/v1";
 
       const prompt = `Aşağıdaki YouTube video transkriptini Türkçe olarak analiz et ve şu formatta detaylı bir özet sun:
 
@@ -132,14 +142,20 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
       setStatusMsg("");
     } catch (err: unknown) {
       logger.error(err);
-      setStatusMsg(err instanceof Error ? err.message : "Video analizi sırasında bir hata oluştu.");
+      setStatusMsg(
+        err instanceof Error
+          ? err.message
+          : "Video analizi sırasında bir hata oluştu.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleSaveToNotes = async () => {
-    if (!summary) {return;}
+    if (!summary) {
+      return;
+    }
     try {
       const newNote: Note = {
         id: `note-${Date.now()}`,
@@ -157,7 +173,9 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
   };
 
   const handleSaveToTasks = async () => {
-    if (!summary) {return;}
+    if (!summary) {
+      return;
+    }
     try {
       const newTask: Todo = {
         id: `todo-${Date.now()}`,
@@ -206,7 +224,9 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
               <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700 }}>
                 LifeOS: AI Companion
               </h3>
-              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+              <span
+                style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}
+              >
                 YouTube Video Transkript & Akıllı Sayfa Özetleyici
               </span>
             </div>
@@ -286,7 +306,13 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
                 alignItems: "center",
               }}
             >
-              <h4 style={{ margin: 0, fontSize: "1rem", color: "var(--accent-color)" }}>
+              <h4
+                style={{
+                  margin: 0,
+                  fontSize: "1rem",
+                  color: "var(--accent-color)",
+                }}
+              >
                 {videoTitle || "AI Video Analizi"}
               </h4>
               <div style={{ display: "flex", gap: "8px" }}>
@@ -326,7 +352,9 @@ Video odaklanma ve öğrenme amaçlı olarak transkripte edilmiştir. Notların�
 
             {/* Transcript Preview */}
             {transcript.length > 0 && (
-              <details style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+              <details
+                style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}
+              >
                 <summary style={{ cursor: "pointer", fontWeight: 600 }}>
                   📜 Tam Transkripti Göster ({transcript.length} Satır)
                 </summary>

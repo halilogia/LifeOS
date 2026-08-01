@@ -15,7 +15,10 @@ import {
 import type { IAiConfigRepository } from "@/domain/repositories/IAiConfigRepository.js";
 import type { IMemoryRepository } from "@/domain/repositories/IMemoryRepository.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
-import type { INoteRepository, Note } from "@/domain/repositories/INoteRepository.js";
+import type {
+  INoteRepository,
+  Note,
+} from "@/domain/repositories/INoteRepository.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 
@@ -64,7 +67,8 @@ export function createAiChatService(deps: AiChatDependencies) {
     const todayStr = new Date().toISOString().split("T")[0];
 
     // Web search step
-    let webSearchData: { query: string; sources: WebSearchSource[] } | null = null;
+    let webSearchData: { query: string; sources: WebSearchSource[] } | null =
+      null;
     const shouldSearch = enableWebSearch && detectNeedsWebSearch(userPrompt);
 
     if (shouldSearch) {
@@ -154,12 +158,20 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     });
     if (!res.ok) {
       let errBody = "";
-      try { errBody = await res.text(); } catch { /* ignore */ }
-      throw new Error(`Ollama returned status ${res.status}: ${errBody || res.statusText}`);
+      try {
+        errBody = await res.text();
+      } catch {
+        /* ignore */
+      }
+      throw new Error(
+        `Ollama returned status ${res.status}: ${errBody || res.statusText}`,
+      );
     }
     const data = await res.json();
     const textResponse = data?.choices?.[0]?.message?.content;
-    if (!textResponse) { throw new Error("Empty response from Ollama"); }
+    if (!textResponse) {
+      throw new Error("Empty response from Ollama");
+    }
     return parseAIResponse(textResponse);
   }
 
@@ -178,14 +190,18 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         : "http://localhost:20128/v1";
     const url = `${baseUrl}/chat/completions`;
     const modelName = aiModel && aiModel.trim() ? aiModel.trim() : "free";
-    const isLocal = baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
+    const isLocal =
+      baseUrl.includes("localhost") || baseUrl.includes("127.0.0.1");
 
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
     if (aiApiKey && aiApiKey.trim()) {
       headers["Authorization"] = `Bearer ${aiApiKey.trim()}`;
     }
     if (!isLocal) {
-      headers["HTTP-Referer"] = "https://github.com/halilogia/chrome-extension-todo";
+      headers["HTTP-Referer"] =
+        "https://github.com/halilogia/chrome-extension-todo";
       headers["X-Title"] = "Life OS Dashboard";
     }
 
@@ -204,15 +220,25 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     });
     if (!res.ok) {
       let errBody = "";
-      try { errBody = await res.text(); } catch { /* ignore */ }
-      if (res.status === 401) {
-        throw new Error("9Router / OpenRouter API anahtarı geçersiz veya eksik. Lütfen Ayarlar > AI Asistan menüsünden API anahtarınızı kontrol edin.");
+      try {
+        errBody = await res.text();
+      } catch {
+        /* ignore */
       }
-      throw new Error(`OpenRouter / 9Router Hata Döndü (${res.status}): ${errBody || res.statusText}`);
+      if (res.status === 401) {
+        throw new Error(
+          "9Router / OpenRouter API anahtarı geçersiz veya eksik. Lütfen Ayarlar > AI Asistan menüsünden API anahtarınızı kontrol edin.",
+        );
+      }
+      throw new Error(
+        `OpenRouter / 9Router Hata Döndü (${res.status}): ${errBody || res.statusText}`,
+      );
     }
     const data = await res.json();
     const textResponse = data?.choices?.[0]?.message?.content;
-    if (!textResponse) { throw new Error("Empty response from OpenRouter"); }
+    if (!textResponse) {
+      throw new Error("Empty response from OpenRouter");
+    }
     return parseAIResponse(textResponse);
   }
 
@@ -256,12 +282,20 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     });
     if (!res.ok) {
       let errBody = "";
-      try { errBody = await res.text(); } catch { /* ignore */ }
-      throw new Error(`Gemini API returned status ${res.status}: ${errBody || res.statusText}`);
+      try {
+        errBody = await res.text();
+      } catch {
+        /* ignore */
+      }
+      throw new Error(
+        `Gemini API returned status ${res.status}: ${errBody || res.statusText}`,
+      );
     }
     const data = await res.json();
     const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!textResponse) { throw new Error("Empty response from Gemini"); }
+    if (!textResponse) {
+      throw new Error("Empty response from Gemini");
+    }
     return parseAIResponse(textResponse);
   }
 
@@ -276,22 +310,49 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     conversationHistory = [],
   }: AICallParams): Promise<AIResponseData> {
     // Build message list from conversation history
-    const historyMessages: Array<{ role: "user" | "assistant"; content: string }> = [];
+    const historyMessages: Array<{
+      role: "user" | "assistant";
+      content: string;
+    }> = [];
     for (const msg of conversationHistory) {
       historyMessages.push({ role: msg.role, content: msg.content });
     }
 
     // Build system prompt with web search + memory context
-    const { systemPrompt, webSearchData } = await buildSystemPrompt(userPrompt, enableWebSearch);
+    const { systemPrompt, webSearchData } = await buildSystemPrompt(
+      userPrompt,
+      enableWebSearch,
+    );
 
     // Route to the correct provider
     let responseData: AIResponseData;
     if (aiProvider === "ollama") {
-      responseData = await callOllama(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel);
+      responseData = await callOllama(
+        systemPrompt,
+        historyMessages,
+        userPrompt,
+        aiEndpoint,
+        aiModel,
+      );
     } else if (aiProvider === "openrouter" || aiProvider === "9router") {
-      responseData = await callOpenRouter(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel, aiApiKey);
+      responseData = await callOpenRouter(
+        systemPrompt,
+        historyMessages,
+        userPrompt,
+        aiEndpoint,
+        aiModel,
+        aiApiKey,
+      );
     } else {
-      responseData = await callGemini(systemPrompt, historyMessages, userPrompt, aiEndpoint, aiModel, aiApiKey, enableWebSearch);
+      responseData = await callGemini(
+        systemPrompt,
+        historyMessages,
+        userPrompt,
+        aiEndpoint,
+        aiModel,
+        aiApiKey,
+        enableWebSearch,
+      );
     }
 
     // Attach search telemetry
@@ -308,7 +369,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     aiResult: AIResponseData,
     lang: string = "tr",
   ): Promise<void> {
-    if (!aiResult.action || aiResult.action === "none") { return; }
+    if (!aiResult.action || aiResult.action === "none") {
+      return;
+    }
 
     if (aiResult.action === "create_task" && aiResult.params?.text) {
       const todos = await todoRepo.getAll();
@@ -328,16 +391,23 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
         lastCompletedDate: null,
       });
       await todoRepo.saveAll(todos);
-    } else if (aiResult.action === "add_note" && aiResult.params?.note_content) {
+    } else if (
+      aiResult.action === "add_note" &&
+      aiResult.params?.note_content
+    ) {
       await handleAddNoteFromAI(
-        (String(aiResult.params.note_type) || "note") as "note" | "diary" | "cornell",
+        (String(aiResult.params.note_type) || "note") as
+          "note" | "diary" | "cornell",
         aiResult.params.note_content as string,
         lang,
         aiResult.params.note_title as string,
         aiResult.params.note_cues as string,
         aiResult.params.note_summary as string,
       );
-    } else if (aiResult.action === "update_memory" && aiResult.params?.memory_fact) {
+    } else if (
+      aiResult.action === "update_memory" &&
+      aiResult.params?.memory_fact
+    ) {
       await handleUpdateMemoryFromAI(String(aiResult.params.memory_fact));
     }
   }
@@ -353,7 +423,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
   ): Promise<void> {
     const currentNotes = await noteRepo.getAll();
     const t = getTranslation(lang as Language);
-    const formattedDate = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
+    const formattedDate = new Date().toLocaleDateString(
+      lang === "tr" ? "tr-TR" : "en-US",
+    );
     const defaultTitle =
       title ||
       (type === "diary"
@@ -376,7 +448,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
 
   /** Append a new learned personal memory fact. */
   async function handleUpdateMemoryFromAI(newFact: string): Promise<void> {
-    if (!newFact || !newFact.trim()) { return; }
+    if (!newFact || !newFact.trim()) {
+      return;
+    }
 
     const currentMemory = await memoryRepo.getMemory();
     const dateStr = new Date().toLocaleDateString("tr-TR");
@@ -385,7 +459,9 @@ Output raw JSON only. Do not wrap it in markdown code blocks like \`\`\`json.`;
     let updatedMemory = currentMemory;
     if (!updatedMemory || !updatedMemory.trim()) {
       updatedMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
-    } else if (updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")) {
+    } else if (
+      updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")
+    ) {
       updatedMemory = updatedMemory.replace(
         "## 💡 AI Tarafından Öğrenilen Bilgiler",
         `## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`,
@@ -454,7 +530,14 @@ export function handleAddNoteFromAI(
   cues?: string,
   summary?: string,
 ): Promise<void> {
-  return getAiChatService().handleAddNoteFromAI(type, content, lang, title, cues, summary);
+  return getAiChatService().handleAddNoteFromAI(
+    type,
+    content,
+    lang,
+    title,
+    cues,
+    summary,
+  );
 }
 export function handleUpdateMemoryFromAI(newFact: string): Promise<void> {
   return getAiChatService().handleUpdateMemoryFromAI(newFact);
