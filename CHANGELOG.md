@@ -4,6 +4,24 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 
 ---
 
+## [4.1.0] - 2026-08-01
+### Eklendi & İyileştirildi
+- **BIST Nakit Bakiyesi & Toplam Varlık (`CashBalanceModal.tsx`, `PortfolioSummaryCard.tsx`, `useBist.ts`)**:
+  - Nakit bakiyesi `chrome.storage.sync`'te — A/B PC senkronize.
+  - Hisse **alımında** nakit otomatik düşülür, **satışında** eklenir.
+  - Toplam Varlık kartı: Nakit + Hisse Değeri kırılımı, kalem ikonu ile nakit ekleme (mevcut + yeni = canlı toplam önizleme).
+- **Varlık Dağılımı Pasta Grafiği (`WealthDistributionModal.tsx`)**:
+  - Toplam Varlık kartına tıklayınca açılan cyberpunk temalı SVG pasta grafiği.
+  - Her varlık farklı renk + derinlik katmanı; canlı piyasa fiyatlarıyla hesaplanır.
+- **Satış Geçmişi (`StockTradeHistoryModal.tsx`)**:
+  - Satış fiyatı + kâr/zarar TL & % + tarih kaydı, toplam K/Z özeti.
+- **WhatsApp & Telegram Köprü Aç/Kapa (`BridgeToggles.tsx`, `contentMain.ts`)**:
+  - Ayarlar > Genel'den `@ai` asistan köprüleri açılıp kapatılabilir — **varsayılan KAPALI**.
+  - Content script köprüyü sadece açıkken başlatır.
+- **Mimari Temizlik**:
+  - `BistView.tsx` 349 → 262 satır (`BistPortfolioTab.tsx` ayrıldı).
+  - `GeneralSettingsTab.tsx` 447 → 84 satır (`AppSettingsGroup.tsx` + `BridgeToggles.tsx` ayrıldı).
+
 ## [4.0.0] - 2026-07-29
 ### Eklendi & İyileştirildi
 - **Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Laboratuvarı)**:

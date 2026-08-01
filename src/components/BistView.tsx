@@ -2,6 +2,7 @@
  * BistView.tsx
  * Midas Tarzı BIST Borsa OS, Halka Arz Takvimi ve Portföy Yönetim Ekranı.
  * Canlı Hisse Arama, Halka Arz Takibi, Portföy Takibi, Kural Motoru, AI Özeti ve KAP Bildirimleri.
+ * Router: tab'ları yönetir, portföy görünümü BistPortfolioTab'a devredildi (6.1).
  */
 
 import { Language } from "@/types/types.js";
@@ -12,8 +13,7 @@ import { useBist } from "@/presentation/hooks/useBist.js";
 // Extracted Sub-components
 import { BistKesfetTab } from "@/components/stock/BistKesfetTab.js";
 import { BistActionBar } from "@/components/stock/BistActionBar.js";
-import { PortfolioSummaryCard } from "@/components/stock/PortfolioSummaryCard.js";
-import { PortfolioTable } from "@/components/stock/PortfolioTable.js";
+import { BistPortfolioTab } from "@/components/stock/BistPortfolioTab.js";
 import { StockWatchlistTable } from "@/components/stock/StockWatchlistTable.js";
 import { AddStockModal } from "@/components/stock/AddStockModal.js";
 import { RuleBuilderModal } from "@/components/stock/RuleBuilderModal.js";
@@ -21,10 +21,6 @@ import { StockAlertHistoryModal } from "@/components/stock/StockAlertHistoryModa
 import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js";
 import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
-import { SellStockModal } from "@/components/stock/SellStockModal.js";
-import { StockTradeHistoryModal } from "@/components/stock/StockTradeHistoryModal.js";
-import { CashBalanceModal } from "@/components/stock/CashBalanceModal.js";
-import { WealthDistributionModal } from "@/components/stock/WealthDistributionModal.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {
@@ -86,10 +82,6 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
     updateCashBalance,
   } = useBist({ lang });
 
-  const [showTradeHistory, setShowTradeHistory] = useState(false);
-  const [showCashModal, setShowCashModal] = useState(false);
-  const [showWealthModal, setShowWealthModal] = useState(false);
-
   return (
     <div className="stock-dashboard">
       {/* Action & Nav Bar */}
@@ -108,60 +100,30 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
 
       {/* TAB 1: BİST PORTFÖYÜM */}
       {activeTab === "portfolio" && (
-        <>
-          <div onClick={() => setShowWealthModal(true)}>
-            <PortfolioSummaryCard
-              totalValue={totalPortfolioValue}
-              totalCost={totalPortfolioCost}
-              dailyProfitLoss={dailyProfitLossTotal}
-              dailyProfitLossPercent={dailyProfitLossPercent}
-              activeRulesCount={activeRulesCount}
-              triggeredAlertsCount={alertLogs.length}
-              cashBalance={cashBalance.amount}
-              totalWealth={totalWealth}
-              onEditCash={(e) => {
-                e.stopPropagation();
-                setShowCashModal(true);
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              margin: "4px 0 12px",
-            }}
-          >
-            <button
-              onClick={() => setShowTradeHistory(true)}
-              style={{
-                background: "transparent",
-                border: "1px solid var(--card-border)",
-                borderRadius: "10px",
-                padding: "8px 14px",
-                fontSize: "0.8rem",
-                color: "var(--text-secondary)",
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              Satış Geçmişi ({tradeHistory.length})
-            </button>
-          </div>
-
-          <PortfolioTable
-            portfolio={portfolio}
-            quotes={quotes}
-            rules={rules}
-            onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
-            onDeleteRule={handleDeleteRule}
-            onDeleteItem={handleDeleteStock}
-            onSellItem={handleSellStock}
-            onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
-            onOpenChart={(sym) => setSelectedChartSymbol(sym)}
-          />
-        </>
+        <BistPortfolioTab
+          portfolio={portfolio}
+          quotes={quotes}
+          rules={rules}
+          tradeHistory={tradeHistory}
+          cashBalance={cashBalance}
+          totalWealth={totalWealth}
+          totalPortfolioValue={totalPortfolioValue}
+          totalPortfolioCost={totalPortfolioCost}
+          dailyProfitLossTotal={dailyProfitLossTotal}
+          dailyProfitLossPercent={dailyProfitLossPercent}
+          alertLogsCount={alertLogs.length}
+          onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
+          onDeleteRule={handleDeleteRule}
+          onDeleteItem={handleDeleteStock}
+          onSellItem={handleSellStock}
+          onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
+          onOpenChart={(sym) => setSelectedChartSymbol(sym)}
+          sellModal={sellModal}
+          setSellModal={setSellModal}
+          handleConfirmSell={handleConfirmSell}
+          updateCashBalance={updateCashBalance}
+          getBuyPrice={(id) => portfolio.find((p) => p.id === id)?.buyPrice ?? 0}
+        />
       )}
 
       {/* TAB 2: TAKİP LİSTELERİM (Midas Style Custom Watchlists) */}
@@ -294,55 +256,6 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
             <CustomStockChart symbol={selectedChartSymbol} lang={lang} />
           </div>
         </div>
-      )}
-
-      {/* Satış Modalı */}
-      {sellModal && (
-        <SellStockModal
-          symbol={sellModal.symbol}
-          currentLot={sellModal.currentLot}
-          currentPrice={sellModal.currentPrice}
-          buyPrice={
-            portfolio.find((p) => p.id === sellModal.id)?.buyPrice ?? 0
-          }
-          onConfirm={handleConfirmSell}
-          onClose={() => setSellModal(null)}
-        />
-      )}
-
-      {/* Satış Geçmişi Modalı */}
-      {showTradeHistory && (
-        <StockTradeHistoryModal
-          trades={tradeHistory}
-          onClose={() => setShowTradeHistory(false)}
-        />
-      )}
-
-      {/* Nakit Bakiyesi Modalı */}
-      {showCashModal && (
-        <CashBalanceModal
-          currentAmount={cashBalance.amount}
-          onAdd={(newAmount) => {
-            updateCashBalance(newAmount);
-            setShowCashModal(false);
-          }}
-          onClose={() => setShowCashModal(false)}
-        />
-      )}
-
-      {/* Varlık Dağılımı Modalı */}
-      {showWealthModal && (
-        <WealthDistributionModal
-          cashBalance={cashBalance.amount}
-          totalWealth={totalWealth}
-          portfolio={portfolio}
-          prices={
-            new Map(
-              quotes.map((q) => [q.symbol.toUpperCase(), q.price]),
-            )
-          }
-          onClose={() => setShowWealthModal(false)}
-        />
       )}
     </div>
   );
