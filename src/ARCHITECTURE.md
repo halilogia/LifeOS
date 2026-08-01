@@ -29,6 +29,7 @@ flowchart TB
         useFreeGames
         useEisenhower
         useHifiz
+        useWillpower
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -151,7 +152,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | AIChatView | aiChatService | sync+local | aichat/ (4) |
 | ArcadeView | arcadeService | local | arcade/ (3) |
 | DetoxView | detoxBlocker (content) | sync | detox/ (3) |
-| WillpowerView | — | sync | — |
+| WillpowerView | useWillpower (hook) | sync | — |
 | EisenhowerView | todo repo, useEisenhower (hook) | sync | eisenhower/ (2) + eisenhower.css |
 | SettingsDrawer | settings repos | sync | settings/ (6) |
 | Sidebar | useUI | sync | sidebar/ (2) |
