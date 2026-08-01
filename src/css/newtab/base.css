@@ -90,12 +90,15 @@
   opacity: 0.85;
 }
 
-html {
+/* cssCodeSplit:true ile bu dosya yalnızca newtab'a yüklenir. Yine de
+   savunma derinliği için :has(#app) scope'u eklenir: ileride base.css
+   başka bir girişten import edilirse bile html/body kuralları sızmaz. */
+html:has(body #app) {
   height: 100%;
   overflow: hidden;
 }
 
-body {
+body:has(#app) {
   background-color: var(--bg-color);
   color: var(--text-primary);
   height: 100%;
@@ -670,7 +673,6 @@ body.sidebar-open .container {
     position: static;
   }
 }
-
 
 /* --- Global Legibility Fix for Select Option Dropdowns --- */
 select option {

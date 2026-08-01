@@ -1,0 +1,5 @@
+/* Side Panel CSS entry — yalnızca sidepanel sayfasına yüklenir.
+   cssCodeSplit:true sayesinde newtab'ın 26 view CSS'i buraya sızmaz.
+   Sadece design tokens (base.css) + sidepanel stilleri yüklenir. */
+@import "./css/newtab/base.css";
+@import "./css/newtab/sidepanel.css";
