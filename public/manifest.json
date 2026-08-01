@@ -6,7 +6,20 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-  "permissions": ["storage", "notifications", "tabs", "alarms", "identity", "sidePanel", "tabGroups", "contextMenus", "tabCapture", "offscreen", "scripting"],
+  "permissions": [
+    "storage",
+    "notifications",
+    "tabs",
+    "alarms",
+    "identity",
+    "sidePanel",
+    "tabGroups",
+    "contextMenus",
+    "tabCapture",
+    "offscreen",
+    "scripting",
+    "downloads"
+  ],
   "side_panel": {
     "default_path": "sidepanel.html"
   },
@@ -22,6 +35,7 @@
     "https://query1.finance.yahoo.com/*",
     "https://openrouter.ai/*",
     "https://generativelanguage.googleapis.com/*",
+    "https://translate.googleapis.com/*",
     "https://halkarz.com/*",
     "https://www.youtube.com/*",
     "https://web.whatsapp.com/*",

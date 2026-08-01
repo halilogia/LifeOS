@@ -16,18 +16,23 @@ initAlarmNotificationHandler();
 initContextMenuHandler();
 
 // Unified Message Orchestrator
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // 1. Dispatch media, offscreen audio, and tab volume booster events
   const handledMedia = handleMediaAndTabMessage(message, sender, sendResponse);
   if (handledMedia) {
     return true;
   }
 
-  // 2. Dispatch translation, tab context, tab grouping, and AI generation events
-  const handledRuntime = await handleRuntimeMessage(message, sender, sendResponse);
-  if (handledRuntime) {
-    return true;
-  }
+  // 2. Dispatch translation, tab context, tab grouping, and AI generation events.
+  //    Async handler — sendResponse çağrıları callback içinde tetiklenir.
+  //    Kanal açık tutulur: async listener + return true, Promise resolve
+  //    edince kanalı kapatır ve callback'teki sendResponse kaybolurdu
+  //    (content tarafında "message port closed" → çeviri balonu sessizce ölürdü).
+  void handleRuntimeMessage(message, sender, sendResponse).then((handled) => {
+    if (!handled) {
+      sendResponse({ ok: true });
+    }
+  });
 
-  return false;
+  return true;
 });

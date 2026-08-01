@@ -143,7 +143,14 @@ export function App() {
     handleMoveTaskDirection,
     handleUpdateTodoUrgentImportant,
     initTodos,
-  } = useTodos(todoRepository, syncPort, syncRepo, triggerCloudBackup, showAlert, getTranslation(lang as Language));
+  } = useTodos(
+    todoRepository,
+    syncPort,
+    syncRepo,
+    triggerCloudBackup,
+    showAlert,
+    getTranslation(lang as Language),
+  );
 
   // ─── App Init Hook ────────────────────────────────────────────────────────
   useAppInit(appInitDeps, {
@@ -192,11 +199,14 @@ export function App() {
     useAppConfirmActions({ showConfirm });
 
   // ─── Continue to Chat callback ──────────────────────────────────────────────
-  const handleContinueToChat = useCallback((symbol: string) => {
-    // Stock bilgisini sessionStorage'a yaz ki AI Chat okusun
-    sessionStorage.setItem("hermes_pending_stock", symbol);
-    handleViewChange("ai-chat");
-  }, [handleViewChange]);
+  const handleContinueToChat = useCallback(
+    (symbol: string) => {
+      // Stock bilgisini sessionStorage'a yaz ki AI Chat okusun
+      sessionStorage.setItem("hermes_pending_stock", symbol);
+      handleViewChange("ai-chat");
+    },
+    [handleViewChange],
+  );
 
   // ─── JSX Template ─────────────────────────────────────────────────────────
   const t = getTranslation(lang as Language);
@@ -323,6 +333,7 @@ export function App() {
         }
         detoxLimits={detoxLimits}
         onDetoxLimitsChange={handleDetoxLimitsChange}
+        onNotify={(message: string) => showAlert(message)}
       />
 
       {/* Main Viewport */}

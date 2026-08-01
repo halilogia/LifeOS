@@ -56,6 +56,7 @@ export interface SettingsDrawerProps {
   detoxLimits: Record<string, number>;
   onDetoxLimitsChange: (limits: Record<string, number>) => void;
   initialTab?: "general" | "kpss" | "detox" | "ai" | "sync";
+  onNotify?: (message: string) => void;
 }
 
 export function SettingsDrawer({
@@ -101,6 +102,7 @@ export function SettingsDrawer({
   detoxLimits,
   onDetoxLimitsChange,
   initialTab,
+  onNotify,
 }: SettingsDrawerProps) {
   const t = translations[lang];
   const [settingsTab, setSettingsTab] = useState<
@@ -179,6 +181,7 @@ export function SettingsDrawer({
             onUniversalInfoBoxHotkeyChange={onUniversalInfoBoxHotkeyChange}
             autoGroupTabsEnabled={autoGroupTabsEnabled}
             onToggleAutoGroupTabs={onToggleAutoGroupTabs}
+            onNotify={onNotify}
           />
         )}
 

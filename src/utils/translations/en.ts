@@ -22,7 +22,8 @@ export const en = {
   alert_restore_success: "Backup restored successfully!",
   alert_restore_invalid: "Invalid backup file format.",
   alert_restore_error: "An error occurred while reading the backup file.",
-  alert_clear_confirm: "Are you sure you want to clear all data? This action cannot be undone.",
+  alert_clear_confirm:
+    "Are you sure you want to clear all data? This action cannot be undone.",
   quote_1: '"The secret of getting ahead is getting started."',
   quote_2: '"Well begun is half done."',
   quote_3: '"Done is better than perfect."',
@@ -105,8 +106,10 @@ export const en = {
   search_game_placeholder: "Search game title...",
   search_btn: "Search",
   loading_history: "Searching Epic Games history...",
-  was_not_free: "This game was not previously free on Epic Games or is not in the list.",
-  was_free_success: "This game was previously given away for free on Epic Games!",
+  was_not_free:
+    "This game was not previously free on Epic Games or is not in the list.",
+  was_free_success:
+    "This game was previously given away for free on Epic Games!",
   was_free_on: "Giveaway Date:",
   metacritic_score: "Metacritic Score:",
   steamdb_score: "SteamDB Score:",
@@ -119,7 +122,8 @@ export const en = {
   willpower_minutes: "Minutes",
   willpower_seconds: "Seconds",
   willpower_reset_btn: "Restart Streak",
-  willpower_reset_confirm: "Are you sure you want to reset this streak and start fresh?",
+  willpower_reset_confirm:
+    "Are you sure you want to reset this streak and start fresh?",
   willpower_level_label: "Willpower Rank",
   willpower_history: "Streak History",
   willpower_history_empty: "No history yet. Your journey starts now!",
@@ -128,17 +132,23 @@ export const en = {
   willpower_history_note: "Note",
   willpower_note_placeholder: "Write a note about this streak (optional)...",
   willpower_rank_initiate: "Initiate",
-  willpower_rank_initiate_desc: "Every great journey starts with a single step. Guard your mind, stay determined.",
+  willpower_rank_initiate_desc:
+    "Every great journey starts with a single step. Guard your mind, stay determined.",
   willpower_rank_iron: "Iron Will",
-  willpower_rank_iron_desc: "You passed the first critical phase. Silence the noise in your mind and keep moving forward.",
+  willpower_rank_iron_desc:
+    "You passed the first critical phase. Silence the noise in your mind and keep moving forward.",
   willpower_rank_control: "Self-Control",
-  willpower_rank_control_desc: "You've left a clean week behind. Your discipline is starting to bear fruit.",
+  willpower_rank_control_desc:
+    "You've left a clean week behind. Your discipline is starting to bear fruit.",
   willpower_rank_warrior: "Warrior",
-  willpower_rank_warrior_desc: "You've been fighting for over two weeks. Habits are breaking, feel your strength.",
+  willpower_rank_warrior_desc:
+    "You've been fighting for over two weeks. Habits are breaking, feel your strength.",
   willpower_rank_knight: "Knight",
-  willpower_rank_knight_desc: "You have crossed the critical 30-day mark! Your determination is inspiring.",
+  willpower_rank_knight_desc:
+    "You have crossed the critical 30-day mark! Your determination is inspiring.",
   willpower_rank_master: "Master",
-  willpower_rank_master_desc: "Over 90 days of absolute willpower mastery. Your mind is completely clear.",
+  willpower_rank_master_desc:
+    "Over 90 days of absolute willpower mastery. Your mind is completely clear.",
   view_detox: "Social Media Detox",
   view_kpss: "KPSS Prep",
   detox_title: "Social Media Detox",
@@ -151,7 +161,8 @@ export const en = {
   detox_btn_enable: "Start Detox",
   detox_btn_disable: "End Detox Session",
   detox_active_title: "Deep Focus Mode",
-  detox_active_desc: "Selected social media channels are completely blocked during your focus session.",
+  detox_active_desc:
+    "Selected social media channels are completely blocked during your focus session.",
   detox_no_sites_alert: "Please select at least one platform.",
   time_remaining: "Time Remaining",
   detox_duration_15m: "15 Minutes",
@@ -179,8 +190,10 @@ export const en = {
   google_sync_status_synced: "Synced with Google",
   google_sync_status_offline: "Offline (Local mode)",
   google_sync_last_synced: "Last backup:",
-  google_sync_success_backup: "Your data has been successfully backed up to Google Drive!",
-  google_sync_success_restore: "Your data has been successfully restored from Google Drive! Reloading...",
+  google_sync_success_backup:
+    "Your data has been successfully backed up to Google Drive!",
+  google_sync_success_restore:
+    "Your data has been successfully restored from Google Drive! Reloading...",
   google_sync_error: "Google sync error!",
   google_sync_no_backup: "No backup file found on your Google Drive.",
   pomo_tab_timer: "Timer",
@@ -188,7 +201,8 @@ export const en = {
   pomo_tab_alarms: "Alarms",
   pomo_tab_zen: "Focus Garden & History",
   zen_garden_title: "Your Focus Garden",
-  zen_garden_subtitle: "Grow and populate your garden with your focus sessions.",
+  zen_garden_subtitle:
+    "Grow and populate your garden with your focus sessions.",
   zen_modal_title: "Congratulations! Session Completed",
   zen_modal_question: "What did you focus on today?",
   zen_modal_placeholder: "Write your focus topic... (e.g. Math, Coding)",
@@ -241,15 +255,19 @@ export const en = {
   stock_cache_note: "Last updated:",
   view_ai_chat: "AI Assistant",
   ai_chat_title: "Life OS AI Assistant",
-  ai_chat_placeholder: "Type a message (e.g.: create task for 20th of the month: Study Chemistry)...",
+  ai_chat_placeholder:
+    "Type a message (e.g.: create task for 20th of the month: Study Chemistry)...",
   ai_chat_key_title: "Gemini API Key",
   ai_chat_key_placeholder: "Paste API Key here...",
   ai_chat_key_save: "Save",
   ai_chat_key_saved: "Key Saved ✓",
-  ai_chat_key_info: "Enter your Gemini API Key to enable conversational AI. Your key is stored securely in your sync storage.",
-  ai_chat_no_key_warning: "No API Key found. Local Smart Command mode is active. (Available: create task for the Xth: [Text], etc.)",
+  ai_chat_key_info:
+    "Enter your Gemini API Key to enable conversational AI. Your key is stored securely in your sync storage.",
+  ai_chat_no_key_warning:
+    "No API Key found. Local Smart Command mode is active. (Available: create task for the Xth: [Text], etc.)",
   ai_chat_send: "Send",
-  ai_chat_welcome: "Hello! I am your Life OS assistant. I can help you manage your tasks and update your calendar. What would you like to do?",
+  ai_chat_welcome:
+    "Hello! I am your Life OS assistant. I can help you manage your tasks and update your calendar. What would you like to do?",
   ai_chat_suggestion_1: "create task for the 20th: Study Chemistry",
   ai_chat_suggestion_2: "add a task for tomorrow: Physics Exam",
   ai_chat_suggestion_3: "create task for July 25: Dentist Appointment",
@@ -257,12 +275,21 @@ export const en = {
   settings_ai_provider: "AI Provider",
   settings_ai_key: "API Key",
   settings_ai_model: "Model Name",
-  settings_ai_model_desc: "If left empty, default is used. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+  settings_ai_model_desc:
+    "If left empty, default is used. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
   settings_tab_general: "General",
   settings_tab_kpss: "KPSS",
   settings_tab_detox: "Detox",
   settings_tab_ai: "AI Assistant",
   settings_tab_sync: "Sync & Backup",
+  settings_error_reporting_title: "Error Reporting",
+  settings_error_reporting_desc:
+    "Logs are stored only on your device and never sent anywhere.",
+  settings_error_reporting_download: "Download Logs (.md)",
+  settings_error_reporting_clear: "Clear Logs",
+  settings_error_reporting_count: "{count} log entries",
+  settings_error_reporting_cleared: "Logs cleared",
+  settings_error_reporting_empty: "No log entries yet",
   srs_review_title: "To Review",
   srs_no_words: "No Words to Study!",
   srs_great_job: "Great Job!",
@@ -274,7 +301,8 @@ export const en = {
   srs_easy: "Easy",
   srs_preparing: "Preparing vocabulary pool...",
   srs_error_loading: "An error occurred while loading the vocabulary pool.",
-  srs_finished_message: "You've finished all your vocabulary reviews for today.",
+  srs_finished_message:
+    "You've finished all your vocabulary reviews for today.",
   srs_click_to_see: "Click to see translation",
   settings_detox_limits_title: "Social Media Daily Limits",
   settings_unlimited: "Unlimited",
@@ -286,11 +314,14 @@ export const en = {
   settings_kpss_target_score_short: "Score",
   settings_kpss_notes_wiki: "KPSS Study Notes & Wiki",
   settings_kpss_auto_title: "Auto First-Word Title",
-  settings_kpss_auto_title_desc: "If title field is left blank when creating a note, automatically uses the first word as the title.",
+  settings_kpss_auto_title_desc:
+    "If title field is left blank when creating a note, automatically uses the first word as the title.",
   settings_kpss_data_reset: "Data Reset",
-  settings_kpss_data_reset_desc: "Resets all your KPSS topic progress, daily question/video stats, SRS flashcards, and past test quiz records.",
+  settings_kpss_data_reset_desc:
+    "Resets all your KPSS topic progress, daily question/video stats, SRS flashcards, and past test quiz records.",
   settings_kpss_reset_button: "Reset All KPSS Data",
-  settings_kpss_net_score_info: "To score 80 Points in KPSS GK-GY, achieving around 70-75 Nets can be sufficient depending on average difficulty. Score and Net are not 1-to-1 equal due to standard deviation.",
+  settings_kpss_net_score_info:
+    "To score 80 Points in KPSS GK-GY, achieving around 70-75 Nets can be sufficient depending on average difficulty. Score and Net are not 1-to-1 equal due to standard deviation.",
   kpss_tab_progress: "Topics & Progress",
   kpss_tab_notes: "KPSS Notes",
   kpss_tab_srs: "KPSS Flashcards (SRS)",
@@ -319,8 +350,10 @@ export const en = {
   kpss_planner_title: "KPSS Daily Auto-Planner",
   kpss_planner_how_works: "How does it work?",
   kpss_planner_info_title: "How KPSS Planner Works?",
-  kpss_planner_all_done: "Congrats! You successfully completed all KPSS topics.",
-  kpss_planner_desc: "Recommended topics to review today based on remaining time and topic density (Click to start):",
+  kpss_planner_all_done:
+    "Congrats! You successfully completed all KPSS topics.",
+  kpss_planner_desc:
+    "Recommended topics to review today based on remaining time and topic density (Click to start):",
   kpss_status_working: "Working",
   kpss_status_not_started: "Not Started",
   kpss_days_left: "Days Left:",
@@ -384,14 +417,17 @@ export const en = {
   settings_ai_select_model: "Select Model:",
   settings_ai_search_model: "Search model (e.g. deepseek)...",
   settings_ai_select_model_placeholder: "Select a model",
-  settings_ai_models_auto_list: "Available models will be listed automatically.",
+  settings_ai_models_auto_list:
+    "Available models will be listed automatically.",
   settings_ai_active_id: "Active / Custom Model ID:",
-  settings_ai_active_id_desc: "You can select from the list above or manually type the full model ID here.",
+  settings_ai_active_id_desc:
+    "You can select from the list above or manually type the full model ID here.",
   settings_ai_show_thinking: "Show Thinking Process:",
   settings_ai_combos: "9Router Combos",
   settings_ai_hide: "Hide",
   settings_ai_show: "Show",
-  settings_ai_endpoint_desc: "e.g. http://localhost:20128/v1 (9Router default address)",
+  settings_ai_endpoint_desc:
+    "e.g. http://localhost:20128/v1 (9Router default address)",
   settings_ai_loading: "Loading...",
   settings_ai_fetch_models: "Fetch Models",
   settings_sync_data_manual: "Data Management (Manual)",
@@ -435,13 +471,15 @@ export const en = {
   stock_daily_change: "Daily Change",
   stock_active_rules: "Alarms & Tracking",
   stock_no_portfolio: "No stocks in your portfolio yet.",
-  stock_no_watchlist: "You don't have a watchlist yet. Create a new list from 'My Watchlists'.",
+  stock_no_watchlist:
+    "You don't have a watchlist yet. Create a new list from 'My Watchlists'.",
   stock_load_more: "Load More BIST Stocks",
   stock_ai_featured_title: "✦ AI Weekly Featured BIST Stocks",
   popup_detox_tab_title: "Detox Limits",
   view_arcade: "Games (Life OS Arcade)",
   arcade_main_title: "Game Library & Laboratory",
-  arcade_subtitle: "Manage, play, and develop your custom game projects and built-in micro-games in one unified place.",
+  arcade_subtitle:
+    "Manage, play, and develop your custom game projects and built-in micro-games in one unified place.",
   arcade_search_placeholder: "Search games or projects...",
   arcade_cat_all: "All Games",
   arcade_cat_playable: "Playable",
@@ -465,13 +503,16 @@ export const en = {
   eisenhower_kanban_title: "Kanban Board",
   confirm_cancel: "Cancel",
   confirm_ok: "OK",
-  eisenhower_quadrant: "Eisenhower matrix quadrant card with drag-and-drop support and task list.",
-  eisenhower_unclassified_panel: "Eisenhower matrix unclassified tasks side panel.",
+  eisenhower_quadrant:
+    "Eisenhower matrix quadrant card with drag-and-drop support and task list.",
+  eisenhower_unclassified_panel:
+    "Eisenhower matrix unclassified tasks side panel.",
   notes_filter_bar: "Notes filter bar",
   notes_header_bar: "Notes header bar",
   free_games_filter_bar: "Game giveaways filter bar",
   free_games_was_it_free_tab: "Epic Games past free game search tab",
-  free_games_view_title: "Free Game Giveaways and Epic Games History Search Screen",
+  free_games_view_title:
+    "Free Game Giveaways and Epic Games History Search Screen",
   free_games_quick_claim: "Quick Claim Pages:",
   free_games_no_match: "No matching giveaways found.",
   free_games_permanent: "Keep Forever / Permanent",
@@ -492,7 +533,8 @@ export const en = {
   ipo_exchange_code: "Exchange Code",
   chart_close: "Close",
   halka_arz_view_title: "Active, Upcoming and Past IPO Tracking Filtering",
-  bist_view_title: "Midas Style BIST Stock OS, IPO Calendar and Portfolio Management Screen",
+  bist_view_title:
+    "Midas Style BIST Stock OS, IPO Calendar and Portfolio Management Screen",
   detox_custom_address_block: "Block Custom Address (Manual)",
   detox_custom_placeholder: "E.g. reddit.com, linkedin.com...",
   detox_what_could_you_do: "What Could You Achieve With This Time?",
@@ -557,7 +599,8 @@ export const en = {
   arcade_importing: "Scanning Game Folders...",
   arcade_loading: "Loading Game Library...",
   arcade_no_games: "No Scanned Games Found",
-  arcade_no_games_hint: "Click the Scan Folder button in the top right to auto-load your projects.",
+  arcade_no_games_hint:
+    "Click the Scan Folder button in the top right to auto-load your projects.",
   arcade_scan_folder: "Scan Folder",
   arcade_add_custom: "Add Custom Game",
   arcade_game_name: "Game Name",
@@ -566,7 +609,8 @@ export const en = {
   arcade_game_url: "Game URL",
   arcade_badge_title: "Life OS Arcade & Indie Dev Hub",
   arcade_copy_cmd: "Copy Command",
-  arcade_cmd_copied: "✓ Command copied to clipboard! Paste (Ctrl+V) in terminal to start the game.",
+  arcade_cmd_copied:
+    "✓ Command copied to clipboard! Paste (Ctrl+V) in terminal to start the game.",
   arcade_open_in_tab: "Open in Tab ↗",
   arcade_save_port: "Save Port",
   arcade_score_label: "Score:",
@@ -575,7 +619,8 @@ export const en = {
   arcade_details_title: "Dev Details",
   arcade_delete_title: "Delete from Library",
   arcade_import_folder_btn: "Scan Folder",
-  arcade_dev_notes_placeholder: "Game updates, design ideas, and mechanic notes...",
+  arcade_dev_notes_placeholder:
+    "Game updates, design ideas, and mechanic notes...",
   arcade_todo_placeholder: "Add new task...",
   arcade_dev_path_title: "Project Folder Path (In Progress)",
   arcade_tech_title: "Technologies & Libraries Used",
@@ -585,33 +630,43 @@ export const en = {
   arcade_cancel_btn: "Cancel",
   arcade_save_to_library_btn: "Save to Library",
   arcade_localhost_warning: "⚠️ localhost refused connection?",
-  arcade_localhost_help: "You need to start the project's local server (Vite / React / Node) to play the game.",
-  arcade_dev_proj_desc: "This project is run via a local development server (localhost).",
+  arcade_localhost_help:
+    "You need to start the project's local server (Vite / React / Node) to play the game.",
+  arcade_dev_proj_desc:
+    "This project is run via a local development server (localhost).",
   arcade_high_score_label: "High Score:",
   arcade_score_label_short: "Score:",
   arcade_importing_btn: "Importing...",
   arcade_iframe_error: "Game Could Not Be Loaded",
-  arcade_iframe_error_hint: "dist/index.html not found in this folder. Run npm run build first, then try again.",
+  arcade_iframe_error_hint:
+    "dist/index.html not found in this folder. Run npm run build first, then try again.",
   arcade_close: "Close",
   arcade_dev_notes_saved: "✓ Developer notes saved.",
   arcade_todo_prompt: "What is the new task?",
   arcade_todo_add: "Add Task",
-  arcade_delete_confirm: "Remove this game from your library? (This only deletes the Arcade record; the folder on disk is unaffected)",
+  arcade_delete_confirm:
+    "Remove this game from your library? (This only deletes the Arcade record; the folder on disk is unaffected)",
   arcade_status_archived: "Archived",
   arcade_folder_path_label: "Source Folder",
-  arcade_folder_path_hint: "This folder is retained by the browser. If the path changes or the folder is removed, access may break.",
+  arcade_folder_path_hint:
+    "This folder is retained by the browser. If the path changes or the folder is removed, access may break.",
   arcade_save: "Save",
   arcade_mode_dist: "🏗️ Build (dist)",
   arcade_mode_dev: "🛠️ Development (npm run dev)",
   arcade_permission_needed: "Folder access needs to be re-granted.",
-  arcade_permission_denied: "Access denied. You may need to re-select the folder.",
+  arcade_permission_denied:
+    "Access denied. You may need to re-select the folder.",
   arcade_grant_permission: "Grant Folder Access",
   arcade_dev_mode_title: "Development Mode Active",
   arcade_dev_mode_hint: "No dist build was found for this game. To play:",
-  arcade_dev_mode_note: "Once the dev server is running, switch back to the Play tab and refresh the iframe. Or keep notes in the dev log.",
-  arcade_browser_no_support: "Your browser does not support File System Access API. Please use Chrome 86+ or a recent Edge build.",
-  arcade_import_success_dist: "✓ Game imported successfully (dist build). Ready to play.",
-  arcade_import_success_dev: "✓ Folder imported. dist/ not found — run npm run dev to start the dev server.",
+  arcade_dev_mode_note:
+    "Once the dev server is running, switch back to the Play tab and refresh the iframe. Or keep notes in the dev log.",
+  arcade_browser_no_support:
+    "Your browser does not support File System Access API. Please use Chrome 86+ or a recent Edge build.",
+  arcade_import_success_dist:
+    "✓ Game imported successfully (dist build). Ready to play.",
+  arcade_import_success_dev:
+    "✓ Folder imported. dist/ not found — run npm run dev to start the dev server.",
   aichat_offline_mode: "Offline/Command Mode",
   aichat_web_search_on: "Google Live Search: ON",
   aichat_web_search_off: "Google Live Search: OFF",
@@ -622,39 +677,55 @@ export const en = {
   aichat_sources: "Reviewed and Verified Web Sources ({count}):",
   aichat_search_query: 'Google AI Search: "{query}"',
   aichat_verified_badge: "Google AI Live Verified",
-  aichat_web_search_active: "Google Live Internet Search & Research in Progress...",
+  aichat_web_search_active:
+    "Google Live Internet Search & Research in Progress...",
   aichat_sources_show: "▲ Sources",
   aichat_sources_hide: "▼ Hide",
-  aichat_added_note_success: 'Sure! I have successfully added the {type_label} to your My Diary tab. ✓',
-  aichat_added_stock_success: '📈 Great! Added {lot_count} shares of {display_name} ({symbol}) @ ₺{price} to your BIST portfolio! ✓',
-  aichat_added_task_success: 'Sure! I have added "{task_text}" to your tasks list{date_part}. ✓',
-  aichat_connection_error: 'Error connecting to the AI service: {error_msg}',
-  aichat_fallback_added_note: '[Local Fallback] Added the {type_label} successfully. ✓',
-  aichat_fallback_added_task: '[Local Fallback] Added "{task_text}" task{date_part}. ✓',
-  aichat_parse_failed: "I couldn't parse this command locally. Try: 'günlük ekle: ...', 'not ekle: ...' or 'ders notu ekle: ...'",
-  aichat_type_label_cornell: 'Cornell study note',
-  aichat_type_label_diary: 'diary entry',
-  aichat_type_label_note: 'note',
+  aichat_added_note_success:
+    "Sure! I have successfully added the {type_label} to your My Diary tab. ✓",
+  aichat_added_stock_success:
+    "📈 Great! Added {lot_count} shares of {display_name} ({symbol}) @ ₺{price} to your BIST portfolio! ✓",
+  aichat_added_task_success:
+    'Sure! I have added "{task_text}" to your tasks list{date_part}. ✓',
+  aichat_connection_error: "Error connecting to the AI service: {error_msg}",
+  aichat_fallback_added_note:
+    "[Local Fallback] Added the {type_label} successfully. ✓",
+  aichat_fallback_added_task:
+    '[Local Fallback] Added "{task_text}" task{date_part}. ✓',
+  aichat_parse_failed:
+    "I couldn't parse this command locally. Try: 'günlük ekle: ...', 'not ekle: ...' or 'ders notu ekle: ...'",
+  aichat_type_label_cornell: "Cornell study note",
+  aichat_type_label_diary: "diary entry",
+  aichat_type_label_note: "note",
   aichat_web_research: "Web Research",
   kpss_planner_close: "Close",
-  kpss_planner_how_step1: "<strong>1. Days Left Calculation:</strong> Calculates the exact days remaining until the exam date (September 6, 2026).",
-  kpss_planner_how_step2: "<strong>2. Topic Distribution:</strong> Filters all uncompleted topics and spreads them evenly across the remaining days to keep you on track.",
-  kpss_planner_how_step3: "<strong>3. Daily Study Pace:</strong> Calculated by dividing remaining topics by remaining days. Rates above 1.5 highlight moderate pace, and above 3.0 require high intensity.",
-  kpss_planner_how_step4: "<strong>4. Daily Question Target:</strong> Based on your target net configured in settings, total required questions are distributed by subject weights. Your daily target updates using: <br /><code style=\"background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px\">(Target Questions Left / Days Remaining)</code> dynamically each day.",
+  kpss_planner_how_step1:
+    "<strong>1. Days Left Calculation:</strong> Calculates the exact days remaining until the exam date (September 6, 2026).",
+  kpss_planner_how_step2:
+    "<strong>2. Topic Distribution:</strong> Filters all uncompleted topics and spreads them evenly across the remaining days to keep you on track.",
+  kpss_planner_how_step3:
+    "<strong>3. Daily Study Pace:</strong> Calculated by dividing remaining topics by remaining days. Rates above 1.5 highlight moderate pace, and above 3.0 require high intensity.",
+  kpss_planner_how_step4:
+    '<strong>4. Daily Question Target:</strong> Based on your target net configured in settings, total required questions are distributed by subject weights. Your daily target updates using: <br /><code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">(Target Questions Left / Days Remaining)</code> dynamically each day.',
   kpss_past_exams_title: "ÖSYM Past Exams Practice Room",
-  kpss_past_exams_desc: "Solve original past KPSS Lisans exam questions by year or practice with randomly mixed questions from all years.",
-  kpss_quiz_generating: "AI is generating proficiency questions. Please wait...",
+  kpss_past_exams_desc:
+    "Solve original past KPSS Lisans exam questions by year or practice with randomly mixed questions from all years.",
+  kpss_quiz_generating:
+    "AI is generating proficiency questions. Please wait...",
   kpss_quiz_no_solution: "No solution provided.",
   kpss_quiz_next: "Next",
   kpss_quiz_next_loading: "Next (Loading...)",
   kpss_quiz_your_answer: " (Your Answer)",
   kpss_quiz_correct_answer: " (Correct Answer)",
-  kpss_quiz_proficiency_result: "You demonstrated a %{score}% proficiency in this topic.",
-  kpss_quiz_status_completed: "Congratulations! Topic successfully marked as 'Completed'.",
+  kpss_quiz_proficiency_result:
+    "You demonstrated a %{score}% proficiency in this topic.",
+  kpss_quiz_status_completed:
+    "Congratulations! Topic successfully marked as 'Completed'.",
   kpss_quiz_status_working: "Topic set to 'Working' status.",
   kpss_quiz_status_not_started: "Topic reset to 'Not Started'.",
   kpss_srs_preparing: "Preparing repetition cards...",
-  kpss_srs_all_done: "You have reviewed all due KPSS repetition cards for today.",
+  kpss_srs_all_done:
+    "You have reviewed all due KPSS repetition cards for today.",
   kpss_srs_click_to_see: "Click to see answer",
   kpss_srs_card_label: "Card",
   kpss_topic_syllabus: "Topic Syllabus & Progress",
@@ -687,27 +758,36 @@ export const en = {
   stock_analysis_btn: "Analyze with AI",
   stock_analysis_analyzing: "Analyzing...",
   stock_analysis_ask: "Ask AI Advisor",
-  stock_analysis_prompt_placeholder: "e.g. Is this stock risky to hold for 1 month?",
+  stock_analysis_prompt_placeholder:
+    "e.g. Is this stock risky to hold for 1 month?",
   stock_analysis_prompt_advisor: "ask a question",
   stock_analysis_portfolio: "My Portfolio",
   stock_analysis_morning_report: "Morning BIST Opening & Watchlist Report",
   stock_analysis_report_generating: "Report is being prepared...",
   stock_analysis_report_generate: "Generate Report",
-  stock_analysis_report_error: "An error occurred while generating the report. Please check your Router/AI settings.",
-  stock_analysis_query_error: "Could not answer the advisor query. Please check your AI settings.",
-  stock_analysis_prompt_advisor_default: "I'm considering buying {symbol}. What are your thoughts on the company's outlook, risks, and watchpoints?",
+  stock_analysis_report_error:
+    "An error occurred while generating the report. Please check your Router/AI settings.",
+  stock_analysis_query_error:
+    "Could not answer the advisor query. Please check your AI settings.",
+  stock_analysis_prompt_advisor_default:
+    "I'm considering buying {symbol}. What are your thoughts on the company's outlook, risks, and watchpoints?",
   stock_ai_report_tab_digest: "Daily / Weekly AI Market Summary",
   stock_ai_report_tab_advisor: "Investment & Buy Decision Advisor",
   stock_ai_report_title: "🤖 AI Portfolio & Market Health Report",
-  stock_ai_report_desc: "Get a concise Turkish summary of your portfolio's status with one click via 9Router AI.",
-  stock_ai_report_analyzing: "9Router AI is analyzing portfolio data and the market...",
-  stock_ai_report_empty: 'No report generated yet. Click "Generate Report" above to get your instant market summary.',
+  stock_ai_report_desc:
+    "Get a concise Turkish summary of your portfolio's status with one click via 9Router AI.",
+  stock_ai_report_analyzing:
+    "9Router AI is analyzing portfolio data and the market...",
+  stock_ai_report_empty:
+    'No report generated yet. Click "Generate Report" above to get your instant market summary.',
   stock_ai_advisor_title: "💡 Buy & Investment Decision Assistant",
-  stock_ai_advisor_desc: "Get a straightforward evaluation from 9Router AI by entering a stock ticker before making a purchase decision.",
+  stock_ai_advisor_desc:
+    "Get a straightforward evaluation from 9Router AI by entering a stock ticker before making a purchase decision.",
   stock_ai_advisor_symbol_label: "Stock Symbol",
   stock_ai_advisor_symbol_placeholder: "e.g. THYAO, GARAN",
   stock_ai_advisor_question_label: "Custom Question (Optional)",
-  stock_ai_advisor_question_placeholder: "e.g. Is this stock risky to hold for 1 month?",
+  stock_ai_advisor_question_placeholder:
+    "e.g. Is this stock risky to hold for 1 month?",
   stock_ai_advisor_analyzing: "AI is evaluating {symbol}...",
   stock_rule_title: "Add Rule",
   stock_rule_condition: "Condition",
@@ -743,7 +823,8 @@ export const en = {
   stock_news_no_news: "No news available.",
   stock_kap_news_title: "📰 KAP & BIST Company News",
   stock_kap_news_loading: "Loading official KAP news...",
-  stock_kap_news_empty: "No new KAP announcements found for your followed stocks.",
+  stock_kap_news_empty:
+    "No new KAP announcements found for your followed stocks.",
   stock_kap_news_show_detail: "Show KAP Details",
   stock_kap_news_ai_analysis_title: "AI News Analysis Summary",
   stock_kap_news_analysis_error: "⚠️ Analysis failed: {message}",
@@ -785,7 +866,8 @@ export const en = {
   stock_tab_analysis: "AI Analysis",
   stock_tab_news: "KAP News",
   stock_analysis_for_symbol: "AI Stock Analysis — {symbol}",
-  stock_analysis_analyzing_symbol: "AI is analyzing {symbol} stock and live market data...",
+  stock_analysis_analyzing_symbol:
+    "AI is analyzing {symbol} stock and live market data...",
   stock_bist_label: "BIST",
   stock_featured_score_bull_high: "90/100 🐂 Bull",
   stock_featured_score_bull: "75/100 🐂 Bull",
@@ -842,10 +924,13 @@ export const en = {
   notes_editor_type_cornell: "Cornell Note",
   notes_editor_diary_placeholder: "How do you feel today? or Title...",
   notes_editor_cues_label: "Keywords / Questions (Cues):",
-  notes_editor_cues_placeholder: "Write core ideas, keywords, or potential exam questions here...",
+  notes_editor_cues_placeholder:
+    "Write core ideas, keywords, or potential exam questions here...",
   notes_editor_notes_label: "Note-taking Column (Notes):",
-  notes_editor_notes_placeholder: "Write detailed lecture notes, [[Internal Links]], and #kpss/tarih tags here...",
-  notes_editor_summary_placeholder: "Write a brief and clear summary of the page details here...",
+  notes_editor_notes_placeholder:
+    "Write detailed lecture notes, [[Internal Links]], and #kpss/tarih tags here...",
+  notes_editor_summary_placeholder:
+    "Write a brief and clear summary of the page details here...",
   notes_editor_diary_content_placeholder: "Dear diary, today...",
   notes_filter_notes: "Notes",
   notes_filter_diary: "Diary",
@@ -915,25 +1000,31 @@ export const en = {
   kpss_chart_target_q: "Target Q",
   kpss_chart_target_v: "Target V",
   popup_volume_label: "Volume",
-  willpower_clear_history_confirm: "Are you sure you want to clear your streak history? This cannot be undone.",
+  willpower_clear_history_confirm:
+    "Are you sure you want to clear your streak history? This cannot be undone.",
   alert_kpss_reset_success: "KPSS data has been successfully reset!",
-  confirm_msg_clear_all_data: "All your data will be permanently deleted. Are you sure?",
-  confirm_msg_reset_kpss_data: "All your KPSS study progress, test results, and statistics will be reset. Are you sure?",
+  confirm_msg_clear_all_data:
+    "All your data will be permanently deleted. Are you sure?",
+  confirm_msg_reset_kpss_data:
+    "All your KPSS study progress, test results, and statistics will be reset. Are you sure?",
   kpss_completed: "Completed!",
   kpss_exam_started: "Exam Started!",
   kpss_time_format: "{days}d, {hours}h, {mins}m, {secs}s",
   note_cornell_title: "Study Note - {date}",
   note_diary_title: "Diary - {date}",
   note_title: "Note - {date}",
-  notif_calendar_msg: "You have {count} tasks to complete today. Click to view!",
+  notif_calendar_msg:
+    "You have {count} tasks to complete today. Click to view!",
   notif_calendar_title: "You Have Tasks Due Today",
   notif_free_game_msg: "Worth: {worth}. Click to claim!",
   notif_free_game_title: "Free Game: {title}",
   stock_chart_hover_hint: "Hover over the chart to see details.",
-  stock_chart_no_data_hint: "This stock has not yet started trading on Borsa Istanbul; historical candlestick data will begin plotting live on the opening day.",
+  stock_chart_no_data_hint:
+    "This stock has not yet started trading on Borsa Istanbul; historical candlestick data will begin plotting live on the opening day.",
   sync_detail_label: "Detail",
   /* DETOX MOTIVATIONAL KEYS */
-  detox_motiv_unlimited_focus: "Unlimited Focus: Endless time to achieve all your goals!",
+  detox_motiv_unlimited_focus:
+    "Unlimited Focus: Endless time to achieve all your goals!",
   detox_motiv_kpss_questions: "Solve $count Practice Exam Questions",
   detox_motiv_book_pages: "Read $count Book Pages",
   detox_motiv_pomodoro: "Complete $count Focused Pomodoro Sessions",
@@ -944,7 +1035,8 @@ export const en = {
   agent_tool_filled_form_fields: "✓ Filled $count form fields.",
   agent_tool_typing_label: "$count typing",
   agent_tool_click_label: "$count clicks",
-  agent_tool_executed_template: "✓ Successfully executed $count actions ($details).",
+  agent_tool_executed_template:
+    "✓ Successfully executed $count actions ($details).",
 
   /* AGENT TOOL SINGLE ACTION KEYS */
   agent_tool_clicked: '✓ Clicked on "$target".',
@@ -958,11 +1050,13 @@ export const en = {
   agent_tool_element: "Element",
 
   /* STOCK REPORT PROMPT KEY */
-  stock_report_user_prompt: "Provide a concise Turkish newspaper-style summary of my portfolio's current state, risks, and points to watch for today/this week.",
+  stock_report_user_prompt:
+    "Provide a concise Turkish newspaper-style summary of my portfolio's current state, risks, and points to watch for today/this week.",
 
   // -- SidePanelApp keys --
   answer_language: "Turkish",
-  agent_analyze_desc: "Analyze the active web page, ask questions, or use quick action triggers.",
+  agent_analyze_desc:
+    "Analyze the active web page, ask questions, or use quick action triggers.",
   agent_ready: "Life OS Agent Ready",
   agent_thinking: "AI Copilot thinking...",
   autofill_form: "Autofill Form",
@@ -974,7 +1068,8 @@ export const en = {
   copy_label_copied: "Copied",
   copy_title: "Copy text",
   copy_title_copied: "Copied!",
-  empty_desc: "Analyze the active web page, ask questions, or use quick action triggers.",
+  empty_desc:
+    "Analyze the active web page, ask questions, or use quick action triggers.",
   executing_actions: "Executing agent tools ({count} items)...",
   failed_response: "Failed to get response. Please check API Key in Settings.",
   input_placeholder: "Ask a question or use voice command...",
@@ -989,8 +1084,10 @@ export const en = {
   prompt_extract: "Extract important structured data or lists from this page.",
   prompt_summarize: "Summarize this page in 3 key bullet points.",
   prompt_takeaways: "Extract key takeaways and action items from this page.",
-  prompt_yt_quiz: "Create a 5-question multiple choice quiz with answer key based on this video.",
-  prompt_yt_summarize: "Summarize this YouTube video transcript and extract key timestamps.",
+  prompt_yt_quiz:
+    "Create a 5-question multiple choice quiz with answer key based on this video.",
+  prompt_yt_summarize:
+    "Summarize this YouTube video transcript and extract key timestamps.",
   question_placeholder: "Ask a question or use voice command...",
   rescan_page: "Rescan Page",
   speech_not_supported: "Speech recognition is not supported in this browser.",
@@ -1002,12 +1099,15 @@ export const en = {
   video_quiz: "5-Q Video Quiz",
   voice_command_tooltip: "Voice Command",
   kpss_external_quiz_title: "Create Quiz with External AI",
-  kpss_external_quiz_desc: "Generate KPSS questions with a ready-made prompt in your preferred AI assistant. Enter your results after finishing.",
+  kpss_external_quiz_desc:
+    "Generate KPSS questions with a ready-made prompt in your preferred AI assistant. Enter your results after finishing.",
   kpss_external_quiz_open: "External AI Quiz",
-  kpss_external_quiz_prompt_copied: "Prompt copied to clipboard! Paste it into the AI.",
+  kpss_external_quiz_prompt_copied:
+    "Prompt copied to clipboard! Paste it into the AI.",
   kpss_external_quiz_opened_url: "New tab opened with prompt pre-filled!",
   kpss_external_quiz_enter_result: "Enter Quiz Result",
-  kpss_external_quiz_result_desc: "Finished the quiz? Enter how many questions you answered and how many were correct.",
+  kpss_external_quiz_result_desc:
+    "Finished the quiz? Enter how many questions you answered and how many were correct.",
   kpss_external_quiz_total: "Total Questions",
   kpss_external_quiz_correct: "Correct Answers",
   kpss_external_quiz_wrong: "Wrong",
@@ -1015,6 +1115,6 @@ export const en = {
   kpss_external_quiz_back: "Back",
   kpss_external_quiz_select_service: "Select AI Service",
   kpss_external_quiz_copy_prompt: "Copy Prompt",
-  kpss_external_quiz_clipboard_hint: "Prompt copied! Paste it (Ctrl+V) after the AI tab opens.",
-}
-
+  kpss_external_quiz_clipboard_hint:
+    "Prompt copied! Paste it (Ctrl+V) after the AI tab opens.",
+};
