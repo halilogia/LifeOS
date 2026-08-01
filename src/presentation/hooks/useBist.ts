@@ -9,6 +9,7 @@ import type {
   StockRule,
   StockAlertLog,
   StockWatchlist,
+  StockTradeHistory,
 } from "@/types/stock.js";
 import type { BistTabId } from "@/components/stock/BistActionBar.js";
 import { logger } from "@/utils/logger.js";
@@ -32,6 +33,7 @@ export function useBist({ lang }: UseBistOptions) {
   const [activeWatchlistId, setActiveWatchlistId] = useState<string>("all");
   const [rules, setRules] = useState<StockRule[]>([]);
   const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
+  const [tradeHistory, setTradeHistory] = useState<StockTradeHistory[]>([]);
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -73,10 +75,13 @@ export function useBist({ lang }: UseBistOptions) {
         fetchStockPrices(),
       ]);
 
+      const savedTrades = await stockRepository.getTradeHistory();
+
       setPortfolio(savedPortfolio);
       setWatchlists(savedWatchlists);
       setRules(savedRules);
       setAlertLogs(savedLogs);
+      setTradeHistory(savedTrades);
 
       const customSymbols = savedPortfolio.map((p) => p.symbol);
       let allQuotes = [...popularQuotes];
@@ -217,7 +222,7 @@ export function useBist({ lang }: UseBistOptions) {
     setSellModal({ id, symbol, currentLot, currentPrice });
   };
 
-  const handleConfirmSell = async (lotToSell: number, _sellPrice: number) => {
+  const handleConfirmSell = async (lotToSell: number, sellPrice: number) => {
     if (!sellModal) {
       return;
     }
@@ -225,6 +230,23 @@ export function useBist({ lang }: UseBistOptions) {
     if (!item) {
       return;
     }
+
+    // Record the completed sale with realized P/L BEFORE updating the
+    // portfolio (item still has its original buyPrice / lotCount here).
+    const trade: StockTradeHistory = {
+      id: `trade-${Date.now()}`,
+      symbol: item.symbol,
+      displayName: item.displayName,
+      lotCount: lotToSell,
+      sellPrice,
+      buyPrice: item.buyPrice,
+      realizedProfit: (sellPrice - item.buyPrice) * lotToSell,
+      realizedProfitPercent:
+        item.buyPrice > 0
+          ? ((sellPrice - item.buyPrice) / item.buyPrice) * 100
+          : 0,
+      soldAt: new Date().toISOString(),
+    };
 
     const remaining = item.lotCount - lotToSell;
     let updated: StockPortfolioItem[];
@@ -236,7 +258,11 @@ export function useBist({ lang }: UseBistOptions) {
       );
     }
     setPortfolio(updated);
-    await stockRepository.savePortfolio(updated);
+    setTradeHistory((prev) => [trade, ...prev].slice(0, 100));
+    await Promise.all([
+      stockRepository.savePortfolio(updated),
+      stockRepository.saveTradeHistory([trade, ...tradeHistory].slice(0, 100)),
+    ]);
     setSellModal(null);
   };
 
@@ -322,5 +348,6 @@ export function useBist({ lang }: UseBistOptions) {
     handleSellStock,
     handleConfirmSell,
     handleDeleteRule,
+    tradeHistory,
   };
 }

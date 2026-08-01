@@ -4,6 +4,7 @@ interface SellStockModalProps {
   symbol: string;
   currentLot: number;
   currentPrice: number;
+  buyPrice: number;
   onConfirm: (lotToSell: number, sellPrice: number) => void;
   onClose: () => void;
 }
@@ -12,11 +13,17 @@ export function SellStockModal({
   symbol,
   currentLot,
   currentPrice,
+  buyPrice,
   onConfirm,
   onClose,
 }: SellStockModalProps) {
   const [lotToSell, setLotToSell] = useState(currentLot);
   const [sellPrice, setSellPrice] = useState(currentPrice);
+
+  const previewProfit = (sellPrice - buyPrice) * lotToSell;
+  const previewPercent =
+    buyPrice > 0 ? ((sellPrice - buyPrice) / buyPrice) * 100 : 0;
+  const isProfit = previewProfit >= 0;
 
   return (
     <div
@@ -118,6 +125,86 @@ export function SellStockModal({
               boxSizing: "border-box",
             }}
           />
+
+          {/* Kâr/Zarar Önizleme */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+              padding: "12px",
+              borderRadius: "12px",
+              background: isProfit
+                ? "rgba(16, 185, 129, 0.1)"
+                : "rgba(239, 68, 68, 0.1)",
+              border: `1px solid ${
+                isProfit ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"
+              }`,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.85rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              <span>Alış Fiyatı</span>
+              <span style={{ color: "var(--text-primary)" }}>
+                {buyPrice.toLocaleString("tr-TR", {
+                  minimumFractionDigits: 2,
+                })}{" "}
+                TL
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.85rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              <span>Satış Fiyatı</span>
+              <span style={{ color: "var(--text-primary)" }}>
+                {sellPrice.toLocaleString("tr-TR", {
+                  minimumFractionDigits: 2,
+                })}{" "}
+                TL
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "4px",
+                paddingTop: "8px",
+                borderTop: "1px solid rgba(255,255,255,0.08)",
+                fontWeight: 700,
+              }}
+            >
+              <span>Tahmini Kâr/Zarar</span>
+              <span
+                style={{
+                  color: isProfit
+                    ? "var(--stock-up, #10b981)"
+                    : "var(--stock-down, #ef4444)",
+                }}
+              >
+                {isProfit ? "+" : ""}
+                {previewProfit.toLocaleString("tr-TR", {
+                  minimumFractionDigits: 2,
+                })}{" "}
+                TL ({isProfit ? "+" : ""}
+                {previewPercent.toLocaleString("tr-TR", {
+                  maximumFractionDigits: 1,
+                })}
+                %)
+              </span>
+            </div>
+          </div>
 
           <div
             style={{

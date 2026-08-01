@@ -8,18 +8,21 @@ import type {
   StockRule,
   StockAlertLog,
   StockWatchlist,
+  StockTradeHistory,
 } from "@/types/stock.js";
 import {
   SYNC_STOCK_PORTFOLIO,
   SYNC_STOCK_RULES,
   SYNC_STOCK_ALERT_LOGS,
   SYNC_STOCK_WATCHLISTS,
+  SYNC_STOCK_TRADE_HISTORY,
 } from "@/infrastructure/storage/keys.js";
 
 const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
 const RULES_KEY = SYNC_STOCK_RULES;
 const LOGS_KEY = SYNC_STOCK_ALERT_LOGS;
 const WATCHLISTS_KEY = SYNC_STOCK_WATCHLISTS;
+const TRADE_HISTORY_KEY = SYNC_STOCK_TRADE_HISTORY;
 
 const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
 
@@ -74,6 +77,30 @@ export class ChromeStorageStockRepository {
     // Son 100 kaydı sakla
     const updated = [log, ...existing].slice(0, 100);
     await this.saveAlertLogs(updated);
+  }
+
+  async getTradeHistory(): Promise<StockTradeHistory[]> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([TRADE_HISTORY_KEY], (res) => {
+        const items = res[TRADE_HISTORY_KEY] as
+          | StockTradeHistory[]
+          | undefined;
+        resolve(items || []);
+      });
+    });
+  }
+
+  async saveTradeHistory(items: StockTradeHistory[]): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [TRADE_HISTORY_KEY]: items }, resolve);
+    });
+  }
+
+  async addTradeHistory(item: StockTradeHistory): Promise<void> {
+    const existing = await this.getTradeHistory();
+    // Son 100 satış kaydını sakla
+    const updated = [item, ...existing].slice(0, 100);
+    await this.saveTradeHistory(updated);
   }
 
   async getWatchlists(): Promise<StockWatchlist[]> {

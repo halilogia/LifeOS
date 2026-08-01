@@ -24,6 +24,19 @@ export interface StockPortfolioItem {
   highestPriceSeen?: number; // İzleyen stop için görülen en yüksek fiyat
 }
 
+/** A completed sell trade — used for realized P/L tracking + history. */
+export interface StockTradeHistory {
+  id: string;
+  symbol: string; // Örn: "THYAO.IS"
+  displayName: string;
+  lotCount: number; // Satılan lot adedi
+  sellPrice: number; // Satış fiyatı (TL)
+  buyPrice: number; // Satış anındaki alış maliyeti (TL)
+  realizedProfit: number; // (sellPrice - buyPrice) * lotCount
+  realizedProfitPercent: number; // % kâr/zarar
+  soldAt: string; // ISO tarih
+}
+
 export interface StockRule {
   id: string;
   symbol: string; // Örn: "THYAO.IS"
