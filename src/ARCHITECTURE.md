@@ -23,6 +23,7 @@ flowchart TB
         useSync
         useKpssQuiz
         usePrayer
+        usePomodoro
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -133,7 +134,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | View (component) | Ana service | Storage | Alt bileşenler |
 |---|---|---|---|
 | ListView / KanbanView | todo repo (application/use-cases) | sync | — |
-| PomodoroView | PomodoroManagerService | local | pomodoro/ (8) |
+| PomodoroView | PomodoroManagerService, usePomodoro (hook) | local | pomodoro/ (8) |
 | KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
 | HifizView | hifizData (domain/data) | sync | hifiz/ (4) |
 | SrsView | kpssSrsService, SrsService | sync | — |
