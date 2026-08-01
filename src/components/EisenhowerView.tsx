@@ -192,7 +192,7 @@ export function EisenhowerView({
         style={{
           marginBottom: "8px",
           display: "flex",
-          justifyContent: "flex-start",
+          justifyContent: "center",
           gap: "10px",
         }}
       >
@@ -370,7 +370,7 @@ export function EisenhowerView({
           />
         </div>
       ) : (
-        <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
           <KanbanView
             todos={todos}
             lang={lang}

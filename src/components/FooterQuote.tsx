@@ -4,7 +4,7 @@ interface FooterQuoteProps {
 
 export function FooterQuote({ quoteText }: FooterQuoteProps) {
   return (
-    <footer className="footer-quote" style={{ marginTop: "30px" }}>
+    <footer className="footer-quote">
       <p
         id="quote"
         className="quote-text"

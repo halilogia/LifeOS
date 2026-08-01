@@ -357,10 +357,12 @@ export function App() {
           onSettingsOpen={handleOpenSettings}
           onContinueToChat={handleContinueToChat}
         />
-        {quoteText && activeView !== "ai-chat" && (
-          <FooterQuote quoteText={quoteText} />
-        )}
       </main>
+
+      {/* Footer Quote — outside container, zero layout impact */}
+      {quoteText && activeView !== "ai-chat" && (
+        <FooterQuote quoteText={quoteText} />
+      )}
 
       {/* Confirm Modal */}
       <ConfirmModal

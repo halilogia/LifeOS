@@ -1,5 +1,8 @@
 /* Spaced Repetition (SRS) Flashcard Styles */
 .srs-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   flex: 1;
   min-width: 0;
 }

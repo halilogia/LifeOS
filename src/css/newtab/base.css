@@ -1,3 +1,11 @@
+/**
+ * ═══════════════════════════════════════════════════════════════
+ *   UYARI: cssCodeSplit:false — bu dosyadaki her kural TÜM sayfalara sızar.
+ *   Global element seçicilere (body, #app, .container) layout/flex/width
+ *   kuralı KOYMA. Layout her view'ın kendi CSS'inde class-based yönetilir.
+ *   Detay: memory → "CSS layout mimarisi"
+ * ═══════════════════════════════════════════════════════════════
+ */
 :root {
   /* ── Core Theme Tokens ────────────────────────────────────────────── */
   --bg-color: #0d0d12;
@@ -84,24 +92,22 @@
 
 html {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  min-height: 100%;
+  height: 100%;
   width: 100%;
   margin: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #app {
   width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .background-overlay {
@@ -110,6 +116,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%);
   z-index: -1;
 }
@@ -137,13 +144,29 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   padding: var(--space-9);
   z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-9);
-  margin: var(--space-11) auto;
+  margin-top: var(--space-11);
+  box-sizing: border-box;
+  height: calc(100vh - var(--space-11));
+  overflow: hidden;
+}
+
+body.sidebar-open .container {
+  margin-left: 280px;
+  width: calc(100% - 280px);
+}
+
+/* Responsive: dar ekranlarda container padding'i azalt */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-5);
+  }
 }
 
 .hidden {
@@ -499,7 +522,12 @@ body {
 }
 
 .view-content.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Clocks & Dates (Hero) */
@@ -525,10 +553,14 @@ body {
 
 /* Footer Quotes */
 .footer-quote {
-  margin-top: 30px;
+  position: fixed;
+  bottom: 1.25rem;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
-  width: 100%;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .quote-text {
@@ -621,12 +653,6 @@ body {
     flex: none;
     width: 100%;
     position: static;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1300px;
   }
 }
 
