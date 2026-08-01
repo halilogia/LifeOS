@@ -30,6 +30,7 @@ flowchart TB
         useEisenhower
         useHifiz
         useWillpower
+        useNotes
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -148,7 +149,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
 | Stock/BistView | bistService, stockAiService, useBist (hook) | local | stock/ (17) |
 | FreeGamesView | gamesService, useFreeGames (hook) | local | freegames/ (2) |
-| NotesView | zettelkastenEngine | sync | notes/ (7) |
+| NotesView | zettelkastenEngine, useNotes (hook) | sync | notes/ (7) |
 | AIChatView | aiChatService | sync+local | aichat/ (4) |
 | ArcadeView | arcadeService | local | arcade/ (3) |
 | DetoxView | detoxBlocker (content) | sync | detox/ (3) |
