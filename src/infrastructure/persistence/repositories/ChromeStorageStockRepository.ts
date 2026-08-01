@@ -9,6 +9,7 @@ import type {
   StockAlertLog,
   StockWatchlist,
   StockTradeHistory,
+  StockCashBalance,
 } from "@/types/stock.js";
 import {
   SYNC_STOCK_PORTFOLIO,
@@ -16,6 +17,7 @@ import {
   SYNC_STOCK_ALERT_LOGS,
   SYNC_STOCK_WATCHLISTS,
   SYNC_STOCK_TRADE_HISTORY,
+  SYNC_STOCK_CASH,
 } from "@/infrastructure/storage/keys.js";
 
 const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
@@ -23,6 +25,7 @@ const RULES_KEY = SYNC_STOCK_RULES;
 const LOGS_KEY = SYNC_STOCK_ALERT_LOGS;
 const WATCHLISTS_KEY = SYNC_STOCK_WATCHLISTS;
 const TRADE_HISTORY_KEY = SYNC_STOCK_TRADE_HISTORY;
+const CASH_KEY = SYNC_STOCK_CASH;
 
 const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
 
@@ -101,6 +104,21 @@ export class ChromeStorageStockRepository {
     // Son 100 satış kaydını sakla
     const updated = [item, ...existing].slice(0, 100);
     await this.saveTradeHistory(updated);
+  }
+
+  async getCashBalance(): Promise<StockCashBalance> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([CASH_KEY], (res) => {
+        const bal = res[CASH_KEY] as StockCashBalance | undefined;
+        resolve(bal || { amount: 0, updatedAt: new Date().toISOString() });
+      });
+    });
+  }
+
+  async setCashBalance(balance: StockCashBalance): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [CASH_KEY]: balance }, resolve);
+    });
   }
 
   async getWatchlists(): Promise<StockWatchlist[]> {

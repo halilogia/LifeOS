@@ -23,6 +23,7 @@ import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
 import { SellStockModal } from "@/components/stock/SellStockModal.js";
 import { StockTradeHistoryModal } from "@/components/stock/StockTradeHistoryModal.js";
+import { CashBalanceModal } from "@/components/stock/CashBalanceModal.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {
@@ -79,9 +80,13 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
     handleConfirmSell,
     handleDeleteRule,
     tradeHistory,
+    cashBalance,
+    totalWealth,
+    updateCashBalance,
   } = useBist({ lang });
 
   const [showTradeHistory, setShowTradeHistory] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
 
   return (
     <div className="stock-dashboard">
@@ -109,6 +114,9 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
             dailyProfitLossPercent={dailyProfitLossPercent}
             activeRulesCount={activeRulesCount}
             triggeredAlertsCount={alertLogs.length}
+            cashBalance={cashBalance.amount}
+            totalWealth={totalWealth}
+            onEditCash={() => setShowCashModal(true)}
           />
 
           <div
@@ -300,6 +308,18 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
         <StockTradeHistoryModal
           trades={tradeHistory}
           onClose={() => setShowTradeHistory(false)}
+        />
+      )}
+
+      {/* Nakit Bakiyesi Modalı */}
+      {showCashModal && (
+        <CashBalanceModal
+          initialAmount={cashBalance.amount}
+          onSave={(amount) => {
+            updateCashBalance(amount);
+            setShowCashModal(false);
+          }}
+          onClose={() => setShowCashModal(false)}
         />
       )}
     </div>
