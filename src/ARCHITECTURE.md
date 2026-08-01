@@ -141,7 +141,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 
 | View (component) | Ana service | Storage | Alt bileşenler |
 |---|---|---|---|
-| ListView / KanbanView | todo repo (application/use-cases) | sync | — |
+| ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils | sync | — |
 | PomodoroView | PomodoroManagerService, usePomodoro (hook) | local | pomodoro/ (8) |
 | KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
 | HifizView | hifizData (domain/data), useHifiz (hook) | sync | hifiz/ (4) |
