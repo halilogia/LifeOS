@@ -6,6 +6,7 @@
 
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { useState } from "preact/hooks";
 import { useBist } from "@/presentation/hooks/useBist.js";
 
 // Extracted Sub-components
@@ -21,6 +22,7 @@ import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js
 import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
 import { SellStockModal } from "@/components/stock/SellStockModal.js";
+import { StockTradeHistoryModal } from "@/components/stock/StockTradeHistoryModal.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {
@@ -76,7 +78,10 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
     handleSellStock,
     handleConfirmSell,
     handleDeleteRule,
+    tradeHistory,
   } = useBist({ lang });
+
+  const [showTradeHistory, setShowTradeHistory] = useState(false);
 
   return (
     <div className="stock-dashboard">
@@ -105,6 +110,30 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
             activeRulesCount={activeRulesCount}
             triggeredAlertsCount={alertLogs.length}
           />
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              margin: "4px 0 12px",
+            }}
+          >
+            <button
+              onClick={() => setShowTradeHistory(true)}
+              style={{
+                background: "transparent",
+                border: "1px solid var(--card-border)",
+                borderRadius: "10px",
+                padding: "8px 14px",
+                fontSize: "0.8rem",
+                color: "var(--text-secondary)",
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              Satış Geçmişi ({tradeHistory.length})
+            </button>
+          </div>
 
           <PortfolioTable
             portfolio={portfolio}
@@ -258,8 +287,19 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
           symbol={sellModal.symbol}
           currentLot={sellModal.currentLot}
           currentPrice={sellModal.currentPrice}
+          buyPrice={
+            portfolio.find((p) => p.id === sellModal.id)?.buyPrice ?? 0
+          }
           onConfirm={handleConfirmSell}
           onClose={() => setSellModal(null)}
+        />
+      )}
+
+      {/* Satış Geçmişi Modalı */}
+      {showTradeHistory && (
+        <StockTradeHistoryModal
+          trades={tradeHistory}
+          onClose={() => setShowTradeHistory(false)}
         />
       )}
     </div>
