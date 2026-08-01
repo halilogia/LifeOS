@@ -215,3 +215,35 @@ flowchart LR
 * Bir iş bitiminde değişim diyagramı yoksa → iş eksiktir.
 * ARCHITECTURE.md güncellenmemişse → iş eksiktir.
 
+---
+
+## 8. Brain Klasörü Protokolü (Hafıza & Plan Yönetimi)
+
+**Amaç**: Projenin hafızası `brain/` klasöründe tutulur. AI her işte bu hafızayı okur ve günceller — kullanıcı 300+ dosyayı takip etmek zorunda kalmaz.
+
+### 8.1 Brain Klasörü Kutsaldır
+* `brain/` altındaki dosyalar projenin hafızasıdır. **Silme, taşıma veya yeniden adlandırma yalnızca açık talimatla yapılır.**
+* Yapı:
+```
+brain/
+├── agents.md        ← bu dosya: kurallar (workspace .agents/AGENTS.md ile senkron)
+├── knowledge.md     ← kalıcı hafıza: mimari, yığın, bağlam
+├── task.md          ← görev takibi
+└── plans/
+   └── plan-NN-YYYY-MM-DD.md  ← sıra numaralı, tarihli planlar
+```
+
+### 8.2 Önce Oku, Sonra Yaz
+Göreve başlamadan önce sırasıyla oku:
+1. `brain/knowledge.md` — kalıcı bağlam (mimari, standartlar)
+2. `brain/task.md` — mevcut görev durumu
+
+### 8.3 Planlar `brain/plans/` Klasörüne Yazılır
+* **Karmaşık görev planları buraya yazılır** — `brain/plans/plan-NN-YYYY-MM-DD.md` formatında (NN = o günün sıra numarası, 01'den başlar).
+* **Mevcut plan dosyası güncellenmez** — her yeni plan yeni dosyaya yazılır; eski planlar geçmiş olarak korunur.
+* Plan onayı: plan yazıldıktan sonra kullanıcı onayı beklenir, sonra uygulanır.
+
+### 8.4 Görev Takibi Şartsız
+* Yapılan her iş `brain/task.md`'de işaretlenir.
+* "Yaptım ama yazmadım" geçerli değildir.
+

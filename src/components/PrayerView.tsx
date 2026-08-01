@@ -1,194 +1,29 @@
-import { useState, useEffect } from "preact/hooks";
-import { prayerService } from "@/services/prayerService.js";
-import type { PrayerTimes } from "@/types/prayer.js";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { logger } from "@/utils/logger.js";
+import { usePrayer } from "@/presentation/hooks/usePrayer.js";
+import { PRAYER_NAMES } from "@/domain/constants/prayerConstants.js";
+import { PrayerCityForm } from "@/components/prayer/PrayerCityForm.js";
 
 interface PrayerViewProps {
   lang: Language;
   compact?: boolean;
 }
 
-const TURKEY_CITIES = [
-  "Adana",
-  "Adiyaman",
-  "Afyonkarahisar",
-  "Agri",
-  "Aksaray",
-  "Amasya",
-  "Ankara",
-  "Antalya",
-  "Ardahan",
-  "Artvin",
-  "Aydin",
-  "Balikesir",
-  "Bartin",
-  "Batman",
-  "Bayburt",
-  "Bilecik",
-  "Bingol",
-  "Bitlis",
-  "Bolu",
-  "Burdur",
-  "Bursa",
-  "Canakkale",
-  "Cankiri",
-  "Corum",
-  "Denizli",
-  "Diyarbakir",
-  "Duzce",
-  "Edirne",
-  "Elazig",
-  "Erzincan",
-  "Erzurum",
-  "Eskisehir",
-  "Gaziantep",
-  "Giresun",
-  "Gumushane",
-  "Hakkari",
-  "Hatay",
-  "Igdir",
-  "Isparta",
-  "Istanbul",
-  "Izmir",
-  "Kahramanmaras",
-  "Karabuk",
-  "Karaman",
-  "Kars",
-  "Kastamonu",
-  "Kayseri",
-  "Kilis",
-  "Kirikkale",
-  "Kirklareli",
-  "Kirsehir",
-  "Kocaeli",
-  "Konya",
-  "Kutahya",
-  "Malatya",
-  "Manisa",
-  "Mardin",
-  "Mersin",
-  "Mugla",
-  "Mus",
-  "Nevsehir",
-  "Nigde",
-  "Ordu",
-  "Osmaniye",
-  "Rize",
-  "Sakarya",
-  "Samsun",
-  "Sanliurfa",
-  "Siirt",
-  "Sinop",
-  "Sivas",
-  "Sirnak",
-  "Tekirdag",
-  "Tokat",
-  "Trabzon",
-  "Tunceli",
-  "Usak",
-  "Van",
-  "Yalova",
-  "Yozgat",
-  "Zonguldak",
-];
-
-const PRAYER_NAMES: Record<string, Record<string, string>> = {
-  tr: {
-    Fajr: "İmsak",
-    Sunrise: "Güneş",
-    Dhuhr: "Öğle",
-    Asr: "İkindi",
-    Maghrib: "Akşam",
-    Isha: "Yatsı",
-    title: "Namaz Vakitleri",
-  },
-  en: {
-    Fajr: "Fajr",
-    Sunrise: "Sunrise",
-    Dhuhr: "Dhuhr",
-    Asr: "Asr",
-    Maghrib: "Maghrib",
-    Isha: "Isha",
-    title: "Prayer Times",
-  },
-};
-
 export function PrayerView({ lang, compact = false }: PrayerViewProps) {
   const t = getTranslation(lang);
   const labels = PRAYER_NAMES[lang] || PRAYER_NAMES.tr;
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [city, setCity] = useState("Istanbul");
-  const [times, setTimes] = useState<PrayerTimes | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [currentPrayerIdx, setCurrentPrayerIdx] = useState(-1);
-
-  useEffect(() => {
-    loadPrayers();
-  }, []);
-
-  const loadPrayers = async (targetCity?: string) => {
-    setLoading(true);
-    setError(false);
-    try {
-      const res = await new Promise<any>((resolve) =>
-        chrome.storage.sync.get(["prayerCity"], (r) => resolve(r)),
-      );
-      const activeCity = targetCity || (res.prayerCity as string) || "Istanbul";
-      setCity(activeCity);
-
-      const prayerTimes = await prayerService.getPrayerTimes(
-        activeCity,
-        "Turkey",
-      );
-      setTimes(prayerTimes);
-      calculateHighlight(prayerTimes);
-      setLoading(false);
-    } catch (e) {
-      logger.error(e);
-      setError(true);
-      setLoading(false);
-    }
-  };
-
-  const calculateHighlight = (prayerTimes: PrayerTimes) => {
-    const now = new Date();
-    const currentTime = now.getHours() * 60 + now.getMinutes();
-
-    const timeToMinutes = (tStr: string) => {
-      const [h, m] = tStr.split(":").map(Number);
-      return h * 60 + m;
-    };
-
-    const schedule = [
-      timeToMinutes(prayerTimes.Fajr),
-      timeToMinutes(prayerTimes.Sunrise),
-      timeToMinutes(prayerTimes.Dhuhr),
-      timeToMinutes(prayerTimes.Asr),
-      timeToMinutes(prayerTimes.Maghrib),
-      timeToMinutes(prayerTimes.Isha),
-    ];
-
-    let idx = -1;
-    for (let i = 0; i < schedule.length; i++) {
-      if (currentTime >= schedule[i]) {
-        idx = i;
-      }
-    }
-    setCurrentPrayerIdx(idx);
-  };
-
-  const handleSaveCity = async (newCity: string) => {
-    if (!newCity) {
-      return;
-    }
-    chrome.storage.sync.set({ prayerCity: newCity, prayerCountry: "Turkey" });
-    setIsFormOpen(false);
-    loadPrayers(newCity);
-  };
+  const {
+    loading,
+    error,
+    city,
+    setCity,
+    times,
+    isFormOpen,
+    setIsFormOpen,
+    currentPrayerIdx,
+    handleSaveCity,
+  } = usePrayer();
 
   if (loading) {
     return (
@@ -251,53 +86,13 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
         </div>
 
         {isFormOpen && (
-          <div
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              padding: "10px",
-              borderRadius: "12px",
-              border: "1px solid var(--card-border)",
-              marginBottom: "1rem",
-            }}
-          >
-            <div style={{ display: "flex", gap: "8px" }}>
-              <select
-                style={{
-                  flex: 1,
-                  background: "var(--bg-color)",
-                  border: "1px solid var(--card-border)",
-                  color: "var(--text-primary)",
-                  padding: "6px 10px",
-                  borderRadius: "8px",
-                  fontSize: "0.8rem",
-                  outline: "none",
-                }}
-                value={city}
-                onChange={(e) => setCity((e.target as HTMLSelectElement).value)}
-              >
-                {TURKEY_CITIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-              <button
-                style={{
-                  background: "var(--accent-color)",
-                  color: "white",
-                  border: "none",
-                  padding: "6px 12px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                }}
-                onClick={() => handleSaveCity(city)}
-              >
-                {t.prayer_ok}
-              </button>
-            </div>
-          </div>
+          <PrayerCityForm
+            city={city}
+            onCityChange={setCity}
+            onSave={handleSaveCity}
+            compact
+            saveLabel={t.prayer_ok}
+          />
         )}
 
         <div className="prayer-list">
@@ -338,7 +133,6 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignSideways: "center",
                 alignItems: "center",
               }}
             >
@@ -397,56 +191,12 @@ export function PrayerView({ lang, compact = false }: PrayerViewProps) {
             </div>
 
             {isFormOpen && (
-              <div
-                id="city-edit-form"
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  padding: "15px",
-                  borderRadius: "12px",
-                  border: "1px solid var(--card-border)",
-                }}
-              >
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <select
-                    id="prayer-city-select"
-                    style={{
-                      flex: 1,
-                      background: "var(--bg-color)",
-                      border: "1px solid var(--card-border)",
-                      color: "var(--text-primary)",
-                      padding: "8px 12px",
-                      borderRadius: "8px",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                    }}
-                    value={city}
-                    onChange={(e) =>
-                      setCity((e.target as HTMLSelectElement).value)
-                    }
-                  >
-                    {TURKEY_CITIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    id="save-prayer-city-btn"
-                    style={{
-                      background: "var(--accent-color)",
-                      color: "white",
-                      border: "none",
-                      padding: "8px 16px",
-                      borderRadius: "8px",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                    }}
-                    onClick={() => handleSaveCity(city)}
-                  >
-                    {t.prayer_save}
-                  </button>
-                </div>
-              </div>
+              <PrayerCityForm
+                city={city}
+                onCityChange={setCity}
+                onSave={handleSaveCity}
+                saveLabel={t.prayer_save}
+              />
             )}
           </div>
 

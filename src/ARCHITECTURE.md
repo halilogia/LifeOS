@@ -21,6 +21,8 @@ flowchart TB
         usePopup
         useUI
         useSync
+        useKpssQuiz
+        usePrayer
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -132,11 +134,11 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 |---|---|---|---|
 | ListView / KanbanView | todo repo (application/use-cases) | sync | — |
 | PomodoroView | PomodoroManagerService | local | pomodoro/ (8) |
-| KpssView | kpssService, kpssQuizService, kpssAiService | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
+| KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
 | HifizView | hifizData (domain/data) | sync | hifiz/ (4) |
 | SrsView | kpssSrsService, SrsService | sync | — |
 | CalendarView | todo repo | sync | — |
-| PrayerView | prayerService | local | — |
+| PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
 | Stock/BistView | bistService, stockAiService | local | stock/ (17) |
 | FreeGamesView | gamesService | local | freegames/ (2) |
 | NotesView | zettelkastenEngine | sync | notes/ (7) |
