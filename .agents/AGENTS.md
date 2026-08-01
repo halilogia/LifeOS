@@ -207,11 +207,7 @@ flowchart LR
 ```
 ````
 
-### 7.3 Walkthrough'a Diyagram Eklenir
-* `walkthrough.md` güncellenirken değişim diyagramı da eklenir.
-* Böylece kullanıcı eski işlere bakınca da ne değiştiğini görsel olarak anlar.
-
-### 7.4 İhlal Tespiti
+### 7.3 İhlal Tespiti
 * Bir iş bitiminde değişim diyagramı yoksa → iş eksiktir.
 * ARCHITECTURE.md güncellenmemişse → iş eksiktir.
 
@@ -226,17 +222,19 @@ flowchart LR
 * Yapı:
 ```
 brain/
-├── agents.md        ← bu dosya: kurallar (workspace .agents/AGENTS.md ile senkron)
 ├── knowledge.md     ← kalıcı hafıza: mimari, yığın, bağlam
 ├── task.md          ← görev takibi
 └── plans/
    └── plan-NN-YYYY-MM-DD.md  ← sıra numaralı, tarihli planlar
 ```
+Kurallar: `.agents/AGENTS.md` (tek yetkili kaynak).
+Mimari harita: `src/ARCHITECTURE.md` (bölüm 7.1 — brain dışında, kod yanında yaşar).
 
 ### 8.2 Önce Oku, Sonra Yaz
 Göreve başlamadan önce sırasıyla oku:
 1. `brain/knowledge.md` — kalıcı bağlam (mimari, standartlar)
 2. `brain/task.md` — mevcut görev durumu
+3. `src/ARCHITECTURE.md` — canlı mimari harita
 
 ### 8.3 Planlar `brain/plans/` Klasörüne Yazılır
 * **Karmaşık görev planları buraya yazılır** — `brain/plans/plan-NN-YYYY-MM-DD.md` formatında (NN = o günün sıra numarası, 01'den başlar).

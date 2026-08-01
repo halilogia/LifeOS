@@ -4,7 +4,6 @@ import {
   AIConfig,
 } from "@/services/kpssQuizFlowService.js";
 import {
-  getLocalQuestionsForTopic,
   getPastExamQuestions,
   KpssPastQuiz,
 } from "@/services/kpssQuizService.js";
@@ -58,92 +57,55 @@ export function useKpssQuiz({
     setQuizQuestions([]);
 
     try {
-      const localQuestions = getLocalQuestionsForTopic(subjectKey, topicName);
+      // Geçmişte çözülen AI soruları (pastQuizzes) — tekrar sorulmaması için exclude
+      const quizKey = `${subjectKey}_${topicName}`;
+      const pastQuiz = pastQuizzes[quizKey];
+      const pastQuestions: QuizQuestion[] = pastQuiz?.questions ?? [];
 
-      if (localQuestions.length > 0) {
-        if (localQuestions.length >= count) {
-          setQuizQuestions(localQuestions.slice(0, count));
-          setCurrentQuestionIndex(0);
-          setSelectedAnswers(new Array(count).fill(-1));
-          setQuizLoading(false);
-          setIsBackgroundLoading(false);
-        } else {
-          setQuizQuestions(localQuestions);
-          setCurrentQuestionIndex(0);
-          setSelectedAnswers(new Array(count).fill(-1));
-          setQuizLoading(false);
-          setIsBackgroundLoading(true);
+      // İlk soru AI'dan beklenir (boş ekran görünmez), kalanlar arka planda üretilir
+      const firstList = await kpssQuizFlowService.fetchQuestionsSubsetFromAI(
+        subjectKey,
+        topicName,
+        1,
+        aiConfig,
+        pastQuestions,
+        pastQuestions.length > 0 ? pastQuestions : [],
+      );
+      if (firstList.length === 0) {
+        throw new Error("Soru üretilemedi.");
+      }
 
-          const neededCount = count - localQuestions.length;
+      const firstQuestion = firstList[0];
+      setQuizQuestions([firstQuestion]);
+      setCurrentQuestionIndex(0);
+      setSelectedAnswers(new Array(count).fill(-1));
+      setQuizLoading(false);
 
-          kpssQuizFlowService
-            .fetchQuestionsSubsetFromAI(
-              subjectKey,
-              topicName,
-              neededCount,
-              aiConfig,
-              localQuestions,
-              localQuestions,
-            )
-            .then((remainingQuestions) => {
-              if (remainingQuestions.length > 0) {
-                setQuizQuestions((prev) => {
-                  const updated = [...prev, ...remainingQuestions];
-                  return updated.slice(0, count);
-                });
-              }
-            })
-            .catch((err) => {
-              logger.error("Background questions pre-fetch failed:", err);
-            })
-            .finally(() => {
-              setIsBackgroundLoading(false);
-            });
-        }
-      } else {
-        const firstList = await kpssQuizFlowService.fetchQuestionsSubsetFromAI(
-          subjectKey,
-          topicName,
-          1,
-          aiConfig,
-        );
-        if (firstList.length === 0) {
-          throw new Error("Soru üretilemedi.");
-        }
-
-        const firstQuestion = firstList[0];
-        setQuizQuestions([firstQuestion]);
-        setCurrentQuestionIndex(0);
-        setSelectedAnswers(new Array(count).fill(-1));
-        setQuizLoading(false);
-
-        if (count > 1) {
-          setIsBackgroundLoading(true);
-          kpssQuizFlowService
-            .fetchQuestionsSubsetFromAI(
-              subjectKey,
-              topicName,
-              count - 1,
-              aiConfig,
-              [firstQuestion],
-            )
-            .then((remainingQuestions) => {
-              if (remainingQuestions.length > 0) {
-                setQuizQuestions((prev) => {
-                  const updated = [...prev, ...remainingQuestions];
-                  return updated.slice(0, count);
-                });
-              }
-            })
-            .catch((err) => {
-              logger.error("Background questions pre-fetch failed:", err);
-            })
-            .finally(() => {
-              setIsBackgroundLoading(false);
-            });
-        } else {
-          setIsBackgroundLoading(false);
-        }
+      if (count > 1) {
+        setIsBackgroundLoading(true);
+        kpssQuizFlowService
+          .fetchQuestionsSubsetFromAI(
+            subjectKey,
+            topicName,
+            count - 1,
+            aiConfig,
+            [...pastQuestions, firstQuestion],
+            pastQuestions.length > 0 ? pastQuestions : [firstQuestion],
+          )
+          .then((remainingQuestions) => {
+            if (remainingQuestions.length > 0) {
+              setQuizQuestions((prev) => {
+                const updated = [...prev, ...remainingQuestions];
+                return updated.slice(0, count);
+              });
+            }
+          })
+          .catch((err) => {
+            logger.error("Background questions pre-fetch failed:", err);
+          })
+          .finally(() => {
+            setIsBackgroundLoading(false);
+          });
       }
     } catch (err: unknown) {
       logger.error("AI quiz generation error:", err);
