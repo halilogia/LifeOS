@@ -116,10 +116,6 @@ export function AiChatMessageItem({
         {!isUser && message.sources && message.sources.length > 0 && (
           <div
             style={{
-              background: "rgba(139, 92, 246, 0.08)",
-              border: "1px solid rgba(139, 92, 246, 0.3)",
-              borderRadius: "10px",
-              padding: "10px 12px",
               marginBottom: "10px",
               fontSize: "0.78rem",
             }}
@@ -222,10 +218,6 @@ export function AiChatMessageItem({
         {message.thinking && aiShowThinking && (
           <div
             style={{
-              background: "var(--card-bg)",
-              border: "1px solid var(--card-border)",
-              borderRadius: "var(--radius-sm, 6px)",
-              padding: "8px 10px",
               marginBottom: "8px",
               fontSize: "0.78rem",
             }}

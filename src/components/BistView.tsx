@@ -36,6 +36,7 @@ import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js
 import { StockAiReportTab } from "@/components/stock/StockAiReportTab.js";
 import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
 import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
+import { SellStockModal } from "@/components/stock/SellStockModal.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 import { logger } from "@/utils/logger.js";
 
@@ -71,6 +72,12 @@ export function BistView({ lang, onContinueToChat }: BistViewProps & { onContinu
   const [selectedChartSymbol, setSelectedChartSymbol] = useState<string | null>(
     null,
   );
+  const [sellModal, setSellModal] = useState<{
+    id: string;
+    symbol: string;
+    currentLot: number;
+    currentPrice: number;
+  } | null>(null);
 
   // Load Data
   const loadData = useCallback(async () => {
@@ -212,6 +219,29 @@ export function BistView({ lang, onContinueToChat }: BistViewProps & { onContinu
     setShowAddModal(true);
   };
 
+  const handleSellStock = (id: string, symbol: string, currentLot: number, currentPrice: number) => {
+    setSellModal({ id, symbol, currentLot, currentPrice });
+  };
+
+  const handleConfirmSell = async (lotToSell: number, sellPrice: number) => {
+    if (!sellModal) return;
+    const item = portfolio.find((p) => p.id === sellModal.id);
+    if (!item) return;
+
+    const remaining = item.lotCount - lotToSell;
+    let updated: StockPortfolioItem[];
+    if (remaining <= 0) {
+      updated = portfolio.filter((p) => p.id !== sellModal.id);
+    } else {
+      updated = portfolio.map((p) =>
+        p.id === sellModal.id ? { ...p, lotCount: remaining } : p,
+      );
+    }
+    setPortfolio(updated);
+    await stockRepository.savePortfolio(updated);
+    setSellModal(null);
+  };
+
   const quoteMap = new Map<string, StockQuote>(
     quotes.map((q) => [q.symbol.toUpperCase(), q]),
   );
@@ -280,6 +310,7 @@ export function BistView({ lang, onContinueToChat }: BistViewProps & { onContinu
             onAddRuleClick={(sym) => setRuleModalSymbol(sym)}
             onDeleteRule={handleDeleteRule}
             onDeleteItem={handleDeleteStock}
+            onSellItem={handleSellStock}
             onAiAnalyzeClick={(sym) => setAiModalSymbol(sym)}
             onOpenChart={(sym) => setSelectedChartSymbol(sym)}
           />
@@ -407,6 +438,17 @@ export function BistView({ lang, onContinueToChat }: BistViewProps & { onContinu
             <CustomStockChart symbol={selectedChartSymbol} lang={lang} />
           </div>
         </div>
+      )}
+
+      {/* Satış Modalı */}
+      {sellModal && (
+        <SellStockModal
+          symbol={sellModal.symbol}
+          currentLot={sellModal.currentLot}
+          currentPrice={sellModal.currentPrice}
+          onConfirm={handleConfirmSell}
+          onClose={() => setSellModal(null)}
+        />
       )}
     </div>
   );

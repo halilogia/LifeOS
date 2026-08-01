@@ -15,6 +15,7 @@ interface PortfolioTableProps {
   onAddRuleClick: (symbol: string) => void;
   onDeleteRule?: (ruleId: string) => void;
   onDeleteItem: (id: string) => void;
+  onSellItem: (id: string, symbol: string, currentLot: number, currentPrice: number) => void;
   onAiAnalyzeClick: (symbol: string) => void;
   onOpenChart: (symbol: string) => void;
 }
@@ -89,6 +90,30 @@ function IconTrash() {
   );
 }
 
+function IconSell() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="7 7 7 3 3 3" />
+      <polyline points="17 17 17 21 21 21" />
+      <polyline points="2 12 3 12 3 12" />
+      <polyline points="22 12 21 12 21 12" />
+      <path d="M12 4v.5" />
+      <path d="M12 12v.5" />
+      <path d="M12 19v.5" />
+      <path d="M12 4.5A8.5 8.5 0 0 0 3.5 13h17A8.5 8.5 0 0 0 12 4.5Z" />
+    </svg>
+  );
+}
+
 function IconBriefcase() {
   return (
     <svg
@@ -114,6 +139,7 @@ export function PortfolioTable({
   onAddRuleClick,
   onDeleteRule,
   onDeleteItem,
+  onSellItem,
   onAiAnalyzeClick,
   onOpenChart,
 }: Omit<PortfolioTableProps, "onOpenAddModal">) {
@@ -370,12 +396,13 @@ export function PortfolioTable({
                         <span style={{ fontSize: "0.75rem" }}>AI</span>
                       </button>
                       <button
-                        className="stock-btn stock-btn-secondary"
-                        onClick={() => onDeleteItem(item.id)}
-                        title="Sil"
-                        style={{ padding: "6px 8px", color: "#f87171" }}
+                        className="stock-btn stock-btn-danger"
+                        onClick={() => onSellItem(item.id, sym, item.lotCount, currentPrice)}
+                        title="Satış Yap"
+                        style={{ padding: "6px 10px" }}
                       >
-                        <IconTrash />
+                        <IconSell />
+                        <span style={{ fontSize: "0.75rem" }}>Sat</span>
                       </button>
                     </div>
                   </td>
