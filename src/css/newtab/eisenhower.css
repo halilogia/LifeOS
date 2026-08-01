@@ -1,0 +1,61 @@
+/* Eisenhower Matrix özel stilleri — eski EisenhowerView içindeki <style> bloğundan taşındı */
+
+.eisenhower-quadrant {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+}
+
+.eisenhower-quadrant.drag-over {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
+}
+
+.eisenhower-task-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  cursor: grab;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eisenhower-task-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.eisenhower-task-card:active {
+  cursor: grabbing;
+}
+
+.quadrant-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quadrant-header-tag {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
