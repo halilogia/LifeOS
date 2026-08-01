@@ -38,6 +38,47 @@ export class RestoreFromDriveUseCase {
         return { restored: false };
       }
 
+      // MERGE: combine Drive backup with current local data instead of
+      // blindly overwriting. Newer local todos/notes (created after the
+      // backup) must survive a restore. Arrays are merged by unique id,
+      // scalars use the backup value only when the local key is absent.
+      const [localTodos, localNotes] = await Promise.all([
+        this.todoRepo ? this.todoRepo.getAll() : Promise.resolve([] as Todo[]),
+        this.noteRepo ? this.noteRepo.getAll() : Promise.resolve([] as Note[]),
+      ]);
+
+      // Todos: merge by id — Drive wins on conflicts, local extras kept
+      if (Array.isArray(restored.todos)) {
+        const mergedTodos = new Map<string, Todo>();
+        for (const t of restored.todos as Todo[]) {
+          if (t && t.id) {
+            mergedTodos.set(t.id, t);
+          }
+        }
+        for (const t of localTodos) {
+          if (t && t.id && !mergedTodos.has(t.id)) {
+            mergedTodos.set(t.id, t); // local-only todo survives
+          }
+        }
+        restored.todos = Array.from(mergedTodos.values());
+      }
+
+      // Notes: merge by id — same strategy
+      if (Array.isArray(restored.notes)) {
+        const mergedNotes = new Map<string, Note>();
+        for (const n of restored.notes as Note[]) {
+          if (n && n.id) {
+            mergedNotes.set(n.id, n);
+          }
+        }
+        for (const n of localNotes) {
+          if (n && n.id && !mergedNotes.has(n.id)) {
+            mergedNotes.set(n.id, n);
+          }
+        }
+        restored.notes = Array.from(mergedNotes.values());
+      }
+
       // Save all restored keys (including sidebarOrder) directly to chrome.storage.sync
       await new Promise<void>((resolve) => {
         chrome.storage.sync.set(restored, () => resolve());

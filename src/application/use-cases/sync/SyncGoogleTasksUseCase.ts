@@ -86,8 +86,9 @@ export class SyncGoogleTasksUseCase {
       );
 
       const mergedTodos = [...mappedFocus, ...mappedRoutines];
+      const mergedById = new Map(mergedTodos.map((t) => [t.id, t]));
 
-      // Upload unsynced local tasks
+      // Upload unsynced local tasks (no remote id yet)
       const unSyncedLocal = localTodos.filter((t) => !t.id);
       for (const localTodo of unSyncedLocal) {
         const isRoutine = localTodo.repeat !== "none";
@@ -103,14 +104,52 @@ export class SyncGoogleTasksUseCase {
               : undefined,
           });
           localTodo.id = createdRemote.id;
-          mergedTodos.push(localTodo);
+          mergedById.set(localTodo.id, localTodo);
         } catch (err) {
           logger.error("Failed to upload offline task:", err);
         }
       }
 
-      await this.todoRepository.saveAll(mergedTodos);
-      return { todos: mergedTodos };
+      // Push status/due changes for todos that already have a remote id.
+      // Without this, completing a todo on PC-A never reaches Google Tasks,
+      // and the next sync on PC-B would resurrect it as "open".
+      const remoteById = new Map(mergedTodos.map((t) => [t.id, t]));
+      for (const localTodo of localTodos) {
+        if (!localTodo.id) {
+          continue;
+        }
+        const remote = remoteById.get(localTodo.id);
+        if (!remote) {
+          continue; // remote task was deleted — keep local copy
+        }
+        const localDone = localTodo.completed;
+        const remoteDone = remote.completed;
+        if (localDone !== remoteDone) {
+          const isRoutine = localTodo.repeat !== "none";
+          const listId = isRoutine ? routinesListId : focusListId;
+          try {
+            await this.syncPort.updateTask(token, listId, localTodo.id, {
+              status: localDone ? "completed" : "needsAction",
+              completed: localDone ? new Date().toISOString() : null,
+            });
+            // Reflect pushed state in merged result
+            const merged = mergedById.get(localTodo.id);
+            if (merged) {
+              merged.completed = localDone;
+              merged.status = localDone ? "done" : "todo";
+              merged.lastCompletedDate = localDone
+                ? new Date().toISOString()
+                : null;
+            }
+          } catch (err) {
+            logger.error("Failed to push task update:", err);
+          }
+        }
+      }
+
+      const finalTodos = Array.from(mergedById.values());
+      await this.todoRepository.saveAll(finalTodos);
+      return { todos: finalTodos };
     } catch (err) {
       logger.warn("SyncGoogleTasksUseCase failed:", err);
       const localTodos = await this.todoRepository.getAll();
