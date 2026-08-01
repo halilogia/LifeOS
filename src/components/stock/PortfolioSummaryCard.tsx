@@ -14,7 +14,7 @@ interface PortfolioSummaryCardProps {
   triggeredAlertsCount: number;
   cashBalance: number;
   totalWealth: number;
-  onEditCash: () => void;
+  onEditCash: (e: MouseEvent) => void;
 }
 
 function IconWallet() {
@@ -136,16 +136,31 @@ export function PortfolioSummaryCard({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              gap: "12px",
             }}
           >
-            <span>Nakit</span>
-            <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
+            <span style={{ minWidth: "70px" }}>Nakit</span>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                minWidth: "110px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <span
+                style={{
+                  color: "var(--text-primary)",
+                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {formatPrice(cashBalance)}
               </span>
               <button
                 onClick={onEditCash}
-                title="Nakit bakiyesini düzenle"
+                title="Nakit ekle"
                 style={{
                   background: "transparent",
                   border: "none",
@@ -153,6 +168,7 @@ export function PortfolioSummaryCard({
                   cursor: "pointer",
                   padding: "2px",
                   display: "flex",
+                  flexShrink: 0,
                 }}
               >
                 <svg
@@ -174,30 +190,56 @@ export function PortfolioSummaryCard({
             style={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
+              gap: "12px",
             }}
           >
-            <span>Hisse Değeri</span>
-            <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
-              {formatPrice(totalValue)}
+            <span style={{ minWidth: "70px" }}>Hisse Değeri</span>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                minWidth: "110px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <span
+                style={{
+                  color: "var(--text-primary)",
+                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {formatPrice(totalValue)}
+              </span>
+              {/* Görünmez kalem — sadece hizalama için (Nakit satırıyla aynı genişlik) */}
+              <span
+                aria-hidden="true"
+                style={{
+                  width: "13px",
+                  height: "13px",
+                  flexShrink: 0,
+                  opacity: 0,
+                  pointerEvents: "none",
+                  display: "flex",
+                }}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                </svg>
+              </span>
             </span>
           </div>
-        </div>
-        <div
-          className={`stock-card-badge ${
-            isZeroProfit
-              ? "stock-badge-neutral"
-              : isPositive
-                ? "stock-badge-positive"
-                : "stock-badge-negative"
-          }`}
-        >
-          {isZeroProfit
-            ? "0,00 ₺ (0.00%)"
-            : `${isPositive ? "+" : ""}${formatPrice(totalProfit)} (${
-                totalCost > 0
-                  ? ((totalProfit / totalCost) * 100).toFixed(2)
-                  : "0.00"
-              }%)`}
         </div>
       </div>
 

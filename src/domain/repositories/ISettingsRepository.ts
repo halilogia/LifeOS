@@ -14,6 +14,8 @@ export interface AppSettings {
   readonly pomoBlockEnabled: boolean;
   readonly universalInfoBoxEnabled: boolean;
   readonly universalInfoBoxHotkey: string;
+  readonly whatsappBridgeEnabled: boolean;
+  readonly telegramBridgeEnabled: boolean;
 }
 
 export interface ISettingsRepository {
@@ -26,5 +28,7 @@ export interface ISettingsRepository {
   setCalendarNotificationsEnabled(enabled: boolean): Promise<void>;
   setPomoBlockEnabled(enabled: boolean): Promise<void>;
   setUniversalInfoBox(enabled: boolean, hotkey: string): Promise<void>;
+  setWhatsappBridgeEnabled(enabled: boolean): Promise<void>;
+  setTelegramBridgeEnabled(enabled: boolean): Promise<void>;
   clearAll(lang: Language): Promise<void>;
 }

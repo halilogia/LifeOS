@@ -19,6 +19,8 @@ export const SYNC_CALENDAR_NOTIFICATIONS = "calendarNotificationsEnabled";
 export const SYNC_POMO_BLOCK_ENABLED = "pomoBlockEnabled";
 export const SYNC_UNIVERSAL_INFOBOX_ENABLED = "universalInfoBoxEnabled";
 export const SYNC_UNIVERSAL_INFOBOX_HOTKEY = "universalInfoBoxHotkey";
+export const SYNC_WHATSAPP_BRIDGE_ENABLED = "whatsappBridgeEnabled";
+export const SYNC_TELEGRAM_BRIDGE_ENABLED = "telegramBridgeEnabled";
 export const SYNC_SETTINGS = "syncSettings";
 export const SYNC_AI_PROVIDER = "aiProvider";
 export const SYNC_AI_API_KEY = "aiApiKey";
@@ -59,6 +61,8 @@ export const SYNC_SETTINGS_KEYS = [
   SYNC_POMO_BLOCK_ENABLED,
   SYNC_UNIVERSAL_INFOBOX_ENABLED,
   SYNC_UNIVERSAL_INFOBOX_HOTKEY,
+  SYNC_WHATSAPP_BRIDGE_ENABLED,
+  SYNC_TELEGRAM_BRIDGE_ENABLED,
 ] as const;
 
 /** Master list of all sync keys for migration purposes. */
@@ -90,6 +94,8 @@ export const SYNC_ALL_KEYS = [
   "kpss_chart_metric_mode",
   SYNC_UNIVERSAL_INFOBOX_ENABLED,
   SYNC_UNIVERSAL_INFOBOX_HOTKEY,
+  SYNC_WHATSAPP_BRIDGE_ENABLED,
+  SYNC_TELEGRAM_BRIDGE_ENABLED,
   "pomodoroHistory",
   SYNC_SETTINGS,
   SYNC_GEMINI_API_KEY,

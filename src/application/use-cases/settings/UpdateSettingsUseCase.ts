@@ -50,6 +50,20 @@ export class UpdateSettingsUseCase {
     await this.settingsRepo.setUniversalInfoBox(enabled, hotkey);
   }
 
+  async toggleWhatsappBridge(): Promise<boolean> {
+    const settings = await this.settingsRepo.getSettings();
+    const nextVal = !settings.whatsappBridgeEnabled;
+    await this.settingsRepo.setWhatsappBridgeEnabled(nextVal);
+    return nextVal;
+  }
+
+  async toggleTelegramBridge(): Promise<boolean> {
+    const settings = await this.settingsRepo.getSettings();
+    const nextVal = !settings.telegramBridgeEnabled;
+    await this.settingsRepo.setTelegramBridgeEnabled(nextVal);
+    return nextVal;
+  }
+
   async clearAllData(lang: Language): Promise<void> {
     await this.settingsRepo.clearAll(lang);
   }

@@ -979,6 +979,8 @@ export const en = {
   list_synced: "Synced with Google Tasks",
   list_sync_now: "Sync Now",
   settings_auto_group_tabs: "Auto-group Active Tab on Side Panel Open",
+  settings_whatsapp_bridge: "WhatsApp Bridge (@ai assistant)",
+  settings_telegram_bridge: "Telegram Bridge (@ai assistant)",
   settings_shortcut_title: "Web Copilot Side Panel Shortcut",
   settings_shortcut_default: "Default: Ctrl + Shift + E",
   settings_shortcut_configure: "Configure Shortcut",

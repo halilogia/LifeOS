@@ -24,6 +24,7 @@ import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
 import { SellStockModal } from "@/components/stock/SellStockModal.js";
 import { StockTradeHistoryModal } from "@/components/stock/StockTradeHistoryModal.js";
 import { CashBalanceModal } from "@/components/stock/CashBalanceModal.js";
+import { WealthDistributionModal } from "@/components/stock/WealthDistributionModal.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {
@@ -87,6 +88,7 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
 
   const [showTradeHistory, setShowTradeHistory] = useState(false);
   const [showCashModal, setShowCashModal] = useState(false);
+  const [showWealthModal, setShowWealthModal] = useState(false);
 
   return (
     <div className="stock-dashboard">
@@ -107,17 +109,22 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
       {/* TAB 1: BİST PORTFÖYÜM */}
       {activeTab === "portfolio" && (
         <>
-          <PortfolioSummaryCard
-            totalValue={totalPortfolioValue}
-            totalCost={totalPortfolioCost}
-            dailyProfitLoss={dailyProfitLossTotal}
-            dailyProfitLossPercent={dailyProfitLossPercent}
-            activeRulesCount={activeRulesCount}
-            triggeredAlertsCount={alertLogs.length}
-            cashBalance={cashBalance.amount}
-            totalWealth={totalWealth}
-            onEditCash={() => setShowCashModal(true)}
-          />
+          <div onClick={() => setShowWealthModal(true)}>
+            <PortfolioSummaryCard
+              totalValue={totalPortfolioValue}
+              totalCost={totalPortfolioCost}
+              dailyProfitLoss={dailyProfitLossTotal}
+              dailyProfitLossPercent={dailyProfitLossPercent}
+              activeRulesCount={activeRulesCount}
+              triggeredAlertsCount={alertLogs.length}
+              cashBalance={cashBalance.amount}
+              totalWealth={totalWealth}
+              onEditCash={(e) => {
+                e.stopPropagation();
+                setShowCashModal(true);
+              }}
+            />
+          </div>
 
           <div
             style={{
@@ -314,12 +321,27 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
       {/* Nakit Bakiyesi Modalı */}
       {showCashModal && (
         <CashBalanceModal
-          initialAmount={cashBalance.amount}
-          onSave={(amount) => {
-            updateCashBalance(amount);
+          currentAmount={cashBalance.amount}
+          onAdd={(newAmount) => {
+            updateCashBalance(newAmount);
             setShowCashModal(false);
           }}
           onClose={() => setShowCashModal(false)}
+        />
+      )}
+
+      {/* Varlık Dağılımı Modalı */}
+      {showWealthModal && (
+        <WealthDistributionModal
+          cashBalance={cashBalance.amount}
+          totalWealth={totalWealth}
+          portfolio={portfolio}
+          prices={
+            new Map(
+              quotes.map((q) => [q.symbol.toUpperCase(), q.price]),
+            )
+          }
+          onClose={() => setShowWealthModal(false)}
         />
       )}
     </div>

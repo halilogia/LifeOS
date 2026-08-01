@@ -980,6 +980,8 @@ export const tr = {
   list_synced: "Google Görevler ile eşitlendi",
   list_sync_now: "Şimdi Eşitle",
   settings_auto_group_tabs: "Yan Panel Açıldığında Sekmeyi Otomatik Grupla",
+  settings_whatsapp_bridge: "WhatsApp Köprüsü (@ai asistan)",
+  settings_telegram_bridge: "Telegram Köprüsü (@ai asistan)",
   settings_shortcut_title: "Web Copilot Yan Panel Kısayolu",
   settings_shortcut_default: "Varsayılan: Ctrl + Shift + E",
   settings_shortcut_configure: "Kısayolu Değiştir",

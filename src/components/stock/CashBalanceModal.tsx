@@ -1,17 +1,21 @@
 import { useState } from "preact/hooks";
+import { formatPrice } from "@/services/bistService.js";
 
 interface CashBalanceModalProps {
-  initialAmount: number;
-  onSave: (amount: number) => void;
+  currentAmount: number;
+  /** Called with the NEW total (current + added). */
+  onAdd: (newAmount: number) => void;
   onClose: () => void;
 }
 
 export function CashBalanceModal({
-  initialAmount,
-  onSave,
+  currentAmount,
+  onAdd,
   onClose,
 }: CashBalanceModalProps) {
-  const [amount, setAmount] = useState(initialAmount || 0);
+  const [addAmount, setAddAmount] = useState(0);
+
+  const newTotal = currentAmount + (addAmount || 0);
 
   return (
     <div
@@ -25,7 +29,7 @@ export function CashBalanceModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="settings-header">
-          <h2>Nakit Bakiyesi</h2>
+          <h2>Nakit Ekle</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -39,6 +43,37 @@ export function CashBalanceModal({
             padding: "8px 0",
           }}
         >
+          {/* Mevcut bakiye */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid var(--card-border)",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              Mevcut Nakit
+            </span>
+            <span
+              style={{
+                fontSize: "0.95rem",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+              }}
+            >
+              {formatPrice(currentAmount)}
+            </span>
+          </div>
+
           <p
             style={{
               fontSize: "0.8rem",
@@ -46,20 +81,19 @@ export function CashBalanceModal({
               lineHeight: 1.5,
             }}
           >
-            Hisse alımlarında düşülür, satışlarda eklenir. Bankadaki mevcut
-            bakiyeni buraya girebilirsin.
+            Eklenecek tutarı gir. Hisse alımlarında düşülür, satışlarda otomatik
+            eklenir.
           </p>
 
           <input
             type="number"
             step="0.01"
             min={0}
-            value={amount}
+            value={addAmount || ""}
+            placeholder="0,00 ₺"
             onInput={(e) => {
               const val = parseFloat((e.target as HTMLInputElement).value);
-              if (!isNaN(val)) {
-                setAmount(val);
-              }
+              setAddAmount(isNaN(val) ? 0 : val);
             }}
             style={{
               background: "rgba(0,0,0,0.2)",
@@ -73,6 +107,37 @@ export function CashBalanceModal({
               boxSizing: "border-box",
             }}
           />
+
+          {/* Yeni toplam önizleme */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "10px 14px",
+              borderRadius: "10px",
+              background: "rgba(139, 92, 246, 0.08)",
+              border: "1px solid rgba(139, 92, 246, 0.2)",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              Yeni Toplam
+            </span>
+            <span
+              style={{
+                fontSize: "1rem",
+                fontWeight: 800,
+                color: "var(--accent-color)",
+              }}
+            >
+              {formatPrice(newTotal)}
+            </span>
+          </div>
 
           <div style={{ display: "flex", gap: "12px" }}>
             <button
@@ -89,7 +154,8 @@ export function CashBalanceModal({
               İptal
             </button>
             <button
-              onClick={() => onSave(amount)}
+              onClick={() => onAdd(newTotal)}
+              disabled={addAmount <= 0}
               style={{
                 flex: 1,
                 background: "var(--accent-color)",
@@ -99,10 +165,11 @@ export function CashBalanceModal({
                 padding: "12px",
                 fontSize: "0.9rem",
                 fontWeight: 700,
-                cursor: "pointer",
+                cursor: addAmount > 0 ? "pointer" : "not-allowed",
+                opacity: addAmount > 0 ? 1 : 0.5,
               }}
             >
-              Kaydet
+              Ekle
             </button>
           </div>
         </div>
