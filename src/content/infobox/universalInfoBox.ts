@@ -4,7 +4,12 @@
  * Clean Architecture - Content Script Domain Module.
  */
 
-import { logger } from "@/utils/logger.js";
+/**
+ * Content script NOTE: Uses contentLogger (console + storage ring buffer)
+ * instead of the centralized logger — bundling that caused esbuild name
+ * collisions that crashed the content IIFE.
+ */
+import { contentWarn, contentError } from "@/content/contentLogger.js";
 
 let bubbleHost: HTMLDivElement | null = null;
 
@@ -65,7 +70,7 @@ function handleTextSelection(e: MouseEvent, hotkey: string): void {
         { type: "translate_text", text: text },
         (response: { translation?: string }) => {
           if (chrome.runtime.lastError) {
-            logger.warn(
+            contentWarn(
               "[InfoBox] translate_text lastError:",
               chrome.runtime.lastError,
             );
@@ -74,12 +79,12 @@ function handleTextSelection(e: MouseEvent, hotkey: string): void {
           if (response && response.translation) {
             showTranslationBubble(response.translation, selection);
           } else {
-            logger.warn("[InfoBox] translate_text yanıtsız:", response);
+            contentWarn("[InfoBox] translate_text yanıtsız:", response);
           }
         },
       );
     } catch (err) {
-      logger.error("[InfoBox] sendMessage hatası:", err);
+      contentError("[InfoBox] sendMessage hatası:", err);
     }
   }, 10);
 }

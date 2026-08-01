@@ -73,7 +73,7 @@ export function AIChatView({
 
   const onSend = () => {
     const text = inputVal.trim();
-    if (!text) return;
+    if (!text) {return;}
     setInputVal("");
     handleSendMessage(text);
   };

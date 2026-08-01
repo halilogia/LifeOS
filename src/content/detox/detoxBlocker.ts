@@ -19,7 +19,9 @@ export function initDetoxBlocker(): void {
 
   function checkScreenTimeLimits(): void {
     try {
-      if (!chrome.runtime?.id) {return;}
+      if (!chrome.runtime?.id) {
+        return;
+      }
 
       chrome.storage.sync.get(
         [
@@ -33,23 +35,29 @@ export function initDetoxBlocker(): void {
           "detoxLimits",
         ],
         (settings) => {
-          if (chrome.runtime.lastError || !chrome.runtime?.id) {return;}
+          if (chrome.runtime.lastError || !chrome.runtime?.id) {
+            return;
+          }
 
           chrome.storage.local.get(
             ["pomodoro_timer_state", "screen_time_stats"],
             (localRes) => {
-              if (chrome.runtime.lastError || !chrome.runtime?.id) {return;}
+              if (chrome.runtime.lastError || !chrome.runtime?.id) {
+                return;
+              }
 
               const enabled = (settings.detox_enabled as boolean) || false;
-              const blockedSites = (settings.detox_blocked_sites as string[]) || [];
+              const blockedSites =
+                (settings.detox_blocked_sites as string[]) || [];
               const endTime = (settings.detox_end_time as number) || 0;
               const lang = (settings.lang as string) || "tr";
               const pomoBlockEnabled = settings.pomoBlockEnabled ?? true;
-              const pomoState = (localRes.pomodoro_timer_state as {
-                running?: boolean;
-                mode?: string;
-                endTime?: number;
-              }) || {};
+              const pomoState =
+                (localRes.pomodoro_timer_state as {
+                  running?: boolean;
+                  mode?: string;
+                  endTime?: number;
+                }) || {};
 
               const isBlockedHost = blockedSites.some((site) =>
                 currentHost.includes(site),
@@ -80,76 +88,82 @@ export function initDetoxBlocker(): void {
                 (settings.detoxLimits as Record<string, number>) ||
                 (settings.detox_limits as Record<string, number>) ||
                 {};
-            const cleanHost = currentHost.replace("www.", "");
-            const limitDomain = Object.keys(detoxLimits).find((domain) => {
-              const cleanDomain = domain.replace("www.", "");
-              return cleanHost.includes(cleanDomain) || cleanDomain.includes(cleanHost);
-            });
-            const activeLimitMinutes = limitDomain
-              ? detoxLimits[limitDomain]
-              : 0;
+              const cleanHost = currentHost.replace("www.", "");
+              const limitDomain = Object.keys(detoxLimits).find((domain) => {
+                const cleanDomain = domain.replace("www.", "");
+                return (
+                  cleanHost.includes(cleanDomain) ||
+                  cleanDomain.includes(cleanHost)
+                );
+              });
+              const activeLimitMinutes = limitDomain
+                ? detoxLimits[limitDomain]
+                : 0;
 
-            let isLimitExceeded = false;
-            let remainingSeconds = 999999;
-            if (activeLimitMinutes > 0 && limitDomain) {
-              const todayStr = new Date().toLocaleDateString("sv");
-              const dailyStats = localRes.screen_time_stats?.[todayStr] || {};
-              const cleanLimitDomain = limitDomain.replace("www.", "");
-              
-              let spentSeconds = 0;
-              for (const statDomain in dailyStats) {
-                const cleanStatDomain = statDomain.replace("www.", "");
-                if (cleanStatDomain.includes(cleanLimitDomain) || cleanLimitDomain.includes(cleanStatDomain)) {
-                  spentSeconds += dailyStats[statDomain];
+              let isLimitExceeded = false;
+              let remainingSeconds = 999999;
+              if (activeLimitMinutes > 0 && limitDomain) {
+                const todayStr = new Date().toLocaleDateString("sv");
+                const dailyStats = localRes.screen_time_stats?.[todayStr] || {};
+                const cleanLimitDomain = limitDomain.replace("www.", "");
+
+                let spentSeconds = 0;
+                for (const statDomain in dailyStats) {
+                  const cleanStatDomain = statDomain.replace("www.", "");
+                  if (
+                    cleanStatDomain.includes(cleanLimitDomain) ||
+                    cleanLimitDomain.includes(cleanStatDomain)
+                  ) {
+                    spentSeconds += dailyStats[statDomain];
+                  }
                 }
+
+                const limitSeconds = activeLimitMinutes * 60;
+                isLimitExceeded = spentSeconds >= limitSeconds;
+                remainingSeconds = limitSeconds - spentSeconds;
               }
 
-              const limitSeconds = activeLimitMinutes * 60;
-              isLimitExceeded = spentSeconds >= limitSeconds;
-              remainingSeconds = limitSeconds - spentSeconds;
-            }
+              if (isDetoxActive || isPomoActive || isLimitExceeded) {
+                const targetEndTime = isPomoActive
+                  ? pomoState.endTime
+                  : isLimitExceeded
+                    ? -1
+                    : endTime;
+                const isLimitBlock =
+                  isLimitExceeded && !isDetoxActive && !isPomoActive;
 
-            if (isDetoxActive || isPomoActive || isLimitExceeded) {
-              const targetEndTime = isPomoActive
-                ? pomoState.endTime
-                : isLimitExceeded
-                  ? -1
-                  : endTime;
-              const isLimitBlock =
-                isLimitExceeded && !isDetoxActive && !isPomoActive;
-
-              setupBlockPage(
-                targetEndTime || -1,
-                (settings.custom_quotes as Array<{ text: string }>) || [],
-                lang,
-                Boolean(isPomoActive),
-                isLimitBlock,
-                activeLimitMinutes,
-                styleEl,
-              );
-            } else {
-              if (styleEl.parentNode) {
-                styleEl.parentNode.removeChild(styleEl);
-              }
-
-              if (
-                activeLimitMinutes > 0 &&
-                remainingSeconds > 0 &&
-                remainingSeconds <= 300
-              ) {
-                showTopWarningBanner(
-                  Math.ceil(remainingSeconds / 60),
+                setupBlockPage(
+                  targetEndTime || -1,
+                  (settings.custom_quotes as Array<{ text: string }>) || [],
                   lang,
-                  limitDomain || "",
+                  Boolean(isPomoActive),
+                  isLimitBlock,
+                  activeLimitMinutes,
+                  styleEl,
                 );
               } else {
-                removeWarningBanner();
+                if (styleEl.parentNode) {
+                  styleEl.parentNode.removeChild(styleEl);
+                }
+
+                if (
+                  activeLimitMinutes > 0 &&
+                  remainingSeconds > 0 &&
+                  remainingSeconds <= 300
+                ) {
+                  showTopWarningBanner(
+                    Math.ceil(remainingSeconds / 60),
+                    lang,
+                    limitDomain || "",
+                  );
+                } else {
+                  removeWarningBanner();
+                }
               }
-            }
-          }
-        );
-      }
-    );
+            },
+          );
+        },
+      );
     } catch {
       // Ignore extension context invalidation on extension reload
     }
@@ -186,12 +200,18 @@ export function initDetoxBlocker(): void {
   }, 2000);
 }
 
-function showTopWarningBanner(minutesLeft: number, lang: string, domain: string): void {
+function showTopWarningBanner(
+  minutesLeft: number,
+  lang: string,
+  domain: string,
+): void {
   if (sessionStorage.getItem("detox_warning_dismissed") === "true") {
     return;
   }
 
-  if (!document.body) {return;}
+  if (!document.body) {
+    return;
+  }
 
   let banner: HTMLElement | null = null;
   let host = document.getElementById("detox-warning-banner-host");
@@ -215,7 +235,9 @@ function showTopWarningBanner(minutesLeft: number, lang: string, domain: string)
     wrapper.style.gap = "12px";
     wrapper.style.background = "rgba(15, 15, 20, 0.85)";
     wrapper.style.backdropFilter = "blur(12px)";
-    (wrapper.style as unknown as Record<string, string>)["webkitBackdropFilter"] = "blur(12px)";
+    (wrapper.style as unknown as Record<string, string>)[
+      "webkitBackdropFilter"
+    ] = "blur(12px)";
     wrapper.style.border = "1px solid rgba(239, 68, 68, 0.4)";
     wrapper.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.5)";
     wrapper.style.borderRadius = "12px";
@@ -239,7 +261,9 @@ function showTopWarningBanner(minutesLeft: number, lang: string, domain: string)
     closeBtn.style.padding = "2px 6px";
     closeBtn.addEventListener("click", () => {
       sessionStorage.setItem("detox_warning_dismissed", "true");
-      if (host) {host.remove();}
+      if (host) {
+        host.remove();
+      }
     });
 
     wrapper.appendChild(textSpan);
@@ -254,10 +278,9 @@ function showTopWarningBanner(minutesLeft: number, lang: string, domain: string)
   if (banner) {
     const siteLabel = domain.replace(".com", "").toUpperCase();
     const t = getTranslation(lang as Language);
-    banner.textContent =
-      t.social_media_limit_warning
-        .replace("{site}", siteLabel)
-        .replace("{minutes}", String(minutesLeft));
+    banner.textContent = t.social_media_limit_warning
+      .replace("{site}", siteLabel)
+      .replace("{minutes}", String(minutesLeft));
   }
 }
 
@@ -314,7 +337,9 @@ function setupBlockPage(
         padding: 16px !important;
       }
     `;
-    if (document.head) {document.head.appendChild(styleTag);}
+    if (document.head) {
+      document.head.appendChild(styleTag);
+    }
   }
 
   if (document.head) {
@@ -341,7 +366,9 @@ function setupBlockPage(
   };
 
   function escapeHtml(str: string): string {
-    if (!str) {return "";}
+    if (!str) {
+      return "";
+    }
     return str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -354,8 +381,7 @@ function setupBlockPage(
     customQuotes.length > 0
       ? customQuotes.map((q) => `"${escapeHtml(q.text)}"`)
       : defaultQuotes[lang] || defaultQuotes.tr;
-  const randomQuote =
-    quotesPool[Math.floor(Math.random() * quotesPool.length)];
+  const randomQuote = quotesPool[Math.floor(Math.random() * quotesPool.length)];
 
   const t = getTranslation(lang as Language);
   let titleText = t.focus_time;
@@ -366,14 +392,14 @@ function setupBlockPage(
     descText = t.pomo_blocked_desc;
   } else if (isLimitBlock) {
     titleText = t.daily_limit_reached;
-    descText = t.daily_limit_desc
-      .replace("{minutes}", String(activeLimitMinutes));
+    descText = t.daily_limit_desc.replace(
+      "{minutes}",
+      String(activeLimitMinutes),
+    );
   }
 
   const buttonText = t.go_to_dashboard;
-  const timeRemainingLabel = isPomo
-    ? t.remaining_focus_time
-    : t.detox_duration;
+  const timeRemainingLabel = isPomo ? t.remaining_focus_time : t.detox_duration;
   const permanentLabel = isLimitBlock
     ? t.daily_limit_expired
     : t.permanent_block;
@@ -503,7 +529,9 @@ function setupBlockPage(
   let timerInterval: ReturnType<typeof setInterval> | null = null;
 
   const setupDOMAndTimer = () => {
-    if (!document.body) {return;}
+    if (!document.body) {
+      return;
+    }
 
     let overlay = document.getElementById("detox-block-overlay");
     if (!overlay) {

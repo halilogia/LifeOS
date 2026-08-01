@@ -98,7 +98,7 @@ export function parseLocalCommand(query: string): LocalParsedResult {
       const symbol = match[1].toUpperCase();
       // Check alias dictionary
       let foundSymbol = symbol;
-      let question = query;
+      const question = query;
       for (const key of Object.keys(BIST_ALIASES)) {
         if (textLower.includes(key)) {
           foundSymbol = BIST_ALIASES[key].symbol.replace(".IS", "");

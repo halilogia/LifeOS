@@ -98,8 +98,8 @@ function autoFillPromptOnTab(tabId: number, prompt: string): void {
     info: { status?: string; url?: string },
     _tab: chrome.tabs.Tab,
   ) => {
-    if (updatedTabId !== tabId) return;
-    if (info.status !== "complete") return;
+    if (updatedTabId !== tabId) {return;}
+    if (info.status !== "complete") {return;}
 
     // Listener'ı bir kere çalıştır, sonra kaldır
     chrome.tabs.onUpdated.removeListener(onUpdated);
@@ -125,7 +125,7 @@ function autoFillPromptOnTab(tabId: number, prompt: string): void {
 
           for (const sel of selectors) {
             const el = document.querySelector(sel) as HTMLElement | null;
-            if (!el || !el.isConnected) continue;
+            if (!el || !el.isConnected) {continue;}
 
             try {
               // Textarea / input

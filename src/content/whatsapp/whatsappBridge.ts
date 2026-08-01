@@ -1,15 +1,14 @@
-import { logger } from "@/utils/logger.js";
-
 /**
  * whatsappBridge.ts
  * WhatsApp Web OpenClaw / 9Router AI & Life OS Integration.
  * Clean Architecture & Strict Security (0 Vulnerability, 0 Backdoor).
- * 
+ *
  * TELEFON UZAKTAN YÖNETİM MODU (Remote Mobile AI Bot):
  * Telefonunuzdan "Kendime Mesaj / Siz" sohbetine attığınız @ai mesajları,
  * bilgisayarda WhatsApp Web sekmesi açık olduğu sürece (arka planda bile dursa)
  * 9Router AI tarafından işlenir ve ANINDA TELEFONUNUZA yanıt olarak düşer! 📱🤖
  */
+import { contentWarn, contentError } from "@/content/contentLogger.js";
 
 const processedAiMessages = new Set<string>();
 
@@ -17,14 +16,17 @@ const processedAiMessages = new Set<string>();
  * Safe helper to observe document body or documentElement
  * Prevents "parameter 1 is not of type 'Node'" error when DOM is loading.
  */
-function safeObserve(observer: MutationObserver, options: MutationObserverInit): void {
+function safeObserve(
+  observer: MutationObserver,
+  options: MutationObserverInit,
+): void {
   const attach = () => {
     const targetNode = document.body || document.documentElement;
     if (targetNode) {
       try {
         observer.observe(targetNode, options);
       } catch (err) {
-        logger.warn("[Life OS WhatsApp Bridge] Observer attach error:", err);
+        contentWarn("[Life OS WhatsApp Bridge] Observer attach error:", err);
       }
     }
   };
@@ -53,7 +55,9 @@ export function initWhatsappBridge(): void {
 
   // Show welcome toast when WhatsApp Web is loaded
   setTimeout(() => {
-    showToast("📱 Uzaktan Telefon AI Modu Aktif! Telefondan @ai yazıp atabilirsiniz.");
+    showToast(
+      "📱 Uzaktan Telefon AI Modu Aktif! Telefondan @ai yazıp atabilirsiniz.",
+    );
   }, 4000);
 }
 
@@ -61,7 +65,9 @@ export function initWhatsappBridge(): void {
  * Inject safe CSS styles into page head for buttons and notifications.
  */
 function injectWhatsappStyles(): void {
-  if (document.getElementById("life-os-wp-styles")) {return;}
+  if (document.getElementById("life-os-wp-styles")) {
+    return;
+  }
 
   const styleEl = document.createElement("style");
   styleEl.id = "life-os-wp-styles";
@@ -129,7 +135,9 @@ function injectWhatsappStyles(): void {
  * Show a safe temporary toast message on screen.
  */
 function showToast(messageText: string): void {
-  if (!document.body) {return;}
+  if (!document.body) {
+    return;
+  }
   const toast = document.createElement("div");
   toast.className = "life-os-wp-toast";
   toast.textContent = messageText;
@@ -167,30 +175,46 @@ function setupRemoteAiAssistantObserver(): void {
 
   // Perform snapshot when DOM ready
   if (document.readyState === "loading") {
-    window.addEventListener("DOMContentLoaded", markExistingMessagesAsProcessed, { once: true });
+    window.addEventListener(
+      "DOMContentLoaded",
+      markExistingMessagesAsProcessed,
+      { once: true },
+    );
   } else {
     markExistingMessagesAsProcessed();
   }
 
   const scanAllMessagesForPrompts = async () => {
-    if (isProcessingAi) {return;}
+    if (isProcessingAi) {
+      return;
+    }
 
     // Scan all message elements in active chat window
     const allMessageNodes = Array.from(
-      document.querySelectorAll("div.message-out, div.message-in, div[role='row'], div.copyable-text"),
+      document.querySelectorAll(
+        "div.message-out, div.message-in, div[role='row'], div.copyable-text",
+      ),
     );
 
-    if (allMessageNodes.length === 0) {return;}
+    if (allMessageNodes.length === 0) {
+      return;
+    }
 
     // Iterate backwards starting from latest messages
-    for (let i = allMessageNodes.length - 1; i >= Math.max(0, allMessageNodes.length - 8); i--) {
+    for (
+      let i = allMessageNodes.length - 1;
+      i >= Math.max(0, allMessageNodes.length - 8);
+      i--
+    ) {
       const msgNode = allMessageNodes[i];
       const textEl =
         msgNode.querySelector("span.selectable-text") ||
         msgNode.querySelector("div.copyable-text") ||
         msgNode.querySelector("span._ao3e");
 
-      if (!textEl) {continue;}
+      if (!textEl) {
+        continue;
+      }
 
       const rawText = textEl.textContent || "";
       const trimmed = rawText.trim();
@@ -215,11 +239,15 @@ function setupRemoteAiAssistantObserver(): void {
         lower === "@ai" ||
         lower === "/ai";
 
-      if (!isAiTrigger) {continue;}
+      if (!isAiTrigger) {
+        continue;
+      }
 
       // Unique hash ID for message to avoid duplicate replies
       const msgHash = `${trimmed}_${i}`;
-      if (processedAiMessages.has(msgHash)) {continue;}
+      if (processedAiMessages.has(msgHash)) {
+        continue;
+      }
 
       // Mark as processed immediately
       processedAiMessages.add(msgHash);
@@ -230,7 +258,9 @@ function setupRemoteAiAssistantObserver(): void {
         .replace(/^@9router\s*/i, "")
         .trim();
 
-      if (!cleanPrompt) {continue;}
+      if (!cleanPrompt) {
+        continue;
+      }
 
       isProcessingAi = true;
       showToast(`📱 Telefondan İstek Geldi: "${cleanPrompt.slice(0, 25)}..."`);
@@ -255,7 +285,11 @@ function setupRemoteAiAssistantObserver(): void {
             (res) => {
               if (chrome.runtime.lastError) {
                 // Silently ignore extension invalidation on reload
-                if (chrome.runtime.lastError.message?.includes("Extension context invalidated")) {
+                if (
+                  chrome.runtime.lastError.message?.includes(
+                    "Extension context invalidated",
+                  )
+                ) {
                   resolve("");
                 } else {
                   reject(chrome.runtime.lastError);
@@ -293,7 +327,7 @@ function setupRemoteAiAssistantObserver(): void {
         // Process only one AI prompt per scan pass
         break;
       } catch (err) {
-        logger.error("[Life OS WhatsApp Bridge] AI Error:", err);
+        contentError("[Life OS WhatsApp Bridge] AI Error:", err);
         isProcessingAi = false;
       }
     }
@@ -321,7 +355,7 @@ function sendTextToWhatsappChat(replyText: string): void {
     document.querySelector('div[contenteditable="true"]');
 
   if (!inputArea) {
-    logger.warn("[Life OS WhatsApp Bridge] Input area not found");
+    contentWarn("[Life OS WhatsApp Bridge] Input area not found");
     return;
   }
 
@@ -332,7 +366,7 @@ function sendTextToWhatsappChat(replyText: string): void {
 
   try {
     document.execCommand("insertText", false, formattedText);
-  } catch (e) {
+  } catch {
     el.innerText = formattedText;
   }
 

@@ -71,7 +71,7 @@ export function SellStockModal({
             value={lotToSell}
             onInput={(e) => {
               const val = parseInt((e.target as HTMLInputElement).value);
-              if (!isNaN(val)) setLotToSell(Math.min(val, currentLot));
+              if (!isNaN(val)) {setLotToSell(Math.min(val, currentLot));}
             }}
             style={{
               background: "rgba(0,0,0,0.2)",
@@ -96,7 +96,7 @@ export function SellStockModal({
             value={sellPrice}
             onInput={(e) => {
               const val = parseFloat((e.target as HTMLInputElement).value);
-              if (!isNaN(val)) setSellPrice(val);
+              if (!isNaN(val)) {setSellPrice(val);}
             }}
             style={{
               background: "rgba(0,0,0,0.2)",
