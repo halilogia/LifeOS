@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from "preact/hooks";
+import { useState, useEffect, useCallback } from "preact/hooks";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { useTodos } from "@/presentation/hooks/useTodos.js";
@@ -73,6 +73,10 @@ export function App() {
     handleTogglePomoBlock,
     handleToggleUniversalInfoBox,
     handleUniversalInfoBoxHotkeyChange,
+    whatsappBridgeEnabled,
+    telegramBridgeEnabled,
+    handleToggleWhatsappBridge,
+    handleToggleTelegramBridge,
     handleToggleAutoGroupTabs,
     handleClearAllData,
     handleUpdateAIConfig,
@@ -301,6 +305,10 @@ export function App() {
         onToggleUniversalInfoBox={handleToggleUniversalInfoBox}
         universalInfoBoxHotkey={universalInfoBoxHotkey}
         onUniversalInfoBoxHotkeyChange={handleUniversalInfoBoxHotkeyChange}
+        whatsappBridgeEnabled={whatsappBridgeEnabled}
+        onToggleWhatsappBridge={handleToggleWhatsappBridge}
+        telegramBridgeEnabled={telegramBridgeEnabled}
+        onToggleTelegramBridge={handleToggleTelegramBridge}
         autoGroupTabsEnabled={autoGroupTabsEnabled}
         onToggleAutoGroupTabs={handleToggleAutoGroupTabs}
         onExportBackup={handleExportBackup}

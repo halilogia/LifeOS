@@ -26,7 +26,19 @@ function safeInit(name: string, fn: () => void): void {
   safeInit("UniversalInfoBox", initUniversalInfoBox);
   safeInit("DomAgentEngine", initDomAgentEngine);
   safeInit("VolumeBooster", initVolumeBoosterListener);
-  safeInit("WhatsappBridge", initWhatsappBridge);
-  safeInit("TelegramBridge", initTelegramBridge);
+
+  // WP/Telegram köprüleri varsayılan KAPALI — Ayarlar > Genel'den açılır.
+  chrome.storage.sync.get(
+    ["whatsappBridgeEnabled", "telegramBridgeEnabled"],
+    (settings) => {
+      if (settings.whatsappBridgeEnabled) {
+        safeInit("WhatsappBridge", initWhatsappBridge);
+      }
+      if (settings.telegramBridgeEnabled) {
+        safeInit("TelegramBridge", initTelegramBridge);
+      }
+    },
+  );
+
   safeInit("QuizPanel", initQuizPanel);
 })();

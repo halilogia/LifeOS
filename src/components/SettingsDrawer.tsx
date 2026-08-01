@@ -23,6 +23,10 @@ export interface SettingsDrawerProps {
   onToggleUniversalInfoBox: () => void;
   universalInfoBoxHotkey: string;
   onUniversalInfoBoxHotkeyChange: (hotkey: string) => void;
+  whatsappBridgeEnabled: boolean;
+  onToggleWhatsappBridge: () => void;
+  telegramBridgeEnabled: boolean;
+  onToggleTelegramBridge: () => void;
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
   onExportBackup: () => void;
@@ -74,6 +78,10 @@ export function SettingsDrawer({
   onToggleUniversalInfoBox,
   universalInfoBoxHotkey,
   onUniversalInfoBoxHotkeyChange,
+  whatsappBridgeEnabled,
+  onToggleWhatsappBridge,
+  telegramBridgeEnabled,
+  onToggleTelegramBridge,
   autoGroupTabsEnabled,
   onToggleAutoGroupTabs,
   onExportBackup,
@@ -179,6 +187,10 @@ export function SettingsDrawer({
             onToggleUniversalInfoBox={onToggleUniversalInfoBox}
             universalInfoBoxHotkey={universalInfoBoxHotkey}
             onUniversalInfoBoxHotkeyChange={onUniversalInfoBoxHotkeyChange}
+            whatsappBridgeEnabled={whatsappBridgeEnabled}
+            onToggleWhatsappBridge={onToggleWhatsappBridge}
+            telegramBridgeEnabled={telegramBridgeEnabled}
+            onToggleTelegramBridge={onToggleTelegramBridge}
             autoGroupTabsEnabled={autoGroupTabsEnabled}
             onToggleAutoGroupTabs={onToggleAutoGroupTabs}
             onNotify={onNotify}

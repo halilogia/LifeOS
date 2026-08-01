@@ -16,6 +16,8 @@ import {
   SYNC_POMO_BLOCK_ENABLED,
   SYNC_UNIVERSAL_INFOBOX_ENABLED,
   SYNC_UNIVERSAL_INFOBOX_HOTKEY,
+  SYNC_WHATSAPP_BRIDGE_ENABLED,
+  SYNC_TELEGRAM_BRIDGE_ENABLED,
 } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageSettingsRepository implements ISettingsRepository {
@@ -27,6 +29,8 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
     pomoBlockEnabled: boolean;
     universalInfoBoxEnabled: boolean;
     universalInfoBoxHotkey: string;
+    whatsappBridgeEnabled: boolean;
+    telegramBridgeEnabled: boolean;
   }> {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
@@ -44,6 +48,10 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
               result[SYNC_UNIVERSAL_INFOBOX_ENABLED] ?? true,
             universalInfoBoxHotkey:
               result[SYNC_UNIVERSAL_INFOBOX_HOTKEY] || "none",
+            whatsappBridgeEnabled:
+              result[SYNC_WHATSAPP_BRIDGE_ENABLED] ?? false,
+            telegramBridgeEnabled:
+              result[SYNC_TELEGRAM_BRIDGE_ENABLED] ?? false,
           });
         },
       );
@@ -107,6 +115,24 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
           [SYNC_UNIVERSAL_INFOBOX_ENABLED]: enabled,
           [SYNC_UNIVERSAL_INFOBOX_HOTKEY]: hotkey,
         },
+        resolve,
+      );
+    });
+  }
+
+  async setWhatsappBridgeEnabled(enabled: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { [SYNC_WHATSAPP_BRIDGE_ENABLED]: enabled },
+        resolve,
+      );
+    });
+  }
+
+  async setTelegramBridgeEnabled(enabled: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(
+        { [SYNC_TELEGRAM_BRIDGE_ENABLED]: enabled },
         resolve,
       );
     });

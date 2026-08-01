@@ -34,6 +34,10 @@ export function useSettings() {
     useState(true);
   const [universalInfoBoxHotkey, setUniversalInfoBoxHotkeyState] =
     useState("none");
+  const [whatsappBridgeEnabled, setWhatsappBridgeEnabledState] =
+    useState(false);
+  const [telegramBridgeEnabled, setTelegramBridgeEnabledState] =
+    useState(false);
   const [autoGroupTabsEnabled, setAutoGroupTabsEnabledState] = useState(true);
 
   // --- AI settings ---
@@ -67,6 +71,8 @@ export function useSettings() {
     setCalendarNotificationsEnabledState(config.calendarNotificationsEnabled);
     setPomoBlockEnabledState(config.pomoBlockEnabled);
     setUniversalInfoBoxHotkeyState(config.universalInfoBoxHotkey);
+    setWhatsappBridgeEnabledState(config.whatsappBridgeEnabled);
+    setTelegramBridgeEnabledState(config.telegramBridgeEnabled);
 
     // AI settings
     const ai = await syncGet<string>([
@@ -147,6 +153,16 @@ export function useSettings() {
     },
     [universalInfoBoxEnabled],
   );
+
+  const handleToggleWhatsappBridge = useCallback(async () => {
+    const nextVal = await settingsUC.toggleWhatsappBridge();
+    setWhatsappBridgeEnabledState(nextVal);
+  }, []);
+
+  const handleToggleTelegramBridge = useCallback(async () => {
+    const nextVal = await settingsUC.toggleTelegramBridge();
+    setTelegramBridgeEnabledState(nextVal);
+  }, []);
 
   const handleClearAllData = useCallback(async () => {
     await settingsUC.clearAllData(lang);
@@ -234,6 +250,8 @@ export function useSettings() {
     pomoBlockEnabled,
     universalInfoBoxEnabled,
     universalInfoBoxHotkey,
+    whatsappBridgeEnabled,
+    telegramBridgeEnabled,
     autoGroupTabsEnabled,
     aiProvider,
     aiApiKey,
@@ -253,6 +271,8 @@ export function useSettings() {
     handleTogglePomoBlock,
     handleToggleUniversalInfoBox,
     handleUniversalInfoBoxHotkeyChange,
+    handleToggleWhatsappBridge,
+    handleToggleTelegramBridge,
     handleToggleAutoGroupTabs,
     handleClearAllData,
     handleUpdateAIConfig,
