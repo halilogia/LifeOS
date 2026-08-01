@@ -20,8 +20,9 @@ const AI_SITES: Array<{ host: string; name: string }> = [
 /** Flexible option marker: "A." "A)" "* A)" "**A)**" etc. */
 const OPTION_RE = /^\s*[*_]*([A-E])[.)]\s*(.*)$/i;
 
-/** Question start marker: "**Soru 1:**", "1.", "1)" etc. */
-const QUESTION_RE = /^\s*[*_#]*\s*(?:Soru\s*)?(\d+)\s*[.):]\s*(.*)$/i;
+/** Question start marker: "Soru 1:", "**1. Soru:**", "1.", "1)", "1-)" etc. */
+const QUESTION_RE =
+  /^\s*[*_#]*\s*(?:Soru\s*)?(\d{1,2})\s*[.):\-–]?\s*(?:Soru\s*)?[:*_#]*\s*(.*)$/i;
 
 /** Correct answer marker: "Doğru Cevap: X", "✓ X", "Cevap: X". */
 const ANSWER_RE = /(?:doğru\s*cevap|✓|cevap)\s*[:*\-–]?\s*([A-E])/i;
@@ -29,9 +30,11 @@ const ANSWER_RE = /(?:doğru\s*cevap|✓|cevap)\s*[:*\-–]?\s*([A-E])/i;
 const STORAGE_KEY = "lifos_quiz_stats";
 
 interface QuizQuestion {
+  num: number;
   question: string;
   options: Array<{ letter: string; text: string }>;
   correctAnswer: string | null;
+  explanation?: string;
 }
 
 interface QuizStats {
@@ -78,6 +81,12 @@ export function initQuizPanel(): void {
   } else {
     document.addEventListener("DOMContentLoaded", start, { once: true });
   }
+
+  // Initial scan — a past chat may already be in the DOM.
+  // MutationObserver only fires on CHANGES, so scan once on load.
+  setTimeout(() => {
+    tryParse();
+  }, 1200);
 }
 
 /** Debounced parse — runs 1.8s after the last DOM change (AI finished typing). */
@@ -91,28 +100,25 @@ function scheduleParse(): void {
 }
 
 /**
- * Collects visible text from the AI response area. We gather text from all
- * open shadow roots too (ChatGPT/Claude/Copilot render inside shadow DOM).
+ * Collects visible text from the AI response area.
+ * Uses innerText (not TreeWalker) — innerText preserves inline text
+ * ("<strong>Soru 1:</strong> metin" stays on ONE line), while TreeWalker
+ * splits text nodes at element boundaries and breaks question parsing.
+ * Open shadow roots are walked too (ChatGPT/Claude/Copilot render inside them).
  */
 function collectPageText(): string {
   const parts: string[] = [];
+  const seen = new Set<Node>();
 
   const walk = (root: ParentNode) => {
-    // Limit to text-bearing blocks to avoid collecting UI chrome text.
-    const walker = document.createTreeWalker(
-      root as Node,
-      NodeFilter.SHOW_TEXT,
-    );
-    while (walker.nextNode()) {
-      const node = walker.currentNode as Text;
-      const text = node.nodeValue?.trim();
-      if (text && text.length > 0) {
-        parts.push(text);
-      }
+    const text = (root as HTMLElement).innerText ?? root.textContent ?? "";
+    if (text.trim()) {
+      parts.push(text.trim());
     }
     root.querySelectorAll("*").forEach((el) => {
       const shadow = (el as HTMLElement).shadowRoot as ShadowRoot | null;
-      if (shadow && shadow.mode === "open") {
+      if (shadow && shadow.mode === "open" && !seen.has(shadow)) {
+        seen.add(shadow);
         walk(shadow);
       }
     });
@@ -128,17 +134,45 @@ function parseQuestions(rawText: string): QuizQuestion[] {
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
+
+  // User prompt templates like "Soru 1: [soru metni]" / "A) [şıkkı]"
+  // are collected too (the user's own message is in the DOM). Drop them.
+  const PLACEHOLDER_RE =
+    /\[(?:soru\s*metni|şıkkı|şıklar|açıklaması|cevabı|question\s*text|option|answer)\]/i;
+
   const questions: QuizQuestion[] = [];
+  const seenNumbers = new Set<number>();
   let current: QuizQuestion | null = null;
+
+  const flush = () => {
+    if (current && current.options.length >= 2) {
+      // Drop user-template questions (placeholder text).
+      const hasPlaceholder =
+        PLACEHOLDER_RE.test(current.question) ||
+        current.options.some((o) => PLACEHOLDER_RE.test(o.text));
+      if (!hasPlaceholder) {
+        questions.push(current);
+      }
+    }
+    current = null;
+  };
 
   for (const line of lines) {
     const qMatch = QUESTION_RE.exec(line);
     if (qMatch && qMatch[1]) {
-      // New question detected — flush previous.
-      if (current && current.options.length >= 2) {
-        questions.push(current);
+      const num = parseInt(qMatch[1], 10);
+      // "Soru 1" appearing again = a NEW test started in the same chat.
+      // The user's template questions (with [soru metni] placeholders) are
+      // never pushed, so a real "Soru 1" only comes from an AI answer.
+      if (num === 1 && questions.length > 0) {
+        questions.length = 0;
+        seenNumbers.clear();
+        contentLog("[QuizPanel] yeni test algılandı — önceki sorular temizlendi");
       }
+      flush();
+      seenNumbers.add(num);
       current = {
+        num,
         question: qMatch[2] || line,
         options: [],
         correctAnswer: null,
@@ -158,14 +192,26 @@ function parseQuestions(rawText: string): QuizQuestion[] {
     const ansMatch = ANSWER_RE.exec(line);
     if (ansMatch && current) {
       current.correctAnswer = ansMatch[1].toUpperCase();
+      // Capture the explanation after "— Açıklama: ..." if present.
+      const expl = line.split(/—|–|-/)[1]?.trim();
+      if (expl && expl.length > 0) {
+        current.explanation = expl.replace(/^açıklama\s*:?\s*/i, "");
+      }
+      continue;
+    }
+
+    // Fallback: a paragraph line that matches nothing (multi-line question
+    // stems, ÖSYM-style long questions) gets appended to the current
+    // question text instead of being dropped.
+    if (current) {
+      current.question =
+        current.question.length > 0
+          ? `${current.question}\n${line}`
+          : line;
     }
   }
 
-  if (current && current.options.length >= 2) {
-    questions.push(current);
-  }
-
-  // Filter: questions must have at least 2 options to be useful.
+  flush();
   return questions;
 }
 
@@ -176,13 +222,26 @@ function tryParse(): void {
   }
   collectedText = raw;
 
+  // Freeze parsing while the overlay panel is open — the user is mid-quiz.
+  if (document.getElementById("lifos-quiz-panel-host")) {
+    return;
+  }
+
   const questions = parseQuestions(raw);
-  if (questions.length === 0) {
-    // No quiz detected — hide trigger if shown.
+  contentLog(
+    `[QuizPanel] parse: ${questions.length} soru bulundu (raw ${raw.length} karakter)`,
+  );
+  if (questions.length < 2) {
+    // No usable quiz detected — hide trigger if shown.
     hideTrigger();
     return;
   }
 
+  // Replace the parsed set on every valid parse. A second test in the
+  // same chat has the SAME question numbers (1-5), so a "grew" check
+  // (questions.length > previous) would compare 5 > 5 = false and keep
+  // the OLD test. Duplicate-number filtering in parseQuestions already
+  // drops the first test's questions in favor of the newer ones.
   parsedQuestions = questions;
   currentIndex = 0;
   selectedAnswers = {};
@@ -274,6 +333,13 @@ function openPanel(): void {
     }
   };
   document.addEventListener("keydown", escHandler);
+}
+
+/** Closes the overlay panel. Works from inside shadow DOM —
+ *  closest() cannot cross the shadow boundary, so we remove
+ *  the host element directly. */
+function closePanel(): void {
+  document.getElementById("lifos-quiz-panel-host")?.remove();
 }
 
 /** Renders the quiz panel content into the shadow root. */
@@ -375,6 +441,17 @@ function renderPanel(shadow: ShadowRoot): void {
       min-width: 20px;
     }
     .option-text { color: #e2e8f0; line-height: 1.5; }
+    .explanation {
+      margin-top: 28px;
+      padding: 14px 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      color: #d1fae5;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .explanation strong { color: #6ee7b7; }
     .nav {
       display: flex;
       justify-content: space-between;
@@ -433,8 +510,22 @@ function renderPanel(shadow: ShadowRoot): void {
 function renderQuestionView(panel: HTMLElement): void {
   panel.innerHTML = "";
 
+  // Clamp index in case questions were re-parsed while panel was open.
+  if (currentIndex < 0) {
+    currentIndex = 0;
+  }
+  if (currentIndex >= parsedQuestions.length) {
+    currentIndex = Math.max(0, parsedQuestions.length - 1);
+  }
+
   const q = parsedQuestions[currentIndex];
   if (!q) {
+    // No questions at all — show empty state instead of a blank panel.
+    const empty = document.createElement("div");
+    empty.className = "result";
+    empty.textContent = "Soru bulunamadı — panel kapatılıyor.";
+    panel.appendChild(empty);
+    contentLog("[QuizPanel] renderQuestionView: no questions available");
     return;
   }
 
@@ -454,7 +545,7 @@ function renderQuestionView(panel: HTMLElement): void {
   closeBtn.className = "close-btn";
   closeBtn.textContent = "×";
   closeBtn.addEventListener("click", () => {
-    panel.closest("#lifos-quiz-panel-host")?.remove();
+    closePanel();
   });
 
   header.appendChild(title);
@@ -468,14 +559,16 @@ function renderQuestionView(panel: HTMLElement): void {
   qText.appendChild(renderRichText(q.question));
   panel.appendChild(qText);
 
-  // Options
-  const isFinished = currentIndex === parsedQuestions.length - 1;
+  // Options — after the user picks, show correct (green) + wrong (red)
+  // on EVERY question immediately, not just the last one.
+  const hasSelected = selectedAnswers[currentIndex] !== undefined;
+  const showResult = hasSelected && q.correctAnswer !== null;
+
   q.options.forEach((opt) => {
     const optEl = document.createElement("div");
     optEl.className = "option";
 
     const selected = selectedAnswers[currentIndex] === opt.letter;
-    const showResult = isFinished && q.correctAnswer !== null;
 
     if (showResult) {
       if (opt.letter === q.correctAnswer) {
@@ -499,8 +592,9 @@ function renderQuestionView(panel: HTMLElement): void {
     optEl.appendChild(text);
 
     optEl.addEventListener("click", () => {
-      if (isFinished && q.correctAnswer !== null) {
-        return; // Lock after finish.
+      // Lock once answered — no re-picking after seeing the answer.
+      if (showResult) {
+        return;
       }
       selectedAnswers[currentIndex] = opt.letter;
       renderQuestionView(panel);
@@ -508,6 +602,17 @@ function renderQuestionView(panel: HTMLElement): void {
 
     panel.appendChild(optEl);
   });
+
+  // Explanation box — shown AFTER the options, once answered.
+  if (showResult && q.explanation) {
+    const explanationEl = document.createElement("div");
+    explanationEl.className = "explanation";
+    const label = document.createElement("strong");
+    label.textContent = "Açıklama: ";
+    explanationEl.appendChild(label);
+    explanationEl.appendChild(renderRichText(q.explanation));
+    panel.appendChild(explanationEl);
+  }
 
   // Nav
   const nav = document.createElement("div");
@@ -524,6 +629,8 @@ function renderQuestionView(panel: HTMLElement): void {
 
   const nextBtn = document.createElement("button");
   nextBtn.className = "nav-btn next";
+
+  const isFinished = currentIndex === parsedQuestions.length - 1;
 
   if (isFinished) {
     nextBtn.textContent = "Bitir";
@@ -583,7 +690,7 @@ function renderResultView(panel: HTMLElement): void {
   closeBtn.textContent = "Kapat";
   closeBtn.style.marginTop = "24px";
   closeBtn.addEventListener("click", () => {
-    panel.closest("#lifos-quiz-panel-host")?.remove();
+    closePanel();
   });
 
   result.appendChild(closeBtn);
