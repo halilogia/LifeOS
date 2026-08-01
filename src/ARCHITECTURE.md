@@ -24,6 +24,7 @@ flowchart TB
         useKpssQuiz
         usePrayer
         usePomodoro
+        useBist
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -140,7 +141,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | SrsView | kpssSrsService, SrsService | sync | — |
 | CalendarView | todo repo | sync | — |
 | PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
-| Stock/BistView | bistService, stockAiService | local | stock/ (17) |
+| Stock/BistView | bistService, stockAiService, useBist (hook) | local | stock/ (17) |
 | FreeGamesView | gamesService | local | freegames/ (2) |
 | NotesView | zettelkastenEngine | sync | notes/ (7) |
 | AIChatView | aiChatService | sync+local | aichat/ (4) |
