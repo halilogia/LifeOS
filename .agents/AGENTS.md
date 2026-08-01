@@ -159,7 +159,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 6.4 Ölü Dosya Önleme Kuralı (Dead File Prevention)
 * **Yeni dosya yazınca ESKİSİNİ SİL**: Bir dosyayı yeni dosyayla değiştirirken (refactor, hook extraction, mimari değişim) eski dosya KESİNLİKLE silinir. "Yeni dosya çalışıyor, eskisi dursun" yasaktır — ölü dosya birikir.
-* **Sıfır Ölü Dosya Garantisi**: Her iş sonunda `node scripts/findDeadFiles.mjs` çalıştırılır ve çıktı "Toplam: 0 dosya" olmalıdır. 0 değilse kalanlar silinir (entry noktaları hariç).
+* **Sıfır Ölü Dosya Garantisi**: Her iş sonunda `node scripts/findDeadFiles.mjs` çalıştırılır ve çıktı "Toplam: 0 dosya" olmalıdır. 0 değilse kalanlar silinir (entry noktaları hariç). Script ayrıca **boş klasörleri** ve public/ referanssız asset'leri de raporlar — onlar da silinir.
 * **İhlal tespiti**: Bir refactor commit'inde eski dosya hâlâ duruyorsa iş eksiktir.
 
 ### 6.5 Klasör Dosya Limiti (Folder File Limit)

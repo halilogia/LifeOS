@@ -92,10 +92,9 @@ flowchart TB
 | Klasör                            | Sorumluluk                        | Ne konur                                                                      | Asla konmaz                           |
 | --------------------------------- | --------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------- |
 | `src/components/`                 | Saf UI görünümü                   | View'lar + `<feature>/` alt bileşenleri                                       | `chrome.storage`, `fetch`, iş mantığı |
-| `src/components/<feature>/`       | Feature'a özel UI parçaları       | kpss/, settings/, stock/, pomodoro/, notes/...                                | —                                     |
+| `src/components/<feature>/`       | Feature'a özel UI parçaları       | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/...                       | —                                     |
 | `src/presentation/hooks/`         | State yönetimi, view-model        | useSettings, useTodos, usePopup, useUI                                        | DOM, fetch                            |
-| `src/presentation/view-models/`   | UI'a hazır veri dönüşümü          | TodoViewModel                                                                 | —                                     |
-| `src/services/`                   | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpssService, errorReportService | JSX                                   |
+| `src/services/`                   | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpss/, stock/, errorReportService | JSX                                  |
 | `src/application/use-cases/`      | Tek işlemli iş kuralları          | AddTodoUseCase, SyncGoogleTasksUseCase                                        | UI, storage detayı                    |
 | `src/application/ports/`          | Dış dünya arayüz tanımları        | ITodoSyncPort, IDriveBackupPort                                               | —                                     |
 | `src/domain/entities/`            | Çekirdek iş nesneleri             | Todo                                                                          | —                                     |
@@ -104,7 +103,8 @@ flowchart TB
 | `src/domain/services/`            | Saf hesaplama servisleri          | KpssCalculatorService, SrsService, TaskService                                | chrome.*                              |
 | `src/domain/constants/`           | Sabit veriler                     | kpssCurriculum, kpssConstants, kpssFlashcards                                 | —                                     |
 | `src/domain/data/`                | Domain verisi                     | hifizData                                                                     | —                                     |
-| `src/infrastructure/persistence/` | chrome.storage implementasyonları | ChromeStorage*Repository                                                      | UI                                    |
+| `src/infrastructure/persistence/repositories/` | chrome.storage implementasyonları | ChromeStorage*Repository  | UI                  |
+| `src/infrastructure/persistence/migrations/`   | Yerel→sync geçişi                 | LocalToSyncMigration       | —                   |
 | `src/infrastructure/api/`         | Google API client'ları            | GoogleTasksApi, GoogleDriveApi, GoogleAuthApi                                 | —                                     |
 | `src/infrastructure/services/`    | Altyapı servisleri                | PomodoroManagerService                                                        | —                                     |
 | `src/infrastructure/storage/`     | Storage key sabitleri             | keys.ts                                                                       | —                                     |
@@ -144,12 +144,12 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | --------------------- | --------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
 | ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils      | sync       | —                                                       |
 | PomodoroView          | PomodoroManagerService, usePomodoro (hook)                      | local      | pomodoro/ (8)                                           |
-| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
+| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/quiz/ (8) + kpss/wiki/ (4) + kpss/srs/ (1) + kpss/ (10) |
 | HifizView             | hifizData (domain/data), useHifiz (hook)                        | sync       | hifiz/ (4)                                              |
 | SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |
 | PrayerView            | prayerService, usePrayer (hook)                                 | sync       | prayer/ (1) — PrayerCityForm                            |
-| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | local      | stock/ (17)                                             |
+| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | local      | stock/ (15) + services/stock/ (3)                       |
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
 | NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
 | AIChatView            | aiChatService                                                   | sync+local | aichat/ (4)                                             |

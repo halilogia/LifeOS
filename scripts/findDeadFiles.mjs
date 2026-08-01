@@ -87,9 +87,41 @@ const dead = files
   .filter((f) => !entries.has(f) && !imported.has(f))
   .sort();
 
-console.log("=== OLU DOSYALAR (hicbir yerden import edilmiyor) ===");
+console.log("\n=== OLU DOSYALAR (hicbir yerden import edilmiyor) ===");
 for (const f of dead) console.log("  " + relative(ROOT, f).replace(/\\/g, "/"));
 console.log(`\nToplam: ${dead.length} dosya`);
+
+// ============================================================
+// BOŞ KLASÖR KONTROLÜ — içinde hiç .ts/.tsx/.css dosyası ve
+// alt klasörü olmayan klasörler (ölü dosya silinince klasör kalabilir)
+// ============================================================
+function findEmptyDirs(dir, acc = []) {
+  let hasFiles = false;
+  let hasSubdirs = false;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      hasSubdirs = true;
+      findEmptyDirs(join(dir, entry.name), acc);
+    } else if (/\.(ts|tsx|css)$/.test(entry.name)) {
+      hasFiles = true;
+    }
+  }
+  // Sadece kaynak dosya türleri sayılır (örn. .gitkeep boş klasörü kurtarmaz)
+  const realFiles = readdirSync(dir).filter((f) => /\.(ts|tsx|css)$/.test(f));
+  if (realFiles.length === 0 && !hasSubdirs) {
+    acc.push(dir);
+  }
+  return acc;
+}
+
+const emptyDirs = findEmptyDirs(SRC);
+console.log("\n=== BOŞ KLASÖRLER (icerik yok) ===");
+if (emptyDirs.length === 0) {
+  console.log("  (yok)");
+} else {
+  for (const d of emptyDirs) console.log("  " + relative(ROOT, d).replace(/\\/g, "/"));
+  console.log(`\nToplam: ${emptyDirs.length} klasör`);
+}
 
 // Also check public/ for unreferenced assets
 if (existsSync(join(ROOT, "public"))) {
