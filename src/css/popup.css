@@ -18,10 +18,28 @@
   font-family: "Inter", sans-serif;
 }
 
-body {
+/* cssCodeSplit:false — bu dosya TÜM sayfalara yüklenir. html/body global
+   kuralları :has(#popup-app) ile sadece popup sayfasına uygulanır;
+   aksi halde newtab'da body scrollbar'ı oluştururdu. */
+html:has(body #popup-app) {
+  height: auto;
+  overflow: auto;
+}
+
+body:has(#popup-app) {
   background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d12 100%);
   color: var(--text-primary);
   padding: 0.6rem;
+  /* Paylaşılan bundle'daki global body/html kurallarını (height:100%,
+     overflow:hidden, max-height:60vh, display:flex, padding-left:36px,
+     margin-bottom vb.) nötralize et. Bu dosya bundle'da son sırada
+     yüklendiği için bu bildirimler kazanır. */
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  max-height: none;
+  margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
 }
