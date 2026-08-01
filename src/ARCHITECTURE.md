@@ -31,6 +31,7 @@ flowchart TB
         useHifiz
         useWillpower
         useNotes
+        useSrs
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -144,7 +145,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | PomodoroView | PomodoroManagerService, usePomodoro (hook) | local | pomodoro/ (8) |
 | KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
 | HifizView | hifizData (domain/data), useHifiz (hook) | sync | hifiz/ (4) |
-| SrsView | kpssSrsService, SrsService | sync | — |
+| SrsView | kpssSrsService, SrsService, useSrs (hook) | sync | — |
 | CalendarView | todo repo, GoogleCalendarApi, useCalendar (hook) | sync | — |
 | PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
 | Stock/BistView | bistService, stockAiService, useBist (hook) | local | stock/ (17) |
