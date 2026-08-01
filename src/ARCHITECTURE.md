@@ -28,6 +28,7 @@ flowchart TB
         useCalendar
         useFreeGames
         useEisenhower
+        useHifiz
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -140,7 +141,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | ListView / KanbanView | todo repo (application/use-cases) | sync | — |
 | PomodoroView | PomodoroManagerService, usePomodoro (hook) | local | pomodoro/ (8) |
 | KpssView | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/ (24) — KpssProgressSection progress tab'ı yönetir |
-| HifizView | hifizData (domain/data) | sync | hifiz/ (4) |
+| HifizView | hifizData (domain/data), useHifiz (hook) | sync | hifiz/ (4) |
 | SrsView | kpssSrsService, SrsService | sync | — |
 | CalendarView | todo repo, GoogleCalendarApi, useCalendar (hook) | sync | — |
 | PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
