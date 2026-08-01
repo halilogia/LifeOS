@@ -139,7 +139,7 @@ export type PrayerService = ReturnType<typeof createPrayerService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStoragePrayerCacheRepository } from "@/infrastructure/persistence/ChromeStoragePrayerCacheRepository.js";
+import { ChromeStoragePrayerCacheRepository } from "@/infrastructure/persistence/repositories/ChromeStoragePrayerCacheRepository.js";
 import { logger } from "@/utils/logger.js";
 
 const _defaultPrayerRepo = new ChromeStoragePrayerCacheRepository();

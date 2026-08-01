@@ -172,7 +172,7 @@ export type StockAiService = ReturnType<typeof createStockAiService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/ChromeStorageAiConfigRepository.js";
+import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/repositories/ChromeStorageAiConfigRepository.js";
 import { logger } from "@/utils/logger.js";
 
 const _defaultAiConfigRepo = new ChromeStorageAiConfigRepository();

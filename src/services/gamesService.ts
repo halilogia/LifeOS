@@ -129,7 +129,7 @@ export type GamesService = ReturnType<typeof createGamesService>;
  * Singleton instance with the default storage-backed repository.
  * Components that need testability can import `createGamesService` instead.
  */
-import { ChromeStorageGamesCacheRepository } from "@/infrastructure/persistence/ChromeStorageGamesCacheRepository.js";
+import { ChromeStorageGamesCacheRepository } from "@/infrastructure/persistence/repositories/ChromeStorageGamesCacheRepository.js";
 import { logger } from "@/utils/logger.js";
 const _defaultCacheRepo = new ChromeStorageGamesCacheRepository();
 export const gamesService = createGamesService(_defaultCacheRepo);

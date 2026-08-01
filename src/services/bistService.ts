@@ -230,7 +230,7 @@ export type BistService = ReturnType<typeof createBistService>;
 /* Singleton instance with the default storage-backed cache repository  */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageBistCacheRepository } from "@/infrastructure/persistence/ChromeStorageBistCacheRepository.js";
+import { ChromeStorageBistCacheRepository } from "@/infrastructure/persistence/repositories/ChromeStorageBistCacheRepository.js";
 import { logger } from "@/utils/logger.js";
 
 const _defaultCacheRepo = new ChromeStorageBistCacheRepository();

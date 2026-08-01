@@ -8,7 +8,7 @@ import {
   fetchLatestKapNews,
   type KapNewsItem,
 } from "@/services/kapNewsService.js";
-import { analyzeKapNewsWithAI } from "@/services/stockAiService.js";
+import { analyzeKapNewsWithAI } from "@/services/stock/stockAiService.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
 

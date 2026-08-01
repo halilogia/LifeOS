@@ -148,7 +148,7 @@ export type KpssService = ReturnType<typeof createKpssService>;
  * The first property access triggers instantiation; subsequent calls reuse the instance.
  * Components that need testability can import `createKpssService` instead.
  */
-import { ChromeStorageKpssRepository } from "@/infrastructure/persistence/ChromeStorageKpssRepository.js";
+import { ChromeStorageKpssRepository } from "@/infrastructure/persistence/repositories/ChromeStorageKpssRepository.js";
 let _kpssServiceInstance: KpssService | null = null;
 function getKpssService(): KpssService {
   if (!_kpssServiceInstance) {

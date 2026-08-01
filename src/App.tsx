@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+﻿import { useState, useEffect, useCallback } from "preact/hooks";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { useTodos } from "@/presentation/hooks/useTodos.js";
@@ -8,9 +8,9 @@ import { useUI } from "@/presentation/hooks/useUI.js";
 import { useAppInit } from "@/presentation/hooks/useAppInit.js";
 import { useAppTodoInput } from "@/presentation/hooks/useAppTodoInput.js";
 import { useAppConfirmActions } from "@/presentation/hooks/useAppConfirmActions.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/ChromeStorageTodoRepository.js";
-import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/ChromeStorageSyncRepository.js";
-import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/ChromeStorageSettingsRepository.js";
+import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
+import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
 import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
@@ -18,7 +18,7 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
 import type { AppInitDependencies } from "@/presentation/hooks/useAppInit.js";
-import { kpssService } from "@/services/kpssService.js";
+import { kpssService } from "@/services/kpss/kpssService.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
 import { ViewRouter } from "@/components/ViewRouter.js";
@@ -29,7 +29,7 @@ import { FooterQuote } from "@/components/FooterQuote.js";
 import { DatePicker } from "@/components/DatePicker.js";
 import type { Todo } from "@/types/types.js";
 
-// Singleton instances — created once outside component to avoid re-instantiation
+// Singleton instances â€” created once outside component to avoid re-instantiation
 const todoRepository = new ChromeStorageTodoRepository();
 const syncRepo: ISyncRepository = new ChromeStorageSyncRepository();
 const syncPort: ITodoSyncPort = createSyncPort();
@@ -44,7 +44,7 @@ const appInitDeps: AppInitDependencies = {
 };
 
 export function App() {
-  // ─── Settings Hook ────────────────────────────────────────────────────────
+  // â”€â”€â”€ Settings Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const {
     lang,
     setLangState,
@@ -83,7 +83,7 @@ export function App() {
     handleDetoxLimitsChange,
   } = useSettings();
 
-  // ─── UI Hook ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€ UI Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const {
     activeView,
     setActiveView,
@@ -117,7 +117,7 @@ export function App() {
     refreshQuote,
   } = useUI();
 
-  // ─── Sync Hook ────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Sync Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const {
     handleManualSyncTasks,
     handleGoogleLogin,
@@ -133,7 +133,7 @@ export function App() {
     detailLabel: "Detail",
   });
 
-  // ─── Todos Hook ───────────────────────────────────────────────────────────
+  // â”€â”€â”€ Todos Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const {
     todos,
     handleAddTodo,
@@ -152,7 +152,7 @@ export function App() {
     getTranslation(lang as Language),
   );
 
-  // ─── App Init Hook ────────────────────────────────────────────────────────
+  // â”€â”€â”€ App Init Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useAppInit(appInitDeps, {
     onSettingsLoaded: loadSettings,
     onTodosLoaded: initTodos,
@@ -174,7 +174,7 @@ export function App() {
     refreshQuote(lang as Language);
   }, [lang]);
 
-  // ─── Todo Input Hook ─────────────────────────────────────────────────────────
+  // â”€â”€â”€ Todo Input Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const {
     todoText,
     setTodoText,
@@ -194,11 +194,11 @@ export function App() {
     handleTabChangeUI,
   });
 
-  // ─── Confirm Actions Hook ────────────────────────────────────────────────────
+  // â”€â”€â”€ Confirm Actions Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const { handleClearAllDataConfirm, handleResetKpssDataConfirm } =
     useAppConfirmActions({ showConfirm });
 
-  // ─── Continue to Chat callback ──────────────────────────────────────────────
+  // â”€â”€â”€ Continue to Chat callback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleContinueToChat = useCallback(
     (symbol: string) => {
       // Stock bilgisini sessionStorage'a yaz ki AI Chat okusun
@@ -208,7 +208,7 @@ export function App() {
     [handleViewChange],
   );
 
-  // ─── JSX Template ─────────────────────────────────────────────────────────
+  // â”€â”€â”€ JSX Template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const t = getTranslation(lang as Language);
   return (
     <>
@@ -370,7 +370,7 @@ export function App() {
         />
       </main>
 
-      {/* Footer Quote — outside container, zero layout impact */}
+      {/* Footer Quote â€” outside container, zero layout impact */}
       {quoteText && activeView !== "ai-chat" && (
         <FooterQuote quoteText={quoteText} />
       )}

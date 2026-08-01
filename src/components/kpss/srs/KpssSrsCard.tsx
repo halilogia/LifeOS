@@ -1,5 +1,5 @@
-import { WordReviewData, ReviewQuality } from "@/types/word.js";
-import { KpssFlashcard } from "@/services/kpssService.js";
+﻿import { WordReviewData, ReviewQuality } from "@/types/word.js";
+import { KpssFlashcard } from "@/services/kpss/kpssService.js";
 
 interface KpssSrsCardProps {
   t: Record<string, string>;
@@ -63,7 +63,7 @@ export function KpssSrsCard({
           margin: "0 auto",
         }}
       >
-        <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>🎉</div>
+        <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>ğŸ‰</div>
         <h3
           style={{
             fontSize: "1.6rem",
@@ -161,7 +161,7 @@ export function KpssSrsCard({
                 borderRadius: "20px",
               }}
             >
-              💡 {t.kpss_srs_click_to_see}
+              ğŸ’¡ {t.kpss_srs_click_to_see}
             </span>
           </div>
           <div

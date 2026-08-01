@@ -1,5 +1,5 @@
-import { Language, KpssProgress } from "@/types/types.js";
-import { KpssTopic } from "@/services/kpssService.js";
+﻿import { Language, KpssProgress } from "@/types/types.js";
+import { KpssTopic } from "@/services/kpss/kpssService.js";
 
 interface KpssTopicListProps {
   lang: Language;
@@ -167,7 +167,7 @@ export function KpssTopicList({
                 )}
               </span>
 
-              {/* Seviye Tespit Sınavı button */}
+              {/* Seviye Tespit SÄ±navÄ± button */}
               <button
                 className="kpss-exam-btn"
                 title={t.kpss_topic_proficiency_test}

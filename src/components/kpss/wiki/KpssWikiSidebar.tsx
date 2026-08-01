@@ -1,4 +1,4 @@
-/**
+﻿/**
  * KpssWikiSidebar.tsx
  * Presentational Left Sidebar component for search, filtering, and note list.
  */
@@ -8,7 +8,7 @@ import {
   KpssWikiNote,
   getSubjectLabel,
   extractTitleFromContent,
-} from "@/services/kpssWikiService.js";
+} from "@/services/kpss/kpssWikiService.js";
 
 interface KpssWikiSidebarProps {
   lang: Language;
@@ -36,11 +36,11 @@ export function KpssWikiSidebar({
   onCreateNewNote,
 }: KpssWikiSidebarProps) {
   const SUBJECT_FILTERS = [
-    { id: "all", label: "Tümü" },
+    { id: "all", label: "TÃ¼mÃ¼" },
     { id: "tarih", label: "Tarih" },
-    { id: "cografya", label: "Coğrafya" },
-    { id: "vatandaslik", label: "Vatandaşlık" },
-    { id: "turkce", label: "Türkçe" },
+    { id: "cografya", label: "CoÄŸrafya" },
+    { id: "vatandaslik", label: "VatandaÅŸlÄ±k" },
+    { id: "turkce", label: "TÃ¼rkÃ§e" },
     { id: "matematik", label: "Matematik" },
   ];
 
@@ -171,7 +171,7 @@ export function KpssWikiSidebar({
               fontSize: "0.75rem",
             }}
           >
-            Kayıtlı ders notu bulunamadı.
+            KayÄ±tlÄ± ders notu bulunamadÄ±.
           </div>
         ) : (
           notes.map((n) => {

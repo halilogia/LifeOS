@@ -1,4 +1,4 @@
-import { getKpssSystemPrompt } from "./kpssPrompts.js";
+import { getKpssSystemPrompt } from "@/services/kpss/kpssPrompts.js";
 
 export interface QuizQuestion {
   question: string;

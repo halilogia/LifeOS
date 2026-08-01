@@ -76,7 +76,7 @@ export type KpssSrsService = ReturnType<typeof createKpssSrsService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageSrsProgressRepository } from "@/infrastructure/persistence/ChromeStorageSrsProgressRepository.js";
+import { ChromeStorageSrsProgressRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSrsProgressRepository.js";
 
 const _defaultSrsRepo = new ChromeStorageSrsProgressRepository();
 const _defaultSrsService = createKpssSrsService(_defaultSrsRepo);

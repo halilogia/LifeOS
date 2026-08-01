@@ -7,7 +7,7 @@
 import type {
   ISyncRepository,
   GoogleSyncSettings,
-} from "../../domain/repositories/ISyncRepository.js";
+} from "../../../domain/repositories/ISyncRepository.js";
 import { SYNC_SETTINGS } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageSyncRepository implements ISyncRepository {

@@ -1,11 +1,11 @@
-import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
+﻿import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
 import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
 import { Language, KpssDailyStats } from "@/types/types.js";
 import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
-import type { KpssTopic } from "@/services/kpssService.js";
+import type { KpssTopic } from "@/services/kpss/kpssService.js";
 
 interface KpssProgressSectionProps {
   lang: Language;

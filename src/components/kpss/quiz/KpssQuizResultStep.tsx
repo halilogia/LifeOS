@@ -4,8 +4,8 @@
  * Premium tipografi ile güncellendi.
  */
 
-import { MathRenderer } from "@/components/kpss/MathRenderer.js";
-import type { QuizQuestion } from "@/components/kpss/KpssQuizQuestionsStep.js";
+import { MathRenderer } from "@/components/kpss/quiz/MathRenderer.js";
+import type { QuizQuestion } from "@/components/kpss/quiz/KpssQuizQuestionsStep.js";
 
 interface KpssQuizResultStepProps {
   lang: string;
@@ -183,13 +183,12 @@ export function KpssQuizResultStep({
                     ? "rgba(255, 255, 255, 0.01)"
                     : "rgba(239, 68, 68, 0.05)",
                 borderRadius: "10px",
-                borderLeft: `3px solid ${
-                  isCorrect
+                borderLeft: `3px solid ${isCorrect
                     ? "#10b981"
                     : userAns === -1
                       ? "rgba(255,255,255,0.15)"
                       : "#ef4444"
-                }`,
+                  }`,
               }}
             >
               <p

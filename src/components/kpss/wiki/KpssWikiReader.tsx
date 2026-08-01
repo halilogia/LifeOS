@@ -1,4 +1,4 @@
-/**
+﻿/**
  * KpssWikiReader.tsx
  * Wikipedia-style Article Reader Component.
  * Displays Article Title, Subtitle, Table of Contents, Wikilink body, and Wikipedia-style Infobox.
@@ -13,7 +13,7 @@ import {
   renderCustomArticleMarkdown,
   extractTitleFromContent,
   extractFirstImageUrl,
-} from "@/services/kpssWikiService.js";
+} from "@/services/kpss/kpssWikiService.js";
 
 interface KpssWikiReaderProps {
   lang: Language;
@@ -174,7 +174,7 @@ export function KpssWikiReader({
           gap: "24px",
         }}
       >
-        {/* Left Column: İçindekiler (Wikipedia Table of Contents) */}
+        {/* Left Column: Ä°Ã§indekiler (Wikipedia Table of Contents) */}
         {tableOfContents.length > 0 && showToc && (
           <div
             style={{
@@ -198,7 +198,7 @@ export function KpssWikiReader({
                 marginBottom: "10px",
               }}
             >
-              <span>İçindekiler</span>
+              <span>Ä°Ã§indekiler</span>
               <button
                 type="button"
                 onClick={() => setShowToc(false)}
@@ -369,7 +369,7 @@ export function KpssWikiReader({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-                Okuma Süresi
+                Okuma SÃ¼resi
               </span>
               <span style={{ color: "#60a5fa", fontWeight: 600 }}>
                 ~{readingTimeMinutes} dk
@@ -385,7 +385,7 @@ export function KpssWikiReader({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-                Son Güncelleme
+                Son GÃ¼ncelleme
               </span>
               <span style={{ color: "#e2e8f0" }}>
                 {new Date(note.updatedAt || note.createdAt).toLocaleDateString(
@@ -395,7 +395,7 @@ export function KpssWikiReader({
             </div>
           </div>
 
-          {/* Outbound Wikilinks / İç Bağlantılar Section */}
+          {/* Outbound Wikilinks / Ä°Ã§ BaÄŸlantÄ±lar Section */}
           {outboundWikilinks.length > 0 && (
             <div
               style={{
@@ -419,7 +419,7 @@ export function KpssWikiReader({
                   gap: "4px",
                 }}
               >
-                <span>📌 İç Bağlantılar</span>
+                <span>ğŸ“Œ Ä°Ã§ BaÄŸlantÄ±lar</span>
                 <span
                   style={{
                     background: "rgba(59, 130, 246, 0.25)",
@@ -455,7 +455,7 @@ export function KpssWikiReader({
             </div>
           )}
 
-          {/* Backlinks / Gelen Bağlantılar Section */}
+          {/* Backlinks / Gelen BaÄŸlantÄ±lar Section */}
           {backlinks.length > 0 && (
             <div
               style={{
@@ -479,7 +479,7 @@ export function KpssWikiReader({
                   gap: "4px",
                 }}
               >
-                <span>🔗 Gelen Bağlantılar</span>
+                <span>ğŸ”— Gelen BaÄŸlantÄ±lar</span>
                 <span
                   style={{
                     background: "rgba(59, 130, 246, 0.25)",

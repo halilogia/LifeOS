@@ -5,7 +5,7 @@
  */
 
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
-import { QuizQuestion } from "@/services/kpssAiService.js";
+import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
 export interface KpssPastQuiz {
   subject: string;

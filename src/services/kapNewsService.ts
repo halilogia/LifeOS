@@ -93,7 +93,7 @@ export type KapNewsService = ReturnType<typeof createKapNewsService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageKapNewsCacheRepository } from "@/infrastructure/persistence/ChromeStorageKapNewsCacheRepository.js";
+import { ChromeStorageKapNewsCacheRepository } from "@/infrastructure/persistence/repositories/ChromeStorageKapNewsCacheRepository.js";
 
 const _defaultKapRepo = new ChromeStorageKapNewsCacheRepository();
 const _defaultKapService = createKapNewsService(_defaultKapRepo);

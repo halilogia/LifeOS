@@ -7,7 +7,7 @@
 import type {
   INoteRepository,
   Note,
-} from "../../domain/repositories/INoteRepository.js";
+} from "../../../domain/repositories/INoteRepository.js";
 import { SYNC_NOTES } from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageNoteRepository implements INoteRepository {

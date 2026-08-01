@@ -670,11 +670,11 @@ export function createArcadeService(repo: IArcadeRepository) {
       const next = games.map((g) =>
         g.id === gameId
           ? {
-              ...g,
-              devNotes: notes,
-              todoList: todoList ?? g.todoList,
-              title: title?.trim() || g.title,
-            }
+            ...g,
+            devNotes: notes,
+            todoList: todoList ?? g.todoList,
+            title: title?.trim() || g.title,
+          }
           : g,
       );
       await repo.saveAllGames(next);
@@ -754,7 +754,7 @@ async function hasDirectoryNamed(
 /**
  * Singleton instance with the default storage-backed repository.
  */
-import { ChromeStorageArcadeRepository } from "@/infrastructure/persistence/ChromeStorageArcadeRepository.js";
+import { ChromeStorageArcadeRepository } from "@/infrastructure/persistence/repositories/ChromeStorageArcadeRepository.js";
 import { logger } from "@/utils/logger.js";
 const _defaultRepo = new ChromeStorageArcadeRepository();
 export const arcadeService = createArcadeService(_defaultRepo);

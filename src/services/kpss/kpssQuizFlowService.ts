@@ -5,17 +5,17 @@
  */
 
 import { Language } from "@/types/types.js";
-import { kpssService } from "@/services/kpssService.js";
+import { kpssService } from "@/services/kpss/kpssService.js";
 import { kpssData } from "@/domain/constants/kpssCurriculum.js";
 import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
 import {
   getLocalQuestionsForTopic,
   KpssPastQuiz,
-} from "@/services/kpssQuizService.js";
+} from "@/services/kpss/kpssQuizService.js";
 import {
   fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
-  QuizQuestion,
-} from "@/services/kpssAiService.js";
+} from "@/services/kpss/kpssAiService.js";
+import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 
 export interface AIConfig {
@@ -189,7 +189,7 @@ export type KpssQuizFlowService = ReturnType<typeof createKpssQuizFlowService>;
 /* Singleton with default repository                                   */
 /* ------------------------------------------------------------------ */
 
-import { ChromeStorageKpssRepository } from "@/infrastructure/persistence/ChromeStorageKpssRepository.js";
+import { ChromeStorageKpssRepository } from "@/infrastructure/persistence/repositories/ChromeStorageKpssRepository.js";
 
 const _defaultKpssRepo = new ChromeStorageKpssRepository();
 const _defaultQuizFlowService = createKpssQuizFlowService(_defaultKpssRepo);

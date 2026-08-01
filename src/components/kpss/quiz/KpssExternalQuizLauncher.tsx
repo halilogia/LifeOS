@@ -1,8 +1,8 @@
-/**
+﻿/**
  * KpssExternalQuizLauncher.tsx
- * Harici AI servis seçim ekranı — Gemini, ChatGPT, Claude, Copilot kartları.
- * Soru sayısı seçici dahildir, prompt canlı olarak güncellenir.
- * Seçilen serviste KPSS quiz prompt'u hazır gönderilir ya da panoya kopyalanır.
+ * Harici AI servis seÃ§im ekranÄ± â€” Gemini, ChatGPT, Claude, Copilot kartlarÄ±.
+ * Soru sayÄ±sÄ± seÃ§ici dahildir, prompt canlÄ± olarak gÃ¼ncellenir.
+ * SeÃ§ilen serviste KPSS quiz prompt'u hazÄ±r gÃ¶nderilir ya da panoya kopyalanÄ±r.
  */
 
 import { useState } from "preact/hooks";
@@ -10,7 +10,7 @@ import {
   ExternalAIService,
   buildKpssQuizPrompt,
   openExternalAIService,
-} from "@/services/kpssExternalQuizService.js";
+} from "@/services/kpss/kpssExternalQuizService.js";
 import { Language } from "@/types/types.js";
 
 interface KpssExternalQuizLauncherProps {
@@ -147,7 +147,7 @@ export function KpssExternalQuizLauncher({
   const [isLoading, setIsLoading] = useState<ExternalAIService | null>(null);
   const [selectedCount, setSelectedCount] = useState(questionCount);
 
-  // Prompt, soru sayısı değiştikçe canlı güncellenir
+  // Prompt, soru sayÄ±sÄ± deÄŸiÅŸtikÃ§e canlÄ± gÃ¼ncellenir
   const prompt = buildKpssQuizPrompt(
     subjectKey,
     topicName,
@@ -159,7 +159,7 @@ export function KpssExternalQuizLauncher({
     setIsLoading(service);
     try {
       await openExternalAIService(service, prompt);
-      // Prompt her zaman panoya kopyalanır
+      // Prompt her zaman panoya kopyalanÄ±r
       setToastMessage(t.kpss_external_quiz_clipboard_hint);
     } finally {
       setIsLoading(null);
@@ -182,7 +182,7 @@ export function KpssExternalQuizLauncher({
       <p class="kpss-external-launcher__title">{t.kpss_external_quiz_title}</p>
       <p class="kpss-external-launcher__desc">{t.kpss_external_quiz_desc}</p>
 
-      {/* Soru sayısı seçici */}
+      {/* Soru sayÄ±sÄ± seÃ§ici */}
       <div class="kpss-question-count-grid">
         {QUESTION_COUNTS.map((count) => (
           <button
@@ -195,7 +195,7 @@ export function KpssExternalQuizLauncher({
         ))}
       </div>
 
-      {/* Servis kartları */}
+      {/* Servis kartlarÄ± */}
       <div class="kpss-external-service-grid">
         {SERVICES.map((svc) => (
           <button
@@ -213,7 +213,7 @@ export function KpssExternalQuizLauncher({
         ))}
       </div>
 
-      {/* Prompt önizleme + kopyalama */}
+      {/* Prompt Ã¶nizleme + kopyalama */}
       <div>
         <div class="kpss-external-prompt-preview">{prompt}</div>
         <button
