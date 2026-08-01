@@ -877,7 +877,7 @@ export const tr = {
   sidebar_srs: "Aralıklı Tekrar",
   sidebar_hifiz: "Aday Din Görevlisi Yeterlilikleri",
   sidebar_prayer: "Namaz Vakitleri",
-  sidebar_kpss: "KPSS Ders Takip",
+  sidebar_kpss: "KPSS",
   sidebar_detox: "Dijital Detoks",
   sidebar_arcade: "Arcade",
   sidebar_free_games: "Ücretsiz Oyunlar",
@@ -1017,4 +1017,4 @@ export const tr = {
   kpss_external_quiz_copy_prompt: "Promptu Kopyala",
   kpss_external_quiz_clipboard_hint: "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
 }
-
+

@@ -239,7 +239,6 @@
   gap: var(--space-4);
   max-height: 220px;
   overflow-y: auto;
-  padding-right: var(--space-2);
 }
 
 .willpower-container .history-list::-webkit-scrollbar {

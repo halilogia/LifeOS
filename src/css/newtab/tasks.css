@@ -300,7 +300,6 @@ body.sidebar-open .top-header {
   list-style: none;
   max-height: 400px;
   overflow-y: auto;
-  padding-right: var(--space-3);
 }
 
 .todo-list::-webkit-scrollbar {
@@ -462,7 +461,6 @@ body.sidebar-open .top-header {
   gap: 0.85rem;
   min-width: 0;
   overflow-y: auto;
-  padding-right: var(--space-1);
 }
 
 .kanban-item {

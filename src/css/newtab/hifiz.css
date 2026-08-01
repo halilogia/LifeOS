@@ -492,7 +492,6 @@
   gap: var(--space-4);
   max-height: 60vh;
   overflow-y: auto;
-  padding-right: var(--space-4);
 }
 
 .yeterlik-item {
