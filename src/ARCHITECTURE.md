@@ -26,6 +26,7 @@ flowchart TB
         usePomodoro
         useBist
         useCalendar
+        useFreeGames
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -143,7 +144,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | CalendarView | todo repo, GoogleCalendarApi, useCalendar (hook) | sync | — |
 | PrayerView | prayerService, usePrayer (hook) | sync | prayer/ (1) — PrayerCityForm |
 | Stock/BistView | bistService, stockAiService, useBist (hook) | local | stock/ (17) |
-| FreeGamesView | gamesService | local | freegames/ (2) |
+| FreeGamesView | gamesService, useFreeGames (hook) | local | freegames/ (2) |
 | NotesView | zettelkastenEngine | sync | notes/ (7) |
 | AIChatView | aiChatService | sync+local | aichat/ (4) |
 | ArcadeView | arcadeService | local | arcade/ (3) |
