@@ -3,7 +3,7 @@
  * Harici AI servisleri (Gemini, ChatGPT, Claude, Copilot) için KPSS sınav prompt üretici
  * ve yeni sekme açma servisini yönetir.
  *
- * Strateji: Tüm servislerde URL açılır + prompt panoya kopyalanır + 
+ * Strateji: Tüm servislerde URL açılır + prompt panoya kopyalanır +
  * sayfa yüklendiğinde otomatik olarak textarea'ya doldurulur.
  * Bu sayede Claude, Gemini, ChatGPT, Copilot ve diğer tüm AI sitelerinde
  * kullanıcının hiçbir şey yapmasına gerek kalmaz.
@@ -16,17 +16,17 @@ export type ExternalAIService = "gemini" | "chatgpt" | "claude" | "copilot";
 
 /** Harici AI servislerinin yeni sekme URL'leri */
 const SERVICE_URLS: Record<ExternalAIService, string> = {
-  gemini:  "https://gemini.google.com/app",
+  gemini: "https://gemini.google.com/app",
   chatgpt: "https://chatgpt.com/",
-  claude:  "https://claude.ai/new",
+  claude: "https://claude.ai/new",
   copilot: "https://copilot.microsoft.com/",
 };
 
 /** Kullanıcıya gösterilecek servis isimleri */
 const SERVICE_NAMES: Record<ExternalAIService, string> = {
-  gemini:  "Gemini",
+  gemini: "Gemini",
   chatgpt: "ChatGPT",
-  claude:  "Claude",
+  claude: "Claude",
   copilot: "Copilot",
 };
 
@@ -98,72 +98,84 @@ function autoFillPromptOnTab(tabId: number, prompt: string): void {
     info: { status?: string; url?: string },
     _tab: chrome.tabs.Tab,
   ) => {
-    if (updatedTabId !== tabId) {return;}
-    if (info.status !== "complete") {return;}
+    if (updatedTabId !== tabId) {
+      return;
+    }
+    if (info.status !== "complete") {
+      return;
+    }
 
     // Listener'ı bir kere çalıştır, sonra kaldır
     chrome.tabs.onUpdated.removeListener(onUpdated);
 
     // Kısa bir gecikme — SPA framework'lerin input'u hazır hale getirmesi için
     setTimeout(() => {
-      chrome.scripting.executeScript({
-        target: { tabId },
-        world: "MAIN",
-        func: (text: string) => {
-          // Tüm AI siteleri için ortak seçiciler
-          const selectors = [
-            "textarea",
-            "[contenteditable='true']",
-            "[role='textbox']",
-            ".ProseMirror",          // Claude
-            "div[contenteditable='true']",
-            "textarea[placeholder*='Message']",
-            "textarea[placeholder*='prompt']",
-            "textarea[placeholder*='yaz']",
-            "textarea[placeholder*='sor']",
-          ];
+      chrome.scripting
+        .executeScript({
+          target: { tabId },
+          world: "MAIN",
+          func: (text: string) => {
+            // Tüm AI siteleri için ortak seçiciler
+            const selectors = [
+              "textarea",
+              "[contenteditable='true']",
+              "[role='textbox']",
+              ".ProseMirror", // Claude
+              "div[contenteditable='true']",
+              "textarea[placeholder*='Message']",
+              "textarea[placeholder*='prompt']",
+              "textarea[placeholder*='yaz']",
+              "textarea[placeholder*='sor']",
+            ];
 
-          for (const sel of selectors) {
-            const el = document.querySelector(sel) as HTMLElement | null;
-            if (!el || !el.isConnected) {continue;}
-
-            try {
-              // Textarea / input
-              if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
-                const inputEl = el as HTMLTextAreaElement;
-                inputEl.value = text;
+            for (const sel of selectors) {
+              const el = document.querySelector(sel) as HTMLElement | null;
+              if (!el || !el.isConnected) {
+                continue;
               }
-              // Contenteditable (Claude, ChatGPT, Gemini)
-              else if (el.isContentEditable) {
-                el.focus();
-                el.innerText = text;
 
-                // React/Vue state güncellemesi için native input setter
-                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-                  window.HTMLTextAreaElement?.prototype || window.HTMLInputElement?.prototype,
-                  "value",
-                )?.set;
-                if (nativeInputValueSetter) {
-                  nativeInputValueSetter.call(el, text);
+              try {
+                // Textarea / input
+                if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
+                  const inputEl = el as HTMLTextAreaElement;
+                  inputEl.value = text;
                 }
-              }
+                // Contenteditable (Claude, ChatGPT, Gemini)
+                else if (el.isContentEditable) {
+                  el.focus();
+                  el.innerText = text;
 
-              // Event'leri dispatch et (React state güncellemesi için)
-              el.focus();
-              el.dispatchEvent(new Event("focus", { bubbles: true }));
-              el.dispatchEvent(new Event("input", { bubbles: true }));
-              el.dispatchEvent(new Event("change", { bubbles: true }));
-              el.dispatchEvent(new KeyboardEvent("keyup", { key: " ", bubbles: true }));
-            } catch {
-              // Sessizce dene — bir seçici çalışmazsa diğerine geç
+                  // React/Vue state güncellemesi için native input setter
+                  const nativeInputValueSetter =
+                    Object.getOwnPropertyDescriptor(
+                      window.HTMLTextAreaElement?.prototype ||
+                        window.HTMLInputElement?.prototype,
+                      "value",
+                    )?.set;
+                  if (nativeInputValueSetter) {
+                    nativeInputValueSetter.call(el, text);
+                  }
+                }
+
+                // Event'leri dispatch et (React state güncellemesi için)
+                el.focus();
+                el.dispatchEvent(new Event("focus", { bubbles: true }));
+                el.dispatchEvent(new Event("input", { bubbles: true }));
+                el.dispatchEvent(new Event("change", { bubbles: true }));
+                el.dispatchEvent(
+                  new KeyboardEvent("keyup", { key: " ", bubbles: true }),
+                );
+              } catch {
+                // Sessizce dene — bir seçici çalışmazsa diğerine geç
+              }
             }
-          }
-        },
-        args: [prompt],
-      }).catch(() => {
-        // executeScript fail olursa (sayfa henüz hazır değilse) sessizce devam et
-        // Kullanıcı zaten clipboard'dan yapıştırabilir
-      });
+          },
+          args: [prompt],
+        })
+        .catch(() => {
+          // executeScript fail olursa (sayfa henüz hazır değilse) sessizce devam et
+          // Kullanıcı zaten clipboard'dan yapıştırabilir
+        });
     }, 1200);
   };
 

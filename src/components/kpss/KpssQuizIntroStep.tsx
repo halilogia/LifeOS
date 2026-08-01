@@ -29,24 +29,28 @@ export function KpssQuizIntroStep({
 
   return (
     <div style={{ textAlign: "center", padding: "8px 4px" }}>
-      <h4 style={{
-        color: "var(--accent-color)",
-        marginBottom: "16px",
-        fontSize: "1.3rem",
-        fontWeight: "800",
-        letterSpacing: "-0.5px",
-      }}>
+      <h4
+        style={{
+          color: "var(--accent-color)",
+          marginBottom: "16px",
+          fontSize: "1.3rem",
+          fontWeight: "800",
+          letterSpacing: "-0.5px",
+        }}
+      >
         {t.kpss_quiz_proficiency}
       </h4>
-      <p style={{
-        fontSize: "0.95rem",
-        color: "var(--text-secondary)",
-        lineHeight: "1.7",
-        marginBottom: "20px",
-        maxWidth: "420px",
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}>
+      <p
+        style={{
+          fontSize: "0.95rem",
+          color: "var(--text-secondary)",
+          lineHeight: "1.7",
+          marginBottom: "20px",
+          maxWidth: "420px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
         {t.kpss_quiz_proficiency}
       </p>
 
@@ -92,11 +96,22 @@ export function KpssQuizIntroStep({
 
       <div
         className="settings-footer"
-        style={{ padding: "16px 0 0 0", marginTop: "24px", display: "flex", flexDirection: "column", gap: "12px" }}
+        style={{
+          padding: "16px 0 0 0",
+          marginTop: "24px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+        }}
       >
         <button
           className="settings-add-btn"
-          style={{ width: "100%", padding: "14px 20px", fontSize: "1rem", fontWeight: "700" }}
+          style={{
+            width: "100%",
+            padding: "14px 20px",
+            fontSize: "1rem",
+            fontWeight: "700",
+          }}
           disabled={!isAiConfigured}
           onClick={onStartQuiz}
         >
@@ -104,10 +119,7 @@ export function KpssQuizIntroStep({
         </button>
 
         {/* Harici AI seçeneği — her zaman aktif */}
-        <button
-          className="kpss-external-open-btn"
-          onClick={onOpenExternal}
-        >
+        <button className="kpss-external-open-btn" onClick={onOpenExternal}>
           <svg
             width="15"
             height="15"
@@ -128,4 +140,3 @@ export function KpssQuizIntroStep({
     </div>
   );
 }
-

@@ -94,7 +94,9 @@ export function computeStockTelemetry(
   history: StockHistoryItem[],
   currentPrice: number,
 ): StockTelemetry | null {
-  if (!history || history.length === 0) {return null;}
+  if (!history || history.length === 0) {
+    return null;
+  }
 
   const monthOpen = history[0].open;
   const monthChangePct =
@@ -110,8 +112,11 @@ export function computeStockTelemetry(
     const slice14 = history.slice(-15);
     for (let i = 1; i < slice14.length; i++) {
       const diff = slice14[i].close - slice14[i - 1].close;
-      if (diff >= 0) {gains += diff;}
-      else {losses -= diff;}
+      if (diff >= 0) {
+        gains += diff;
+      } else {
+        losses -= diff;
+      }
     }
     const avgGain = gains / 14;
     const avgLoss = losses / 14;
@@ -137,7 +142,7 @@ export function computeStockTelemetry(
 
   const sma20Status =
     sma20 !== null
-      ? `₺${sma20.toFixed(2)} (fiyat %${((currentPrice - sma20) / sma20 * 100).toFixed(1)} ${currentPrice >= sma20 ? "üstünde 📈" : "altında 📉"})`
+      ? `₺${sma20.toFixed(2)} (fiyat %${(((currentPrice - sma20) / sma20) * 100).toFixed(1)} ${currentPrice >= sma20 ? "üstünde 📈" : "altında 📉"})`
       : "N/A";
 
   // Volume ratio
@@ -158,7 +163,9 @@ export function computeStockTelemetry(
   };
 }
 
-export function buildStockContextPrompt(params: BuildStockContextParams): string {
+export function buildStockContextPrompt(
+  params: BuildStockContextParams,
+): string {
   const { symbol, quote, history, portfolio } = params;
 
   if (symbol && symbol !== "ALL_PORTFOLIO") {

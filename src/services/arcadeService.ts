@@ -17,10 +17,15 @@ interface FileHandle {
 }
 
 const ensurePermission = async (handle: unknown): Promise<boolean> => {
-  const h = handle as { queryPermission?: (opts: { mode: string }) => Promise<string>; requestPermission?: (opts: { mode: string }) => Promise<string> };
+  const h = handle as {
+    queryPermission?: (opts: { mode: string }) => Promise<string>;
+    requestPermission?: (opts: { mode: string }) => Promise<string>;
+  };
   if (h.queryPermission) {
     const state = await h.queryPermission({ mode: "read" });
-    if (state === "granted") {return true;}
+    if (state === "granted") {
+      return true;
+    }
     if (h.requestPermission) {
       const next = await h.requestPermission({ mode: "read" });
       return next === "granted";
@@ -36,7 +41,10 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
   for (let i = 0; i < bytes.byteLength; i += chunkSize) {
     binary += String.fromCharCode.apply(
       null,
-      bytes.subarray(i, Math.min(i + chunkSize, bytes.byteLength)) as unknown as number[],
+      bytes.subarray(
+        i,
+        Math.min(i + chunkSize, bytes.byteLength),
+      ) as unknown as number[],
     );
   }
   return btoa(binary);
@@ -45,24 +53,45 @@ const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
 const getMimeType = (filename: string, fallbackType?: string): string => {
   const ext = filename.split(".").pop()?.toLowerCase() ?? "";
   switch (ext) {
-    case "js": case "mjs": return "text/javascript;charset=utf-8";
-    case "css": return "text/css;charset=utf-8";
-    case "html": case "htm": return "text/html;charset=utf-8";
-    case "json": return "application/json;charset=utf-8";
-    case "png": return "image/png";
-    case "jpg": case "jpeg": return "image/jpeg";
-    case "gif": return "image/gif";
-    case "webp": return "image/webp";
-    case "svg": return "image/svg+xml;charset=utf-8";
-    case "woff": return "font/woff";
-    case "woff2": return "font/woff2";
-    case "ttf": return "font/ttf";
-    case "otf": return "font/otf";
-    case "mp3": return "audio/mpeg";
-    case "wav": return "audio/wav";
-    case "ogg": return "audio/ogg";
-    case "mp4": return "video/mp4";
-    default: return fallbackType || "application/octet-stream";
+    case "js":
+    case "mjs":
+      return "text/javascript;charset=utf-8";
+    case "css":
+      return "text/css;charset=utf-8";
+    case "html":
+    case "htm":
+      return "text/html;charset=utf-8";
+    case "json":
+      return "application/json;charset=utf-8";
+    case "png":
+      return "image/png";
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "gif":
+      return "image/gif";
+    case "webp":
+      return "image/webp";
+    case "svg":
+      return "image/svg+xml;charset=utf-8";
+    case "woff":
+      return "font/woff";
+    case "woff2":
+      return "font/woff2";
+    case "ttf":
+      return "font/ttf";
+    case "otf":
+      return "font/otf";
+    case "mp3":
+      return "audio/mpeg";
+    case "wav":
+      return "audio/wav";
+    case "ogg":
+      return "audio/ogg";
+    case "mp4":
+      return "video/mp4";
+    default:
+      return fallbackType || "application/octet-stream";
   }
 };
 
@@ -76,21 +105,69 @@ const formatFolderName = (name: string): string => {
 
 const detectCategory = (name: string): GameEntry["category"] => {
   const lower = name.toLowerCase();
-  if (lower.includes("rpg") || lower.includes("adventure") || lower.includes("isekai") || lower.includes("quest")) {return "rpg";}
-  if (lower.includes("sim") || lower.includes("manager") || lower.includes("survival") || lower.includes("tycoon") || lower.includes("market") || lower.includes("stardew")) {return "simulation";}
-  if (lower.includes("ai") || lower.includes("focus")) {return "ai";}
-  if (lower.includes("puzzle") || lower.includes("match") || lower.includes("tarot") || lower.includes("card")) {return "puzzle";}
-  if (lower.includes("race") || lower.includes("moto") || lower.includes("runner") || lower.includes("wave")) {return "casual";}
+  if (
+    lower.includes("rpg") ||
+    lower.includes("adventure") ||
+    lower.includes("isekai") ||
+    lower.includes("quest")
+  ) {
+    return "rpg";
+  }
+  if (
+    lower.includes("sim") ||
+    lower.includes("manager") ||
+    lower.includes("survival") ||
+    lower.includes("tycoon") ||
+    lower.includes("market") ||
+    lower.includes("stardew")
+  ) {
+    return "simulation";
+  }
+  if (lower.includes("ai") || lower.includes("focus")) {
+    return "ai";
+  }
+  if (
+    lower.includes("puzzle") ||
+    lower.includes("match") ||
+    lower.includes("tarot") ||
+    lower.includes("card")
+  ) {
+    return "puzzle";
+  }
+  if (
+    lower.includes("race") ||
+    lower.includes("moto") ||
+    lower.includes("runner") ||
+    lower.includes("wave")
+  ) {
+    return "casual";
+  }
   return "action";
 };
 
 const detectTechStack = (name: string): string[] => {
   const lower = name.toLowerCase();
   const stack: string[] = [];
-  if (lower.includes("3d") || lower.includes("voxel") || lower.includes("webgl")) {stack.push("Three.js");}
-  if (lower.includes("2d") || lower.includes("canvas") || lower.includes("phaser")) {stack.push("Canvas / 2D");}
-  if (lower.includes("ai")) {stack.push("Gemini API");}
-  if (stack.length === 0) {stack.push("TypeScript", "Vite");}
+  if (
+    lower.includes("3d") ||
+    lower.includes("voxel") ||
+    lower.includes("webgl")
+  ) {
+    stack.push("Three.js");
+  }
+  if (
+    lower.includes("2d") ||
+    lower.includes("canvas") ||
+    lower.includes("phaser")
+  ) {
+    stack.push("Canvas / 2D");
+  }
+  if (lower.includes("ai")) {
+    stack.push("Gemini API");
+  }
+  if (stack.length === 0) {
+    stack.push("TypeScript", "Vite");
+  }
   return stack;
 };
 
@@ -122,19 +199,29 @@ async function* walkDirectory(
   }
 }
 
-const coverPattern = /(^|\/)(cover|thumbnail|screenshot|icon|logo)[^/]*\.(png|jpe?g|webp|gif|svg)$/i;
+const coverPattern =
+  /(^|\/)(cover|thumbnail|screenshot|icon|logo)[^/]*\.(png|jpe?g|webp|gif|svg)$/i;
 const imagePattern = /\.(png|jpe?g|webp|gif|svg)$/i;
 
-const findCoverImage = async (rootDir: unknown): Promise<string | undefined> => {
+const findCoverImage = async (
+  rootDir: unknown,
+): Promise<string | undefined> => {
   const candidates: unknown[] = [];
   for await (const { path, handle } of walkDirectory(rootDir)) {
     if (imagePattern.test(path)) {
-      if (coverPattern.test(path)) {candidates.unshift(handle);}
-      else {candidates.push(handle);}
+      if (coverPattern.test(path)) {
+        candidates.unshift(handle);
+      } else {
+        candidates.push(handle);
+      }
     }
   }
-  if (candidates.length === 0) {return undefined;}
-  const preferred = (candidates.find((h) => coverPattern.test((h as { name: string }).name)) ?? candidates[0]) as { getFile: () => Promise<File> };
+  if (candidates.length === 0) {
+    return undefined;
+  }
+  const preferred = (candidates.find((h) =>
+    coverPattern.test((h as { name: string }).name),
+  ) ?? candidates[0]) as { getFile: () => Promise<File> };
   try {
     const file = await preferred.getFile();
     return await new Promise<string>((resolve, reject) => {
@@ -149,23 +236,34 @@ const findCoverImage = async (rootDir: unknown): Promise<string | undefined> => 
   }
 };
 
-const findEntryHTMLPath = async (rootDir: unknown): Promise<string | undefined> => {
-  const dirVal = rootDir as { getDirectoryHandle: (name: string) => Promise<unknown>; getFileHandle: (name: string) => Promise<unknown> };
+const findEntryHTMLPath = async (
+  rootDir: unknown,
+): Promise<string | undefined> => {
+  const dirVal = rootDir as {
+    getDirectoryHandle: (name: string) => Promise<unknown>;
+    getFileHandle: (name: string) => Promise<unknown>;
+  };
   for (const rel of ["dist/index.html", "index.html"]) {
     const parts = rel.split("/");
     let dir: unknown = rootDir;
     let ok = true;
     for (let i = 0; i < parts.length - 1; i++) {
       try {
-        dir = await (dir as { getDirectoryHandle: (name: string) => Promise<unknown> }).getDirectoryHandle(parts[i]);
+        dir = await (
+          dir as { getDirectoryHandle: (name: string) => Promise<unknown> }
+        ).getDirectoryHandle(parts[i]);
       } catch {
         ok = false;
         break;
       }
     }
-    if (!ok) {continue;}
+    if (!ok) {
+      continue;
+    }
     try {
-      await (dir as { getFileHandle: (name: string) => Promise<unknown> }).getFileHandle(parts[parts.length - 1]);
+      await (
+        dir as { getFileHandle: (name: string) => Promise<unknown> }
+      ).getFileHandle(parts[parts.length - 1]);
       return rel;
     } catch {
       // try next
@@ -179,20 +277,33 @@ const findEntryHTMLPath = async (rootDir: unknown): Promise<string | undefined> 
 /* ------------------------------------------------------------------ */
 
 const isExternal = (value: string): boolean => {
-  if (!value) {return true;}
-  if (/^(https?:|data:|blob:|javascript:)/i.test(value)) {return true;}
-  if (value.startsWith("#")) {return true;}
+  if (!value) {
+    return true;
+  }
+  if (/^(https?:|data:|blob:|javascript:)/i.test(value)) {
+    return true;
+  }
+  if (value.startsWith("#")) {
+    return true;
+  }
   return false;
 };
 
 const joinPath = (base: string, rel: string): string => {
   let cleanRel = rel;
-  if (cleanRel.startsWith("/")) { cleanRel = cleanRel.slice(1); }
+  if (cleanRel.startsWith("/")) {
+    cleanRel = cleanRel.slice(1);
+  }
   const stack = base.split("/").filter(Boolean);
   for (const part of cleanRel.split("/")) {
-    if (part === "" || part === ".") {continue;}
-    if (part === "..") {stack.pop();}
-    else {stack.push(part);}
+    if (part === "" || part === ".") {
+      continue;
+    }
+    if (part === "..") {
+      stack.pop();
+    } else {
+      stack.push(part);
+    }
   }
   return stack.join("/");
 };
@@ -231,16 +342,23 @@ const rewriteAttributes = async (
     const name = m[1].toLowerCase();
     const value = m[2] ?? m[3] ?? "";
     let newValue = value;
-    if ((name === "src" || name === "href" || name === "poster") && !isExternal(value)) {
+    if (
+      (name === "src" || name === "href" || name === "poster") &&
+      !isExternal(value)
+    ) {
       const resolved = await resolve(joinPath(basePrefix, value));
-      if (resolved) {newValue = resolved;}
+      if (resolved) {
+        newValue = resolved;
+      }
     } else if (name === "srcset") {
       const parts = value.split(",").map((entry) => entry.trim());
-      const rewritten = await Promise.all(parts.map(async (entry) => {
-        const [urlPart, ...rest] = entry.split(/\s+/);
-        const resolved = await resolve(joinPath(basePrefix, urlPart));
-        return resolved ? [resolved, ...rest].join(" ") : entry;
-      }));
+      const rewritten = await Promise.all(
+        parts.map(async (entry) => {
+          const [urlPart, ...rest] = entry.split(/\s+/);
+          const resolved = await resolve(joinPath(basePrefix, urlPart));
+          return resolved ? [resolved, ...rest].join(" ") : entry;
+        }),
+      );
       newValue = rewritten.join(", ");
     }
     result += `${m[1]}="${newValue.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"`;
@@ -274,8 +392,13 @@ export function createArcadeService(repo: IArcadeRepository) {
     },
 
     async importFolder(): Promise<ImportResult | null> {
-      if (typeof window === "undefined" || typeof window.showDirectoryPicker !== "function") {
-        throw new Error("Bu tarayıcı File System Access API'ı desteklemiyor. Lütfen Chrome veya Edge'in güncel sürümünü kullanın.");
+      if (
+        typeof window === "undefined" ||
+        typeof window.showDirectoryPicker !== "function"
+      ) {
+        throw new Error(
+          "Bu tarayıcı File System Access API'ı desteklemiyor. Lütfen Chrome veya Edge'in güncel sürümünü kullanın.",
+        );
       }
       const dir = await window.showDirectoryPicker({ mode: "read" });
       const folderName = dir.name;
@@ -288,7 +411,10 @@ export function createArcadeService(repo: IArcadeRepository) {
       const isPlayable = Boolean(entryHTMLPath);
 
       let displayTitle = formatFolderName(folderName);
-      if (folderName.toLowerCase() === "dist" || folderName.toLowerCase() === "build") {
+      if (
+        folderName.toLowerCase() === "dist" ||
+        folderName.toLowerCase() === "build"
+      ) {
         displayTitle = `Oyun Projesi (${folderName})`;
       }
 
@@ -312,20 +438,37 @@ export function createArcadeService(repo: IArcadeRepository) {
       };
 
       const games = await repo.getAllGames();
-      const next = [game, ...games.filter((g) => g.handleId !== handleId && g.folderPath !== folderName)];
+      const next = [
+        game,
+        ...games.filter(
+          (g) => g.handleId !== handleId && g.folderPath !== folderName,
+        ),
+      ];
       await repo.saveAllGames(next);
-      return { game, mode: isPlayable ? "dist" : "dev", missingDist: !isPlayable };
+      return {
+        game,
+        mode: isPlayable ? "dist" : "dev",
+        missingDist: !isPlayable,
+      };
     },
 
     async loadGamePackage(game: GameEntry): Promise<GamePackage | null> {
       const handle = await repo.getDirectoryHandle(game.handleId);
-      if (!handle) {return null;}
+      if (!handle) {
+        return null;
+      }
       const ok = await ensurePermission(handle);
-      if (!ok) {return null;}
+      if (!ok) {
+        return null;
+      }
 
       const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
       const candidate = game.entryHTMLPath ?? "dist/index.html";
-      if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
+      if (
+        !ALLOWED_ENTRY_PATHS.includes(
+          candidate as (typeof ALLOWED_ENTRY_PATHS)[number],
+        )
+      ) {
         logger.warn("Disallowed entryHTMLPath:", candidate);
         return null;
       }
@@ -353,7 +496,9 @@ export function createArcadeService(repo: IArcadeRepository) {
       const files: Record<string, ArrayBuffer> = {};
 
       for await (const { path, handle: fHandle } of walkDirectory(folderDir)) {
-        if (path === fileName) {continue;}
+        if (path === fileName) {
+          continue;
+        }
         try {
           const file = await (fHandle as FileHandle).getFile();
           files[path] = await file.arrayBuffer();
@@ -367,13 +512,21 @@ export function createArcadeService(repo: IArcadeRepository) {
 
     async resolveGameURL(game: GameEntry): Promise<string | null> {
       const handle = await repo.getDirectoryHandle(game.handleId);
-      if (!handle) {return null;}
+      if (!handle) {
+        return null;
+      }
       const ok = await ensurePermission(handle);
-      if (!ok) {return null;}
+      if (!ok) {
+        return null;
+      }
 
       const ALLOWED_ENTRY_PATHS = ["dist/index.html", "index.html"] as const;
       const candidate = game.entryHTMLPath ?? "dist/index.html";
-      if (!ALLOWED_ENTRY_PATHS.includes(candidate as typeof ALLOWED_ENTRY_PATHS[number])) {
+      if (
+        !ALLOWED_ENTRY_PATHS.includes(
+          candidate as (typeof ALLOWED_ENTRY_PATHS)[number],
+        )
+      ) {
         logger.warn("Refusing to resolve disallowed entryHTMLPath:", candidate);
         return null;
       }
@@ -381,7 +534,9 @@ export function createArcadeService(repo: IArcadeRepository) {
       const rootPath = candidate;
       const parts = rootPath.split("/");
       const fileName = parts.pop()!;
-      if (parts.some((p) => p === "" || p === "." || p === "..")) {return null;}
+      if (parts.some((p) => p === "" || p === "." || p === "..")) {
+        return null;
+      }
       let folderDir = handle as DirHandle;
       for (const part of parts) {
         try {
@@ -405,14 +560,22 @@ export function createArcadeService(repo: IArcadeRepository) {
       const cache = new Map<string, string>();
       const resolveAsset = async (relPath: string): Promise<string | null> => {
         const clean = relPath.split("#")[0].split("?")[0];
-        if (!clean) {return null;}
+        if (!clean) {
+          return null;
+        }
         const segments = clean.split("/");
-        if (segments.some((p) => p === "..")) {return null;}
-        if (cache.has(clean)) {return cache.get(clean)!;}
+        if (segments.some((p) => p === "..")) {
+          return null;
+        }
+        if (cache.has(clean)) {
+          return cache.get(clean)!;
+        }
         let parent = handle as DirHandle;
         for (let i = 0; i < segments.length - 1; i++) {
           const seg = segments[i];
-          if (seg === "" || seg === ".") {continue;}
+          if (seg === "" || seg === ".") {
+            continue;
+          }
           try {
             parent = await parent.getDirectoryHandle(seg);
           } catch {
@@ -420,7 +583,13 @@ export function createArcadeService(repo: IArcadeRepository) {
           }
         }
         const targetName = segments[segments.length - 1];
-        if (!targetName || targetName.includes("/") || targetName.includes("\\") || targetName === "." || targetName === "..") {
+        if (
+          !targetName ||
+          targetName.includes("/") ||
+          targetName.includes("\\") ||
+          targetName === "." ||
+          targetName === ".."
+        ) {
           return null;
         }
         try {
@@ -438,9 +607,18 @@ export function createArcadeService(repo: IArcadeRepository) {
       };
 
       let rewritten = await rewriteHTML(html, folderPrefix, resolveAsset);
-      rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi, "");
-      rewritten = rewritten.replace(/<meta\s+[^>]*http-equiv\s*=\s*["']?(x-frame-options|content-security-policy)["']?[^>]*>/gi, "");
-      rewritten = rewritten.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
+      rewritten = rewritten.replace(
+        /<meta\s+[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*>/gi,
+        "",
+      );
+      rewritten = rewritten.replace(
+        /<meta\s+[^>]*http-equiv\s*=\s*["']?(x-frame-options|content-security-policy)["']?[^>]*>/gi,
+        "",
+      );
+      rewritten = rewritten.replace(
+        /\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi,
+        "",
+      );
       return rewritten;
     },
 
@@ -454,29 +632,50 @@ export function createArcadeService(repo: IArcadeRepository) {
       const next = games.filter((g) => g.id !== gameId);
       await repo.saveAllGames(next);
       if (target?.handleId) {
-        try { await repo.deleteDirectoryHandle(target.handleId); } catch { /* ignore */ }
+        try {
+          await repo.deleteDirectoryHandle(target.handleId);
+        } catch {
+          /* ignore */
+        }
       }
       return next;
     },
 
     async toggleFavorite(gameId: string): Promise<GameEntry[]> {
       const games = await repo.getAllGames();
-      const next = games.map((g) => (g.id === gameId ? { ...g, isFavorite: !g.isFavorite } : g));
+      const next = games.map((g) =>
+        g.id === gameId ? { ...g, isFavorite: !g.isFavorite } : g,
+      );
       await repo.saveAllGames(next);
       return next;
     },
 
-    async updateGameStatus(gameId: string, status: GameEntry["status"]): Promise<GameEntry[]> {
+    async updateGameStatus(
+      gameId: string,
+      status: GameEntry["status"],
+    ): Promise<GameEntry[]> {
       const games = await repo.getAllGames();
       const next = games.map((g) => (g.id === gameId ? { ...g, status } : g));
       await repo.saveAllGames(next);
       return next;
     },
 
-    async updateDevNotes(gameId: string, notes: string, todoList?: GameEntry["todoList"], title?: string): Promise<GameEntry[]> {
+    async updateDevNotes(
+      gameId: string,
+      notes: string,
+      todoList?: GameEntry["todoList"],
+      title?: string,
+    ): Promise<GameEntry[]> {
       const games = await repo.getAllGames();
       const next = games.map((g) =>
-        g.id === gameId ? { ...g, devNotes: notes, todoList: todoList ?? g.todoList, title: title?.trim() || g.title } : g,
+        g.id === gameId
+          ? {
+              ...g,
+              devNotes: notes,
+              todoList: todoList ?? g.todoList,
+              title: title?.trim() || g.title,
+            }
+          : g,
       );
       await repo.saveAllGames(next);
       return next;
@@ -485,9 +684,13 @@ export function createArcadeService(repo: IArcadeRepository) {
     async recheckGame(gameId: string): Promise<GameEntry | null> {
       const games = await repo.getAllGames();
       const g = games.find((x) => x.id === gameId);
-      if (!g) {return null;}
+      if (!g) {
+        return null;
+      }
       const handle = await repo.getDirectoryHandle(g.handleId);
-      if (!handle) {return g;}
+      if (!handle) {
+        return g;
+      }
 
       const hasDist = await hasDirectoryNamed(handle, "dist");
       const updated: GameEntry = {
@@ -504,9 +707,13 @@ export function createArcadeService(repo: IArcadeRepository) {
     async ensurePermissionForGame(gameId: string): Promise<boolean> {
       const games = await repo.getAllGames();
       const g = games.find((x) => x.id === gameId);
-      if (!g) {return false;}
+      if (!g) {
+        return false;
+      }
       const handle = await repo.getDirectoryHandle(g.handleId);
-      if (!handle) {return false;}
+      if (!handle) {
+        return false;
+      }
       return ensurePermission(handle);
     },
 
@@ -515,7 +722,9 @@ export function createArcadeService(repo: IArcadeRepository) {
       const result: GameEntry[] = [];
       for (const g of games) {
         const handle = await repo.getDirectoryHandle(g.handleId);
-        if (handle) {result.push(g);}
+        if (handle) {
+          result.push(g);
+        }
       }
       return result;
     },
@@ -528,9 +737,14 @@ export type ArcadeService = ReturnType<typeof createArcadeService>;
 /* Misc (module-private)                                                */
 /* ------------------------------------------------------------------ */
 
-async function hasDirectoryNamed(root: unknown, name: string): Promise<boolean> {
+async function hasDirectoryNamed(
+  root: unknown,
+  name: string,
+): Promise<boolean> {
   try {
-    await (root as { getDirectoryHandle: (name: string) => Promise<unknown> }).getDirectoryHandle(name);
+    await (
+      root as { getDirectoryHandle: (name: string) => Promise<unknown> }
+    ).getDirectoryHandle(name);
     return true;
   } catch {
     return false;

@@ -29,7 +29,10 @@ export class GoogleCalendarApi {
     return data.items || [];
   }
 
-  async createCalendarEvent(token: string, event: GoogleCalendarEvent): Promise<GoogleCalendarEvent> {
+  async createCalendarEvent(
+    token: string,
+    event: GoogleCalendarEvent,
+  ): Promise<GoogleCalendarEvent> {
     const url =
       "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     const res = await fetch(url, {

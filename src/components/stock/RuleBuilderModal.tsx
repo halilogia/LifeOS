@@ -119,11 +119,16 @@ export function RuleBuilderModal({
               className="stock-select"
               value={ruleType}
               onChange={(e) => {
-                const nextType = (e.target as HTMLSelectElement).value as StockRuleType;
+                const nextType = (e.target as HTMLSelectElement)
+                  .value as StockRuleType;
                 setRuleType(nextType);
                 if (["PRICE_ABOVE", "PRICE_BELOW"].includes(nextType)) {
                   setTargetValue(100);
-                } else if (["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(nextType)) {
+                } else if (
+                  ["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(
+                    nextType,
+                  )
+                ) {
                   setTargetValue(5);
                 }
               }}
@@ -170,7 +175,9 @@ export function RuleBuilderModal({
                 required
               />
             </div>
-          ) : ["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(ruleType) ? (
+          ) : ["STOP_LOSS", "TAKE_PROFIT", "TRAILING_STOP"].includes(
+              ruleType,
+            ) ? (
             <div className="stock-form-group">
               <label className="stock-form-label">Yüzde Oranı (%)</label>
               <input

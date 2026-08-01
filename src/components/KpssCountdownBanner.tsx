@@ -30,7 +30,10 @@ export function KpssCountdownBanner({
         </span>
         <span className="kpss-countdown-time">{estimatedTimeLeft}</span>
         <span className="kpss-countdown-subtitle">
-          {t.kpss_countdown_remaining.replace("{count}", String(remainingCount))}
+          {t.kpss_countdown_remaining.replace(
+            "{count}",
+            String(remainingCount),
+          )}
         </span>
       </div>
     </div>

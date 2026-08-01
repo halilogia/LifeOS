@@ -122,6 +122,10 @@ export const LOCAL_KPSS_PAST_QUIZZES = "kpss_past_quizzes";
 export const PRAYER_CALENDAR_PREFIX = "prayer_calendar_";
 
 /** Build a prayer calendar storage key dynamically. */
-export function prayerCalendarKey(city: string, year: number, month: number): string {
+export function prayerCalendarKey(
+  city: string,
+  year: number,
+  month: number,
+): string {
   return `${PRAYER_CALENDAR_PREFIX}${city.toLowerCase()}_${year}_${month}`;
 }

@@ -3,7 +3,10 @@
  * Glassmorphic Motivational Card showing "Bu Süreyle Ne Yapabilirdin?"
  */
 
-import { calculateMotivationalAchievements, type AchievementType } from "@/domain/services/detoxMotivationalService.js";
+import {
+  calculateMotivationalAchievements,
+  type AchievementType,
+} from "@/domain/services/detoxMotivationalService.js";
 import { translations } from "@/utils/i18n.js";
 
 interface DetoxMotivationCardProps {
@@ -35,7 +38,9 @@ export function DetoxMotivationCard({
 }: DetoxMotivationCardProps) {
   const achievements = calculateMotivationalAchievements(durationMinutes);
 
-  if (achievements.length === 0) { return null; }
+  if (achievements.length === 0) {
+    return null;
+  }
 
   const t = translations[lang as "tr" | "en"];
 
@@ -54,11 +59,27 @@ export function DetoxMotivationCard({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#a78bfa"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>
           <line x1="9" y1="21" x2="15" y2="21"></line>
         </svg>
-        <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: 700, color: "#f8fafc" }}>
+        <h4
+          style={{
+            margin: 0,
+            fontSize: "0.92rem",
+            fontWeight: 700,
+            color: "#f8fafc",
+          }}
+        >
           {t.detox_what_could_you_do}
         </h4>
       </div>
@@ -87,12 +108,16 @@ export function DetoxMotivationCard({
               transition: "transform 0.2s ease, background 0.2s ease",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-              (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.06)";
+              (e.currentTarget as HTMLElement).style.transform =
+                "translateY(-2px)";
+              (e.currentTarget as HTMLElement).style.background =
+                "rgba(255, 255, 255, 0.06)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-              (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.03)";
+              (e.currentTarget as HTMLElement).style.transform =
+                "translateY(0)";
+              (e.currentTarget as HTMLElement).style.background =
+                "rgba(255, 255, 255, 0.03)";
             }}
           >
             <span style={{ fontSize: "1.2rem" }}>{item.icon}</span>

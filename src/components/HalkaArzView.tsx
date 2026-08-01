@@ -70,8 +70,12 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
   ).length;
 
   const displayedActiveList = activeIPOs.filter((item) => {
-    if (subFilter === "active_only") {return item.status === "active";}
-    if (subFilter === "upcoming_only") {return item.status === "upcoming";}
+    if (subFilter === "active_only") {
+      return item.status === "active";
+    }
+    if (subFilter === "upcoming_only") {
+      return item.status === "upcoming";
+    }
     return true;
   });
 
@@ -84,13 +88,19 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
             className={`stock-btn ${activeTab === "active" ? "stock-btn-primary" : "stock-btn-secondary"}`}
             onClick={() => setActiveTab("active")}
           >
-            {t.ipo_tab_active_and_upcoming.replace("{count}", String(activeIPOs.length))}
+            {t.ipo_tab_active_and_upcoming.replace(
+              "{count}",
+              String(activeIPOs.length),
+            )}
           </button>
           <button
             className={`stock-btn ${activeTab === "history" ? "stock-btn-primary" : "stock-btn-secondary"}`}
             onClick={() => setActiveTab("history")}
           >
-            {t.ipo_tab_history_label.replace("{count}", String(historyIPOs.length))}
+            {t.ipo_tab_history_label.replace(
+              "{count}",
+              String(historyIPOs.length),
+            )}
           </button>
         </div>
 
@@ -134,7 +144,10 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               color: subFilter === "active_only" ? "#34d399" : "#94a3b8",
             }}
           >
-            {t.ipo_wip_filter_active.replace("{count}", String(activeOnlyCount))}
+            {t.ipo_wip_filter_active.replace(
+              "{count}",
+              String(activeOnlyCount),
+            )}
           </button>
           <button
             onClick={() => setSubFilter("upcoming_only")}
@@ -155,7 +168,10 @@ export function HalkaArzView({ lang }: HalkaArzViewProps) {
               color: subFilter === "upcoming_only" ? "#fbbf24" : "#94a3b8",
             }}
           >
-            {t.ipo_wip_filter_upcoming.replace("{count}", String(upcomingOnlyCount))}
+            {t.ipo_wip_filter_upcoming.replace(
+              "{count}",
+              String(upcomingOnlyCount),
+            )}
           </button>
           <button
             onClick={() => setSubFilter("all")}

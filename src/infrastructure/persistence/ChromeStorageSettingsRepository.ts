@@ -6,7 +6,17 @@
 
 import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
 import type { Language } from "@/domain/value-objects/Language.js";
-import { SYNC_SETTINGS_KEYS, SYNC_SIDEBAR_ORDER, SYNC_LANG, SYNC_SIDEBAR_OPEN, SYNC_FREE_GAMES_NOTIFICATIONS, SYNC_CALENDAR_NOTIFICATIONS, SYNC_POMO_BLOCK_ENABLED, SYNC_UNIVERSAL_INFOBOX_ENABLED, SYNC_UNIVERSAL_INFOBOX_HOTKEY } from "@/infrastructure/storage/keys.js";
+import {
+  SYNC_SETTINGS_KEYS,
+  SYNC_SIDEBAR_ORDER,
+  SYNC_LANG,
+  SYNC_SIDEBAR_OPEN,
+  SYNC_FREE_GAMES_NOTIFICATIONS,
+  SYNC_CALENDAR_NOTIFICATIONS,
+  SYNC_POMO_BLOCK_ENABLED,
+  SYNC_UNIVERSAL_INFOBOX_ENABLED,
+  SYNC_UNIVERSAL_INFOBOX_HOTKEY,
+} from "@/infrastructure/storage/keys.js";
 
 export class ChromeStorageSettingsRepository implements ISettingsRepository {
   async getSettings(): Promise<{
@@ -30,8 +40,10 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
             calendarNotificationsEnabled:
               result[SYNC_CALENDAR_NOTIFICATIONS] ?? true,
             pomoBlockEnabled: result[SYNC_POMO_BLOCK_ENABLED] ?? true,
-            universalInfoBoxEnabled: result[SYNC_UNIVERSAL_INFOBOX_ENABLED] ?? true,
-            universalInfoBoxHotkey: result[SYNC_UNIVERSAL_INFOBOX_HOTKEY] || "none",
+            universalInfoBoxEnabled:
+              result[SYNC_UNIVERSAL_INFOBOX_ENABLED] ?? true,
+            universalInfoBoxHotkey:
+              result[SYNC_UNIVERSAL_INFOBOX_HOTKEY] || "none",
           });
         },
       );
@@ -91,7 +103,10 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
   async setUniversalInfoBox(enabled: boolean, hotkey: string): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.sync.set(
-        { [SYNC_UNIVERSAL_INFOBOX_ENABLED]: enabled, [SYNC_UNIVERSAL_INFOBOX_HOTKEY]: hotkey },
+        {
+          [SYNC_UNIVERSAL_INFOBOX_ENABLED]: enabled,
+          [SYNC_UNIVERSAL_INFOBOX_HOTKEY]: hotkey,
+        },
         resolve,
       );
     });

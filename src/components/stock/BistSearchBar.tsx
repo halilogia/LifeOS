@@ -4,14 +4,8 @@
  */
 
 import { useState, useEffect } from "preact/hooks";
-import {
-  searchBistStocks,
-  formatPrice,
-} from "@/services/bistService.js";
-import type {
-  BISTSearchResult,
-  StockQuote,
-} from "@/types/bist.js";
+import { searchBistStocks, formatPrice } from "@/services/bistService.js";
+import type { BISTSearchResult, StockQuote } from "@/types/bist.js";
 
 interface BistSearchBarProps {
   searchQuery: string;
@@ -214,7 +208,8 @@ export function BistSearchBar({
                       fontSize: "0.88rem",
                     }}
                   >
-                    "{searchQuery}" aramasıyla eşleşen canlı BİST hissesi bulunamadı.
+                    "{searchQuery}" aramasıyla eşleşen canlı BİST hissesi
+                    bulunamadı.
                   </div>
                   {isValidTicker && (
                     <div

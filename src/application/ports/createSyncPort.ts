@@ -14,21 +14,21 @@ import { GoogleTasksApi } from "@/infrastructure/api/GoogleTasksApi.js";
  * Called once in the composition root (App.tsx) and passed down to hooks/use-cases.
  */
 export function createSyncPort(): ITodoSyncPort {
-    const authApi = new GoogleAuthApi();
-    const tasksApi = new GoogleTasksApi();
+  const authApi = new GoogleAuthApi();
+  const tasksApi = new GoogleTasksApi();
 
-    return {
-        getAuthToken: (interactive) => authApi.getAuthToken(interactive),
-        getUserEmail: (token) => authApi.getUserEmail(token),
-        getOrCreateTaskList: (token, title) =>
-            tasksApi.getOrCreateTaskList(token, title),
-        getTasks: (token, taskListId) => tasksApi.getTasks(token, taskListId),
-        createTask: (token, taskListId, task) =>
-            tasksApi.createTask(token, taskListId, task),
-        updateTask: (token, taskListId, taskId, task) =>
-            tasksApi.updateTask(token, taskListId, taskId, task),
-        deleteTask: (token, taskListId, taskId) =>
-            tasksApi.deleteTask(token, taskListId, taskId),
-        removeCachedAuthToken: (token) => authApi.removeCachedAuthToken(token),
-    };
+  return {
+    getAuthToken: (interactive) => authApi.getAuthToken(interactive),
+    getUserEmail: (token) => authApi.getUserEmail(token),
+    getOrCreateTaskList: (token, title) =>
+      tasksApi.getOrCreateTaskList(token, title),
+    getTasks: (token, taskListId) => tasksApi.getTasks(token, taskListId),
+    createTask: (token, taskListId, task) =>
+      tasksApi.createTask(token, taskListId, task),
+    updateTask: (token, taskListId, taskId, task) =>
+      tasksApi.updateTask(token, taskListId, taskId, task),
+    deleteTask: (token, taskListId, taskId) =>
+      tasksApi.deleteTask(token, taskListId, taskId),
+    removeCachedAuthToken: (token) => authApi.removeCachedAuthToken(token),
+  };
 }

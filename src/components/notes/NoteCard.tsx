@@ -367,7 +367,9 @@ export function NoteCard({
             const tags = extractTags(rawText);
             const links = extractInternalLinks(rawText);
 
-            if (tags.length === 0 && links.length === 0) {return null;}
+            if (tags.length === 0 && links.length === 0) {
+              return null;
+            }
 
             return (
               <div
@@ -447,15 +449,23 @@ export function NoteCard({
                   e.stopPropagation();
                   let mdText = `# ${note.title || "Not"}\n\n`;
                   if (note.type === "cornell") {
-                    if (note.cues) {mdText += `### İpuçları / Anahtar Kelimeler\n${note.cues}\n\n`;}
-                    if (note.content) {mdText += `### Notlar\n${note.content}\n\n`;}
-                    if (note.summary) {mdText += `### Özet\n${note.summary}\n\n`;}
+                    if (note.cues) {
+                      mdText += `### İpuçları / Anahtar Kelimeler\n${note.cues}\n\n`;
+                    }
+                    if (note.content) {
+                      mdText += `### Notlar\n${note.content}\n\n`;
+                    }
+                    if (note.summary) {
+                      mdText += `### Özet\n${note.summary}\n\n`;
+                    }
                   } else {
                     mdText += `${note.content || ""}\n\n`;
                   }
                   mdText += `---\n*Oluşturulma Tarihi: ${new Date(note.createdAt).toLocaleDateString()}*`;
 
-                  const blob = new Blob([mdText], { type: "text/markdown;charset=utf-8;" });
+                  const blob = new Blob([mdText], {
+                    type: "text/markdown;charset=utf-8;",
+                  });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url;

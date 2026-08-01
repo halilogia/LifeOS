@@ -22,10 +22,13 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       const progress: Record<string, unknown>[] = await srsRepo.getAll();
 
       const progressMap = new Map<string, WordReviewData>();
-      progress.forEach((p) => progressMap.set(p.wordId as string, p as unknown as WordReviewData));
+      progress.forEach((p) =>
+        progressMap.set(p.wordId as string, p as unknown as WordReviewData),
+      );
 
       const srsUniverse: SRSWordWithInfo[] = kpssDummyFlashcards.map((w) => {
-        const p = progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+        const p =
+          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
         return { ...p, level: w.category, listType: "kpss", freq: 0 };
       });
 
@@ -48,7 +51,10 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
     },
 
     /** Processes review quality rating with SM-2 algorithm and persists. */
-    async saveSrsReview(reviewData: WordReviewData, quality: ReviewQuality): Promise<void> {
+    async saveSrsReview(
+      reviewData: WordReviewData,
+      quality: ReviewQuality,
+    ): Promise<void> {
       const outcome = calculateSM2(reviewData, quality, new Date());
 
       const progress = await srsRepo.getAll();

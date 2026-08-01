@@ -16,7 +16,10 @@
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .arcade-game-card:hover {
@@ -88,7 +91,9 @@
   justify-content: center;
   cursor: pointer;
   z-index: 2;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
 }
 
 .arcade-card-del-btn:hover {
@@ -104,7 +109,6 @@
   background: rgba(239, 68, 68, 0.2) !important;
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
-
 
 .arcade-card-play-overlay {
   position: absolute;

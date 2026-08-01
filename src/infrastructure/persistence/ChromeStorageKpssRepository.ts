@@ -6,7 +6,12 @@
 
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
-import { SYNC_KPSS_PROGRESS, SYNC_KPSS_DAILY_STATS, SYNC_KPSS_SRS, LOCAL_KPSS_PAST_QUIZZES } from "@/infrastructure/storage/keys.js";
+import {
+  SYNC_KPSS_PROGRESS,
+  SYNC_KPSS_DAILY_STATS,
+  SYNC_KPSS_SRS,
+  LOCAL_KPSS_PAST_QUIZZES,
+} from "@/infrastructure/storage/keys.js";
 
 const KPSS_PROGRESS_KEY = SYNC_KPSS_PROGRESS;
 const KPSS_DAILY_STATS_KEY = SYNC_KPSS_DAILY_STATS;

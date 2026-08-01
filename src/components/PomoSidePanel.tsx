@@ -73,7 +73,9 @@ export function PomoSidePanel({
 
   const handleSoundToggle = (soundType: AmbientSoundType) => {
     const engine = audioEngineRef.current;
-    if (!engine) {return;}
+    if (!engine) {
+      return;
+    }
 
     if (activeSound === soundType && isPlaying) {
       engine.stopAllSounds();

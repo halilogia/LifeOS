@@ -2,7 +2,7 @@
  * detoxMotivationalService.ts
  * Calculates dynamic motivational achievements ("Bu Süreyle Ne Yapabilirdin?")
  * based on saved detox minutes.
- * 
+ *
  * Domain layer — pure function, no external dependencies.
  * Returns raw data without translations. Caller handles formatting.
  */
@@ -90,7 +90,7 @@ export function calculateMotivationalAchievements(
   }
 
   // 5. Yürüyüş / Spor (1 dakikada 80 metre)
-  const distanceKm = Math.round((mins * 0.08) * 10) / 10;
+  const distanceKm = Math.round(mins * 0.08 * 10) / 10;
   if (distanceKm >= 0.5) {
     achievements.push({
       icon: "🏃",

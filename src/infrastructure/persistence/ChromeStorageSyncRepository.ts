@@ -14,7 +14,8 @@ export class ChromeStorageSyncRepository implements ISyncRepository {
   async getSyncSettings(): Promise<GoogleSyncSettings> {
     return new Promise((resolve) => {
       chrome.storage.sync.get([SYNC_SETTINGS], (result) => {
-        const settings = result[SYNC_SETTINGS] as GoogleSyncSettings | undefined;
+        const settings = result[SYNC_SETTINGS] as
+          GoogleSyncSettings | undefined;
         resolve(
           settings ?? {
             enabled: false,

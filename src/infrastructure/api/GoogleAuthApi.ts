@@ -22,7 +22,9 @@ export class GoogleAuthApi {
           return reject(new Error("Failed to retrieve token."));
         }
         const token =
-          typeof result === "string" ? result : (result as { token: string }).token;
+          typeof result === "string"
+            ? result
+            : (result as { token: string }).token;
         if (!token) {
           return reject(new Error("No token returned in auth result."));
         }

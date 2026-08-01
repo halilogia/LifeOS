@@ -623,7 +623,11 @@ body:has(#sidebar.open) .stock-modal-overlay,
 }
 
 .watchlist-tab-chip.active {
-  background: linear-gradient(135deg, var(--accent-glow) 0%, rgba(99, 102, 241, 0.25) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-glow) 0%,
+    rgba(99, 102, 241, 0.25) 100%
+  );
   border-color: var(--accent-color);
   color: var(--text-primary);
   font-weight: 600;

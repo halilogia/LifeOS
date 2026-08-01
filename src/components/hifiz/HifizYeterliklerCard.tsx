@@ -33,9 +33,7 @@ export function HifizYeterliklerCard({
 
       <div className="hifiz-overall-progress-container">
         <div className="hifiz-overall-info">
-          <span>
-            {t.hifiz_progress}
-          </span>
+          <span>{t.hifiz_progress}</span>
           <span id="yeterlikler-overall-percent">{yeterliklerPercent}%</span>
         </div>
         <div className="hifiz-overall-bar">

@@ -129,8 +129,7 @@ export function KpssNetEstimationCard({
           <span
             style={{ fontSize: "1.4rem", fontWeight: "800", color: "white" }}
           >
-            {activeTarget}{" "}
-            {isNetMode ? t.kpss_net_label : t.kpss_score_label}
+            {activeTarget} {isNetMode ? t.kpss_net_label : t.kpss_score_label}
           </span>
         </div>
 
@@ -279,8 +278,7 @@ export function KpssNetEstimationCard({
                 textAlign: "right",
               }}
             >
-              🎉{" "}
-              {t.kpss_goal_achieved}
+              🎉 {t.kpss_goal_achieved}
             </span>
           )}
         </div>
@@ -304,7 +302,7 @@ export function KpssNetEstimationCard({
             <div
               key={subKey}
               onClick={() => onSelectSubject?.(subKey)}
-              title={`${t.kpss_show_topics.replace('{subject}', labels[subKey] || subKey)}`}
+              title={`${t.kpss_show_topics.replace("{subject}", labels[subKey] || subKey)}`}
               style={{
                 background: isSelected
                   ? "rgba(124, 58, 237, 0.14)"
@@ -336,7 +334,13 @@ export function KpssNetEstimationCard({
               >
                 <span>{labels[subKey] || subKey}</span>
                 {isSelected && (
-                  <span style={{ fontSize: "0.65rem", color: "var(--accent-color)", fontWeight: "800" }}>
+                  <span
+                    style={{
+                      fontSize: "0.65rem",
+                      color: "var(--accent-color)",
+                      fontWeight: "800",
+                    }}
+                  >
                     ✓ {t.kpss_selected}
                   </span>
                 )}

@@ -10,7 +10,12 @@ interface ArcadeGameModalProps {
   lang: Language;
   onClose: () => void;
   onUpdateStatus: (gameId: string, status: GameEntry["status"]) => void;
-  onUpdateDevNotes: (gameId: string, notes: string, todoList: DevTodoItem[], title?: string) => void;
+  onUpdateDevNotes: (
+    gameId: string,
+    notes: string,
+    todoList: DevTodoItem[],
+    title?: string,
+  ) => void;
   onDeleteGame: (gameId: string) => void;
 }
 
@@ -36,22 +41,27 @@ export function ArcadeGameModal({
   const [devCmdCopied, setDevCmdCopied] = useState(false);
   const [notes, setNotes] = useState(game.devNotes ?? "");
   const [title, setTitle] = useState(game.title ?? "");
-  const [todoList, setTodoList] = useState<DevTodoItem[]>(game.todoList ?? STARTER_TODO);
+  const [todoList, setTodoList] = useState<DevTodoItem[]>(
+    game.todoList ?? STARTER_TODO,
+  );
   const toastTimerRef = useRef<number | null>(null);
 
   const t = translations[lang];
   const tr = t as Record<string, string>;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const sandboxUrl = typeof chrome !== "undefined" && chrome.runtime?.getURL
-    ? chrome.runtime.getURL("sandbox.html")
-    : "sandbox.html";
+  const sandboxUrl =
+    typeof chrome !== "undefined" && chrome.runtime?.getURL
+      ? chrome.runtime.getURL("sandbox.html")
+      : "sandbox.html";
 
   // SECURITY: escape folderPath before embedding in shell command. The path
   // comes from chrome.fileSystem's display name and is not user-editable, but
   // it could still contain characters (e.g. a folder literally named `evil"$x")
   // that would break the quoting or inject extra commands.
-  const safeFolderPath = game.folderPath.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+  const safeFolderPath = game.folderPath
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"');
   const devCmd = `cd "${safeFolderPath}" && npm run dev`;
   // Display a sanitized version for the user; never inject raw.
   const devCmdDisplay = `cd "${game.folderPath}" && npm run dev`;
@@ -61,15 +71,22 @@ export function ArcadeGameModal({
   // fires a second load event which would re-trigger sandbox.js if we sent again.
   const messageSentRef = useRef(false);
   const handleSandboxLoad = () => {
-    if (messageSentRef.current) {return;} // already sent once
+    if (messageSentRef.current) {
+      return;
+    } // already sent once
     if (gamePkg && iframeRef.current?.contentWindow) {
       messageSentRef.current = true;
-      iframeRef.current.contentWindow.postMessage({ type: "LOAD_GAME_PACKAGE", pkg: gamePkg }, "*");
+      iframeRef.current.contentWindow.postMessage(
+        { type: "LOAD_GAME_PACKAGE", pkg: gamePkg },
+        "*",
+      );
     }
   };
 
   useEffect(() => {
-    if (game.mode !== "dist") {return;}
+    if (game.mode !== "dist") {
+      return;
+    }
     let cancelled = false;
     const load = async () => {
       setLoading(true);
@@ -85,17 +102,32 @@ export function ArcadeGameModal({
           return;
         }
         const pkg = await arcadeService.loadGamePackage(game);
-        if (cancelled) {return;}
-        if (pkg) {setGamePkg(pkg);}
-        else {setError(tr.arcade_iframe_error);}
+        if (cancelled) {
+          return;
+        }
+        if (pkg) {
+          setGamePkg(pkg);
+        } else {
+          setError(tr.arcade_iframe_error);
+        }
       } catch (err: unknown) {
-        if (!cancelled) {setError(err instanceof Error ? (err?.message ?? tr.arcade_iframe_error) : tr.arcade_iframe_error);}
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? (err?.message ?? tr.arcade_iframe_error)
+              : tr.arcade_iframe_error,
+          );
+        }
       } finally {
-        if (!cancelled) {setLoading(false);}
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
     void load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [game.id, game.mode, game.entryHTMLPath]);
 
   const handleRequestPermission = async () => {
@@ -115,7 +147,11 @@ export function ArcadeGameModal({
         setError(tr.arcade_iframe_error);
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? (err?.message ?? tr.arcade_iframe_error) : tr.arcade_iframe_error);
+      setError(
+        err instanceof Error
+          ? (err?.message ?? tr.arcade_iframe_error)
+          : tr.arcade_iframe_error,
+      );
     } finally {
       setLoading(false);
     }
@@ -123,15 +159,22 @@ export function ArcadeGameModal({
 
   const showToast = (next: Toast) => {
     setToast(next);
-    if (toastTimerRef.current) {window.clearTimeout(toastTimerRef.current);}
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
     if (next) {
       toastTimerRef.current = window.setTimeout(() => setToast(null), 2500);
     }
   };
 
-  useEffect(() => () => {
-    if (toastTimerRef.current) {window.clearTimeout(toastTimerRef.current);}
-  }, []);
+  useEffect(
+    () => () => {
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    },
+    [],
+  );
 
   const handleSaveDevNotes = () => {
     onUpdateDevNotes(game.id, notes, todoList, title);
@@ -141,12 +184,19 @@ export function ArcadeGameModal({
   const handleAddTodo = () => {
     const text = window.prompt(tr.arcade_todo_prompt);
     if (text && text.trim()) {
-      setTodoList((prev) => [...prev, { id: `todo_${Date.now()}`, text: text.trim(), completed: false }]);
+      setTodoList((prev) => [
+        ...prev,
+        { id: `todo_${Date.now()}`, text: text.trim(), completed: false },
+      ]);
     }
   };
 
   const handleToggleTodo = (id: string) => {
-    setTodoList((prev) => prev.map((t_) => (t_.id === id ? { ...t_, completed: !t_.completed } : t_)));
+    setTodoList((prev) =>
+      prev.map((t_) =>
+        t_.id === id ? { ...t_, completed: !t_.completed } : t_,
+      ),
+    );
   };
 
   const handleDeleteTodo = (id: string) => {
@@ -173,17 +223,33 @@ export function ArcadeGameModal({
 
   return (
     <div className="arcade-modal-overlay" onClick={onClose}>
-      <div className="arcade-modal-container" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="arcade-modal-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="arcade-modal-header">
           <div className="arcade-modal-title-section">
-            <div className="arcade-modal-badge">{game.category.toUpperCase()}</div>
+            <div className="arcade-modal-badge">
+              {game.category.toUpperCase()}
+            </div>
             <h2>{game.title}</h2>
             <span className={`arcade-mode-badge ${game.mode}`}>
               {game.mode === "dist" ? tr.arcade_mode_dist : tr.arcade_mode_dev}
             </span>
           </div>
-          <button className="arcade-modal-close" onClick={onClose} title={tr.arcade_close}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <button
+            className="arcade-modal-close"
+            onClick={onClose}
+            title={tr.arcade_close}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -195,7 +261,14 @@ export function ArcadeGameModal({
             className={`arcade-tab-btn ${tab === "play" ? "active" : ""}`}
             onClick={() => setTab("play")}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill={tab === "play" ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill={tab === "play" ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
             <span>{tr.arcade_tab_play}</span>
@@ -204,7 +277,14 @@ export function ArcadeGameModal({
             className={`arcade-tab-btn ${tab === "dev" ? "active" : ""}`}
             onClick={() => setTab("dev")}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
             </svg>
@@ -225,7 +305,14 @@ export function ArcadeGameModal({
                   )}
                   {error && !loading && (
                     <div className="arcade-error-panel">
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.5">
+                      <svg
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="1.5"
+                      >
                         <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="8" x2="12" y2="12" />
                         <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -233,11 +320,16 @@ export function ArcadeGameModal({
                       <h3>{tr.arcade_iframe_error}</h3>
                       <p>{error}</p>
                       {permissionNeeded && (
-                        <button className="arcade-btn-primary" onClick={handleRequestPermission}>
+                        <button
+                          className="arcade-btn-primary"
+                          onClick={handleRequestPermission}
+                        >
                           {tr.arcade_grant_permission}
                         </button>
                       )}
-                      <p className="arcade-error-hint">{tr.arcade_iframe_error_hint}</p>
+                      <p className="arcade-error-hint">
+                        {tr.arcade_iframe_error_hint}
+                      </p>
                     </div>
                   )}
                   {gamePkg && !loading && !error && (
@@ -252,7 +344,14 @@ export function ArcadeGameModal({
                 </>
               ) : (
                 <div className="arcade-dev-mode-panel">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--text-muted)"
+                    strokeWidth="1.5"
+                  >
                     <polyline points="16 18 22 12 16 6" />
                     <polyline points="8 6 2 12 8 18" />
                   </svg>
@@ -267,7 +366,9 @@ export function ArcadeGameModal({
                       {devCmdCopied ? tr.arcade_cmd_copied : tr.arcade_copy_cmd}
                     </button>
                   </div>
-                  <p className="arcade-dev-mode-note">{tr.arcade_dev_mode_note}</p>
+                  <p className="arcade-dev-mode-note">
+                    {tr.arcade_dev_mode_note}
+                  </p>
                 </div>
               )}
             </div>
@@ -281,7 +382,9 @@ export function ArcadeGameModal({
                   type="text"
                   className="arcade-title-input"
                   value={title}
-                  onInput={(e) => setTitle((e.target as HTMLInputElement).value)}
+                  onInput={(e) =>
+                    setTitle((e.target as HTMLInputElement).value)
+                  }
                   placeholder="Oyun Adı"
                 />
               </div>
@@ -289,7 +392,9 @@ export function ArcadeGameModal({
               <div className="arcade-dev-section">
                 <h3>{tr.arcade_dev_status}</h3>
                 <div className="arcade-status-buttons">
-                  {(["playable", "in_progress", "concept", "archived"] as const).map((status) => (
+                  {(
+                    ["playable", "in_progress", "concept", "archived"] as const
+                  ).map((status) => (
                     <button
                       key={status}
                       className={`arcade-status-btn ${game.status === status ? "active" : ""}`}
@@ -307,19 +412,30 @@ export function ArcadeGameModal({
               <div className="arcade-dev-section">
                 <h3>{tr.arcade_folder_path_label}</h3>
                 <div className="arcade-folder-display">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
                   </svg>
                   <span>{game.folderPath}</span>
                 </div>
-                <p className="arcade-folder-hint">{tr.arcade_folder_path_hint}</p>
+                <p className="arcade-folder-hint">
+                  {tr.arcade_folder_path_hint}
+                </p>
               </div>
 
               <div className="arcade-dev-section">
                 <h3>{tr.arcade_technologies}</h3>
                 <div className="arcade-tech-badges">
                   {game.techStack?.map((tech, idx) => (
-                    <span key={idx} className="arcade-tech-tag">{tech}</span>
+                    <span key={idx} className="arcade-tech-tag">
+                      {tech}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -329,7 +445,9 @@ export function ArcadeGameModal({
                 <textarea
                   className="arcade-notes-textarea"
                   value={notes}
-                  onInput={(e) => setNotes((e.target as HTMLTextAreaElement).value)}
+                  onInput={(e) =>
+                    setNotes((e.target as HTMLTextAreaElement).value)
+                  }
                   placeholder={tr.arcade_dev_notes_placeholder}
                   rows={5}
                 />
@@ -338,7 +456,10 @@ export function ArcadeGameModal({
               <div className="arcade-dev-section">
                 <div className="arcade-todo-header">
                   <h3>{tr.arcade_todo_list}</h3>
-                  <button className="arcade-todo-add-btn" onClick={handleAddTodo}>
+                  <button
+                    className="arcade-todo-add-btn"
+                    onClick={handleAddTodo}
+                  >
                     + {tr.arcade_todo_add}
                   </button>
                 </div>
@@ -347,7 +468,10 @@ export function ArcadeGameModal({
                 ) : (
                   <ul className="arcade-todo-list">
                     {todoList.map((t_) => (
-                      <li key={t_.id} className={`arcade-todo-item ${t_.completed ? "completed" : ""}`}>
+                      <li
+                        key={t_.id}
+                        className={`arcade-todo-item ${t_.completed ? "completed" : ""}`}
+                      >
                         <input
                           type="checkbox"
                           checked={t_.completed}
@@ -368,7 +492,10 @@ export function ArcadeGameModal({
               </div>
 
               <div className="arcade-dev-actions">
-                <button className="arcade-btn-primary" onClick={handleSaveDevNotes}>
+                <button
+                  className="arcade-btn-primary"
+                  onClick={handleSaveDevNotes}
+                >
                   {tr.arcade_save}
                 </button>
                 <button className="arcade-btn-danger" onClick={handleDelete}>
@@ -380,9 +507,7 @@ export function ArcadeGameModal({
         </div>
 
         {toast && (
-          <div className={`arcade-toast ${toast.kind}`}>
-            {toast.text}
-          </div>
+          <div className={`arcade-toast ${toast.kind}`}>{toast.text}</div>
         )}
       </div>
     </div>

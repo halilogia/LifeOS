@@ -6,18 +6,39 @@
  */
 
 import type { IBistCacheRepository } from "@/domain/repositories/IBistCacheRepository.js";
-import type { StockQuote, BISTSearchResult, StockHistoryItem } from "@/types/bist.js";
+import type {
+  StockQuote,
+  BISTSearchResult,
+  StockHistoryItem,
+} from "@/types/bist.js";
 
 // ── Dynamic BIST Ticker Discovery (NO hardcoded arrays) ───
 export async function fetchDynamicBistTickers(): Promise<string[]> {
   try {
-    const prefixes = ["IS", "THY", "GARAN", "AKBNK", "EREGL", "ASELS", "KCHOL", "TUPRS", "SASA", "BIMAS"];
+    const prefixes = [
+      "IS",
+      "THY",
+      "GARAN",
+      "AKBNK",
+      "EREGL",
+      "ASELS",
+      "KCHOL",
+      "TUPRS",
+      "SASA",
+      "BIMAS",
+    ];
     const results = await Promise.all(
       prefixes.map((p) =>
-        fetch(`https://query2.finance.yahoo.com/v1/finance/search?q=${p}&quotesCount=20&newsCount=0`, {
-          headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
-          signal: AbortSignal.timeout(5000),
-        })
+        fetch(
+          `https://query2.finance.yahoo.com/v1/finance/search?q=${p}&quotesCount=20&newsCount=0`,
+          {
+            headers: {
+              "User-Agent": "Mozilla/5.0",
+              Accept: "application/json",
+            },
+            signal: AbortSignal.timeout(5000),
+          },
+        )
           .then((r) => (r.ok ? r.json() : { quotes: [] }))
           .catch(() => ({ quotes: [] })),
       ),
@@ -27,7 +48,11 @@ export async function fetchDynamicBistTickers(): Promise<string[]> {
     for (const res of results) {
       const quotes = res.quotes || [];
       for (const q of quotes) {
-        if (q.symbol && typeof q.symbol === "string" && q.symbol.endsWith(".IS")) {
+        if (
+          q.symbol &&
+          typeof q.symbol === "string" &&
+          q.symbol.endsWith(".IS")
+        ) {
           set.add(q.symbol.toUpperCase());
         }
       }
@@ -44,8 +69,12 @@ export async function fetchDynamicBistTickers(): Promise<string[]> {
 /**
  * Yahoo Finance Canlı Arama API'si.
  */
-export async function searchBistStocks(query: string): Promise<BISTSearchResult[]> {
-  if (!query || query.trim().length === 0) { return []; }
+export async function searchBistStocks(
+  query: string,
+): Promise<BISTSearchResult[]> {
+  if (!query || query.trim().length === 0) {
+    return [];
+  }
 
   try {
     const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query.trim())}&quotesCount=15&newsCount=0`;
@@ -54,18 +83,28 @@ export async function searchBistStocks(query: string): Promise<BISTSearchResult[
       signal: AbortSignal.timeout(6000),
     });
 
-    if (!res.ok) { return []; }
+    if (!res.ok) {
+      return [];
+    }
 
     const json = await res.json();
-    const quotes = (json?.quotes as Array<{
-      symbol?: string; shortname?: string; longname?: string;
-      exchange?: string; sector?: string; industry?: string;
-    }>) || [];
+    const quotes =
+      (json?.quotes as Array<{
+        symbol?: string;
+        shortname?: string;
+        longname?: string;
+        exchange?: string;
+        sector?: string;
+        industry?: string;
+      }>) || [];
 
     const bistQuotes = quotes.filter(
       (q) =>
         q.symbol &&
-        (q.exchange === "IST" || q.symbol.toUpperCase().endsWith(".IS") || q.exchange === "SE" || q.exchange === "TUR"),
+        (q.exchange === "IST" ||
+          q.symbol.toUpperCase().endsWith(".IS") ||
+          q.exchange === "SE" ||
+          q.exchange === "TUR"),
     );
 
     return bistQuotes.map((q) => {
@@ -98,11 +137,15 @@ async function fetchSingleQuote(symbol: string): Promise<StockQuote> {
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) { throw new Error(`HTTP ${res.status}`); }
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
 
     const json = await res.json();
     const meta = json?.chart?.result?.[0]?.meta;
-    if (!meta) { throw new Error("No meta data"); }
+    if (!meta) {
+      throw new Error("No meta data");
+    }
 
     const price: number = meta.regularMarketPrice ?? 0;
     const prev: number = meta.previousClose ?? meta.chartPreviousClose ?? price;
@@ -158,7 +201,9 @@ export function createBistService(cacheRepo: IBistCacheRepository) {
       // Cache check (only for full list — not when symbols are explicitly provided)
       if (!symbols) {
         const cached = await cacheRepo.getCached();
-        if (cached) { return cached; }
+        if (cached) {
+          return cached;
+        }
       }
 
       const quotes = await Promise.all(targetSymbols.map(fetchSingleQuote));
@@ -191,28 +236,45 @@ import { logger } from "@/utils/logger.js";
 const _defaultCacheRepo = new ChromeStorageBistCacheRepository();
 const _defaultService = createBistService(_defaultCacheRepo);
 
-export const { fetchStockQuote, fetchStockPrices, refreshStockPrices } = _defaultService;
+export const { fetchStockQuote, fetchStockPrices, refreshStockPrices } =
+  _defaultService;
 
 // ── Format helpers (pure) ──────────────────────────────────────────
 
 export function formatPrice(price: number, currency = "TRY"): string {
-  if (price === 0) { return "—"; }
+  if (price === 0) {
+    return "—";
+  }
   const symbol = currency === "TRY" ? "₺" : currency;
   return `${price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
 }
 
 export function formatVolume(vol: number): string {
-  if (vol === 0) { return "—"; }
-  if (vol >= 1_000_000_000) { return `${(vol / 1_000_000_000).toFixed(2)}B`; }
-  if (vol >= 1_000_000) { return `${(vol / 1_000_000).toFixed(2)}M`; }
-  if (vol >= 1_000) { return `${(vol / 1_000).toFixed(1)}K`; }
+  if (vol === 0) {
+    return "—";
+  }
+  if (vol >= 1_000_000_000) {
+    return `${(vol / 1_000_000_000).toFixed(2)}B`;
+  }
+  if (vol >= 1_000_000) {
+    return `${(vol / 1_000_000).toFixed(2)}M`;
+  }
+  if (vol >= 1_000) {
+    return `${(vol / 1_000).toFixed(1)}K`;
+  }
   return vol.toLocaleString("tr-TR");
 }
 
 export function formatMarketCap(mc?: number): string {
-  if (!mc) { return "—"; }
-  if (mc >= 1_000_000_000) { return `${(mc / 1_000_000_000).toFixed(2)}B ₺`; }
-  if (mc >= 1_000_000) { return `${(mc / 1_000_000).toFixed(2)}M ₺`; }
+  if (!mc) {
+    return "—";
+  }
+  if (mc >= 1_000_000_000) {
+    return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;
+  }
+  if (mc >= 1_000_000) {
+    return `${(mc / 1_000_000).toFixed(2)}M ₺`;
+  }
   return `${mc.toLocaleString("tr-TR")} ₺`;
 }
 
@@ -230,11 +292,15 @@ export async function fetchStockHistory(
       signal: AbortSignal.timeout(10000),
     });
 
-    if (!res.ok) { throw new Error(`HTTP ${res.status}`); }
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
 
     const json = await res.json();
     const result = json?.chart?.result?.[0];
-    if (!result) { throw new Error("No chart result"); }
+    if (!result) {
+      throw new Error("No chart result");
+    }
 
     const timestamps: number[] = result.timestamp || [];
     const quotes = result.indicators?.quote?.[0] || {};
@@ -246,7 +312,12 @@ export async function fetchStockHistory(
 
     const history: StockHistoryItem[] = [];
     for (let i = 0; i < timestamps.length; i++) {
-      if (opens[i] !== undefined && opens[i] !== null && closes[i] !== undefined && closes[i] !== null) {
+      if (
+        opens[i] !== undefined &&
+        opens[i] !== null &&
+        closes[i] !== undefined &&
+        closes[i] !== null
+      ) {
         history.push({
           timestamp: timestamps[i] * 1000,
           open: opens[i],

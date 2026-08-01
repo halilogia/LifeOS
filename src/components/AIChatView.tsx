@@ -17,7 +17,11 @@ import { useAiChatMessages } from "./aichat/useAiChatMessages.js";
 interface AIChatViewProps {
   lang: Language;
   todos: Todo[];
-  onAddTodo: (text: string, repeat: Todo["repeat"], dueDate?: string) => Promise<void>;
+  onAddTodo: (
+    text: string,
+    repeat: Todo["repeat"],
+    dueDate?: string,
+  ) => Promise<void>;
   onToggleTodo: (index: number) => Promise<void>;
   onDeleteTodo: (index: number) => Promise<void>;
   onManualSync: () => Promise<void>;
@@ -73,7 +77,9 @@ export function AIChatView({
 
   const onSend = () => {
     const text = inputVal.trim();
-    if (!text) {return;}
+    if (!text) {
+      return;
+    }
     setInputVal("");
     handleSendMessage(text);
   };
@@ -146,9 +152,7 @@ export function AIChatView({
           enableWebSearch={enableWebSearch}
           webSearchTitle={t.aichat_web_search_title}
           webSearchLabel={
-            enableWebSearch
-              ? t.aichat_web_search_on
-              : t.aichat_web_search_off
+            enableWebSearch ? t.aichat_web_search_on : t.aichat_web_search_off
           }
           onInputChange={setInputVal}
           onSendMessage={onSend}

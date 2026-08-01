@@ -41,9 +41,7 @@ export function calculateKpssCountdown(
   }
   return {
     days: Math.floor(diffKpss / (1000 * 60 * 60 * 24)),
-    hours: Math.floor(
-      (diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    ),
+    hours: Math.floor((diffKpss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
     minutes: Math.floor((diffKpss % (1000 * 60 * 60)) / (1000 * 60)),
     seconds: Math.floor((diffKpss % (1000 * 60)) / 1000),
   };
@@ -68,9 +66,7 @@ export function calculateEstimatedCompletionTime(
 
   return {
     days: Math.floor(diffEst / (1000 * 60 * 60 * 24)),
-    hours: Math.floor(
-      (diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    ),
+    hours: Math.floor((diffEst % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
     minutes: Math.floor((diffEst % (1000 * 60 * 60)) / (1000 * 60)),
     seconds: Math.floor((diffEst % (1000 * 60)) / 1000),
   };

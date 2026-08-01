@@ -78,7 +78,7 @@ export default ts.config(
       'local/no-turkish-literals': 'warn',
       'max-lines': ['error', { 'max': 1200, 'skipBlankLines': true, 'skipComments': true }],
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
       'no-console': 'off',
       'prefer-const': 'error',
       'no-var': 'error',

@@ -34,7 +34,6 @@ const DEFAULT_ORDER = [
   "bist",
 ];
 
-
 export function Sidebar({
   lang,
   activeView,
@@ -129,59 +128,37 @@ export function Sidebar({
   const getItemLabel = (key: string): string => {
     switch (key) {
       case "list":
-        return (
-          t.sidebar_focus
-        );
+        return t.sidebar_focus;
       case "willpower":
-        return (
-          t.sidebar_willpower
-        );
+        return t.sidebar_willpower;
       case "pomodoro":
         return t.view_pomodoro || "Pomodoro";
       case "eisenhower":
-        return (
-          t.sidebar_kanban
-        );
+        return t.sidebar_kanban;
       case "ai-chat":
-        return (
-          t.sidebar_ai_chat
-        );
+        return t.sidebar_ai_chat;
       case "notes":
         return t.sidebar_notes;
       case "calendar":
         return t.sidebar_calendar;
       case "srs":
-        return (
-          t.sidebar_srs
-        );
+        return t.sidebar_srs;
       case "hifiz":
-        return (
-          t.sidebar_hifiz
-        );
+        return t.sidebar_hifiz;
       case "prayer":
-        return (
-          t.sidebar_prayer
-        );
+        return t.sidebar_prayer;
       case "kpss":
         return t.sidebar_kpss;
       case "detox":
-        return (
-          t.sidebar_detox
-        );
+        return t.sidebar_detox;
       case "arcade":
-        return (
-          t.sidebar_arcade
-        );
+        return t.sidebar_arcade;
       case "free-games":
-        return (
-          t.sidebar_free_games
-        );
+        return t.sidebar_free_games;
       case "bist":
         return t.sidebar_bist;
       case "halka-arz":
-        return (
-          t.sidebar_bist_short
-        );
+        return t.sidebar_bist_short;
       default:
         return key;
     }

@@ -16,16 +16,25 @@ export type { KpssWikiNote, HeadingItem } from "@/types/kpss.js";
  * e.g. "Maki ailesinin..." -> "Maki"
  */
 export function extractTitleFromContent(content: string): string {
-  if (!content) {return "";}
+  if (!content) {
+    return "";
+  }
   const lines = content.split("\n");
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed) {continue;}
-    const clean = trimmed.replace(/^#+\s*/, "").replace(/^[\:\-\*\_\`]+/, "").trim();
-    if (!clean) {continue;}
+    if (!trimmed) {
+      continue;
+    }
+    const clean = trimmed
+      .replace(/^#+\s*/, "")
+      .replace(/^[:\-*_`]+/, "")
+      .trim();
+    if (!clean) {
+      continue;
+    }
     const words = clean.split(/\s+/);
     if (words.length > 0 && words[0]) {
-      return words[0].replace(/[\,\;\:\!\"\'\(\)]/g, "").trim();
+      return words[0].replace(/[,;:!"'()]/g, "").trim();
     }
   }
   return "";
@@ -35,13 +44,18 @@ export function extractTitleFromContent(content: string): string {
  * Extract H1, H2, H3 headings from markdown content
  */
 export function extractHeadings(content: string): HeadingItem[] {
-  if (!content) {return [];}
+  if (!content) {
+    return [];
+  }
   const lines = content.split("\n");
   const headings: HeadingItem[] = [];
   lines.forEach((l) => {
     const m = l.match(/^(#{1,3})\s+(.+)$/);
     if (m) {
-      headings.push({ level: m[1].length, text: m[2].replace(/[\*\_\[\]]/g, "").trim() });
+      headings.push({
+        level: m[1].length,
+        text: m[2].replace(/[*_[\]]/g, "").trim(),
+      });
     }
   });
   return headings;
@@ -51,51 +65,76 @@ export function extractHeadings(content: string): HeadingItem[] {
  * Extract the first Image URL from markdown content for Infobox Featured Header
  */
 export function extractFirstImageUrl(content: string): string | null {
-  if (!content) {return null;}
-  const mdImgMatch = content.match(/!\[.*?\]\((https?:\/\/[^\s\)]+)\)/i);
-  if (mdImgMatch && mdImgMatch[1]) {return mdImgMatch[1];}
+  if (!content) {
+    return null;
+  }
+  const mdImgMatch = content.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/i);
+  if (mdImgMatch && mdImgMatch[1]) {
+    return mdImgMatch[1];
+  }
   const plainUrlMatch = content.match(
-    /(https?:\/\/[^\s<>\"]+\\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>\"']+images\?[^\s<>\"']+|https?:\/\/[^\s<>\"']+encrypted-tbn[^\s<>\"']+)/i,
+    /(https?:\/\/[^\s<>"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>"']+images\?[^\s<>"']+|https?:\/\/[^\s<>"']+encrypted-tbn[^\s<>"']+)/i,
   );
-  if (plainUrlMatch && plainUrlMatch[0]) {return plainUrlMatch[0];}
+  if (plainUrlMatch && plainUrlMatch[0]) {
+    return plainUrlMatch[0];
+  }
   return null;
 }
 
 /**
  * Render Markdown with custom styled links highlighted in blue.
  */
-export function renderCustomArticleMarkdown(content: string, allNotes: KpssWikiNote[]): string {
-  if (!content) {return "";}
+export function renderCustomArticleMarkdown(
+  content: string,
+  allNotes: KpssWikiNote[],
+): string {
+  if (!content) {
+    return "";
+  }
   const firstImg = extractFirstImageUrl(content);
   let processedContent = content;
   if (firstImg) {
     const escapedUrl = firstImg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const mdPattern = new RegExp(`!\\[.*?\\]\\(${escapedUrl}\\)`, "gi");
     const plainPattern = new RegExp(`^\\s*${escapedUrl}\\s*$`, "gim");
-    processedContent = processedContent.replace(mdPattern, "").replace(plainPattern, "");
+    processedContent = processedContent
+      .replace(mdPattern, "")
+      .replace(plainPattern, "");
   }
   processedContent = processedContent.replace(
-    /^(https?:\/\/[^\s<>\"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>\"']+images\?[^\s<>\"']+|https?:\/\/[^\s<>\"']+encrypted-tbn[^\s<>\"']+)$/gim,
+    /^(https?:\/\/[^\s<>"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>"']+images\?[^\s<>"']+|https?:\/\/[^\s<>"']+encrypted-tbn[^\s<>"']+)$/gim,
     (url) => `![Görsel](${url})`,
   );
   let html = renderMarkdown(processedContent);
-  html = html.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (_, title, display) => {
-    const text = display || title;
-    return `<a data-wiki-link="${escapeHtmlAttr(title)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${text}</a>`;
-  });
+  html = html.replace(
+    /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,
+    (_, title, display) => {
+      const text = display || title;
+      return `<a data-wiki-link="${escapeHtmlAttr(title)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${text}</a>`;
+    },
+  );
   allNotes.forEach((n) => {
-    if (!n.title || n.title.trim().length < 3) {return;}
+    if (!n.title || n.title.trim().length < 3) {
+      return;
+    }
     const cleanTitle = n.title.trim();
     const escaped = cleanTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     try {
-      const regex = new RegExp(`(?<![\\p{L}\\p{N}])(${escaped})(?![\\p{L}\\p{N}])`, "gui");
-      html = html.replace(regex, (match) =>
-        `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
+      const regex = new RegExp(
+        `(?<![\\p{L}\\p{N}])(${escaped})(?![\\p{L}\\p{N}])`,
+        "gui",
+      );
+      html = html.replace(
+        regex,
+        (match) =>
+          `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
       );
     } catch {
       const regex = new RegExp(`\\b(${escaped})\\b`, "gi");
-      html = html.replace(regex, (match) =>
-        `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
+      html = html.replace(
+        regex,
+        (match) =>
+          `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
       );
     }
   });
@@ -150,7 +189,9 @@ export function createKpssWikiService(wikiRepo: IWikiNoteRepository) {
       }
 
       return cleaned.sort(
-        (a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime(),
+        (a, b) =>
+          new Date(b.updatedAt || b.createdAt).getTime() -
+          new Date(a.updatedAt || a.createdAt).getTime(),
       );
     },
 
@@ -182,4 +223,9 @@ import { ChromeStorageWikiNoteRepository } from "@/infrastructure/persistence/Ch
 const _defaultWikiRepo = new ChromeStorageWikiNoteRepository();
 const _defaultWikiService = createKpssWikiService(_defaultWikiRepo);
 
-export const { getKpssWikiNotes, saveKpssWikiNotes, getAutoTitleSetting, saveAutoTitleSetting } = _defaultWikiService;
+export const {
+  getKpssWikiNotes,
+  saveKpssWikiNotes,
+  getAutoTitleSetting,
+  saveAutoTitleSetting,
+} = _defaultWikiService;

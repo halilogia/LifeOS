@@ -162,7 +162,10 @@ export function DetoxUsageCard({
             >
               {showAllStats
                 ? t.detox_show_less
-                : t.detox_show_all.replace("{count}", String(sortedScreenTimeSites.length))}
+                : t.detox_show_all.replace(
+                    "{count}",
+                    String(sortedScreenTimeSites.length),
+                  )}
             </button>
           )}
         </div>

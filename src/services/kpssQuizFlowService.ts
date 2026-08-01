@@ -8,8 +8,14 @@ import { Language } from "@/types/types.js";
 import { kpssService } from "@/services/kpssService.js";
 import { kpssData } from "@/domain/constants/kpssCurriculum.js";
 import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
-import { getLocalQuestionsForTopic, KpssPastQuiz } from "@/services/kpssQuizService.js";
-import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service, QuizQuestion } from "@/services/kpssAiService.js";
+import {
+  getLocalQuestionsForTopic,
+  KpssPastQuiz,
+} from "@/services/kpssQuizService.js";
+import {
+  fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
+  QuizQuestion,
+} from "@/services/kpssAiService.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 
 export interface AIConfig {
@@ -58,17 +64,33 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       correctCount: number;
       totalCount: number;
       pastQuizzes: Record<string, KpssPastQuiz>;
-    }): Promise<{ scorePercentage: number; updatedPastQuizzes: Record<string, KpssPastQuiz> }> {
-      const { currentSubject, activeQuizTopic, correctCount, totalCount, pastQuizzes } = params;
+    }): Promise<{
+      scorePercentage: number;
+      updatedPastQuizzes: Record<string, KpssPastQuiz>;
+    }> {
+      const {
+        currentSubject,
+        activeQuizTopic,
+        correctCount,
+        totalCount,
+        pastQuizzes,
+      } = params;
 
-      const scorePercentage = totalCount > 0
-        ? Math.round((correctCount / totalCount) * 100)
-        : 0;
-      const newStatus: 0 | 1 | 2 = scorePercentage >= 80 ? 2 : scorePercentage >= 40 ? 1 : 0;
+      const scorePercentage =
+        totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+      const newStatus: 0 | 1 | 2 =
+        scorePercentage >= 80 ? 2 : scorePercentage >= 40 ? 1 : 0;
 
-      const isRegularTopic = (kpssData[currentSubject] || []).some((t) => t.title === activeQuizTopic);
+      const isRegularTopic = (kpssData[currentSubject] || []).some(
+        (t) => t.title === activeQuizTopic,
+      );
       if (isRegularTopic) {
-        await kpssService.updateTopicStatus(currentSubject, activeQuizTopic, newStatus, scorePercentage);
+        await kpssService.updateTopicStatus(
+          currentSubject,
+          activeQuizTopic,
+          newStatus,
+          scorePercentage,
+        );
       }
 
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
@@ -82,7 +104,9 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       };
 
       const updatedPastQuizzes = { ...pastQuizzes, [quizKey]: newQuizRecord };
-      await kpssRepo.savePastQuizzes(updatedPastQuizzes as unknown as Record<string, unknown>);
+      await kpssRepo.savePastQuizzes(
+        updatedPastQuizzes as unknown as Record<string, unknown>,
+      );
       await kpssService.saveKpssDailyStats(totalCount, 0, currentSubject);
 
       return { scorePercentage, updatedPastQuizzes };
@@ -95,20 +119,41 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       quizQuestions: QuizQuestion[];
       selectedAnswers: number[];
       pastQuizzes: Record<string, KpssPastQuiz>;
-    }): Promise<{ scorePercentage: number; updatedPastQuizzes: Record<string, KpssPastQuiz> }> {
-      const { currentSubject, activeQuizTopic, quizQuestions, selectedAnswers, pastQuizzes } = params;
+    }): Promise<{
+      scorePercentage: number;
+      updatedPastQuizzes: Record<string, KpssPastQuiz>;
+    }> {
+      const {
+        currentSubject,
+        activeQuizTopic,
+        quizQuestions,
+        selectedAnswers,
+        pastQuizzes,
+      } = params;
 
       let correctCount = 0;
       quizQuestions.forEach((q, idx) => {
-        if (selectedAnswers[idx] === q.correctAnswer) { correctCount++; }
+        if (selectedAnswers[idx] === q.correctAnswer) {
+          correctCount++;
+        }
       });
 
-      const scorePercentage = Math.round((correctCount / quizQuestions.length) * 100);
-      const newStatus: 0 | 1 | 2 = scorePercentage >= 80 ? 2 : scorePercentage >= 40 ? 1 : 0;
+      const scorePercentage = Math.round(
+        (correctCount / quizQuestions.length) * 100,
+      );
+      const newStatus: 0 | 1 | 2 =
+        scorePercentage >= 80 ? 2 : scorePercentage >= 40 ? 1 : 0;
 
-      const isRegularTopic = (kpssData[currentSubject] || []).some((t) => t.title === activeQuizTopic);
+      const isRegularTopic = (kpssData[currentSubject] || []).some(
+        (t) => t.title === activeQuizTopic,
+      );
       if (isRegularTopic) {
-        await kpssService.updateTopicStatus(currentSubject, activeQuizTopic, newStatus, scorePercentage);
+        await kpssService.updateTopicStatus(
+          currentSubject,
+          activeQuizTopic,
+          newStatus,
+          scorePercentage,
+        );
       }
 
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
@@ -123,9 +168,15 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
 
       const updatedPastQuizzes = { ...pastQuizzes, [quizKey]: newQuizRecord };
 
-      await kpssRepo.savePastQuizzes(updatedPastQuizzes as unknown as Record<string, unknown>);
+      await kpssRepo.savePastQuizzes(
+        updatedPastQuizzes as unknown as Record<string, unknown>,
+      );
 
-      await kpssService.saveKpssDailyStats(quizQuestions.length, 0, currentSubject);
+      await kpssService.saveKpssDailyStats(
+        quizQuestions.length,
+        0,
+        currentSubject,
+      );
 
       return { scorePercentage, updatedPastQuizzes };
     },

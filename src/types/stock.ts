@@ -50,4 +50,3 @@ export interface StockWatchlist {
   symbols: string[]; // Hisse sembolleri listesi (örn: ["THYAO", "GARAN"])
   createdAt: string; // ISO Tarih
 }
-

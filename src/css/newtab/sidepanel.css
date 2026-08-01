@@ -6,7 +6,11 @@
   width: 100%;
   background: radial-gradient(circle at 50% 0%, #15102a 0%, #09090d 70%);
   color: var(--text-primary, #f1f5f9);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -233,7 +237,9 @@
   border-radius: 50%;
   border: 2px stroke transparent;
   background: linear-gradient(135deg, #8b5cf6, #6366f1) border-box;
-  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
   mask-composite: exclude;
   animation: orbSpin 6s linear infinite;
 }
@@ -262,13 +268,24 @@
 }
 
 @keyframes orbSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes orbPulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.15); opacity: 0.9; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
 }
 
 .sidepanel-empty-title {
@@ -435,8 +452,13 @@
 }
 
 @keyframes micPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.12); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
 }
 
 .sidepanel-send-btn {

@@ -11,7 +11,11 @@ interface KpssWikiHeaderProps {
   onCreateNewNote: () => void;
 }
 
-export function KpssWikiHeader({ lang, t, onCreateNewNote }: KpssWikiHeaderProps) {
+export function KpssWikiHeader({
+  lang,
+  t,
+  onCreateNewNote,
+}: KpssWikiHeaderProps) {
   return (
     <div
       style={{
@@ -38,7 +42,16 @@ export function KpssWikiHeader({ lang, t, onCreateNewNote }: KpssWikiHeaderProps
             boxShadow: "0 4px 14px rgba(59, 130, 246, 0.4)",
           }}
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
             <path d="M12 6v7"></path>
@@ -46,14 +59,36 @@ export function KpssWikiHeader({ lang, t, onCreateNewNote }: KpssWikiHeaderProps
           </svg>
         </div>
         <div>
-          <div style={{ fontWeight: 800, fontSize: "0.98rem", color: "#f8fafc", display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
+            style={{
+              fontWeight: 800,
+              fontSize: "0.98rem",
+              color: "#f8fafc",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
             <span>KPSS DERS NOTLARI STÜDYOSU</span>
-            <span style={{ fontSize: "0.68rem", color: "#38bdf8", background: "rgba(56, 189, 248, 0.15)", border: "1px solid rgba(56, 189, 248, 0.3)", padding: "1px 8px", borderRadius: "20px", fontWeight: 700 }}>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                color: "#38bdf8",
+                background: "rgba(56, 189, 248, 0.15)",
+                border: "1px solid rgba(56, 189, 248, 0.3)",
+                padding: "1px 8px",
+                borderRadius: "20px",
+                fontWeight: 700,
+              }}
+            >
               Kişisel Çalışma Arşivi
             </span>
           </div>
-          <div style={{ fontSize: "0.74rem", color: "#94a3b8", marginTop: "2px" }}>
-            [[İç Bağlantı]] ve otomatik ders notu linkleri ile konular arasında gezinin.
+          <div
+            style={{ fontSize: "0.74rem", color: "#94a3b8", marginTop: "2px" }}
+          >
+            [[İç Bağlantı]] ve otomatik ders notu linkleri ile konular arasında
+            gezinin.
           </div>
         </div>
       </div>
@@ -77,7 +112,14 @@ export function KpssWikiHeader({ lang, t, onCreateNewNote }: KpssWikiHeaderProps
           transition: "all 0.2s ease",
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+        >
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>

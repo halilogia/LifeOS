@@ -25,7 +25,10 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
   const tr = t as Record<string, string>;
 
   useEffect(() => {
-    if (typeof window !== "undefined" && typeof window.showDirectoryPicker !== "function") {
+    if (
+      typeof window !== "undefined" &&
+      typeof window.showDirectoryPicker !== "function"
+    ) {
       setBrowserSupport(false);
     }
     void loadGames();
@@ -42,8 +45,13 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     setImportToast(null);
     try {
       const result: ImportResult | null = await arcadeService.importFolder();
-      if (!result) {return;}
-      setGames((prev) => [result.game, ...prev.filter((g) => g.handleId !== result.game.handleId)]);
+      if (!result) {
+        return;
+      }
+      setGames((prev) => [
+        result.game,
+        ...prev.filter((g) => g.handleId !== result.game.handleId),
+      ]);
       if (result.mode === "dist") {
         setImportToast(tr.arcade_import_success_dist);
       } else {
@@ -68,7 +76,10 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-  const handleUpdateStatus = async (gameId: string, status: GameEntry["status"]) => {
+  const handleUpdateStatus = async (
+    gameId: string,
+    status: GameEntry["status"],
+  ) => {
     const updated = await arcadeService.updateGameStatus(gameId, status);
     setGames(updated);
     if (activeGame && activeGame.id === gameId) {
@@ -76,8 +87,18 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
     }
   };
 
-  const handleUpdateDevNotes = async (gameId: string, notes: string, todoList: DevTodoItem[], title?: string) => {
-    const updated = await arcadeService.updateDevNotes(gameId, notes, todoList, title);
+  const handleUpdateDevNotes = async (
+    gameId: string,
+    notes: string,
+    todoList: DevTodoItem[],
+    title?: string,
+  ) => {
+    const updated = await arcadeService.updateDevNotes(
+      gameId,
+      notes,
+      todoList,
+      title,
+    );
     setGames(updated);
     if (activeGame && activeGame.id === gameId) {
       setActiveGame(updated.find((g) => g.id === gameId) || null);
@@ -91,15 +112,23 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
   };
 
   const filteredGames = games.filter((game) => {
-    if (activeCategory === "playable" && game.status !== "playable") {return false;}
-    if (activeCategory === "in_progress" && game.status !== "in_progress") {return false;}
-    if (activeCategory === "favorites" && !game.isFavorite) {return false;}
+    if (activeCategory === "playable" && game.status !== "playable") {
+      return false;
+    }
+    if (activeCategory === "in_progress" && game.status !== "in_progress") {
+      return false;
+    }
+    if (activeCategory === "favorites" && !game.isFavorite) {
+      return false;
+    }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const matchTitle = game.title.toLowerCase().includes(q);
       const matchDesc = game.description.toLowerCase().includes(q);
-      const matchTech = game.techStack?.some((tech) => tech.toLowerCase().includes(q));
+      const matchTech = game.techStack?.some((tech) =>
+        tech.toLowerCase().includes(q),
+      );
       return matchTitle || matchDesc || matchTech;
     }
 
@@ -146,14 +175,28 @@ export function ArcadeView({ lang }: ArcadeViewProps) {
         </div>
       ) : filteredGames.length === 0 ? (
         <div className="arcade-empty-state">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--text-muted)"
+            strokeWidth="1.5"
+          >
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
           <h3>{tr.arcade_no_games}</h3>
           <p>{tr.arcade_no_games_hint}</p>
           {browserSupport && (
             <button className="arcade-add-btn" onClick={handleImportFolder}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
               <span>{tr.arcade_import_folder_btn}</span>

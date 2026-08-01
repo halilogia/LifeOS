@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from "preact/hooks";
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { drawKpssStatsChart } from "@/utils/kpssChartDrawer.js";
 
-
 interface KpssDailyStatsCardProps {
   lang: Language;
   t: Record<string, string>;
@@ -56,7 +55,9 @@ export function KpssDailyStatsCard({
   kpssTargetDate,
 }: KpssDailyStatsCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [chartMetric, setChartMetric] = useState<"all" | "questions" | "videos">("all");
+  const [chartMetric, setChartMetric] = useState<
+    "all" | "questions" | "videos"
+  >("all");
 
   useEffect(() => {
     chrome.storage.sync.get(["kpss_chart_metric_mode"], (res) => {
@@ -106,7 +107,9 @@ export function KpssDailyStatsCard({
         <h3>{labels.stats_title}</h3>
         <div className="kpss-stats-inputs">
           <div className="kpss-input-group">
-            <label htmlFor="kpss-questions-input">{labels.stat_questions}</label>
+            <label htmlFor="kpss-questions-input">
+              {labels.stat_questions}
+            </label>
             <input
               type="number"
               id="kpss-questions-input"
@@ -119,9 +122,7 @@ export function KpssDailyStatsCard({
             />
           </div>
           <div className="kpss-input-group">
-            <label htmlFor="kpss-videos-input">
-              {t.kpss_videos_watched}
-            </label>
+            <label htmlFor="kpss-videos-input">{t.kpss_videos_watched}</label>
             <input
               type="number"
               id="kpss-videos-input"
@@ -205,14 +206,32 @@ export function KpssDailyStatsCard({
             {t.kpss_progress_chart}
           </span>
 
-          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "6px",
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
             {/* Metric Mode Filter Pills */}
-            <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.3)", padding: "2px", borderRadius: "6px", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
+            <div
+              style={{
+                display: "flex",
+                background: "rgba(0, 0, 0, 0.3)",
+                padding: "2px",
+                borderRadius: "6px",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+              }}
+            >
               <button
                 type="button"
                 onClick={() => handleMetricModeChange("all")}
                 style={{
-                  background: chartMetric === "all" ? "var(--accent-color, #2563eb)" : "transparent",
+                  background:
+                    chartMetric === "all"
+                      ? "var(--accent-color, #2563eb)"
+                      : "transparent",
                   border: "none",
                   color: "#ffffff",
                   fontSize: "0.65rem",
@@ -229,7 +248,8 @@ export function KpssDailyStatsCard({
                 type="button"
                 onClick={() => handleMetricModeChange("questions")}
                 style={{
-                  background: chartMetric === "questions" ? "#10b981" : "transparent",
+                  background:
+                    chartMetric === "questions" ? "#10b981" : "transparent",
                   border: "none",
                   color: "#ffffff",
                   fontSize: "0.65rem",
@@ -246,7 +266,8 @@ export function KpssDailyStatsCard({
                 type="button"
                 onClick={() => handleMetricModeChange("videos")}
                 style={{
-                  background: chartMetric === "videos" ? "#3b82f6" : "transparent",
+                  background:
+                    chartMetric === "videos" ? "#3b82f6" : "transparent",
                   border: "none",
                   color: "#ffffff",
                   fontSize: "0.65rem",
@@ -340,8 +361,17 @@ export function KpssDailyStatsCard({
 
         {/* Saved Daily Logs - Glassmorphic Pill Chips with SVG Delete Button */}
         {dailyStats && dailyStats.length > 0 && (
-          <div style={{ marginTop: "6px", display: "flex", flexDirection: "column", gap: "6px" }}>
-            <span style={{ fontSize: "0.72rem", color: "#94a3b8", fontWeight: 700 }}>
+          <div
+            style={{
+              marginTop: "6px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+            }}
+          >
+            <span
+              style={{ fontSize: "0.72rem", color: "#94a3b8", fontWeight: 700 }}
+            >
               {t.kpss_saved_logs}
             </span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -361,10 +391,15 @@ export function KpssDailyStatsCard({
                     fontWeight: 600,
                   }}
                 >
-                  <span style={{ color: "#a855f7", fontWeight: 700 }}>{stat.date}</span>
+                  <span style={{ color: "#a855f7", fontWeight: 700 }}>
+                    {stat.date}
+                  </span>
                   <span style={{ color: "#cbd5e1" }}>
-                    {stat.questions > 0 && `${stat.questions} ${t.kpss_filter_questions} `}
-                    {stat.videos ? `${stat.videos} ${t.kpss_filter_videos}` : ""}
+                    {stat.questions > 0 &&
+                      `${stat.questions} ${t.kpss_filter_questions} `}
+                    {stat.videos
+                      ? `${stat.videos} ${t.kpss_filter_videos}`
+                      : ""}
                   </span>
                   {onDeleteStat && (
                     <button
@@ -387,7 +422,14 @@ export function KpssDailyStatsCard({
                         transition: "all 0.2s ease",
                       }}
                     >
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
                         <polyline points="3 6 5 6 21 6"></polyline>
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                       </svg>

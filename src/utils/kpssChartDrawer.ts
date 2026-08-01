@@ -22,8 +22,12 @@ export interface KpssChartParams {
 }
 
 function getFormattedDateLabel(dateStr?: string): string {
-  if (!dateStr) {return "";}
-  if (dateStr.includes("/")) {return dateStr;}
+  if (!dateStr) {
+    return "";
+  }
+  if (dateStr.includes("/")) {
+    return dateStr;
+  }
   const parts = dateStr.split("-");
   if (parts.length === 3) {
     return `${parts[2] || "01"}/${parts[1] || "01"}`;
@@ -39,7 +43,7 @@ export function getSubjectNets(subKey: string, kpssProgress: KpssProgress[]) {
   tList.forEach((t) => {
     totalQuestions += t.questionsCount;
     const prog = kpssProgress.find(
-      (p) => p.subject === subKey && p.topic === t.title
+      (p) => p.subject === subKey && p.topic === t.title,
     );
     if (prog) {
       if (prog.score !== undefined) {
@@ -67,13 +71,17 @@ export function getOverallNets(kpssProgress: KpssProgress[]) {
 
 export function drawKpssStatsChart(
   canvas: HTMLCanvasElement,
-  params: KpssChartParams
+  params: KpssChartParams,
 ): void {
   const ctx = canvas.getContext("2d");
-  if (!ctx) {return;}
+  if (!ctx) {
+    return;
+  }
 
   const rect = canvas.getBoundingClientRect();
-  if (rect.width === 0) {return;}
+  if (rect.width === 0) {
+    return;
+  }
 
   const dpr = window.devicePixelRatio || 1;
   canvas.width = rect.width * dpr;
@@ -119,7 +127,9 @@ export function drawKpssStatsChart(
 
   const statsMap = new Map<string, KpssDailyStats>();
   (dailyStats || []).forEach((s) => {
-    if (!s.date) {return;}
+    if (!s.date) {
+      return;
+    }
     let key = s.date;
     if (s.date.includes("-")) {
       const parts = s.date.split("-");
@@ -164,7 +174,7 @@ export function drawKpssStatsChart(
   const estimatedScore = Math.round((40 + overallNet * 0.5) * 10) / 10;
   const daysRemaining = Math.max(
     1,
-    Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24))
+    Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24)),
   );
 
   let remainingQuestions: number;
@@ -182,22 +192,22 @@ export function drawKpssStatsChart(
 
   const dailyQuestionsTarget = Math.max(
     10,
-    Math.round(remainingQuestions / daysRemaining)
+    Math.round(remainingQuestions / daysRemaining),
   );
   const dailyVideosTarget = Math.max(
     1,
-    Math.round(remainingVideos / daysRemaining)
+    Math.round(remainingVideos / daysRemaining),
   );
 
   const maxQuestions = Math.max(
     ...lastNDays.map((s) => s.questions),
     dailyQuestionsTarget,
-    10
+    10,
   );
   const maxVideos = Math.max(
     ...lastNDays.map((s) => s.videos || 0),
     dailyVideosTarget,
-    1
+    1,
   );
 
   const getX = (index: number, count: number) => {
@@ -235,7 +245,7 @@ export function drawKpssStatsChart(
       ctx.fillText(
         `${t.kpss_chart_target_q}: ${dailyQuestionsTarget}`,
         padding + 4,
-        yTargetQ - 4
+        yTargetQ - 4,
       );
     }
 
@@ -254,7 +264,7 @@ export function drawKpssStatsChart(
       ctx.fillText(
         `${t.kpss_chart_target_v}: ${dailyVideosTarget}`,
         width - padding - 4,
-        yTargetV - 4
+        yTargetV - 4,
       );
     }
 
@@ -269,7 +279,9 @@ export function drawKpssStatsChart(
       const centerX = padding + chartWidth / 2;
 
       if (showQuestions) {
-        const xQ = showVideos ? centerX - barWidth - barGap / 2 : centerX - barWidth / 2;
+        const xQ = showVideos
+          ? centerX - barWidth - barGap / 2
+          : centerX - barWidth / 2;
         const hQ = chartHeight * 0.65;
         const yQ = height - padding - hQ;
 
@@ -284,11 +296,17 @@ export function drawKpssStatsChart(
         ctx.fillStyle = "white";
         ctx.font = "bold 13px Inter";
         ctx.textAlign = "center";
-        ctx.fillText(`${dailyQuestionsTarget} Soru`, xQ + barWidth / 2, yQ - 10);
+        ctx.fillText(
+          `${dailyQuestionsTarget} Soru`,
+          xQ + barWidth / 2,
+          yQ - 10,
+        );
       }
 
       if (showVideos) {
-        const xV = showQuestions ? centerX + barGap / 2 : centerX - barWidth / 2;
+        const xV = showQuestions
+          ? centerX + barGap / 2
+          : centerX - barWidth / 2;
         const hV = chartHeight * 0.55;
         const yV = height - padding - hV;
 
@@ -315,7 +333,8 @@ export function drawKpssStatsChart(
     const barGap = 2;
     const slotPadding = lastNDays.length > 10 ? 2 : 6;
     const numBars = showQuestions && showVideos ? 2 : 1;
-    const barWidth = (slotWidth - slotPadding * 2 - (numBars > 1 ? barGap : 0)) / numBars;
+    const barWidth =
+      (slotWidth - slotPadding * 2 - (numBars > 1 ? barGap : 0)) / numBars;
 
     lastNDays.forEach((stat, i) => {
       const slotX = padding + i * slotWidth;
@@ -346,7 +365,9 @@ export function drawKpssStatsChart(
       }
 
       if (showVideos) {
-        const xV = showQuestions ? slotX + slotPadding + barWidth + barGap : slotX + slotPadding;
+        const xV = showQuestions
+          ? slotX + slotPadding + barWidth + barGap
+          : slotX + slotPadding;
         const hV = ((stat.videos || 0) / maxVideos) * (chartHeight - 30);
         const yV = height - padding - Math.max(hV, 0);
 
@@ -366,7 +387,11 @@ export function drawKpssStatsChart(
           ctx.fillStyle = "white";
           ctx.font = "bold 9px Inter";
           ctx.textAlign = "center";
-          ctx.fillText((stat.videos || 0).toString(), xV + barWidth / 2, yV - 6);
+          ctx.fillText(
+            (stat.videos || 0).toString(),
+            xV + barWidth / 2,
+            yV - 6,
+          );
         }
       }
 
@@ -392,7 +417,10 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         ctx.lineTo(getX(i, lastNDays.length), getYQ(lastNDays[i].questions));
       }
-      ctx.lineTo(getX(lastNDays.length - 1, lastNDays.length), height - padding);
+      ctx.lineTo(
+        getX(lastNDays.length - 1, lastNDays.length),
+        height - padding,
+      );
       ctx.closePath();
       const gradQ = ctx.createLinearGradient(0, padding, 0, height - padding);
       gradQ.addColorStop(0, "rgba(16, 185, 129, 0.2)");
@@ -407,8 +435,11 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYQ(lastNDays[i].questions);
-        if (i === 0) {ctx.moveTo(x, y);}
-        else {ctx.lineTo(x, y);}
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
       ctx.stroke();
     }
@@ -420,7 +451,10 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         ctx.lineTo(getX(i, lastNDays.length), getYV(lastNDays[i].videos || 0));
       }
-      ctx.lineTo(getX(lastNDays.length - 1, lastNDays.length), height - padding);
+      ctx.lineTo(
+        getX(lastNDays.length - 1, lastNDays.length),
+        height - padding,
+      );
       ctx.closePath();
       const gradV = ctx.createLinearGradient(0, padding, 0, height - padding);
       gradV.addColorStop(0, "rgba(59, 130, 246, 0.2)");
@@ -435,8 +469,11 @@ export function drawKpssStatsChart(
       for (let i = 0; i < lastNDays.length; i++) {
         const x = getX(i, lastNDays.length);
         const y = getYV(lastNDays[i].videos || 0);
-        if (i === 0) {ctx.moveTo(x, y);}
-        else {ctx.lineTo(x, y);}
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       }
       ctx.stroke();
     }

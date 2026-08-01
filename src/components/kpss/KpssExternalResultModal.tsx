@@ -60,29 +60,33 @@ export function KpssExternalResultModal({
 
   return (
     <div class="kpss-ext-result">
-
       {/* Başlık */}
       <div class="kpss-ext-result__header">
-        <h4 class="kpss-ext-result__title">{t.kpss_external_quiz_enter_result}</h4>
+        <h4 class="kpss-ext-result__title">
+          {t.kpss_external_quiz_enter_result}
+        </h4>
         <p class="kpss-ext-result__desc">{t.kpss_external_quiz_result_desc}</p>
       </div>
 
       {/* Skor çemberi + Input alanları yan yana */}
       <div class="kpss-ext-result__main">
-
         {/* SVG Skor Çemberi */}
         <div class="kpss-ext-result__ring-wrap">
           <svg class="kpss-ext-result__ring" viewBox="0 0 100 100">
             {/* Arka iz */}
             <circle
-              cx="50" cy="50" r={radius}
+              cx="50"
+              cy="50"
+              r={radius}
               fill="none"
               stroke="rgba(255,255,255,0.06)"
               stroke-width="8"
             />
             {/* Aktif yay */}
             <circle
-              cx="50" cy="50" r={radius}
+              cx="50"
+              cy="50"
+              r={radius}
               fill="none"
               stroke={scorePercent > 0 ? scoreColor : "rgba(255,255,255,0.06)"}
               stroke-width="8"
@@ -92,12 +96,14 @@ export function KpssExternalResultModal({
               style={{
                 transform: "rotate(-90deg)",
                 transformOrigin: "50% 50%",
-                transition: "stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1), stroke 0.3s ease",
+                transition:
+                  "stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1), stroke 0.3s ease",
               }}
             />
             {/* Merkez metin */}
             <text
-              x="50" y="44"
+              x="50"
+              y="44"
               text-anchor="middle"
               font-size="18"
               font-weight="800"
@@ -107,7 +113,8 @@ export function KpssExternalResultModal({
               {scorePercent > 0 ? `%${scorePercent}` : "—"}
             </text>
             <text
-              x="50" y="60"
+              x="50"
+              y="60"
               text-anchor="middle"
               font-size="7.5"
               font-weight="600"
@@ -121,10 +128,11 @@ export function KpssExternalResultModal({
 
         {/* Input alanları */}
         <div class="kpss-ext-result__fields">
-
           {/* Toplam Soru */}
           <div class="kpss-ext-result__field">
-            <label class="kpss-ext-result__label">{t.kpss_external_quiz_total}</label>
+            <label class="kpss-ext-result__label">
+              {t.kpss_external_quiz_total}
+            </label>
             <div class="kpss-ext-result__input-wrap">
               <input
                 type="number"
@@ -133,12 +141,15 @@ export function KpssExternalResultModal({
                 min={1}
                 max={100}
                 onInput={(e) => {
-                  const v = parseInt((e.target as HTMLInputElement).value, 10) || 1;
+                  const v =
+                    parseInt((e.target as HTMLInputElement).value, 10) || 1;
                   setTotal(v);
                   setCorrect((prev) => Math.min(prev, v));
                 }}
               />
-              <span class="kpss-ext-result__input-unit">{t.kpss_quiz_questions}</span>
+              <span class="kpss-ext-result__input-unit">
+                {t.kpss_quiz_questions}
+              </span>
             </div>
           </div>
 
@@ -155,11 +166,17 @@ export function KpssExternalResultModal({
                 min={0}
                 max={total}
                 onInput={(e) => {
-                  const v = parseInt((e.target as HTMLInputElement).value, 10) || 0;
+                  const v =
+                    parseInt((e.target as HTMLInputElement).value, 10) || 0;
                   setCorrect(clampCorrect(v));
                 }}
               />
-              <span class="kpss-ext-result__input-unit" style={{ color: "#10b981" }}>✓</span>
+              <span
+                class="kpss-ext-result__input-unit"
+                style={{ color: "#10b981" }}
+              >
+                ✓
+              </span>
             </div>
           </div>
 
@@ -172,7 +189,12 @@ export function KpssExternalResultModal({
               <div class="kpss-ext-result__input kpss-ext-result__input--wrong kpss-ext-result__readonly">
                 {wrong}
               </div>
-              <span class="kpss-ext-result__input-unit" style={{ color: "#ef4444" }}>✗</span>
+              <span
+                class="kpss-ext-result__input-unit"
+                style={{ color: "#ef4444" }}
+              >
+                ✗
+              </span>
             </div>
           </div>
         </div>

@@ -60,8 +60,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
   const playHairdryer = (volume: number) => {
     stopAllSounds();
     try {
-      const AudioCtx =
-        window.AudioContext || window.webkitAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -112,8 +111,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
   const playRain = (volume: number) => {
     stopAllSounds();
     try {
-      const AudioCtx =
-        window.AudioContext || window.webkitAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -123,8 +121,20 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
       const right = rainBuffer.getChannelData(1);
 
       // 1. Continuous pink/brown background rain shower on asphalt
-      let b0L = 0, b1L = 0, b2L = 0, b3L = 0, b4L = 0, b5L = 0, b6L = 0;
-      let b0R = 0, b1R = 0, b2R = 0, b3R = 0, b4R = 0, b5R = 0, b6R = 0;
+      let b0L = 0,
+        b1L = 0,
+        b2L = 0,
+        b3L = 0,
+        b4L = 0,
+        b5L = 0,
+        b6L = 0;
+      let b0R = 0,
+        b1R = 0,
+        b2R = 0,
+        b3R = 0,
+        b4R = 0,
+        b5R = 0,
+        b6R = 0;
 
       for (let i = 0; i < bufferSize; i++) {
         const whiteL = Math.random() * 2 - 1;
@@ -132,20 +142,22 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
         b0L = 0.99886 * b0L + whiteL * 0.0555179;
         b1L = 0.99332 * b1L + whiteL * 0.0750759;
-        b2L = 0.96900 * b2L + whiteL * 0.1538520;
-        b3L = 0.86650 * b3L + whiteL * 0.3104856;
-        b4L = 0.55000 * b4L + whiteL * 0.5329522;
-        b5L = -0.7616 * b5L - whiteL * 0.0168980;
-        left[i] = (b0L + b1L + b2L + b3L + b4L + b5L + b6L + whiteL * 0.5362) * 0.04;
+        b2L = 0.969 * b2L + whiteL * 0.153852;
+        b3L = 0.8665 * b3L + whiteL * 0.3104856;
+        b4L = 0.55 * b4L + whiteL * 0.5329522;
+        b5L = -0.7616 * b5L - whiteL * 0.016898;
+        left[i] =
+          (b0L + b1L + b2L + b3L + b4L + b5L + b6L + whiteL * 0.5362) * 0.04;
         b6L = whiteL * 0.115926;
 
         b0R = 0.99886 * b0R + whiteR * 0.0555179;
         b1R = 0.99332 * b1R + whiteR * 0.0750759;
-        b2R = 0.96900 * b2R + whiteR * 0.1538520;
-        b3R = 0.86650 * b3R + whiteR * 0.3104856;
-        b4R = 0.55000 * b4R + whiteR * 0.5329522;
-        b5R = -0.7616 * b5R - whiteR * 0.0168980;
-        right[i] = (b0R + b1R + b2R + b3R + b4R + b5R + b6R + whiteR * 0.5362) * 0.04;
+        b2R = 0.969 * b2R + whiteR * 0.153852;
+        b3R = 0.8665 * b3R + whiteR * 0.3104856;
+        b4R = 0.55 * b4R + whiteR * 0.5329522;
+        b5R = -0.7616 * b5R - whiteR * 0.016898;
+        right[i] =
+          (b0R + b1R + b2R + b3R + b4R + b5R + b6R + whiteR * 0.5362) * 0.04;
         b6R = whiteR * 0.115926;
       }
 
@@ -159,10 +171,13 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
 
         for (let s = 0; s < decaySamples; s++) {
           const idx = dropStart + s;
-          if (idx >= bufferSize) {break;}
+          if (idx >= bufferSize) {
+            break;
+          }
           const t = s / ctx.sampleRate;
           const env = Math.exp(-s / (decaySamples / 4.0));
-          const dropSample = Math.sin(2 * Math.PI * dropFreq * t) * dropAmp * env;
+          const dropSample =
+            Math.sin(2 * Math.PI * dropFreq * t) * dropAmp * env;
 
           left[idx] += dropSample * 0.7;
           right[idx] += dropSample * 0.7;
@@ -200,8 +215,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
   const playWind = (volume: number) => {
     stopAllSounds();
     try {
-      const AudioCtx =
-        window.AudioContext || window.webkitAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 
@@ -259,8 +273,7 @@ export function createAmbientAudioEngine(): AmbientAudioEngine {
   const playLofi = (volume: number) => {
     stopAllSounds();
     try {
-      const AudioCtx =
-        window.AudioContext || window.webkitAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioCtx();
       audioContextRef = ctx;
 

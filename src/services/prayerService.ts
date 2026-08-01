@@ -6,12 +6,27 @@
  */
 
 import type { IPrayerCacheRepository } from "@/domain/repositories/IPrayerCacheRepository.js";
-import type { PrayerTimes, DayPrayerData, PrayerDay, PrayerApiDay } from "@/types/prayer.js";
+import type {
+  PrayerTimes,
+  DayPrayerData,
+  PrayerDay,
+  PrayerApiDay,
+} from "@/types/prayer.js";
 
-export type { PrayerTimes, DayPrayerData, PrayerDay, PrayerApiDay } from "@/types/prayer.js";
+export type {
+  PrayerTimes,
+  DayPrayerData,
+  PrayerDay,
+  PrayerApiDay,
+} from "@/types/prayer.js";
 
 export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
-  let _cache: { date: string; city: string; country: string; times: PrayerTimes } | null = null;
+  let _cache: {
+    date: string;
+    city: string;
+    country: string;
+    times: PrayerTimes;
+  } | null = null;
 
   return {
     async getPrayerTimes(
@@ -24,7 +39,12 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
       const month = today.getMonth() + 1;
 
       // 1. In-memory cache
-      if (_cache && _cache.date === todayStr && _cache.city === city && _cache.country === country) {
+      if (
+        _cache &&
+        _cache.date === todayStr &&
+        _cache.city === city &&
+        _cache.country === country
+      ) {
         return _cache.times;
       }
 
@@ -44,7 +64,9 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
           `https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=13`,
         );
 
-        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const json = await response.json();
         const monthDays: PrayerDay[] = json.data || [];
@@ -62,7 +84,10 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
             Maghrib: rawTimings.Maghrib.split(" ")[0],
             Isha: rawTimings.Isha.split(" ")[0],
           };
-          newCacheMap[formattedDate] = { date: formattedDate, timings: cleanTimings };
+          newCacheMap[formattedDate] = {
+            date: formattedDate,
+            timings: cleanTimings,
+          };
         });
 
         await cacheRepo.setMonthCalendar(storageKey, newCacheMap);
@@ -74,11 +99,16 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
         }
 
         const firstDayKey = Object.keys(newCacheMap)[0];
-        if (firstDayKey) { return newCacheMap[firstDayKey].timings; }
+        if (firstDayKey) {
+          return newCacheMap[firstDayKey].timings;
+        }
 
         throw new Error("No timings found in calendar API");
       } catch (error) {
-        logger.warn("Prayer service API fetch failed (Offline mode). Attempting fallback:", error);
+        logger.warn(
+          "Prayer service API fetch failed (Offline mode). Attempting fallback:",
+          error,
+        );
 
         // Fallback: search any available stored month
         const allLocalStorage = await cacheRepo.getAllKeys();
@@ -87,13 +117,16 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
         );
 
         for (const k of calendarKeys) {
-          const calMap = allLocalStorage[k] as Record<string, DayPrayerData> | undefined;
+          const calMap = allLocalStorage[k] as
+            Record<string, DayPrayerData> | undefined;
           if (calMap && calMap[todayStr]) {
             return calMap[todayStr].timings;
           }
         }
 
-        if (_cache) { return _cache.times; }
+        if (_cache) {
+          return _cache.times;
+        }
         throw error;
       }
     },

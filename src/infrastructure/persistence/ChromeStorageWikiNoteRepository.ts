@@ -6,7 +6,10 @@
 
 import type { IWikiNoteRepository } from "@/domain/repositories/IWikiNoteRepository.js";
 import type { KpssWikiNote } from "@/types/kpss.js";
-import { SYNC_KPSS_WIKI_NOTES, SYNC_KPSS_AUTO_TITLE } from "@/infrastructure/storage/keys.js";
+import {
+  SYNC_KPSS_WIKI_NOTES,
+  SYNC_KPSS_AUTO_TITLE,
+} from "@/infrastructure/storage/keys.js";
 
 const STORAGE_KEY = SYNC_KPSS_WIKI_NOTES;
 const AUTO_TITLE_SETTING_KEY = SYNC_KPSS_AUTO_TITLE;

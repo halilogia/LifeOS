@@ -14,7 +14,9 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   const [range, setRange] = useState<"1d" | "1mo" | "3mo" | "6mo" | "1y">("1d");
   const [history, setHistory] = useState<StockHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(
+    null,
+  );
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -29,10 +31,14 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   }, [symbol, range]);
 
   useEffect(() => {
-    if (!canvasRef.current || history.length === 0) {return;}
+    if (!canvasRef.current || history.length === 0) {
+      return;
+    }
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    if (!ctx) {return;}
+    if (!ctx) {
+      return;
+    }
 
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -148,7 +154,9 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   }, [history, hoveredPoint]);
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!canvasRef.current || history.length === 0) {return;}
+    if (!canvasRef.current || history.length === 0) {
+      return;
+    }
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
 
@@ -207,11 +215,15 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
               style={{ padding: "4px 10px", fontSize: "0.75rem" }}
               onClick={() => setRange(r)}
             >
-              {r === "1d" ? t.stock_chart_period_1d
-                : r === "1mo" ? t.stock_chart_period_1m
-                : r === "3mo" ? t.stock_chart_period_3m
-                : r === "6mo" ? "6A"
-                : t.stock_chart_period_1y}
+              {r === "1d"
+                ? t.stock_chart_period_1d
+                : r === "1mo"
+                  ? t.stock_chart_period_1m
+                  : r === "3mo"
+                    ? t.stock_chart_period_3m
+                    : r === "6mo"
+                      ? "6A"
+                      : t.stock_chart_period_1y}
             </button>
           ))}
         </div>
@@ -229,7 +241,9 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
         {hoveredPoint ? (
           <>
             <span>
-              {range === "1d" ? `${t.stock_chart_interval}: ` : `${t.stock_card_open}: `}
+              {range === "1d"
+                ? `${t.stock_chart_interval}: `
+                : `${t.stock_card_open}: `}
               {range === "1d"
                 ? new Date(hoveredPoint.timestamp).toLocaleTimeString(
                     lang === "tr" ? "tr-TR" : "en-US",
@@ -239,19 +253,21 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
                     lang === "tr" ? "tr-TR" : "en-US",
                   )}
             </span>
-            <span>{t.stock_card_open}: ₺{hoveredPoint.open.toFixed(2)}</span>
+            <span>
+              {t.stock_card_open}: ₺{hoveredPoint.open.toFixed(2)}
+            </span>
             <span style={{ color: "#4ade80" }}>
               {t.stock_card_high}: ₺{hoveredPoint.high.toFixed(2)}
             </span>
             <span style={{ color: "#f87171" }}>
               {t.stock_card_low}: ₺{hoveredPoint.low.toFixed(2)}
             </span>
-            <span>{t.stock_card_close_price}: ₺{hoveredPoint.close.toFixed(2)}</span>
+            <span>
+              {t.stock_card_close_price}: ₺{hoveredPoint.close.toFixed(2)}
+            </span>
           </>
         ) : (
-          <span style={{ color: "#64748b" }}>
-            {t.stock_chart_hover_hint}
-          </span>
+          <span style={{ color: "#64748b" }}>{t.stock_chart_hover_hint}</span>
         )}
       </div>
 
@@ -289,10 +305,18 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
               borderRadius: "12px",
             }}
           >
-            <div style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc" }}>
+            <div
+              style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc" }}
+            >
               {symbol.toUpperCase()} — {t.stock_chart_no_data}
             </div>
-            <div style={{ fontSize: "0.82rem", color: "#94a3b8", maxWidth: "420px" }}>
+            <div
+              style={{
+                fontSize: "0.82rem",
+                color: "#94a3b8",
+                maxWidth: "420px",
+              }}
+            >
               {t.stock_chart_no_data_hint}
             </div>
           </div>

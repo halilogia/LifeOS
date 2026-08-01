@@ -125,7 +125,9 @@ export function BistKesfetTab({
 }: BistKesfetTabProps) {
   const t = getTranslation(lang);
   // Modal for adding a stock to a watchlist
-  const [watchlistModalSymbol, setWatchlistModalSymbol] = useState<string | null>(null);
+  const [watchlistModalSymbol, setWatchlistModalSymbol] = useState<
+    string | null
+  >(null);
   const [newListName, setNewListName] = useState("");
   const [bistTickers, setBistTickers] = useState<string[]>([]);
 
@@ -143,7 +145,9 @@ export function BistKesfetTab({
   const allTickers = Array.from(
     new Set([
       ...bistTickers,
-      ...Array.from(quoteMap.keys()).map((k) => (k.endsWith(".IS") ? k : `${k}.IS`)),
+      ...Array.from(quoteMap.keys()).map((k) =>
+        k.endsWith(".IS") ? k : `${k}.IS`,
+      ),
     ]),
   );
 
@@ -170,31 +174,36 @@ export function BistKesfetTab({
   }, [filteredTickers.length]);
 
   // Dynamically calculate top featured stocks: prioritize positive momentum gainers & high TL Volume
-  const featuredStocks = allTickers.map((fullSym) => {
-    const cleanSym = fullSym.replace(".IS", "");
-    const q = quoteMap.get(cleanSym) || quoteMap.get(fullSym);
-    const price = q ? q.price : 0;
-    const volume = q ? q.volume : 0;
-    const tlVolume = price * volume;
-    return {
-      sym: cleanSym,
-      name: q?.shortName || cleanSym,
-      price,
-      changePercent: q ? q.changePercent : 0,
-      volume,
-      tlVolume,
-      isUp: q ? q.changePercent >= 0 : false,
-    };
-  })
+  const featuredStocks = allTickers
+    .map((fullSym) => {
+      const cleanSym = fullSym.replace(".IS", "");
+      const q = quoteMap.get(cleanSym) || quoteMap.get(fullSym);
+      const price = q ? q.price : 0;
+      const volume = q ? q.volume : 0;
+      const tlVolume = price * volume;
+      return {
+        sym: cleanSym,
+        name: q?.shortName || cleanSym,
+        price,
+        changePercent: q ? q.changePercent : 0,
+        volume,
+        tlVolume,
+        isUp: q ? q.changePercent >= 0 : false,
+      };
+    })
     .sort((a, b) => {
-      if (a.isUp !== b.isUp) {return a.isUp ? -1 : 1;}
+      if (a.isUp !== b.isUp) {
+        return a.isUp ? -1 : 1;
+      }
       return b.tlVolume - a.tlVolume || b.changePercent - a.changePercent;
     })
     .slice(0, 3);
 
   const handleCreateAndAdd = (e: Event) => {
     e.preventDefault();
-    if (!newListName.trim() || !watchlistModalSymbol) {return;}
+    if (!newListName.trim() || !watchlistModalSymbol) {
+      return;
+    }
     onCreateWatchlist(newListName.trim());
     setNewListName("");
   };
@@ -237,13 +246,14 @@ export function BistKesfetTab({
           }}
         >
           {featuredStocks.map((item, idx) => {
-            const scoreLabel = item.changePercent >= 5
-              ? t.stock_featured_score_bull_high
-              : item.changePercent > 0
-                ? t.stock_featured_score_bull
-                : item.changePercent === 0
-                  ? t.stock_featured_score_neutral
-                  : t.stock_featured_score_bear;
+            const scoreLabel =
+              item.changePercent >= 5
+                ? t.stock_featured_score_bull_high
+                : item.changePercent > 0
+                  ? t.stock_featured_score_bull
+                  : item.changePercent === 0
+                    ? t.stock_featured_score_neutral
+                    : t.stock_featured_score_bear;
 
             let tagLabel = t.stock_tag_normal_flow;
             let tagBg = "rgba(139, 92, 246, 0.15)";
@@ -322,7 +332,9 @@ export function BistKesfetTab({
                   </div>
                   <span
                     className={`stock-card-badge ${
-                      item.isUp ? "stock-badge-positive" : "stock-badge-negative"
+                      item.isUp
+                        ? "stock-badge-positive"
+                        : "stock-badge-negative"
                     }`}
                     style={{ fontSize: "0.75rem" }}
                   >
@@ -394,7 +406,9 @@ export function BistKesfetTab({
           const price = quote ? quote.price : null;
           const changePercent = quote ? quote.changePercent : 0;
           const isUp = changePercent >= 0;
-          const companyName = quote?.shortName || t.stock_company_name_fallback.replace("{symbol}", symClean);
+          const companyName =
+            quote?.shortName ||
+            t.stock_company_name_fallback.replace("{symbol}", symClean);
 
           return (
             <div
@@ -581,13 +595,27 @@ export function BistKesfetTab({
 
       {/* Infinite Scroll / Load More Indicator */}
       {visibleCount < filteredTickers.length && (
-        <div style={{ textAlign: "center", marginTop: "10px", marginBottom: "20px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "10px",
+            marginBottom: "20px",
+          }}
+        >
           <button
             className="stock-btn stock-btn-secondary"
             style={{ padding: "8px 24px", fontSize: "0.85rem" }}
-            onClick={() => setVisibleCount((prev) => Math.min(prev + 24, filteredTickers.length))}
+            onClick={() =>
+              setVisibleCount((prev) =>
+                Math.min(prev + 24, filteredTickers.length),
+              )
+            }
           >
-            {t.stock_load_more} {t.stock_load_more_remaining.replace("{count}", String(filteredTickers.length - visibleCount))}
+            {t.stock_load_more}{" "}
+            {t.stock_load_more_remaining.replace(
+              "{count}",
+              String(filteredTickers.length - visibleCount),
+            )}
           </button>
         </div>
       )}
@@ -605,7 +633,10 @@ export function BistKesfetTab({
           >
             <div className="stock-modal-header">
               <div className="stock-modal-title">
-                {t.stock_watchlist_add_title.replace("{symbol}", watchlistModalSymbol.toUpperCase())}
+                {t.stock_watchlist_add_title.replace(
+                  "{symbol}",
+                  watchlistModalSymbol.toUpperCase(),
+                )}
               </div>
               <button
                 type="button"
@@ -625,7 +656,9 @@ export function BistKesfetTab({
               </button>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
               {watchlists.length === 0 ? (
                 <div
                   style={{
@@ -640,7 +673,9 @@ export function BistKesfetTab({
               ) : (
                 watchlists.map((wl) => {
                   const isAdded = wl.symbols.some(
-                    (s) => s.replace(".IS", "").toUpperCase() === watchlistModalSymbol.toUpperCase(),
+                    (s) =>
+                      s.replace(".IS", "").toUpperCase() ===
+                      watchlistModalSymbol.toUpperCase(),
                   );
                   return (
                     <button
@@ -652,7 +687,9 @@ export function BistKesfetTab({
                         justifyContent: "space-between",
                         padding: "10px 14px",
                         borderRadius: "10px",
-                        background: isAdded ? "rgba(139, 92, 246, 0.2)" : "rgba(255, 255, 255, 0.04)",
+                        background: isAdded
+                          ? "rgba(139, 92, 246, 0.2)"
+                          : "rgba(255, 255, 255, 0.04)",
                         border: `1px solid ${isAdded ? "rgba(139, 92, 246, 0.5)" : "rgba(255, 255, 255, 0.08)"}`,
                         color: isAdded ? "#e0e7ff" : "#f1f5f9",
                         fontWeight: 600,
@@ -662,9 +699,19 @@ export function BistKesfetTab({
                         onToggleWatchlistSymbol(wl.id, watchlistModalSymbol);
                       }}
                     >
-                      <span>{t.stock_watchlist_asset_count.replace("{name}", wl.name).replace("{count}", String(wl.symbols.length))}</span>
+                      <span>
+                        {t.stock_watchlist_asset_count
+                          .replace("{name}", wl.name)
+                          .replace("{count}", String(wl.symbols.length))}
+                      </span>
                       {isAdded && (
-                        <span style={{ color: "#818cf8", display: "flex", alignItems: "center" }}>
+                        <span
+                          style={{
+                            color: "#818cf8",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
                           <IconCheck />
                         </span>
                       )}

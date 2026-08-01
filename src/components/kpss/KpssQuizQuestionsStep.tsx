@@ -62,9 +62,7 @@ export function KpssQuizQuestionsStep({
     return (
       <div className="ha-loading" style={{ minHeight: "200px" }}>
         <div className="ha-spinner" />
-        <span style={{ fontSize: "0.95rem" }}>
-          {t.kpss_quiz_generating}
-        </span>
+        <span style={{ fontSize: "0.95rem" }}>{t.kpss_quiz_generating}</span>
       </div>
     );
   }
@@ -208,12 +206,7 @@ export function KpssQuizQuestionsStep({
           >
             {t.kpss_quiz_solution}
           </div>
-          <MathRenderer
-            text={
-              currentQ.solution ||
-              t.kpss_quiz_no_solution
-            }
-          />
+          <MathRenderer text={currentQ.solution || t.kpss_quiz_no_solution} />
         </div>
       )}
 

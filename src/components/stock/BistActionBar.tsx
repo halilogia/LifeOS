@@ -204,9 +204,7 @@ export function BistActionBar({
         </button>
         <button
           className={`stock-btn ${
-            activeTab === "kesfet"
-              ? "stock-btn-primary"
-              : "stock-btn-secondary"
+            activeTab === "kesfet" ? "stock-btn-primary" : "stock-btn-secondary"
           }`}
           onClick={() => onTabChange("kesfet")}
         >
@@ -252,4 +250,3 @@ export function BistActionBar({
     </div>
   );
 }
-

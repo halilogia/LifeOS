@@ -51,4 +51,6 @@ export const subjectsList: string[] = [
   "vatandaslik",
 ];
 
-export const KPSS_TARGET_DATE: number = new Date("2026-09-06T10:15:00").getTime();
+export const KPSS_TARGET_DATE: number = new Date(
+  "2026-09-06T10:15:00",
+).getTime();

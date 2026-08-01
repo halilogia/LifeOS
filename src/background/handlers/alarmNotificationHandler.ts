@@ -59,8 +59,14 @@ async function checkFreeGames(): Promise<void> {
 
           newGiveaways.forEach(
             (item: { id: number; title: string; worth: string }) => {
-              const title = t.notif_free_game_title.replace("{title}", item.title);
-              const message = t.notif_free_game_msg.replace("{worth}", item.worth);
+              const title = t.notif_free_game_title.replace(
+                "{title}",
+                item.title,
+              );
+              const message = t.notif_free_game_msg.replace(
+                "{worth}",
+                item.worth,
+              );
 
               chrome.notifications.create(String(item.id), {
                 type: "basic",
@@ -119,7 +125,10 @@ async function checkCalendarTasks(): Promise<void> {
           }
 
           const title = t.notif_calendar_title;
-          const message = t.notif_calendar_msg.replace("{count}", String(dueToday.length));
+          const message = t.notif_calendar_msg.replace(
+            "{count}",
+            String(dueToday.length),
+          );
 
           chrome.notifications.create("calendar_tasks_due_today", {
             type: "basic",

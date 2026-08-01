@@ -34,20 +34,30 @@ export function AiSettingsTab({
 
   useEffect(() => {
     const loadMemory = () => {
-      chrome.storage.sync.get(["aiUserMemory"], (syncRes: Record<string, any>) => {
-        if (syncRes && typeof syncRes.aiUserMemory === "string") {
-          setUserMemory(syncRes.aiUserMemory);
-        } else {
-          const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
-          setUserMemory(defaultMemory);
-        }
-      });
+      chrome.storage.sync.get(
+        ["aiUserMemory"],
+        (syncRes: Record<string, any>) => {
+          if (syncRes && typeof syncRes.aiUserMemory === "string") {
+            setUserMemory(syncRes.aiUserMemory);
+          } else {
+            const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
+            setUserMemory(defaultMemory);
+          }
+        },
+      );
     };
 
     loadMemory();
 
-    const listener = (changes: Record<string, chrome.storage.StorageChange>, areaName: string) => {
-      if (areaName === "sync" && changes.aiUserMemory && typeof changes.aiUserMemory.newValue === "string") {
+    const listener = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      areaName: string,
+    ) => {
+      if (
+        areaName === "sync" &&
+        changes.aiUserMemory &&
+        typeof changes.aiUserMemory.newValue === "string"
+      ) {
         setUserMemory(changes.aiUserMemory.newValue);
       }
     };
@@ -82,7 +92,9 @@ export function AiSettingsTab({
       }
       const data = await res.json();
       if (data && Array.isArray(data.data)) {
-        const list = (data.data as { id: string }[]).map((m: { id: string }) => m.id).sort();
+        const list = (data.data as { id: string }[])
+          .map((m: { id: string }) => m.id)
+          .sort();
         setModels(list);
       } else {
         throw new Error("Invalid format");
@@ -538,9 +550,18 @@ export function AiSettingsTab({
                 gap: "8px",
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6v6l4 2"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#a78bfa"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+                <path d="M12 6v6l4 2" />
               </svg>
               <span>Kişisel AI Hafızası (memory.md)</span>
             </label>
@@ -570,11 +591,15 @@ export function AiSettingsTab({
               lineHeight: 1.4,
             }}
           >
-            Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu alana özel notlarınızı yazabilirsiniz.
+            Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel
+            tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu
+            alana özel notlarınızı yazabilirsiniz.
           </span>
           <textarea
             value={userMemory}
-            onInput={(e) => setUserMemory((e.target as HTMLTextAreaElement).value)}
+            onInput={(e) =>
+              setUserMemory((e.target as HTMLTextAreaElement).value)
+            }
             rows={7}
             style={{
               width: "100%",
@@ -613,7 +638,14 @@ export function AiSettingsTab({
               marginTop: "4px",
             }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
               <polyline points="17 21 17 13 7 13 7 21"></polyline>
               <polyline points="7 3 7 8 15 8"></polyline>

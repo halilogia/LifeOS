@@ -155,7 +155,12 @@ export function StockKapNewsModal({
         ...prev,
         [item.id]: {
           loading: false,
-          text: t.stock_kap_news_analysis_error.replace("{message}", e instanceof Error ? (e?.message || t.stock_error_occurred) : String(e)),
+          text: t.stock_kap_news_analysis_error.replace(
+            "{message}",
+            e instanceof Error
+              ? e?.message || t.stock_error_occurred
+              : String(e),
+          ),
         },
       }));
     }
@@ -169,9 +174,7 @@ export function StockKapNewsModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="stock-modal-header">
-          <div className="stock-modal-title">
-            {t.stock_kap_news_title}
-          </div>
+          <div className="stock-modal-title">{t.stock_kap_news_title}</div>
           <button
             style={{
               background: "none",

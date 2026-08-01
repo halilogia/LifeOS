@@ -26,12 +26,14 @@ export interface AgentToolDefinition {
 export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
   {
     name: "click",
-    description: "Clicks buttons, links, tabs, or interactive elements by target text or CSS selector.",
+    description:
+      "Clicks buttons, links, tabs, or interactive elements by target text or CSS selector.",
     actionType: "click",
   },
   {
     name: "type",
-    description: "Types text into input fields, textareas, or contenteditable elements.",
+    description:
+      "Types text into input fields, textareas, or contenteditable elements.",
     actionType: "type",
   },
   {
@@ -41,17 +43,20 @@ export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
   },
   {
     name: "extract",
-    description: "Extracts page structure, text content, and metadata from active DOM.",
+    description:
+      "Extracts page structure, text content, and metadata from active DOM.",
     actionType: "extract",
   },
   {
     name: "highlight",
-    description: "Highlights target elements visually with neon scanning bounding box.",
+    description:
+      "Highlights target elements visually with neon scanning bounding box.",
     actionType: "highlight",
   },
   {
     name: "update_memory",
-    description: "Saves new user facts to personal memory.md (chrome.storage.sync.aiUserMemory).",
+    description:
+      "Saves new user facts to personal memory.md (chrome.storage.sync.aiUserMemory).",
     actionType: "update_memory",
   },
 ];
@@ -59,8 +64,13 @@ export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
 /**
  * Generates an accurate, context-aware Turkish/English summary for executed tool actions.
  */
-export function formatActionExecutionSummary(actions: AgentActionPayload[], lang: "tr" | "en"): string {
-  if (!actions || actions.length === 0) {return "";}
+export function formatActionExecutionSummary(
+  actions: AgentActionPayload[],
+  lang: "tr" | "en",
+): string {
+  if (!actions || actions.length === 0) {
+    return "";
+  }
 
   const t = getTranslation(lang as Language);
 
@@ -77,7 +87,12 @@ export function formatActionExecutionSummary(actions: AgentActionPayload[], lang
         return t.agent_tool_typed.replace("$target", targetName);
 
       case "scroll":
-        return t.agent_tool_scrolled.replace("$direction", act.direction === "up" ? t.agent_tool_scrolled_up : t.agent_tool_scrolled_down);
+        return t.agent_tool_scrolled.replace(
+          "$direction",
+          act.direction === "up"
+            ? t.agent_tool_scrolled_up
+            : t.agent_tool_scrolled_down,
+        );
 
       case "extract":
         return t.agent_tool_extracted;
@@ -86,7 +101,10 @@ export function formatActionExecutionSummary(actions: AgentActionPayload[], lang
         return t.agent_tool_highlighted.replace("$target", targetName);
 
       default:
-        return t.agent_tool_executed_single.replace("$count", String(actions.length));
+        return t.agent_tool_executed_single.replace(
+          "$count",
+          String(actions.length),
+        );
     }
   }
 
@@ -99,9 +117,15 @@ export function formatActionExecutionSummary(actions: AgentActionPayload[], lang
   }
 
   const parts: string[] = [];
-  if (typeCount > 0) {parts.push(t.agent_tool_typing_label.replace("$count", String(typeCount)));}
-  if (clickCount > 0) {parts.push(t.agent_tool_click_label.replace("$count", String(clickCount)));}
+  if (typeCount > 0) {
+    parts.push(t.agent_tool_typing_label.replace("$count", String(typeCount)));
+  }
+  if (clickCount > 0) {
+    parts.push(t.agent_tool_click_label.replace("$count", String(clickCount)));
+  }
   const details = parts.join(", ");
 
-  return t.agent_tool_executed_template.replace("$count", String(actions.length)).replace("$details", details);
+  return t.agent_tool_executed_template
+    .replace("$count", String(actions.length))
+    .replace("$details", details);
 }

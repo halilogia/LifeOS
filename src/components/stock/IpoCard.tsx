@@ -104,7 +104,9 @@ export function IpoCard({ ipo, lang, t }: IpoCardProps) {
         </div>
 
         <div>
-          <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>{t.ipo_sector_label}</div>
+          <div style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
+            {t.ipo_sector_label}
+          </div>
           <div style={{ fontWeight: 600, color: "#f8fafc" }}>
             {ipo.sector || t.ipo_general}
           </div>

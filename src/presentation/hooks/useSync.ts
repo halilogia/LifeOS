@@ -203,20 +203,20 @@ export function useSync(options: UseSyncOptions = {}) {
   }, []);
 
   return {
-      syncSettings,
-      setSyncSettingsState,
-      googleUserEmail,
-      setGoogleUserEmail,
-      isSyncing,
-      loadSyncSettings,
-      handleGoogleLogin,
-      handleGoogleLogout,
-      handleManualSyncTasks,
-      handleBackupToGoogleDrive,
-      handleRestoreFromGoogleDrive,
-      // Aliases for App.tsx destructuring
-      handleExportBackup: handleBackupToGoogleDrive,
-      handleImportBackup: handleRestoreFromGoogleDrive,
-      triggerCloudBackup,
-    };
-  }
+    syncSettings,
+    setSyncSettingsState,
+    googleUserEmail,
+    setGoogleUserEmail,
+    isSyncing,
+    loadSyncSettings,
+    handleGoogleLogin,
+    handleGoogleLogout,
+    handleManualSyncTasks,
+    handleBackupToGoogleDrive,
+    handleRestoreFromGoogleDrive,
+    // Aliases for App.tsx destructuring
+    handleExportBackup: handleBackupToGoogleDrive,
+    handleImportBackup: handleRestoreFromGoogleDrive,
+    triggerCloudBackup,
+  };
+}
