@@ -4,10 +4,10 @@
  * Layout Assembly Pattern ile parçalarına ayrıştırılmıştır.
  */
 
-import { useState, useEffect } from "preact/hooks";
 import { Todo, Language } from "@/types/types.js";
 import { KanbanView } from "@/components/KanbanView.js";
 import { translations } from "@/utils/i18n.js";
+import { useEisenhower } from "@/presentation/hooks/useEisenhower.js";
 
 // Extracted Sub-components
 import { EisenhowerQuadrantCard } from "@/components/eisenhower/EisenhowerQuadrantCard.js";
@@ -35,86 +35,20 @@ export function EisenhowerView({
   onMoveTaskDirection,
 }: EisenhowerViewProps) {
   const t = translations[lang];
-  const [activeTab, setActiveTab] = useState<"matrix" | "kanban">(defaultTab);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [dragOverQuad, setDragOverQuad] = useState<string | null>(null);
-
-  // Sync active tab state with sidebar selection triggers
-  useEffect(() => {
-    setActiveTab(defaultTab);
-  }, [defaultTab]);
-
-  // Divide tasks into quadrants (exclude completed tasks)
-  const q1 = todos
-    .map((t, idx) => ({ t, idx }))
-    .filter(
-      ({ t }) => t.urgent === true && t.important === true && !t.completed,
-    );
-
-  const q2 = todos
-    .map((t, idx) => ({ t, idx }))
-    .filter(
-      ({ t }) => t.urgent === false && t.important === true && !t.completed,
-    );
-
-  const q3 = todos
-    .map((t, idx) => ({ t, idx }))
-    .filter(
-      ({ t }) => t.urgent === true && t.important === false && !t.completed,
-    );
-
-  const q4 = todos
-    .map((t, idx) => ({ t, idx }))
-    .filter(
-      ({ t }) => t.urgent === false && t.important === false && !t.completed,
-    );
-
-  const unclassified = todos
-    .map((t, idx) => ({ t, idx }))
-    .filter(
-      ({ t }) =>
-        (t.urgent === undefined || t.important === undefined) && !t.completed,
-    );
-
-  const handleDragStart = (idx: number) => {
-    setDraggedIndex(idx);
-  };
-
-  const handleDragOver = (e: DragEvent, quadId: string) => {
-    e.preventDefault();
-    setDragOverQuad(quadId);
-  };
-
-  const handleDragLeave = () => {
-    setDragOverQuad(null);
-  };
-
-  const handleDrop = (quadId: string) => {
-    setDragOverQuad(null);
-    if (draggedIndex === null) {
-      return;
-    }
-
-    let urgent: boolean | undefined = undefined;
-    let important: boolean | undefined = undefined;
-
-    if (quadId === "q1") {
-      urgent = true;
-      important = true;
-    } else if (quadId === "q2") {
-      urgent = false;
-      important = true;
-    } else if (quadId === "q3") {
-      urgent = true;
-      important = false;
-    } else if (quadId === "q4") {
-      urgent = false;
-      important = false;
-    }
-
-    onUpdateTodoUrgentImportant(draggedIndex, urgent, important);
-    setDraggedIndex(null);
-  };
+  const {
+    activeTab,
+    setActiveTab,
+    dragOverQuad,
+    q1,
+    q2,
+    q3,
+    q4,
+    unclassified,
+    handleDragStart,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+  } = useEisenhower({ todos, defaultTab, onUpdateTodoUrgentImportant });
 
   const emptyText = t.eisenhower_drag_hint;
 
@@ -129,63 +63,6 @@ export function EisenhowerView({
         height: "calc(100vh - 120px)",
       }}
     >
-      {/* CSS Overrides specifically for Eisenhower Matrix Grid */}
-      <style>{`
-        .eisenhower-quadrant {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--card-border);
-          border-radius: 16px;
-          padding: 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          min-height: 200px;
-          transition: all 0.3s ease;
-          overflow-y: auto;
-        }
-        .eisenhower-quadrant.drag-over {
-          background: rgba(139, 92, 246, 0.08);
-          border-color: var(--accent-color);
-          box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
-        }
-        .eisenhower-task-card {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--card-border);
-          border-radius: 10px;
-          padding: 10px 12px;
-          font-size: 0.82rem;
-          color: var(--text-primary);
-          cursor: grab;
-          transition: all 0.2s ease;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .eisenhower-task-card:hover {
-          background: rgba(255, 255, 255, 0.08);
-          transform: translateY(-2px);
-        }
-        .eisenhower-task-card:active {
-          cursor: grabbing;
-        }
-        .quadrant-title {
-          font-size: 0.85rem;
-          font-weight: 700;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding-bottom: 8px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .quadrant-header-tag {
-          font-size: 0.65rem;
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-weight: 800;
-          text-transform: uppercase;
-        }
-      `}</style>
-
       {/* Sub-Tab Navigation Header */}
       <div
         className="pomodoro-tab-header"
@@ -370,7 +247,15 @@ export function EisenhowerView({
           />
         </div>
       ) : (
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+            overflow: "hidden",
+          }}
+        >
           <KanbanView
             todos={todos}
             lang={lang}
