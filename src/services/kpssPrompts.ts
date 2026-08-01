@@ -6,12 +6,19 @@ export function getKpssSystemPrompt(
   dynamicExamples?: unknown[],
 ): string {
   // Baseline prompt detailing the structure and ÖSYM rules
-  const baseRules = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun, zorlayıcı olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.
+  const baseRules = `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Kullanıcının seçeceği ders ve konu hakkında çoktan seçmeli bir test hazırlayacaksın. Hazırladığın test tamamen Türkçe dilinde olmalı ve KPSS formatına uygun olmalıdır. Soruları A, B, C, D, E olmak üzere tam 5 seçenekli hazırlayacaksın. Her sorunun doğru cevabını belirtirken aynı zamanda o sorunun açıklayıcı çözüm/açıklama metnini de ("solution") hazırlamalısın.
 
 ### ÖSYM Formatı ve Soru Kalitesi Kuralları:
 1. Sorular ÖSYM'nin KPSS Lisans sınavlarındaki gibi zengin, ayrıntılı, paragraflı veya öncüllü (I, II, III şeklinde maddeler içeren) olmalıdır. Çok kısa, tek cümlelik yüzeysel sorulardan KESİNLİKLE kaçın.
 2. Soru Kökünde Kesin Netlik: Soru kökleri yoruma kapalı, neyi sorduğu %100 açık olmalıdır. Muğlaklıklardan kaçın.
-3. Tek ve Kesin Doğru Cevap: Sorudaki diğer 4 yanlış seçenek (çeldiriciler) akademik olarak tamamen yanlış olmalı, doğru seçenek ise hiçbir tartışmaya veya farklı yoruma yol açmayacak derecede kesin bir doğru bilgi olmalıdır.`;
+3. Düşürücü Çeldirici Kuralı (ÖSYM Standardı): Yanlış seçenekler "uydurma" veya "bariz yanlış" bilgilerden oluşmamalıdır. Çeldiriciler, konu ile doğrudan ilişkili GERÇEK bilgilerden seçilmelidir; ilk bakışta doğru görünüp dikkatli analizde yanlış olduğu anlaşılan "düşürücü çeldiriciler" kullanılmalıdır (örn: başka bir döneme ait gerçek bir olay, başka bir padişah dönemi yeniliği, doğru kavramın yanlış tanımı). Bariz yanlış, komik, konu dışı veya uydurma şıklar KESİNLİKLE yasaktır. Doğru seçenek ise hiçbir tartışmaya veya farklı yoruma yol açmayacak derecede kesin bir doğru bilgi olmalıdır.
+4. Gerçek Bilgi Zorunluluğu (Uydurma Yasağı): Gerçek olmayan savaş, antlaşma, kurum, kişi veya olay isimleri KESİNLİKLE oluşturulamaz. Tüm seçenekler ve açıklamalar yalnızca gerçek, bilimsel literatürde yer alan bilgilerden oluşmalıdır. Çeldiriciler de gerçek bilgilerden seçilir — sadece bağlam/dönem yanlış olur, isimler asla uydurma olmaz.
+5. Zorluk Dağılımı: Sorular tekdüze zorlukta olmamalıdır. 5 soruda: 1 kolay (doğrudan bilgi), 2 orta (yorum gerektiren), 2 zor (güçlü çeldirici ve analiz gerektiren) şeklinde dağıtılmalıdır. Hepsi aşırı zor veya hepsi kolay KPSS'ye benzemez.
+6. Soru Tipi Dağılımı: Sorular tek tip olmamalıdır. 5 soruda: 2 öncüllü (I, II, III), 1 paragraf/çıkarım, 1 kavram/terim bilgisi, 1 kronoloji/karşılaştırma sorusu olacak şekilde çeşitlendirilmelidir. Soru sayısı 5'ten farklıysa bu oran korunarak ölçeklendirilir.
+7. Cevap Anahtarı Dağılımı: Doğru cevaplar A, B, C, D, E harflerine dengeli dağılmalıdır (5 soruda her harf en az 1 kez). Ardışık sorularda aynı harf tekrar etmemelidir.
+8. Kazanım Tekrarı Yasağı: Aynı alt kazanım, dönem veya olay birden fazla soruda ölçülmemelidir. Konu kapsamı dengeli dağıtılmalıdır (örn: siyasi, ekonomik, kültürel, askeri alt başlıklardan farklı sorular).
+9. Şık Dengesi ve İpucu Yasağı: Seçenekler birbirine yakın uzunlukta olmalıdır. Doğru cevap; uzunluğu, kesin ifadeleri ("her zaman", "tamamen", "yalnızca"), tekrar eden kalıpları veya diğerlerinden belirgin farkı ile ele VERİLMEMELİDİR.
+10. Açıklama Kuralı: "solution" metni yalnızca doğru cevabın neden doğru olduğunu değil, diğer 4 çeldiricinin neden yanlış olduğunu da kısaca açıklamalıdır.`;
 
   let subjectRules: string;
 
@@ -88,6 +95,7 @@ export function getKpssSystemPrompt(
 ### Tarih Özel Kuralları:
 1. Tarih soruları kronolojik olarak tamamen doğru ve bilimsel literatüre uygun olmalıdır. Kesinlikle uydurma veya kurgusal olaylar içermemelidir.
 2. Sorularda padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihine yönelik kronolojik veya nedensel bağlamları kusursuz kurgula.
+3. Kronoloji Kontrolü (Doğru Cevap Güvencesi): Olay-padişah-antlaşma-savaş eşleşmesi üretim öncesi kontrol edilmelidir. Çeldiricilerde başka döneme ait GERÇEK bir olay bilinçli olarak kullanılabilir (düşürücü çeldirici — bkz. kural 3), ancak DOĞRU CEVAPTA dönem kayması ASLA olamaz. "II. Kılıç Arslan → Kösedağ Savaşı", "I. Alaeddin Keykubad → Baba İshak Ayaklanması" gibi hatalı eşleşmeler doğru cevapta kesinlikle yer alamaz; böyle kaymalar yalnızca çeldirici olarak kullanılabilir.
 
 ### Tarih Kusursuz Örnek Soru Taslağı (Buna Birebir Uygun Hazırla):
 {
