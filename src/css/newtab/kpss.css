@@ -4,10 +4,11 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: var(--space-8);
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-7);
+  /* height:100% YOK — view-content.active zaten scroll'lu (overflow-y:auto).
+     Container doğal yükseklikte büyür, konular asla sıkışmaz. */
 }
 
 .kpss-header {
@@ -63,8 +64,7 @@
 }
 
 .kpss-content {
-  flex: 1;
-  overflow-y: auto;
+  width: 100%;
 }
 
 /* Scrollbar adjustment */

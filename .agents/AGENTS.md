@@ -21,12 +21,15 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
   * `PrayerView.tsx`: City prayer times lookup.
   * `KpssView.tsx`: Subject checklist and Canvas daily progress charts.
   * `FreeGamesView.tsx`: Gaming deals tracker.
-* **`src/core/`**:
-  * [storage.ts](file:///c:/GitHub/Done/chrome-extension/src/core/storage.ts): Synced cloud storage wrappers (`chrome.storage.sync`).
-  * [state.ts](file:///c:/GitHub/Done/chrome-extension/src/core/state.ts): Main in-memory states context.
-  * [backup.ts](file:///c:/GitHub/Done/chrome-extension/src/core/backup.ts): JSON backup utilities.
+* **`src/infrastructure/`**:
+  * [persistence/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/persistence): Chrome storage repository implementations (`ChromeStorageTodoRepository` vb.) — `chrome.storage.sync`/`local` erişimi burada yaşar.
+  * [api/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/api): Google API client'ları (Tasks, Drive, Calendar, Auth).
+* **`src/application/`**:
+  * [use-cases/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/application/use-cases): Tek işlemli iş kuralları (AddTodoUseCase, ToggleTodoUseCase, SyncGoogleTasksUseCase).
+  * [ports/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/application/ports): Dış dünya port arayüzleri (ITodoSyncPort, IDriveBackupPort).
 * **`src/css/newtab/`**:
-  * CSS files divided into feature-specific stylesheets (e.g. `base.css`, `sidebar.css`, `tasks.css`, etc.). Import stylesheet changes in [newtab.css](file:///c:/GitHub/Done/chrome-extension/src/newtab.css).
+  * CSS files divided into feature-specific stylesheets (e.g. `base.css`, `sidebar.css`, `tasks.css`, etc.). Import stylesheet changes in [newtab.css](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/newtab.css).
+* **`src/ARCHITECTURE.md`**: CANLI mimari harita — her değişiklikte güncellenir (bkz. bölüm 7).
 
 ---
 
@@ -45,7 +48,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 2.3 Storage Management
 * Use **`chrome.storage.sync`** for configurations, user lists, and study logs.
-* Define get/set wrappers inside [storage.ts](file:///c:/GitHub/Done/chrome-extension/src/core/storage.ts).
+* Define get/set wrappers inside [ChromeStorageSettingsRepository](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/persistence/ChromeStorageSettingsRepository.ts) veya ilgili `ChromeStorage*Repository` (infrastructure/persistence/).
 * **Important**: When adding a new storage key, append its key name string to the `syncKeys` array in the `migrateLocalToSync` method of `storage.ts` so cloud sync works properly.
 
 ### 2.4 Localization (i18n)
@@ -58,7 +61,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * To introduce a new panel, declare it under the `renderActiveViewComponent` router and wire its navigation triggers to [Sidebar.tsx](file:///c:/GitHub/Done/chrome-extension/src/components/Sidebar.tsx).
 
 ### 2.6 Path Aliases
-* **Module Aliases Requirement**: Always use path alias syntax `@/` for importing internal modules (e.g. `@/core/...`, `@/components/...`, `@/utils/...`) rather than relative directory nesting references (`../../`).
+* **Module Aliases Requirement**: Always use path alias syntax `@/` for importing internal modules (e.g. `@/infrastructure/...`, `@/components/...`, `@/utils/...`, `@/services/...`, `@/domain/...`) rather than relative directory nesting references (`../../`).
 
 ### 2.7 Confirm Dialog Deprecation
 * **No browser confirmations**: Do not invoke native browser `confirm()` or alert popups. Always trigger the custom declarative `<ConfirmModal />` component to obtain confirmation actions.
@@ -100,7 +103,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 5.1 Separation of Concerns (SoC)
 * **Visual Components Boundaries**: Preact elements inside `src/components/` should focus strictly on UI layout representation and simple visual hooks. 
-* **Business Logic Relocation**: Storage management, network fetches, calculation formulas, and state providers must reside in separate helper/service classes inside `src/core/` or `src/services/`.
+* **Business Logic Relocation**: Storage management, network fetches, calculation formulas, and state providers must reside in separate helper/service classes inside `src/services/`, `src/domain/` veya `src/infrastructure/persistence/`.
 
 ### 5.2 Single Responsibility Principle (SRP)
 * Keep functions, files, and classes focused on a single responsibility. Do not write monolithic components that merge layout, alarms, storage sync, and custom checkers in one massive scope.
@@ -130,4 +133,85 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 4.6 Merkezi ve Tekil AI Yapılandırma Protokolü (Sıfır API Hatası Garantisi)
 * **Merkezi AI Yapılandırması Zorunluluğu**: Yeni bir AI özelliği veya arka plan servisi eklenirken asla elle/ad-hoc `chrome.storage` ayrıştırma mantığı yazılmamalıdır. Her zaman `src/services/aiChatService.ts` içerisindeki tekil yetkili `getAIConfigFromStorage()` fonksiyonu kullanılmalıdır.
 * **Çift Depolama & Çift Key Garantisi**: Ayarlar kaydedilirken hem `chrome.storage.sync` hem de `chrome.storage.local` depolarına `geminiApiKey` ve `aiApiKey` alanları eşzamanlı yazılır. Böylece hiçbir yeni AI modülü yetki veya anahtar hatası veremez.
+
+### 4.7 Merkezi Loglama Protokolü (Centralized Logging)
+* **Ham `console.*` YASAK**: Doğrudan `console.log/warn/error/debug/info` çağrıları yazılamaz. Her zaman `src/utils/logger.ts` içindeki tekil `logger` singleton'ı kullanılır (`import { logger } from "@/utils/logger.js"`). Logger hem console'a hem de `chrome.storage.local`'a (500 entry ring buffer) kaydeder — Ayarlar > Genel > Hata Raporlama'dan `.md` indirilebilir.
+* **Sessiz Hata Noktalarına Log Zorunlu (Mandatory)**: Aşağıdaki durumlarda log eklenmesi zorunludur:
+  - `chrome.runtime.lastError` kontrolleri → `logger.warn("[Modül] ... lastError:", chrome.runtime.lastError)`
+  - `try/catch` bloklarının `catch` kısmı → `logger.error`
+  - `sendMessage`/`sendResponse` yanıtsız kalan mesajlar → `logger.warn`
+  - Asenkron callback'lerde başarısız fetch/API çağrıları → `logger.error`
+* **Log Mesajı Formatı**: `"[ModülAdı] kısa açıklama"` (örn. `"[InfoBox] translate_text lastError:"`). İç log mesajlarındaki Türkçe karakterler i18n kuralından muaftır (kullanıcıya görünmez).
+* **Asla Loglanmayacaklar**: API anahtarları, token'lar, şifreler, kimlik bilgileri (bkz. 4.4). Gizli veri loglanacaksa maskelenir (örn. `sk-***`).
+* **Asenkron Mesaj Zinciri Kuralı**: `chrome.runtime.onMessage` listener'ı asla `async` yapılmaz (kanal kapanır, callback'teki `sendResponse` kaybolur → "message port closed"). Callback tabanlı `sendResponse` + `return true` deseni kullanılır. Referans: `src/background/backgroundMain.ts`.
+
+---
+
+## 6. Somut Mimari Kurallar (Measurable Architecture Rules)
+
+"Clean code / clean architecture" yazmak tek başına yeterli değildir — bu kurallar **ölçülebilir** ve **denetlenebilir** olmalıdır. Aşağıdaki 3 kural her kod değişikliğinde uygulanır.
+
+### 6.1 Dosya Boyut Limitleri (File Size Limits)
+* **View Component'leri ≤ 300 satır**: Bir view (örn. `KpssView.tsx`, `PomodoroView.tsx`) 300 satırı aşarsa ZORUNLU olarak alt bileşenlere bölünür (`src/components/<feature>/` klasörüne). 300 satır üstü her yeni kod, yeni bir alt bileşene taşınır.
+* **Service/Helper ≤ 200 satır**: `src/services/`, `src/infrastructure/`, `src/domain/` dosyaları 200 satırı aşarsa bölünür.
+* **CSS dosyası ≤ 400 satır**: `src/css/newtab/<feature>.css` 400 satırı aşarsa `src/css/newtab/<feature>/` alt klasörüne bölünür (bkz. 5.6).
+* **App.tsx ≤ 300 satır**: Ana bileşen şişerse presentational parçalar (`HeroHeader`, `FooterQuote` vb.) ayrı dosyalara çekilir.
+
+### 6.2 Katman Bağımlılık Kuralı (Layer Dependency Rule)
+* **`components/` ASLA direkt `chrome.storage.*` çağırmaz**: Tüm storage erişimi `src/services/`, `src/infrastructure/persistence/` veya `src/presentation/hooks/` üzerinden yapılır. View component'leri veriyi **prop veya hook** olarak alır.
+* **`components/` ASLA direkt `fetch()` çağırmaz**: Network çağrıları `src/services/` içindeki servislerde yaşar.
+* **Veri akışı tek yönlüdür**: `services/` → `hooks/` → `components/` (UI). Ters yön yasaktır.
+* **İhlal tespiti**: Bir view içinde `chrome.storage.` veya `fetch(` görürsen, o çağrıyı ilgili service'e taşı.
+
+### 6.3 Klasör Haritası (Folder Map)
+| Klasör | Sorumluluk | Ne konur |
+|---|---|---|
+| `src/domain/` | Saf iş mantığı, tipler, sabitler | Hesaplamalar, value objects, constants (UI/storage bağımsız) |
+| `src/services/` | Dış dünya ile iletişim | Network fetch, chrome.storage erişimi, AI servisleri, kpssService, errorReportService |
+| `src/presentation/hooks/` | State yönetimi | useSettings, useTodos, usePopup, useUI vb. |
+| `src/components/` | Sadece UI | View'lar + alt bileşenler (`<feature>/` klasörlerinde) |
+| `src/components/<feature>/` | Feature'a özel UI parçaları | kpss/, popup/, settings/, pomodoro/ vb. |
+| `src/utils/` | Genel yardımcılar | i18n, logger, formatlayıcılar |
+| `src/background/` | Service worker | message handler'lar, alarm'lar |
+| `src/content/` | Content script'ler | infobox/, detox/, agent/, whatsapp/ vb. |
+| `src/css/` | Stiller | popup.css + newtab/ altında feature CSS'leri |
+
+**Kural**: Yeni dosya oluştururken önce yukarıdaki tablodan doğru klasörü seç. Emin değilsen `src/services/` en güvenli varsayılandır (iş mantığı + storage + network).
+
+---
+
+## 7. Görsel Değişim Raporlama & Mimari Harita Bakımı (Visual Change Reporting)
+
+**Amaç**: Kullanıcı 300+ dosyayı kafasında tutmak zorunda kalmasın. Her iş sonunda AI, değişikliği **görsel** olarak özetler ve mimari haritayı canlı tutar.
+
+### 7.1 `src/ARCHITECTURE.md` Zorunlu Bakım
+* **Canlı dokümandır**: Her kod değişikliği sonunda güncellenir.
+* Yeni dosya/klasör eklenirse → haritaya eklenir.
+* Dosya silinirse → haritadan kaldırılır.
+* Sorumluluk değişirse → tablo düzeltilir.
+* Yeni feature eklenirse → Feature Haritası'na satır eklenir.
+
+### 7.2 Her İş Sonunda Değişim Diyagramı (Zorunlu)
+Her görev tamamlandığında yanıtın sonuna **mermaid flowchart** eklenir:
+```
+- Hangi dosyalar değişti (dosya adı + satır sayısı)
+- Hangi katmanlara dokunuldu (components/ services/ domain/ infrastructure/)
+- Yeni bağımlılıklar (X → Y çağırıyor)
+```
+Format:
+````markdown
+```mermaid
+flowchart LR
+    A["KpssView.tsx (değişti)"] --> B["kpssService.ts (dokunuldu)"]
+    B --> C["kpss.css (düzeltildi)"]
+```
+````
+
+### 7.3 Walkthrough'a Diyagram Eklenir
+* `walkthrough.md` güncellenirken değişim diyagramı da eklenir.
+* Böylece kullanıcı eski işlere bakınca da ne değiştiğini görsel olarak anlar.
+
+### 7.4 İhlal Tespiti
+* Bir iş bitiminde değişim diyagramı yoksa → iş eksiktir.
+* ARCHITECTURE.md güncellenmemişse → iş eksiktir.
 

@@ -8,9 +8,11 @@ import { kpssSrsService } from "@/services/kpssSrsService.js";
 import { kpssQuizFlowService } from "@/services/kpssQuizFlowService.js";
 import { KpssDailyStats, Language } from "@/types/types.js";
 import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
-import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { type ReviewQuality, type WordReviewData } from "@/domain/services/SrsService.js";
+import {
+  type ReviewQuality,
+  type WordReviewData,
+} from "@/domain/services/SrsService.js";
 import {
   calculateKpssCountdown,
   calculateEstimatedCompletionTime,
@@ -35,11 +37,8 @@ import {
 // Extracted Presentational Sub-components
 import { KpssHeaderBar } from "@/components/kpss/KpssHeaderBar.js";
 import { KpssTopicDetailModal } from "@/components/kpss/KpssTopicDetailModal.js";
-import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
-import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
-import { KpssTopicList } from "@/components/kpss/KpssTopicList.js";
+import { KpssProgressSection } from "@/components/kpss/KpssProgressSection.js";
 import { KpssSrsCard } from "@/components/kpss/KpssSrsCard.js";
-import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssQuizModal } from "@/components/kpss/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/KpssNotesDashboard.js";
@@ -146,7 +145,9 @@ export function KpssView({
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
     const reviewData = srsQueue[srsIndex];
-    if (!reviewData) { return; }
+    if (!reviewData) {
+      return;
+    }
 
     await kpssSrsService.saveSrsReview(reviewData, quality);
 
@@ -395,7 +396,6 @@ export function KpssView({
   };
 
   const handleStartQuiz = (topic: string, subject?: string) => {
-
     const targetSubject = subject || currentSubject;
     if (subject && subject !== currentSubject) {
       setCurrentSubject(subject);
@@ -444,10 +444,7 @@ export function KpssView({
             ? t.kpss_subject_history
             : "Matematik";
 
-    const yearName =
-      year === "karma"
-        ? t.kpss_exam_mixed_years
-        : year;
+    const yearName = year === "karma" ? t.kpss_exam_mixed_years : year;
 
     setActiveQuizTopic(`${yearName} KPSS Past Questions (${subjectName})`);
     setQuizLoading(false);
@@ -526,77 +523,45 @@ export function KpssView({
         />
 
         {activeTab === "progress" ? (
-          <>
-            <KpssCountdownBanner
-              lang={lang}
-              t={t}
-              kpssTimeLeft={kpssTimeLeft}
-              estimatedTimeLeft={estimatedTimeLeft}
-              remainingCount={remainingCount}
-            />
-
-            <KpssAutoPlannerCard
-              t={t}
-              kpssProgress={kpssProgress}
-              onStartQuiz={(subject, topicTitle) =>
-                handleStartQuiz(topicTitle, subject)
-              }
-              labels={labels}
-            />
-
-            <KpssDailyStatsCard
-              lang={lang}
-              t={t}
-              questionsInput={questionsInput}
-              videosInput={videosInput}
-              subjectInput={subjectInput}
-              chartDays={chartDays}
-              chartType={chartType}
-              onQuestionsInputChange={setQuestionsInput}
-              onVideosInputChange={setVideosInput}
-              onSubjectInputChange={setSubjectInput}
-              onSaveStats={handleSaveStats}
-              onResetStats={handleResetStats}
-              onDeleteStat={handleDeleteStat}
-              onChartDaysChange={handleChartDaysChange}
-              onChartTypeChange={handleChartTypeChange}
-              labels={labels}
-              subjectsList={subjectsList}
-              dailyStats={dailyStats}
-              goalType={goalType}
-              targetNet={targetNet}
-              targetScore={targetScore}
-              kpssProgress={kpssProgress}
-              kpssTargetDate={KPSS_TARGET_DATE}
-            />
-
-            <KpssNetEstimationCard
-              t={t}
-              goalType={goalType}
-              targetNet={targetNet}
-              targetScore={targetScore}
-              overallNet={overallNet}
-              maxNet={maxNet}
-              estimatedScore={estimatedScore}
-              getSubjectNets={getSubjectNets}
-              labels={labels}
-              subjectsList={subjectsList}
-              selectedSubject={currentSubject}
-              onSelectSubject={setCurrentSubject}
-            />
-
-            <KpssTopicList
-              lang={lang}
-              t={t}
-              topics={topics}
-              kpssProgress={kpssProgress}
-              currentSubject={currentSubject}
-              sortBy={sortBy}
-              onSortByChange={setSortBy}
-              onStartQuiz={(topic) => handleStartQuiz(topic)}
-              onShowDetail={(topic) => setActiveTopic(topic)}
-            />
-          </>
+          <KpssProgressSection
+            lang={lang}
+            t={t}
+            labels={labels}
+            kpssTimeLeft={kpssTimeLeft}
+            estimatedTimeLeft={estimatedTimeLeft}
+            remainingCount={remainingCount}
+            kpssProgress={kpssProgress}
+            dailyStats={dailyStats}
+            questionsInput={questionsInput}
+            videosInput={videosInput}
+            subjectInput={subjectInput}
+            chartDays={chartDays}
+            chartType={chartType}
+            sortBy={sortBy}
+            goalType={goalType}
+            targetNet={targetNet}
+            targetScore={targetScore}
+            currentSubject={currentSubject}
+            subjectsList={subjectsList}
+            kpssTargetDate={KPSS_TARGET_DATE}
+            overallNet={overallNet}
+            maxNet={maxNet}
+            estimatedScore={estimatedScore}
+            getSubjectNets={getSubjectNets}
+            topics={topics}
+            onQuestionsInputChange={setQuestionsInput}
+            onVideosInputChange={setVideosInput}
+            onSubjectInputChange={setSubjectInput}
+            onSaveStats={handleSaveStats}
+            onResetStats={handleResetStats}
+            onDeleteStat={handleDeleteStat}
+            onChartDaysChange={handleChartDaysChange}
+            onChartTypeChange={handleChartTypeChange}
+            onSelectSubject={setCurrentSubject}
+            onSortByChange={setSortBy}
+            onStartQuiz={(topic, subject) => handleStartQuiz(topic, subject)}
+            onShowDetail={(topic) => setActiveTopic(topic)}
+          />
         ) : activeTab === "notes" ? (
           <KpssNotesDashboard lang={lang} t={t} />
         ) : activeTab === "srs" ? (
@@ -613,10 +578,7 @@ export function KpssView({
             onReloadQueue={loadKpssSrsQueue}
           />
         ) : (
-          <KpssPastExamsDashboard
-            t={t}
-            onStartPastExam={handleStartPastExam}
-          />
+          <KpssPastExamsDashboard t={t} onStartPastExam={handleStartPastExam} />
         )}
       </div>
 
