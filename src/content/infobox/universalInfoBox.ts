@@ -4,6 +4,8 @@
  * Clean Architecture - Content Script Domain Module.
  */
 
+import { logger } from "@/utils/logger.js";
+
 let bubbleHost: HTMLDivElement | null = null;
 
 export function initUniversalInfoBox(): void {
@@ -28,9 +30,15 @@ export function initUniversalInfoBox(): void {
 }
 
 function handleTextSelection(e: MouseEvent, hotkey: string): void {
-  if (hotkey === "alt" && !e.altKey) {return;}
-  if (hotkey === "ctrl" && !e.ctrlKey) {return;}
-  if (hotkey === "shift" && !e.shiftKey) {return;}
+  if (hotkey === "alt" && !e.altKey) {
+    return;
+  }
+  if (hotkey === "ctrl" && !e.ctrlKey) {
+    return;
+  }
+  if (hotkey === "shift" && !e.shiftKey) {
+    return;
+  }
 
   setTimeout(() => {
     const selection = window.getSelection();
@@ -50,18 +58,28 @@ function handleTextSelection(e: MouseEvent, hotkey: string): void {
     }
 
     try {
-      if (!chrome.runtime?.id) {return;}
+      if (!chrome.runtime?.id) {
+        return;
+      }
       chrome.runtime.sendMessage(
         { type: "translate_text", text: text },
         (response: { translation?: string }) => {
-          if (chrome.runtime.lastError) {return;}
+          if (chrome.runtime.lastError) {
+            logger.warn(
+              "[InfoBox] translate_text lastError:",
+              chrome.runtime.lastError,
+            );
+            return;
+          }
           if (response && response.translation) {
             showTranslationBubble(response.translation, selection);
+          } else {
+            logger.warn("[InfoBox] translate_text yanıtsız:", response);
           }
         },
       );
-    } catch {
-      // Extension context invalidated on extension reload
+    } catch (err) {
+      logger.error("[InfoBox] sendMessage hatası:", err);
     }
   }, 10);
 }
@@ -84,10 +102,15 @@ function removeBubble(): void {
   }
 }
 
-function showTranslationBubble(translationText: string, selection: Selection): void {
+function showTranslationBubble(
+  translationText: string,
+  selection: Selection,
+): void {
   removeBubble();
 
-  if (!document.body) {return;}
+  if (!document.body) {
+    return;
+  }
 
   bubbleHost = document.createElement("div");
   bubbleHost.style.position = "absolute";

@@ -1,4 +1,5 @@
 import { Language } from "@/types/types.js";
+import { ErrorReportSettingsTab } from "@/components/settings/ErrorReportSettingsTab.js";
 
 interface GeneralSettingsTabProps {
   lang: Language;
@@ -16,6 +17,7 @@ interface GeneralSettingsTabProps {
   onUniversalInfoBoxHotkeyChange: (hotkey: string) => void;
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
+  onNotify?: (message: string) => void;
 }
 
 export function GeneralSettingsTab({
@@ -34,6 +36,7 @@ export function GeneralSettingsTab({
   onUniversalInfoBoxHotkeyChange,
   autoGroupTabsEnabled = true,
   onToggleAutoGroupTabs,
+  onNotify,
 }: GeneralSettingsTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -228,9 +231,7 @@ export function GeneralSettingsTab({
                 <rect x="14" y="14" width="7" height="7" rx="1"></rect>
                 <rect x="3" y="14" width="7" height="7" rx="1"></rect>
               </svg>
-              <span>
-                {t.settings_auto_group_tabs}
-              </span>
+              <span>{t.settings_auto_group_tabs}</span>
               <span
                 style={{
                   marginLeft: "auto",
@@ -335,11 +336,24 @@ export function GeneralSettingsTab({
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                 <line x1="9" y1="3" x2="9" y2="21"></line>
               </svg>
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "white" }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.85rem",
+                    fontWeight: "600",
+                    color: "white",
+                  }}
+                >
                   {t.settings_shortcut_title}
                 </span>
-                <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+                <span
+                  style={{
+                    fontSize: "0.72rem",
+                    color: "var(--text-secondary)",
+                  }}
+                >
                   {t.settings_shortcut_default}
                 </span>
               </div>
@@ -366,6 +380,9 @@ export function GeneralSettingsTab({
           </div>
         </div>
       </div>
+
+      {/* Error Reporting Section */}
+      {onNotify && <ErrorReportSettingsTab t={t} onNotify={onNotify} />}
     </div>
   );
 }

@@ -22,7 +22,8 @@ export const tr = {
   alert_restore_success: "Yedek başarıyla yüklendi!",
   alert_restore_invalid: "Geçersiz yedek dosyası formatı.",
   alert_restore_error: "Yedek dosyası okunurken bir hata oluştu.",
-  alert_clear_confirm: "Tüm verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  alert_clear_confirm:
+    "Tüm verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
   quote_1: '"Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır."',
   quote_2: '"Başlamak, başarmanın yarısıdır."',
   quote_3: '"Yapılmış olması, mükemmel olmasından iyidir."',
@@ -105,7 +106,8 @@ export const tr = {
   search_game_placeholder: "Oyun adı ara...",
   search_btn: "Ara",
   loading_history: "Epic Games geçmişi aranıyor...",
-  was_not_free: "Bu oyun Epic Games'te daha önce ücretsiz dağıtılmadı veya listede yok.",
+  was_not_free:
+    "Bu oyun Epic Games'te daha önce ücretsiz dağıtılmadı veya listede yok.",
   was_free_success: "Bu oyun daha önce Epic Games'te ücretsiz dağıtıldı!",
   was_free_on: "Dağıtılma Tarihi:",
   metacritic_score: "Metacritic Puanı:",
@@ -119,26 +121,35 @@ export const tr = {
   willpower_minutes: "Dakika",
   willpower_seconds: "Saniye",
   willpower_reset_btn: "Yeni Başlangıç Yap",
-  willpower_reset_confirm: "Bu süreci sıfırlayıp yeni bir başlangıç yapmak istediğinize emin misiniz?",
+  willpower_reset_confirm:
+    "Bu süreci sıfırlayıp yeni bir başlangıç yapmak istediğinize emin misiniz?",
   willpower_level_label: "İrade Derecesi",
   willpower_history: "Süreç Geçmişi",
-  willpower_history_empty: "Henüz geçmiş süreç kaydı yok. Yolculuğun şimdi başlıyor!",
+  willpower_history_empty:
+    "Henüz geçmiş süreç kaydı yok. Yolculuğun şimdi başlıyor!",
   willpower_history_date: "Başlangıç Tarihi",
   willpower_history_duration: "Süre",
   willpower_history_note: "Not",
-  willpower_note_placeholder: "Bu süreç hakkında bir not yazın (isteğe bağlı)...",
+  willpower_note_placeholder:
+    "Bu süreç hakkında bir not yazın (isteğe bağlı)...",
   willpower_rank_initiate: "Başlangıç",
-  willpower_rank_initiate_desc: "Her büyük yolculuk küçük bir adımla başlar. Zihnini koru, kararlı ol.",
+  willpower_rank_initiate_desc:
+    "Her büyük yolculuk küçük bir adımla başlar. Zihnini koru, kararlı ol.",
   willpower_rank_iron: "Demir İrade",
-  willpower_rank_iron_desc: "İlk kritik aşamayı geçtin. Zihnindeki sesleri sustur ve yoluna devam et.",
+  willpower_rank_iron_desc:
+    "İlk kritik aşamayı geçtin. Zihnindeki sesleri sustur ve yoluna devam et.",
   willpower_rank_control: "Özdenetim",
-  willpower_rank_control_desc: "Bir haftalık temiz süreci geride bıraktın. Disiplinin meyvelerini vermeye başlıyor.",
+  willpower_rank_control_desc:
+    "Bir haftalık temiz süreci geride bıraktın. Disiplinin meyvelerini vermeye başlıyor.",
   willpower_rank_warrior: "Savaşçı",
-  willpower_rank_warrior_desc: "İki haftadan fazladır savaşıyorsun. Alışkanlıklar kırılıyor, gücünü hisset.",
+  willpower_rank_warrior_desc:
+    "İki haftadan fazladır savaşıyorsun. Alışkanlıklar kırılıyor, gücünü hisset.",
   willpower_rank_knight: "Şövalye",
-  willpower_rank_knight_desc: "Kritik 30 günlük barajı aştın! Kararlılığın herkese ilham veriyor.",
+  willpower_rank_knight_desc:
+    "Kritik 30 günlük barajı aştın! Kararlılığın herkese ilham veriyor.",
   willpower_rank_master: "Üstat",
-  willpower_rank_master_desc: "90 günden fazla süredir iradenin mutlak hakimisin. Zihnin tamamen berrak.",
+  willpower_rank_master_desc:
+    "90 günden fazla süredir iradenin mutlak hakimisin. Zihnin tamamen berrak.",
   view_detox: "Sosyal Medya Detoksu",
   view_kpss: "KPSS Hazırlık",
   detox_title: "Sosyal Medya Detoksu",
@@ -151,7 +162,8 @@ export const tr = {
   detox_btn_enable: "Detoksu Başlat",
   detox_btn_disable: "Detoksu Sonlandır",
   detox_active_title: "Derin Odaklanma Modu",
-  detox_active_desc: "Odaklanma oturumunuz boyunca seçilen sosyal medya kanalları tamamen engellenmiştir.",
+  detox_active_desc:
+    "Odaklanma oturumunuz boyunca seçilen sosyal medya kanalları tamamen engellenmiştir.",
   detox_no_sites_alert: "Lütfen en az bir site seçin.",
   time_remaining: "Kalan Süre",
   detox_duration_15m: "15 Dakika",
@@ -179,8 +191,10 @@ export const tr = {
   google_sync_status_synced: "Google ile Senkronize",
   google_sync_status_offline: "Çevrimdışı (Yerel Kayıt)",
   google_sync_last_synced: "Son yedekleme:",
-  google_sync_success_backup: "Verileriniz Google Drive'a başarıyla yedeklendi!",
-  google_sync_success_restore: "Verileriniz Google Drive'dan başarıyla yüklendi! Sayfa yenileniyor...",
+  google_sync_success_backup:
+    "Verileriniz Google Drive'a başarıyla yedeklendi!",
+  google_sync_success_restore:
+    "Verileriniz Google Drive'dan başarıyla yüklendi! Sayfa yenileniyor...",
   google_sync_error: "Google senkronizasyon hatası!",
   google_sync_no_backup: "Google Drive üzerinde kayıtlı yedek bulunamadı.",
   pomo_tab_timer: "Zamanlayıcı",
@@ -188,7 +202,8 @@ export const tr = {
   pomo_tab_alarms: "Alarmlar",
   pomo_tab_zen: "Odak Bahçesi & Geçmiş",
   zen_garden_title: "Odak Bahçeniz",
-  zen_garden_subtitle: "Odaklanma seanslarınızla bahçenizi yeşertin ve genişletin.",
+  zen_garden_subtitle:
+    "Odaklanma seanslarınızla bahçenizi yeşertin ve genişletin.",
   zen_modal_title: "Tebrikler! Seans Tamamlandı",
   zen_modal_question: "Bugün ne üzerine çalıştınız?",
   zen_modal_placeholder: "Çalışma konusunu yazın... (Örn: Matematik, Kodlama)",
@@ -241,15 +256,19 @@ export const tr = {
   stock_cache_note: "Son güncelleme:",
   view_ai_chat: "AI Asistan",
   ai_chat_title: "Life OS Yapay Zeka Asistanı",
-  ai_chat_placeholder: "Bir mesaj yazın (Örn: ayın 20'sine görev oluştur: Kimya çalış)...",
+  ai_chat_placeholder:
+    "Bir mesaj yazın (Örn: ayın 20'sine görev oluştur: Kimya çalış)...",
   ai_chat_key_title: "Gemini API Anahtarı",
   ai_chat_key_placeholder: "API Anahtarını buraya yapıştırın...",
   ai_chat_key_save: "Kaydet",
   ai_chat_key_saved: "Anahtar Kaydedildi ✓",
-  ai_chat_key_info: "Hizmeti kullanabilmek için bir Gemini API Anahtarı girebilirsiniz. Anahtarınız tarayıcınızda güvenle saklanır.",
-  ai_chat_no_key_warning: "API anahtarı bulunamadı. Yerel Akıllı Komut modu aktif. (Kullanılabilir: ayın X'ine görev oluştur: [Metin], vb.)",
+  ai_chat_key_info:
+    "Hizmeti kullanabilmek için bir Gemini API Anahtarı girebilirsiniz. Anahtarınız tarayıcınızda güvenle saklanır.",
+  ai_chat_no_key_warning:
+    "API anahtarı bulunamadı. Yerel Akıllı Komut modu aktif. (Kullanılabilir: ayın X'ine görev oluştur: [Metin], vb.)",
   ai_chat_send: "Gönder",
-  ai_chat_welcome: "Merhaba! Ben Life OS asistanınız. Size görevlerinizi yönetmede ve takviminizi güncellemede yardımcı olabilirim. Ne yapmak istersiniz?",
+  ai_chat_welcome:
+    "Merhaba! Ben Life OS asistanınız. Size görevlerinizi yönetmede ve takviminizi güncellemede yardımcı olabilirim. Ne yapmak istersiniz?",
   ai_chat_suggestion_1: "ayın 20sine görev oluştur: Kimya Çalış",
   ai_chat_suggestion_2: "yarın fizik sınavı için hatırlatıcı ekle",
   ai_chat_suggestion_3: "25 Temmuz için görev oluştur: Dişçi Randevusu",
@@ -257,12 +276,21 @@ export const tr = {
   settings_ai_provider: "AI Sağlayıcısı",
   settings_ai_key: "API Anahtarı",
   settings_ai_model: "Model Adı",
-  settings_ai_model_desc: "Boş bırakılırsa varsayılan model kullanılır. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
+  settings_ai_model_desc:
+    "Boş bırakılırsa varsayılan model kullanılır. (Gemini: gemini-1.5-flash, OpenRouter: google/gemini-2.5-flash)",
   settings_tab_general: "Genel",
   settings_tab_kpss: "KPSS",
   settings_tab_detox: "Detoks",
   settings_tab_ai: "AI Asistan",
   settings_tab_sync: "Eşitleme & Yedek",
+  settings_error_reporting_title: "Hata Raporlama",
+  settings_error_reporting_desc:
+    "Loglar yalnızca cihazında saklanır, hiçbir yere gönderilmez.",
+  settings_error_reporting_download: "Logları İndir (.md)",
+  settings_error_reporting_clear: "Logları Temizle",
+  settings_error_reporting_count: "{count} log kaydı",
+  settings_error_reporting_cleared: "Loglar temizlendi",
+  settings_error_reporting_empty: "Henüz log kaydı yok",
   srs_review_title: "Gözden Geçirilecekler",
   srs_no_words: "Çalışılacak Kelime Kalmadı!",
   srs_great_job: "Harika İş!",
@@ -286,11 +314,14 @@ export const tr = {
   settings_kpss_target_score_short: "Puan",
   settings_kpss_notes_wiki: "KPSS Ders Notları & Wiki",
   settings_kpss_auto_title: "Otomatik İlk Kelime Başlığı",
-  settings_kpss_auto_title_desc: "Ders notu yazarken başlık alanı boş bırakılırsa sadece ilk kelimeyi otomatik başlık yapar.",
+  settings_kpss_auto_title_desc:
+    "Ders notu yazarken başlık alanı boş bırakılırsa sadece ilk kelimeyi otomatik başlık yapar.",
   settings_kpss_data_reset: "Veri Sıfırlama",
-  settings_kpss_data_reset_desc: "Tüm KPSS konu tamamlama verilerinizi, günlük soru/video istatistiklerinizi, SRS tekrar kartlarınızı ve çıkmış sınav test geçmişinizi sıfırlar.",
+  settings_kpss_data_reset_desc:
+    "Tüm KPSS konu tamamlama verilerinizi, günlük soru/video istatistiklerinizi, SRS tekrar kartlarınızı ve çıkmış sınav test geçmişinizi sıfırlar.",
   settings_kpss_reset_button: "Tüm KPSS Verilerini Sıfırla",
-  settings_kpss_net_score_info: "KPSS GK-GY puan türlerinde 80 Puan alabilmek için ortalama sınav zorluğuna göre 70-75 Net yapılması yeterli olabilmektedir. Net ve Puan birebir eşit değildir, standart sapma formüllere dahildir.",
+  settings_kpss_net_score_info:
+    "KPSS GK-GY puan türlerinde 80 Puan alabilmek için ortalama sınav zorluğuna göre 70-75 Net yapılması yeterli olabilmektedir. Net ve Puan birebir eşit değildir, standart sapma formüllere dahildir.",
   kpss_tab_progress: "Konular & İlerleme",
   kpss_tab_notes: "KPSS Ders Notları",
   kpss_tab_srs: "KPSS Bilgi Kartları (SRS)",
@@ -319,8 +350,10 @@ export const tr = {
   kpss_planner_title: "KPSS Günlük Konu Planlayıcı",
   kpss_planner_how_works: "Sistem Nasıl Çalışır?",
   kpss_planner_info_title: "KPSS Planlayıcı Nasıl Çalışır?",
-  kpss_planner_all_done: "Tebrikler! Tüm KPSS konularını başarıyla tamamladınız.",
-  kpss_planner_desc: "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular (Başlatmak için tıklayın):",
+  kpss_planner_all_done:
+    "Tebrikler! Tüm KPSS konularını başarıyla tamamladınız.",
+  kpss_planner_desc:
+    "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular (Başlatmak için tıklayın):",
   kpss_status_working: "Çalışılıyor",
   kpss_status_not_started: "Başlanmadı",
   kpss_days_left: "Kalan Gün:",
@@ -368,7 +401,8 @@ export const tr = {
   kpss_sort_completion: "Tamamlanma Durumu",
   kpss_header_title: "KPSS Hazırlık",
   kpss_quiz_questions: "Soru",
-  kpss_quiz_error: "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin.",
+  kpss_quiz_error:
+    "Sınav soruları oluşturulurken yapay zekâ bir hata verdi. Lütfen tekrar deneyin.",
   kpss_quiz_no_past: "Bu kategori için çıkmış soru bulunamadı.",
   kpss_quiz_error_title: "Hata",
   kpss_subject_history: "Tarih",
@@ -386,12 +420,14 @@ export const tr = {
   settings_ai_select_model_placeholder: "Bir model seçin",
   settings_ai_models_auto_list: "Mevcut modeller otomatik listelenecektir.",
   settings_ai_active_id: "Aktif / Özel Model Kimliği:",
-  settings_ai_active_id_desc: "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz.",
+  settings_ai_active_id_desc:
+    "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz.",
   settings_ai_show_thinking: "Düşünme Sürecini (Thinking) Göster:",
   settings_ai_combos: "9Router Kombinasyonları (Combos)",
   settings_ai_hide: "Gizle",
   settings_ai_show: "Göster",
-  settings_ai_endpoint_desc: "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)",
+  settings_ai_endpoint_desc:
+    "Örn: http://localhost:20128/v1 (9Router varsayılan adresi)",
   settings_ai_loading: "Yükleniyor...",
   settings_ai_fetch_models: "Modelleri Getir",
   settings_sync_data_manual: "Veri Yönetimi (Manuel)",
@@ -435,13 +471,15 @@ export const tr = {
   stock_daily_change: "Günlük Değişim",
   stock_active_rules: "Alarmlar & Takip",
   stock_no_portfolio: "Portföyünüzde henüz hisse bulunmuyor.",
-  stock_no_watchlist: "Henüz bir takip listeniz yok. 'Takip Listelerim' sekmesinden yeni liste oluşturabilirsiniz.",
+  stock_no_watchlist:
+    "Henüz bir takip listeniz yok. 'Takip Listelerim' sekmesinden yeni liste oluşturabilirsiniz.",
   stock_load_more: "Daha Fazla BİST Hissesi Yükle",
   stock_ai_featured_title: "✦ AI Haftalık Öne Çıkan BİST Hisseleri",
   popup_detox_tab_title: "Detoks & Süre Sınırı",
   view_arcade: "Oyunlar (Life OS Arcade)",
   arcade_main_title: "Oyun Kütüphanesi & Laboratuvarı",
-  arcade_subtitle: "Kendi geliştirdiğin oyun projelerini ve hazır mini oyunları tek bir yerde yönet, oyna ve geliştir.",
+  arcade_subtitle:
+    "Kendi geliştirdiğin oyun projelerini ve hazır mini oyunları tek bir yerde yönet, oyna ve geliştir.",
   arcade_search_placeholder: "Oyunlarda veya projelerde ara...",
   arcade_cat_all: "Tüm Oyunlar",
   arcade_cat_playable: "Oynanabilir",
@@ -465,13 +503,17 @@ export const tr = {
   eisenhower_kanban_title: "Kanban Tahtası",
   confirm_cancel: "İptal",
   confirm_ok: "Tamam",
-  eisenhower_quadrant: "Eisenhower matrisi çeyrek kartı (Sürükle-bırak desteği ve görev listesi)",
-  eisenhower_unclassified_panel: "Eisenhower matrisi henüz sınıflandırılmamış görevler yan paneli",
+  eisenhower_quadrant:
+    "Eisenhower matrisi çeyrek kartı (Sürükle-bırak desteği ve görev listesi)",
+  eisenhower_unclassified_panel:
+    "Eisenhower matrisi henüz sınıflandırılmamış görevler yan paneli",
   notes_filter_bar: "Notlar üst filtre barı",
   notes_header_bar: "Notlar üst başlık çubuğu",
   free_games_filter_bar: "Oyun fırsatları üst filtre barı",
-  free_games_was_it_free_tab: "Epic Games geçmiş ücretsiz oyun sorgulama sekmesi",
-  free_games_view_title: "Ücretsiz Oyun Fırsatları ve Epic Games Geçmiş Sorgulama Ekranı",
+  free_games_was_it_free_tab:
+    "Epic Games geçmiş ücretsiz oyun sorgulama sekmesi",
+  free_games_view_title:
+    "Ücretsiz Oyun Fırsatları ve Epic Games Geçmiş Sorgulama Ekranı",
   free_games_quick_claim: "Hızlı Talep Sayfaları:",
   free_games_no_match: "Eşleşen fırsat bulunamadı.",
   free_games_permanent: "Kalıcı / Süresiz",
@@ -492,7 +534,8 @@ export const tr = {
   ipo_exchange_code: "Borsa Kodu",
   chart_close: "Kapat",
   halka_arz_view_title: "Aktif, Yaklaşan ve Geçmiş Halka Arz Takibi Filtreleme",
-  bist_view_title: "Midas Tarzı BIST Borsa OS, Halka Arz Takvimi ve Portföy Yönetim Ekranı",
+  bist_view_title:
+    "Midas Tarzı BIST Borsa OS, Halka Arz Takvimi ve Portföy Yönetim Ekranı",
   detox_custom_address_block: "Özel Adres Engelle (Manuel)",
   detox_custom_placeholder: "Örn: reddit.com, linkedin.com...",
   detox_what_could_you_do: "Bu Süreyle Ne Yapabilirdin?",
@@ -557,7 +600,8 @@ export const tr = {
   arcade_importing: "Oyun Klasörleri Taranıyor...",
   arcade_loading: "Oyun Kütüphanesi Yükleniyor...",
   arcade_no_games: "Henüz Taranmış Oyun Bulunamadı",
-  arcade_no_games_hint: "Sağ üstteki Klasör Tara butonuna basıp projelerini otomatik yükle.",
+  arcade_no_games_hint:
+    "Sağ üstteki Klasör Tara butonuna basıp projelerini otomatik yükle.",
   arcade_scan_folder: "Klasör Tara",
   arcade_add_custom: "Özel Oyun Ekle",
   arcade_game_name: "Oyun Adı",
@@ -566,7 +610,8 @@ export const tr = {
   arcade_game_url: "Oyun URL'si",
   arcade_badge_title: "Life OS Arcade & Oyun Geliştirme Hub",
   arcade_copy_cmd: "Komutu Kopyala",
-  arcade_cmd_copied: "✓ Komut panoya kopyalandı! Terminal açıp (Ctrl+V) ile oyunu başlatın.",
+  arcade_cmd_copied:
+    "✓ Komut panoya kopyalandı! Terminal açıp (Ctrl+V) ile oyunu başlatın.",
   arcade_open_in_tab: "🚀 Sekmede Aç ↗",
   arcade_save_port: "Portu Kaydet",
   arcade_score_label: "Skor:",
@@ -575,7 +620,8 @@ export const tr = {
   arcade_details_title: "Steam Dev Detayları",
   arcade_delete_title: "Oyunu Kütüphaneden Sil",
   arcade_import_folder_btn: "Klasör Tara",
-  arcade_dev_notes_placeholder: "Oyun güncellemeleri, tasarım fikirleri ve mekanik notları...",
+  arcade_dev_notes_placeholder:
+    "Oyun güncellemeleri, tasarım fikirleri ve mekanik notları...",
   arcade_todo_placeholder: "Yeni yapılacak görev ekle...",
   arcade_dev_path_title: "Proje Klasör Yolu (In Progress)",
   arcade_tech_title: "Kullanılan Teknolojiler & Kütüphaneler",
@@ -585,33 +631,44 @@ export const tr = {
   arcade_cancel_btn: "İptal",
   arcade_save_to_library_btn: "Kütüphaneye Kaydet",
   arcade_localhost_warning: "⚠️ localhost bağlanmayı reddetti mi?",
-  arcade_localhost_help: "Oyunu oynayabilmek için projenin yerel sunucusunu (Vite / React / Node) başlatmanız gerekir.",
-  arcade_dev_proj_desc: "Bu proje yerel geliştirme sunucusu (localhost) üzerinden çalıştırılır.",
+  arcade_localhost_help:
+    "Oyunu oynayabilmek için projenin yerel sunucusunu (Vite / React / Node) başlatmanız gerekir.",
+  arcade_dev_proj_desc:
+    "Bu proje yerel geliştirme sunucusu (localhost) üzerinden çalıştırılır.",
   arcade_high_score_label: "En Yüksek:",
   arcade_score_label_short: "Skor:",
   arcade_importing_btn: "İmport ediliyor...",
   arcade_iframe_error: "Oyun Yüklenemedi",
-  arcade_iframe_error_hint: "Oyun klasörü içinde dist/index.html bulunamadı. Lütfen önce npm run build çalıştırıp tekrar deneyin.",
+  arcade_iframe_error_hint:
+    "Oyun klasörü içinde dist/index.html bulunamadı. Lütfen önce npm run build çalıştırıp tekrar deneyin.",
   arcade_close: "Kapat",
   arcade_dev_notes_saved: "✓ Geliştirici notları kaydedildi.",
   arcade_todo_prompt: "Yeni yapılacak görev nedir?",
   arcade_todo_add: "Görev Ekle",
-  arcade_delete_confirm: "Bu oyunu kütüphaneden silmek istediğinize emin misiniz? (Klasör dosyaları etkilenmez, sadece Arcade kaydı silinir)",
+  arcade_delete_confirm:
+    "Bu oyunu kütüphaneden silmek istediğinize emin misiniz? (Klasör dosyaları etkilenmez, sadece Arcade kaydı silinir)",
   arcade_status_archived: "Arşivlendi",
   arcade_folder_path_label: "Kaynak Klasör",
-  arcade_folder_path_hint: "Bu klasör, içerik tarayıcı tarafından saklanır. Konum değişirse veya silinirse erişim kopabilir.",
+  arcade_folder_path_hint:
+    "Bu klasör, içerik tarayıcı tarafından saklanır. Konum değişirse veya silinirse erişim kopabilir.",
   arcade_save: "Kaydet",
   arcade_mode_dist: "🏗️ Build (dist)",
   arcade_mode_dev: "🛠️ Geliştirme (npm run dev)",
   arcade_permission_needed: "Klasör erişimi yeniden gerekli.",
-  arcade_permission_denied: "Erişim reddedildi. Tekrar denemek için klasörü yeniden seçmeniz gerekebilir.",
+  arcade_permission_denied:
+    "Erişim reddedildi. Tekrar denemek için klasörü yeniden seçmeniz gerekebilir.",
   arcade_grant_permission: "Klasör Erişimini Onayla",
   arcade_dev_mode_title: "Geliştirme Modu Aktif",
-  arcade_dev_mode_hint: "Bu oyun için dist build çıktısı bulunamadı. Oynamak için:",
-  arcade_dev_mode_note: "Oyun başladıktan sonra buradaki Oyna sekmesine dönüp iframe'i yenileyebilirsiniz. Veya steam dev log'a not alabilirsiniz.",
-  arcade_browser_no_support: "Tarayıcınız File System Access API'ı desteklemiyor. Lütfen Chrome 86+ veya Edge güncel sürümünü kullanın.",
-  arcade_import_success_dist: "✓ Oyun başarıyla içeri aktarıldı (dist build). Hemen oynayabilirsiniz.",
-  arcade_import_success_dev: "✓ Klasör içeri aktarıldı. dist/ klasörü bulunamadı, dev modu için npm run dev çalıştırın.",
+  arcade_dev_mode_hint:
+    "Bu oyun için dist build çıktısı bulunamadı. Oynamak için:",
+  arcade_dev_mode_note:
+    "Oyun başladıktan sonra buradaki Oyna sekmesine dönüp iframe'i yenileyebilirsiniz. Veya steam dev log'a not alabilirsiniz.",
+  arcade_browser_no_support:
+    "Tarayıcınız File System Access API'ı desteklemiyor. Lütfen Chrome 86+ veya Edge güncel sürümünü kullanın.",
+  arcade_import_success_dist:
+    "✓ Oyun başarıyla içeri aktarıldı (dist build). Hemen oynayabilirsiniz.",
+  arcade_import_success_dev:
+    "✓ Klasör içeri aktarıldı. dist/ klasörü bulunamadı, dev modu için npm run dev çalıştırın.",
   aichat_offline_mode: "Çevrimdışı/Komut Modu",
   aichat_web_search_on: "Google Canlı Arama: AÇIK",
   aichat_web_search_off: "Google Canlı Arama: KAPALI",
@@ -622,35 +679,51 @@ export const tr = {
   aichat_sources: "İncelenen ve Doğrulanan Web Kaynakları ({count}):",
   aichat_search_query: 'Google AI Arama: "{query}"',
   aichat_verified_badge: "Google AI Canlı Doğrulandı",
-  aichat_web_search_active: "Google Canlı İnternet Arama & Araştırma Yapılıyor...",
+  aichat_web_search_active:
+    "Google Canlı İnternet Arama & Araştırma Yapılıyor...",
   aichat_sources_show: "▲ Kaynaklar",
   aichat_sources_hide: "▼ Gizle",
-  aichat_added_note_success: 'Harika! İstediğiniz {type_label} Günlüğüm sekmesine başarıyla ekledim. ✓',
-  aichat_added_stock_success: '📈 Harika! {lot_count} lot {display_name} ({symbol}) ₺{price} fiyattan BIST portföyünüze başarıyla eklendi! ✓',
-  aichat_added_task_success: 'Tamamdır! "{task_text}" görevini{date_part} takviminize ekledim. ✓',
-  aichat_connection_error: 'Yapay zeka servisine bağlanırken bir sorun oluştu: {error_msg}',
-  aichat_fallback_added_note: '[Yerel Fallback] İstediğiniz {type_label} Günlüğüm sekmesine ekledim. ✓',
-  aichat_fallback_added_task: '[Yerel Fallback] "{task_text}" görevini{date_part} ekledim. ✓',
-  aichat_parse_failed: "Üzgünüm, bu komutu yerel olarak çözümleyemedim. Lütfen 'günlük ekle: ...', 'not ekle: ...' veya 'ders notu ekle: ...' formatında yazmayı deneyin.",
-  aichat_type_label_cornell: 'Cornell ders notunu',
-  aichat_type_label_diary: 'günlük yazısını',
-  aichat_type_label_note: 'notu',
+  aichat_added_note_success:
+    "Harika! İstediğiniz {type_label} Günlüğüm sekmesine başarıyla ekledim. ✓",
+  aichat_added_stock_success:
+    "📈 Harika! {lot_count} lot {display_name} ({symbol}) ₺{price} fiyattan BIST portföyünüze başarıyla eklendi! ✓",
+  aichat_added_task_success:
+    'Tamamdır! "{task_text}" görevini{date_part} takviminize ekledim. ✓',
+  aichat_connection_error:
+    "Yapay zeka servisine bağlanırken bir sorun oluştu: {error_msg}",
+  aichat_fallback_added_note:
+    "[Yerel Fallback] İstediğiniz {type_label} Günlüğüm sekmesine ekledim. ✓",
+  aichat_fallback_added_task:
+    '[Yerel Fallback] "{task_text}" görevini{date_part} ekledim. ✓',
+  aichat_parse_failed:
+    "Üzgünüm, bu komutu yerel olarak çözümleyemedim. Lütfen 'günlük ekle: ...', 'not ekle: ...' veya 'ders notu ekle: ...' formatında yazmayı deneyin.",
+  aichat_type_label_cornell: "Cornell ders notunu",
+  aichat_type_label_diary: "günlük yazısını",
+  aichat_type_label_note: "notu",
   aichat_web_research: "Web Araştırması",
   kpss_planner_close: "Kapat",
-  kpss_planner_how_step1: "<strong>1. Kalan Gün Hesabı:</strong> Sınav tarihi (6 Eylül 2026) ile bugün arasındaki kalan gün sayısını hesaplar.",
-  kpss_planner_how_step2: "<strong>2. Konu Dağıtımı:</strong> Henüz tamamlanmamış (durumu \"Tamamlandı\" olmayan) tüm konularınızı kalan gün sayısına dengeli bir şekilde böler ve her güne eşit iş yükü çıkarır.",
-  kpss_planner_how_step3: "<strong>3. Günlük Çalışma Hızı:</strong> Kalan toplam konu sayısının kalan gün sayısına oranıdır (Konu/Gün). Bu oran 1.5'in üstündeyse mor, 3.0'ın üstündeyse kırmızı renkli uyarı gösterilir.",
-  kpss_planner_how_step4: "<strong>4. Günlük Soru Hedefi:</strong> Ayarlarda belirlediğiniz hedef nete ulaşabilmeniz için çözmeniz gereken toplam soru sayısı KPSS konu ağırlıklarına göre dağıtılır. Günlük soru hedefiniz: <br /><code style=\"background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px\">(Kalan Hedef Soru / Kalan Gün Sayısı)</code> formülüyle dinamik olarak her gün güncellenir.",
+  kpss_planner_how_step1:
+    "<strong>1. Kalan Gün Hesabı:</strong> Sınav tarihi (6 Eylül 2026) ile bugün arasındaki kalan gün sayısını hesaplar.",
+  kpss_planner_how_step2:
+    '<strong>2. Konu Dağıtımı:</strong> Henüz tamamlanmamış (durumu "Tamamlandı" olmayan) tüm konularınızı kalan gün sayısına dengeli bir şekilde böler ve her güne eşit iş yükü çıkarır.',
+  kpss_planner_how_step3:
+    "<strong>3. Günlük Çalışma Hızı:</strong> Kalan toplam konu sayısının kalan gün sayısına oranıdır (Konu/Gün). Bu oran 1.5'in üstündeyse mor, 3.0'ın üstündeyse kırmızı renkli uyarı gösterilir.",
+  kpss_planner_how_step4:
+    '<strong>4. Günlük Soru Hedefi:</strong> Ayarlarda belirlediğiniz hedef nete ulaşabilmeniz için çözmeniz gereken toplam soru sayısı KPSS konu ağırlıklarına göre dağıtılır. Günlük soru hedefiniz: <br /><code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">(Kalan Hedef Soru / Kalan Gün Sayısı)</code> formülüyle dinamik olarak her gün güncellenir.',
   kpss_past_exams_title: "ÖSYM Çıkmış Sorular Sınav Salonu",
-  kpss_past_exams_desc: "Yıllara göre orijinal çıkmış KPSS Lisans sorularını veya tüm yılların karışımından oluşan karma denemeleri çözün.",
-  kpss_quiz_generating: "Yapay Zekâ seviye tespit sorularını oluşturuyor. Lütfen bekleyin...",
+  kpss_past_exams_desc:
+    "Yıllara göre orijinal çıkmış KPSS Lisans sorularını veya tüm yılların karışımından oluşan karma denemeleri çözün.",
+  kpss_quiz_generating:
+    "Yapay Zekâ seviye tespit sorularını oluşturuyor. Lütfen bekleyin...",
   kpss_quiz_no_solution: "Çözüm bilgisi bulunmuyor.",
   kpss_quiz_next: "Sonraki",
   kpss_quiz_next_loading: "Sonraki (Yükleniyor...)",
   kpss_quiz_your_answer: " (Sizin Cevabınız)",
   kpss_quiz_correct_answer: " (Doğru Cevap)",
-  kpss_quiz_proficiency_result: "Bu konuda %{score}% oranında yetkinlik gösterdiniz.",
-  kpss_quiz_status_completed: "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi.",
+  kpss_quiz_proficiency_result:
+    "Bu konuda %{score}% oranında yetkinlik gösterdiniz.",
+  kpss_quiz_status_completed:
+    "Tebrikler! Konu 'Tamamlandı' olarak işaretlendi.",
   kpss_quiz_status_working: "Konu 'Çalışılıyor' durumuna getirildi.",
   kpss_quiz_status_not_started: "Konu 'Çalışılmadı' olarak sıfırlandı.",
   kpss_srs_preparing: "Tekrar kartları hazırlanıyor...",
@@ -693,21 +766,29 @@ export const tr = {
   stock_analysis_morning_report: "Sabah BİST Açılış & Takip Listesi Raporu",
   stock_analysis_report_generating: "Rapor Hazırlanıyor...",
   stock_analysis_report_generate: "Rapor Oluştur",
-  stock_analysis_report_error: "Rapor oluşturulurken bir hata meydana geldi. Lütfen Router / AI ayarlarınızı kontrol edin.",
-  stock_analysis_query_error: "Danışman sorgusu yanıtlanamadı. Lütfen AI ayarlarınızı kontrol edin.",
-  stock_analysis_prompt_advisor_default: "{symbol} hissesini almayı düşünüyorum. Şirketin genel seyri, riskleri ve dikkat edilmesi gereken konular hakkında ne düşünüyorsun?",
+  stock_analysis_report_error:
+    "Rapor oluşturulurken bir hata meydana geldi. Lütfen Router / AI ayarlarınızı kontrol edin.",
+  stock_analysis_query_error:
+    "Danışman sorgusu yanıtlanamadı. Lütfen AI ayarlarınızı kontrol edin.",
+  stock_analysis_prompt_advisor_default:
+    "{symbol} hissesini almayı düşünüyorum. Şirketin genel seyri, riskleri ve dikkat edilmesi gereken konular hakkında ne düşünüyorsun?",
   stock_ai_report_tab_digest: "Günlük / Haftalık AI Borsa Özeti",
   stock_ai_report_tab_advisor: "Yatırım & Alım Karar Asistanı",
   stock_ai_report_title: "🤖 AI Portföy & Piyasa Sağlık Raporu",
-  stock_ai_report_desc: "9Router AI altyapısıyla portföyünüzün genel durumunu tek tıkla Türkçe sade bir özet olarak alın.",
-  stock_ai_report_analyzing: "9Router AI portföy verilerini ve piyasayı analiz ediyor...",
-  stock_ai_report_empty: 'Henüz rapor oluşturulmadı. Yukarıdaki "Rapor Oluştur" butonuna basarak anlık piyasa özetinizi alabilirsiniz.',
+  stock_ai_report_desc:
+    "9Router AI altyapısıyla portföyünüzün genel durumunu tek tıkla Türkçe sade bir özet olarak alın.",
+  stock_ai_report_analyzing:
+    "9Router AI portföy verilerini ve piyasayı analiz ediyor...",
+  stock_ai_report_empty:
+    'Henüz rapor oluşturulmadı. Yukarıdaki "Rapor Oluştur" butonuna basarak anlık piyasa özetinizi alabilirsiniz.',
   stock_ai_advisor_title: "💡 Alım & Yatırım Karar Asistanı",
-  stock_ai_advisor_desc: "Yeni bir hisse almadan veya karar vermeden önce hisse kodunu yazarak 9Router AI'dan sade değerlendirme alın.",
+  stock_ai_advisor_desc:
+    "Yeni bir hisse almadan veya karar vermeden önce hisse kodunu yazarak 9Router AI'dan sade değerlendirme alın.",
   stock_ai_advisor_symbol_label: "Hisse Sembolü",
   stock_ai_advisor_symbol_placeholder: "Örn: KRDMD, SASA, EREGL",
   stock_ai_advisor_question_label: "Özel Soru (İsteğe Bağlı)",
-  stock_ai_advisor_question_placeholder: "Örn: Bu hisseyi 1 ay tutmak riskli mi?",
+  stock_ai_advisor_question_placeholder:
+    "Örn: Bu hisseyi 1 ay tutmak riskli mi?",
   stock_ai_advisor_analyzing: "AI {symbol} hissesini değerlendiriyor...",
   stock_rule_title: "Kural Ekle",
   stock_rule_condition: "Koşul",
@@ -743,7 +824,8 @@ export const tr = {
   stock_news_no_news: "Haber bulunamadı.",
   stock_kap_news_title: "📰 KAP & BIST Şirket Haberleri",
   stock_kap_news_loading: "Resmi KAP haberleri yükleniyor...",
-  stock_kap_news_empty: "Takip ettiğiniz hisselere ait yeni bir KAP bildirimi bulunamadı.",
+  stock_kap_news_empty:
+    "Takip ettiğiniz hisselere ait yeni bir KAP bildirimi bulunamadı.",
   stock_kap_news_show_detail: "KAP Açıklamasını Göster",
   stock_kap_news_ai_analysis_title: "AI Haber Analiz Özeti",
   stock_kap_news_analysis_error: "⚠️ Analiz oluşturulamadı: {message}",
@@ -785,7 +867,8 @@ export const tr = {
   stock_tab_analysis: "AI Analizi",
   stock_tab_news: "KAP Haberleri",
   stock_analysis_for_symbol: "AI Borsa Analizi — {symbol}",
-  stock_analysis_analyzing_symbol: "Yapay zeka {symbol} hissesini ve canlı piyasa verilerini analiz ediyor...",
+  stock_analysis_analyzing_symbol:
+    "Yapay zeka {symbol} hissesini ve canlı piyasa verilerini analiz ediyor...",
   stock_bist_label: "BIST",
   stock_featured_score_bull_high: "90/100 🐂 Boğa",
   stock_featured_score_bull: "75/100 🐂 Boğa",
@@ -842,10 +925,13 @@ export const tr = {
   notes_editor_type_cornell: "Ders Notu",
   notes_editor_diary_placeholder: "Bugün nasıl hissediyorsun? veya Başlık...",
   notes_editor_cues_label: "Anahtar Kelimeler / Sorular (Cues):",
-  notes_editor_cues_placeholder: "Temel fikirler, anahtar kelimeler veya olası sınav sorularını buraya yazın...",
+  notes_editor_cues_placeholder:
+    "Temel fikirler, anahtar kelimeler veya olası sınav sorularını buraya yazın...",
   notes_editor_notes_label: "Not Alma Alanı (Notes):",
-  notes_editor_notes_placeholder: "Ders esnasındaki ayrıntılı notlarınızı, [[İç Bağlantı]] ve #kpss/tarih etiketlerinizi yazın...",
-  notes_editor_summary_placeholder: "Bu çalışma sayfasındaki bilgilerin kısa ve net bir özetini buraya yazın...",
+  notes_editor_notes_placeholder:
+    "Ders esnasındaki ayrıntılı notlarınızı, [[İç Bağlantı]] ve #kpss/tarih etiketlerinizi yazın...",
+  notes_editor_summary_placeholder:
+    "Bu çalışma sayfasındaki bilgilerin kısa ve net bir özetini buraya yazın...",
   notes_editor_diary_content_placeholder: "Sevgili günlük, bugün...",
   notes_filter_notes: "Notlar",
   notes_filter_diary: "Günlükler",
@@ -915,25 +1001,31 @@ export const tr = {
   kpss_chart_target_q: "Hedef Soru",
   kpss_chart_target_v: "Hedef Video",
   popup_volume_label: "Ses Boost",
-  willpower_clear_history_confirm: "Süreç geçmişini tamamen temizlemek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  willpower_clear_history_confirm:
+    "Süreç geçmişini tamamen temizlemek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
   alert_kpss_reset_success: "KPSS verileri başarıyla sıfırlandı!",
-  confirm_msg_clear_all_data: "Tüm verileriniz kalıcı olarak silinecektir. Emin misiniz?",
-  confirm_msg_reset_kpss_data: "Tüm KPSS çalışma verileriniz, test sonuçlarınız ve istatistikleriniz sıfırlanacaktır. Emin misiniz?",
+  confirm_msg_clear_all_data:
+    "Tüm verileriniz kalıcı olarak silinecektir. Emin misiniz?",
+  confirm_msg_reset_kpss_data:
+    "Tüm KPSS çalışma verileriniz, test sonuçlarınız ve istatistikleriniz sıfırlanacaktır. Emin misiniz?",
   kpss_completed: "Tebrikler, bitti!",
   kpss_exam_started: "Sınav Başladı!",
   kpss_time_format: "{days} Gün, {hours} Saat, {mins} Dk, {secs} Sn",
   note_cornell_title: "Ders Notu - {date}",
   note_diary_title: "Günlük - {date}",
   note_title: "Not - {date}",
-  notif_calendar_msg: "Bugün tamamlamanız gereken {count} adet görev bulunuyor. Görmek için tıklayın!",
+  notif_calendar_msg:
+    "Bugün tamamlamanız gereken {count} adet görev bulunuyor. Görmek için tıklayın!",
   notif_calendar_title: "Bugün Yapılacak Görevleriniz Var",
   notif_free_game_msg: "Değeri: {worth}. Almak için tıkla!",
   notif_free_game_title: "Ücretsiz Oyun: {title}",
   stock_chart_hover_hint: "Detay görmek için imleci grafik üzerine getirin.",
-  stock_chart_no_data_hint: "Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır.",
+  stock_chart_no_data_hint:
+    "Bu hisse henüz Borsa İstanbul'da ilk işlem gününe başlamadığı için tarihsel mum verileri açılış günüyle birlikte canlı çizilmeye başlayacaktır.",
   sync_detail_label: "Detay",
   /* DETOX MOTIVATIONAL KEYS */
-  detox_motiv_unlimited_focus: "Süresiz Odaklanma: Tüm hedeflerini başarmak için önünde sınırsız zaman var!",
+  detox_motiv_unlimited_focus:
+    "Süresiz Odaklanma: Tüm hedeflerini başarmak için önünde sınırsız zaman var!",
   detox_motiv_kpss_questions: "$count KPSS / Test Sorusu Çözebilirdin",
   detox_motiv_book_pages: "$count Sayfa Kitap Okuyabilirdin",
   detox_motiv_pomodoro: "$count Odaklanmış Pomodoro Tamamlayabilirdin",
@@ -944,7 +1036,8 @@ export const tr = {
   agent_tool_filled_form_fields: "✓ $count adet form alanı dolduruldu.",
   agent_tool_typing_label: "$count yazma",
   agent_tool_click_label: "$count tıklama",
-  agent_tool_executed_template: "✓ $count adet işlem başarıyla yürütüldü ($details).",
+  agent_tool_executed_template:
+    "✓ $count adet işlem başarıyla yürütüldü ($details).",
 
   /* AGENT TOOL SINGLE ACTION KEYS */
   agent_tool_clicked: '✓ "$target" bağlantısına/sekmesine tıklandı.',
@@ -958,11 +1051,13 @@ export const tr = {
   agent_tool_element: "Öğe",
 
   /* STOCK REPORT PROMPT KEY */
-  stock_report_user_prompt: "Portföyümün bugünkü/bu haftaki genel durumunu, risklerini ve dikkat edilmesi gereken konuları Türkçe sade bir gazete özeti olarak çıkar.",
+  stock_report_user_prompt:
+    "Portföyümün bugünkü/bu haftaki genel durumunu, risklerini ve dikkat edilmesi gereken konuları Türkçe sade bir gazete özeti olarak çıkar.",
 
   // -- SidePanelApp keys --
   answer_language: "Türkçe",
-  agent_analyze_desc: "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
+  agent_analyze_desc:
+    "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
   agent_ready: "Life OS Agent Hazır",
   agent_thinking: "Yapay zeka yanıtlıyor...",
   autofill_form: "Formu Doldur (memory.md)",
@@ -974,9 +1069,11 @@ export const tr = {
   copy_label_copied: "Kopyalandı",
   copy_title: "Metni Kopyala",
   copy_title_copied: "Kopyalandı!",
-  empty_desc: "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
+  empty_desc:
+    "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
   executing_actions: "Aksiyon yürütülüyor ({count} işlem)...",
-  failed_response: "Yanıt alınamadı. Lütfen Ayarlar'dan API Anahtarınızı kontrol edin.",
+  failed_response:
+    "Yanıt alınamadı. Lütfen Ayarlar'dan API Anahtarınızı kontrol edin.",
   input_placeholder: "Sayfa hakkında soru yazın veya sesli komut verin...",
   listening_placeholder: "Konuşun, dinleniyor...",
   listening_tooltip: "Dinleniyor...",
@@ -988,9 +1085,12 @@ export const tr = {
   prompt_ask: "Bu sayfa ne anlatıyor ve ne amaçla yazılmıştır?",
   prompt_extract: "Bu sayfadaki önemli veri veya listeleri çıkar.",
   prompt_summarize: "Bu sayfayı 3 ana maddede özetle.",
-  prompt_takeaways: "Bu sayfadaki en önemli çıkarımları ve eylem maddelerini yaz.",
-  prompt_yt_quiz: "Bu YouTube videosunun içeriğini/transkriptini incele. Konuyu pekiştirmek için video içeriğinden 5 soruluk çoktan seçmeli (A, B, C, D seçenekli) soru testi oluştur ve en alt kısımda cevap anahtarı ile açıklamalarını ver.",
-  prompt_yt_summarize: "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar.",
+  prompt_takeaways:
+    "Bu sayfadaki en önemli çıkarımları ve eylem maddelerini yaz.",
+  prompt_yt_quiz:
+    "Bu YouTube videosunun içeriğini/transkriptini incele. Konuyu pekiştirmek için video içeriğinden 5 soruluk çoktan seçmeli (A, B, C, D seçenekli) soru testi oluştur ve en alt kısımda cevap anahtarı ile açıklamalarını ver.",
+  prompt_yt_summarize:
+    "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar.",
   question_placeholder: "Sayfa hakkında soru yazın veya sesli komut verin...",
   rescan_page: "Sayfayı Yeniden Tara",
   speech_not_supported: "Tarayıcınız sesli komutu desteklemiyor.",
@@ -1002,12 +1102,15 @@ export const tr = {
   video_quiz: "5 Soruluk Test",
   voice_command_tooltip: "Sesli Komut Ver",
   kpss_external_quiz_title: "Harici AI ile Sınav Oluştur",
-  kpss_external_quiz_desc: "Seçtiğiniz AI asistanında KPSS soruları hazır prompt ile oluşturun. Sınav bittikten sonra sonuçlarınızı buraya girin.",
+  kpss_external_quiz_desc:
+    "Seçtiğiniz AI asistanında KPSS soruları hazır prompt ile oluşturun. Sınav bittikten sonra sonuçlarınızı buraya girin.",
   kpss_external_quiz_open: "Harici AI ile Sınav",
-  kpss_external_quiz_prompt_copied: "Prompt panoya kopyalandı! AI'ya yapıştırın.",
+  kpss_external_quiz_prompt_copied:
+    "Prompt panoya kopyalandı! AI'ya yapıştırın.",
   kpss_external_quiz_opened_url: "Yeni sekme açıldı, prompt hazır gönderildi!",
   kpss_external_quiz_enter_result: "Sınav Sonucunu Gir",
-  kpss_external_quiz_result_desc: "Sınav bitti mi? Kaç soru yapıp kaç doğru yaptığınızı girin.",
+  kpss_external_quiz_result_desc:
+    "Sınav bitti mi? Kaç soru yapıp kaç doğru yaptığınızı girin.",
   kpss_external_quiz_total: "Toplam Soru",
   kpss_external_quiz_correct: "Doğru Sayısı",
   kpss_external_quiz_wrong: "Yanlış",
@@ -1015,6 +1118,6 @@ export const tr = {
   kpss_external_quiz_back: "Geri",
   kpss_external_quiz_select_service: "AI Servisini Seçin",
   kpss_external_quiz_copy_prompt: "Promptu Kopyala",
-  kpss_external_quiz_clipboard_hint: "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
-}
-
+  kpss_external_quiz_clipboard_hint:
+    "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
+};
