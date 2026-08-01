@@ -10,6 +10,7 @@ import type {
   StockAlertLog,
   StockWatchlist,
   StockTradeHistory,
+  StockCashBalance,
 } from "@/types/stock.js";
 import type { BistTabId } from "@/components/stock/BistActionBar.js";
 import { logger } from "@/utils/logger.js";
@@ -34,6 +35,10 @@ export function useBist({ lang }: UseBistOptions) {
   const [rules, setRules] = useState<StockRule[]>([]);
   const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
   const [tradeHistory, setTradeHistory] = useState<StockTradeHistory[]>([]);
+  const [cashBalance, setCashBalance] = useState<StockCashBalance>({
+    amount: 0,
+    updatedAt: new Date().toISOString(),
+  });
   const [quotes, setQuotes] = useState<StockQuote[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -76,12 +81,14 @@ export function useBist({ lang }: UseBistOptions) {
       ]);
 
       const savedTrades = await stockRepository.getTradeHistory();
+      const savedCash = await stockRepository.getCashBalance();
 
       setPortfolio(savedPortfolio);
       setWatchlists(savedWatchlists);
       setRules(savedRules);
       setAlertLogs(savedLogs);
       setTradeHistory(savedTrades);
+      setCashBalance(savedCash);
 
       const customSymbols = savedPortfolio.map((p) => p.symbol);
       let allQuotes = [...popularQuotes];
@@ -168,6 +175,16 @@ export function useBist({ lang }: UseBistOptions) {
     }
     setPortfolio(updated);
     await stockRepository.savePortfolio(updated);
+    // Otomatik nakit: alış tutarını düş
+    const cashCost = fullItem.buyPrice * fullItem.lotCount;
+    if (cashCost > 0) {
+      const newCash = {
+        amount: cashBalance.amount - cashCost,
+        updatedAt: new Date().toISOString(),
+      };
+      setCashBalance(newCash);
+      await stockRepository.setCashBalance(newCash);
+    }
     setShowAddModal(false);
     loadData();
   };
@@ -259,9 +276,17 @@ export function useBist({ lang }: UseBistOptions) {
     }
     setPortfolio(updated);
     setTradeHistory((prev) => [trade, ...prev].slice(0, 100));
+    // Otomatik nakit: satış gelirini ekle
+    const sellIncome = sellPrice * lotToSell;
+    const newCash = {
+      amount: cashBalance.amount + sellIncome,
+      updatedAt: new Date().toISOString(),
+    };
+    setCashBalance(newCash);
     await Promise.all([
       stockRepository.savePortfolio(updated),
       stockRepository.saveTradeHistory([trade, ...tradeHistory].slice(0, 100)),
+      stockRepository.setCashBalance(newCash),
     ]);
     setSellModal(null);
   };
@@ -299,6 +324,14 @@ export function useBist({ lang }: UseBistOptions) {
       ? (dailyProfitLossTotal / totalPortfolioCost) * 100
       : 0;
   const activeRulesCount = rules.filter((r) => r.isActive).length;
+
+  const totalWealth = cashBalance.amount + totalPortfolioValue;
+
+  const updateCashBalance = async (amount: number) => {
+    const newCash = { amount, updatedAt: new Date().toISOString() };
+    setCashBalance(newCash);
+    await stockRepository.setCashBalance(newCash);
+  };
 
   return {
     lang,
@@ -349,5 +382,8 @@ export function useBist({ lang }: UseBistOptions) {
     handleConfirmSell,
     handleDeleteRule,
     tradeHistory,
+    cashBalance,
+    totalWealth,
+    updateCashBalance,
   };
 }

@@ -38,6 +38,7 @@ export const SYNC_STOCK_RULES = "stockRules";
 export const SYNC_STOCK_ALERT_LOGS = "stockAlertLogs";
 export const SYNC_STOCK_WATCHLISTS = "stockWatchlists";
 export const SYNC_STOCK_TRADE_HISTORY = "stockTradeHistory";
+export const SYNC_STOCK_CASH = "stockCash";
 
 /** All AI-config keys for batch reads. */
 export const SYNC_AI_KEYS = [
@@ -104,6 +105,7 @@ export const SYNC_ALL_KEYS = [
   SYNC_ALARMS,
   SYNC_STOCK_WATCHLISTS,
   SYNC_STOCK_TRADE_HISTORY,
+  SYNC_STOCK_CASH,
   SYNC_AI_USER_MEMORY,
 ];
 

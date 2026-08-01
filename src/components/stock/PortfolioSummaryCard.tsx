@@ -12,6 +12,9 @@ interface PortfolioSummaryCardProps {
   dailyProfitLossPercent: number;
   activeRulesCount: number;
   triggeredAlertsCount: number;
+  cashBalance: number;
+  totalWealth: number;
+  onEditCash: () => void;
 }
 
 function IconWallet() {
@@ -93,6 +96,9 @@ export function PortfolioSummaryCard({
   dailyProfitLossPercent,
   activeRulesCount,
   triggeredAlertsCount,
+  cashBalance,
+  totalWealth,
+  onEditCash,
 }: PortfolioSummaryCardProps) {
   const totalProfit = totalValue - totalCost;
   const isZeroProfit = Math.abs(totalProfit) < 0.001;
@@ -101,17 +107,80 @@ export function PortfolioSummaryCard({
 
   return (
     <div className="stock-summary-grid">
-      {/* Toplam Portföy Değeri */}
+      {/* Toplam Varlık (Nakit + Hisse) */}
       <div className="stock-summary-card">
         <div
           className="stock-card-label"
           style={{ display: "flex", alignItems: "center", gap: "6px" }}
         >
           <IconWallet />
-          <span>Toplam Portföy Değeri</span>
+          <span>Toplam Varlık</span>
         </div>
         <div className="stock-card-value">
-          {totalValue > 0 ? formatPrice(totalValue) : "0,00 ₺"}
+          {totalWealth > 0 ? formatPrice(totalWealth) : "0,00 ₺"}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
+            marginTop: "8px",
+            paddingTop: "8px",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            fontSize: "0.75rem",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span>Nakit</span>
+            <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
+                {formatPrice(cashBalance)}
+              </span>
+              <button
+                onClick={onEditCash}
+                title="Nakit bakiyesini düzenle"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--accent-color)",
+                  cursor: "pointer",
+                  padding: "2px",
+                  display: "flex",
+                }}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                </svg>
+              </button>
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>Hisse Değeri</span>
+            <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
+              {formatPrice(totalValue)}
+            </span>
+          </div>
         </div>
         <div
           className={`stock-card-badge ${

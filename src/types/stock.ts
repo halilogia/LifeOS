@@ -37,6 +37,12 @@ export interface StockTradeHistory {
   soldAt: string; // ISO tarih
 }
 
+/** Manual/auto-tracked cash balance for total wealth calculation. */
+export interface StockCashBalance {
+  amount: number; // TL
+  updatedAt: string; // ISO tarih
+}
+
 export interface StockRule {
   id: string;
   symbol: string; // Örn: "THYAO.IS"
