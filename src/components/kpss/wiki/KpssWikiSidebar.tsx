@@ -1,13 +1,17 @@
-﻿/**
+/**
  * KpssWikiSidebar.tsx
- * Presentational Left Sidebar component for search, filtering, and note list.
+ * Presentational Left Sidebar component for search, filtering, and hierarchical note tree.
+ * Notion-style: parent notes expandable, child notes (parentId) nested with indent.
  */
 
+import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import {
   KpssWikiNote,
   getSubjectLabel,
   extractTitleFromContent,
+  buildWikiTree,
+  WikiTreeNode,
 } from "@/services/kpss/kpssWikiService.js";
 
 interface KpssWikiSidebarProps {
@@ -21,7 +25,17 @@ interface KpssWikiSidebarProps {
   onFilterChange: (subject: string) => void;
   onSelectNote: (note: KpssWikiNote) => void;
   onCreateNewNote: () => void;
+  onAddChildNote: (parent: KpssWikiNote) => void;
 }
+
+const SUBJECT_FILTERS = [
+  { id: "all", label: "Tümü" },
+  { id: "tarih", label: "Tarih" },
+  { id: "cografya", label: "Coğrafya" },
+  { id: "vatandaslik", label: "Vatandaşlık" },
+  { id: "turkce", label: "Türkçe" },
+  { id: "matematik", label: "Matematik" },
+];
 
 export function KpssWikiSidebar({
   lang,
@@ -34,15 +48,122 @@ export function KpssWikiSidebar({
   onFilterChange,
   onSelectNote,
   onCreateNewNote,
+  onAddChildNote,
 }: KpssWikiSidebarProps) {
-  const SUBJECT_FILTERS = [
-    { id: "all", label: "TÃ¼mÃ¼" },
-    { id: "tarih", label: "Tarih" },
-    { id: "cografya", label: "CoÄŸrafya" },
-    { id: "vatandaslik", label: "VatandaÅŸlÄ±k" },
-    { id: "turkce", label: "TÃ¼rkÃ§e" },
-    { id: "matematik", label: "Matematik" },
-  ];
+  // Expanded parent ids set (default: all expanded)
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
+  const tree = buildWikiTree(notes);
+
+  const toggleCollapse = (id: string, e: MouseEvent) => {
+    e.stopPropagation();
+    setCollapsedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const renderNode = (node: WikiTreeNode, depth: number) => {
+    const n = node.note;
+    const isSelected = n.id === selectedNoteId;
+    const hasChildren = node.children.length > 0;
+    const isCollapsed = collapsedIds.has(n.id);
+    const displayTitle =
+      n.title.trim() ||
+      extractTitleFromContent(n.content) ||
+      t.kpss_wiki_untitled;
+
+    return (
+      <div key={n.id} style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          onClick={() => onSelectNote(n)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            padding: "7px 8px",
+            paddingLeft: `${8 + depth * 14}px`,
+            background: isSelected
+              ? "rgba(37, 99, 235, 0.2)"
+              : "rgba(255, 255, 255, 0.02)",
+            border: `1px solid ${isSelected ? "#3b82f6" : "transparent"}`,
+            borderRadius: "8px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {/* Collapse toggle */}
+          <button
+            type="button"
+            onClick={(e) => toggleCollapse(n.id, e)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#64748b",
+              fontSize: "0.6rem",
+              cursor: hasChildren ? "pointer" : "default",
+              width: 14,
+              height: 14,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              flexShrink: 0,
+              opacity: hasChildren ? 1 : 0.2,
+            }}
+          >
+            {hasChildren ? (isCollapsed ? "▶" : "▼") : "•"}
+          </button>
+
+          <span
+            style={{
+              fontWeight: isSelected ? 700 : 500,
+              fontSize: "0.76rem",
+              color: isSelected ? "#ffffff" : "#cbd5e1",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              flex: 1,
+            }}
+          >
+            {displayTitle}
+          </span>
+
+          {/* Add child note button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddChildNote(n);
+            }}
+            title={t.kpss_wiki_add_child || "Alt Not Ekle"}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#60a5fa",
+              fontSize: "0.85rem",
+              cursor: "pointer",
+              padding: "0 2px",
+              opacity: isSelected ? 1 : 0,
+              flexShrink: 0,
+            }}
+          >
+            +
+          </button>
+        </div>
+
+        {hasChildren && !isCollapsed && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "3px", marginTop: "3px" }}>
+            {node.children.map((child) => renderNode(child, depth + 1))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -151,12 +272,12 @@ export function KpssWikiSidebar({
         ))}
       </div>
 
-      {/* Note List */}
+      {/* Note Tree */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "6px",
+          gap: "4px",
           overflowY: "auto",
           flex: 1,
           maxHeight: "560px",
@@ -171,65 +292,10 @@ export function KpssWikiSidebar({
               fontSize: "0.75rem",
             }}
           >
-            KayÄ±tlÄ± ders notu bulunamadÄ±.
+            Kayıtlı ders notu bulunamadı.
           </div>
         ) : (
-          notes.map((n) => {
-            const isSelected = n.id === selectedNoteId;
-            const displayTitle =
-              n.title.trim() ||
-              extractTitleFromContent(n.content) ||
-              t.kpss_wiki_untitled;
-            return (
-              <div
-                key={n.id}
-                onClick={() => onSelectNote(n)}
-                style={{
-                  padding: "9px 12px",
-                  background: isSelected
-                    ? "rgba(37, 99, 235, 0.2)"
-                    : "rgba(255, 255, 255, 0.02)",
-                  border: `1px solid ${isSelected ? "#3b82f6" : "rgba(255, 255, 255, 0.05)"}`,
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "3px",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: "0.78rem",
-                    color: isSelected ? "#ffffff" : "#cbd5e1",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {displayTitle}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.65rem",
-                    color: "#64748b",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>
-                    {new Date(n.updatedAt || n.createdAt).toLocaleDateString(
-                      "tr-TR",
-                    )}
-                  </span>
-                  <span style={{ color: "#60a5fa", fontWeight: 600 }}>
-                    {getSubjectLabel(n.subject)}
-                  </span>
-                </div>
-              </div>
-            );
-          })
+          tree.map((node) => renderNode(node, 0))
         )}
       </div>
     </div>

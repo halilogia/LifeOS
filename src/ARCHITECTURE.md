@@ -92,6 +92,7 @@ flowchart TB
 | Klasör                            | Sorumluluk                        | Ne konur                                                                      | Asla konmaz                           |
 | --------------------------------- | --------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------- |
 | `src/components/`                 | Saf UI görünümü                   | View'lar + `<feature>/` alt bileşenleri                                       | `chrome.storage`, `fetch`, iş mantığı |
+| `desktop/`                      | Electron masaüstü sarmalayıcı    | main.js, preload.js (chrome API mock), build.js, package.json | —            |
 | `src/components/<feature>/`       | Feature'a özel UI parçaları       | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/...                       | —                                     |
 | `src/presentation/hooks/`         | State yönetimi, view-model        | useSettings, useTodos, usePopup, useUI                                        | DOM, fetch                            |
 | `src/services/`                   | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpss/, stock/, errorReportService | JSX                                  |
@@ -101,7 +102,7 @@ flowchart TB
 | `src/domain/value-objects/`       | Değer tipleri                     | Language, TodoStatus, RepeatType                                              | —                                     |
 | `src/domain/repositories/`        | Depo arayüzleri (contract)        | ITodoRepository, IKpssRepository                                              | Implementasyon                        |
 | `src/domain/services/`            | Saf hesaplama servisleri          | KpssCalculatorService, SrsService, TaskService                                | chrome.*                              |
-| `src/domain/constants/`           | Sabit veriler                     | kpssCurriculum, kpssConstants, kpssFlashcards                                 | —                                     |
+| `src/domain/constants/`           | Sabit veriler                     | kpssCurriculum, kpssConstants, kpssFlashcards, TurkeyGeographyData, TurkeyProvincePaths | —                                     |
 | `src/domain/data/`                | Domain verisi                     | hifizData                                                                     | —                                     |
 | `src/infrastructure/persistence/repositories/` | chrome.storage implementasyonları | ChromeStorage*Repository  | UI                  |
 | `src/infrastructure/persistence/migrations/`   | Yerel→sync geçişi                 | LocalToSyncMigration       | —                   |
@@ -144,7 +145,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | --------------------- | --------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
 | ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils      | sync       | —                                                       |
 | PomodoroView          | PomodoroManagerService, usePomodoro (hook)                      | local      | pomodoro/ (8)                                           |
-| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/quiz/ (8) + kpss/wiki/ (4) + kpss/srs/ (1) + kpss/ (10) |
+| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/quiz/ (8) + kpss/wiki/ (4 — hiyerarşik parentId ağacı) + kpss/obsidian/ (2) + kpss/srs/ (1) + kpss/map/ (1 — TurkeyMapView) + kpss/ (10) |
 | HifizView             | hifizData (domain/data), useHifiz (hook)                        | sync       | hifiz/ (4)                                              |
 | SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |

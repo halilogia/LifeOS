@@ -71,6 +71,14 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **Domain-Specific Name Exceptions**: Local Turkish domain-specific terms (such as `kpss` for exam modules and `hifiz` for memorization modules) are permitted as specialized domain names.
 * **UI Localization Separation**: User-facing UI text, button titles, modal headers, and notifications MUST be managed dynamically in Turkish & English using the `i18n.ts` localization system (`translations[lang]`).
 
+### 2.9 'Zen' ve Basmakalıp Kelime Yasağı (No Cliché / No 'Zen' Naming Rule)
+* **'Zen' ve Jenerik Kelimelerin Yasağı**: 'Zen', 'ZenTodo' gibi jenerik, kalıplaşmış kelimelerin ve jenerik isimlerin yeni kod yazımında ve yeni modüllerde kullanılması KESİNLİKLE YASAKTIR.
+* **Özgün ve Benzersiz İsimlendirme**: Tüm yeni modüller, klasörler, projeler, UI bileşenleri ve değişken isimleri için her zaman özgün, profesyonel, anlaşılır ve benzersiz (unique) isimler (örneğin `MindVault`, `ThoughtCraft`, `LifeOS`) seçilmelidir.
+
+### 2.10 Sıfır 'any' Tipi Yasağı (Strict Type Safety — No 'any' Rule)
+* **Sıfır 'any' Tipi Garantisi**: Kod tabanında `any` tipi kullanılması KESİNLİKLE YASAKTIR (`@typescript-eslint/no-explicit-any`).
+* Tüm değişkenler, fonksiyon parametreleri, API yanıtları ve callback verileri açıkça tanımlanmış interfaces, type aliases veya `unknown` tipi kullanılarak strictly typed olarak yazılmalıdır.
+
 ---
 
 ## 3. Architecture Philosophy

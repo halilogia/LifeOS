@@ -12,8 +12,8 @@ import type { KpssWikiNote, HeadingItem } from "@/types/kpss.js";
 export type { KpssWikiNote, HeadingItem } from "@/types/kpss.js";
 
 /**
- * Extract Title from content: extracts ONLY the very first word!
- * e.g. "Maki ailesinin..." -> "Maki"
+ * Extract Title from content: extracts the first meaningful line as title (no limit).
+ * e.g. "Maki ailesinin özellikleri..." -> "Maki ailesinin özellikleri..."
  */
 export function extractTitleFromContent(content: string): string {
   if (!content) {
@@ -32,10 +32,8 @@ export function extractTitleFromContent(content: string): string {
     if (!clean) {
       continue;
     }
-    const words = clean.split(/\s+/);
-    if (words.length > 0 && words[0]) {
-      return words[0].replace(/[,;:!"'()]/g, "").trim();
-    }
+    // İlk anlamlı satırın tamamını başlık yap — karakter sınırı yok
+    return clean;
   }
   return "";
 }
@@ -177,12 +175,7 @@ export function createKpssWikiService(wikiRepo: IWikiNoteRepository) {
           !n.title.includes("Anayasa Hukuku"),
       );
 
-      cleaned.forEach((n) => {
-        if (n.title.length > 35) {
-          const firstWord = extractTitleFromContent(n.content);
-          n.title = firstWord || n.title.split(/\s+/)[0] || "Ders Notu";
-        }
-      });
+      // Not: başlık kırpma bilinçli olarak kaldırıldı — manuel başlıklara asla dokunulmaz.
 
       if (cleaned.length !== loaded.length) {
         await wikiRepo.saveAll(cleaned);
@@ -213,6 +206,30 @@ export function createKpssWikiService(wikiRepo: IWikiNoteRepository) {
 }
 
 export type KpssWikiService = ReturnType<typeof createKpssWikiService>;
+
+/**
+ * Build hierarchical tree from flat notes array using parentId.
+ * Roots = notes without parentId (or parent missing). Children nested under parents.
+ */
+export interface WikiTreeNode {
+  note: KpssWikiNote;
+  children: WikiTreeNode[];
+}
+
+export function buildWikiTree(notes: KpssWikiNote[]): WikiTreeNode[] {
+  const map = new Map<string, WikiTreeNode>();
+  notes.forEach((n) => map.set(n.id, { note: n, children: [] }));
+  const roots: WikiTreeNode[] = [];
+  map.forEach((node) => {
+    const parentId = node.note.parentId;
+    if (parentId && map.has(parentId)) {
+      map.get(parentId)!.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  });
+  return roots;
+}
 
 /* ------------------------------------------------------------------ */
 /* Singleton with default repository                                   */
