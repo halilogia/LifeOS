@@ -1,7 +1,8 @@
 /**
  * useAiChatMessages.ts
  * Hook — manages AI Chat state, message history, and AI API interaction.
- * Extracted from AIChatView.tsx to keep view pure (~200 satır, eski 483 → 200)
+ * Extracted from AIChatView.tsx to keep view pure.
+ * Tuval: mesaj state + AI akışı; offline/fallback reply'lar localReplyBuilder'da.
  */
 import { useState, useEffect } from "preact/hooks";
 import type { Todo } from "@/types/types.js";
@@ -14,11 +15,9 @@ import {
   handleAddNoteFromAI,
   handleUpdateMemoryFromAI,
 } from "@/services/aichat/index.js";
-import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
-import type { StockPortfolioItem } from "@/types/stock.js";
 import { fetchStockQuote } from "@/services/bistService.js";
-import { analyzeStockWithAI } from "@/services/stock/stockAiService.js";
 import { logger } from "@/utils/logger.js";
+import { buildLocalReply } from "./localReplyBuilder.js";
 
 export interface UseAiChatMessagesParams {
   lang: Language;
@@ -259,129 +258,34 @@ export function useAiChatMessages({
 
       // ── Offline mode ─────────────────────────────────────────────────────
       setIsBotTyping(false);
-      const localParsed = parseLocalCommand(query);
-      let replyText = "";
-
-      if (localParsed.parsed) {
-        if (localParsed.action === "add_note" && localParsed.content) {
-          const type = localParsed.note_type || "note";
-          await handleAddNoteFromAI(type, localParsed.content, lang);
-          const typeLabel =
-            type === "diary"
-              ? t.aichat_type_label_diary
-              : type === "cornell"
-                ? t.aichat_type_label_cornell
-                : t.aichat_type_label_note;
-          replyText = t.aichat_added_note_success.replace(
-            "{type_label}",
-            typeLabel,
-          );
-        } else if (localParsed.action === "create_task" && localParsed.text) {
-          const dueDateFormatted = localParsed.date
-            ? ` (${localParsed.date})`
-            : "";
-          await onAddTodo(localParsed.text, "none", localParsed.date);
-          await onManualSync();
-          replyText = t.aichat_added_task_success
-            .replace("{task_text}", localParsed.text)
-            .replace("{date_part}", dueDateFormatted);
-        } else if (localParsed.action === "add_stock" && localParsed.stock) {
-          const { symbol, displayName, buyPrice, lotCount } = localParsed.stock;
-          const stockRepo = new ChromeStorageStockRepository();
-          const currentPortfolio = await stockRepo.getPortfolio();
-          const newStock: StockPortfolioItem = {
-            id: `stock-${Date.now()}`,
-            symbol,
-            displayName,
-            buyPrice,
-            lotCount,
-            buyDate: new Date().toISOString().split("T")[0],
-          };
-          await stockRepo.savePortfolio([...currentPortfolio, newStock]);
-          replyText = t.aichat_added_stock_success
-            .replace("{lot_count}", String(lotCount))
-            .replace("{display_name}", displayName)
-            .replace("{symbol}", symbol.replace(".IS", ""))
-            .replace("{price}", buyPrice.toFixed(2));
-        } else if (
-          localParsed.action === "ask_stock" &&
-          localParsed.stockQuery
-        ) {
-          const { symbol, question } = localParsed.stockQuery;
-          try {
-            const quote = await fetchStockQuote(symbol);
-            replyText = await analyzeStockWithAI({
-              symbol,
-              quote,
-              userQuestion: question,
-            });
-          } catch {
-            const quote2 = await fetchStockQuote(symbol).catch(() => null);
-            const price = quote2?.price ?? 0;
-            const change = quote2?.changePercent ?? 0;
-            replyText = `🔍 **${symbol.replace(".IS", "")}** ${change >= 0 ? "📈" : "📉"}\n\nCanlı Fiyat: **₺${price}**\nDeğişim: %${change.toFixed(2)}\n\n⚠️ AI analizi şu an kullanılamıyor.`;
-          }
-        }
+      const replyText = await buildLocalReply(query, {
+        t,
+        lang,
+        onAddTodo,
+        onManualSync,
+      });
+      if (replyText) {
+        addBotMsg(setMessages, lang, { text: replyText });
       } else {
-        replyText = t.aichat_parse_failed;
+        addBotMsg(setMessages, lang, { text: t.aichat_parse_failed });
       }
-
-      addBotMsg(setMessages, lang, { text: replyText });
     } catch (e) {
       // ── Catch → fallback ─────────────────────────────────────────────────
       setIsBotTyping(false);
-      const localParsed = parseLocalCommand(query);
-      let replyText = "";
-
-      if (localParsed.parsed) {
-        if (localParsed.action === "add_note" && localParsed.content) {
-          const type = localParsed.note_type || "note";
-          await handleAddNoteFromAI(type, localParsed.content, lang);
-          const typeLabel =
-            type === "diary"
-              ? t.aichat_type_label_diary
-              : type === "cornell"
-                ? t.aichat_type_label_cornell
-                : t.aichat_type_label_note;
-          replyText = t.aichat_fallback_added_note.replace(
-            "{type_label}",
-            typeLabel,
-          );
-        } else if (localParsed.action === "create_task" && localParsed.text) {
-          await onAddTodo(localParsed.text, "none", localParsed.date);
-          await onManualSync();
-          replyText = t.aichat_fallback_added_task
-            .replace("{task_text}", localParsed.text)
-            .replace(
-              "{date_part}",
-              localParsed.date ? ` (${localParsed.date})` : "",
-            );
-        } else if (
-          localParsed.action === "ask_stock" &&
-          localParsed.stockQuery
-        ) {
-          try {
-            const quote = await fetchStockQuote(localParsed.stockQuery.symbol);
-            replyText = await analyzeStockWithAI({
-              symbol: localParsed.stockQuery.symbol,
-              quote,
-              userQuestion: localParsed.stockQuery.question,
-            });
-          } catch {
-            const q = await fetchStockQuote(
-              localParsed.stockQuery.symbol,
-            ).catch(() => null);
-            const price = q?.price ?? 0;
-            const change = q?.changePercent ?? 0;
-            replyText = `🔍 **${localParsed.stockQuery.symbol.replace(".IS", "")}** ${change >= 0 ? "📈" : "📉"}\n\nCanlı Fiyat: **₺${price}**\nDeğişim: %${change.toFixed(2)}`;
-          }
-        }
+      const replyText = await buildLocalReply(query, {
+        t,
+        lang,
+        onAddTodo,
+        onManualSync,
+      }, true);
+      if (replyText) {
+        addBotMsg(setMessages, lang, { text: replyText });
       } else {
         const errorMsg = e instanceof Error ? e.message : String(e);
-        replyText = t.aichat_connection_error.replace("{error_msg}", errorMsg);
+        addBotMsg(setMessages, lang, {
+          text: t.aichat_connection_error.replace("{error_msg}", errorMsg),
+        });
       }
-
-      addBotMsg(setMessages, lang, { text: replyText });
     }
   };
 
