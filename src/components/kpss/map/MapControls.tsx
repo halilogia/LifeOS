@@ -1,6 +1,7 @@
 interface MapControlsProps {
   t: Record<string, string>;
   title: string;
+  subtitle?: string;
   total: number;
   revealedCount: number;
   playing: boolean;
@@ -14,6 +15,7 @@ interface MapControlsProps {
 export function MapControls({
   t,
   title,
+  subtitle,
   total,
   revealedCount,
   playing,
@@ -49,7 +51,7 @@ export function MapControls({
           {title}
         </h3>
         <p style={{ margin: "4px 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
-          {total} {t.kpss_map_subtitle || "konum — sırasıyla oynat"}
+          {subtitle || `${total} ${t.kpss_map_subtitle || "konum — sırasıyla oynat"}`}
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>

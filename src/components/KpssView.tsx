@@ -38,7 +38,7 @@ import { KpssQuizModal } from "@/components/kpss/quiz/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/exams/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
-import { HistoryMapView } from "@/components/kpss/history/HistoryMapView.js";
+import { HistoryMapView } from "@/components/kpss/map/HistoryMapView.js";
 import { logger } from "@/utils/logger.js";
 
 interface KpssViewProps {
