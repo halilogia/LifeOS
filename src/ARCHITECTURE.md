@@ -145,7 +145,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | --------------------- | --------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
 | ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils      | sync       | —                                                       |
 | PomodoroView          | PomodoroManagerService, usePomodoro (hook)                      | local      | pomodoro/ (8)                                           |
-| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/quiz/ (8) + kpss/wiki/ (4 — hiyerarşik parentId ağacı) + kpss/obsidian/ (2) + kpss/srs/ (1) + kpss/map/ (1 — TurkeyMapView) + kpss/ (10) |
+| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook) | sync+local | kpss/quiz/ (8) + kpss/wiki/ (8 — hiyerarşik parentId ağacı; KpssNotesDashboard=tuval + useKpssNotes hook + Header/Toolbar/HelpModal parçaları) + kpss/obsidian/ (2) + kpss/srs/ (1) + kpss/map/ (1 — TurkeyMapView) + kpss/ (10) |
 | HifizView             | hifizData (domain/data), useHifiz (hook)                        | sync       | hifiz/ (4)                                              |
 | SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |
