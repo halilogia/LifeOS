@@ -38,6 +38,10 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [playing, setPlaying] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
+  // viewRef — wheel handler'da güncel view'a erişim
+  const viewRef = useRef(view);
+  viewRef.current = view;
   const timerRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -106,24 +110,31 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
     stopPlayback();
     // Sıfırla → son haliyle (tüm pinler görünür)
     setRevealedCount(total);
+    // Fare kaydırma/zoom'dan oluşan konum değişikliğini de sıfırla
+    setView({ x: 0, y: 0, scale: 1 });
   };
 
-  // --- Fare sol click basılı tutarak sürükleme (video oynatıcı timeline gibi) ---
+  // --- Fare sol click basılı tutarak sürükleme (Google Maps tarzı PAN) ---
   const dragRef = useRef<{
     active: boolean;
     startX: number;
-    startCount: number;
-  }>({ active: false, startX: 0, startCount: 0 });
+    startY: number;
+    originX: number;
+    originY: number;
+  }>({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
   const svgWrapRef = useRef<HTMLDivElement | null>(null);
 
   const handlePointerDown = (e: PointerEvent) => {
     if (e.button !== 0) {
       return;
     }
+    const v = viewRef.current;
     dragRef.current = {
       active: true,
       startX: e.clientX,
-      startCount: revealedCount,
+      startY: e.clientY,
+      originX: v.x,
+      originY: v.y,
     };
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
     stopPlayback();
@@ -131,25 +142,46 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
 
   const handlePointerMove = (e: PointerEvent) => {
     const drag = dragRef.current;
-    const wrap = svgWrapRef.current;
-    if (!drag.active || !wrap) {
+    if (!drag.active) {
       return;
     }
-    const rect = wrap.getBoundingClientRect();
-    if (rect.width <= 0) {
-      return;
-    }
-    // Sürükleme mesafesini harita genişliğine oranla → pin sayısına çevir
     const dx = e.clientX - drag.startX;
-    const delta = Math.round((dx / rect.width) * total);
-    const next = Math.min(total, Math.max(0, drag.startCount + delta));
-    setRevealedCount(next);
-    setCurrentIndex(next > 0 ? next - 1 : -1);
+    const dy = e.clientY - drag.startY;
+    setView({
+      ...viewRef.current,
+      x: drag.originX + dx,
+      y: drag.originY + dy,
+    });
   };
 
   const handlePointerUp = () => {
     dragRef.current.active = false;
   };
+
+  // Wheel ile zoom — imleç merkezli
+  const handleWheel = (e: WheelEvent) => {
+    e.preventDefault();
+    const wrap = svgWrapRef.current;
+    if (!wrap) {
+      return;
+    }
+    const rect = wrap.getBoundingClientRect();
+    const v = viewRef.current;
+    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+    const newScale = Math.min(5, Math.max(0.5, v.scale * factor));
+    // İmleç pozisyonu harita koordinatı
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
+    const wx = (px - v.x) / v.scale;
+    const wy = (py - v.y) / v.scale;
+    setView({
+      scale: newScale,
+      x: px - wx * newScale,
+      y: py - wy * newScale,
+    });
+  };
+
+  // viewRef — wheel handler'da güncel view'a erişim
 
   // Video oynatıcı gibi manuel ileri/geri sarma
   const handleStep = (dir: 1 | -1) => {
@@ -234,9 +266,11 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
           currentIndex={currentIndex}
           isFullscreen={isFullscreen}
           svgWrapRef={svgWrapRef}
+          view={view}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
+          onWheel={handleWheel}
         />
       </div>
 
