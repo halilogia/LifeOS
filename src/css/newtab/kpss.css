@@ -695,3 +695,16 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* KPSS Not Stüdyosu — tam ekran modu (tarayýcý chrome'unu deðil, container'ý kaplar) */
+.kpss-notes-fullscreen:fullscreen {
+  background: #0f172a;
+  padding: 20px;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.kpss-notes-fullscreen:fullscreen .kpss-notes-grid {
+  min-height: calc(100vh - 120px);
+}

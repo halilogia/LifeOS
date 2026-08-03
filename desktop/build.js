@@ -22,6 +22,18 @@ fs.mkdirSync(WEB_DIR, { recursive: true });
 fs.cpSync(EXT_DIST, WEB_DIR, { recursive: true });
 console.log(`[build] dist/ kopyalandı → desktop/web/ (${fs.readdirSync(WEB_DIR).length} öğe)`);
 
+// file:// protokolü için absolute /assets/ → relative ./assets/ (Electron)
+const htmlFiles = ["newtab.html", "popup.html", "sidepanel.html", "offscreen.html"];
+for (const f of htmlFiles) {
+  const fp = path.join(WEB_DIR, f);
+  if (fs.existsSync(fp)) {
+    let html = fs.readFileSync(fp, "utf8");
+    html = html.replace(/(src|href)="\/(assets\/[^"]+)"/g, '$1="./$2"');
+    fs.writeFileSync(fp, html);
+    console.log(`[build] ${f} → relative asset yolları`);
+  }
+}
+
 // İkon kopyala (electron-builder windows ikonu)
 const iconSrc = path.join(ROOT, "mindvault_app_icon.png");
 if (fs.existsSync(iconSrc)) {

@@ -1,14 +1,23 @@
 /**
  * preload.js
- * Electron contextBridge — Chrome Extension API mock'u.
+ * Electron — Chrome Extension API mock'u (contextIsolation: false).
  * Sadece KPSS Not Stüdyosu'nun ihtiyaç duyduğu API'ler mock'lanır:
  *   - chrome.storage.sync / local  → localStorage tabanlı kalıcı depo
  *   - chrome.runtime.*             → minimal no-op / getURL
- *   - chrome.i18n                  → no-op
  * Not: Veriler localStorage'da JSON olarak tutulur — uygulama kapanınca kaybolmaz.
  */
 
-const { contextBridge, ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron");
+
+// ---------- Senkronizasyon API'si (dosyaya yedekle / dosyadan yükle) ----------
+// Renderer'dan çağrılır: window.mindvaultSync.exportToFile(notesJson) / importFromFile()
+// Ana süreç (main.js) dosya seçici + okuma/yazma yönetir.
+window.mindvaultSync = {
+  exportToFile: (notesJson) => ipcRenderer.invoke("mindvault:export", notesJson),
+  importFromFile: () => ipcRenderer.invoke("mindvault:import"),
+  exportToClipboard: (notesJson) => ipcRenderer.invoke("mindvault:export-clipboard", notesJson),
+  importFromClipboard: () => ipcRenderer.invoke("mindvault:import-clipboard"),
+};
 
 // ---------- Storage namespace ----------
 function makeStorageArea(areaName) {
@@ -135,7 +144,12 @@ const noopNamespace = () =>
     },
   );
 
-const chromeMock = {
+// Electron 31'de window.chrome zaten mevcut (tarayıcı uyumluluğu için).
+// contextIsolation: false olduğundan doğrudan üzerine yazabiliriz.
+// Mevcut property'leri koru, sadece ihtiyaç duyulanları ekle.
+const existingChrome = window.chrome || {};
+const mock = {
+  ...existingChrome,
   storage: {
     sync: makeStorageArea("sync"),
     local: makeStorageArea("local"),
@@ -162,4 +176,4 @@ const chromeMock = {
   fileSystem: noopNamespace(),
 };
 
-contextBridge.exposeInMainWorld("chrome", chromeMock);
+window.chrome = mock;

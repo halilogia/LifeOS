@@ -11,7 +11,7 @@
   "build": {
     "appId": "com.mindvault.desktop",
     "productName": "MindVault",
-    "files": ["main.js", "preload.js", "web/**/*"],
+    "files": ["main.js", "preload.js", "icon.png", "web/**/*"],
     "win": {
       "target": ["portable"],
       "icon": "icon.png"
