@@ -158,7 +158,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
 | WillpowerView         | useWillpower (hook)                                             | sync       | —                                                       |
 | EisenhowerView        | todo repo, useEisenhower (hook)                                 | sync       | eisenhower/ (2) + eisenhower.css                        |
-| SettingsDrawer        | settings repos                                                  | sync       | settings/ (9)                                           |
+| SettingsDrawer        | settings repos                                                  | sync       | settings/ (9) + settings/ai/ (3 — AiSettingsTab parçaları)                     |
 | Sidebar               | useUI                                                           | sync       | sidebar/ (2)                                            |
 
 ---
