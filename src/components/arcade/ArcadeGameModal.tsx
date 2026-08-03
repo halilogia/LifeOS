@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import { GameEntry, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
-import { arcadeService, GamePackage } from "@/services/arcadeService.js";
+import { arcadeService, GamePackage } from "@/services/arcade/index.js";
 import { translations } from "@/utils/i18n.js";
 import { logger } from "@/utils/logger.js";
 

@@ -154,7 +154,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
 | NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
 | AIChatView            | aiChatService                                                   | sync+local | aichat/ (4)                                             |
-| ArcadeView            | arcadeService                                                   | local      | arcade/ (3)                                             |
+| ArcadeView            | arcadeService (arcade/ — fileSystem, htmlRewriter, gameLauncher, types) | local      | arcade/ (3)                                             |
 | DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
 | WillpowerView         | useWillpower (hook)                                             | sync       | —                                                       |
 | EisenhowerView        | todo repo, useEisenhower (hook)                                 | sync       | eisenhower/ (2) + eisenhower.css                        |
