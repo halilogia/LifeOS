@@ -153,7 +153,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | Stock/BistView        | bistService, stockAiService, useBist (hook)                     | sync      | stock/ (23 — BistSearchBar=tuval+SearchResultCard/NoResultCard/searchIcons, PortfolioTable=tuval+PortfolioRow/portfolioIcons) + stock/kesfet/ (4 — BistKesfetTab parçaları) + services/stock/ (3) |
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
 | NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (13 — NoteCard=tuval+NoteCardInlineEditor, NoteEditorModal=tuval+Header/Body/WikiAutocomplete/BacklinksPanel) |
-| AIChatView            | aiChatService (services/aichat/ — providers, systemPrompt, actionExecutor) | sync+local | aichat/ (4)                                             |
+| AIChatView            | aiChatService (services/aichat/ — providers, systemPrompt, actionExecutor) | sync+local | components/aichat/ (10 — AiChatMessageItem=tuval+aiChatIcons/AiMessageSources/AiThinkingCard/AiMessageFooter, useAiChatMessages + localReplyBuilder) + services/aichat/ (4) |
 | ArcadeView            | arcadeService (arcade/ — fileSystem, htmlRewriter, gameLauncher, types) | local      | arcade/ (6 — ArcadeGameModal=tuval + ArcadeModalHeader/ArcadePlayTab/ArcadeDevTab) |
 | DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
 | WillpowerView         | useWillpower (hook)                                             | sync       | —                                                       |
