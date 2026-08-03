@@ -32,6 +32,26 @@ interface HistoryMapSvgProps {
 
 /* ========== Render helpers (pure functions) ========== */
 
+function computeDiagramViewBox(
+  nodes: HistoryDiagramNode[],
+  _revealedCount: number
+): string {
+  if (nodes.length === 0) {
+    return "0 0 1000 422";
+  }
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  nodes.forEach((n) => {
+    const w = Math.max(88, n.label.length * 7.2 + 18);
+    const h = 40;
+    minX = Math.min(minX, n.x - w / 2);
+    maxX = Math.max(maxX, n.x + w / 2);
+    minY = Math.min(minY, n.y - h / 2);
+    maxY = Math.max(maxY, n.y + h / 2);
+  });
+  const padX = 40, padY = 40;
+  return `${minX - padX} ${minY - padY} ${maxX - minX + padX * 2} ${maxY - minY + padY * 2}`;
+}
+
 function renderDiagramLinks(
   nodes: HistoryDiagramNode[],
   revealedCount: number
@@ -107,19 +127,48 @@ function renderDiagramNodes(
   });
 }
 
+function getPinOffsets(
+  events: HistoryEvent[]
+): Map<number, { dx: number; dy: number }> {
+  const buckets = new Map<string, number[]>();
+  events.forEach((ev, idx) => {
+    const key = `${Math.round(ev.x * 10)}-${Math.round(ev.y * 10)}`;
+    const arr = buckets.get(key) || [];
+    arr.push(idx);
+    buckets.set(key, arr);
+  });
+  const offsets = new Map<number, { dx: number; dy: number }>();
+  buckets.forEach((indices) => {
+    if (indices.length === 1) {
+      return;
+    }
+    const radius = 14;
+    indices.forEach((idx, i) => {
+      const angle = (i / indices.length) * Math.PI * 2;
+      offsets.set(idx, {
+        dx: Math.cos(angle) * radius,
+        dy: Math.sin(angle) * radius,
+      });
+    });
+  });
+  return offsets;
+}
+
 function renderTerritoryPins(
   events: HistoryEvent[],
   revealedCount: number,
   currentIndex: number,
   unitColor: string
 ) {
+  const offsets = getPinOffsets(events);
   return events.slice(0, revealedCount).map((ev, idx) => {
     const isCurrent = idx === currentIndex;
     const pinColor = ev.color || unitColor;
+    const off = offsets.get(idx) || { dx: 0, dy: 0 };
     return (
       <g
         key={`pin-${ev.title}-${idx}`}
-        transform={`translate(${ev.x} ${ev.y})`}
+        transform={`translate(${ev.x + off.dx} ${ev.y + off.dy})`}
         className={`pin${isCurrent ? " current" : " revealed"}`}
         style={{ cursor: "default" }}
       >
@@ -248,7 +297,11 @@ export function HistoryMapSvg({
       }}
     >
       <svg
-        viewBox={HISTORY_VIEWBOX}
+        viewBox={
+          isDiagram
+            ? computeDiagramViewBox(nodes, revealedCount)
+            : HISTORY_VIEWBOX
+        }
         preserveAspectRatio="xMidYMid meet"
         style={{
           width: "100%",
