@@ -116,7 +116,7 @@ flowchart TB
 | `src/types/`                      | Tip tanımları                     | types.ts, kpss.ts, stock.ts, bist.ts...                                       | —                                     |
 | `src/data/`                       | Statik veri dosyaları             | kpss/ (eski sınav JSON'ları)                                                  | —                                     |
 | `src/offscreen/`                  | Offscreen doküman                 | offscreenAudio                                                                | —                                     |
-| `src/sidepanel/`                  | Side panel UI                     | index, SidePanelApp                                                           | —                                     |
+| `src/sidepanel/`                  | Side panel UI (Web Copilot)       | index, SidePanelApp (tuval ~90), useSidePanelChat (hook), SidePanelHeader/TabBar/Chips/Messages/InputBar (parçalar), ChatMessage (tip) | —                                     |
 | `src/css/`                        | Stiller                           | popup.css + newtab/ feature CSS'leri                                          | —                                     |
 
 ---
