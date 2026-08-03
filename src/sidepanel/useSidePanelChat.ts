@@ -5,7 +5,7 @@ import { PageContext } from "@/content/agent/domAgentEngine.js";
 import {
   getAIConfigFromStorage,
   handleUpdateMemoryFromAI,
-} from "@/services/aiChatService.js";
+} from "@/services/aichat/index.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 import { ChatMessage } from "./ChatMessage.js";
 

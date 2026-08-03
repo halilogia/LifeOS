@@ -13,7 +13,7 @@ import {
   callAIConfigured,
   handleAddNoteFromAI,
   handleUpdateMemoryFromAI,
-} from "@/services/aiChatService.js";
+} from "@/services/aichat/index.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
 import type { StockPortfolioItem } from "@/types/stock.js";
 import { fetchStockQuote } from "@/services/bistService.js";
