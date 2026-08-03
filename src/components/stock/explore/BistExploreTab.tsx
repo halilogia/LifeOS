@@ -1,8 +1,8 @@
 /**
- * BistKesfetTab.tsx
+ * BistExploreTab.tsx
  * Midas Tarzı BIST Keşfet ve Hisse Arama Ekranı (tuval).
  * Veri mantığı: ticker fetch, infinite scroll, featured hesaplama.
- * Parçalar: KesfetFeaturedCard, KesfetTickerCard, KesfetWatchlistModal.
+ * Parçalar: ExploreFeaturedCard, ExploreTickerCard, ExploreWatchlistModal.
  */
 
 import { useState, useEffect } from "preact/hooks";
@@ -12,11 +12,11 @@ import { BistSearchBar } from "@/components/stock/search/BistSearchBar.js";
 import type { StockWatchlist } from "@/types/stock.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
-import { KesfetFeaturedCard } from "@/components/stock/kesfet/KesfetFeaturedCard.js";
-import { KesfetTickerCard } from "@/components/stock/kesfet/KesfetTickerCard.js";
-import { KesfetWatchlistModal } from "@/components/stock/kesfet/KesfetWatchlistModal.js";
+import { ExploreFeaturedCard } from "@/components/stock/explore/ExploreFeaturedCard.js";
+import { ExploreTickerCard } from "@/components/stock/explore/ExploreTickerCard.js";
+import { ExploreWatchlistModal } from "@/components/stock/explore/ExploreWatchlistModal.js";
 
-interface BistKesfetTabProps {
+interface BistExploreTabProps {
   searchQuery: string;
   quoteMap: Map<string, StockQuote>;
   watchlists: StockWatchlist[];
@@ -29,7 +29,7 @@ interface BistKesfetTabProps {
   lang: Language;
 }
 
-export function BistKesfetTab({
+export function BistExploreTab({
   searchQuery,
   quoteMap,
   watchlists,
@@ -40,7 +40,7 @@ export function BistKesfetTab({
   onOpenChart,
   onOpenAiModal,
   lang,
-}: BistKesfetTabProps) {
+}: BistExploreTabProps) {
   const t = getTranslation(lang);
   // Modal for adding a stock to a watchlist
   const [watchlistModalSymbol, setWatchlistModalSymbol] = useState<
@@ -123,7 +123,7 @@ export function BistKesfetTab({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       {/* AI Haftalık Öne Çıkan Hisseler Köşesi */}
-      <KesfetFeaturedCard
+      <ExploreFeaturedCard
         t={t}
         featuredStocks={featuredStocks}
         onOpenAiModal={onOpenAiModal}
@@ -150,7 +150,7 @@ export function BistKesfetTab({
         }}
       >
         {displayedTickers.map((fullSym) => (
-          <KesfetTickerCard
+          <ExploreTickerCard
             key={fullSym}
             t={t}
             fullSym={fullSym}
@@ -192,7 +192,7 @@ export function BistKesfetTab({
 
       {/* Watchlist Selector Modal */}
       {watchlistModalSymbol && (
-        <KesfetWatchlistModal
+        <ExploreWatchlistModal
           t={t}
           watchlists={watchlists}
           symbol={watchlistModalSymbol}

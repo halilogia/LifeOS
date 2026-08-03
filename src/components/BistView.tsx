@@ -11,7 +11,7 @@ import { useState } from "preact/hooks";
 import { useBist } from "@/presentation/hooks/useBist.js";
 
 // Extracted Sub-components
-import { BistKesfetTab } from "@/components/stock/kesfet/BistKesfetTab.js";
+import { BistExploreTab } from "@/components/stock/explore/BistExploreTab.js";
 import { BistActionBar } from "@/components/stock/common/BistActionBar.js";
 import { BistPortfolioTab } from "@/components/stock/portfolio/BistPortfolioTab.js";
 import { StockWatchlistTable } from "@/components/stock/watchlist/StockWatchlistTable.js";
@@ -143,7 +143,7 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
 
       {/* TAB 2: KEŞFET & HISSE ARAMA (Midas Discovery & Stock Search Grid) */}
       {activeTab === "kesfet" && (
-        <BistKesfetTab
+        <BistExploreTab
           lang={lang}
           searchQuery={searchQuery}
           quoteMap={quoteMap}

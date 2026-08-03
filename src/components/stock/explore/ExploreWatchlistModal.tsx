@@ -1,8 +1,8 @@
 import { useState } from "preact/hooks";
 import type { StockWatchlist } from "@/types/stock.js";
-import { IconCheck } from "./kesfetIcons.js";
+import { IconCheck } from "./exploreIcons.js";
 
-interface KesfetWatchlistModalProps {
+interface ExploreWatchlistModalProps {
   t: Record<string, string>;
   watchlists: StockWatchlist[];
   symbol: string;
@@ -10,13 +10,13 @@ interface KesfetWatchlistModalProps {
   onClose: () => void;
 }
 
-export function KesfetWatchlistModal({
+export function ExploreWatchlistModal({
   t,
   watchlists,
   symbol,
   onToggle,
   onClose,
-}: KesfetWatchlistModalProps) {
+}: ExploreWatchlistModalProps) {
   return (
     <div className="stock-modal-overlay" onClick={onClose}>
       <div
