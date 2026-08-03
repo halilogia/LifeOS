@@ -150,7 +150,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | SrsView               | kpssSrsService, SrsService, useSrs (hook)                       | sync       | —                                                       |
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                | sync       | —                                                       |
 | PrayerView            | prayerService, usePrayer (hook)                                 | sync       | prayer/ (1) — PrayerCityForm                            |
-| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | sync      | stock/ (19) + services/stock/ (3)                       |
+| Stock/BistView        | bistService, stockAiService, useBist (hook)                     | sync      | stock/ (19) + stock/kesfet/ (4 — BistKesfetTab parçaları) + services/stock/ (3) |
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
 | NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
 | AIChatView            | aiChatService                                                   | sync+local | aichat/ (4)                                             |
