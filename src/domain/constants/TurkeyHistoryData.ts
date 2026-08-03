@@ -46,7 +46,7 @@ export interface HistoryUnit {
   subtitle: string;
   showYear: boolean;
   color: string;
-  legend: HistoryLegendRow[];
+  legend: HistoryLegendRow[] | null;
   events?: HistoryEvent[];
   nodes?: HistoryDiagramNode[];
 }
@@ -252,9 +252,7 @@ export const HISTORY_UNITS: HistoryUnit[] = [
     subtitle: "8 önemli beylik · devlet dağılınca ortaya çıkan yapı",
     showYear: false,
     color: "#8c2a1f",
-    legend: [
-      { c: "#8c2a1f", l: "Beylik toprakları" },
-    ],
+    legend: null,
     events: [
       { title: "Karamanoğulları", city: "Konya / Karaman", desc: "En güçlü beylikti; 1277'de Türkçeyi resmî dil ilan etti. Selçuklu mirasına en çok sahip çıkan beylikti.", tag: "Beylik", territory: ["Konya", "Karaman", "Niğde"], color: "#8c2a1f", x: 390.5, y: 319 },
       { title: "Germiyanoğulları", city: "Kütahya", desc: "İç Batı Anadolu'da güçlü bir beylikti, Kütahya merkezliydi.", tag: "Beylik", territory: ["Kütahya", "Uşak"], color: "#6b4226", x: 225.4, y: 180.2 },

@@ -10,7 +10,7 @@ interface HistorySidebarProps {
   selectedUnitId: string;
   onUnitChange: (id: string) => void;
   unitColor: string;
-  legend: { c: string; l: string }[];
+  legend: { c: string; l: string }[] | null;
   maxHeight: string;
 }
 
@@ -111,7 +111,7 @@ export function HistorySidebar({
       </div>
 
       {/* Lejant */}
-      {legend.length > 0 && (
+      {legend && legend.length > 0 && (
         <div
           style={{
             borderTop: "1px solid rgba(255,255,255,0.08)",
