@@ -9,7 +9,7 @@ import {
   callAIConfigured,
   getAIConfigFromStorage,
   executeAIAction,
-} from "@/services/aiChatService.js";
+} from "@/services/aichat/index.js";
 
 export interface RuntimeMessage {
   type: string;
