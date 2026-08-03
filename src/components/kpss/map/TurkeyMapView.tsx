@@ -3,16 +3,18 @@
  * Türkiye Fiziki Haritası — konu seçici (volkanik dağlar, ovalar, göller, akarsular, platolar).
  * Video oynatıcı mantığı: ileri/geri sarma, fullscreen, başlangıçta tüm pinler görünür.
  * Veri: src/domain/constants/TurkeyGeographyData.ts + TurkeyProvincePaths.ts
+ * Parçalar: MapControls, MapTopicSidebar, MapCanvas.
  */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  MAP_VIEWBOX,
   MAP_TOPICS,
   TOPIC_PINS,
   VOLCANIC_MOUNTAINS,
   TurkeyMapTopic,
 } from "@/domain/constants/TurkeyGeographyData.js";
-import { TURKEY_PROVINCE_PATHS } from "@/domain/constants/TurkeyProvincePaths.js";
+import { MapControls } from "./MapControls.js";
+import { MapTopicSidebar } from "./MapTopicSidebar.js";
+import { MapCanvas } from "./MapCanvas.js";
 
 interface TurkeyMapViewProps {
   t: Record<string, string>;
@@ -189,149 +191,22 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
       }}
     >
       {/* Harita Başlığı + Kontroller */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "10px",
-          background: "rgba(15, 23, 42, 0.6)",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
-          borderRadius: "14px",
-          padding: "14px 18px",
-        }}
-      >
-        <div>
-          <h3
-            style={{
-              margin: 0,
-              color: "#f8fafc",
-              fontSize: "1.05rem",
-              fontWeight: 800,
-            }}
-          >
-            {t[TOPIC_TITLE_KEYS[selectedTopic]] ||
-              t.kpss_map_title ||
-              "Türkiye Fiziki Haritası"}
-          </h3>
-          <p style={{ margin: "4px 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
-            {total} {t.kpss_map_subtitle || "konum · sırasıyla oynat"}
-          </p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span
-            style={{
-              fontSize: "0.78rem",
-              color: "#94a3b8",
-              background: "rgba(255,255,255,0.06)",
-              padding: "6px 12px",
-              borderRadius: "20px",
-              fontWeight: 700,
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {revealedCount} / {total}
-          </span>
-
-          {/* İleri/Geri Sarma */}
-          <button
-            type="button"
-            onClick={() => handleStep(-1)}
-            disabled={revealedCount <= 0}
-            title={t.kpss_map_prev || "Geri"}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.15)",
-              color: revealedCount <= 0 ? "#475569" : "#94a3b8",
-              borderRadius: "8px",
-              padding: "7px 12px",
-              fontSize: "0.9rem",
-              fontWeight: 700,
-              cursor: revealedCount <= 0 ? "not-allowed" : "pointer",
-              opacity: revealedCount <= 0 ? 0.5 : 1,
-            }}
-          >
-            ◀
-          </button>
-          <button
-            type="button"
-            onClick={() => handleStep(1)}
-            disabled={revealedCount >= total}
-            title={t.kpss_map_next || "İleri"}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.15)",
-              color: revealedCount >= total ? "#475569" : "#94a3b8",
-              borderRadius: "8px",
-              padding: "7px 12px",
-              fontSize: "0.9rem",
-              fontWeight: 700,
-              cursor: revealedCount >= total ? "not-allowed" : "pointer",
-              opacity: revealedCount >= total ? 0.5 : 1,
-            }}
-          >
-            ▶
-          </button>
-
-          <button
-            type="button"
-            onClick={handleReset}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.15)",
-              color: "#94a3b8",
-              borderRadius: "8px",
-              padding: "7px 14px",
-              fontSize: "0.78rem",
-              fontWeight: 700,
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {t.kpss_map_reset || "Sıfırla"}
-          </button>
-          <button
-            type="button"
-            onClick={handlePlay}
-            style={{
-              background: playing
-                ? "rgba(220, 38, 38, 0.85)"
-                : "linear-gradient(135deg, #c8511f, #e6773f)",
-              border: "none",
-              color: "#fff8ef",
-              borderRadius: "8px",
-              padding: "7px 16px",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {playing ? "❚❚" : "▶"} {playing ? (t.kpss_map_stop || "Durdur") : (t.kpss_map_play || "Oynat")}
-          </button>
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            title={isFullscreen ? (t.kpss_map_exit_fullscreen || "Tam Ekrandan Çık") : (t.kpss_map_fullscreen || "Tam Ekran")}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.15)",
-              color: "#94a3b8",
-              borderRadius: "8px",
-              padding: "7px 12px",
-              fontSize: "0.9rem",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            {isFullscreen ? "⤢" : "⛶"}
-          </button>
-        </div>
-      </div>
+      <MapControls
+        t={t}
+        title={
+          t[TOPIC_TITLE_KEYS[selectedTopic]] ||
+          t.kpss_map_title ||
+          "Türkiye Fiziki Haritası"
+        }
+        total={total}
+        revealedCount={revealedCount}
+        playing={playing}
+        isFullscreen={isFullscreen}
+        onStep={handleStep}
+        onReset={handleReset}
+        onPlayToggle={handlePlay}
+        onToggleFullscreen={toggleFullscreen}
+      />
 
       {/* Konu Seçici + Harita */}
       <div
@@ -343,226 +218,26 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
         }}
       >
         {/* Sol Sidebar: Konu Listesi */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "6px",
-            minWidth: "150px",
-            maxWidth: "170px",
-            background: "rgba(15, 23, 42, 0.55)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "14px",
-            padding: "10px",
-            alignSelf: "flex-start",
-          }}
-        >
-          {MAP_TOPICS.map((topic) => {
-            const active = selectedTopic === topic.id;
-            return (
-              <button
-                key={topic.id}
-                type="button"
-                onClick={() => handleTopicChange(topic.id)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: active ? "rgba(255,255,255,0.1)" : "transparent",
-                  border: active ? `1px solid ${topic.color}` : "1px solid transparent",
-                  borderRadius: "9px",
-                  padding: "8px 10px",
-                  color: active ? "#ffffff" : "#94a3b8",
-                  fontSize: "0.78rem",
-                  fontWeight: active ? 800 : 600,
-                  cursor: "pointer",
-                  textAlign: "left",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <span
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    background: topic.color,
-                    border: "1.5px solid rgba(255,255,255,0.35)",
-                    display: "inline-block",
-                    flexShrink: 0,
-                  }}
-                />
-                {t[`kpss_map_topic_${topic.id}`] || topic.id}
-              </button>
-            );
-          })}
-        </div>
+        <MapTopicSidebar
+          t={t}
+          selectedTopic={selectedTopic}
+          onSelect={handleTopicChange}
+        />
 
         {/* Harita Gövdesi */}
-        <div
-          ref={svgWrapRef}
+        <MapCanvas
+          t={t}
+          topicColor={topicColor}
+          legendKey={topicMeta.legendKey}
+          pins={pins}
+          revealedCount={revealedCount}
+          currentIndex={currentIndex}
+          isFullscreen={isFullscreen}
+          svgWrapRef={svgWrapRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-          style={{
-            position: "relative",
-            flex: 1,
-            minWidth: 0,
-            borderRadius: "16px",
-            overflow: "hidden",
-            cursor: "grab",
-            touchAction: "none",
-            background:
-              "radial-gradient(ellipse at 30% 20%, #f4ecd8, #e6d9b8 55%, #d8c79a 100%)",
-            boxShadow:
-              "inset 0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.25)",
-          }}
-        >
-          <svg
-            viewBox={MAP_VIEWBOX}
-            preserveAspectRatio="xMidYMid meet"
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              maxHeight: isFullscreen ? "calc(100vh - 180px)" : undefined,
-            }}
-          >
-            {/* İl Sınırları */}
-            {TURKEY_PROVINCE_PATHS.map((province) => (
-              <path
-                key={province.name}
-                d={province.d}
-                fill="#d8cba7"
-                stroke="#a3906a"
-                strokeWidth={0.7}
-                style={{ transition: "fill 0.3s" }}
-              />
-            ))}
-
-            {/* Konu Pinleri */}
-            {pins.map((pin, idx) => {
-              const revealed = idx < revealedCount;
-              const isCurrent = idx === currentIndex;
-              return (
-                <g
-                  key={`${selectedTopic}-${pin.name}`}
-                  transform={`translate(${pin.x} ${pin.y})`}
-                  style={{ cursor: "default" }}
-                >
-                  {revealed && (
-                    <circle
-                      r={isCurrent ? 8 : 5}
-                      fill={isCurrent ? "#c99a3c" : topicColor}
-                      stroke="#3a1408"
-                      strokeWidth={1.1}
-                    />
-                  )}
-                  {revealed && isCurrent && (
-                    <circle
-                      r={6}
-                      fill="none"
-                      stroke={topicColor}
-                      strokeWidth={1.5}
-                      style={{
-                        animation: "mapPulse 1.4s ease-out infinite",
-                        transformOrigin: "center",
-                      }}
-                    />
-                  )}
-                  {revealed && (
-                    <text
-                      y={-10}
-                      textAnchor="middle"
-                      style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: 13,
-                        fill: "#3a1408",
-                        fontWeight: 700,
-                        pointerEvents: "none",
-                      }}
-                    >
-                      {pin.name}
-                    </text>
-                  )}
-                </g>
-              );
-            })}
-          </svg>
-
-          {/* Lejant */}
-          <div
-            style={{
-              position: "absolute",
-              right: 14,
-              top: 12,
-              background: "rgba(255,255,255,0.6)",
-              border: "1px solid rgba(0,0,0,0.08)",
-              borderRadius: "10px",
-              padding: "6px 12px",
-              fontSize: "0.72rem",
-              color: "#5a5140",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <span
-              style={{
-                width: 9,
-                height: 9,
-                borderRadius: "50%",
-                background: topicColor,
-                border: "1.5px solid #3a1408",
-                display: "inline-block",
-              }}
-            />
-            {t[topicMeta.legendKey] || t.kpss_map_legend || "Konum"}
-          </div>
-
-          {/* Bilgi Kartı */}
-          {currentIndex >= 0 && currentIndex < total && (
-            <div
-              style={{
-                position: "absolute",
-                left: 16,
-                bottom: 16,
-                maxWidth: 280,
-                background: "rgba(30, 24, 16, 0.92)",
-                color: "#f4ead7",
-                borderRadius: "12px",
-                padding: "12px 16px",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.68rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: topicColor,
-                  marginBottom: 3,
-                }}
-              >
-                {currentIndex + 1} / {total}
-              </div>
-              <h4
-                style={{
-                  margin: "0 0 3px",
-                  fontFamily: "Georgia, serif",
-                  fontSize: "1rem",
-                  color: "#fff4e4",
-                }}
-              >
-                {pins[currentIndex].name}
-              </h4>
-              <p style={{ margin: 0, fontSize: "0.78rem", color: "#cfc3aa" }}>
-                {pins[currentIndex].city}
-              </p>
-            </div>
-          )}
-        </div>
+        />
       </div>
 
       {/* @keyframes tanımı (global CSS'e eklenir) */}
