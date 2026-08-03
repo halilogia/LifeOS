@@ -814,7 +814,7 @@ export const tr = {
     "{symbol} hissesini almayı düşünüyorum. Şirketin genel seyri, riskleri ve dikkat edilmesi gereken konular hakkında ne düşünüyorsun?",
   stock_ai_report_tab_digest: "Günlük / Haftalık AI Borsa Özeti",
   stock_ai_report_tab_advisor: "Yatırım & Alım Karar Asistanı",
-  stock_ai_report_title: "🤖 AI Portföy & Piyasa Sağlık Raporu",
+  stock_ai_report_title: "✨ AI Portföy \u0026 Piyasa Sağlık Raporu",
   stock_ai_report_desc:
     "9Router AI altyapısıyla portföyünüzün genel durumunu tek tıkla Türkçe sade bir özet olarak alın.",
   stock_ai_report_analyzing:

@@ -112,7 +112,13 @@ export function AIChatView({
           ))}
           {isBotTyping && (
             <div className="message-bubble-wrapper bot">
-              <div className="avatar">🤖</div>
+              <div className="avatar">
+                <img
+                  src="icons/AI.png"
+                  alt="AI"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+                />
+              </div>
               <div
                 className="message-bubble typing"
                 style={{

@@ -357,6 +357,15 @@ export function KpssView({
               quiz.handleStartQuiz(topic, subject)
             }
             onShowDetail={(topic) => setActiveTopic(topic)}
+            onOpenYoutube={(topic) =>
+              window.open(
+                `https://www.youtube.com/results?search_query=${encodeURIComponent(
+                  topic + " KPSS",
+                )}`,
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
           />
         ) : activeTab === "notes" ? (
           <KpssNotesDashboard lang={lang} t={t} />

@@ -1,4 +1,4 @@
-﻿import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
+import { KpssCountdownBanner } from "@/components/KpssCountdownBanner.js";
 import { KpssAutoPlannerCard } from "@/components/kpss/KpssAutoPlannerCard.js";
 import { KpssDailyStatsCard } from "@/components/kpss/KpssDailyStatsCard.js";
 import { KpssNetEstimationCard } from "@/components/kpss/KpssNetEstimationCard.js";
@@ -45,6 +45,7 @@ interface KpssProgressSectionProps {
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onStartQuiz: (topic: string, subject?: string) => void;
   onShowDetail: (topic: { title: string; description: string }) => void;
+  onOpenYoutube: (topic: string) => void;
 }
 
 export function KpssProgressSection({
@@ -85,6 +86,7 @@ export function KpssProgressSection({
   onSortByChange,
   onStartQuiz,
   onShowDetail,
+  onOpenYoutube,
 }: KpssProgressSectionProps) {
   return (
     <>
@@ -154,6 +156,7 @@ export function KpssProgressSection({
         onSortByChange={onSortByChange}
         onStartQuiz={(topic) => onStartQuiz(topic)}
         onShowDetail={onShowDetail}
+        onOpenYoutube={onOpenYoutube}
       />
     </>
   );

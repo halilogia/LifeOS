@@ -83,7 +83,7 @@
 
 .kpss-topic-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: var(--space-7);
 }
 
@@ -122,6 +122,8 @@
   font-size: 1rem;
   color: var(--text-secondary);
   font-weight: 500;
+  flex: 1;
+  min-width: 0;
 }
 
 .kpss-info-btn {
@@ -696,7 +698,7 @@
   }
 }
 
-/* KPSS Not Stüdyosu — tam ekran modu (tarayýcý chrome'unu deðil, container'ý kaplar) */
+/* KPSS Not Stï¿½dyosu ï¿½ tam ekran modu (tarayï¿½cï¿½ chrome'unu deï¿½il, container'ï¿½ kaplar) */
 .kpss-notes-fullscreen:fullscreen {
   background: #0f172a;
   padding: 20px;
