@@ -1,11 +1,14 @@
 /**
  * BistSearchBar.tsx
  * Midas tarzı canlı BIST hisse arama çubuğu ve arama sonuç kartları.
+ * Tuval: debounce arama + sonuç paneli kompozisyonu.
  */
-
 import { useState, useEffect } from "preact/hooks";
-import { searchBistStocks, formatPrice } from "@/services/bistService.js";
+import { searchBistStocks } from "@/services/bistService.js";
 import type { BISTSearchResult, StockQuote } from "@/types/bist.js";
+import { IconSearch } from "./searchIcons.js";
+import { SearchResultCard } from "./SearchResultCard.js";
+import { NoResultCard } from "./NoResultCard.js";
 
 interface BistSearchBarProps {
   searchQuery: string;
@@ -14,59 +17,6 @@ interface BistSearchBarProps {
   onQuickAddStock: (symbolClean: string) => void;
   onOpenChart: (symbolClean: string) => void;
   onOpenAiModal: (symbolClean: string) => void;
-}
-
-function IconSearch() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  );
-}
-
-function IconPlus() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
-
-function IconSparkles() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
-    </svg>
-  );
 }
 
 export function BistSearchBar({
@@ -174,7 +124,7 @@ export function BistSearchBar({
               marginBottom: "4px",
             }}
           >
-            CANLI BİST ARAMA SONUÇLARI ({liveResults.length})
+            CANLI BIST ARAMA SONUÇLARI ({liveResults.length})
           </div>
 
           {isLoading ? (
@@ -189,241 +139,23 @@ export function BistSearchBar({
               Borsa İstanbul canlı verileri aranıyor...
             </div>
           ) : liveResults.length === 0 ? (
-            (() => {
-              const customSym = searchQuery.trim().toUpperCase();
-              const isValidTicker = /^[A-Z0-9]{3,7}$/.test(customSym);
-              return (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    padding: "12px",
-                    textAlign: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      color: "var(--text-muted, #94a3b8)",
-                      fontSize: "0.88rem",
-                    }}
-                  >
-                    "{searchQuery}" aramasıyla eşleşen canlı BİST hissesi
-                    bulunamadı.
-                  </div>
-                  {isValidTicker && (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "10px 14px",
-                        borderRadius: "10px",
-                        background: "rgba(99, 102, 241, 0.08)",
-                        border: "1px dashed rgba(99, 102, 241, 0.4)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "0.85rem",
-                            fontWeight: 800,
-                            padding: "4px 8px",
-                            borderRadius: "6px",
-                            background: "rgba(99, 102, 241, 0.25)",
-                            color: "#c084fc",
-                          }}
-                        >
-                          {customSym}
-                        </span>
-                        <div style={{ textAlign: "left" }}>
-                          <div
-                            style={{
-                              fontWeight: 700,
-                              color: "white",
-                              fontSize: "0.9rem",
-                            }}
-                          >
-                            {customSym} BIST Hissesi
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "0.75rem",
-                              color: "#94a3b8",
-                            }}
-                          >
-                            Borsa İstanbul
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ display: "flex", gap: "6px" }}>
-                        <button
-                          className="stock-btn stock-btn-primary"
-                          style={{ padding: "6px 12px", fontSize: "0.78rem" }}
-                          onClick={() => onQuickAddStock(customSym)}
-                        >
-                          <IconPlus />
-                          <span>+ Portföye Ekle</span>
-                        </button>
-                        <button
-                          className="stock-btn stock-btn-secondary"
-                          style={{ padding: "6px 10px", fontSize: "0.78rem" }}
-                          onClick={() => onOpenChart(customSym)}
-                        >
-                          Grafik
-                        </button>
-                        <button
-                          className="stock-btn stock-btn-ai"
-                          style={{ padding: "6px 10px", fontSize: "0.78rem" }}
-                          onClick={() => onOpenAiModal(customSym)}
-                        >
-                          <IconSparkles />
-                          <span>AI</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })()
+            <NoResultCard
+              searchQuery={searchQuery}
+              onQuickAddStock={onQuickAddStock}
+              onOpenChart={onOpenChart}
+              onOpenAiModal={onOpenAiModal}
+            />
           ) : (
-            liveResults.map((item) => {
-              const symClean = item.cleanSymbol;
-              const liveQ = quoteMap.get(symClean);
-              const isPos = liveQ ? liveQ.changePercent >= 0 : true;
-
-              return (
-                <div
-                  key={item.symbol}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px 14px",
-                    borderRadius: "10px",
-                    background: "var(--card-bg, rgba(30, 41, 59, 0.6))",
-                    border:
-                      "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.8rem",
-                        fontWeight: 700,
-                        padding: "4px 8px",
-                        borderRadius: "6px",
-                        background:
-                          "var(--stock-badge-bg, rgba(99, 102, 241, 0.2))",
-                        color: "var(--stock-accent, #818cf8)",
-                      }}
-                    >
-                      {symClean}
-                    </span>
-                    <div style={{ textAlign: "left" }}>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          color: "var(--text-primary, #f8fafc)",
-                          fontSize: "0.92rem",
-                        }}
-                      >
-                        {item.shortName}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "var(--text-secondary, #94a3b8)",
-                        }}
-                      >
-                        {item.sector || "BIST"}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "16px",
-                    }}
-                  >
-                    {liveQ ? (
-                      <div style={{ textAlign: "right" }}>
-                        <div
-                          style={{
-                            fontWeight: 700,
-                            color: "var(--text-primary, #f8fafc)",
-                            fontSize: "0.95rem",
-                          }}
-                        >
-                          {formatPrice(liveQ.price)}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "0.75rem",
-                            fontWeight: 700,
-                            color: isPos
-                              ? "var(--stock-up, #4ade80)"
-                              : "var(--stock-down, #f87171)",
-                          }}
-                        >
-                          {isPos ? "+" : ""}
-                          {liveQ.changePercent.toFixed(2)}%
-                        </div>
-                      </div>
-                    ) : (
-                      <span
-                        style={{
-                          fontSize: "0.8rem",
-                          color: "var(--text-muted, #64748b)",
-                        }}
-                      >
-                        BIST 100
-                      </span>
-                    )}
-
-                    <div style={{ display: "flex", gap: "6px" }}>
-                      <button
-                        className="stock-btn stock-btn-primary"
-                        style={{ padding: "5px 10px", fontSize: "0.78rem" }}
-                        onClick={() => onQuickAddStock(symClean)}
-                      >
-                        <IconPlus />
-                        <span>+ Portföye Ekle</span>
-                      </button>
-                      <button
-                        className="stock-btn stock-btn-secondary"
-                        style={{ padding: "5px 10px", fontSize: "0.78rem" }}
-                        onClick={() => onOpenChart(symClean)}
-                      >
-                        Grafik
-                      </button>
-                      <button
-                        className="stock-btn stock-btn-ai"
-                        style={{ padding: "5px 10px", fontSize: "0.78rem" }}
-                        onClick={() => onOpenAiModal(symClean)}
-                      >
-                        <IconSparkles />
-                        <span>AI</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
+            liveResults.map((item) => (
+              <SearchResultCard
+                key={item.symbol}
+                item={item}
+                quoteMap={quoteMap}
+                onQuickAddStock={onQuickAddStock}
+                onOpenChart={onOpenChart}
+                onOpenAiModal={onOpenAiModal}
+              />
+            ))
           )}
         </div>
       )}
