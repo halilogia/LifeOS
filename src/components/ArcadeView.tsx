@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { arcadeService, ImportResult } from "@/services/arcadeService.js";
+import { arcadeService, ImportResult } from "@/services/arcade/index.js";
 import { GameEntry, GameCategory, DevTodoItem } from "@/types/game.js";
 import { Language } from "@/types/types.js";
 import { ArcadeHeader } from "@/components/arcade/ArcadeHeader.js";
