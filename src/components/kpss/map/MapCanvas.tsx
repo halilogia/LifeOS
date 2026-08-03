@@ -14,9 +14,11 @@ interface MapCanvasProps {
   currentIndex: number;
   isFullscreen: boolean;
   svgWrapRef: Ref<HTMLDivElement>;
+  view: { x: number; y: number; scale: number };
   onPointerDown: (e: PointerEvent) => void;
   onPointerMove: (e: PointerEvent) => void;
   onPointerUp: () => void;
+  onWheel: (e: WheelEvent) => void;
 }
 
 export function MapCanvas({
@@ -28,9 +30,11 @@ export function MapCanvas({
   currentIndex,
   isFullscreen,
   svgWrapRef,
+  view,
   onPointerDown,
   onPointerMove,
   onPointerUp,
+  onWheel,
 }: MapCanvasProps) {
   const total = pins.length;
   return (
@@ -40,14 +44,18 @@ export function MapCanvas({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onWheel={onWheel}
       style={{
         position: "relative",
         flex: 1,
         minWidth: 0,
+        height: isFullscreen ? undefined : 480,
         borderRadius: "16px",
         overflow: "hidden",
         cursor: "grab",
         touchAction: "none",
+        userSelect: "none",
+        WebkitUserSelect: "none",
         background:
           "radial-gradient(ellipse at 30% 20%, #f4ecd8, #e6d9b8 55%, #d8c79a 100%)",
         boxShadow:
@@ -59,9 +67,12 @@ export function MapCanvas({
         preserveAspectRatio="xMidYMid meet"
         style={{
           width: "100%",
-          height: "auto",
+          height: "100%",
           display: "block",
           maxHeight: isFullscreen ? "calc(100vh - 180px)" : undefined,
+          transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`,
+          transformOrigin: "0 0",
+          transition: "transform 0.05s linear",
         }}
       >
         {/* İl Sınırları */}

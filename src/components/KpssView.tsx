@@ -38,6 +38,7 @@ import { KpssQuizModal } from "@/components/kpss/quiz/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/exams/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
+import { HistoryMapView } from "@/components/kpss/history/HistoryMapView.js";
 import { logger } from "@/utils/logger.js";
 
 interface KpssViewProps {
@@ -92,6 +93,11 @@ export function KpssView({
   const [activeTab, setActiveTab] = useState<
     "progress" | "notes" | "srs" | "past-exams" | "map"
   >("progress");
+
+  // Map sub-tab: geography | history
+  const [mapSubTab, setMapSubTab] = useState<"geography" | "history">(
+    "geography",
+  );
 
   // Sorting state for topic lists
   const [sortBy, setSortBy] = useState<"default" | "questions" | "status">(
@@ -393,7 +399,65 @@ export function KpssView({
               margin: "0 auto",
             }}
           >
-            <TurkeyMapView t={t} />
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                marginBottom: "12px",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setMapSubTab("geography")}
+                style={{
+                  background:
+                    mapSubTab === "geography"
+                      ? "rgba(181,67,47,0.2)"
+                      : "rgba(255,255,255,0.04)",
+                  border:
+                    mapSubTab === "geography"
+                      ? "1px solid #b5432f"
+                      : "1px solid rgba(255,255,255,0.08)",
+                  color: mapSubTab === "geography" ? "#ffe4da" : "#d9d2bf",
+                  padding: "9px 18px",
+                  borderRadius: "9px",
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {t.kpss_map_subtab_geography || "Coğrafya"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setMapSubTab("history")}
+                style={{
+                  background:
+                    mapSubTab === "history"
+                      ? "rgba(181,67,47,0.2)"
+                      : "rgba(255,255,255,0.04)",
+                  border:
+                    mapSubTab === "history"
+                      ? "1px solid #b5432f"
+                      : "1px solid rgba(255,255,255,0.08)",
+                  color: mapSubTab === "history" ? "#ffe4da" : "#d9d2bf",
+                  padding: "9px 18px",
+                  borderRadius: "9px",
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {t.kpss_map_subtab_history || "Tarih"}
+              </button>
+            </div>
+            {mapSubTab === "geography" ? (
+              <TurkeyMapView t={t} />
+            ) : (
+              <HistoryMapView t={t} />
+            )}
           </div>
         ) : (
           <KpssPastExamsDashboard

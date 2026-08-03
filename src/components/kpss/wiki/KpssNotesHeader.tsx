@@ -1,7 +1,7 @@
 /**
  * KpssNotesHeader.tsx
  * Presentational Header for KPSS Not Stüdyosu.
- * MindVault icon + gradient title + optional sync status message.
+ * Gradient title + optional sync status message.
  */
 
 interface KpssNotesHeaderProps {
@@ -19,20 +19,6 @@ export function KpssNotesHeader({ t, syncMsg }: KpssNotesHeaderProps) {
         padding: "0 4px",
       }}
     >
-      <img
-        src="icons/mindvault.png"
-        alt="MindVault"
-        style={{
-          width: "32px",
-          height: "32px",
-          borderRadius: "9px",
-          background: "#ffffff",
-          objectFit: "contain",
-          padding: "4px",
-          boxSizing: "border-box",
-          boxShadow: "0 2px 10px rgba(124, 58, 237, 0.45)",
-        }}
-      />
       <h2
         style={{
           margin: 0,
