@@ -26,7 +26,7 @@ import { ConfirmModal } from "@/components/ConfirmModal.js";
 import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
-import { DatePicker } from "@/components/DatePicker.js";
+import { AppTopHeader } from "@/components/AppTopHeader.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import type { Todo } from "@/types/types.js";
 
@@ -240,58 +240,18 @@ export function App() {
 
       {/* Top Input Header */}
       {activeView === "list" && (
-        <header className="top-header" style={{ display: "flex" }}>
-          <div className="global-input-container">
-            <div className="input-group">
-              <input
-                type="text"
-                id="todo-input"
-                value={todoText}
-                onInput={(e) =>
-                  setTodoText((e.target as HTMLInputElement).value)
-                }
-                onKeyPress={handleKeyPress}
-                placeholder={t.todo_placeholder}
-                autocomplete="off"
-              />
-              <DatePicker
-                value={todoDueDate}
-                onChange={setTodoDueDate}
-                lang={lang as Language}
-              />
-              <select
-                id="repeat-select"
-                className="repeat-select"
-                value={todoRepeat}
-                onChange={handleRepeatChange}
-              >
-                <option value="none">{t.repeat_none}</option>
-                <option value="daily">{t.repeat_daily}</option>
-                <option value="weekly">{t.repeat_weekly}</option>
-                <option value="monthly">{t.repeat_monthly}</option>
-              </select>
-              <button
-                id="add-btn"
-                onClick={handleAddTodoClick}
-                aria-label="Add Task"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </header>
+        <AppTopHeader
+          t={t}
+          lang={lang as Language}
+          todoText={todoText}
+          onTodoTextChange={setTodoText}
+          onKeyPress={handleKeyPress}
+          todoRepeat={todoRepeat}
+          onRepeatChange={handleRepeatChange}
+          todoDueDate={todoDueDate}
+          onDueDateChange={setTodoDueDate}
+          onAddTodoClick={handleAddTodoClick}
+        />
       )}
 
       {/* Settings Drawer */}

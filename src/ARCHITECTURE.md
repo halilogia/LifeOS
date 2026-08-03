@@ -152,7 +152,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | PrayerView            | prayerService, usePrayer (hook)                                 | sync       | prayer/ (1) — PrayerCityForm                            |
 | Stock/BistView        | bistService, stockAiService, useBist (hook)                     | sync      | stock/ (19) + stock/kesfet/ (4 — BistKesfetTab parçaları) + services/stock/ (3) |
 | FreeGamesView         | gamesService, useFreeGames (hook)                               | local      | freegames/ (2)                                          |
-| NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (7)                                              |
+| NotesView             | zettelkastenEngine, useNotes (hook)                             | sync       | notes/ (13 — NoteCard=tuval+NoteCardInlineEditor, NoteEditorModal=tuval+Header/Body/WikiAutocomplete/BacklinksPanel) |
 | AIChatView            | aiChatService (services/aichat/ — providers, systemPrompt, actionExecutor) | sync+local | aichat/ (4)                                             |
 | ArcadeView            | arcadeService (arcade/ — fileSystem, htmlRewriter, gameLauncher, types) | local      | arcade/ (3)                                             |
 | DetoxView             | detoxBlocker (content)                                          | sync       | detox/ (3)                                              |
