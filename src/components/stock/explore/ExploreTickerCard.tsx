@@ -1,7 +1,7 @@
 import type { StockQuote } from "@/types/bist.js";
-import { IconBookmark, IconPlus, IconChart, IconSparkles } from "./kesfetIcons.js";
+import { IconBookmark, IconPlus, IconChart, IconSparkles } from "./exploreIcons.js";
 
-interface KesfetTickerCardProps {
+interface ExploreTickerCardProps {
   t: Record<string, string>;
   fullSym: string;
   quoteMap: Map<string, StockQuote>;
@@ -11,7 +11,7 @@ interface KesfetTickerCardProps {
   onOpenAiModal: (symbol: string) => void;
 }
 
-export function KesfetTickerCard({
+export function ExploreTickerCard({
   t,
   fullSym,
   quoteMap,
@@ -19,7 +19,7 @@ export function KesfetTickerCard({
   onQuickAddStock,
   onOpenChart,
   onOpenAiModal,
-}: KesfetTickerCardProps) {
+}: ExploreTickerCardProps) {
   const symClean = fullSym.replace(".IS", "");
   const quote = quoteMap.get(symClean) || quoteMap.get(fullSym);
 

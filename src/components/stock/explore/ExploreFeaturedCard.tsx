@@ -1,4 +1,4 @@
-import { IconSparkles, IconBookmark, IconChart } from "./kesfetIcons.js";
+import { IconSparkles, IconBookmark, IconChart } from "./exploreIcons.js";
 
 export interface FeaturedStock {
   sym: string;
@@ -10,7 +10,7 @@ export interface FeaturedStock {
   isUp: boolean;
 }
 
-interface KesfetFeaturedCardProps {
+interface ExploreFeaturedCardProps {
   t: Record<string, string>;
   featuredStocks: FeaturedStock[];
   onOpenAiModal: (symbol: string) => void;
@@ -18,13 +18,13 @@ interface KesfetFeaturedCardProps {
   onOpenWatchlistModal: (symbol: string) => void;
 }
 
-export function KesfetFeaturedCard({
+export function ExploreFeaturedCard({
   t,
   featuredStocks,
   onOpenAiModal,
   onOpenChart,
   onOpenWatchlistModal,
-}: KesfetFeaturedCardProps) {
+}: ExploreFeaturedCardProps) {
   return (
     <div
       style={{
