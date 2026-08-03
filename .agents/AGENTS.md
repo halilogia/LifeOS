@@ -159,11 +159,12 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 "Clean code / clean architecture" yazmak tek başına yeterli değildir — bu kurallar **ölçülebilir** ve **denetlenebilir** olmalıdır. Aşağıdaki 3 kural her kod değişikliğinde uygulanır.
 
-### 6.1 Dosya Boyut Limitleri (File Size Limits)
-* **View Component'leri ≤ 300 satır**: Bir view (örn. `KpssView.tsx`, `PomodoroView.tsx`) 300 satırı aşarsa ZORUNLU olarak alt bileşenlere bölünür (`src/components/<feature>/` klasörüne). 300 satır üstü her yeni kod, yeni bir alt bileşene taşınır.
-* **Service/Helper ≤ 200 satır**: `src/services/`, `src/infrastructure/`, `src/domain/` dosyaları 200 satırı aşarsa bölünür.
-* **CSS dosyası ≤ 400 satır**: `src/css/newtab/<feature>.css` 400 satırı aşarsa `src/css/newtab/<feature>/` alt klasörüne bölünür (bkz. 5.6).
-* **App.tsx ≤ 300 satır**: Ana bileşen şişerse presentational parçalar (`HeroHeader`, `FooterQuote` vb.) ayrı dosyalara çekilir.
+### 6.1 Dosya Boyut Rehberi (Esnek Kural — Sorumluluk Esaslı)
+* **Katı satır limiti YOKTUR**: Dosyalar satır sayısına göre değil, sorumluluk yoğunluğuna göre değerlendirilir. Büyük bir dosya tek sorumluluk taşıyorsa sorun değildir; küçük bir dosya bile birden fazla işi üstleniyorsa bölünür.
+* **BÖLÜNÜR (birden fazla sorumluluk)**: Farklı domain/sorumluluklar tek dosyada toplanmışsa (örn. view içinde hem state hem 3 ayrı UI bloğu, service içinde hem fetch hem hesaplama hem storage) → alt bileşenlere/alt modüllere bölünür (`src/components/<feature>/`, `src/services/<feature>/`).
+* **BÖLÜNMEZ (tek sorumluluk)**: Dosya tek bir sorumluluğa sahipse ve içerik o sorumluluğa hizmet ediyorsa bölünmez — ne kadar büyük olursa olsun. Örnekler: çeviri dosyaları (`tr.ts`, `en.ts` — saf anahtar-değer verisi), sabit veri setleri (`TurkeyProvincePaths.ts`), merkezi tema token'ları (`base.css`), tek-sorumluluk hook'ları (`useSidePanelChat.ts`), yoğun mesaj işleyicileri (`whatsappBridge.ts`).
+* **Karar kriteri — "Tek Sorumluluk Testi"**: Dosyanın başlığı tek cümleyle özetlenebiliyorsa ve tüm içerik o cümleye hizmet ediyorsa → bölünmez. Başlık birden fazla cümle gerektiriyorsa → bölünür.
+* **Bölme sırası**: En büyükten değil, en çok sorumluluk taşıyandan başlanır. Öncelik ana view'lar → not modülleri → servisler → alt limit dosyaları.
 
 ### 6.4 Ölü Dosya Önleme Kuralı (Dead File Prevention)
 * **Yeni dosya yazınca ESKİSİNİ SİL**: Bir dosyayı yeni dosyayla değiştirirken (refactor, hook extraction, mimari değişim) eski dosya KESİNLİKLE silinir. "Yeni dosya çalışıyor, eskisi dursun" yasaktır — ölü dosya birikir.
