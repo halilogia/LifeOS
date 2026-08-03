@@ -4,7 +4,7 @@
  * Clean Architecture & SRP compliance: delegating storage and UI rendering to modules.
  */
 
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import {
   KpssWikiNote,
@@ -24,7 +24,20 @@ interface KpssNotesDashboardProps {
   t: Record<string, string>;
 }
 
+// Electron preload tarafından enjekte edilen senkronizasyon API'si
+declare global {
+  interface Window {
+    mindvaultSync?: {
+      exportToFile: (notesJson: string) => Promise<{ ok: boolean; canceled?: boolean; filePath?: string }>;
+      importFromFile: () => Promise<{ ok: boolean; canceled?: boolean; data?: string; filePath?: string }>;
+      exportToClipboard: (notesJson: string) => Promise<{ ok: boolean }>;
+      importFromClipboard: () => Promise<{ ok: boolean; data?: string }>;
+    };
+  }
+}
+
 export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
+  const notesRootRef = useRef<HTMLDivElement | null>(null);
   const [notes, setNotes] = useState<KpssWikiNote[]>([]);
   const [selectedSubjectFilter, setSelectedSubjectFilter] =
     useState<string>("all");
@@ -41,6 +54,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   >("tarih");
   const [editorContent, setEditorContent] = useState("");
   const [saveStatus, setSaveStatus] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string>("");
 
   useEffect(() => {
     loadNotes();
@@ -227,6 +241,8 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
 
   return (
     <div
+      ref={notesRootRef}
+      className="kpss-notes-fullscreen"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -247,10 +263,14 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           src="icons/mindvault.png"
           alt="MindVault"
           style={{
-            width: "30px",
-            height: "30px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 10px rgba(124, 58, 237, 0.4)",
+            width: "32px",
+            height: "32px",
+            borderRadius: "9px",
+            background: "#ffffff",
+            objectFit: "contain",
+            padding: "4px",
+            boxSizing: "border-box",
+            boxShadow: "0 2px 10px rgba(124, 58, 237, 0.45)",
           }}
         />
         <h2
@@ -267,6 +287,18 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
         >
           {t.kpss_notes_title || "KPSS Ders Notları Stüdyosu"}
         </h2>
+        {syncMsg && (
+          <span
+            style={{
+              fontSize: "0.72rem",
+              color: "#34d399",
+              fontWeight: 600,
+              marginLeft: "auto",
+            }}
+          >
+            {syncMsg}
+          </span>
+        )}
       </div>
 
       {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
@@ -366,11 +398,14 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
-                  {/* Tam Ekran Modu */}
+                  {/* Tam Ekran Modu — container'ı tam ekran yapar, tarayıcıyı değil */}
                   <button
                     type="button"
                     onClick={() => {
-                      const el = document.documentElement;
+                      const el = notesRootRef.current;
+                      if (!el) {
+                        return;
+                      }
                       if (document.fullscreenElement) {
                         void document.exitFullscreen();
                       } else {
@@ -426,6 +461,72 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                   >
                     <span>.md İndir</span>
                   </button>
+
+                  {/* Masaüstü Senkronizasyonu (yalnızca Electron exe'de görünür) */}
+                  {typeof window !== "undefined" &&
+                    typeof window.mindvaultSync !== "undefined" && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const notesJson = JSON.stringify(notes);
+                            const res =
+                              await window.mindvaultSync!.exportToFile(notesJson);
+                            if (res && res.ok) {
+                              setSyncMsg("Dışa aktarıldı: " + res.filePath);
+                            } else if (res && res.canceled) {
+                              setSyncMsg("");
+                            }
+                          }}
+                          title="Notları JSON dosyasına yedekle (eklentiye aktarmak için)"
+                          style={{
+                            background: "rgba(16, 185, 129, 0.15)",
+                            border: "1px solid rgba(16, 185, 129, 0.35)",
+                            color: "#34d399",
+                            borderRadius: "6px",
+                            padding: "4px 10px",
+                            fontSize: "0.72rem",
+                            fontWeight: 700,
+                            cursor: "pointer",
+                          }}
+                        >
+                          ⇩ Yedekle
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const res = await window.mindvaultSync!.importFromFile();
+                            if (res && res.ok && res.data) {
+                              try {
+                                const imported = JSON.parse(res.data);
+                                if (Array.isArray(imported)) {
+                                  await saveKpssWikiNotes(imported);
+                                  setNotes(imported);
+                                  setSyncMsg("İçe aktarıldı: " + imported.length + " not");
+                                }
+                              } catch {
+                                setSyncMsg("Geçersiz dosya formatı");
+                              }
+                            } else if (res && res.canceled) {
+                              setSyncMsg("");
+                            }
+                          }}
+                          title="JSON dosyasından notları içe aktar"
+                          style={{
+                            background: "rgba(245, 158, 11, 0.15)",
+                            border: "1px solid rgba(245, 158, 11, 0.35)",
+                            color: "#fbbf24",
+                            borderRadius: "6px",
+                            padding: "4px 10px",
+                            fontSize: "0.72rem",
+                            fontWeight: 700,
+                            cursor: "pointer",
+                          }}
+                        >
+                          ⇧ Yükle
+                        </button>
+                      </>
+                    )}
 
                   {/* Info Guide Button: KPSS not alma kılavuzu popup'ı */}
                   <button
