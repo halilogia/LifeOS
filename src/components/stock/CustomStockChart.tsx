@@ -3,6 +3,10 @@ import { Language } from "@/types/types.js";
 import { fetchStockHistory } from "@/services/bistService.js";
 import type { StockHistoryItem } from "@/types/bist.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { drawStockChart } from "./stockChartDrawer.js";
+import { ChartHoverBar } from "./ChartHoverBar.js";
+import { ChartRangeSelector } from "./ChartRangeSelector.js";
+import type { ChartRange } from "./ChartRangeSelector.js";
 
 interface CustomStockChartProps {
   symbol: string;
@@ -11,7 +15,7 @@ interface CustomStockChartProps {
 
 export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
   const t = getTranslation(lang);
-  const [range, setRange] = useState<"1d" | "1mo" | "3mo" | "6mo" | "1y">("1d");
+  const [range, setRange] = useState<ChartRange>("1d");
   const [history, setHistory] = useState<StockHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [hoveredPoint, setHoveredPoint] = useState<StockHistoryItem | null>(
@@ -34,123 +38,7 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
     if (!canvasRef.current || history.length === 0) {
       return;
     }
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return;
-    }
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-
-    const width = rect.width;
-    const height = rect.height;
-
-    ctx.clearRect(0, 0, width, height);
-
-    const paddingLeft = 10;
-    const paddingRight = 50;
-    const paddingTop = 20;
-    const paddingBottom = 30;
-
-    const chartWidth = width - paddingLeft - paddingRight;
-    const chartHeight = height - paddingTop - paddingBottom;
-
-    let minPrice = Math.min(...history.map((d) => d.low));
-    let maxPrice = Math.max(...history.map((d) => d.high));
-    if (minPrice === maxPrice) {
-      minPrice *= 0.95;
-      maxPrice *= 1.05;
-    }
-
-    const gridLines = 5;
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-    ctx.fillStyle = "#64748b";
-    ctx.font = "10px sans-serif";
-    ctx.textAlign = "left";
-
-    for (let i = 0; i <= gridLines; i++) {
-      const y = paddingTop + (chartHeight / gridLines) * i;
-      const priceVal = maxPrice - ((maxPrice - minPrice) / gridLines) * i;
-
-      ctx.beginPath();
-      ctx.moveTo(paddingLeft, y);
-      ctx.lineTo(width - paddingRight, y);
-      ctx.stroke();
-
-      ctx.fillText(`₺${priceVal.toFixed(2)}`, width - paddingRight + 5, y + 3);
-    }
-
-    const candleCount = history.length;
-    const candleWidth = Math.max(2, chartWidth / candleCount - 2);
-
-    history.forEach((d, i) => {
-      const x = paddingLeft + (chartWidth / candleCount) * i + candleWidth / 2;
-      const isGreen = d.close >= d.open;
-
-      const openY =
-        paddingTop +
-        chartHeight -
-        ((d.open - minPrice) / (maxPrice - minPrice)) * chartHeight;
-      const closeY =
-        paddingTop +
-        chartHeight -
-        ((d.close - minPrice) / (maxPrice - minPrice)) * chartHeight;
-      const highY =
-        paddingTop +
-        chartHeight -
-        ((d.high - minPrice) / (maxPrice - minPrice)) * chartHeight;
-      const lowY =
-        paddingTop +
-        chartHeight -
-        ((d.low - minPrice) / (maxPrice - minPrice)) * chartHeight;
-
-      ctx.strokeStyle = isGreen ? "#4ade80" : "#f87171";
-      ctx.fillStyle = isGreen ? "#4ade80" : "#f87171";
-
-      ctx.beginPath();
-      ctx.moveTo(x, highY);
-      ctx.lineTo(x, lowY);
-      ctx.stroke();
-
-      const bodyTop = Math.min(openY, closeY);
-      const bodyHeight = Math.max(2, Math.abs(openY - closeY));
-      ctx.fillRect(x - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
-    });
-
-    if (hoveredPoint) {
-      const hoveredIndex = history.findIndex(
-        (h) => h.timestamp === hoveredPoint.timestamp,
-      );
-      if (hoveredIndex !== -1) {
-        const x =
-          paddingLeft +
-          (chartWidth / candleCount) * hoveredIndex +
-          candleWidth / 2;
-        ctx.strokeStyle = "rgba(99, 102, 241, 0.4)";
-        ctx.setLineDash([4, 4]);
-
-        ctx.beginPath();
-        ctx.moveTo(x, paddingTop);
-        ctx.lineTo(x, height - paddingBottom);
-        ctx.stroke();
-
-        const closeY =
-          paddingTop +
-          chartHeight -
-          ((hoveredPoint.close - minPrice) / (maxPrice - minPrice)) *
-            chartHeight;
-        ctx.beginPath();
-        ctx.moveTo(paddingLeft, closeY);
-        ctx.lineTo(width - paddingRight, closeY);
-        ctx.stroke();
-
-        ctx.setLineDash([]);
-      }
-    }
+    drawStockChart(canvasRef.current, history, hoveredPoint);
   }, [history, hoveredPoint]);
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -207,69 +95,15 @@ export function CustomStockChart({ symbol, lang }: CustomStockChartProps) {
           </span>
         </div>
 
-        <div style={{ display: "flex", gap: "6px" }}>
-          {(["1d", "1mo", "3mo", "6mo", "1y"] as const).map((r) => (
-            <button
-              key={r}
-              className={`stock-btn ${range === r ? "stock-btn-primary" : "stock-btn-secondary"}`}
-              style={{ padding: "4px 10px", fontSize: "0.75rem" }}
-              onClick={() => setRange(r)}
-            >
-              {r === "1d"
-                ? t.stock_chart_period_1d
-                : r === "1mo"
-                  ? t.stock_chart_period_1m
-                  : r === "3mo"
-                    ? t.stock_chart_period_3m
-                    : r === "6mo"
-                      ? "6A"
-                      : t.stock_chart_period_1y}
-            </button>
-          ))}
-        </div>
+        <ChartRangeSelector t={t} range={range} onRangeChange={setRange} />
       </div>
 
-      <div
-        style={{
-          height: "24px",
-          display: "flex",
-          gap: "16px",
-          fontSize: "0.8rem",
-          color: "#cbd5e1",
-        }}
-      >
-        {hoveredPoint ? (
-          <>
-            <span>
-              {range === "1d"
-                ? `${t.stock_chart_interval}: `
-                : `${t.stock_card_open}: `}
-              {range === "1d"
-                ? new Date(hoveredPoint.timestamp).toLocaleTimeString(
-                    lang === "tr" ? "tr-TR" : "en-US",
-                    { hour: "2-digit", minute: "2-digit" },
-                  )
-                : new Date(hoveredPoint.timestamp).toLocaleDateString(
-                    lang === "tr" ? "tr-TR" : "en-US",
-                  )}
-            </span>
-            <span>
-              {t.stock_card_open}: ₺{hoveredPoint.open.toFixed(2)}
-            </span>
-            <span style={{ color: "#4ade80" }}>
-              {t.stock_card_high}: ₺{hoveredPoint.high.toFixed(2)}
-            </span>
-            <span style={{ color: "#f87171" }}>
-              {t.stock_card_low}: ₺{hoveredPoint.low.toFixed(2)}
-            </span>
-            <span>
-              {t.stock_card_close_price}: ₺{hoveredPoint.close.toFixed(2)}
-            </span>
-          </>
-        ) : (
-          <span style={{ color: "#64748b" }}>{t.stock_chart_hover_hint}</span>
-        )}
-      </div>
+      <ChartHoverBar
+        t={t}
+        lang={lang}
+        range={range}
+        hoveredPoint={hoveredPoint}
+      />
 
       <div style={{ position: "relative", width: "100%", height: "260px" }}>
         {loading ? (
