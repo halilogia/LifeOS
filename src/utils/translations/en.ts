@@ -812,7 +812,7 @@ export const en = {
     "I'm considering buying {symbol}. What are your thoughts on the company's outlook, risks, and watchpoints?",
   stock_ai_report_tab_digest: "Daily / Weekly AI Market Summary",
   stock_ai_report_tab_advisor: "Investment & Buy Decision Advisor",
-  stock_ai_report_title: "🤖 AI Portfolio & Market Health Report",
+  stock_ai_report_title: "✨ AI Portfolio & Market Health Report",
   stock_ai_report_desc:
     "Get a concise Turkish summary of your portfolio's status with one click via 9Router AI.",
   stock_ai_report_analyzing:

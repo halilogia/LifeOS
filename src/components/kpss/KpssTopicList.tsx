@@ -1,4 +1,4 @@
-﻿import { Language, KpssProgress } from "@/types/types.js";
+import { Language, KpssProgress } from "@/types/types.js";
 import { KpssTopic } from "@/services/kpss/kpssService.js";
 
 interface KpssTopicListProps {
@@ -11,6 +11,7 @@ interface KpssTopicListProps {
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onStartQuiz: (topic: string) => void;
   onShowDetail: (topic: { title: string; description: string }) => void;
+  onOpenYoutube: (topic: string) => void;
 }
 
 export function KpssTopicList({
@@ -23,6 +24,7 @@ export function KpssTopicList({
   onSortByChange,
   onStartQuiz,
   onShowDetail,
+  onOpenYoutube,
 }: KpssTopicListProps) {
   return (
     <div className="kpss-content">
@@ -191,6 +193,26 @@ export function KpssTopicList({
                   <line x1="16" y1="13" x2="8" y2="13"></line>
                   <line x1="16" y1="17" x2="8" y2="17"></line>
                   <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </button>
+
+              {/* YouTube ara butonu — konu başlığını YouTube'da arar */}
+              <button
+                className="kpss-info-btn"
+                title="YouTube'da Ara"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenYoutube(topic.title);
+                }}
+                style={{ color: "#ef4444" }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.5 15.5v-7L15.8 12z"></path>
                 </svg>
               </button>
 

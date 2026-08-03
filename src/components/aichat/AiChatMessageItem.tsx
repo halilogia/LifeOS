@@ -157,7 +157,17 @@ export function AiChatMessageItem({
 
   return (
     <div className={`message-bubble-wrapper ${message.sender}`}>
-      <div className="avatar">{isUser ? "👤" : "🤖"}</div>
+      <div className="avatar">
+        {isUser ? (
+          "👤"
+        ) : (
+          <img
+            src="icons/AI.png"
+            alt="AI"
+            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+          />
+        )}
+      </div>
       <div className="message-bubble">
         {/* Google AI Mode Live Research Step Card */}
         {!isUser && message.sources && message.sources.length > 0 && (
