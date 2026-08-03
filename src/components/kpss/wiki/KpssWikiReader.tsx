@@ -1,4 +1,4 @@
-﻿/**
+/**
  * KpssWikiReader.tsx
  * Wikipedia-style Article Reader Component.
  * Displays Article Title, Subtitle, Table of Contents, Wikilink body, and Wikipedia-style Infobox.
@@ -198,7 +198,7 @@ export function KpssWikiReader({
                 marginBottom: "10px",
               }}
             >
-              <span>Ä°Ã§indekiler</span>
+              <span>İçindekiler</span>
               <button
                 type="button"
                 onClick={() => setShowToc(false)}
@@ -369,7 +369,7 @@ export function KpssWikiReader({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-                Okuma SÃ¼resi
+                Okuma Süresi
               </span>
               <span style={{ color: "#60a5fa", fontWeight: 600 }}>
                 ~{readingTimeMinutes} dk
@@ -385,7 +385,7 @@ export function KpssWikiReader({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-                Son GÃ¼ncelleme
+                Son Güncelleme
               </span>
               <span style={{ color: "#e2e8f0" }}>
                 {new Date(note.updatedAt || note.createdAt).toLocaleDateString(
@@ -395,7 +395,7 @@ export function KpssWikiReader({
             </div>
           </div>
 
-          {/* Outbound Wikilinks / Ä°Ã§ BaÄŸlantÄ±lar Section */}
+          {/* Outbound Wikilinks / İç Bağlantılar Section */}
           {outboundWikilinks.length > 0 && (
             <div
               style={{
@@ -419,7 +419,7 @@ export function KpssWikiReader({
                   gap: "4px",
                 }}
               >
-                <span>ğŸ“Œ Ä°Ã§ BaÄŸlantÄ±lar</span>
+                <span>📌 İç Bağlantılar</span>
                 <span
                   style={{
                     background: "rgba(59, 130, 246, 0.25)",
@@ -455,7 +455,7 @@ export function KpssWikiReader({
             </div>
           )}
 
-          {/* Backlinks / Gelen BaÄŸlantÄ±lar Section */}
+          {/* Backlinks / Gelen Bağlantılar Section */}
           {backlinks.length > 0 && (
             <div
               style={{
@@ -479,7 +479,7 @@ export function KpssWikiReader({
                   gap: "4px",
                 }}
               >
-                <span>ğŸ”— Gelen BaÄŸlantÄ±lar</span>
+                <span>🔗 Gelen Bağlantılar</span>
                 <span
                   style={{
                     background: "rgba(59, 130, 246, 0.25)",

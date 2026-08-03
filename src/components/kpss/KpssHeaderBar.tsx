@@ -3,12 +3,19 @@
  * KPSS Hazırlık başlığı ve alt sekme navigasyon barı.
  */
 
+export type KpssTabId =
+  | "progress"
+  | "notes"
+  | "srs"
+  | "past-exams"
+  | "map";
+
 interface KpssHeaderBarProps {
   title: string;
-  activeTab: "progress" | "srs" | "past-exams" | "notes";
+  activeTab: KpssTabId;
   lang: string;
   t: Record<string, string>;
-  onTabChange: (tab: "progress" | "srs" | "past-exams" | "notes") => void;
+  onTabChange: (tab: KpssTabId) => void;
 }
 
 export function KpssHeaderBar({
@@ -58,6 +65,12 @@ export function KpssHeaderBar({
           onClick={() => onTabChange("past-exams")}
         >
           {t.kpss_tab_past_exams}
+        </button>
+        <button
+          className={`pomo-tab-link ${activeTab === "map" ? "active" : ""}`}
+          onClick={() => onTabChange("map")}
+        >
+          {t.kpss_tab_map}
         </button>
       </div>
     </>

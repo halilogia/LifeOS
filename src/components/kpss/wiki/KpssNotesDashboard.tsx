@@ -96,6 +96,26 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     setViewMode("edit");
   };
 
+  const handleAddChildNote = async (parent: KpssWikiNote) => {
+    const childNote: KpssWikiNote = {
+      id: `note-${Date.now()}`,
+      title: "",
+      subject: parent.subject,
+      content: "",
+      parentId: parent.id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const updated = [childNote, ...notes];
+    await saveKpssWikiNotes(updated);
+    setNotes(updated);
+    setSelectedNoteId(childNote.id);
+    setEditorTitle("");
+    setEditorSubject(parent.subject);
+    setEditorContent("");
+    setViewMode("edit");
+  };
+
   const handleSaveArticle = async () => {
     if (!selectedNoteId) {
       return;
@@ -214,6 +234,41 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
         marginTop: "14px",
       }}
     >
+      {/* Başlık + MindVault ikonu */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          padding: "0 4px",
+        }}
+      >
+        <img
+          src="icons/mindvault.png"
+          alt="MindVault"
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 10px rgba(124, 58, 237, 0.4)",
+          }}
+        />
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            color: "#e2e8f0",
+            background: "linear-gradient(90deg, #c084fc, #60a5fa)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          {t.kpss_notes_title || "KPSS Ders Notları Stüdyosu"}
+        </h2>
+      </div>
+
       {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
       <div
         style={{
@@ -234,6 +289,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           onFilterChange={setSelectedSubjectFilter}
           onSelectNote={selectNote}
           onCreateNewNote={handleCreateNewNote}
+          onAddChildNote={handleAddChildNote}
         />
 
         <div
@@ -310,6 +366,45 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
+                  {/* Tam Ekran Modu */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const el = document.documentElement;
+                      if (document.fullscreenElement) {
+                        void document.exitFullscreen();
+                      } else {
+                        void el.requestFullscreen();
+                      }
+                    }}
+                    title="Tam Ekran"
+                    style={{
+                      background: "rgba(124, 58, 237, 0.15)",
+                      border: "1px solid rgba(124, 58, 237, 0.35)",
+                      color: "#c084fc",
+                      borderRadius: "6px",
+                      padding: "4px 10px",
+                      fontSize: "0.72rem",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                    >
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                    </svg>
+                    <span>{t.kpss_notes_open_app || "Tam Ekran"}</span>
+                  </button>
+
                   {/* Export Action: Download Markdown */}
                   <button
                     type="button"
@@ -330,6 +425,29 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                     }}
                   >
                     <span>.md İndir</span>
+                  </button>
+
+                  {/* Info Guide Button: KPSS not alma kılavuzu popup'ı */}
+                  <button
+                    type="button"
+                    onClick={() => setShowInfoboxHelp(true)}
+                    title={t.kpss_notes_help_title || "KPSS Not Alma Rehberi"}
+                    style={{
+                      background: "rgba(168, 85, 247, 0.15)",
+                      border: "1px solid rgba(168, 85, 247, 0.35)",
+                      color: "#c084fc",
+                      borderRadius: "6px",
+                      padding: "5px 10px",
+                      cursor: "pointer",
+                      fontSize: "0.8rem",
+                      fontWeight: 800,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    !
                   </button>
 
                   {/* Icon-Only Neural Graph Button */}
@@ -443,7 +561,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
         />
       )}
 
-      {/* Infobox Help Guide Modal Popup */}
+      {/* KPSS Not Alma Rehberi Modal Popup */}
       {showInfoboxHelp && (
         <div
           style={{
@@ -464,11 +582,13 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           <div
             style={{
               background: "#0f172a",
-              border: "1px solid rgba(59, 130, 246, 0.4)",
+              border: "1px solid rgba(168, 85, 247, 0.4)",
               borderRadius: "14px",
               padding: "24px",
-              maxWidth: "460px",
-              width: "90%",
+              maxWidth: "540px",
+              width: "92%",
+              maxHeight: "85vh",
+              overflowY: "auto",
               boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
               color: "#f1f5f9",
             }}
@@ -487,12 +607,12 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
               <h3
                 style={{
                   margin: 0,
-                  color: "#38bdf8",
+                  color: "#c084fc",
                   fontSize: "1.05rem",
                   fontWeight: 800,
                 }}
               >
-                ℹ️ Dinamik Bilgi Kutusu Nasıl Çalışır?
+                {t.kpss_notes_help_title || "KPSS Not Alma Rehberi"}
               </h3>
               <button
                 type="button"
@@ -513,42 +633,69 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "12px",
+                gap: "14px",
                 fontSize: "0.84rem",
                 lineHeight: 1.6,
               }}
             >
               <div>
-                <strong style={{ color: "#60a5fa" }}>
-                  🖼️ 1. Kapak Görseli:
+                <strong style={{ color: "#c084fc" }}>
+                  1. Ana Başlık → Alt Başlık Yapısı:
                 </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Notunuza yapıştırdığınız resim adresi (örneğin Google Görsel
-                  linki) metin içinden gizlenir ve otomatik olarak Bilgi
-                  Kutusu'nun en üstüne yerleştirilir. 2. ve 3. görseller metin
-                  içinde kalır.
+                  Önce ana not oluştur (ör.{" "}
+                  <code style={{ color: "#a78bfa" }}>Büyük Selçuklu</code>).
+                  Notun üzerine gelip{" "}
+                  <code style={{ color: "#60a5fa" }}>+</code> butonuyla alt not
+                  ekle (ör. <code style={{ color: "#a78bfa" }}>Devlet Teşkilatı</code>).
+                  Alt notlara da <code style={{ color: "#60a5fa" }}>+</code> ile
+                  devam et — iç içe hiyerarşi oluşur.
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: "#60a5fa" }}>
-                  📌 2. Dinamik Özet Satırları:
+                <strong style={{ color: "#c084fc" }}>
+                  2. Kısa Metin, Net Bilgi:
                 </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Notunuzda <code>Başlık : Açıklama</code> (örneğin{" "}
-                  <code>Zeytin : Akdeniz ikliminin en net kanıtıdır</code>)
-                  formatında yazdığınız tanımlar otomatik taranıp Bilgi
-                  Kutusu'na özet olarak çekilir.
+                  Her alt başlığa 1-3 cümlelik özet yaz. KPSS'de ezber yerine
+                  kavram netliği önemli. Örnek:{" "}
+                  <em>
+                    "Vezir-i Azam: Büyük Selçuklu'da başkent yönetiminden sorumlu,
+                    Nizamülmülk en meşhur örneğidir."
+                  </em>
                 </p>
               </div>
 
               <div>
-                <strong style={{ color: "#60a5fa" }}>
-                  🔗 3. Gelen Bağlantılar (Backlinks):
+                <strong style={{ color: "#c084fc" }}>
+                  3. Tanım Satırları (Bilgi Kutusu):
                 </strong>
                 <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-                  Diğer notlarda bu notun adı geçtiğinde otomatik bağlantı
-                  kurulur ve kutunun altında listelenir.
+                  <code style={{ color: "#a78bfa" }}>Terim : Açıklama</code>{" "}
+                  formatında yazdığın satırlar notun sağındaki Bilgi Kutusu'na
+                  otomatik özet olarak çekilir.
+                </p>
+              </div>
+
+              <div>
+                <strong style={{ color: "#c084fc" }}>
+                  4. Notlar Arası Bağlantı (Wikilink):
+                </strong>
+                <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
+                  <code style={{ color: "#a78bfa" }}>[[Not Adı]]</code> yazarsan
+                  tıklanabilir bağlantı olur. Ağaç butonuyla notlar arası grafik
+                  bağlantıları görürsün.
+                </p>
+              </div>
+
+              <div>
+                <strong style={{ color: "#c084fc" }}>
+                  5. Başlık Otomatik Doldurma:
+                </strong>
+                <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
+                  Başlık boş bırakılırsa ilk satırdan otomatik alınır. Manuel
+                  başlık yazarsan ona asla dokunulmaz.
                 </p>
               </div>
             </div>
@@ -574,6 +721,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           </div>
         </div>
       )}
+
     </div>
   );
 }

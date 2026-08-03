@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import {
   kpssService,
   kpssData,
@@ -37,6 +37,7 @@ import { KpssSrsCard } from "@/components/kpss/srs/KpssSrsCard.js";
 import { KpssQuizModal } from "@/components/kpss/quiz/KpssQuizModal.js";
 import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
+import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
 import { logger } from "@/utils/logger.js";
 
 interface KpssViewProps {
@@ -89,7 +90,7 @@ export function KpssView({
 
   // Active sub-tab
   const [activeTab, setActiveTab] = useState<
-    "progress" | "notes" | "srs" | "past-exams"
+    "progress" | "notes" | "srs" | "past-exams" | "map"
   >("progress");
 
   // Sorting state for topic lists
@@ -108,18 +109,29 @@ export function KpssView({
   const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">(
     "normal",
   );
+  const [srsSourceMode, setSrsSourceMode] = useState<"all" | "preset" | "notes">("all");
+  const [flashcardsUniverse, setFlashcardsUniverse] = useState<any[]>(kpssDummyFlashcards);
+  const [userNotesCount, setUserNotesCount] = useState<number>(0);
 
-  const loadKpssSrsQueue = async () => {
+  const loadKpssSrsQueue = async (mode = srsSourceMode) => {
     setSrsLoading(true);
     try {
-      const queue = await kpssSrsService.loadSrsQueue();
-      setSrsQueue(queue);
+      const res = await kpssSrsService.loadSrsQueue(mode);
+      const userCards = await kpssSrsService.getUserNotesFlashcards();
+      setUserNotesCount(userCards.length);
+      setSrsQueue(res.queue);
+      setFlashcardsUniverse(res.universe);
       setSrsIndex(0);
       setSrsLoading(false);
     } catch (e) {
       logger.error("Failed to load KPSS SRS Queue:", e);
       setSrsLoading(false);
     }
+  };
+
+  const handleSourceModeChange = (mode: "all" | "preset" | "notes") => {
+    setSrsSourceMode(mode);
+    loadKpssSrsQueue(mode);
   };
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
@@ -140,7 +152,7 @@ export function KpssView({
 
   useEffect(() => {
     if (activeTab === "srs") {
-      loadKpssSrsQueue();
+      loadKpssSrsQueue(srsSourceMode);
     }
   }, [activeTab]);
 
@@ -349,18 +361,105 @@ export function KpssView({
         ) : activeTab === "notes" ? (
           <KpssNotesDashboard lang={lang} t={t} />
         ) : activeTab === "srs" ? (
-          <KpssSrsCard
-            t={t}
-            srsLoading={srsLoading}
-            srsQueue={srsQueue}
-            srsIndex={srsIndex}
-            srsFlipped={srsFlipped}
-            srsFadeState={srsFadeState}
-            onFlipChange={(flipped) => setSrsFlipped(flipped)}
-            onReviewQuality={handleKpssSrsReview}
-            kpssDummyFlashcards={kpssDummyFlashcards}
-            onReloadQueue={loadKpssSrsQueue}
-          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
+              width: "100%",
+            }}
+          >
+            {/* SRS Source Selector Filter Bar */}
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                background: "rgba(15, 23, 42, 0.6)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                padding: "6px",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => handleSourceModeChange("all")}
+                style={{
+                  background: srsSourceMode === "all" ? "#2563eb" : "transparent",
+                  color: srsSourceMode === "all" ? "#ffffff" : "#94a3b8",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                📌 {t.kpss_srs_source_all || "Tüm Kartlar"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSourceModeChange("preset")}
+                style={{
+                  background: srsSourceMode === "preset" ? "#2563eb" : "transparent",
+                  color: srsSourceMode === "preset" ? "#ffffff" : "#94a3b8",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                📚 {t.kpss_srs_source_preset || "Hazır KPSS Kartları"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSourceModeChange("notes")}
+                style={{
+                  background: srsSourceMode === "notes" ? "#7c3aed" : "transparent",
+                  color: srsSourceMode === "notes" ? "#ffffff" : "#94a3b8",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "6px 14px",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                📝 {t.kpss_srs_source_notes || "Sadece Benim Notlarım"} ({userNotesCount})
+              </button>
+            </div>
+
+            <KpssSrsCard
+              t={t}
+              srsLoading={srsLoading}
+              srsQueue={srsQueue}
+              srsIndex={srsIndex}
+              srsFlipped={srsFlipped}
+              srsFadeState={srsFadeState}
+              onFlipChange={(flipped) => setSrsFlipped(flipped)}
+              onReviewQuality={handleKpssSrsReview}
+              flashcardsUniverse={flashcardsUniverse}
+              onReloadQueue={() => loadKpssSrsQueue(srsSourceMode)}
+            />
+          </div>
+        ) : activeTab === "map" ? (
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "1100px",
+              margin: "0 auto",
+            }}
+          >
+            <TurkeyMapView t={t} />
+          </div>
         ) : (
           <KpssPastExamsDashboard
             t={t}

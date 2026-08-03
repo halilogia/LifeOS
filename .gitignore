@@ -30,3 +30,7 @@ yarn-error.log*
 aichathistory/
 archives/
 brain/
+desktop/web/
+desktop/dist/
+desktop/node_modules/
+desktop/icon.png

@@ -11,6 +11,7 @@ export interface KpssWikiNote {
   title: string;
   subject: "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik";
   content: string;
+  parentId?: string | null;
   createdAt: string;
   updatedAt: string;
 }

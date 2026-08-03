@@ -1,4 +1,4 @@
-﻿import { WordReviewData, ReviewQuality } from "@/types/word.js";
+import { WordReviewData, ReviewQuality } from "@/types/word.js";
 import { KpssFlashcard } from "@/services/kpss/kpssService.js";
 
 interface KpssSrsCardProps {
@@ -10,7 +10,7 @@ interface KpssSrsCardProps {
   srsFadeState: "normal" | "slide-out";
   onFlipChange: (flipped: boolean) => void;
   onReviewQuality: (quality: ReviewQuality) => void;
-  kpssDummyFlashcards: KpssFlashcard[];
+  flashcardsUniverse: KpssFlashcard[];
   onReloadQueue: () => void;
 }
 
@@ -23,7 +23,7 @@ export function KpssSrsCard({
   srsFadeState,
   onFlipChange,
   onReviewQuality,
-  kpssDummyFlashcards,
+  flashcardsUniverse,
   onReloadQueue,
 }: KpssSrsCardProps) {
   if (srsLoading) {
@@ -63,7 +63,7 @@ export function KpssSrsCard({
           margin: "0 auto",
         }}
       >
-        <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>ğŸ‰</div>
+        <div style={{ fontSize: "3.5rem", marginBottom: "16px" }}>🎉</div>
         <h3
           style={{
             fontSize: "1.6rem",
@@ -96,7 +96,7 @@ export function KpssSrsCard({
   }
 
   const currentReview = srsQueue[srsIndex];
-  const card = kpssDummyFlashcards.find((c) => c.id === currentReview.wordId);
+  const card = flashcardsUniverse.find((c) => c.id === currentReview.wordId);
   if (!card) {
     return null;
   }
@@ -161,7 +161,7 @@ export function KpssSrsCard({
                 borderRadius: "20px",
               }}
             >
-              ğŸ’¡ {t.kpss_srs_click_to_see}
+              💡 {t.kpss_srs_click_to_see}
             </span>
           </div>
           <div

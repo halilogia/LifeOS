@@ -27,6 +27,7 @@ import { SettingsDrawer } from "@/components/SettingsDrawer.js";
 import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
 import { DatePicker } from "@/components/DatePicker.js";
+import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import type { Todo } from "@/types/types.js";
 
 // Singleton instances â€” created once outside component to avoid re-instantiation
@@ -214,6 +215,11 @@ export function App() {
 
   // â”€â”€â”€ JSX Template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const t = getTranslation(lang as Language);
+
+  if (typeof window !== "undefined" && window.location.search.includes("view=kpss-notes")) {
+    return <KpssNotesDashboard lang={lang as Language} t={t} />;
+  }
+
   return (
     <>
       {/* Background visual overlay blur */}

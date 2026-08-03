@@ -9,7 +9,9 @@
     "build": "vite build",
     "count-lines": "node scripts/countLines.js",
     "generate:tree": "node scripts/automated_project_tree.cjs",
-    "lint": "eslint src --ext .ts,.tsx"
+    "lint": "eslint src --ext .ts,.tsx",
+    "desktop:build": "npm run build && cd desktop && npm install && node build.js",
+    "desktop:start": "cd desktop && npm install && npm start"
   },
   "repository": {
     "type": "git",
