@@ -32,6 +32,14 @@ const TOPIC_TITLE_KEYS: Record<HistoryTopic, string> = {
   "hacli": "kpss_history_title_hacli",
 };
 
+const CATEGORY_KEYS: Record<HistoryEventCategory, string> = {
+  war: "kpss_history_cat_war",
+  treaty: "kpss_history_cat_treaty",
+  trade: "kpss_history_cat_trade",
+  culture: "kpss_history_cat_culture",
+  organization: "kpss_history_cat_organization",
+};
+
 export function HistoryMapView({ t }: HistoryMapViewProps) {
   const [selectedTopic, setSelectedTopic] =
     useState<HistoryTopic>("anadolu-selcuklu");
@@ -276,11 +284,11 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
           flex: isFullscreen ? 1 : undefined,
         }}
       >
-        {/* Sol Sidebar: Konu Listesi */}
+        {/* Sol Sidebar: Devlet → Kategori → Olay slaytları */}
         <div
           style={{
-            width: 170,
-            flex: "0 0 170px",
+            width: 200,
+            flex: "0 0 200px",
             display: "flex",
             flexDirection: "column",
             gap: "8px",
@@ -292,6 +300,7 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
             maxHeight: isFullscreen ? "calc(100vh - 120px)" : 480,
           }}
         >
+          {/* Devletler */}
           {HISTORY_TOPICS.map((topic) => {
             const isActive = topic.id === selectedTopic;
             const isEnabled = topic.enabled;
@@ -307,12 +316,12 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
                     ? "rgba(181,67,47,0.2)"
                     : "rgba(255,255,255,0.04)",
                   border: isActive
-                    ? "1px solid var(--crimson-2, #b5432f)"
+                    ? "1px solid #b5432f"
                     : "1px solid rgba(255,255,255,0.08)",
                   color: isActive ? "#ffe4da" : "#d9d2bf",
-                  padding: "11px 12px",
+                  padding: "10px 12px",
                   borderRadius: "9px",
-                  fontSize: "0.82rem",
+                  fontSize: "0.8rem",
                   fontWeight: isActive ? 700 : 500,
                   cursor: isEnabled ? "pointer" : "not-allowed",
                   display: "flex",
@@ -336,12 +345,12 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
                   <span
                     style={{
                       marginLeft: "auto",
-                      fontSize: "0.6rem",
+                      fontSize: "0.55rem",
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
                       color: "#8f8378",
                       border: "1px solid #524540",
-                      padding: "2px 6px",
+                      padding: "2px 5px",
                       borderRadius: 20,
                     }}
                   >
@@ -352,26 +361,16 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
             );
           })}
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "6px",
-            padding: "0 2px",
-          }}
-        >
+          {/* Ayraç */}
           <div
             style={{
-              fontSize: "0.62rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#8f8378",
-              fontWeight: 700,
-              marginBottom: 2,
+              height: 1,
+              background: "rgba(255,255,255,0.08)",
+              margin: "2px 0",
             }}
-          >
-            {t.kpss_history_filter_title || "Kategori"}
-          </div>
+          />
+
+          {/* Kategoriler — aktif devletin altında */}
           <button
             type="button"
             onClick={() => handleCategoryChange("all")}
@@ -387,6 +386,7 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
                   : "1px solid rgba(255,255,255,0.08)",
               color: activeCategory === "all" ? "#ffe4da" : "#d9d2bf",
               padding: "7px 10px",
+              paddingLeft: "18px",
               borderRadius: "8px",
               fontSize: "0.72rem",
               fontWeight: activeCategory === "all" ? 700 : 500,
@@ -435,6 +435,7 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
                     : "1px solid rgba(255,255,255,0.08)",
                   color: isActive ? "#ffe4da" : "#d9d2bf",
                   padding: "7px 10px",
+                  paddingLeft: "18px",
                   borderRadius: "8px",
                   fontSize: "0.72rem",
                   fontWeight: isActive ? 700 : 500,
@@ -459,8 +460,68 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
               </button>
             );
           })}
+
+          {/* Ayraç */}
+          <div
+            style={{
+              height: 1,
+              background: "rgba(255,255,255,0.08)",
+              margin: "2px 0",
+            }}
+          />
+
+          {/* Olay slaytları — aktif kategorinin olayları */}
+          {filteredEvents.map((ev, idx) => {
+            const isCurrent = idx === currentIndex;
+            const catColor = HISTORY_CATEGORY_COLORS[ev.category];
+            return (
+              <button
+                key={`${ev.year}-${ev.title}`}
+                type="button"
+                onClick={() => {
+                  stopPlayback();
+                  setRevealedCount(idx + 1);
+                  setCurrentIndex(idx);
+                }}
+                style={{
+                  textAlign: "left",
+                  background: isCurrent
+                    ? "rgba(181,67,47,0.25)"
+                    : "rgba(255,255,255,0.03)",
+                  border: isCurrent
+                    ? "1px solid #b5432f"
+                    : "1px solid rgba(255,255,255,0.06)",
+                  color: isCurrent ? "#ffe4da" : "#b9b2a2",
+                  padding: "7px 10px",
+                  paddingLeft: "26px",
+                  borderRadius: "8px",
+                  fontSize: "0.7rem",
+                  fontWeight: isCurrent ? 700 : 400,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  transition: "all 0.15s ease",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.66rem",
+                    color: catColor,
+                    fontWeight: 700,
+                    fontVariantNumeric: "tabular-nums",
+                    flex: "0 0 auto",
+                  }}
+                >
+                  {ev.year}
+                </span>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {ev.title}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      </div>
 
       {/* Harita Gövdesi */}
         <div
@@ -699,75 +760,94 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
             </div>
           </div>
 
-          {/* Bilgi Kartı — yıl + olay + açıklama */}
-          {currentIndex >= 0 && currentIndex < total && (
-            <div
-              style={{
-                position: "absolute",
-                left: 16,
-                bottom: 16,
-                maxWidth: 320,
-                background: "rgba(28, 18, 14, 0.93)",
-                color: "#f4ead7",
-                borderRadius: "12px",
-                padding: "12px 16px",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                pointerEvents: "none",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.68rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: topicColor,
-                  marginBottom: 3,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 10,
-                }}
-              >
-                <span>
-                  {currentIndex + 1} / {total}
-                </span>
-                <span
-                  style={{
-                    color: "#c99a3c",
-                    fontWeight: 700,
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  {filteredEvents[currentIndex].year}
-                </span>
-              </div>
-              <h4
-                style={{
-                  margin: "0 0 3px",
-                  fontFamily: "Georgia, serif",
-                  fontSize: "1rem",
-                  color: "#fff4e4",
-                }}
-              >
-                {filteredEvents[currentIndex].title}
-              </h4>
-              <p style={{ margin: 0, fontSize: "0.78rem", color: "#cfc3aa" }}>
-                {filteredEvents[currentIndex].desc}
-              </p>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#a99a82",
-                  marginTop: 6,
-                  fontStyle: "italic",
-                }}
-              >
-                {filteredEvents[currentIndex].city}
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Konu Anlatım Slaytı — harita altı, tam genişlik */}
+      {currentIndex >= 0 && currentIndex < total && (
+        <div
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(28,18,14,0.95), rgba(45,30,20,0.95))",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "14px",
+            padding: "18px 22px",
+            color: "#f4ead7",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+          }}
+        >
+          {/* Üst satır: sıra + yıl + kategori */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 8,
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.68rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#a99a82",
+                fontWeight: 700,
+              }}
+            >
+              {currentIndex + 1} / {total}
+            </span>
+            <span
+              style={{
+                fontSize: "0.9rem",
+                fontWeight: 700,
+                color: "#c99a3c",
+              }}
+            >
+              {filteredEvents[currentIndex].year}
+            </span>
+            <span
+              style={{
+                fontSize: "0.66rem",
+                padding: "2px 8px",
+                borderRadius: 20,
+                background: HISTORY_CATEGORY_COLORS[filteredEvents[currentIndex].category],
+                color: "#fff",
+                fontWeight: 600,
+                letterSpacing: "0.04em",
+              }}
+            >
+              {t[CATEGORY_KEYS[filteredEvents[currentIndex].category]] ||
+                filteredEvents[currentIndex].category}
+            </span>
+          </div>
+          {/* Başlık */}
+          <h3
+            style={{
+              margin: "0 0 6px",
+              fontFamily: "Georgia, serif",
+              fontSize: "1.15rem",
+              color: "#fff4e4",
+            }}
+          >
+            {filteredEvents[currentIndex].title}
+          </h3>
+          {/* Anlatım */}
+          <p style={{ margin: 0, fontSize: "0.85rem", lineHeight: 1.55, color: "#cfc3aa" }}>
+            {filteredEvents[currentIndex].desc}
+          </p>
+          {/* Şehir */}
+          <div
+            style={{
+              marginTop: 8,
+              fontSize: "0.74rem",
+              color: "#a99a82",
+              fontStyle: "italic",
+            }}
+          >
+            {filteredEvents[currentIndex].city}
+          </div>
+        </div>
+      )}
 
       {/* @keyframes tanımı (global CSS'e eklenir) */}
       <style>{`
