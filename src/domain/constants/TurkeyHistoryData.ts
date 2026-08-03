@@ -129,12 +129,12 @@ export const ANADOLU_SELCUKLU_EVENTS: HistoryEvent[] = [
   },
   {
     year: 1081,
-    title: "Çaka Bey'in donanması",
+    title: "Çaka Bey ve ilk Türk donanması",
     city: "İzmir",
     x: 115.6,
     y: 283.4,
     desc: "Çaka Bey İzmir'de ilk Türk donanmasını kurdu; Ege adalarına seferler düzenledi. Anadolu'da denizciliğin öncüsü oldu.",
-    category: "organization",
+    category: "war",
   },
   {
     year: 1097,
@@ -173,21 +173,12 @@ export const ANADOLU_SELCUKLU_EVENTS: HistoryEvent[] = [
     category: "trade",
   },
   {
-    year: 1219,
-    title: "Venedik ile ticaret anlaşması",
-    city: "Alanya (Antalya)",
-    x: 330.4,
-    y: 373.1,
-    desc: "Selçuklu, Venedikli tüccarlara limanlarda imtiyazlar tanıdı. Bu anlaşma Akdeniz ticaretinde Selçuklu'nun etkinliğini artırdı.",
-    category: "treaty",
-  },
-  {
     year: 1220,
-    title: "Kervansaray dönemi — İpek Yolu",
+    title: "Kervansaraylar ve İpek Yolu",
     city: "Aksaray",
     x: 452,
     y: 235,
-    desc: "Alaeddin Keykubad döneminde Konya-Aksaray-Kayseri-Sivas hattında dev kervansaraylar inşa edildi. İpek Yolu tüccarları güvenle Anadolu'dan geçti.",
+    desc: "Alaeddin Keykubad döneminde Konya-Aksaray-Kayseri-Sivas hattında dev kervansaraylar inşa edildi. Ticaret yollarının güvenliği sağlandı.",
     category: "culture",
   },
   {
