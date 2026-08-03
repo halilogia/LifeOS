@@ -3,6 +3,10 @@ import { Note } from "@/types/types.js";
 import { extractInternalLinks } from "@/services/zettelkastenEngine.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
+import { NoteEditorHeader } from "./NoteEditorHeader.js";
+import { NoteEditorBody } from "./NoteEditorBody.js";
+import { WikiAutocomplete } from "./WikiAutocomplete.js";
+import { NoteBacklinksPanel } from "./NoteBacklinksPanel.js";
 
 export type NoteType = "note" | "diary" | "cornell";
 
@@ -104,358 +108,42 @@ export function NoteEditorModal({
         style={{ maxWidth: noteType === "cornell" ? "800px" : "600px" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <header
-          className="settings-header"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            alignItems: "stretch",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <label
-                style={{
-                  fontSize: "0.82rem",
-                  opacity: 0.8,
-                  fontWeight: 600,
-                }}
-              >
-                {t.notes_editor_title_label}
-              </label>
-              <div
-                style={{
-                  display: "flex",
-                  background: "rgba(255, 255, 255, 0.03)",
-                  padding: "3px",
-                  borderRadius: "10px",
-                  border:
-                    "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
-                  gap: "4px",
-                }}
-              >
-                {(["note", "diary", "cornell"] as const).map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => onNoteTypeChange(type)}
-                    style={{
-                      background:
-                        noteType === type
-                          ? "var(--accent-color)"
-                          : "transparent",
-                      color:
-                        noteType === type
-                          ? "#fff"
-                          : "var(--text-secondary, #94a3b8)",
-                      border: "none",
-                      padding: "4px 10px",
-                      borderRadius: "8px",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-                      boxShadow:
-                        noteType === type
-                          ? "0 4px 10px rgba(139, 92, 246, 0.3)"
-                          : "none",
-                    }}
-                  >
-                    {type === "note"
-                      ? t.notes_editor_type_note
-                      : type === "diary"
-                        ? t.notes_editor_type_diary
-                        : t.notes_editor_type_cornell}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <button
-              className="close-btn"
-              onClick={onClose}
-              style={{ margin: 0, padding: "0 6px", fontSize: "1.5rem" }}
-            >
-              &times;
-            </button>
-          </div>
-          <input
-            type="text"
-            id="note-title-input"
-            className="note-title-input"
-            value={noteTitle}
-            onInput={(e) =>
-              onNoteTitleChange((e.target as HTMLInputElement).value)
-            }
-            placeholder={
-              noteType === "diary"
-                ? t.notes_editor_diary_placeholder
-                : notesPlaceholder
-            }
-          />
-        </header>
+        <NoteEditorHeader
+          t={t}
+          noteType={noteType}
+          noteTitle={noteTitle}
+          notesPlaceholder={notesPlaceholder}
+          onTypeChange={onNoteTypeChange}
+          onTitleChange={onNoteTitleChange}
+          onClose={onClose}
+        />
 
         <div
           className="note-editor-body"
           style={{ padding: "0 10px", position: "relative" }}
         >
-          {noteType === "cornell" ? (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                marginTop: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 2fr",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "6px",
-                  }}
-                >
-                  <label
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--text-secondary)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {t.notes_editor_cues_label}
-                  </label>
-                  <textarea
-                    value={noteCues}
-                    onInput={(e) =>
-                      onNoteCuesChange((e.target as HTMLTextAreaElement).value)
-                    }
-                    placeholder={t.notes_editor_cues_placeholder}
-                    style={{
-                      background: "rgba(0, 0, 0, 0.2)",
-                      border: "1px solid var(--card-border)",
-                      borderRadius: "10px",
-                      padding: "12px",
-                      color: "var(--text-primary, #f1f5f9)",
-                      fontSize: "0.85rem",
-                      height: "220px",
-                      resize: "none",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "6px",
-                  }}
-                >
-                  <label
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--text-secondary)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {t.notes_editor_notes_label}
-                  </label>
-                  <textarea
-                    value={noteContent}
-                    onInput={(e) =>
-                      handleContentInput(
-                        (e.target as HTMLTextAreaElement).value,
-                      )
-                    }
-                    placeholder={t.notes_editor_notes_placeholder}
-                    style={{
-                      background: "rgba(0, 0, 0, 0.2)",
-                      border: "1px solid var(--card-border)",
-                      borderRadius: "10px",
-                      padding: "12px",
-                      color: "var(--text-primary, #f1f5f9)",
-                      fontSize: "0.85rem",
-                      height: "220px",
-                      resize: "none",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "6px",
-                }}
-              >
-                <label
-                  style={{
-                    fontSize: "0.8rem",
-                    color: "var(--text-secondary)",
-                    fontWeight: 600,
-                  }}
-                >
-                  {t.notes_editor_summary_label}
-                </label>
-                <textarea
-                  value={noteSummary}
-                  onInput={(e) =>
-                    onNoteSummaryChange((e.target as HTMLTextAreaElement).value)
-                  }
-                  placeholder={t.notes_editor_summary_placeholder}
-                  style={{
-                    background: "rgba(0, 0, 0, 0.2)",
-                    border: "1px solid var(--card-border)",
-                    borderRadius: "10px",
-                    padding: "12px",
-                    color: "var(--text-primary, #f1f5f9)",
-                    fontSize: "0.85rem",
-                    height: "70px",
-                    resize: "none",
-                    outline: "none",
-                  }}
-                />
-              </div>
-            </div>
-          ) : (
-            <textarea
-              id="note-content-input"
-              className="note-content-input"
-              value={noteContent}
-              onInput={(e) =>
-                handleContentInput((e.target as HTMLTextAreaElement).value)
-              }
-              placeholder={
-                noteType === "diary"
-                  ? t.notes_editor_diary_content_placeholder
-                  : notesContentPlaceholder
-              }
-            />
-          )}
+          <NoteEditorBody
+            t={t}
+            noteType={noteType}
+            noteContent={noteContent}
+            noteCues={noteCues}
+            noteSummary={noteSummary}
+            notesContentPlaceholder={notesContentPlaceholder}
+            onContentInput={handleContentInput}
+            onCuesChange={onNoteCuesChange}
+            onSummaryChange={onNoteSummaryChange}
+          />
 
           {/* Autocomplete Popup when typing [[ */}
           {showLinkSuggestions && filteredSuggestions.length > 0 && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "50px",
-                left: "20px",
-                width: "280px",
-                maxHeight: "180px",
-                overflowY: "auto",
-                background: "rgba(15, 23, 42, 0.95)",
-                border: "1px solid var(--accent-color, #a855f7)",
-                borderRadius: "12px",
-                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
-                zIndex: 100,
-                padding: "6px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.72rem",
-                  color: "#94a3b8",
-                  padding: "4px 8px",
-                  fontWeight: 600,
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-                }}
-              >
-                🔗 İç Bağlantı Ekle (`[[...]]`):
-              </div>
-              {filteredSuggestions.map((n) => (
-                <button
-                  key={n.id}
-                  type="button"
-                  onClick={() => insertLink(n.title)}
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    padding: "6px 10px",
-                    background: "transparent",
-                    border: "none",
-                    color: "#f8fafc",
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    borderRadius: "6px",
-                  }}
-                  onMouseEnter={(e) =>
-                    ((e.target as HTMLElement).style.background =
-                      "rgba(168, 85, 247, 0.2)")
-                  }
-                  onMouseLeave={(e) =>
-                    ((e.target as HTMLElement).style.background = "transparent")
-                  }
-                >
-                  [[{n.title}]]
-                </button>
-              ))}
-            </div>
+            <WikiAutocomplete
+              suggestions={filteredSuggestions}
+              onSelect={insertLink}
+            />
           )}
 
-          {/* Backlinks Panel ("🔗 Bağlantılı Notlar") */}
-          {backlinks.length > 0 && (
-            <div
-              style={{
-                marginTop: "12px",
-                padding: "10px 14px",
-                background: "rgba(15, 23, 42, 0.4)",
-                borderRadius: "10px",
-                border: "1px solid rgba(168, 85, 247, 0.2)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  color: "#c084fc",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                🔗 Bağlantılı Notlar (Backlinks - {backlinks.length}):
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "6px",
-                  flexWrap: "wrap",
-                  marginTop: "6px",
-                }}
-              >
-                {backlinks.map((b) => (
-                  <span
-                    key={b.id}
-                    style={{
-                      fontSize: "0.72rem",
-                      padding: "2px 8px",
-                      borderRadius: "6px",
-                      background: "rgba(168, 85, 247, 0.15)",
-                      color: "#e0e7ff",
-                      border: "1px solid rgba(168, 85, 247, 0.3)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    [[{b.title}]]
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Backlinks Panel */}
+          {backlinks.length > 0 && <NoteBacklinksPanel backlinks={backlinks} />}
         </div>
 
         <div className="settings-footer">

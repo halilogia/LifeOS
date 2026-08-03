@@ -5,6 +5,7 @@ import {
   getNodeColor,
 } from "@/services/zettelkastenEngine.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { NoteCardInlineEditor } from "./NoteCardInlineEditor.js";
 
 interface NoteCardProps {
   note: Note;
@@ -61,167 +62,20 @@ export function NoteCard({
       }}
     >
       {isInlineEditing ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            width: "100%",
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <input
-            type="text"
-            value={inlineTitle}
-            onInput={(e) =>
-              setInlineTitle((e.target as HTMLInputElement).value)
-            }
-            style={{
-              width: "100%",
-              background: "rgba(0,0,0,0.3)",
-              border: "1px solid var(--card-border)",
-              color: "#fff",
-              padding: "8px 12px",
-              borderRadius: "8px",
-              fontSize: "0.85rem",
-              fontWeight: "bold",
-              outline: "none",
-            }}
-            placeholder={t.notes_card_title_placeholder}
-          />
-
-          {currentType === "cornell" ? (
-            <>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "8px",
-                }}
-              >
-                <textarea
-                  value={inlineCues}
-                  onInput={(e) =>
-                    setInlineCues((e.target as HTMLTextAreaElement).value)
-                  }
-                  style={{
-                    width: "100%",
-                    background: "rgba(0,0,0,0.3)",
-                    border: "1px solid var(--card-border)",
-                    color: "#fff",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    fontSize: "0.8rem",
-                    height: "100px",
-                    resize: "none",
-                    outline: "none",
-                  }}
-                  placeholder={t.notes_card_cues_placeholder}
-                />
-                <textarea
-                  value={inlineContent}
-                  onInput={(e) =>
-                    setInlineContent((e.target as HTMLTextAreaElement).value)
-                  }
-                  style={{
-                    width: "100%",
-                    background: "rgba(0,0,0,0.3)",
-                    border: "1px solid var(--card-border)",
-                    color: "#fff",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    fontSize: "0.8rem",
-                    height: "100px",
-                    resize: "none",
-                    outline: "none",
-                  }}
-                  placeholder={t.notes_card_content_notes_placeholder}
-                />
-              </div>
-              <textarea
-                value={inlineSummary}
-                onInput={(e) =>
-                  setInlineSummary((e.target as HTMLTextAreaElement).value)
-                }
-                style={{
-                  width: "100%",
-                  background: "rgba(0,0,0,0.3)",
-                  border: "1px solid var(--card-border)",
-                  color: "#fff",
-                  padding: "8px",
-                  borderRadius: "8px",
-                  fontSize: "0.8rem",
-                  height: "60px",
-                  resize: "none",
-                  outline: "none",
-                }}
-                placeholder={t.notes_card_summary_placeholder}
-              />
-            </>
-          ) : (
-            <textarea
-              value={inlineContent}
-              onInput={(e) =>
-                setInlineContent((e.target as HTMLTextAreaElement).value)
-              }
-              style={{
-                width: "100%",
-                background: "rgba(0,0,0,0.3)",
-                border: "1px solid var(--card-border)",
-                color: "#fff",
-                padding: "8px 12px",
-                borderRadius: "8px",
-                fontSize: "0.82rem",
-                height: "120px",
-                resize: "none",
-                outline: "none",
-              }}
-              placeholder={t.notes_card_content_placeholder}
-            />
-          )}
-
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              justifyContent: "flex-end",
-              marginTop: "4px",
-            }}
-          >
-            <button
-              type="button"
-              onClick={onCancelInlineEdit}
-              style={{
-                background: "rgba(255, 255, 255, 0.05)",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-secondary)",
-                padding: "4px 10px",
-                borderRadius: "6px",
-                fontSize: "0.72rem",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              {t.notes_card_cancel}
-            </button>
-            <button
-              type="button"
-              onClick={() => onSaveInlineNote(note.id)}
-              style={{
-                background: "var(--accent-color)",
-                border: "none",
-                color: "white",
-                padding: "4px 10px",
-                borderRadius: "6px",
-                fontSize: "0.72rem",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              {t.notes_card_save}
-            </button>
-          </div>
-        </div>
+        <NoteCardInlineEditor
+          t={t}
+          type={currentType}
+          inlineTitle={inlineTitle}
+          inlineContent={inlineContent}
+          inlineCues={inlineCues}
+          inlineSummary={inlineSummary}
+          onTitleChange={setInlineTitle}
+          onContentChange={setInlineContent}
+          onCuesChange={setInlineCues}
+          onSummaryChange={setInlineSummary}
+          onSave={() => onSaveInlineNote(note.id)}
+          onCancel={onCancelInlineEdit}
+        />
       ) : (
         <>
           <div className="note-card-header" style={{ width: "100%" }}>
@@ -381,20 +235,20 @@ export function NoteCard({
                   marginBottom: "4px",
                 }}
               >
-                {tags.map((t) => (
+                {tags.map((tName) => (
                   <span
-                    key={t}
+                    key={tName}
                     style={{
                       fontSize: "0.68rem",
                       padding: "1px 6px",
                       borderRadius: "4px",
                       background: "rgba(168, 85, 247, 0.2)",
-                      color: getNodeColor([t]),
+                      color: getNodeColor([tName]),
                       border: "1px solid rgba(168, 85, 247, 0.3)",
                       fontWeight: 600,
                     }}
                   >
-                    #{t}
+                    #{tName}
                   </span>
                 ))}
                 {links.map((l) => (
