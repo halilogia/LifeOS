@@ -1,6 +1,6 @@
 import type { StockQuote } from "@/types/bist.js";
 import { formatPrice } from "@/services/bistService.js";
-import { IconChart, IconPlus, IconSparkles } from "./portfolioIcons.js";
+import { IconChart, IconPlus, IconSparkles } from "@/components/stock/portfolio/portfolioIcons.js";
 
 interface WatchlistRowProps {
   symbol: string;

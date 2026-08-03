@@ -30,12 +30,12 @@ import {
 import { KpssPastQuiz } from "@/services/kpss/kpssQuizService.js";
 
 // Extracted Presentational Sub-components
-import { KpssHeaderBar } from "@/components/kpss/KpssHeaderBar.js";
-import { KpssTopicDetailModal } from "@/components/kpss/KpssTopicDetailModal.js";
-import { KpssProgressSection } from "@/components/kpss/KpssProgressSection.js";
-import { KpssSrsTab } from "@/components/kpss/KpssSrsTab.js";
+import { KpssHeaderBar } from "@/components/kpss/topics/KpssHeaderBar.js";
+import { KpssTopicDetailModal } from "@/components/kpss/topics/KpssTopicDetailModal.js";
+import { KpssProgressSection } from "@/components/kpss/topics/KpssProgressSection.js";
+import { KpssSrsTab } from "@/components/kpss/topics/KpssSrsTab.js";
 import { KpssQuizModal } from "@/components/kpss/quiz/KpssQuizModal.js";
-import { KpssPastExamsDashboard } from "@/components/kpss/KpssPastExamsDashboard.js";
+import { KpssPastExamsDashboard } from "@/components/kpss/exams/KpssPastExamsDashboard.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
 import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
 import { logger } from "@/utils/logger.js";

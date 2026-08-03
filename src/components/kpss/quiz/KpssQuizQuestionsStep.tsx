@@ -5,8 +5,8 @@ import { CSSProperties } from "preact";
  * KPSS Sınavı sorularının gösterim ekranı (İlerleme çubuğu, Canvas, Harita, Şıklar, Çözüm kutusu ve Navigasyon).
  */
 
-import { KpssQuestionCanvas } from "@/components/kpss/KpssQuestionCanvas.js";
-import { KpssQuestionMap } from "@/components/kpss/KpssQuestionMap.js";
+import { KpssQuestionCanvas } from "@/components/kpss/topics/KpssQuestionCanvas.js";
+import { KpssQuestionMap } from "@/components/kpss/exams/KpssQuestionMap.js";
 import { MathRenderer } from "@/components/kpss/quiz/MathRenderer.js";
 
 export interface QuizQuestion {

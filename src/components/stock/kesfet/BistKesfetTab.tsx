@@ -8,7 +8,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { fetchDynamicBistTickers } from "@/services/bistService.js";
 import type { StockQuote } from "@/types/bist.js";
-import { BistSearchBar } from "@/components/stock/BistSearchBar.js";
+import { BistSearchBar } from "@/components/stock/search/BistSearchBar.js";
 import type { StockWatchlist } from "@/types/stock.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";

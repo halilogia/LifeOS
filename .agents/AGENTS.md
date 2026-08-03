@@ -171,12 +171,17 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **Sıfır Ölü Dosya Garantisi**: Her iş sonunda `node scripts/findDeadFiles.mjs` çalıştırılır ve çıktı "Toplam: 0 dosya" olmalıdır. 0 değilse kalanlar silinir (entry noktaları hariç). Script ayrıca **boş klasörleri** ve public/ referanssız asset'leri de raporlar — onlar da silinir.
 * **İhlal tespiti**: Bir refactor commit'inde eski dosya hâlâ duruyorsa iş eksiktir.
 
-### 6.5 Klasör Dosya Limiti (Folder File Limit)
-* **Klasör ≤ 15 dosya**: Bir klasör 15+ `.ts/.tsx` dosya içeriyorsa, dosyalar tek sorumluluğa sahip değilse feature alt klasörlerine bölünür (örn. `components/kpss/` → `quiz/` + `wiki/` + `srs/`).
-* **İstisna**: Klasörün kendisi tek sorumluluk ise (örn. `presentation/hooks/` = "state management", `domain/repositories/` = "interface'ler") dosya sayısı bakım kuralı değildir — bölünmez.
+### 6.5 Klasör Düzeni (Folder Organization — Esnek, Sorumluluk Esaslı)
+* **Katı dosya sayısı YOKTUR**: "15+ dosya → böl" gibi evrensel eşikler YASAKTIR. Bir klasörün şişkinliği dosya sayısıyla değil, **sorumluluk yoğunluğuyla** ölçülür.
+* **Tek Sorumluluk Testi (her klasör için)**: Klasörün başlığı tek cümleyle özetlenebiliyorsa (örn. `presentation/hooks/` = "state management", `domain/repositories/` = "interface'ler", `components/` = "route listesi") → kaç dosya olursa olsun BÖLÜNMEZ.
+* **BÖLÜNÜR sinyalleri** (dosya sayısı değil):
+  * Klasör içinde **birden fazla farklı domain** biriktiyse (örn. `stock/` içinde portfolio + watchlist + chart + news + search aynı anda) → domain bazlı alt klasörler ayrılır.
+  * Dosyalar birbirini **çapraz import ediyorsa** ve ortak soyutlama yoksa → gruplama kokusu.
+  * Aynı ad önekiyle (örn. `Kpss*`) dosyalar kökte birikmişse ama hepsi farklı görevse (planner vs exam vs topic) → domain alt klasörleri.
+* **BÖLÜNMEZ**: Klasör tek domain ise (örn. `kpss/quiz/`, `kpss/wiki/`) dosya sayısı ne olursa olsun korunur — bölmek yapay derinlik ekler.
 * **Bölme kuralı**: Alt klasör oluştururken import'lar `@/` alias ile güncellenir, `findDeadFiles.mjs` ile 0 ölü dosya doğrulanır.
 * **Kök vs Klasör Kararı (Folder Placement)**: Her feature'ın kendi klasörü olması YANLIŞ kuraldır. Dosya yerleşimi:
-  * **Çok dosyalı feature** (>3 dosya, aynı domain) → `feature/` klasörü (örn. `services/kpss/`, `components/kpss/quiz/`)
+  * **Çok dosyalı feature** (aynı domain, anlamlı grup) → `feature/` klasörü (örn. `services/kpss/`, `components/kpss/quiz/`)
   * **Tek dosyalık feature / giriş noktası** → kökte durur (örn. `ListView.tsx`, `prayerService.ts` — klasör 1 dosyalık şişkinlik olur)
   * **Paylaşılan parçalar** (ConfirmModal, DatePicker) → kök, feature klasörüne gömülmez
   * **View kökleri** (`components/`): ana view'lar `ViewRouter`'dan yönlendirilir, birbirini import etmez — kökte durur = "route listesi" tek bakışta görünür

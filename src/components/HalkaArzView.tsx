@@ -7,7 +7,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { IpoCard } from "@/components/stock/IpoCard.js";
+import { IpoCard } from "@/components/stock/common/IpoCard.js";
 import {
   fetchActiveIPOs,
   fetchIPOHistory,
