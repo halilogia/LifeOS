@@ -1,4 +1,4 @@
-import { IconEye, IconSparkles } from "./portfolioIcons.js";
+import { IconEye, IconSparkles } from "@/components/stock/portfolio/portfolioIcons.js";
 
 interface WatchlistHeaderProps {
   listTitle: string;

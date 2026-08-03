@@ -11,16 +11,16 @@ import { useState } from "preact/hooks";
 import { useBist } from "@/presentation/hooks/useBist.js";
 
 // Extracted Sub-components
-import { BistKesfetTab } from "@/components/stock/BistKesfetTab.js";
-import { BistActionBar } from "@/components/stock/BistActionBar.js";
-import { BistPortfolioTab } from "@/components/stock/BistPortfolioTab.js";
-import { StockWatchlistTable } from "@/components/stock/StockWatchlistTable.js";
-import { AddStockModal } from "@/components/stock/AddStockModal.js";
-import { RuleBuilderModal } from "@/components/stock/RuleBuilderModal.js";
-import { StockAlertHistoryModal } from "@/components/stock/StockAlertHistoryModal.js";
-import { StockAiAnalysisModal } from "@/components/stock/StockAiAnalysisModal.js";
-import { StockKapNewsModal } from "@/components/stock/StockKapNewsModal.js";
-import { CustomStockChart } from "@/components/stock/CustomStockChart.js";
+import { BistKesfetTab } from "@/components/stock/kesfet/BistKesfetTab.js";
+import { BistActionBar } from "@/components/stock/common/BistActionBar.js";
+import { BistPortfolioTab } from "@/components/stock/portfolio/BistPortfolioTab.js";
+import { StockWatchlistTable } from "@/components/stock/watchlist/StockWatchlistTable.js";
+import { AddStockModal } from "@/components/stock/portfolio/AddStockModal.js";
+import { RuleBuilderModal } from "@/components/stock/analysis/RuleBuilderModal.js";
+import { StockAlertHistoryModal } from "@/components/stock/analysis/StockAlertHistoryModal.js";
+import { StockAiAnalysisModal } from "@/components/stock/analysis/StockAiAnalysisModal.js";
+import { StockKapNewsModal } from "@/components/stock/news/StockKapNewsModal.js";
+import { CustomStockChart } from "@/components/stock/chart/CustomStockChart.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 
 interface BistViewProps {

@@ -12,7 +12,7 @@ import type {
   StockTradeHistory,
   StockCashBalance,
 } from "@/types/stock.js";
-import type { BistTabId } from "@/components/stock/BistActionBar.js";
+import type { BistTabId } from "@/components/stock/common/BistActionBar.js";
 import { logger } from "@/utils/logger.js";
 
 interface UseBistOptions {
