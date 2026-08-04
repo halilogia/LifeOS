@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "preact/hooks";
 
 const DEFAULT_ORDER = [
   "list",
-  "kanban",
+  "eisenhower",
   "notes",
   "pomodoro",
   "willpower",
@@ -11,12 +11,12 @@ const DEFAULT_ORDER = [
   "calendar",
   "prayer",
   "kpss",
-  "freegames",
+  "free-games",
   "arcade",
   "detox",
   "bist",
-  "halkaarz",
-  "aichat",
+  "halka-arz",
+  "ai-chat",
 ];
 
 export function useSidebarOrder() {
