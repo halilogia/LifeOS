@@ -1,7 +1,4 @@
-import type {
-  KpssWikiNote,
-  HeadingItem,
-} from "@/services/kpss/kpssWikiService.js";
+import type { KpssWikiNote } from "@/services/kpss/kpssWikiService.js";
 import { getSubjectLabel } from "@/services/kpss/kpssWikiService.js";
 
 interface WikiInfoboxProps {
@@ -9,7 +6,6 @@ interface WikiInfoboxProps {
   displayTitle: string;
   subject: string;
   imageUrl: string | null;
-  keySummaryRows: { key: string; val: string }[];
   readingTimeMinutes: number;
   wordCount: number;
   updatedAt: number | string;
@@ -19,11 +15,10 @@ interface WikiInfoboxProps {
 }
 
 export function WikiInfobox({
-  note,
+  note: _note,
   displayTitle,
   subject,
   imageUrl,
-  keySummaryRows,
   readingTimeMinutes,
   wordCount,
   updatedAt,
@@ -112,38 +107,6 @@ export function WikiInfobox({
           fontSize: "0.74rem",
         }}
       >
-        {keySummaryRows.map((row, idx) => (
-          <div
-            key={idx}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-              paddingBottom: "4px",
-            }}
-          >
-            <span
-              style={{
-                color: "#94a3b8",
-                fontWeight: 600,
-                fontSize: "0.7rem",
-              }}
-            >
-              {row.key}
-            </span>
-            <span
-              style={{
-                color: "#e2e8f0",
-                fontSize: "0.72rem",
-                fontWeight: 500,
-              }}
-            >
-              {row.val}
-            </span>
-          </div>
-        ))}
-
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span style={{ color: "#94a3b8", fontWeight: 600 }}>
             Okuma Süresi
