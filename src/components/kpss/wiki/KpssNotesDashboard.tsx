@@ -5,7 +5,7 @@
  * State yönetimi useKpssNotes hook'unda, görsel parçalar alt bileşenlerde.
  */
 
-import { useState, useRef } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import {
   KpssWikiNote,
@@ -47,7 +47,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     setEditorContent,
     saveStatus,
     selectedNote,
-    tableOfContents,
     selectNote,
     handleCreateNewNote,
     handleAddChildNote,
@@ -113,16 +112,23 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     }
   };
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
-  const handleTocNavigate = (index: number) => {
-    const item = tableOfContents[index];
-    if (item?.noteId) {
-      const childNote = notes.find((n) => n.id === item.noteId);
-      if (childNote) {
-        selectNote(childNote);
+  useEffect(() => {
+    void (async () => {
+      const result = await chrome.storage.sync.get("kpssWikiSidebarCollapsed");
+      if (result.kpssWikiSidebarCollapsed !== undefined) {
+        setSidebarCollapsed(Boolean(result.kpssWikiSidebarCollapsed));
       }
-    }
+    })();
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      void chrome.storage.sync.set({ kpssWikiSidebarCollapsed: next });
+      return next;
+    });
   };
 
   return (
@@ -163,7 +169,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           searchQuery={searchQuery}
           selectedSubjectFilter={selectedSubjectFilter}
           isCollapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
+          onToggleCollapse={toggleSidebar}
           onSearchChange={setSearchQuery}
           onFilterChange={setSelectedSubjectFilter}
           onSelectNote={selectNote}
@@ -206,9 +212,8 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                   t={t}
                   note={selectedNote}
                   allNotes={notes}
-                  tableOfContents={tableOfContents}
                   onWikilinkClick={handleWikilinkClick}
-                  onNavigateToc={handleTocNavigate}
+                  onSelectNote={selectNote}
                 />
               ) : (
                 <KpssWikiEditor
