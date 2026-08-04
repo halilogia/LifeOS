@@ -3,14 +3,13 @@
  * Makale okuma alanı.
  * 
  * Özellikler:
- * - İkon başlığın hemen SOLUNDA aynı hizada yer alır.
- * - İkona tıklandığında z-index'li floating Popup olarak açılır (sabitlenme yok, sadece popup).
+ * - Başlığın altında Wikipedia tarzı bilgi satırı (konu, okuma süresi, kelime, tarih).
+ * - Tek sütunlu makale içeriği + sağ infobox.
  */
 
 import { useMemo } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import type { KpssWikiNote, HeadingItem } from "@/services/kpss/kpssWikiService.js";
-import { extractHeadings } from "@/services/kpss/kpssWikiService.js";
+import type { KpssWikiNote } from "@/services/kpss/kpssWikiService.js";
 import { WikiInfobox } from "./WikiInfobox.js";
 import { WikiArticleBody } from "./WikiArticleBody.js";
 import { WikiTitleHeader } from "./WikiTitleHeader.js";
@@ -20,9 +19,8 @@ interface KpssWikiReaderProps {
   t: Record<string, string>;
   note: KpssWikiNote | null;
   allNotes: KpssWikiNote[];
-  tableOfContents?: HeadingItem[];
   onWikilinkClick: (e: MouseEvent) => void;
-  onNavigateToc?: (index: number) => void;
+  onSelectNote: (note: KpssWikiNote) => void;
 }
 
 export function KpssWikiReader({
@@ -30,9 +28,8 @@ export function KpssWikiReader({
   t: _t,
   note,
   allNotes,
-  tableOfContents: externalToc,
   onWikilinkClick,
-  onNavigateToc,
+  onSelectNote,
 }: KpssWikiReaderProps) {
   if (!note) {
     return (
@@ -51,32 +48,9 @@ export function KpssWikiReader({
     );
   }
 
-  // Not içeriğinden başlıkları ayrıştır veya prop'tan al
-  const tableOfContents = useMemo(
-    () => externalToc || extractHeadings(note.content || ""),
-    [externalToc, note.content],
-  );
-
   const displayTitle = note.title || "Ders Notu";
 
-  const handleTocNavigate = (index: number) => {
-    if (onNavigateToc) {
-      onNavigateToc(index);
-      return;
-    }
-    const item = tableOfContents[index];
-    if (!item) return;
-
-    const headings = Array.from(document.querySelectorAll("h2, h3, h4"));
-    const target = headings.find(
-      (h) => h.textContent && h.textContent.includes(item.text),
-    );
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
-  // Infobox için metin metrikleri
+  // Metin metrikleri
   const contentText = note.content || "";
   const wordCount = useMemo(
     () => contentText.trim().split(/\s+/).filter(Boolean).length,
@@ -96,6 +70,13 @@ export function KpssWikiReader({
   const rawNote = note as unknown as Record<string, unknown>;
   const imageUrl = (rawNote.imageUrl as string) || null;
   const outboundWikilinks = (rawNote.wikilinks as string[]) || [];
+  const subjectLabel = note.subject || "Tarih";
+
+  // Alt notlar (child notes)
+  const childNotes = useMemo(
+    () => allNotes.filter((n) => n.parentId === note.id),
+    [allNotes, note.id],
+  );
 
   return (
     <div
@@ -112,14 +93,10 @@ export function KpssWikiReader({
         boxSizing: "border-box",
       }}
     >
-      {/* Başlık Satırı — Sol tarafında yazısız İçindekiler ikonu */}
-      <WikiTitleHeader
-        displayTitle={displayTitle}
-        tableOfContents={tableOfContents}
-        onNavigate={handleTocNavigate}
-      />
+      {/* Başlık */}
+      <WikiTitleHeader displayTitle={displayTitle} />
 
-      {/* Makale Okuma Ekranı — İçi daraltılmayan temiz 2 sütunlu düzen (Metin + Infobox) */}
+      {/* Makale Okuma Ekranı — Tek sütunlu düzende metin */}
       <div
         style={{
           display: "grid",
@@ -146,7 +123,9 @@ export function KpssWikiReader({
           updatedAt={note.updatedAt || Date.now()}
           outboundWikilinks={outboundWikilinks}
           backlinks={backlinks}
+          childNotes={childNotes}
           onWikilinkClick={onWikilinkClick}
+          onSelectNote={(childNote) => onSelectNote(childNote)}
         />
       </div>
     </div>

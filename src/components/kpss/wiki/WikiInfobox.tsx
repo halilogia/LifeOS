@@ -11,7 +11,9 @@ interface WikiInfoboxProps {
   updatedAt: number | string;
   outboundWikilinks: string[];
   backlinks: KpssWikiNote[];
+  childNotes: KpssWikiNote[];
   onWikilinkClick: (e: MouseEvent) => void;
+  onSelectNote?: (note: KpssWikiNote) => void;
 }
 
 export function WikiInfobox({
@@ -24,7 +26,9 @@ export function WikiInfobox({
   updatedAt,
   outboundWikilinks,
   backlinks,
+  childNotes,
   onWikilinkClick,
+  onSelectNote,
 }: WikiInfoboxProps) {
   return (
     <div
@@ -97,7 +101,7 @@ export function WikiInfobox({
         </div>
       )}
 
-      {/* Key-Value & Stats */}
+      {/* Key-Value Stats */}
       <div
         style={{
           display: "flex",
@@ -247,6 +251,65 @@ export function WikiInfobox({
                 }}
               >
                 {bl.title}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Child Notes */}
+      {childNotes.length > 0 && (
+        <div
+          style={{
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            padding: "8px 10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "6px",
+            fontSize: "0.74rem",
+            background: "rgba(15, 23, 42, 0.5)",
+          }}
+        >
+          <div
+            style={{
+              color: "#94a3b8",
+              fontWeight: 700,
+              fontSize: "0.7rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <span>Alt Notlar</span>
+            <span
+              style={{
+                background: "rgba(59, 130, 246, 0.25)",
+                color: "#60a5fa",
+                padding: "1px 5px",
+                borderRadius: "10px",
+                fontSize: "0.65rem",
+              }}
+            >
+              {childNotes.length}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+            {childNotes.map((cn) => (
+              <span
+                key={cn.id}
+                onClick={() => onSelectNote?.(cn)}
+                style={{
+                  color: "#60a5fa",
+                  background: "rgba(59, 130, 246, 0.15)",
+                  border: "1px solid rgba(59, 130, 246, 0.3)",
+                  borderRadius: "4px",
+                  padding: "2px 6px",
+                  cursor: "pointer",
+                  fontSize: "0.7rem",
+                  fontWeight: 600,
+                }}
+              >
+                {cn.title}
               </span>
             ))}
           </div>

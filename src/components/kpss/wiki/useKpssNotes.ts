@@ -7,12 +7,10 @@
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import {
   KpssWikiNote,
-  HeadingItem,
   getKpssWikiNotes,
   saveKpssWikiNotes,
   getAutoTitleSetting,
   extractTitleFromContent,
-  extractHeadings,
 } from "@/services/kpss/kpssWikiService.js";
 
 export type KpssSubject =
@@ -36,7 +34,6 @@ export interface UseKpssNotesResult {
   setEditorContent: (content: string) => void;
   saveStatus: boolean;
   selectedNote: KpssWikiNote | undefined;
-  tableOfContents: HeadingItem[];
   selectNote: (note: KpssWikiNote) => void;
   handleCreateNewNote: () => Promise<void>;
   handleAddChildNote: (parent: KpssWikiNote) => Promise<void>;
@@ -259,20 +256,6 @@ export function useKpssNotes(
   };
 
   const selectedNote = notes.find((n) => n.id === selectedNoteId);
-  const tableOfContents: HeadingItem[] = [];
-
-  // İçindekiler = Yalnızca bu nota bağlı ALT NOTLAR (Child Notes)
-  if (selectedNote) {
-    const children = notes.filter((n) => n.parentId === selectedNote.id);
-    children.forEach((child) => {
-      const childTitle = child.title.trim() || "Başlıksız Alt Not";
-      tableOfContents.push({
-        level: 2,
-        text: childTitle,
-        noteId: child.id,
-      });
-    });
-  }
 
   return {
     notes,
@@ -288,7 +271,6 @@ export function useKpssNotes(
     setEditorContent,
     saveStatus,
     selectedNote,
-    tableOfContents,
     selectNote,
     handleCreateNewNote,
     handleAddChildNote,
