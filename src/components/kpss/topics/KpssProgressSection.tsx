@@ -44,6 +44,7 @@ interface KpssProgressSectionProps {
   onSelectSubject: (subKey: string) => void;
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onStartQuiz: (topic: string, subject?: string) => void;
+  onReviewPastQuiz?: (topic: string) => void;
   onShowDetail: (topic: { title: string; description: string }) => void;
   onOpenYoutube: (topic: string) => void;
 }
@@ -85,6 +86,7 @@ export function KpssProgressSection({
   onSelectSubject,
   onSortByChange,
   onStartQuiz,
+  onReviewPastQuiz,
   onShowDetail,
   onOpenYoutube,
 }: KpssProgressSectionProps) {
@@ -155,6 +157,7 @@ export function KpssProgressSection({
         sortBy={sortBy}
         onSortByChange={onSortByChange}
         onStartQuiz={(topic) => onStartQuiz(topic)}
+        onReviewPastQuiz={onReviewPastQuiz}
         onShowDetail={onShowDetail}
         onOpenYoutube={onOpenYoutube}
       />

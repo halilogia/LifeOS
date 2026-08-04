@@ -1,37 +1,20 @@
-export function getScoreColor(score: number): string {
-  if (score >= 80) {
-    return "#10b981";
-  }
-  if (score >= 60) {
-    return "#f59e0b";
-  }
-  if (score >= 40) {
-    return "#f97316";
-  }
-  return "#ef4444";
-}
-
-export function getScoreEmoji(score: number): string {
-  if (score >= 90) {
-    return "🏆";
-  }
-  if (score >= 80) {
-    return "🌟";
-  }
-  if (score >= 60) {
-    return "👍";
-  }
-  if (score >= 40) {
-    return "💪";
-  }
-  return "📚";
-}
+/**
+ * QuizResultHero.tsx
+ * KPSS Sınav Sonuç ve Konu İlerleme Kartı.
+ * 
+ * Özellikler:
+ * - Soru Sayısı Hedefi (100 Soru Barajı) İlerleme Çubuğu
+ * - Birikimli Başarı Oranı (%80 Şartı) İlerleme Çubuğu
+ * - Çözülen Sınav Skoru (eğer soru çözüldüyse)
+ * - Sıfır karmaşa, sıfır "0/0 Soru" yazısı, gereksiz metinler kaldırılmıştır.
+ */
 
 interface QuizResultHeroProps {
   t: Record<string, string>;
   score: number;
   correctCount: number;
   totalQuestions: number;
+  cumulative: { totalQuestions: number; totalCorrect: number };
 }
 
 export function QuizResultHero({
@@ -39,44 +22,166 @@ export function QuizResultHero({
   score,
   correctCount,
   totalQuestions,
+  cumulative,
 }: QuizResultHeroProps) {
-  const scoreColor = getScoreColor(score);
-  const emoji = getScoreEmoji(score);
+  // Birikimli (Konu Genel) İstatistikleri
+  const cumTotal = cumulative?.totalQuestions ?? 0;
+  const cumCorrect = cumulative?.totalCorrect ?? 0;
+  const cumPercent =
+    cumTotal > 0
+      ? Math.round((cumCorrect / cumTotal) * 100)
+      : score > 0
+        ? score
+        : 0;
+
+  // Baraj Hesapları
+  const questionTargetPct = Math.min(100, Math.round((cumTotal / 100) * 100));
+  const successTargetPct = Math.min(100, cumPercent);
+  const isCompleted = cumTotal >= 100 && cumPercent >= 80;
 
   return (
     <div
       style={{
-        textAlign: "center",
-        padding: "24px 16px 20px",
-        background:
-          "linear-gradient(135deg, rgba(139,92,246,0.08), rgba(99,102,241,0.04))",
-        borderRadius: "16px",
-        border: "1px solid rgba(139,92,246,0.12)",
-        marginBottom: "20px",
+        padding: "20px",
+        background: "rgba(20, 20, 30, 0.7)",
+        border: `1px solid ${isCompleted ? "rgba(16, 185, 129, 0.4)" : "var(--card-border)"}`,
+        borderRadius: "14px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        marginBottom: "16px",
       }}
     >
-      <div style={{ fontSize: "2.2rem", marginBottom: "4px" }}>{emoji}</div>
+      {/* Üst Bar: Sonuç Rozeti ve Durum etiketleri */}
       <div
         style={{
-          fontSize: "3.8rem",
-          fontWeight: 800,
-          color: scoreColor,
-          lineHeight: 1.1,
-          letterSpacing: "-2px",
-          marginBottom: "4px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        %{score}
+        <div>
+          <span
+            style={{
+              fontSize: "0.78rem",
+              color: "var(--text-secondary)",
+              fontWeight: "600",
+              display: "block",
+            }}
+          >
+            Konu Durumu
+          </span>
+          <strong
+            style={{
+              fontSize: "1.1rem",
+              color: isCompleted ? "#34d399" : "#f3f4f6",
+            }}
+          >
+            {isCompleted ? "✓ Tamamlandı" : "Devam Ediyor"}
+          </strong>
+        </div>
+
+        {totalQuestions > 0 && (
+          <div
+            style={{
+              textAlign: "right",
+              background: "rgba(139, 92, 246, 0.12)",
+              border: "1px solid rgba(139, 92, 246, 0.3)",
+              padding: "6px 12px",
+              borderRadius: "8px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "0.7rem",
+                color: "var(--text-secondary)",
+                display: "block",
+              }}
+            >
+              Son Sınav
+            </span>
+            <strong style={{ fontSize: "0.95rem", color: "#c084fc" }}>
+              {correctCount}/{totalQuestions} Doğru (%{score})
+            </strong>
+          </div>
+        )}
       </div>
-      <div
-        style={{
-          fontSize: "0.8rem",
-          color: "var(--text-secondary)",
-          fontWeight: 500,
-          letterSpacing: "0.3px",
-        }}
-      >
-        {correctCount}/{totalQuestions} {t.kpss_quiz_questions}
+
+      {/* ── BAR 1: 100 Soru Barajı İlerlemesi ── */}
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "0.8rem",
+            fontWeight: "700",
+            marginBottom: "6px",
+            color: "#e2e8f0",
+          }}
+        >
+          <span>🎯 Soru Sayısı Hedefi</span>
+          <span style={{ color: "var(--accent-color)" }}>
+            {cumTotal} / 100 Soru
+          </span>
+        </div>
+        <div
+          style={{
+            height: "8px",
+            background: "rgba(255, 255, 255, 0.08)",
+            borderRadius: "4px",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: `${questionTargetPct}%`,
+              background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+              borderRadius: "4px",
+              transition: "width 0.4s ease",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* ── BAR 2: %80 Başarı Şartı İlerlemesi ── */}
+      <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "0.8rem",
+            fontWeight: "700",
+            marginBottom: "6px",
+            color: "#e2e8f0",
+          }}
+        >
+          <span>🏆 Birikimli Başarı Oranı</span>
+          <span style={{ color: cumPercent >= 80 ? "#34d399" : "#f59e0b" }}>
+            %{cumPercent} Başarı (Hedef: %80)
+          </span>
+        </div>
+        <div
+          style={{
+            height: "8px",
+            background: "rgba(255, 255, 255, 0.08)",
+            borderRadius: "4px",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: `${successTargetPct}%`,
+              background:
+                cumPercent >= 80
+                  ? "linear-gradient(90deg, #10b981, #34d399)"
+                  : "linear-gradient(90deg, #f59e0b, #fbbf24)",
+              borderRadius: "4px",
+              transition: "width 0.4s ease",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

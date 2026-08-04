@@ -11,6 +11,7 @@ import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
 import {
   getLocalQuestionsForTopic,
   KpssPastQuiz,
+  KpssPastQuizSession,
 } from "@/services/kpss/kpssQuizService.js";
 import {
   fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
@@ -28,6 +29,9 @@ export interface AIConfig {
 
 export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
   return {
+    getKpssProgress() {
+      return kpssService.getKpssProgress();
+    },
     /** Fetches questions subset from AI service wrapper. */
     fetchQuestionsSubsetFromAI(
       subjectKey: string,
@@ -97,6 +101,34 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       }
 
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
+      const existingRecord = pastQuizzes[quizKey];
+      const existingHistory: KpssPastQuizSession[] = existingRecord?.history
+        ? [...existingRecord.history]
+        : existingRecord?.questions && existingRecord.questions.length > 0
+          ? [
+              {
+                id: "sess_1",
+                date: existingRecord.date || new Date().toISOString().split("T")[0],
+                questionCount: existingRecord.questions.length,
+                score: existingRecord.score,
+                questions: existingRecord.questions,
+                selectedAnswers: existingRecord.selectedAnswers,
+                mode: "local",
+              },
+            ]
+          : [];
+
+      const newSession: KpssPastQuizSession = {
+        id: `sess_${Date.now()}`,
+        date: `${new Date().toLocaleDateString("tr-TR")} ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`,
+        questionCount: totalCount,
+        score: scorePercentage,
+        questions: [],
+        selectedAnswers: [],
+        mode: "external",
+      };
+
+      const updatedHistory = [...existingHistory, newSession];
       const newQuizRecord: KpssPastQuiz = {
         subject: currentSubject,
         topic: activeQuizTopic,
@@ -104,6 +136,7 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
         questions: [],
         selectedAnswers: [],
         date: new Date().toISOString().split("T")[0],
+        history: updatedHistory,
       };
 
       const updatedPastQuizzes = { ...pastQuizzes, [quizKey]: newQuizRecord };
@@ -175,6 +208,34 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       }
 
       const quizKey = `${currentSubject}_${activeQuizTopic}`;
+      const existingRecord = pastQuizzes[quizKey];
+      const existingHistory: KpssPastQuizSession[] = existingRecord?.history
+        ? [...existingRecord.history]
+        : existingRecord?.questions && existingRecord.questions.length > 0
+          ? [
+              {
+                id: "sess_1",
+                date: existingRecord.date || new Date().toISOString().split("T")[0],
+                questionCount: existingRecord.questions.length,
+                score: existingRecord.score,
+                questions: existingRecord.questions,
+                selectedAnswers: existingRecord.selectedAnswers,
+                mode: "local",
+              },
+            ]
+          : [];
+
+      const newSession: KpssPastQuizSession = {
+        id: `sess_${Date.now()}`,
+        date: `${new Date().toLocaleDateString("tr-TR")} ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`,
+        questionCount: quizQuestions.length,
+        score: scorePercentage,
+        questions: quizQuestions,
+        selectedAnswers: selectedAnswers,
+        mode: "local",
+      };
+
+      const updatedHistory = [...existingHistory, newSession];
       const newQuizRecord: KpssPastQuiz = {
         subject: currentSubject,
         topic: activeQuizTopic,
@@ -182,6 +243,7 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
         questions: quizQuestions,
         selectedAnswers: selectedAnswers,
         date: new Date().toISOString().split("T")[0],
+        history: updatedHistory,
       };
 
       const updatedPastQuizzes = { ...pastQuizzes, [quizKey]: newQuizRecord };

@@ -69,4 +69,12 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
       chrome.storage.local.set({ [LOCAL_KPSS_PAST_QUIZZES]: quizzes }, resolve);
     });
   }
+
+  async getPastQuizzes(): Promise<Record<string, any>> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get([LOCAL_KPSS_PAST_QUIZZES], (res) => {
+        resolve(res[LOCAL_KPSS_PAST_QUIZZES] || {});
+      });
+    });
+  }
 }

@@ -16,6 +16,13 @@ flowchart TB
     end
 
     subgraph Hooks["presentation/hooks/ (State yönetimi)"]
+        subgraph Quiz["quiz/"]
+            QuizModal["KpssQuizModal.tsx"]
+            QuizIntroStep["KpssQuizIntroStep.tsx"]
+            QuizQuestionsStep["KpssQuizQuestionsStep.tsx"]
+            QuizResultStep["KpssQuizResultStep.tsx"]
+            QuizReviewModal["KpssQuizReviewModal.tsx (Pop-up Soru İnceleme)"]
+        end
         useSettings
         useTodos
         usePopup

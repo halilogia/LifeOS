@@ -16,6 +16,7 @@ interface KpssTopicListProps {
     questionsCount?: number;
   }) => void;
   onOpenYoutube: (topic: string) => void;
+  onReviewPastQuiz?: (topic: string) => void;
 }
 
 export function KpssTopicList({
@@ -29,6 +30,7 @@ export function KpssTopicList({
   onStartQuiz,
   onShowDetail,
   onOpenYoutube,
+  onReviewPastQuiz,
 }: KpssTopicListProps) {
   return (
     <div className="kpss-content">
@@ -152,23 +154,28 @@ export function KpssTopicList({
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
                 <span>{topic.title}</span>
+                <span
+                  className="kpss-topic-q-badge"
+                  style={{
+                    fontSize: "0.65rem",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid var(--card-border)",
+                    padding: "2px 6px",
+                    borderRadius: "4px",
+                    color: "var(--text-secondary)",
+                    fontWeight: "600",
+                  }}
+                >
+                  {progress?.totalQuestions ?? 0} Soru
+                </span>
                 {progress && progress.score !== undefined && (
                   <span className="kpss-topic-score-badge">
                     %{progress.score}
-                    <span
-                      style={{
-                        color: "var(--text-secondary)",
-                        fontWeight: 600,
-                        marginLeft: 6,
-                      }}
-                    >
-                      · {progress.totalQuestions ?? 0} soru
-                    </span>
                   </span>
                 )}
               </span>
 
-              {/* Seviye Tespit SÄ±navÄ± button */}
+              {/* Seviye Tespit Sınavı button */}
               <button
                 className="kpss-exam-btn"
                 title={t.kpss_topic_proficiency_test}
@@ -194,6 +201,33 @@ export function KpssTopicList({
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
               </button>
+
+              {/* Geçmiş Soru İnceleme butonu — daha önce soru çözülmüşse */}
+              {(progress?.totalQuestions ?? 0) > 0 && onReviewPastQuiz && (
+                <button
+                  className="kpss-info-btn"
+                  title="Çözülmüş Soruları İncele"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onReviewPastQuiz(topic.title);
+                  }}
+                  style={{ color: "var(--accent-color)" }}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </button>
+              )}
 
               {/* YouTube ara butonu — konu başlığını YouTube'da arar */}
               <button

@@ -11,6 +11,8 @@ interface KpssQuizIntroStepProps {
   onSetSelectedQuizCount: (count: number) => void;
   onStartQuiz: () => void;
   onOpenExternal: () => void;
+  onReviewPastQuiz?: () => void;
+  hasPastQuiz?: boolean;
 }
 
 export function KpssQuizIntroStep({
@@ -21,6 +23,8 @@ export function KpssQuizIntroStep({
   onSetSelectedQuizCount,
   onStartQuiz,
   onOpenExternal,
+  onReviewPastQuiz,
+  hasPastQuiz,
 }: KpssQuizIntroStepProps) {
   const isAiConfigured =
     aiApiKey ||
@@ -40,19 +44,6 @@ export function KpssQuizIntroStep({
       >
         {t.kpss_quiz_proficiency}
       </h4>
-      <p
-        style={{
-          fontSize: "0.95rem",
-          color: "var(--text-secondary)",
-          lineHeight: "1.7",
-          marginBottom: "20px",
-          maxWidth: "420px",
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      >
-        {t.kpss_quiz_proficiency}
-      </p>
 
       <div className="kpss-question-count-grid">
         {[5, 10, 15, 20, 25].map((count) => (
@@ -147,6 +138,21 @@ export function KpssQuizIntroStep({
           </svg>
           {t.kpss_external_quiz_open}
         </button>
+
+        {/* Geçmiş Soru İnceleme — eğer daha önce test çözüldüyse */}
+        {hasPastQuiz && onReviewPastQuiz && (
+          <button
+            className="kpss-external-open-btn"
+            style={{
+              borderColor: "rgba(139, 92, 246, 0.4)",
+              color: "var(--accent-color)",
+              background: "rgba(139, 92, 246, 0.08)",
+            }}
+            onClick={onReviewPastQuiz}
+          >
+            🔍 Son Çözülen Sınavı İncele
+          </button>
+        )}
       </div>
     </div>
   );

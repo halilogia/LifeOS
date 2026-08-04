@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import {
   kpssQuizFlowService,
   AIConfig,
@@ -173,23 +173,14 @@ export function useKpssQuiz({
       onSubjectChange?.(subject);
     }
     setActiveQuizTopic(topic);
-    // Detail modal'Ä± kapat (Ã§akÄ±ÅŸmamasÄ± iÃ§in)
+    // Detail modal'ını kapat
     onCloseDetail?.();
-    const quizKey = `${targetSubject}_${topic}`;
-    const pastQuiz = pastQuizzes[quizKey];
-    if (pastQuiz) {
-      setQuizQuestions(pastQuiz.questions);
-      setSelectedAnswers(pastQuiz.selectedAnswers);
-      setQuizResultScore(pastQuiz.score);
-      setQuizStep("result");
-    } else {
-      setQuizStep("intro");
-      setSelectedQuizCount(5);
-      setQuizQuestions([]);
-      setSelectedAnswers([]);
-      setQuizError(null);
-      setCumulative({ totalQuestions: 0, totalCorrect: 0 });
-    }
+    setQuizStep("intro");
+    setSelectedQuizCount(5);
+    setQuizQuestions([]);
+    setSelectedAnswers([]);
+    setQuizError(null);
+    setCumulative({ totalQuestions: 0, totalCorrect: 0 });
   };
 
   const handleStartPastExam = (year: string, subject: string) => {
@@ -222,6 +213,43 @@ export function useKpssQuiz({
     setActiveQuizTopic(`${yearName} Past Questions (${subjectName})`);
     setQuizLoading(false);
     setIsBackgroundLoading(false);
+  };
+
+  const handleReviewPastQuiz = async (topic: string, subject?: string) => {
+    const targetSubject = subject || currentSubject();
+    if (subject && subject !== currentSubject()) {
+      onSubjectChange?.(subject);
+    }
+    setActiveQuizTopic(topic);
+    onCloseDetail?.();
+    const quizKey = `${targetSubject}_${topic}`;
+    const pastQuiz = pastQuizzes[quizKey];
+
+    // Cumulative verisini veritabanından çek
+    try {
+      const progressList = await kpssQuizFlowService.getKpssProgress();
+      const rec = progressList.find(
+        (p) => p.subject === targetSubject && p.topic === topic,
+      );
+      setCumulative({
+        totalQuestions: rec?.totalQuestions ?? 0,
+        totalCorrect: rec?.totalCorrect ?? 0,
+      });
+    } catch {
+      // fallback
+    }
+
+    if (pastQuiz) {
+      setQuizQuestions(pastQuiz.questions || []);
+      setSelectedAnswers(pastQuiz.selectedAnswers || []);
+      setQuizResultScore(pastQuiz.score);
+      setQuizStep("result");
+    } else {
+      setQuizStep("intro");
+      setSelectedQuizCount(5);
+      setQuizQuestions([]);
+      setSelectedAnswers([]);
+    }
   };
 
   const loadPastQuizzes = async () => {
@@ -259,6 +287,7 @@ export function useKpssQuiz({
     handleFinishQuiz,
     handleSaveExternalResult,
     handleStartQuiz,
+    handleReviewPastQuiz,
     handleStartPastExam,
     loadPastQuizzes,
   };

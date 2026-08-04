@@ -357,6 +357,9 @@ export function KpssView({
             onStartQuiz={(topic, subject) =>
               quiz.handleStartQuiz(topic, subject)
             }
+            onReviewPastQuiz={(topic) =>
+              quiz.handleReviewPastQuiz(topic)
+            }
             onShowDetail={(topic) => setActiveTopic(topic)}
             onOpenYoutube={(topic) =>
               window.open(
@@ -490,6 +493,7 @@ export function KpssView({
         cumulative={quiz.cumulative}
         aiApiKey={aiApiKey}
         aiEndpoint={aiEndpoint}
+        pastQuizzes={quiz.pastQuizzes}
         onClose={() => {
           quiz.setActiveQuizTopic(null);
           quiz.setQuizStep("intro");
@@ -518,14 +522,11 @@ export function KpssView({
           quiz.setCurrentQuestionIndex(quiz.currentQuestionIndex + 1)
         }
         onFinishQuiz={quiz.handleFinishQuiz}
-        onRetakeQuiz={() => {
-          quiz.setQuizStep("intro");
-          quiz.setSelectedQuizCount(5);
-          quiz.setQuizQuestions([]);
-          quiz.setSelectedAnswers([]);
-          quiz.setQuizError(null);
-        }}
-        onSaveExternalResult={quiz.handleSaveExternalResult}
+        onRetakeQuiz={() => quiz.setQuizStep("intro")}
+        onSaveExternalResult={(correct, total) =>
+          quiz.handleSaveExternalResult(correct, total)
+        }
+        onReviewPastQuiz={(topic) => quiz.handleReviewPastQuiz(topic)}
         subjectNames={SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr}
       />
     </div>
