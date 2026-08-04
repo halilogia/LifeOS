@@ -13,6 +13,8 @@ interface WikiArticleBodyProps {
 interface SplitPart {
   type: "text" | "sema" | "harita";
   value: string;
+  /** Blok içindeki ilk satır — şema/harita başlığı (opsiyonel) */
+  title: string;
 }
 
 /** Markdown'ı "```sema" ve "```harita" bloklarına göre böler */
@@ -23,13 +25,33 @@ function splitBlocks(content: string): SplitPart[] {
   let m: RegExpExecArray | null;
   while ((m = re.exec(content)) !== null) {
     if (m.index > last) {
-      parts.push({ type: "text", value: content.slice(last, m.index) });
+      parts.push({ type: "text", value: content.slice(last, m.index), title: "" });
     }
-    parts.push({ type: m[1] as "sema" | "harita", value: m[2].trim() });
+    const raw = m[2].trim();
+    // Blok ilk satırı "# Başlık" şeklindeyse başlık sayılır (markdown işaretiyle)
+    const lines = raw.split("\n");
+    const first = lines[0].trim();
+    let title = "";
+    let body = raw;
+    if (first.startsWith("#")) {
+      title = first.replace(/^#+\s*/, "").trim();
+      body = lines.slice(1).join("\n").trim();
+    }
+    parts.push({
+      type: m[1] as "sema" | "harita",
+      value: body,
+      title,
+    });
     last = m.index + m[0].length;
   }
   if (last < content.length) {
-    parts.push({ type: "text", value: content.slice(last) });
+    // Kalan metin: "|flag|" içeren satırlar (blok işareti olmadan kaydedilmiş eski harita verisi)
+    const rest = content.slice(last);
+    if (/^\s*[^|\n]+\|[^|\n]*\|[^|\n]*\|[\d.]+\|[\d.]+\s*$/m.test(rest)) {
+      parts.push({ type: "harita", value: rest.trim(), title: "" });
+    } else {
+      parts.push({ type: "text", value: rest, title: "" });
+    }
   }
   return parts;
 }
@@ -59,7 +81,7 @@ export function WikiArticleBody({
             boxSizing: "border-box",
           }}
         >
-          <SchemaBuilder outline={outline} title={note.title} />
+          <SchemaBuilder outline={outline} title={part.title} />
         </div>
       );
     }
@@ -81,7 +103,7 @@ export function WikiArticleBody({
         >
           <HaritaBlock
             content={"```harita\n" + pinData + "\n```"}
-            title={note.title}
+            title={part.title}
           />
         </div>
       );

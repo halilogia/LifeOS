@@ -40,6 +40,8 @@ export function extractTitleFromContent(content: string): string {
 
 /**
  * Extract H1, H2, H3 headings from markdown content
+ * "```sema" / "```harita" bloklarının içindeki başlıklar hariç tutulur
+ * (şema/harita başlığı İçindekiler'e karışmasın).
  */
 export function extractHeadings(content: string): HeadingItem[] {
   if (!content) {
@@ -47,7 +49,20 @@ export function extractHeadings(content: string): HeadingItem[] {
   }
   const lines = content.split("\n");
   const headings: HeadingItem[] = [];
+  let inBlock = false;
   lines.forEach((l) => {
+    const trimmed = l.trim();
+    if (/^```(sema|harita)\s*$/.test(trimmed)) {
+      inBlock = true;
+      return;
+    }
+    if (inBlock && /^```\s*$/.test(trimmed)) {
+      inBlock = false;
+      return;
+    }
+    if (inBlock) {
+      return;
+    }
     const m = l.match(/^(#{1,3})\s+(.+)$/);
     if (m) {
       headings.push({
@@ -122,18 +137,32 @@ export function renderCustomArticleMarkdown(
         `(?<![\\p{L}\\p{N}])(${escaped})(?![\\p{L}\\p{N}])`,
         "gui",
       );
-      html = html.replace(
-        regex,
-        (match) =>
-          `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
-      );
+      html = html.replace(regex, (match, _g, offset, str) => {
+        // Zaten <a> etiketi içinde olan eşleşmeleri atla (iç içe bağlantı oluşmasın)
+        const before = str.slice(0, offset);
+        const after = str.slice(offset + match.length);
+        if (
+          before.lastIndexOf("<a") > before.lastIndexOf("</a>") ||
+          after.indexOf("</a>") < after.indexOf("<a") ||
+          before.lastIndexOf("=") > before.lastIndexOf(">")
+        ) {
+          return match;
+        }
+        return `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`;
+      });
     } catch {
       const regex = new RegExp(`\\b(${escaped})\\b`, "gi");
-      html = html.replace(
-        regex,
-        (match) =>
-          `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`,
-      );
+      html = html.replace(regex, (match, _g, offset, str) => {
+        const before = str.slice(0, offset);
+        const after = str.slice(offset + match.length);
+        if (
+          before.lastIndexOf("<a") > before.lastIndexOf("</a>") ||
+          after.indexOf("</a>") < after.indexOf("<a")
+        ) {
+          return match;
+        }
+        return `<a data-wiki-link="${escapeHtmlAttr(cleanTitle)}" class="article-link" style="color: #60a5fa; cursor: pointer; text-decoration: underline; font-weight: 600;">${match}</a>`;
+      });
     }
   });
   return html;
