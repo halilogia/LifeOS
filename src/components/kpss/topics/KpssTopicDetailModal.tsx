@@ -7,6 +7,7 @@ interface KpssTopicDetailModalProps {
   topic: {
     title: string;
     description: string;
+    questionsCount?: number;
   };
   detailsTitle: string;
   onClose: () => void;
@@ -48,6 +49,33 @@ export function KpssTopicDetailModal({
         </div>
         <div className="kpss-modal-body">
           <p>{topic.description}</p>
+          {topic.questionsCount !== undefined && (
+            <div
+              style={{
+                marginTop: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid var(--card-border)",
+                borderRadius: "8px",
+                padding: "8px 12px",
+                fontSize: "0.8rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 700,
+                  color: "var(--accent-color)",
+                  fontSize: "1rem",
+                }}
+              >
+                {topic.questionsCount}
+              </span>
+              <span>soru — KPSS Lisans sınavında bu konudan çıkan soru sayısı</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

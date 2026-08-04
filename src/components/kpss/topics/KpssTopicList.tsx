@@ -10,7 +10,11 @@ interface KpssTopicListProps {
   sortBy: "default" | "questions" | "status";
   onSortByChange: (val: "default" | "questions" | "status") => void;
   onStartQuiz: (topic: string) => void;
-  onShowDetail: (topic: { title: string; description: string }) => void;
+  onShowDetail: (topic: {
+    title: string;
+    description: string;
+    questionsCount?: number;
+  }) => void;
   onOpenYoutube: (topic: string) => void;
 }
 
@@ -148,23 +152,18 @@ export function KpssTopicList({
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
                 <span>{topic.title}</span>
-                <span
-                  className="kpss-topic-q-badge"
-                  style={{
-                    fontSize: "0.65rem",
-                    background: "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid var(--card-border)",
-                    padding: "2px 6px",
-                    borderRadius: "4px",
-                    color: "var(--text-secondary)",
-                    fontWeight: "600",
-                  }}
-                >
-                  {topic.questionsCount} {t.kpss_quiz_questions}
-                </span>
                 {progress && progress.score !== undefined && (
                   <span className="kpss-topic-score-badge">
                     %{progress.score}
+                    <span
+                      style={{
+                        color: "var(--text-secondary)",
+                        fontWeight: 600,
+                        marginLeft: 6,
+                      }}
+                    >
+                      · {progress.totalQuestions ?? 0} soru
+                    </span>
                   </span>
                 )}
               </span>
@@ -225,6 +224,7 @@ export function KpssTopicList({
                   onShowDetail({
                     title: topic.title,
                     description: topic.description,
+                    questionsCount: topic.questionsCount,
                   });
                 }}
               >

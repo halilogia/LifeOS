@@ -31,6 +31,7 @@ interface KpssQuizModalProps {
   selectedAnswers: number[];
   quizResultScore: number;
   quizError: string | null;
+  cumulative: { totalQuestions: number; totalCorrect: number };
   aiApiKey: string;
   aiEndpoint: string;
   onClose: () => void;
@@ -59,6 +60,7 @@ export function KpssQuizModal({
   selectedAnswers,
   quizResultScore,
   quizError,
+  cumulative,
   aiApiKey,
   aiEndpoint,
   onClose,
@@ -218,6 +220,7 @@ export function KpssQuizModal({
                   currentSubject={currentSubject}
                   activeQuizTopic={activeQuizTopic}
                   quizResultScore={quizResultScore}
+                  cumulative={cumulative}
                   quizQuestions={quizQuestions}
                   selectedAnswers={selectedAnswers}
                   subjectNames={subjectNames}

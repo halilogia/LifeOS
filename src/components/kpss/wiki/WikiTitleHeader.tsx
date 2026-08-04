@@ -29,8 +29,15 @@ export function WikiTitleHeader({
         position: "relative",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-        {/* İçindekiler (liste) ikonu — başlığın SOLUNDA, Wikipedia tarzı açılır panel */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
+        {/* İçindekiler (liste) ikonu — başlığın SOLUNDA, ilk satır hizasında */}
         {hasToc && (
           <button
             type="button"
@@ -53,6 +60,7 @@ export function WikiTitleHeader({
               justifyContent: "center",
               transition: "all 0.2s ease",
               flex: "0 0 auto",
+              marginTop: "0.55em",
             }}
           >
             {/* Madde işaretli liste ikonu */}
@@ -69,6 +77,8 @@ export function WikiTitleHeader({
             fontFamily:
               "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
             letterSpacing: "-0.015em",
+            flex: "1 1 auto",
+            minWidth: 0,
           }}
         >
           {displayTitle}

@@ -6,6 +6,8 @@
  */
 
 import { renderMarkdown } from "@/utils/markdownRenderer.js";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import type { IWikiNoteRepository } from "@/domain/repositories/IWikiNoteRepository.js";
 import type { KpssWikiNote, HeadingItem } from "@/types/kpss.js";
 
@@ -119,6 +121,25 @@ export function renderCustomArticleMarkdown(
     (url) => `![Görsel](${url})`,
   );
   let html = renderMarkdown(processedContent);
+
+  // LaTeX desteği: $$...$$ (blok) ve $...$ (satır içi) KaTeX ile render edilir.
+  // ÖNCE yapılır ki wikilink dönüşümleri LaTeX içeriğine dokunmasın.
+  html = html.replace(/(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g, (match) => {
+    const isBlock = match.startsWith("$$") && match.endsWith("$$");
+    const math = isBlock ? match.slice(2, -2) : match.slice(1, -1);
+    try {
+      const rendered = katex.renderToString(math, {
+        displayMode: isBlock,
+        throwOnError: false,
+      });
+      return isBlock
+        ? `<div style="margin:10px 0;overflow-x:auto;">${rendered}</div>`
+        : rendered;
+    } catch {
+      return match;
+    }
+  });
+
   html = html.replace(
     /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,
     (_, title, display) => {
@@ -138,13 +159,15 @@ export function renderCustomArticleMarkdown(
         "gui",
       );
       html = html.replace(regex, (match, _g, offset, str) => {
-        // Zaten <a> etiketi içinde olan eşleşmeleri atla (iç içe bağlantı oluşmasın)
+        // Zaten <a> veya KaTeX span içinde olan eşleşmeleri atla
         const before = str.slice(0, offset);
         const after = str.slice(offset + match.length);
         if (
           before.lastIndexOf("<a") > before.lastIndexOf("</a>") ||
           after.indexOf("</a>") < after.indexOf("<a") ||
-          before.lastIndexOf("=") > before.lastIndexOf(">")
+          before.lastIndexOf("=") > before.lastIndexOf(">") ||
+          before.lastIndexOf('<span class="katex"') >
+            before.lastIndexOf("</span>")
         ) {
           return match;
         }
@@ -157,7 +180,9 @@ export function renderCustomArticleMarkdown(
         const after = str.slice(offset + match.length);
         if (
           before.lastIndexOf("<a") > before.lastIndexOf("</a>") ||
-          after.indexOf("</a>") < after.indexOf("<a")
+          after.indexOf("</a>") < after.indexOf("<a") ||
+          before.lastIndexOf('<span class="katex"') >
+            before.lastIndexOf("</span>")
         ) {
           return match;
         }
@@ -165,6 +190,7 @@ export function renderCustomArticleMarkdown(
       });
     }
   });
+
   return html;
 }
 
