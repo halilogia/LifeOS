@@ -183,8 +183,18 @@ export function useKpssQuiz({
     setCumulative({ totalQuestions: 0, totalCorrect: 0 });
   };
 
-  const handleStartPastExam = (year: string, subject: string) => {
-    const questions = getPastExamQuestions(year, subject);
+  const handleStartPastExam = (
+    year: string,
+    subject: string,
+    countLimit?: number,
+    selectedChapter?: string,
+  ) => {
+    const questions = getPastExamQuestions(
+      year,
+      subject,
+      countLimit,
+      selectedChapter,
+    );
 
     if (questions.length === 0) {
       setQuizError(t.kpss_quiz_no_past);
@@ -208,9 +218,14 @@ export function useKpssQuiz({
             ? t.kpss_subject_history
             : "Matematik";
 
-    const yearName = year === "karma" ? t.kpss_exam_mixed_years : year;
+    const yearName =
+      year === "karma"
+        ? t.kpss_exam_mixed_years || "Karma Deneme"
+        : year === "tarih_arsivi"
+          ? `Tarih Soru Arşivi (${selectedChapter && selectedChapter !== "all" ? selectedChapter : "Tüm Üniteler"})`
+          : year;
 
-    setActiveQuizTopic(`${yearName} Past Questions (${subjectName})`);
+    setActiveQuizTopic(`${yearName} (${questions.length} Soru)`);
     setQuizLoading(false);
     setIsBackgroundLoading(false);
   };
@@ -223,12 +238,24 @@ export function useKpssQuiz({
     setActiveQuizTopic(topic);
     onCloseDetail?.();
     const quizKey = `${targetSubject}_${topic}`;
-    const pastQuiz = pastQuizzes[quizKey];
+    // Esnek quizKey araması (Tam eşleşme veya normalize eşleşme)
+    let pastQuiz = pastQuizzes[quizKey];
+    if (!pastQuiz) {
+      const normTopic = topic.toLowerCase().trim();
+      const matchedKey = Object.keys(pastQuizzes).find((k) => {
+        const [s, t] = k.split("_");
+        return s === targetSubject && t && t.toLowerCase().trim() === normTopic;
+      });
+      if (matchedKey) {
+        pastQuiz = pastQuizzes[matchedKey];
+      }
+    }
 
     // Cumulative verisini veritabanından çek
+    let rec: { totalQuestions?: number; totalCorrect?: number; score?: number } | undefined;
     try {
       const progressList = await kpssQuizFlowService.getKpssProgress();
-      const rec = progressList.find(
+      rec = progressList.find(
         (p) => p.subject === targetSubject && p.topic === topic,
       );
       setCumulative({
@@ -243,6 +270,12 @@ export function useKpssQuiz({
       setQuizQuestions(pastQuiz.questions || []);
       setSelectedAnswers(pastQuiz.selectedAnswers || []);
       setQuizResultScore(pastQuiz.score);
+      setQuizStep("result");
+    } else if (rec && ((rec.totalQuestions ?? 0) > 0 || (rec.score !== undefined && rec.score > 0))) {
+      // Eğer geçmiş sınav kaydı detay soru içermiyorsa ama konu çözülmüşse yine de Sonuç/İnceleme ekranını aç
+      setQuizQuestions([]);
+      setSelectedAnswers([]);
+      setQuizResultScore(rec.score ?? 0);
       setQuizStep("result");
     } else {
       setQuizStep("intro");

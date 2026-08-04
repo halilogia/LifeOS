@@ -259,21 +259,17 @@ export function useKpssNotes(
   };
 
   const selectedNote = notes.find((n) => n.id === selectedNoteId);
-  const tableOfContents = selectedNote
-    ? extractHeadings(selectedNote.content)
-    : [];
+  const tableOfContents: HeadingItem[] = [];
 
-  // İç içe (parent-child) notlar: child notların başlıkları da İçindekiler'e eklenir
+  // İçindekiler = Yalnızca bu nota bağlı ALT NOTLAR (Child Notes)
   if (selectedNote) {
     const children = notes.filter((n) => n.parentId === selectedNote.id);
     children.forEach((child) => {
-      const childTitle = child.title.trim();
-      if (childTitle) {
-        tableOfContents.push({ level: 2, text: childTitle });
-      }
-      // Child'ın kendi başlıkları da alt başlık olarak
-      extractHeadings(child.content).forEach((h) => {
-        tableOfContents.push({ level: Math.min(3, h.level + 1), text: h.text });
+      const childTitle = child.title.trim() || "Başlıksız Alt Not";
+      tableOfContents.push({
+        level: 2,
+        text: childTitle,
+        noteId: child.id,
       });
     });
   }

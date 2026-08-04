@@ -104,31 +104,14 @@ export function KpssQuizResultStep({
         cumulative={cumulative}
       />
 
-      {/* ─── Soruları İncele Pop-Up Butonu ─── */}
-      {quizQuestions.length > 0 && (
-        <div style={{ marginTop: "16px" }}>
-          <button
-            className="kpss-external-open-btn"
-            style={{
-              width: "100%",
-              padding: "12px",
-              fontSize: "0.95rem",
-              justifyContent: "center",
-              background: "rgba(255, 255, 255, 0.04)",
-            }}
-            onClick={() => setShowReviewModal(true)}
-          >
-            🔍 Soruları İncele ({quizQuestions.length} Soru)
-          </button>
-        </div>
-      )}
-
       {/* ─── Actions ─── */}
       <QuizResultActions
         t={t}
+        hasPastQuestions={
+          quizQuestions.length > 0 || (historySessions && historySessions.length > 0)
+        }
+        onReviewQuestions={() => setShowReviewModal(true)}
         onRetakeQuiz={onRetakeQuiz}
-        onExport={handleExportTxt}
-        onClose={onClose}
       />
 
       {/* ─── Soruları İncele Pop-up Modali ─── */}

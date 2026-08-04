@@ -113,6 +113,18 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     }
   };
 
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const handleTocNavigate = (index: number) => {
+    const item = tableOfContents[index];
+    if (item?.noteId) {
+      const childNote = notes.find((n) => n.id === item.noteId);
+      if (childNote) {
+        selectNote(childNote);
+      }
+    }
+  };
+
   return (
     <div
       ref={notesRootRef}
@@ -130,16 +142,17 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     >
       <KpssNotesHeader t={t} syncMsg={syncMsg} />
 
-      {/* Main Grid Layout (Expanded height & width, top header removed for extra space) */}
+      {/* Main Grid Layout (Dynamic Collapsible Sidebar for Full Screen Mode) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "270px 1fr",
+          gridTemplateColumns: sidebarCollapsed ? "auto 1fr" : "270px 1fr",
           gap: "16px",
           minHeight: "680px",
           width: "100%",
           maxWidth: "100%",
           minWidth: 0,
+          transition: "grid-template-columns 0.25s ease",
         }}
       >
         <KpssWikiSidebar
@@ -149,11 +162,15 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           selectedNoteId={selectedNote?.id ?? null}
           searchQuery={searchQuery}
           selectedSubjectFilter={selectedSubjectFilter}
+          tableOfContents={tableOfContents}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
           onSearchChange={setSearchQuery}
           onFilterChange={setSelectedSubjectFilter}
           onSelectNote={selectNote}
           onCreateNewNote={handleCreateNewNote}
           onAddChildNote={handleAddChildNote}
+          onNavigateToc={handleTocNavigate}
         />
 
         <div

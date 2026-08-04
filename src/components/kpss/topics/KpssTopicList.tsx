@@ -154,25 +154,6 @@ export function KpssTopicList({
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
                 <span>{topic.title}</span>
-                <span
-                  className="kpss-topic-q-badge"
-                  style={{
-                    fontSize: "0.65rem",
-                    background: "rgba(255, 255, 255, 0.05)",
-                    border: "1px solid var(--card-border)",
-                    padding: "2px 6px",
-                    borderRadius: "4px",
-                    color: "var(--text-secondary)",
-                    fontWeight: "600",
-                  }}
-                >
-                  {progress?.totalQuestions ?? 0} Soru
-                </span>
-                {progress && progress.score !== undefined && (
-                  <span className="kpss-topic-score-badge">
-                    %{progress.score}
-                  </span>
-                )}
               </span>
 
               {/* Seviye Tespit Sınavı button */}

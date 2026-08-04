@@ -3,12 +3,7 @@
  * KPSS Sınavı tamamlandıktan veya geçmiş sınav seçildikten sonra
  * detaylı soru inceleme pop-up modali.
  * 
- * Özellikler:
- * - 📜 Geçmiş Test Oturumları (Sessions) seçicisi (5 soruluk, 10 soruluk testleri ayrı ayrı seçme)
- * - Soru listesi, işaretlenen şık, doğru şık, çözüm açıklaması
- * - Dışarı Aktar (TXT olarak indir)
- * - Seviyeni Değerlendir (Skor Özeti)
- * - Tekrar Çöz
+ * Temiz Kod Standartı: Sıfır düşük kaliteli emoji, sade anlaşılır başlıklar.
  */
 
 import { useState } from "preact/hooks";
@@ -144,7 +139,7 @@ export function KpssQuizReviewModal({
         >
           <div>
             <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>
-              🔍 {t.kpss_quiz_solution || "Soruları İncele"} — {topicTitle}
+              Soruları İncele — {topicTitle}
             </h3>
             <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
               {subjectTitle}
@@ -174,7 +169,7 @@ export function KpssQuizReviewModal({
             maxHeight: "calc(90vh - 140px)",
           }}
         >
-          {/* 📜 Geçmiş Test Oturum Seçicisi */}
+          {/* Geçmiş Test Oturum Seçicisi */}
           {historySessions.length > 0 && (
             <div
               style={{
@@ -197,7 +192,7 @@ export function KpssQuizReviewModal({
                   color: "#c084fc",
                 }}
               >
-                📜 Geçmiş Test Oturumları ({historySessions.length})
+                Geçmiş Test Oturumları ({historySessions.length})
               </span>
               <select
                 value={selectedSessionIdx}
@@ -248,7 +243,7 @@ export function KpssQuizReviewModal({
                   display: "block",
                 }}
               >
-                📊 Seviye Değerlendirmesi
+                Seviye Değerlendirmesi
               </span>
               <strong style={{ fontSize: "0.95rem", color: "#e2e8f0" }}>
                 {totalQuestions > 0
@@ -305,22 +300,37 @@ export function KpssQuizReviewModal({
           {/* Dışarı Aktar */}
           <button
             className="kpss-qcount-btn"
-            style={{ flex: 1, minWidth: "120px" }}
+            style={{
+              flex: 1,
+              minWidth: "120px",
+              padding: "12px 0",
+              fontSize: "0.88rem",
+              fontWeight: 600,
+            }}
             onClick={handleCustomExport}
           >
-            📤 Dışarı Aktar
+            Dışarı Aktar
           </button>
 
           {/* Tekrar Çöz */}
           <button
-            className="settings-add-btn"
-            style={{ flex: 1, minWidth: "140px", padding: "0 12px" }}
+            className="kpss-qcount-btn"
+            style={{
+              flex: 1,
+              minWidth: "140px",
+              padding: "12px 0",
+              fontSize: "0.88rem",
+              fontWeight: 600,
+              background: "rgba(139, 92, 246, 0.2)",
+              border: "1px solid rgba(139, 92, 246, 0.4)",
+              color: "#e2e8f0",
+            }}
             onClick={() => {
               onClose();
               onRetake();
             }}
           >
-            🔄 Tekrar Çöz
+            Tekrar Çöz
           </button>
         </div>
       </div>
