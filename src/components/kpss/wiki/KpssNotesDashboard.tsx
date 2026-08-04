@@ -5,8 +5,8 @@
  * State yönetimi useKpssNotes hook'unda, görsel parçalar alt bileşenlerde.
  */
 
-import { useState, useEffect, useRef } from "preact/hooks";
-import { Language } from "@/types/types.js";
+import { useState, useEffect, useRef, useMemo } from "preact/hooks";
+import { Language, Note } from "@/types/types.js";
 import {
   KpssWikiNote,
   saveKpssWikiNotes,
@@ -55,6 +55,16 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     handleDownloadMarkdown,
     handleWikilinkClick,
   } = useKpssNotes(t, selectedSubjectFilter);
+
+  const parentIdMap = useMemo(() => {
+    const map = new Map<string, string>();
+    notes.forEach((n) => {
+      if (n.parentId) {
+        map.set(n.id, n.parentId);
+      }
+    });
+    return map;
+  }, [notes]);
 
   const filteredNotes = notes.filter((n) => {
     if (
@@ -243,11 +253,8 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
       {/* Zettelkasten Interactive 2D Neural Graph Modal */}
       {showGraphModal && (
         <ZettelkastenGraphModal
-          notes={
-            notes as unknown as Parameters<
-              typeof ZettelkastenGraphModal
-            >[0]["notes"]
-          }
+          notes={notes as unknown as Note[]}
+          parentIdMap={parentIdMap}
           onClose={() => setShowGraphModal(false)}
           onSelectNote={(n) => {
             selectNote(n as unknown as KpssWikiNote);

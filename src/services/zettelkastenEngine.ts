@@ -24,6 +24,7 @@ export interface GraphEdge {
   source: string; // node id
   target: string; // node id
   label?: string;
+  type: "parent" | "wikilink";
 }
 
 export interface ZettelkastenGraph {
@@ -127,6 +128,7 @@ export function buildKnowledgeGraph(
   notes: Note[],
   width = 800,
   height = 500,
+  parentIdMap?: Map<string, string>,
 ): ZettelkastenGraph {
   if (notes.length === 0) {
     return { nodes: [], edges: [] };
@@ -141,7 +143,20 @@ export function buildKnowledgeGraph(
   const edges: GraphEdge[] = [];
   const edgeSet = new Set<string>();
 
-  // Extract edges
+  // 1. Parent-Child edges (green, solid)
+  if (parentIdMap) {
+    parentIdMap.forEach((parentId, childId) => {
+      if (parentId && childId) {
+        const edgeKey = [childId, parentId].sort().join("<->");
+        if (!edgeSet.has(edgeKey)) {
+          edgeSet.add(edgeKey);
+          edges.push({ source: childId, target: parentId, type: "parent" });
+        }
+      }
+    });
+  }
+
+  // 2. Wikilink edges (purple, dashed)
   notes.forEach((note) => {
     const rawContent = `${note.content || ""} ${note.cues || ""} ${note.summary || ""}`;
     const internalLinks = extractInternalLinks(rawContent);
@@ -152,7 +167,12 @@ export function buildKnowledgeGraph(
         const edgeKey = [note.id, targetId].sort().join("<->");
         if (!edgeSet.has(edgeKey)) {
           edgeSet.add(edgeKey);
-          edges.push({ source: note.id, target: targetId, label: linkTitle });
+          edges.push({
+            source: note.id,
+            target: targetId,
+            label: linkTitle,
+            type: "wikilink",
+          });
         }
       }
     });
