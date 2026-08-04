@@ -1,7 +1,7 @@
 /**
  * KpssWikiReader.tsx
  * Makale okuma alanı.
- * 
+ *
  * Özellikler:
  * - Başlığın altında Wikipedia tarzı bilgi satırı (konu, okuma süresi, kelime, tarih).
  * - Tek sütunlu makale içeriği + sağ infobox.
@@ -63,15 +63,15 @@ export function KpssWikiReader({
     return allNotes.filter(
       (other) =>
         other.id !== note.id &&
-        other.content?.toLowerCase().includes(`[[${note.title.toLowerCase()}]]`),
+        other.content
+          ?.toLowerCase()
+          .includes(`[[${note.title.toLowerCase()}]]`),
     );
   }, [allNotes, note]);
 
   const rawNote = note as unknown as Record<string, unknown>;
   const imageUrl = (rawNote.imageUrl as string) || null;
   const outboundWikilinks = (rawNote.wikilinks as string[]) || [];
-  const subjectLabel = note.subject || "Tarih";
-
   // Alt notlar (child notes)
   const childNotes = useMemo(
     () => allNotes.filter((n) => n.parentId === note.id),
