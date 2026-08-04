@@ -9,7 +9,6 @@ import { kpssService } from "@/services/kpss/kpssService.js";
 import { kpssData } from "@/domain/constants/kpssCurriculum.js";
 import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
 import {
-  getLocalQuestionsForTopic,
   KpssPastQuiz,
   KpssPastQuizSession,
 } from "@/services/kpss/kpssQuizService.js";
