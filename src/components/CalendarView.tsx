@@ -75,8 +75,8 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
         completed: t.completed,
       })),
       ...dayEvents.map((ev) => {
-        const timeStr = ev.start.dateTime
-          ? new Date(ev.start.dateTime).toLocaleTimeString(
+        const timeStr = ev.start?.dateTime
+          ? new Date(ev.start.dateTime as string).toLocaleTimeString(
               lang === "tr" ? "tr-TR" : "en-US",
               {
                 hour: "2-digit",
@@ -122,8 +122,8 @@ export function CalendarView({ todos, lang }: CalendarViewProps) {
               </li>
             ))}
             {dayEvents.map((ev, idx) => {
-              const timeStr = ev.start.dateTime
-                ? new Date(ev.start.dateTime).toLocaleTimeString(
+              const timeStr = ev.start?.dateTime
+                ? new Date(ev.start.dateTime as string).toLocaleTimeString(
                     lang === "tr" ? "tr-TR" : "en-US",
                     {
                       hour: "2-digit",

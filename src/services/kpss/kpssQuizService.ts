@@ -64,14 +64,24 @@ export function getPastExamQuestions(
   let questions: QuizQuestion[] = [];
 
   if (year === "tarih_arsivi") {
-    const list = (osymData as { history?: any[] }).history || [];
+    const rawHistory = (osymData as { history?: unknown[] }).history || [];
+    type HistoryItem = {
+      chapter?: string;
+      question?: string;
+      answer?: string;
+      options?: Record<string, string>;
+      explanation?: string;
+    };
+    const list = rawHistory as HistoryItem[];
     list.forEach((q) => {
       let isMatch = false;
       if (!selectedChapter || selectedChapter === "all") {
         isMatch = true;
       } else if (q.chapter) {
         const normQ = q.chapter.toLowerCase().replace(/[^a-z0-9çğıöşü]/g, "");
-        const normSel = selectedChapter.toLowerCase().replace(/[^a-z0-9çğıöşü]/g, "");
+        const normSel = selectedChapter
+          .toLowerCase()
+          .replace(/[^a-z0-9çğıöşü]/g, "");
         isMatch =
           normQ === normSel ||
           normQ.includes(normSel) ||
@@ -85,7 +95,7 @@ export function getPastExamQuestions(
         const correctIdx = letters.indexOf(cleanAnsLetter);
 
         questions.push({
-          question: q.question,
+          question: q.question || "",
           options: letters.map((l) => `${l}) ${q.options?.[l] || ""}`),
           correctAnswer: correctIdx !== -1 ? correctIdx : 0,
           solution: q.explanation
@@ -142,7 +152,7 @@ export function getPastExamQuestions(
     const yearData = KPSS_YEARLY_DATA[year];
     if (yearData) {
       if (subject === "all") {
-        Object.values(yearData).forEach((list: unknown) => {
+        Object.values(yearData).forEach((list: unknown[]) => {
           if (Array.isArray(list)) {
             questions.push(...(list as unknown as QuizQuestion[]));
           }

@@ -58,11 +58,7 @@ export function AppTopHeader({
             <option value="weekly">{t.repeat_weekly}</option>
             <option value="monthly">{t.repeat_monthly}</option>
           </select>
-          <button
-            id="add-btn"
-            onClick={onAddTodoClick}
-            aria-label="Add Task"
-          >
+          <button id="add-btn" onClick={onAddTodoClick} aria-label="Add Task">
             <svg
               width="20"
               height="20"

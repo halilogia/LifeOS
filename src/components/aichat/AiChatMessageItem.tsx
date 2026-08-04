@@ -57,7 +57,12 @@ export function AiChatMessageItem({
           <img
             src="icons/AI.png"
             alt="AI"
-            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }}
           />
         )}
       </div>

@@ -272,12 +272,16 @@ export function useAiChatMessages({
     } catch (e) {
       // ── Catch → fallback ─────────────────────────────────────────────────
       setIsBotTyping(false);
-      const replyText = await buildLocalReply(query, {
-        t,
-        lang,
-        onAddTodo,
-        onManualSync,
-      }, true);
+      const replyText = await buildLocalReply(
+        query,
+        {
+          t,
+          lang,
+          onAddTodo,
+          onManualSync,
+        },
+        true,
+      );
       if (replyText) {
         addBotMsg(setMessages, lang, { text: replyText });
       } else {

@@ -11,7 +11,13 @@ interface SidePanelMessagesProps {
   onChipClick: (type: "summarize" | "key_takeaways") => void;
 }
 
-function SidePanelCopyBtn({ text, t }: { text: string; t: Record<string, string> }) {
+function SidePanelCopyBtn({
+  text,
+  t,
+}: {
+  text: string;
+  t: Record<string, string>;
+}) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     if (!text) {

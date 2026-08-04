@@ -38,9 +38,9 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
   }, []);
 
   const loadData = useCallback(async () => {
-    const result = await new Promise<any>((resolve) =>
+    const result = await new Promise<WillpowerStreak | undefined>((resolve) =>
       chrome.storage.sync.get(["willpowerStreak"], (res) =>
-        resolve(res.willpowerStreak),
+        resolve(res.willpowerStreak as WillpowerStreak | undefined),
       ),
     );
     let streakData = result;

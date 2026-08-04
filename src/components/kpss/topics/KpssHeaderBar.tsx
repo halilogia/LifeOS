@@ -3,12 +3,7 @@
  * KPSS Hazırlık başlığı ve alt sekme navigasyon barı.
  */
 
-export type KpssTabId =
-  | "progress"
-  | "notes"
-  | "srs"
-  | "past-exams"
-  | "map";
+export type KpssTabId = "progress" | "notes" | "srs" | "past-exams" | "map";
 
 interface KpssHeaderBarProps {
   title: string;

@@ -2,7 +2,7 @@
  * kpssOsymHistoryFlashcards.ts
  * KPSS SRS — Tarih Çıkmış Sorular kaynağı.
  * Kaynak: ÖSYM çıkmış questions.json (915 tarih sorusu).
- * 
+ *
  * Kart Arka Yüzü Sadece Doğru Cevap + Temiz İpucu gösterecek biçimde biçimlendirilmiştir.
  */
 
@@ -33,8 +33,7 @@ export const kpssOsymHistoryFlashcards: KpssFlashcard[] = (
   // answer harfini temizle (örn. "A", " Yanıt A", "A 2" -> "A")
   const rawAns = (q.answer || "").trim();
   const cleanAnsLetter = rawAns.charAt(0).toUpperCase();
-  const optionText =
-    q.options?.[cleanAnsLetter] || q.options?.[rawAns] || "";
+  const optionText = q.options?.[cleanAnsLetter] || q.options?.[rawAns] || "";
 
   // Arka yüzde SADECE Doğru Şık Harfi + Cevap Metni gösterilir
   const answerDisplay = optionText

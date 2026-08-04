@@ -1,5 +1,5 @@
-import { useState, useEffect } from "preact/hooks";
 import { getTranslation } from "@/utils/i18n.js";
+import { useTabVolume } from "@/presentation/hooks/useTabVolume.js";
 
 interface PopupVolumeTabProps {
   lang: "tr" | "en";
@@ -7,52 +7,7 @@ interface PopupVolumeTabProps {
 
 export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
   const t = getTranslation(lang);
-  const [volumeLevel, setVolumeLevel] = useState<number>(100);
-  const [activeTabId, setActiveTabId] = useState<number | null>(null);
-  const [tabTitle, setTabTitle] = useState<string>("");
-
-  useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs && tabs[0] && tabs[0].id) {
-        const tId = tabs[0].id;
-        setActiveTabId(tId);
-        setTabTitle(tabs[0].title || "Aktif Sekme");
-
-        const storageKey = `volume_tab_${tId}`;
-        chrome.storage.local.get([storageKey], (res) => {
-          if (res[storageKey] !== undefined) {
-            setVolumeLevel(res[storageKey] as number);
-          } else {
-            setVolumeLevel(100);
-          }
-        });
-      }
-    });
-  }, []);
-
-  const handleVolumeChange = (newLevel: number) => {
-    setVolumeLevel(newLevel);
-
-    if (activeTabId !== null) {
-      const storageKey = `volume_tab_${activeTabId}`;
-      chrome.storage.local.set({ [storageKey]: newLevel });
-
-      const multiplier = newLevel / 100;
-      chrome.runtime.sendMessage({
-        type: "set_volume_boost",
-        tabId: activeTabId,
-        volumeLevel: multiplier,
-      });
-
-      chrome.tabs
-        .sendMessage(activeTabId, {
-          type: "set_volume_boost",
-          tabId: activeTabId,
-          volumeLevel: multiplier,
-        })
-        .catch(() => {});
-    }
-  };
+  const { volumeLevel, tabTitle, saveVolume } = useTabVolume();
 
   const isDangerZone = volumeLevel > 300;
 
@@ -162,7 +117,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
           step="10"
           value={volumeLevel}
           onInput={(e) =>
-            handleVolumeChange(Number((e.target as HTMLInputElement).value))
+            saveVolume(Number((e.target as HTMLInputElement).value))
           }
           style={{
             width: "100%",
@@ -194,7 +149,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
         }}
       >
         <button
-          onClick={() => handleVolumeChange(100)}
+          onClick={() => saveVolume(100)}
           style={{
             background:
               volumeLevel === 100
@@ -212,7 +167,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
           %100
         </button>
         <button
-          onClick={() => handleVolumeChange(200)}
+          onClick={() => saveVolume(200)}
           style={{
             background:
               volumeLevel === 200
@@ -230,7 +185,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
           %200
         </button>
         <button
-          onClick={() => handleVolumeChange(300)}
+          onClick={() => saveVolume(300)}
           style={{
             background:
               volumeLevel === 300
@@ -248,7 +203,7 @@ export function PopupVolumeTab({ lang }: PopupVolumeTabProps) {
           %300
         </button>
         <button
-          onClick={() => handleVolumeChange(500)}
+          onClick={() => saveVolume(500)}
           style={{
             background:
               volumeLevel === 500 ? "#ef4444" : "rgba(239,68,68,0.15)",

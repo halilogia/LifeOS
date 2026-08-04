@@ -22,10 +22,7 @@ export function BridgeToggles({
   return (
     <>
       {/* WhatsApp Bridge Toggle */}
-      <button
-        className="settings-action-btn"
-        onClick={onToggleWhatsappBridge}
-      >
+      <button className="settings-action-btn" onClick={onToggleWhatsappBridge}>
         <svg
           width="18"
           height="18"
@@ -53,10 +50,7 @@ export function BridgeToggles({
       </button>
 
       {/* Telegram Bridge Toggle */}
-      <button
-        className="settings-action-btn"
-        onClick={onToggleTelegramBridge}
-      >
+      <button className="settings-action-btn" onClick={onToggleTelegramBridge}>
         <svg
           width="18"
           height="18"

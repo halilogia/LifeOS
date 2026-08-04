@@ -46,7 +46,10 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
   return btoa(binary);
 };
 
-export const getMimeType = (filename: string, fallbackType?: string): string => {
+export const getMimeType = (
+  filename: string,
+  fallbackType?: string,
+): string => {
   const ext = filename.split(".").pop()?.toLowerCase() ?? "";
   switch (ext) {
     case "js":

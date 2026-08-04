@@ -58,85 +58,85 @@ export function AiMessageSources({
       </div>
 
       {isVisible && (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "6px",
-          marginTop: "6px",
-        }}
-      >
         <div
           style={{
-            fontSize: "0.72rem",
-            color: "#94a3b8",
             display: "flex",
-            alignItems: "center",
-            gap: "4px",
-          }}
-        >
-          <IconGlobe />
-          <span>
-            {t.aichat_sources.replace("{count}", String(sources.length))}
-          </span>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+            flexDirection: "column",
             gap: "6px",
+            marginTop: "6px",
           }}
         >
-          {sources.map((src, idx) => {
-            let domain = "";
-            try {
-              domain = new URL(src.url).hostname.replace("www.", "");
-            } catch {
-              domain = "web";
-            }
-            return (
-              <a
-                key={idx}
-                href={src.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  background: "rgba(255, 255, 255, 0.05)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  borderRadius: "6px",
-                  padding: "5px 8px",
-                  color: "#e2e8f0",
-                  textDecoration: "none",
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  transition: "all 0.15s ease",
-                  overflow: "hidden",
-                }}
-              >
-                <span style={{ color: "#818cf8", fontWeight: 700 }}>
-                  [{idx + 1}]
-                </span>
-                <span
+          <div
+            style={{
+              fontSize: "0.72rem",
+              color: "#94a3b8",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <IconGlobe />
+            <span>
+              {t.aichat_sources.replace("{count}", String(sources.length))}
+            </span>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+              gap: "6px",
+            }}
+          >
+            {sources.map((src, idx) => {
+              let domain = "";
+              try {
+                domain = new URL(src.url).hostname.replace("www.", "");
+              } catch {
+                domain = "web";
+              }
+              return (
+                <a
+                  key={idx}
+                  href={src.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
-                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    borderRadius: "6px",
+                    padding: "5px 8px",
+                    color: "#e2e8f0",
+                    textDecoration: "none",
+                    fontSize: "0.72rem",
+                    fontWeight: 500,
+                    transition: "all 0.15s ease",
                     overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    flex: 1,
                   }}
-                  title={src.title}
                 >
-                  {src.title}
-                </span>
-                <IconExternal />
-              </a>
-            );
-          })}
+                  <span style={{ color: "#818cf8", fontWeight: 700 }}>
+                    [{idx + 1}]
+                  </span>
+                  <span
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      flex: 1,
+                    }}
+                    title={src.title}
+                  >
+                    {src.title}
+                  </span>
+                  <IconExternal />
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </div>
       )}
     </div>
   );

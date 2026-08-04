@@ -110,7 +110,13 @@ export function KpssWikiSidebar({
           paddingBottom: "8px",
         }}
       >
-        <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--text-secondary)" }}>
+        <span
+          style={{
+            fontSize: "0.82rem",
+            fontWeight: 700,
+            color: "var(--text-secondary)",
+          }}
+        >
           {t.kpss_notes_title || "Ders Notları Studyo"}
         </span>
         <button
@@ -165,8 +171,6 @@ export function KpssWikiSidebar({
           onAddChildNote={onAddChildNote}
         />
       </div>
-
     </div>
   );
 }
-

@@ -1,7 +1,7 @@
 /**
  * QuizResultHero.tsx
  * KPSS Sınav Sonuç ve Konu İlerleme Kartı.
- * 
+ *
  * Özellikler:
  * - Soru Sayısı Hedefi (100 Soru Barajı) İlerleme Çubuğu
  * - Birikimli Başarı Oranı (%80 Şartı) İlerleme Çubuğu

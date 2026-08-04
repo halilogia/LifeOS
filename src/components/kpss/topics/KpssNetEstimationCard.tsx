@@ -128,7 +128,9 @@ export function KpssNetEstimationCard({
             </svg>
             {isNetMode ? t.kpss_net_target : t.kpss_score_target}
           </span>
-          <span style={{ fontSize: "1.4rem", fontWeight: "800", color: "white" }}>
+          <span
+            style={{ fontSize: "1.4rem", fontWeight: "800", color: "white" }}
+          >
             {activeTarget} {isNetMode ? t.kpss_net_label : t.kpss_score_label}
           </span>
         </div>

@@ -21,7 +21,7 @@ export class LocalToSyncMigration {
         if (localData && Object.keys(localData).length > 0) {
           chrome.storage.sync.get(null, async (syncData) => {
             if (!syncData || Object.keys(syncData).length <= 1) {
-              const filteredData: Record<string, any> = {};
+              const filteredData: Record<string, unknown> = {};
               for (const key of SYNC_KEYS) {
                 if (localData[key] !== undefined) {
                   filteredData[key] = localData[key];

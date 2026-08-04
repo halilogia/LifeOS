@@ -42,12 +42,15 @@ export function usePopup() {
   const loadDetoxSettings = useCallback(() => {
     chrome.storage.sync.get(
       ["detox_enabled", "detox_blocked_sites", "detox_end_time"],
-      (resData) => {
-        const res = resData as Record<string, any>;
-        const isEnabled = res.detox_enabled || false;
-        const end = res.detox_end_time || 0;
+      (resData: {
+        detox_enabled?: boolean;
+        detox_blocked_sites?: string[];
+        detox_end_time?: number;
+      }) => {
+        const isEnabled = resData.detox_enabled || false;
+        const end = resData.detox_end_time || 0;
         setDetoxEnabled(isEnabled);
-        setDetoxBlockedSites(res.detox_blocked_sites || []);
+        setDetoxBlockedSites(resData.detox_blocked_sites || []);
         setDetoxEndTime(end);
       },
     );
@@ -160,11 +163,13 @@ export function usePopup() {
           0,
           Math.floor((Date.now() - swStartTime) / 1000),
         );
-        chrome.storage.local.get(["stopwatch_state"], (resData) => {
-          const res = resData as Record<string, any>;
-          const offset = res["stopwatch_state"]?.time || 0;
-          setSwTime(offset + elapsed);
-        });
+        chrome.storage.local.get(
+          ["stopwatch_state"],
+          (resData: { stopwatch_state?: { time?: number } }) => {
+            const offset = resData?.stopwatch_state?.time || 0;
+            setSwTime(offset + elapsed);
+          },
+        );
       }, 1000);
     }
     return () => {

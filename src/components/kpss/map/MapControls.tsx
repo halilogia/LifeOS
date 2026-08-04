@@ -51,7 +51,8 @@ export function MapControls({
           {title}
         </h3>
         <p style={{ margin: "4px 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
-          {subtitle || `${total} ${t.kpss_map_subtitle || "konum — sırasıyla oynat"}`}
+          {subtitle ||
+            `${total} ${t.kpss_map_subtitle || "konum — sırasıyla oynat"}`}
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -147,9 +148,7 @@ export function MapControls({
           }}
         >
           {playing ? "⏸" : "▶"}{" "}
-          {playing
-            ? t.kpss_map_stop || "Durdur"
-            : t.kpss_map_play || "Oynat"}
+          {playing ? t.kpss_map_stop || "Durdur" : t.kpss_map_play || "Oynat"}
         </button>
         <button
           type="button"

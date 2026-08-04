@@ -391,8 +391,7 @@ export const tr = {
   kpss_planner_title: "Günlük Konu Planlayıcı",
   kpss_planner_how_works: "Sistem Nasıl Çalışır?",
   kpss_planner_info_title: "Planlayıcı Nasıl Çalışır?",
-  kpss_planner_all_done:
-    "Tebrikler! Tüm konuları başarıyla tamamladınız.",
+  kpss_planner_all_done: "Tebrikler! Tüm konuları başarıyla tamamladınız.",
   kpss_planner_desc:
     "Sınava kalan süreye ve konu yükünüze göre bugün tamamlamanız önerilen konular (Başlatmak için tıklayın):",
   kpss_status_working: "Çalışılıyor",
@@ -448,7 +447,8 @@ export const tr = {
   kpss_wiki_save_remind: "Değişikliklerinizi kaydetmeyi unutmayın.",
   kpss_wiki_save_btn: "Değişiklikleri Kaydet",
   kpss_wiki_editor_placeholder: "Ders Notu Başlığı (örneğin: Çorum)...",
-  kpss_wiki_textarea_placeholder: "Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz...",
+  kpss_wiki_textarea_placeholder:
+    "Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz...",
   kpss_sort_by: "Sıralama:",
   kpss_sort_syllabus: "Müfredat Sırası",
   kpss_sort_completion: "Tamamlanma Durumu",

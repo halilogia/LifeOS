@@ -111,7 +111,10 @@ function prepare(nodes: OutlineNode[], depth: number): void {
   });
 }
 
-function assignX(nodes: OutlineNode[], cursor: { val: number }): { val: number } {
+function assignX(
+  nodes: OutlineNode[],
+  cursor: { val: number },
+): { val: number } {
   nodes.forEach((n) => {
     if (n.children.length) {
       cursor = assignX(n.children, cursor);
@@ -136,9 +139,11 @@ function collect(nodes: OutlineNode[], out: OutlineNode[]): OutlineNode[] {
   return out;
 }
 
-function computeLayout(
-  text: string,
-): { all: OutlineNode[]; totalWidth: number; totalHeight: number } {
+function computeLayout(text: string): {
+  all: OutlineNode[];
+  totalWidth: number;
+  totalHeight: number;
+} {
   const forest = parseOutline(text);
   if (forest.length === 0) {
     return { all: [], totalWidth: 0, totalHeight: 0 };
@@ -223,10 +228,15 @@ export function SchemaBuilder({
   onChange,
   revealedCount,
 }: SchemaBuilderProps) {
-  const [internalText, setInternalText] = useState<string>(outline ?? DEFAULT_OUTLINE);
+  const [internalText, setInternalText] = useState<string>(
+    outline ?? DEFAULT_OUTLINE,
+  );
   const text = outline ?? internalText;
 
-  const { all, totalWidth, totalHeight } = useMemo(() => computeLayout(text), [text]);
+  const { all, totalWidth, totalHeight } = useMemo(
+    () => computeLayout(text),
+    [text],
+  );
 
   const handleEditorChange = (value: string) => {
     setInternalText(value);
@@ -258,8 +268,12 @@ export function SchemaBuilder({
       {editable && (
         <textarea
           value={text}
-          onInput={(e) => handleEditorChange((e.target as HTMLTextAreaElement).value)}
-          placeholder={'Her satır bir kutu. Alt dal için satır başına "-" koy (ne kadar çok tire, o kadar derin).'}
+          onInput={(e) =>
+            handleEditorChange((e.target as HTMLTextAreaElement).value)
+          }
+          placeholder={
+            'Her satır bir kutu. Alt dal için satır başına "-" koy (ne kadar çok tire, o kadar derin).'
+          }
           style={{
             width: "100%",
             maxWidth: "100%",
@@ -355,83 +369,84 @@ export function SchemaBuilder({
               height: Math.max(totalHeight, 1),
             }}
           >
-          {/* Eğri bağlantı çizgileri */}
-          <svg
-            width={totalWidth}
-            height={totalHeight}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              overflow: "visible",
-              pointerEvents: "none",
-            }}
-          >
-            {all.map((n, idx) =>
-              n.children.map((c) => {
-                const show = !visibleSet || (visibleSet.has(n) && visibleSet.has(c));
-                if (!show) {
-                  return null;
-                }
-                const x1 = n.x;
-                const y1 = n.y + BOX_H;
-                const x2 = c.x;
-                const y2 = c.y;
-                const midY = (y1 + y2) / 2;
-                // Child yeni eklenen öğeyse çizgi "çizilme" animasyonu alır
-                const cIdx = all.indexOf(c);
-                const isNew = cIdx === lastIndex;
-                return (
-                  <path
-                    key={`link-${idx}-${c.text}`}
-                    d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
-                    fill="none"
-                    stroke={LINE_COLOR}
-                    strokeWidth={2.2}
-                    strokeDasharray={isNew ? 120 : undefined}
-                    strokeDashoffset={isNew ? 120 : undefined}
-                    style={
-                      isNew
-                        ? {
-                            animation: "schemaLinkIn 0.5s ease-out forwards",
-                            opacity: 0,
-                          }
-                        : undefined
-                    }
-                  />
-                );
-              }),
-            )}
-          </svg>
-
-          {/* Kutular */}
-          {all.map((n, nIdx) => {
-            if (visibleSet && !visibleSet.has(n)) {
-              return null;
-            }
-            const isNew = nIdx === lastIndex;
-            return (
-              <div
-                key={n.text}
-                style={{
-                  ...BOX_STYLE,
-                  left: n.x - n.w / 2,
-                  top: n.y,
-                  width: n.w,
-                  height: BOX_H,
-                  ...(isNew
-                    ? {
-                        transformOrigin: "center",
-                        animation: "schemaBoxIn 0.45s ease-out forwards",
-                        opacity: 0,
+            {/* Eğri bağlantı çizgileri */}
+            <svg
+              width={totalWidth}
+              height={totalHeight}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                overflow: "visible",
+                pointerEvents: "none",
+              }}
+            >
+              {all.map((n, idx) =>
+                n.children.map((c) => {
+                  const show =
+                    !visibleSet || (visibleSet.has(n) && visibleSet.has(c));
+                  if (!show) {
+                    return null;
+                  }
+                  const x1 = n.x;
+                  const y1 = n.y + BOX_H;
+                  const x2 = c.x;
+                  const y2 = c.y;
+                  const midY = (y1 + y2) / 2;
+                  // Child yeni eklenen öğeyse çizgi "çizilme" animasyonu alır
+                  const cIdx = all.indexOf(c);
+                  const isNew = cIdx === lastIndex;
+                  return (
+                    <path
+                      key={`link-${idx}-${c.text}`}
+                      d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
+                      fill="none"
+                      stroke={LINE_COLOR}
+                      strokeWidth={2.2}
+                      strokeDasharray={isNew ? 120 : undefined}
+                      strokeDashoffset={isNew ? 120 : undefined}
+                      style={
+                        isNew
+                          ? {
+                              animation: "schemaLinkIn 0.5s ease-out forwards",
+                              opacity: 0,
+                            }
+                          : undefined
                       }
-                    : {}),
-                }}
-              >
-                {n.text}
-              </div>
-            );
-          })}
+                    />
+                  );
+                }),
+              )}
+            </svg>
+
+            {/* Kutular */}
+            {all.map((n, nIdx) => {
+              if (visibleSet && !visibleSet.has(n)) {
+                return null;
+              }
+              const isNew = nIdx === lastIndex;
+              return (
+                <div
+                  key={n.text}
+                  style={{
+                    ...BOX_STYLE,
+                    left: n.x - n.w / 2,
+                    top: n.y,
+                    width: n.w,
+                    height: BOX_H,
+                    ...(isNew
+                      ? {
+                          transformOrigin: "center",
+                          animation: "schemaBoxIn 0.45s ease-out forwards",
+                          opacity: 0,
+                        }
+                      : {}),
+                  }}
+                >
+                  {n.text}
+                </div>
+              );
+            })}
           </div>
         </div>
 

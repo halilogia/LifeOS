@@ -205,7 +205,8 @@ export function KpssQuizModal({
                   quizQuestions={quizQuestions}
                   selectedAnswers={selectedAnswers}
                   historySessions={
-                    pastQuizzes?.[`${currentSubject}_${activeQuizTopic}`]?.history
+                    pastQuizzes?.[`${currentSubject}_${activeQuizTopic}`]
+                      ?.history
                   }
                   subjectNames={subjectNames}
                   onRetakeQuiz={onRetakeQuiz}

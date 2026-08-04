@@ -1,5 +1,10 @@
 import type { StockQuote } from "@/types/bist.js";
-import { IconBookmark, IconPlus, IconChart, IconSparkles } from "./exploreIcons.js";
+import {
+  IconBookmark,
+  IconPlus,
+  IconChart,
+  IconSparkles,
+} from "./exploreIcons.js";
 
 interface ExploreTickerCardProps {
   t: Record<string, string>;
@@ -54,7 +59,9 @@ export function ExploreTickerCard({
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "white" }}>
+            <span
+              style={{ fontWeight: 800, fontSize: "0.95rem", color: "white" }}
+            >
               {symClean}
             </span>
             <span
@@ -69,7 +76,9 @@ export function ExploreTickerCard({
               BIST
             </span>
           </div>
-          <div style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "2px" }}>
+          <div
+            style={{ fontSize: "0.8rem", color: "#94a3b8", marginTop: "2px" }}
+          >
             {companyName}
           </div>
         </div>

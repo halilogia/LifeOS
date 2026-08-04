@@ -110,8 +110,7 @@ export function createAiChatService(deps: AiChatDependencies) {
       title?: string,
       cues?: string,
       summary?: string,
-    ) =>
-      addNoteImpl(type, content, lang, noteRepo, title, cues, summary),
+    ) => addNoteImpl(type, content, lang, noteRepo, title, cues, summary),
     handleUpdateMemoryFromAI: (newFact: string) =>
       updateMemoryImpl(newFact, memoryRepo),
   };
@@ -145,7 +144,9 @@ function getAiChatService(): AiChatService {
 export function getAIConfigFromStorage() {
   return getAiChatService().getAIConfigFromStorage();
 }
-export function callAIConfigured(params: AICallParams): Promise<AIResponseData> {
+export function callAIConfigured(
+  params: AICallParams,
+): Promise<AIResponseData> {
   return getAiChatService().callAIConfigured(params);
 }
 export function executeAIAction(

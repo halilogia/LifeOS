@@ -2,7 +2,7 @@
  * KpssQuizReviewModal.tsx
  * KPSS Sınavı tamamlandıktan veya geçmiş sınav seçildikten sonra
  * detaylı soru inceleme pop-up modali.
- * 
+ *
  * Temiz Kod Standartı: Sıfır düşük kaliteli emoji, sade anlaşılır başlıklar.
  */
 
@@ -141,7 +141,9 @@ export function KpssQuizReviewModal({
             <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>
               Soruları İncele — {topicTitle}
             </h3>
-            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
+            <span
+              style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}
+            >
               {subjectTitle}
             </span>
           </div>
@@ -215,7 +217,9 @@ export function KpssQuizReviewModal({
               >
                 {historySessions.map((sess, idx) => (
                   <option key={sess.id || idx} value={idx}>
-                    Oturum #{idx + 1}: {sess.questionCount || sess.questions?.length || 5} Soru · %{sess.score} ({sess.date})
+                    Oturum #{idx + 1}:{" "}
+                    {sess.questionCount || sess.questions?.length || 5} Soru · %
+                    {sess.score} ({sess.date})
                   </option>
                 ))}
               </select>
@@ -281,7 +285,8 @@ export function KpssQuizReviewModal({
                 fontSize: "0.9rem",
               }}
             >
-              Bu sınav harici AI sitesinde çözülmüş ve sonucu %{currentScore} olarak kaydedilmiştir.
+              Bu sınav harici AI sitesinde çözülmüş ve sonucu %{currentScore}{" "}
+              olarak kaydedilmiştir.
             </div>
           )}
         </div>

@@ -52,8 +52,7 @@ export function NoteEditorHeader({
               background: "rgba(255, 255, 255, 0.03)",
               padding: "3px",
               borderRadius: "10px",
-              border:
-                "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               gap: "4px",
             }}
           >
@@ -66,7 +65,9 @@ export function NoteEditorHeader({
                   background:
                     noteType === type ? "var(--accent-color)" : "transparent",
                   color:
-                    noteType === type ? "#fff" : "var(--text-secondary, #94a3b8)",
+                    noteType === type
+                      ? "#fff"
+                      : "var(--text-secondary, #94a3b8)",
                   border: "none",
                   padding: "4px 10px",
                   borderRadius: "8px",
@@ -104,7 +105,9 @@ export function NoteEditorHeader({
         value={noteTitle}
         onInput={(e) => onTitleChange((e.target as HTMLInputElement).value)}
         placeholder={
-          noteType === "diary" ? t.notes_editor_diary_placeholder : notesPlaceholder
+          noteType === "diary"
+            ? t.notes_editor_diary_placeholder
+            : notesPlaceholder
         }
       />
     </header>

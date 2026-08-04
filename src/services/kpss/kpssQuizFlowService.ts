@@ -13,9 +13,7 @@ import {
   KpssPastQuiz,
   KpssPastQuizSession,
 } from "@/services/kpss/kpssQuizService.js";
-import {
-  fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service,
-} from "@/services/kpss/kpssAiService.js";
+import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service } from "@/services/kpss/kpssAiService.js";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 
@@ -108,7 +106,8 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
           ? [
               {
                 id: "sess_1",
-                date: existingRecord.date || new Date().toISOString().split("T")[0],
+                date:
+                  existingRecord.date || new Date().toISOString().split("T")[0],
                 questionCount: existingRecord.questions.length,
                 score: existingRecord.score,
                 questions: existingRecord.questions,
@@ -215,7 +214,8 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
           ? [
               {
                 id: "sess_1",
-                date: existingRecord.date || new Date().toISOString().split("T")[0],
+                date:
+                  existingRecord.date || new Date().toISOString().split("T")[0],
                 questionCount: existingRecord.questions.length,
                 score: existingRecord.score,
                 questions: existingRecord.questions,

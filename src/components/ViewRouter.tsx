@@ -86,9 +86,17 @@ export function ViewRouter(props: ViewRouterProps) {
           todos={props.todos}
           lang={props.lang}
           defaultTab="kanban"
-          onUpdateTodoUrgentImportant={props.onUpdateTodoUrgentImportant as any}
+          onUpdateTodoUrgentImportant={(originalIndex, urgent, important) => {
+            void props.onUpdateTodoUrgentImportant(
+              originalIndex,
+              urgent ?? false,
+              important ?? false,
+            );
+          }}
           onMoveTaskStatus={props.onMoveTaskStatus}
-          onMoveTaskDirection={props.onMoveTaskDirection as any}
+          onMoveTaskDirection={(index, direction) => {
+            void props.onMoveTaskDirection(index, direction as 1 | -1);
+          }}
         />
       );
     case "notes":

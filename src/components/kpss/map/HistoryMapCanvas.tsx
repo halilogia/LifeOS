@@ -26,7 +26,9 @@ interface HistoryMapCanvasProps {
   onWheel: (e: WheelEvent) => void;
 }
 
-function getPinOffsets(events: HistoryEvent[]): Map<number, { dx: number; dy: number }> {
+function getPinOffsets(
+  events: HistoryEvent[],
+): Map<number, { dx: number; dy: number }> {
   const buckets = new Map<string, number[]>();
   events.forEach((ev, idx) => {
     const key = `${Math.round(ev.x)}-${Math.round(ev.y)}`;
@@ -42,7 +44,10 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, { dx: number; dy: nu
     const radius = 14;
     indices.forEach((idx, i) => {
       const angle = (i / indices.length) * Math.PI * 2;
-      offsets.set(idx, { dx: Math.cos(angle) * radius, dy: Math.sin(angle) * radius });
+      offsets.set(idx, {
+        dx: Math.cos(angle) * radius,
+        dy: Math.sin(angle) * radius,
+      });
     });
   });
   return offsets;
@@ -124,33 +129,33 @@ export function HistoryMapCanvas({
 
       {/* Lejant */}
       <div
+        style={{
+          position: "absolute",
+          right: 14,
+          top: 12,
+          background: "rgba(255,255,255,0.7)",
+          border: "1px solid rgba(0,0,0,0.08)",
+          borderRadius: 10,
+          padding: "6px 12px",
+          fontSize: "0.72rem",
+          color: "#5a5140",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <span
           style={{
-            position: "absolute",
-            right: 14,
-            top: 12,
-            background: "rgba(255,255,255,0.7)",
-            border: "1px solid rgba(0,0,0,0.08)",
-            borderRadius: 10,
-            padding: "6px 12px",
-            fontSize: "0.72rem",
-            color: "#5a5140",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
+            width: 9,
+            height: 9,
+            borderRadius: "50%",
+            background: unitColor,
+            border: "1.5px solid #3a1408",
+            display: "inline-block",
           }}
-        >
-          <span
-            style={{
-              width: 9,
-              height: 9,
-              borderRadius: "50%",
-              background: unitColor,
-              border: "1.5px solid #3a1408",
-              display: "inline-block",
-            }}
-          />
-          Konum
-        </div>
+        />
+        Konum
+      </div>
     </div>
   );
 }
@@ -181,8 +186,20 @@ function PinLayer({
             transform={`translate(${ev.x + off.dx} ${ev.y + off.dy})`}
           >
             <circle r={2} fill={c} />
-            <line x1={0} y1={0} x2={0} y2={-16} stroke="#3a1408" strokeWidth={1.4} />
-            <path d="M 0,-16 L 11,-12 L 0,-8 Z" fill={isCurrent ? "#c99a3c" : c} stroke="#3a1408" strokeWidth={0.6} />
+            <line
+              x1={0}
+              y1={0}
+              x2={0}
+              y2={-16}
+              stroke="#3a1408"
+              strokeWidth={1.4}
+            />
+            <path
+              d="M 0,-16 L 11,-12 L 0,-8 Z"
+              fill={isCurrent ? "#c99a3c" : c}
+              stroke="#3a1408"
+              strokeWidth={0.6}
+            />
             <circle
               r={isCurrent ? 4.2 : 3.2}
               fill={isCurrent ? "#c99a3c" : c}
@@ -220,4 +237,3 @@ function PinLayer({
     </>
   );
 }
-

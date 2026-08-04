@@ -19,9 +19,7 @@ import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressR
 export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
   return {
     /** Loads enriched SRS flashcard queue from tarih çıkmış soruları. */
-    async loadSrsQueue(
-      chapter: string = "all",
-    ): Promise<{
+    async loadSrsQueue(chapter: string = "all"): Promise<{
       queue: WordReviewData[];
       universe: KpssFlashcard[];
       chapters: string[];
@@ -62,16 +60,15 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
         return { ...p, level: w.category, listType: "kpss", freq: 0 };
       });
 
-      const enrichedProgress: SRSWordWithInfo[] = filteredProgress
-        .map((p) => {
-          const wInfo = activeUniverseCards.find((w) => w.id === p.wordId);
-          return {
-            ...p,
-            level: wInfo?.category || "Tarih",
-            listType: "kpss",
-            freq: 0,
-          } as unknown as SRSWordWithInfo;
-        });
+      const enrichedProgress: SRSWordWithInfo[] = filteredProgress.map((p) => {
+        const wInfo = activeUniverseCards.find((w) => w.id === p.wordId);
+        return {
+          ...p,
+          level: wInfo?.category || "Tarih",
+          listType: "kpss",
+          freq: 0,
+        } as unknown as SRSWordWithInfo;
+      });
 
       const queue = prepareSRSQueue(enrichedProgress, {
         dailyGoal: 15,

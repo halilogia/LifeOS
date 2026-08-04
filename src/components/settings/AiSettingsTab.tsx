@@ -3,6 +3,8 @@ import { logger } from "@/utils/logger.js";
 import { AiConfigForm } from "@/components/settings/ai/AiConfigForm.js";
 import { AiThinkingToggle } from "@/components/settings/ai/AiThinkingToggle.js";
 import { AiMemoryEditor } from "@/components/settings/ai/AiMemoryEditor.js";
+import { useAiUserMemory } from "@/presentation/hooks/useAiUserMemory.js";
+import { fetchAvailableModels } from "@/services/aichat/modelFetcher.js";
 
 interface AiSettingsTabProps {
   t: Record<string, string>;
@@ -32,44 +34,12 @@ export function AiSettingsTab({
   const [models, setModels] = useState<string[]>([]);
   const [loadingModels, setLoadingModels] = useState(false);
   const [modelError, setModelError] = useState("");
-  const [userMemory, setUserMemory] = useState("");
   const [memorySavedSuccess, setMemorySavedSuccess] = useState(false);
 
-  useEffect(() => {
-    const loadMemory = () => {
-      chrome.storage.sync.get(
-        ["aiUserMemory"],
-        (syncRes: Record<string, any>) => {
-          if (syncRes && typeof syncRes.aiUserMemory === "string") {
-            setUserMemory(syncRes.aiUserMemory);
-          } else {
-            const defaultMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n- **İsim**: Halil Emre\n- **Rol / İlgiler**: Yazılım Geliştirme, Borsa İstanbul (BİST) ve Kişisel Verimlilik.\n- **AI İletişim Tercihi**: Sade, net, Türkçe, doğrudan sonuca odaklanan ifadeler.\n- **Kişisel Hedefler**: Günlük iş akışını ve yatırım takip alışkanlıklarını disiplinli yönetmek.`;
-            setUserMemory(defaultMemory);
-          }
-        },
-      );
-    };
-
-    loadMemory();
-
-    const listener = (
-      changes: Record<string, chrome.storage.StorageChange>,
-      areaName: string,
-    ) => {
-      if (
-        areaName === "sync" &&
-        changes.aiUserMemory &&
-        typeof changes.aiUserMemory.newValue === "string"
-      ) {
-        setUserMemory(changes.aiUserMemory.newValue);
-      }
-    };
-    chrome.storage.onChanged.addListener(listener);
-    return () => chrome.storage.onChanged.removeListener(listener);
-  }, []);
+  const { userMemory, setUserMemory, saveMemory } = useAiUserMemory();
 
   const handleSaveMemory = () => {
-    chrome.storage.sync.set({ aiUserMemory: userMemory }, () => {
+    saveMemory(userMemory, () => {
       setMemorySavedSuccess(true);
       setTimeout(() => setMemorySavedSuccess(false), 2500);
     });
@@ -79,29 +49,8 @@ export function AiSettingsTab({
     setLoadingModels(true);
     setModelError("");
     try {
-      const baseUrl =
-        aiEndpoint && aiEndpoint.trim()
-          ? aiEndpoint.trim().replace(/\/$/, "")
-          : "https://openrouter.ai/api/v1";
-      const url = `${baseUrl}/models`;
-      const headers: Record<string, string> = {};
-      if (aiApiKey && aiApiKey.trim()) {
-        headers["Authorization"] = `Bearer ${aiApiKey}`;
-      }
-
-      const res = await fetch(url, { headers });
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
-      const data = await res.json();
-      if (data && Array.isArray(data.data)) {
-        const list = (data.data as { id: string }[])
-          .map((m: { id: string }) => m.id)
-          .sort();
-        setModels(list);
-      } else {
-        throw new Error("Invalid format");
-      }
+      const list = await fetchAvailableModels(aiEndpoint, aiApiKey);
+      setModels(list);
     } catch (err: unknown) {
       logger.error("Failed to fetch models:", err);
       setModelError(t.settings_ai_failed_models);

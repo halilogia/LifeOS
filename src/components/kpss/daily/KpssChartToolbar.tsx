@@ -78,7 +78,9 @@ export function KpssChartToolbar({
             onClick={() => onMetricChange("all")}
             style={{
               background:
-                chartMetric === "all" ? "var(--accent-color, #2563eb)" : "transparent",
+                chartMetric === "all"
+                  ? "var(--accent-color, #2563eb)"
+                  : "transparent",
               border: "none",
               color: "#ffffff",
               fontSize: "0.65rem",
@@ -148,7 +150,8 @@ export function KpssChartToolbar({
         <button
           onClick={() => onDaysChange(30)}
           style={{
-            background: chartDays === 30 ? "var(--accent-color)" : "transparent",
+            background:
+              chartDays === 30 ? "var(--accent-color)" : "transparent",
             border: "none",
             color: "white",
             fontSize: "0.65rem",
@@ -164,7 +167,8 @@ export function KpssChartToolbar({
         <button
           onClick={() => onTypeChange("line")}
           style={{
-            background: chartType === "line" ? "var(--accent-color)" : "transparent",
+            background:
+              chartType === "line" ? "var(--accent-color)" : "transparent",
             border: "none",
             color: "white",
             fontSize: "0.65rem",
@@ -180,7 +184,8 @@ export function KpssChartToolbar({
         <button
           onClick={() => onTypeChange("bar")}
           style={{
-            background: chartType === "bar" ? "var(--accent-color)" : "transparent",
+            background:
+              chartType === "bar" ? "var(--accent-color)" : "transparent",
             border: "none",
             color: "white",
             fontSize: "0.65rem",

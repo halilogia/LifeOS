@@ -35,23 +35,24 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
         [...SYNC_SETTINGS_KEYS],
-        (result: Record<string, any>) => {
+        (result: Record<string, unknown>) => {
+          const r = result;
           resolve({
-            lang: (result[SYNC_LANG] as Language) || "tr",
-            sidebarOpen: result[SYNC_SIDEBAR_OPEN] ?? true,
+            lang: (r[SYNC_LANG] as Language) || "tr",
+            sidebarOpen: (r[SYNC_SIDEBAR_OPEN] as boolean) ?? true,
             freeGamesNotificationsEnabled:
-              result[SYNC_FREE_GAMES_NOTIFICATIONS] ?? true,
+              (r[SYNC_FREE_GAMES_NOTIFICATIONS] as boolean) ?? true,
             calendarNotificationsEnabled:
-              result[SYNC_CALENDAR_NOTIFICATIONS] ?? true,
-            pomoBlockEnabled: result[SYNC_POMO_BLOCK_ENABLED] ?? true,
+              (r[SYNC_CALENDAR_NOTIFICATIONS] as boolean) ?? true,
+            pomoBlockEnabled: (r[SYNC_POMO_BLOCK_ENABLED] as boolean) ?? true,
             universalInfoBoxEnabled:
-              result[SYNC_UNIVERSAL_INFOBOX_ENABLED] ?? true,
+              (r[SYNC_UNIVERSAL_INFOBOX_ENABLED] as boolean) ?? true,
             universalInfoBoxHotkey:
-              result[SYNC_UNIVERSAL_INFOBOX_HOTKEY] || "none",
+              (r[SYNC_UNIVERSAL_INFOBOX_HOTKEY] as string) || "none",
             whatsappBridgeEnabled:
-              result[SYNC_WHATSAPP_BRIDGE_ENABLED] ?? false,
+              (r[SYNC_WHATSAPP_BRIDGE_ENABLED] as boolean) ?? false,
             telegramBridgeEnabled:
-              result[SYNC_TELEGRAM_BRIDGE_ENABLED] ?? false,
+              (r[SYNC_TELEGRAM_BRIDGE_ENABLED] as boolean) ?? false,
           });
         },
       );

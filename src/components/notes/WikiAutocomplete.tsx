@@ -55,7 +55,8 @@ export function WikiAutocomplete({
             borderRadius: "6px",
           }}
           onMouseEnter={(e) =>
-            ((e.target as HTMLElement).style.background = "rgba(168, 85, 247, 0.2)")
+            ((e.target as HTMLElement).style.background =
+              "rgba(168, 85, 247, 0.2)")
           }
           onMouseLeave={(e) =>
             ((e.target as HTMLElement).style.background = "transparent")

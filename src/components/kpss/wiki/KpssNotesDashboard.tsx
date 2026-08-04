@@ -18,6 +18,7 @@ import { KpssNotesHeader } from "@/components/kpss/wiki/KpssNotesHeader.js";
 import { KpssNotesToolbar } from "@/components/kpss/wiki/KpssNotesToolbar.js";
 import { KpssHelpModal } from "@/components/kpss/wiki/KpssHelpModal.js";
 import { useKpssNotes } from "@/components/kpss/wiki/useKpssNotes.js";
+import { useKpssWikiSidebar as useWikiSidebarState } from "@/presentation/hooks/useKpssWikiSidebar.js";
 import { ZettelkastenGraphModal } from "@/components/notes/ZettelkastenGraphModal.js";
 
 interface KpssNotesDashboardProps {
@@ -122,24 +123,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     }
   };
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-
-  useEffect(() => {
-    void (async () => {
-      const result = await chrome.storage.sync.get("kpssWikiSidebarCollapsed");
-      if (result.kpssWikiSidebarCollapsed !== undefined) {
-        setSidebarCollapsed(Boolean(result.kpssWikiSidebarCollapsed));
-      }
-    })();
-  }, []);
-
-  const toggleSidebar = () => {
-    setSidebarCollapsed((prev) => {
-      const next = !prev;
-      void chrome.storage.sync.set({ kpssWikiSidebarCollapsed: next });
-      return next;
-    });
-  };
+  const { sidebarCollapsed, toggleSidebar } = useWikiSidebarState();
 
   return (
     <div

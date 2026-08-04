@@ -1,7 +1,12 @@
 import type { StockQuote } from "@/types/bist.js";
 import { formatPrice } from "@/services/bistService.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
-import { IconChart, IconPlus, IconSparkles, IconSell } from "./portfolioIcons.js";
+import {
+  IconChart,
+  IconPlus,
+  IconSparkles,
+  IconSell,
+} from "./portfolioIcons.js";
 
 interface PortfolioRowProps {
   item: StockPortfolioItem;
@@ -43,8 +48,7 @@ export function PortfolioRow({
   const profit = hasLivePrice ? totalVal - costVal : 0;
   const profitPct = hasLivePrice && costVal > 0 ? (profit / costVal) * 100 : 0;
   const symbolRules = rules.filter(
-    (r) =>
-      r.symbol.replace(/\.IS$/, "").toUpperCase() === sym && r.isActive,
+    (r) => r.symbol.replace(/\.IS$/, "").toUpperCase() === sym && r.isActive,
   );
 
   return (
@@ -216,7 +220,9 @@ export function PortfolioRow({
           </button>
           <button
             className="stock-btn stock-btn-danger"
-            onClick={() => onSellItem(item.id, sym, item.lotCount, currentPrice)}
+            onClick={() =>
+              onSellItem(item.id, sym, item.lotCount, currentPrice)
+            }
             title="Satış Yap"
             style={{ padding: "6px 10px" }}
           >

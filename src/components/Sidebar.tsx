@@ -1,8 +1,9 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { SidebarNavItem } from "./sidebar/SidebarNavItem.js";
 import { SidebarIcon } from "./sidebar/SidebarIcons.js";
+import { useSidebarOrder } from "@/presentation/hooks/useSidebarOrder.js";
 
 interface SidebarProps {
   lang: Language;
@@ -16,24 +17,6 @@ interface SidebarProps {
   onOrderChange?: (newOrder: string[]) => void;
 }
 
-const DEFAULT_ORDER = [
-  "list",
-  "arcade",
-  "willpower",
-  "pomodoro",
-  "eisenhower",
-  "ai-chat",
-  "notes",
-  "calendar",
-  "srs",
-  "hifiz",
-  "prayer",
-  "kpss",
-  "detox",
-  "free-games",
-  "bist",
-];
-
 export function Sidebar({
   lang,
   activeView,
@@ -46,29 +29,9 @@ export function Sidebar({
   onOrderChange,
 }: SidebarProps) {
   const t = getTranslation(lang);
-  const [order, setOrder] = useState<string[]>(DEFAULT_ORDER);
+  const { order, setOrder, saveOrder } = useSidebarOrder();
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
-
-  useEffect(() => {
-    new Promise<string[]>((resolve) =>
-      chrome.storage.sync.get(["sidebarOrder"], (res) =>
-        resolve((res.sidebarOrder as string[]) || []),
-      ),
-    ).then((saved) => {
-      let finalOrder = DEFAULT_ORDER;
-      if (saved && saved.length > 0) {
-        // Filter out deprecated keys, append missing ones
-        const filtered = saved.filter((k) => DEFAULT_ORDER.includes(k));
-        const missing = DEFAULT_ORDER.filter((k) => !filtered.includes(k));
-        finalOrder = [...filtered, ...missing];
-      }
-      setOrder(finalOrder);
-      if (onOrderChange) {
-        onOrderChange(finalOrder);
-      }
-    });
-  }, []);
 
   const handleDragStart = (e: DragEvent, id: string) => {
     setDraggedItem(id);
@@ -119,7 +82,7 @@ export function Sidebar({
     nextOrder.splice(targetIdx, 0, currentItem);
 
     setOrder(nextOrder);
-    chrome.storage.sync.set({ sidebarOrder: nextOrder });
+    saveOrder(nextOrder);
     if (onOrderChange) {
       onOrderChange(nextOrder);
     }

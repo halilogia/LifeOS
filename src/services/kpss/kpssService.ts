@@ -31,14 +31,21 @@ export function createKpssService(kpssRepo: IKpssRepository) {
 
       progressList.forEach((p) => {
         // Eski score'u olan fakat totalQuestions verisi boş olan kayıtları onar
-        if ((p.totalQuestions === undefined || p.totalQuestions === 0) && p.score !== undefined) {
+        if (
+          (p.totalQuestions === undefined || p.totalQuestions === 0) &&
+          p.score !== undefined
+        ) {
           const quizKey = `${p.subject}_${p.topic}`;
-          const pastQuiz = pastQuizzes[quizKey];
-
-          if (pastQuiz && pastQuiz.questions && pastQuiz.questions.length > 0) {
+          const pastQuiz = pastQuizzes[quizKey] as
+            | {
+                questions?: { correctAnswer?: string }[];
+                selectedAnswers?: string[];
+              }
+            | undefined;
+          if (pastQuiz?.questions && pastQuiz.questions.length > 0) {
             p.totalQuestions = pastQuiz.questions.length;
             const correctCount = (pastQuiz.selectedAnswers || []).filter(
-              (ans, idx) => ans === pastQuiz.questions[idx]?.correctAnswer,
+              (ans, idx) => ans === pastQuiz.questions![idx]?.correctAnswer,
             ).length;
             p.totalCorrect = correctCount;
           } else {
@@ -118,7 +125,13 @@ export function createKpssService(kpssRepo: IKpssRepository) {
         const newTotalC = prevC + correctCount;
 
         if (!record) {
-          record = { subject, topic, status: 1, totalQuestions: 0, totalCorrect: 0 };
+          record = {
+            subject,
+            topic,
+            status: 1,
+            totalQuestions: 0,
+            totalCorrect: 0,
+          };
         }
         record.totalQuestions = newTotalQ;
         record.totalCorrect = newTotalC;
@@ -188,6 +201,13 @@ export function createKpssService(kpssRepo: IKpssRepository) {
       }
 
       await kpssRepo.saveAllDailyStats(stats);
+    },
+
+    /**
+     * Retrieves past quiz records.
+     */
+    async getPastQuizzes(): Promise<Record<string, unknown>> {
+      return kpssRepo.getPastQuizzes();
     },
 
     /**

@@ -147,9 +147,7 @@ export function ExploreFeaturedCard({
                 </div>
                 <span
                   className={`stock-card-badge ${
-                    item.isUp
-                      ? "stock-badge-positive"
-                      : "stock-badge-negative"
+                    item.isUp ? "stock-badge-positive" : "stock-badge-negative"
                   }`}
                   style={{ fontSize: "0.75rem" }}
                 >

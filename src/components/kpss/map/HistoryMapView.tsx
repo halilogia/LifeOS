@@ -5,12 +5,18 @@
  * SchemaBuilder (devlet teşkilatı şeması), useMapPlayback (ortak mantık).
  */
 import { useEffect, useState } from "preact/hooks";
-import { HISTORY_UNITS, type HistoryUnit } from "@/domain/constants/TurkeyHistoryData.js";
+import {
+  HISTORY_UNITS,
+  type HistoryUnit,
+} from "@/domain/constants/TurkeyHistoryData.js";
 import { MapControls } from "@/components/kpss/map/MapControls.js";
 import { HistoryTopicSidebar } from "@/components/kpss/map/HistoryTopicSidebar.js";
 import { HistoryMapCanvas } from "@/components/kpss/map/HistoryMapCanvas.js";
 import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
-import { TESKILAT_OUTLINE, TESKILAT_TITLE } from "@/components/kpss/map/StateStructureOutline.js";
+import {
+  TESKILAT_OUTLINE,
+  TESKILAT_TITLE,
+} from "@/components/kpss/map/StateStructureOutline.js";
 import { useMapPlayback } from "@/components/kpss/map/useMapPlayback.js";
 
 interface HistoryMapViewProps {
@@ -46,7 +52,7 @@ function getInitialRevealed(u: HistoryUnit): number {
 
 export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
   const [selectedUnitId, setSelectedUnitId] = useState<string>(
-    HISTORY_UNITS[0].id
+    HISTORY_UNITS[0].id,
   );
   const initialUnit =
     HISTORY_UNITS.find((u) => u.id === HISTORY_UNITS[0].id) || HISTORY_UNITS[0];
@@ -113,7 +119,12 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
   return (
     <div
       ref={containerRef}
-      style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 10,
+        width: "100%",
+      }}
     >
       <style>{ANIM_CSS}</style>
 
@@ -198,7 +209,9 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
               >
                 {currentIndex + 1} / {total}
                 {currentEv.year && (
-                  <span style={{ color: "#c99a3c", fontWeight: 700, marginLeft: 8 }}>
+                  <span
+                    style={{ color: "#c99a3c", fontWeight: 700, marginLeft: 8 }}
+                  >
                     {currentEv.year}
                   </span>
                 )}

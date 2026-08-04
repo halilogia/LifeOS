@@ -6,7 +6,7 @@ interface PomoZenHistoryCardProps {
   onSearchQueryInput: (val: string) => void;
   filteredHistory: PomodoroLog[];
   t: Record<string, string>;
-  renderZenElementSvg: (element: PomodoroLog["element"]) => any;
+  renderZenElementSvg: (element: PomodoroLog["element"]) => preact.VNode | null;
 }
 
 export function PomoZenHistoryCard({

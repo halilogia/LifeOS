@@ -61,7 +61,8 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
   } = playback;
 
   const pins = TOPIC_PINS[selectedTopic];
-  const topicMeta = MAP_TOPICS.find((m) => m.id === selectedTopic) || MAP_TOPICS[0];
+  const topicMeta =
+    MAP_TOPICS.find((m) => m.id === selectedTopic) || MAP_TOPICS[0];
   const topicColor = topicMeta.color;
 
   // Seçili konu değişince toplam pin sayısını senkronla

@@ -52,7 +52,9 @@ export function KpssQuizIntroStep({
             className={`kpss-qcount-btn ${selectedQuizCount === count ? "active" : ""}`}
             onClick={() => onSetSelectedQuizCount(count)}
           >
-            <span>{count} {t.kpss_quiz_questions}</span>
+            <span>
+              {count} {t.kpss_quiz_questions}
+            </span>
             <span
               style={{
                 display: "block",
