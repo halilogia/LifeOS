@@ -295,25 +295,27 @@ export function SchemaBuilder({
           boxSizing: "border-box",
         }}
       >
-        {/* Başlık */}
-        <div
-          style={{
-            background: "#7a1414",
-            color: "#fff",
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: 15,
-            padding: "10px 24px",
-            borderRadius: 5,
-            margin: "0 auto 35px auto",
-            width: "fit-content",
-            minWidth: 280,
-            letterSpacing: 0.5,
-            boxShadow: "0 2px 4px rgba(0,0,0,.2)",
-          }}
-        >
-          {title}
-        </div>
+        {/* Başlık — boşsa gizli */}
+        {title.trim() ? (
+          <div
+            style={{
+              background: "#7a1414",
+              color: "#fff",
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: 15,
+              padding: "10px 24px",
+              borderRadius: 5,
+              margin: "0 auto 35px auto",
+              width: "fit-content",
+              minWidth: 280,
+              letterSpacing: 0.5,
+              boxShadow: "0 2px 4px rgba(0,0,0,.2)",
+            }}
+          >
+            {title}
+          </div>
+        ) : null}
 
         {/* Şema alanı — genişliği her zaman tam; şema darsa ortalanır, genişse scroll */}
         <div

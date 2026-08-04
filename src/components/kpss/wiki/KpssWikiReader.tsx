@@ -36,9 +36,7 @@ export function KpssWikiReader({
   const [showToc, setShowToc] = useState(true);
 
   const displayTitle =
-    note.title.trim() ||
-    extractTitleFromContent(note.content) ||
-    t.kpss_wiki_untitled;
+    note.title.trim() || extractTitleFromContent(note.content) || "";
 
   // Extract first image URL for Infobox Featured Media
   const imageUrl = useMemo(() => {
