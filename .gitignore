@@ -34,4 +34,15 @@ desktop/web/
 desktop/dist/
 desktop/node_modules/
 desktop/icon.png
+# Electron desktop (kaynak dosyalar takip edilir; build çıktıları hariç)
+electron/desktop/web/
+electron/desktop/dist/
+electron/desktop/node_modules/
+electron/desktop/icon.png
+electron/*.log
+electron/**/err*.log
+electron/**/out*.log
 scripts/
+.vscode/
+.Agent/
+.commandcode/

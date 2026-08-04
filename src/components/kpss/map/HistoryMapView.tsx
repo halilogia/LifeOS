@@ -1,90 +1,91 @@
 /**
  * HistoryMapView.tsx
- * KPSS Tarih Haritası — Anadolu Selçuklu ünitesi.
- * Tuval: state + handlers + layout. Alt bileşenler: HistorySidebar, HistoryMapSvg, HistoryInfoCard.
+ * KPSS Tarih haritası — Anadolu Selçuklu ünitesi (territory / points / diagram).
+ * Parçalar: MapControls, HistoryTopicSidebar, HistoryMapCanvas (harita),
+ * SchemaBuilder (devlet teşkilatı şeması), useMapPlayback (ortak mantık).
  */
-import { useEffect, useRef, useState } from "preact/hooks";
-import {
-  HISTORY_UNITS,
-  type HistoryEvent,
-  type HistoryDiagramNode,
-} from "@/domain/constants/TurkeyHistoryData.js";
+import { useEffect, useState } from "preact/hooks";
+import { HISTORY_UNITS, type HistoryUnit } from "@/domain/constants/TurkeyHistoryData.js";
 import { MapControls } from "@/components/kpss/map/MapControls.js";
-import { HistorySidebar } from "@/components/kpss/map/HistorySidebar.js";
-import { HistoryMapSvg } from "@/components/kpss/map/HistoryMapSvg.js";
-import { HistoryInfoCard } from "@/components/kpss/map/HistoryInfoCard.js";
+import { HistoryTopicSidebar } from "@/components/kpss/map/HistoryTopicSidebar.js";
+import { HistoryMapCanvas } from "@/components/kpss/map/HistoryMapCanvas.js";
+import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
+import { TESKILAT_OUTLINE, TESKILAT_TITLE } from "@/components/kpss/map/StateStructureOutline.js";
+import { useMapPlayback } from "@/components/kpss/map/useMapPlayback.js";
 
 interface HistoryMapViewProps {
   t: Record<string, string>;
 }
 
-interface ViewState {
-  x: number;
-  y: number;
-  scale: number;
-}
-
 const STEP_MS = 2200;
 
-/* ========== Animasyon keyframes ========== */
+/** Devlet Teşkilatı şeması düğüm sayısı — veri ağacından türetilir */
+const TESKILAT_BOX_COUNT = 9;
+
 const ANIM_CSS = `
-@keyframes drop {
-  0%   { transform: translateY(-14px) scale(0.4); opacity: 0; }
-  100% { transform: translateY(0)      scale(1);   opacity: 1; }
+@keyframes historyPulse {
+  0%   { opacity: 0.55; r: 6; }
+  100% { opacity: 0;    r: 20; }
 }
-@keyframes fadein {
-  from { opacity: 0; transform: translateY(3px); }
-  to   { opacity: 1; transform: translateY(0);   }
-}
-@keyframes pop {
-  0%   { opacity: 0.55; r: 2;   }
-  100% { opacity: 0;    r: 22;  }
-}
-@keyframes pulse {
-  0%   { opacity: 0.55; r: 6;   }
-  100% { opacity: 0;    r: 20;  }
-}
-@keyframes trailin {
+@keyframes historyTrailin {
   from { opacity: 0; stroke-dashoffset: 40; }
   to   { opacity: 0.85; stroke-dashoffset: 0; }
 }
+@keyframes historyFadein {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 `;
 
-export function HistoryMapView({ t }: HistoryMapViewProps) {
+function getInitialRevealed(u: HistoryUnit): number {
+  if (u.mode === "diagram") {
+    return TESKILAT_BOX_COUNT;
+  }
+  return u.events?.length || 0;
+}
+
+export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
   const [selectedUnitId, setSelectedUnitId] = useState<string>(
     HISTORY_UNITS[0].id
   );
-  const [revealedCount, setRevealedCount] = useState(
-    HISTORY_UNITS[0].events?.length || 0
-  );
-  const [currentIndex, setCurrentIndex] = useState(-1);
-  const [playing, setPlaying] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [view, setView] = useState<ViewState>({ x: 0, y: 0, scale: 1 });
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const svgWrapRef = useRef<HTMLDivElement | null>(null);
-  const timerRef = useRef<number | null>(null);
-  const dragRef = useRef<{
-    startX: number;
-    startY: number;
-    viewX: number;
-    viewY: number;
-  } | null>(null);
+  const initialUnit =
+    HISTORY_UNITS.find((u) => u.id === HISTORY_UNITS[0].id) || HISTORY_UNITS[0];
+  const playback = useMapPlayback({
+    initialCount: getInitialRevealed(initialUnit),
+    stepMs: STEP_MS,
+  });
+  const {
+    revealedCount,
+    currentIndex,
+    playing,
+    isFullscreen,
+    view,
+    containerRef,
+    svgWrapRef,
+    total,
+    setTotal,
+    handleUnitChange,
+    handlePlay,
+    handleStep,
+    handleReset,
+    toggleFullscreen,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onWheel,
+  } = playback;
 
   const unit =
     HISTORY_UNITS.find((u) => u.id === selectedUnitId) || HISTORY_UNITS[0];
   const isDiagram = unit.mode === "diagram";
-  const events: HistoryEvent[] = unit.events || [];
-  const nodes: HistoryDiagramNode[] = unit.nodes || [];
-  const total = isDiagram ? nodes.length : events.length;
-  const currentEv =
-    currentIndex >= 0 && currentIndex < total
-      ? isDiagram
-        ? nodes[currentIndex]
-        : events[currentIndex]
-      : null;
+  const events = isDiagram ? [] : unit.events || [];
+  const nextTotal = isDiagram ? TESKILAT_BOX_COUNT : events.length;
+  useEffect(() => {
+    if (total !== nextTotal) {
+      setTotal(nextTotal);
+    }
+  }, [total, nextTotal, setTotal]);
 
-  // Birikimli territory boyama
   const territoryColors = new Map<string, string>();
   if (unit.mode === "territory") {
     events.slice(0, revealedCount).forEach((ev) => {
@@ -94,174 +95,30 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
     });
   }
 
-  const clearTimer = () => {
-    if (timerRef.current !== null) {
-      window.clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  const stopPlayback = () => {
-    setPlaying(false);
-    clearTimer();
-  };
-
-  const handleUnitChange = (id: string) => {
+  const handleUnitChangeById = (id: string) => {
     if (id === selectedUnitId) {
       return;
     }
-    stopPlayback();
-    const next = HISTORY_UNITS.find((u) => u.id === id);
-    if (!next) {
-      return;
-    }
+    const next = HISTORY_UNITS.find((u) => u.id === id) || HISTORY_UNITS[0];
     setSelectedUnitId(id);
-    setRevealedCount(
-      next.mode === "diagram"
-        ? next.nodes?.length || 0
-        : next.events?.length || 0
-    );
-    setCurrentIndex(-1);
-    setView({ x: 0, y: 0, scale: 1 });
+    handleUnitChange(getInitialRevealed(next));
   };
 
-  const handlePlay = () => {
-    if (playing) {
-      stopPlayback();
-      return;
-    }
-    if (revealedCount >= total) {
-      setRevealedCount(0);
-      setCurrentIndex(-1);
-      setPlaying(true);
-      window.setTimeout(() => {
-        setRevealedCount(1);
-        setCurrentIndex(0);
-      }, 60);
-    } else {
-      setPlaying(true);
-    }
-  };
-
-  useEffect(() => {
-    if (!playing) {
-      return;
-    }
-    timerRef.current = window.setInterval(() => {
-      setRevealedCount((prev) => {
-        const next = prev + 1;
-        setCurrentIndex(next - 1);
-        if (next >= total) {
-          stopPlayback();
-        }
-        return next;
-      });
-    }, STEP_MS);
-    return () => {
-      clearTimer();
-    };
-  }, [playing, total]);
-
-  const handleStep = (dir: number) => {
-    stopPlayback();
-    const next = Math.min(total, Math.max(0, revealedCount + dir));
-    setRevealedCount(next);
-    setCurrentIndex(next > 0 ? next - 1 : -1);
-  };
-
-  const handleReset = () => {
-    stopPlayback();
-    setRevealedCount(0);
-    setCurrentIndex(-1);
-    setView({ x: 0, y: 0, scale: 1 });
-  };
-
-  const toggleFullscreen = () => {
-    const el = containerRef.current;
-    if (!el) {
-      return;
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    } else {
-      el.requestFullscreen().catch(() => {});
-    }
-  };
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
-  }, []);
-
-  // Pan
-  const handlePointerDown = (e: PointerEvent) => {
-    const el = svgWrapRef.current;
-    if (!el) {
-      return;
-    }
-    el.setPointerCapture(e.pointerId);
-    dragRef.current = {
-      startX: e.clientX,
-      startY: e.clientY,
-      viewX: view.x,
-      viewY: view.y,
-    };
-  };
-
-  const handlePointerMove = (e: PointerEvent) => {
-    const drag = dragRef.current;
-    if (!drag) {
-      return;
-    }
-    const dx = e.clientX - drag.startX;
-    const dy = e.clientY - drag.startY;
-    setView((v) => ({ ...v, x: drag.viewX + dx, y: drag.viewY + dy }));
-  };
-
-  const handlePointerUp = () => {
-    dragRef.current = null;
-  };
-
-  const handleWheel = (e: WheelEvent) => {
-    e.preventDefault();
-    const el = svgWrapRef.current;
-    if (!el) {
-      return;
-    }
-    const rect = el.getBoundingClientRect();
-    const px = e.clientX - rect.left;
-    const py = e.clientY - rect.top;
-    setView((v) => {
-      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-      const newScale = Math.min(5, Math.max(0.5, v.scale * factor));
-      const k = newScale / v.scale;
-      return {
-        scale: newScale,
-        x: px - (px - v.x) * k,
-        y: py - (py - v.y) * k,
-      };
-    });
-  };
-
-  const sidebarMaxH = isFullscreen
-    ? "calc(100vh - 120px)"
-    : "480px";
+  /* ---- Bilgi kartı (sadece harita olayları için) ---- */
+  const currentEv =
+    !isDiagram && currentIndex >= 0 && currentIndex < total
+      ? events[currentIndex]
+      : null;
 
   return (
     <div
       ref={containerRef}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "12px",
-        width: "100%",
-      }}
+      style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%" }}
     >
       <style>{ANIM_CSS}</style>
 
       <MapControls
-        t={t}
+        t={_t}
         title={unit.title}
         subtitle={unit.subtitle}
         total={total}
@@ -269,56 +126,132 @@ export function HistoryMapView({ t }: HistoryMapViewProps) {
         playing={playing}
         isFullscreen={isFullscreen}
         onStep={handleStep}
-        onReset={handleReset}
+        onReset={() => handleReset(getInitialRevealed(unit))}
         onPlayToggle={handlePlay}
         onToggleFullscreen={toggleFullscreen}
       />
 
-      {/* Sidebar + Harita */}
-      <div
-        style={{
-          display: "flex",
-          gap: "12px",
-          alignItems: "stretch",
-          flex: isFullscreen ? 1 : undefined,
-        }}
-      >
-        <HistorySidebar
+      <div style={{ display: "flex", gap: 10, alignItems: "stretch" }}>
+        <HistoryTopicSidebar
           units={HISTORY_UNITS}
           selectedUnitId={selectedUnitId}
-          onUnitChange={handleUnitChange}
-          unitColor={unit.color}
-          legend={unit.legend}
-          maxHeight={sidebarMaxH}
+          onSelect={handleUnitChangeById}
         />
 
-        {/* Harita + bilgi kartı container */}
         <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
-          <HistoryMapSvg
-            isDiagram={isDiagram}
-            events={events}
-            nodes={nodes}
-            revealedCount={revealedCount}
-            currentIndex={currentIndex}
-            unitColor={unit.color}
-            territoryColors={territoryColors}
-            view={view}
-            isFullscreen={isFullscreen}
-            svgWrapRef={svgWrapRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onWheel={handleWheel}
-          />
+          {isDiagram ? (
+            <div
+              style={{
+                position: "relative",
+                flex: 1,
+                minWidth: 0,
+                height: "100%",
+              }}
+            >
+              <SchemaBuilder
+                outline={TESKILAT_OUTLINE}
+                title={TESKILAT_TITLE}
+                revealedCount={revealedCount}
+              />
+            </div>
+          ) : (
+            <HistoryMapCanvas
+              events={events}
+              revealedCount={revealedCount}
+              currentIndex={currentIndex}
+              unitColor={unit.color}
+              territoryColors={territoryColors}
+              view={view}
+              isFullscreen={isFullscreen}
+              svgWrapRef={svgWrapRef}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onWheel={onWheel}
+            />
+          )}
 
           {currentEv && (
-            <HistoryInfoCard
-              ev={currentEv}
-              isDiagram={isDiagram}
-              currentIndex={currentIndex}
-              total={total}
-              unitColor={unit.color}
-            />
+            <div
+              style={{
+                position: "absolute",
+                left: 16,
+                bottom: 16,
+                maxWidth: 320,
+                background: "rgba(28,18,14,0.93)",
+                color: "#f4ead7",
+                borderRadius: 12,
+                padding: "14px 16px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                animation: "historyFadein 0.3s ease-out",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: unit.color,
+                  marginBottom: 5,
+                }}
+              >
+                {currentIndex + 1} / {total}
+                {currentEv.year && (
+                  <span style={{ color: "#c99a3c", fontWeight: 700, marginLeft: 8 }}>
+                    {currentEv.year}
+                  </span>
+                )}
+              </div>
+              {currentEv.tag && (
+                <span
+                  style={{
+                    display: "inline-block",
+                    fontSize: 10,
+                    background: "rgba(201,154,60,0.18)",
+                    color: "#c99a3c",
+                    border: "1px solid rgba(201,154,60,0.4)",
+                    padding: "2px 8px",
+                    borderRadius: 20,
+                    marginBottom: 6,
+                  }}
+                >
+                  {currentEv.tag}
+                </span>
+              )}
+              <h3
+                style={{
+                  margin: "0 0 3px",
+                  fontFamily: "Georgia, serif",
+                  fontSize: 17,
+                  color: "#fff4e4",
+                }}
+              >
+                {currentEv.title}
+              </h3>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 12.5,
+                  color: "#cfc3aa",
+                  lineHeight: 1.45,
+                }}
+              >
+                {currentEv.desc}
+              </p>
+              {currentEv.city && (
+                <div
+                  style={{
+                    fontSize: 11.5,
+                    color: "#a99a82",
+                    marginTop: 6,
+                    fontStyle: "italic",
+                  }}
+                >
+                  {currentEv.city}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

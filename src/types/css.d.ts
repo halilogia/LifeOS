@@ -3,6 +3,11 @@ declare module "*.css" {
   export default content;
 }
 
+declare module "*.md?raw" {
+  const content: string;
+  export default content;
+}
+
 interface FileSystemDirectoryHandle {
   readonly name: string;
   queryPermission?(descriptor?: {
