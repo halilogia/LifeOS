@@ -1,12 +1,26 @@
-/**
- * kpssQuizService.ts
- * Service module for querying local KPSS past questions archives and handling exam subsets.
- * Clean Architecture - Service Layer.
- */
-
-import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
-import osymData from "@/data/kpss/osymHistoryQuestions.json";
+import {
+  loadExamYearData,
+  loadAllExamData,
+  AVAILABLE_EXAM_YEARS,
+} from "@/services/kpss/data/kpssDataRegistry.js";
+import osymData from "@/services/kpss/data/osymHistoryQuestions.json";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
+
+// In-memory cache — loaded once, reused across calls
+let _cachedAllData: Record<string, Record<string, unknown[]>> | null = null;
+
+async function getAllData(): Promise<
+  Record<string, Record<string, unknown[]>>
+> {
+  if (!_cachedAllData) {
+    _cachedAllData = await loadAllExamData();
+  }
+  return _cachedAllData;
+}
+
+function clearDataCache(): void {
+  _cachedAllData = null;
+}
 
 export interface KpssPastQuizSession {
   id: string;
@@ -31,12 +45,13 @@ export interface KpssPastQuiz {
 /**
  * Aggregates questions for a specific topic across yearly exam archives.
  */
-export function getLocalQuestionsForTopic(
+export async function getLocalQuestionsForTopic(
   subjectKey: string,
   topicName: string,
-): QuizQuestion[] {
+): Promise<QuizQuestion[]> {
+  const allData = await getAllData();
   const aggregated: QuizQuestion[] = [];
-  Object.values(KPSS_YEARLY_DATA).forEach((yearData) => {
+  Object.values(allData).forEach((yearData) => {
     const list = yearData[subjectKey];
     if (Array.isArray(list)) {
       list.forEach((q: unknown) => {
@@ -55,12 +70,12 @@ export function getLocalQuestionsForTopic(
  * Supports countLimit and selectedChapter filtering for Tarih Soru Arşivi (915 Q) & Karma Sınav.
  * Uses KPSS Lisans exam distribution ratios (50% History, 35% Geography, 15% Math) when All subjects selected in Mixed mode.
  */
-export function getPastExamQuestions(
+export async function getPastExamQuestions(
   year: string,
   subject: string,
   countLimit?: number,
   selectedChapter?: string,
-): QuizQuestion[] {
+): Promise<QuizQuestion[]> {
   let questions: QuizQuestion[] = [];
 
   if (year === "tarih_arsivi") {
@@ -114,8 +129,9 @@ export function getPastExamQuestions(
       const geoPool: QuizQuestion[] = [];
       const mathPool: QuizQuestion[] = [];
 
-      Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
-        const yearData = KPSS_YEARLY_DATA[y];
+      const allData = await getAllData();
+      Object.keys(allData).forEach((y) => {
+        const yearData = allData[y];
         if (yearData.tarih)
           historyPool.push(...(yearData.tarih as unknown as QuizQuestion[]));
         if (yearData.cografya)
@@ -139,8 +155,9 @@ export function getPastExamQuestions(
       return shuffle([...pickedHistory, ...pickedGeo, ...pickedMath]);
     } else {
       // Tekil bir ders seçildiyse o dersin tüm yıllardaki sorularını karıştır
-      Object.keys(KPSS_YEARLY_DATA).forEach((y) => {
-        const yearData = KPSS_YEARLY_DATA[y];
+      const allData2 = await getAllData();
+      Object.keys(allData2).forEach((y) => {
+        const yearData = allData2[y];
         const list = yearData[subject];
         if (Array.isArray(list)) {
           questions.push(...(list as unknown as QuizQuestion[]));
@@ -149,7 +166,8 @@ export function getPastExamQuestions(
       questions = [...questions].sort(() => Math.random() - 0.5);
     }
   } else {
-    const yearData = KPSS_YEARLY_DATA[year];
+    const allData3 = await getAllData();
+    const yearData = allData3[year];
     if (yearData) {
       if (subject === "all") {
         Object.values(yearData).forEach((list: unknown[]) => {
@@ -170,3 +188,48 @@ export function getPastExamQuestions(
 
   return questions;
 }
+
+/**
+ * Returns question count for a given exam year and subject.
+ * Used by KpssPastExamsDashboard to display counts without importing data directly.
+ */
+export async function getExamSubjectCount(
+  year: string,
+  subject: string,
+): Promise<number> {
+  if (year === "tarih_arsivi") {
+    return subject === "tarih" || subject === "all" ? 915 : 0;
+  }
+  if (year === "karma") {
+    const allData = await getAllData();
+    let sum = 0;
+    Object.entries(allData).forEach(([yKey, yData]) => {
+      if (yKey !== "tarih_arsivi") {
+        if (subject === "all") {
+          sum +=
+            (yData.tarih?.length || 0) +
+            (yData.cografya?.length || 0) +
+            (yData.matematik?.length || 0);
+        } else if (yData[subject]) {
+          sum += (yData[subject] as unknown[]).length;
+        }
+      }
+    });
+    return sum;
+  }
+
+  const yearData = await loadExamYearData(year);
+  if (!yearData) return 0;
+
+  if (subject === "all") {
+    return (
+      (yearData.tarih?.length || 0) +
+      (yearData.cografya?.length || 0) +
+      (yearData.matematik?.length || 0)
+    );
+  }
+
+  return (yearData[subject] as unknown[] | undefined)?.length || 0;
+}
+
+export { AVAILABLE_EXAM_YEARS };

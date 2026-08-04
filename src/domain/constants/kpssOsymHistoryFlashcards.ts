@@ -6,7 +6,7 @@
  * Kart Arka Yüzü Sadece Doğru Cevap + Temiz İpucu gösterecek biçimde biçimlendirilmiştir.
  */
 
-import osymData from "@/data/kpss/osymHistoryQuestions.json";
+import osymData from "@/services/kpss/data/osymHistoryQuestions.json";
 
 export interface KpssFlashcard {
   id: string;

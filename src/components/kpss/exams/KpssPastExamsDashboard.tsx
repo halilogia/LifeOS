@@ -1,5 +1,5 @@
-import { useState } from "preact/hooks";
-import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
+import { useState, useEffect } from "preact/hooks";
+import { getExamSubjectCount } from "@/services/kpss/kpssQuizService.js";
 
 interface KpssPastExamsDashboardProps {
   t: Record<string, string>;
@@ -99,41 +99,24 @@ export function KpssPastExamsDashboard({
     },
   ];
 
-  const getSubjectCount = (year: string, subject: string) => {
-    if (year === "tarih_arsivi") {
-      return subject === "tarih" || subject === "all" ? 915 : 0;
-    }
-    if (year === "karma") {
-      let sum = 0;
-      Object.entries(KPSS_YEARLY_DATA).forEach(([yKey, yData]) => {
-        if (yKey !== "tarih_arsivi") {
-          if (subject === "all") {
-            sum +=
-              (yData.tarih?.length || 0) +
-              (yData.cografya?.length || 0) +
-              (yData.matematik?.length || 0);
-          } else if (yData[subject]) {
-            sum += yData[subject].length;
-          }
-        }
-      });
-      return sum;
-    }
+  // Subject counts loaded async via service (rule 6.2 compliance)
+  const [subjectCounts, setSubjectCounts] = useState<Record<string, number>>(
+    {},
+  );
 
-    const data = KPSS_YEARLY_DATA[year];
-    if (!data) {
-      return 0;
-    }
+  useEffect(() => {
+    const load = async () => {
+      const counts: Record<string, number> = {};
+      for (const sub of ["cografya", "tarih", "matematik", "all"]) {
+        counts[sub] = await getExamSubjectCount(selectedYear, sub);
+      }
+      setSubjectCounts(counts);
+    };
+    load();
+  }, [selectedYear]);
 
-    if (subject === "all") {
-      return (
-        (data.tarih?.length || 0) +
-        (data.cografya?.length || 0) +
-        (data.matematik?.length || 0)
-      );
-    }
-
-    return data[subject]?.length || 0;
+  const getSubjectCount = (_year: string, subject: string) => {
+    return subjectCounts[subject] ?? 0;
   };
 
   const subjects = [

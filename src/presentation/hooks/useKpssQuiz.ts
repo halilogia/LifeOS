@@ -189,13 +189,13 @@ export function useKpssQuiz({
     setCumulative({ totalQuestions: 0, totalCorrect: 0 });
   };
 
-  const handleStartPastExam = (
+  const handleStartPastExam = async (
     year: string,
     subject: string,
     countLimit?: number,
     selectedChapter?: string,
   ) => {
-    const questions = getPastExamQuestions(
+    const questions = await getPastExamQuestions(
       year,
       subject,
       countLimit,
