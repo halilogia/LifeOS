@@ -173,13 +173,13 @@ export function renderCustomArticleMarkdown(
  */
 export function getSubjectLabel(subj: string): string {
   const labels: Record<string, string> = {
-    tarih: "KPSS Tarih",
-    cografya: "KPSS Coğrafya",
-    vatandaslik: "KPSS Vatandaşlık",
-    turkce: "KPSS Türkçe",
-    matematik: "KPSS Matematik",
+    tarih: "Tarih",
+    cografya: "Coğrafya",
+    vatandaslik: "Vatandaşlık",
+    turkce: "Türkçe",
+    matematik: "Matematik",
   };
-  return labels[subj] || "Genel KPSS";
+  return labels[subj] || "Genel";
 }
 
 function escapeHtmlAttr(str: string): string {

@@ -169,13 +169,13 @@ export function KpssWikiReader({
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#60a5fa",
-                  fontSize: "0.68rem",
+                  fontSize: "0.9rem",
                   cursor: "pointer",
                   padding: 0,
+                  lineHeight: 1,
                 }}
               >
-                ✕
+                ❌
               </button>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>

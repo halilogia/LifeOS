@@ -30,21 +30,7 @@ export function WikiTitleHeader({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-        <h1
-          style={{
-            fontSize: "2.1rem",
-            fontWeight: 800,
-            color: "#ffffff",
-            margin: 0,
-            fontFamily:
-              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-            letterSpacing: "-0.015em",
-          }}
-        >
-          {displayTitle}
-        </h1>
-
-        {/* İçindekiler (liste) ikonu — Wikipedia tarzı açılır panel */}
+        {/* İçindekiler (liste) ikonu — başlığın SOLUNDA, Wikipedia tarzı açılır panel */}
         {hasToc && (
           <button
             type="button"
@@ -66,12 +52,27 @@ export function WikiTitleHeader({
               alignItems: "center",
               justifyContent: "center",
               transition: "all 0.2s ease",
+              flex: "0 0 auto",
             }}
           >
             {/* Madde işaretli liste ikonu */}
             <IconList size={16} strokeWidth={2.2} />
           </button>
         )}
+
+        <h1
+          style={{
+            fontSize: "2.1rem",
+            fontWeight: 800,
+            color: "#ffffff",
+            margin: 0,
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {displayTitle}
+        </h1>
       </div>
 
       {/* Açılır İçindekiler paneli */}
@@ -107,57 +108,27 @@ export function WikiTitleHeader({
             }}
           >
             <span>İçindekiler</span>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {onPin && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTocOpen(false);
-                    onPin();
-                  }}
-                  title="Kenar çubuğuna taşı"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "#94a3b8",
-                    fontSize: "0.68rem",
-                    cursor: "pointer",
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 3,
-                  }}
-                >
-                  {/* Kenar çubuğu ikonu */}
-                  <svg
-                    width="11"
-                    height="11"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <line x1="9" y1="3" x2="9" y2="21" />
-                  </svg>
-                  kenar çubuğuna taşı
-                </button>
-              )}
+            {onPin && (
               <button
                 type="button"
-                onClick={() => setTocOpen(false)}
+                onClick={() => {
+                  setTocOpen(false);
+                  onPin();
+                }}
+                title="Kenar çubuğuna taşı"
+                aria-label="Kenar çubuğuna taşı"
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#60a5fa",
-                  fontSize: "0.68rem",
+                  fontSize: "0.95rem",
                   cursor: "pointer",
                   padding: 0,
+                  lineHeight: 1,
                 }}
               >
-                gizle
+                📌
               </button>
-            </div>
+            )}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {tableOfContents.map((item, idx) => {
