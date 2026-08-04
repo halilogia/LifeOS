@@ -3,6 +3,13 @@
  * Presentational Toolbar for KPSS Not Stüdyosu.
  * Mode tabs (read/edit) + Fullscreen + Sync (Electron) + MD download + Help + Graph + Delete.
  */
+import {
+  IconFullscreen,
+  IconDownload,
+  IconGraph,
+  IconTrash,
+  IconInfo,
+} from "../kpssIcons.js";
 
 interface KpssNotesToolbarProps {
   t: Record<string, string>;
@@ -87,16 +94,7 @@ export function KpssNotesToolbar({
             gap: "5px",
           }}
         >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-          >
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-          </svg>
+          <IconFullscreen size={13} strokeWidth={2.2} />
         </button>
 
         {/* Export Action: Download Markdown */}
@@ -109,16 +107,14 @@ export function KpssNotesToolbar({
             border: "1px solid rgba(59, 130, 246, 0.3)",
             color: "#60a5fa",
             borderRadius: "6px",
-            padding: "4px 10px",
-            fontSize: "0.72rem",
-            fontWeight: 700,
+            padding: "4px 8px",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
-            gap: "4px",
+            justifyContent: "center",
           }}
         >
-          <span>.md İndir</span>
+          <IconDownload size={14} strokeWidth={2.2} />
         </button>
 
         {/* Masaüstü Senkronizasyonu (yalnızca Electron exe'de görünür) */}
@@ -182,7 +178,7 @@ export function KpssNotesToolbar({
             transition: "all 0.2s ease",
           }}
         >
-          !
+          <IconInfo size={13} strokeWidth={2.2} />
         </button>
 
         {/* Icon-Only Neural Graph Button */}
@@ -203,21 +199,7 @@ export function KpssNotesToolbar({
             transition: "all 0.2s ease",
           }}
         >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="6" cy="6" r="3"></circle>
-            <circle cx="18" cy="6" r="3"></circle>
-            <circle cx="12" cy="18" r="3"></circle>
-            <line x1="8.5" y1="7.5" x2="15.5" y2="7.5"></line>
-            <line x1="7.5" y1="8.5" x2="10.5" y2="15.5"></line>
-            <line x1="16.5" y1="8.5" x2="13.5" y2="15.5"></line>
-          </svg>
+          <IconGraph size={14} />
         </button>
 
         <button
@@ -235,17 +217,7 @@ export function KpssNotesToolbar({
             alignItems: "center",
           }}
         >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
+          <IconTrash size={13} strokeWidth={2} />
         </button>
       </div>
     </div>

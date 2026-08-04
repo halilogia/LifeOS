@@ -34,7 +34,7 @@ export function KpssQuizResultStep({
   onClose,
 }: KpssQuizResultStepProps) {
   const handleExportTxt = () => {
-    let text = `KPSS Sınav Raporu\n`;
+    let text = `Sınav Raporu\n`;
     text += `Ders: ${subjectNames[currentSubject] || currentSubject}\n`;
     text += `Konu: ${activeQuizTopic}\n`;
     text += `Skor: %${quizResultScore}\n`;
@@ -63,7 +63,7 @@ export function KpssQuizResultStep({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `KPSS_Sinav_${currentSubject}_${activeQuizTopic?.replace(/\s+/g, "_")}.txt`;
+    link.download = `Sinav_${currentSubject}_${activeQuizTopic?.replace(/\s+/g, "_")}.txt`;
     link.click();
     URL.revokeObjectURL(url);
   };
