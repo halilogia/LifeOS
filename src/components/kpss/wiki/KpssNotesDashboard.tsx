@@ -162,7 +162,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           selectedNoteId={selectedNote?.id ?? null}
           searchQuery={searchQuery}
           selectedSubjectFilter={selectedSubjectFilter}
-          tableOfContents={tableOfContents}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
           onSearchChange={setSearchQuery}
@@ -170,7 +169,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           onSelectNote={selectNote}
           onCreateNewNote={handleCreateNewNote}
           onAddChildNote={handleAddChildNote}
-          onNavigateToc={handleTocNavigate}
         />
 
         <div
@@ -210,6 +208,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                   allNotes={notes}
                   tableOfContents={tableOfContents}
                   onWikilinkClick={handleWikilinkClick}
+                  onNavigateToc={handleTocNavigate}
                 />
               ) : (
                 <KpssWikiEditor

@@ -1,14 +1,13 @@
 /**
  * KpssWikiReader.tsx
- * Wikipedia tarzı makale okuma ve içindekiler menüsü.
+ * Makale okuma alanı.
  * 
- * Tema Standardı:
- * - Mor/Violet Accent renk tonları
- * - Sıfır emoji (❌, 📌 kaldırılmıştır)
- * - Sol kenar çubuğunda açılan/gizlenen Wikipedia tarzı İçindekiler menüsü
+ * Özellikler:
+ * - İkon başlığın hemen SOLUNDA aynı hizada yer alır.
+ * - İkona tıklandığında z-index'li floating Popup olarak açılır (sabitlenme yok, sadece popup).
  */
 
-import { useState, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import type { KpssWikiNote, HeadingItem } from "@/services/kpss/kpssWikiService.js";
 import { extractHeadings } from "@/services/kpss/kpssWikiService.js";
@@ -23,6 +22,7 @@ interface KpssWikiReaderProps {
   allNotes: KpssWikiNote[];
   tableOfContents?: HeadingItem[];
   onWikilinkClick: (e: MouseEvent) => void;
+  onNavigateToc?: (index: number) => void;
 }
 
 export function KpssWikiReader({
@@ -32,10 +32,8 @@ export function KpssWikiReader({
   allNotes,
   tableOfContents: externalToc,
   onWikilinkClick,
+  onNavigateToc,
 }: KpssWikiReaderProps) {
-  // Sol kenar çubuğunda İçindekiler sabitlenmiş mi?
-  const [tocPinned, setTocPinned] = useState(false);
-
   if (!note) {
     return (
       <div
@@ -62,6 +60,10 @@ export function KpssWikiReader({
   const displayTitle = note.title || "Ders Notu";
 
   const handleTocNavigate = (index: number) => {
+    if (onNavigateToc) {
+      onNavigateToc(index);
+      return;
+    }
     const item = tableOfContents[index];
     if (!item) return;
 
@@ -73,8 +75,6 @@ export function KpssWikiReader({
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-
-  const pinnedToc = tableOfContents.length > 0 && tocPinned;
 
   // Infobox için metin metrikleri
   const contentText = note.content || "";
@@ -112,146 +112,22 @@ export function KpssWikiReader({
         boxSizing: "border-box",
       }}
     >
-      {/* Article Title Header — Sol tarafta Wikipedia tarzı İçindekiler ikonu/butonu */}
+      {/* Başlık Satırı — Sol tarafında yazısız İçindekiler ikonu */}
       <WikiTitleHeader
         displayTitle={displayTitle}
         tableOfContents={tableOfContents}
         onNavigate={handleTocNavigate}
-        onToggleSidebar={() => setTocPinned((p) => !p)}
-        isSidebarPinned={pinnedToc}
       />
 
-      {/* Wikipedia Reader Grid (Sol İçindekiler Kenar Çubuğu + İçerik + Sağ Infobox) */}
+      {/* Makale Okuma Ekranı — İçi daraltılmayan temiz 2 sütunlu düzen (Metin + Infobox) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: pinnedToc ? "220px 1fr 240px" : "1fr 240px",
+          gridTemplateColumns: "1fr 240px",
           gap: "24px",
           alignItems: "start",
         }}
       >
-        {/* Sol Kenar Çubuğu: Wikipedia Tarzı İçindekiler Paneli */}
-        {pinnedToc && (
-          <div
-            style={{
-              position: "sticky",
-              top: 0,
-              background: "rgba(18, 18, 26, 0.75)",
-              border: "1px solid var(--card-border)",
-              borderRadius: "12px",
-              padding: "12px 14px",
-              maxHeight: "calc(100vh - 160px)",
-              overflowY: "auto",
-              backdropFilter: "blur(12px)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                fontWeight: 700,
-                fontSize: "0.82rem",
-                color: "#c084fc",
-                borderBottom: "1px solid var(--card-border)",
-                paddingBottom: "8px",
-                marginBottom: "10px",
-              }}
-            >
-              <span>İçindekiler</span>
-              <button
-                type="button"
-                onClick={() => setTocPinned(false)}
-                title="Gizle"
-                style={{
-                  background: "rgba(255, 255, 255, 0.05)",
-                  border: "1px solid var(--card-border)",
-                  borderRadius: "4px",
-                  color: "var(--text-secondary)",
-                  fontSize: "0.7rem",
-                  padding: "2px 6px",
-                  cursor: "pointer",
-                  lineHeight: 1,
-                }}
-              >
-                gizle
-              </button>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-              {tableOfContents.map((item, idx) => {
-                const depth = item.level - 1;
-                const isSub = depth > 0;
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      display: "flex",
-                      alignItems: "stretch",
-                      position: "relative",
-                    }}
-                  >
-                    {isSub && (
-                      <div
-                        style={{
-                          width: 10,
-                          position: "relative",
-                          flex: "0 0 auto",
-                          borderLeft: "1.5px solid rgba(139, 92, 246, 0.35)",
-                          marginLeft: (depth - 1) * 8,
-                        }}
-                      />
-                    )}
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleTocNavigate(idx);
-                      }}
-                      style={{
-                        color: isSub ? "var(--text-secondary)" : "#e2e8f0",
-                        fontSize: isSub ? "0.76rem" : "0.8rem",
-                        fontWeight: isSub ? 400 : 600,
-                        textDecoration: "none",
-                        paddingLeft: isSub ? "4px" : "0px",
-                        paddingTop: "3px",
-                        paddingBottom: "3px",
-                        borderRadius: "4px",
-                        lineHeight: 1.4,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        flex: 1,
-                        minWidth: 0,
-                        transition: "color 0.2s ease",
-                      }}
-                      onMouseEnter={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color = "#c084fc")
-                      }
-                      onMouseLeave={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color = isSub
-                          ? "var(--text-secondary)"
-                          : "#e2e8f0")
-                      }
-                    >
-                      <span
-                        style={{
-                          color: "#64748b",
-                          marginRight: "6px",
-                          fontSize: "0.7rem",
-                        }}
-                      >
-                        {idx + 1}.
-                      </span>
-                      {item.text}
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
         {/* Ana Makale İçeriği */}
         <WikiArticleBody
           note={note}
