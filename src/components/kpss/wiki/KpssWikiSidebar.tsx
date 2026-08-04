@@ -1,13 +1,11 @@
 /**
  * KpssWikiSidebar.tsx
- * Presentational Left Sidebar component for search, filtering, hierarchical note tree,
- * and pinned Table of Contents / Child Notes.
+ * Presentational Left Sidebar component for search, filtering and hierarchical note tree.
  */
 import { Language } from "@/types/types.js";
-import type { KpssWikiNote, HeadingItem } from "@/services/kpss/kpssWikiService.js";
+import type { KpssWikiNote } from "@/services/kpss/kpssWikiService.js";
 import { WikiSearchFilterBar } from "./WikiSearchFilterBar.js";
 import { WikiNoteTree } from "./WikiNoteTree.js";
-import { IconList } from "../kpssIcons.js";
 
 interface KpssWikiSidebarProps {
   lang: Language;
@@ -16,7 +14,6 @@ interface KpssWikiSidebarProps {
   selectedNoteId: string | null;
   searchQuery: string;
   selectedSubjectFilter: string;
-  tableOfContents?: HeadingItem[];
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
   onSearchChange: (q: string) => void;
@@ -24,7 +21,6 @@ interface KpssWikiSidebarProps {
   onSelectNote: (note: KpssWikiNote) => void;
   onCreateNewNote: () => void;
   onAddChildNote: (parent: KpssWikiNote) => void;
-  onNavigateToc?: (index: number) => void;
 }
 
 export function KpssWikiSidebar({
@@ -34,7 +30,6 @@ export function KpssWikiSidebar({
   selectedNoteId,
   searchQuery,
   selectedSubjectFilter,
-  tableOfContents = [],
   isCollapsed = false,
   onToggleCollapse,
   onSearchChange,
@@ -42,7 +37,6 @@ export function KpssWikiSidebar({
   onSelectNote,
   onCreateNewNote,
   onAddChildNote,
-  onNavigateToc,
 }: KpssWikiSidebarProps) {
   if (isCollapsed) {
     return (
@@ -172,81 +166,7 @@ export function KpssWikiSidebar({
         />
       </div>
 
-      {/* Sol Paneline Sabitlenmiş İçindekiler / Alt Notlar Bloğu */}
-      {tableOfContents.length > 0 && (
-        <div
-          style={{
-            borderTop: "1px solid var(--card-border)",
-            paddingTop: "10px",
-            marginTop: "6px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              fontSize: "0.8rem",
-              fontWeight: 700,
-              color: "#c084fc",
-              marginBottom: "8px",
-            }}
-          >
-            <IconList size={15} strokeWidth={2.2} />
-            <span>İçindekiler / Alt Notlar</span>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "4px",
-              maxHeight: "180px",
-              overflowY: "auto",
-            }}
-          >
-            {tableOfContents.map((item, idx) => {
-              const depth = item.level - 1;
-              const isSub = depth > 0;
-              return (
-                <a
-                  key={idx}
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onNavigateToc?.(idx);
-                  }}
-                  style={{
-                    color: isSub ? "var(--text-secondary)" : "#e2e8f0",
-                    fontSize: isSub ? "0.74rem" : "0.78rem",
-                    fontWeight: isSub ? 400 : 600,
-                    textDecoration: "none",
-                    paddingLeft: isSub ? `${depth * 10}px` : "2px",
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    display: "block",
-                    transition: "color 0.2s ease",
-                  }}
-                  onMouseEnter={(e) =>
-                    ((e.currentTarget as HTMLElement).style.color = "#c084fc")
-                  }
-                  onMouseLeave={(e) =>
-                    ((e.currentTarget as HTMLElement).style.color = isSub
-                      ? "var(--text-secondary)"
-                      : "#e2e8f0")
-                  }
-                >
-                  {item.text}
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
+

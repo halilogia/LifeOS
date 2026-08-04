@@ -1,11 +1,11 @@
 /**
  * WikiTitleHeader.tsx
- * Ders notu başlığı ve İçindekiler tetikleyici paneli.
+ * Ders notu başlığı ve İçindekiler ikonu.
  * 
- * Düzeltmeler:
- * - Kelime kesintilerini önleme (word-break: break-word, sığmayan kelime alt satıra geçer)
- * - Buton ile başlık üst üste binmez (temiz dikey akış)
- * - 1. 2. madde numaraları kaldırılmıştır (sadece alt not ve başlık metinleri görünür)
+ * Özellikler:
+ * - İkon başlığın hemen SOLUNDA aynı hizada yer alır.
+ * - İkona tıklandığında önüne floating Popup paneli açılır (sabitlenme yok, sadece popup).
+ * - Popup içinde "X" kapatma ikonu bulunur.
  */
 
 import { useState } from "preact/hooks";
@@ -14,21 +14,16 @@ import { IconList } from "../kpssIcons.js";
 
 interface WikiTitleHeaderProps {
   displayTitle: string;
-  /** İçindekiler / Alt Notlar listesi */
+  /** İçindekiler listesi */
   tableOfContents?: HeadingItem[];
   /** Bir başlığa tıklanınca çağrılır */
   onNavigate?: (index: number) => void;
-  /** Kenar çubuğuna sabitleme / açma toggle */
-  onToggleSidebar?: () => void;
-  isSidebarPinned?: boolean;
 }
 
 export function WikiTitleHeader({
   displayTitle,
   tableOfContents = [],
   onNavigate,
-  onToggleSidebar,
-  isSidebarPinned = false,
 }: WikiTitleHeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const hasToc = tableOfContents.length > 0;
@@ -45,52 +40,47 @@ export function WikiTitleHeader({
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
           alignItems: "flex-start",
           gap: "12px",
           width: "100%",
         }}
       >
-        {/* İçindekiler Butonu */}
+        {/* İçindekiler İkonu — Başlığın HEMEN SOLUNDA */}
         {hasToc && (
           <button
             type="button"
             onClick={() => {
-              if (onToggleSidebar) {
-                onToggleSidebar();
-              } else {
-                setDropdownOpen((prev) => !prev);
-              }
+              setDropdownOpen((prev) => !prev);
             }}
-            title="İçindekiler / Alt Notlar"
+            title="İçindekiler"
             aria-label="İçindekiler"
             style={{
               background:
-                isSidebarPinned || dropdownOpen
-                  ? "rgba(139, 92, 246, 0.2)"
-                  : "rgba(255, 255, 255, 0.04)",
+                dropdownOpen
+                  ? "rgba(139, 92, 246, 0.25)"
+                  : "rgba(255, 255, 255, 0.05)",
               border:
-                isSidebarPinned || dropdownOpen
-                  ? "1px solid rgba(139, 92, 246, 0.45)"
+                dropdownOpen
+                  ? "1px solid rgba(139, 92, 246, 0.5)"
                   : "1px solid var(--card-border)",
-              color: isSidebarPinned || dropdownOpen ? "#c084fc" : "var(--text-secondary)",
+              color: dropdownOpen ? "#c084fc" : "var(--text-secondary)",
               borderRadius: "8px",
-              padding: "6px 12px",
+              width: "36px",
+              height: "36px",
+              minWidth: "36px",
               cursor: "pointer",
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
-              gap: "8px",
-              fontSize: "0.82rem",
-              fontWeight: 600,
+              justifyContent: "center",
               transition: "all 0.2s ease",
+              marginTop: "4px",
             }}
           >
-            <IconList size={16} strokeWidth={2.2} />
-            <span>İçindekiler</span>
+            <IconList size={18} strokeWidth={2.2} />
           </button>
         )}
 
-        {/* Ana Başlık - Kelime Bölünmesini Önleme */}
+        {/* Ana Başlık */}
         <h1
           style={{
             fontSize: "2rem",
@@ -104,15 +94,16 @@ export function WikiTitleHeader({
             wordBreak: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "normal",
-            width: "100%",
+            flex: 1,
+            minWidth: 0,
           }}
         >
           {displayTitle}
         </h1>
       </div>
 
-      {/* Açılır Popover İçindekiler / Alt Notlar */}
-      {dropdownOpen && !isSidebarPinned && hasToc && (
+      {/* Açılır Popover İçindekiler (Sadece Popup) */}
+      {dropdownOpen && hasToc && (
         <div
           style={{
             position: "absolute",
@@ -123,9 +114,9 @@ export function WikiTitleHeader({
             border: "1px solid var(--card-border)",
             borderRadius: "12px",
             padding: "12px 14px",
-            maxWidth: "340px",
-            width: "90%",
-            maxHeight: "360px",
+            maxWidth: "220px",
+            width: "55%",
+            maxHeight: "340px",
             overflowY: "auto",
             zIndex: 100,
             backdropFilter: "blur(16px)",
@@ -145,24 +136,39 @@ export function WikiTitleHeader({
               alignItems: "center",
             }}
           >
-            <span>İçindekiler / Alt Notlar</span>
+            <span>İçindekiler</span>
+            {/* Kapatma X İkonu */}
             <button
               type="button"
-              onClick={() => {
-                setDropdownOpen(false);
-                onToggleSidebar?.();
-              }}
+              onClick={() => setDropdownOpen(false)}
+              title="Kapat"
+              aria-label="Kapat"
               style={{
                 background: "rgba(255, 255, 255, 0.05)",
                 border: "1px solid var(--card-border)",
                 borderRadius: "6px",
                 color: "var(--text-secondary)",
-                fontSize: "0.72rem",
-                padding: "2px 8px",
+                width: "26px",
+                height: "26px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 cursor: "pointer",
               }}
             >
-              Sol panele sabitle
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </div>
 

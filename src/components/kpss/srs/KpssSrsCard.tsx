@@ -150,19 +150,6 @@ export function KpssSrsCard({
             >
               {card.question}
             </p>
-            <span
-              style={{
-                fontSize: "0.8rem",
-                opacity: 0.5,
-                marginTop: "24px",
-                display: "inline-block",
-                background: "rgba(255,255,255,0.05)",
-                padding: "4px 10px",
-                borderRadius: "20px",
-              }}
-            >
-              💡 {t.kpss_srs_click_to_see}
-            </span>
           </div>
           <div
             className="flashcard-side flashcard-back"
