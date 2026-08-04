@@ -49,7 +49,7 @@ export function QuizResultHero({
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        marginBottom: "16px",
+        marginBottom: "10px",
       }}
     >
       {/* Üst Bar: Sonuç Rozeti ve Durum etiketleri */}

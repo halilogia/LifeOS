@@ -166,14 +166,23 @@ export function KpssSrsCard({
           </div>
           <div
             className="flashcard-side flashcard-back"
-            style={{ boxSizing: "border-box", padding: "30px" }}
+            style={{
+              boxSizing: "border-box",
+              padding: "24px",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
             <p
               style={{
-                fontSize: "1.45rem",
+                fontSize: "1.15rem",
                 fontWeight: "700",
                 color: "var(--accent-color)",
-                marginBottom: "12px",
+                marginBottom: "10px",
+                lineHeight: 1.4,
               }}
             >
               {card.answer}
@@ -181,13 +190,14 @@ export function KpssSrsCard({
             {card.hint && (
               <p
                 style={{
-                  fontSize: "0.9rem",
-                  opacity: 0.6,
+                  fontSize: "0.82rem",
+                  opacity: 0.7,
                   fontStyle: "italic",
                   color: "var(--text-secondary)",
+                  lineHeight: 1.3,
+                  marginTop: "6px",
                 }}
               >
-                {t.kpss_srs_hint}
                 {card.hint}
               </p>
             )}

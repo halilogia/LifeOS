@@ -1,15 +1,15 @@
 interface QuizResultActionsProps {
   t: Record<string, string>;
+  hasPastQuestions?: boolean;
+  onReviewQuestions: () => void;
   onRetakeQuiz: () => void;
-  onExport: () => void;
-  onClose: () => void;
 }
 
 export function QuizResultActions({
   t,
+  hasPastQuestions = true,
+  onReviewQuestions,
   onRetakeQuiz,
-  onExport,
-  onClose,
 }: QuizResultActionsProps) {
   return (
     <div
@@ -19,45 +19,41 @@ export function QuizResultActions({
         display: "flex",
         flexDirection: "column",
         gap: "10px",
+        marginTop: "12px",
       }}
     >
-      <div style={{ display: "flex", gap: "10px", width: "100%" }}>
+      {/* Ana Aksiyon: Geçmiş Testleri İncele */}
+      {hasPastQuestions && (
         <button
-          className="kpss-qcount-btn"
+          className="kpss-external-open-btn"
           style={{
-            flex: 1,
-            padding: "12px 0",
-            fontWeight: 600,
-            fontSize: "0.9rem",
+            width: "100%",
+            padding: "13px",
+            fontSize: "0.95rem",
+            fontWeight: 700,
+            justifyContent: "center",
+            background: "rgba(139, 92, 246, 0.2)",
+            border: "1px solid rgba(139, 92, 246, 0.4)",
+            color: "#e2e8f0",
           }}
-          onClick={onRetakeQuiz}
+          onClick={onReviewQuestions}
         >
-          {t.kpss_quiz_retake}
+          Geçmiş Testleri İncele
         </button>
-        <button
-          className="kpss-qcount-btn"
-          style={{
-            flex: 1,
-            padding: "12px 0",
-            fontWeight: 600,
-            fontSize: "0.9rem",
-          }}
-          onClick={onExport}
-        >
-          {t.kpss_quiz_export}
-        </button>
-      </div>
+      )}
+
+      {/* İkincil Aksiyon: Seviyeni Tekrar Çöz */}
       <button
-        className="settings-add-btn"
+        className="kpss-qcount-btn"
         style={{
           width: "100%",
-          padding: "14px 20px",
-          fontSize: "1rem",
-          fontWeight: 700,
+          padding: "12px 0",
+          fontWeight: 600,
+          fontSize: "0.88rem",
         }}
-        onClick={onClose}
+        onClick={onRetakeQuiz}
       >
-        {t.kpss_quiz_close}
+        {t.kpss_quiz_retake || "Seviyeni Tekrar Çöz"}
       </button>
     </div>
   );

@@ -1,95 +1,70 @@
 /**
  * KpssWikiReader.tsx
- * Wikipedia-style Article Reader Component.
- * Tuval: state + memo'lar + 4 parçanın kompozisyonu (WikiTitleHeader, WikiArticleBody, WikiInfobox).
+ * Wikipedia tarzı makale okuma ve içindekiler menüsü.
+ * 
+ * Tema Standardı:
+ * - Mor/Violet Accent renk tonları
+ * - Sıfır emoji (❌, 📌 kaldırılmıştır)
+ * - Sol kenar çubuğunda açılan/gizlenen Wikipedia tarzı İçindekiler menüsü
  */
-import { useMemo, useState } from "preact/hooks";
+
+import { useState, useMemo } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import {
-  KpssWikiNote,
-  HeadingItem,
-  extractTitleFromContent,
-  extractFirstImageUrl,
-} from "@/services/kpss/kpssWikiService.js";
-import { WikiTitleHeader } from "./WikiTitleHeader.js";
-import { WikiArticleBody } from "./WikiArticleBody.js";
+import type { KpssWikiNote, HeadingItem } from "@/services/kpss/kpssWikiService.js";
+import { extractHeadings } from "@/services/kpss/kpssWikiService.js";
 import { WikiInfobox } from "./WikiInfobox.js";
+import { WikiArticleBody } from "./WikiArticleBody.js";
+import { WikiTitleHeader } from "./WikiTitleHeader.js";
 
 interface KpssWikiReaderProps {
   lang: Language;
   t: Record<string, string>;
-  note: KpssWikiNote;
+  note: KpssWikiNote | null;
   allNotes: KpssWikiNote[];
-  tableOfContents: HeadingItem[];
+  tableOfContents?: HeadingItem[];
   onWikilinkClick: (e: MouseEvent) => void;
 }
 
 export function KpssWikiReader({
-  lang,
-  t,
+  lang: _lang,
+  t: _t,
   note,
   allNotes,
-  tableOfContents,
+  tableOfContents: externalToc,
   onWikilinkClick,
 }: KpssWikiReaderProps) {
+  // Sol kenar çubuğunda İçindekiler sabitlenmiş mi?
   const [tocPinned, setTocPinned] = useState(false);
-  const displayTitle =
-    note.title.trim() || extractTitleFromContent(note.content) || "";
 
-  // Extract first image URL for Infobox Featured Media
-  const imageUrl = useMemo(() => {
-    return extractFirstImageUrl(note.content);
-  }, [note.content]);
+  if (!note) {
+    return (
+      <div
+        className="kpss-auto-planner-card"
+        style={{
+          width: "100%",
+          padding: "40px 24px",
+          textAlign: "center",
+          color: "var(--text-secondary)",
+          fontSize: "0.95rem",
+        }}
+      >
+        Lütfen incelemek istediğiniz bir ders notu seçiniz.
+      </div>
+    );
+  }
 
-  // Extract outbound wikilinks from article content [[Target Title]]
-  const outboundWikilinks = useMemo(() => {
-    if (!note || !note.content) {
-      return [];
-    }
-    const regex = /\[\[(.*?)\]\]/g;
-    const matches: string[] = [];
-    let match;
-    while ((match = regex.exec(note.content)) !== null) {
-      const title = match[1].trim();
-      if (title && !matches.includes(title)) {
-        matches.push(title);
-      }
-    }
-    return matches;
-  }, [note.content]);
+  // Not içeriğinden başlıkları ayrıştır veya prop'tan al
+  const tableOfContents = useMemo(
+    () => externalToc || extractHeadings(note.content || ""),
+    [externalToc, note.content],
+  );
 
-  // Calculate word count & estimated reading time
-  const wordCount = useMemo(() => {
-    if (!note || !note.content) {
-      return 0;
-    }
-    return note.content.trim().split(/\s+/).filter(Boolean).length;
-  }, [note.content]);
+  const displayTitle = note.title || "Ders Notu";
 
-  const readingTimeMinutes = useMemo(() => {
-    return Math.max(1, Math.ceil(wordCount / 180));
-  }, [wordCount]);
+  const handleTocNavigate = (index: number) => {
+    const item = tableOfContents[index];
+    if (!item) return;
 
-  // Calculate Backlinks: find other notes that reference this note's title
-  const backlinks = useMemo(() => {
-    if (!note || !note.title || note.title.trim().length < 3) {
-      return [];
-    }
-    const cleanTitle = note.title.trim().toLowerCase();
-    return allNotes.filter((n) => {
-      if (n.id === note.id) {
-        return false;
-      }
-      return n.content.toLowerCase().includes(cleanTitle);
-    });
-  }, [note, allNotes]);
-
-  const handleTocNavigate = (idx: number) => {
-    const item = tableOfContents[idx];
-    if (!item) {
-      return;
-    }
-    // İçerikte başlık metnini bul ve kaydır
     const headings = Array.from(document.querySelectorAll("h2, h3, h4"));
     const target = headings.find(
       (h) => h.textContent && h.textContent.includes(item.text),
@@ -99,8 +74,28 @@ export function KpssWikiReader({
     }
   };
 
-  // Kenar çubuğuna sabitlenmiş İçindekiler
   const pinnedToc = tableOfContents.length > 0 && tocPinned;
+
+  // Infobox için metin metrikleri
+  const contentText = note.content || "";
+  const wordCount = useMemo(
+    () => contentText.trim().split(/\s+/).filter(Boolean).length,
+    [contentText],
+  );
+  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+  // Geri bağlantılar (backlinks)
+  const backlinks = useMemo(() => {
+    return allNotes.filter(
+      (other) =>
+        other.id !== note.id &&
+        other.content?.toLowerCase().includes(`[[${note.title.toLowerCase()}]]`),
+    );
+  }, [allNotes, note]);
+
+  const rawNote = note as unknown as Record<string, unknown>;
+  const imageUrl = (rawNote.imageUrl as string) || null;
+  const outboundWikilinks = (rawNote.wikilinks as string[]) || [];
 
   return (
     <div
@@ -117,35 +112,37 @@ export function KpssWikiReader({
         boxSizing: "border-box",
       }}
     >
-      {/* Article Title Header — sağda İçindekiler ikonu */}
+      {/* Article Title Header — Sol tarafta Wikipedia tarzı İçindekiler ikonu/butonu */}
       <WikiTitleHeader
         displayTitle={displayTitle}
         tableOfContents={tableOfContents}
         onNavigate={handleTocNavigate}
-        onPin={() => setTocPinned(true)}
+        onToggleSidebar={() => setTocPinned((p) => !p)}
+        isSidebarPinned={pinnedToc}
       />
 
-      {/* Wikipedia Reader Grid (Left Pinned TOC + Content + Right Infobox) */}
+      {/* Wikipedia Reader Grid (Sol İçindekiler Kenar Çubuğu + İçerik + Sağ Infobox) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: pinnedToc ? "200px 1fr 220px" : "1fr 220px",
+          gridTemplateColumns: pinnedToc ? "220px 1fr 240px" : "1fr 240px",
           gap: "24px",
           alignItems: "start",
         }}
       >
-        {/* Sol Kenar Çubuğu: Sabitlenmiş İçindekiler */}
+        {/* Sol Kenar Çubuğu: Wikipedia Tarzı İçindekiler Paneli */}
         {pinnedToc && (
           <div
             style={{
               position: "sticky",
               top: 0,
-              background: "rgba(15, 23, 42, 0.55)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "8px",
-              padding: "10px 12px",
+              background: "rgba(18, 18, 26, 0.75)",
+              border: "1px solid var(--card-border)",
+              borderRadius: "12px",
+              padding: "12px 14px",
               maxHeight: "calc(100vh - 160px)",
               overflowY: "auto",
+              backdropFilter: "blur(12px)",
             }}
           >
             <div
@@ -153,61 +150,57 @@ export function KpssWikiReader({
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                fontWeight: 800,
-                fontSize: "0.78rem",
-                color: "#cbd5e1",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-                paddingBottom: 6,
-                marginBottom: 8,
+                fontWeight: 700,
+                fontSize: "0.82rem",
+                color: "#c084fc",
+                borderBottom: "1px solid var(--card-border)",
+                paddingBottom: "8px",
+                marginBottom: "10px",
               }}
             >
               <span>İçindekiler</span>
               <button
                 type="button"
                 onClick={() => setTocPinned(false)}
-                title="Kenar çubuğundan kaldır"
+                title="Gizle"
                 style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: "0.9rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid var(--card-border)",
+                  borderRadius: "4px",
+                  color: "var(--text-secondary)",
+                  fontSize: "0.7rem",
+                  padding: "2px 6px",
                   cursor: "pointer",
-                  padding: 0,
                   lineHeight: 1,
                 }}
               >
-                ❌
+                gizle
               </button>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
               {tableOfContents.map((item, idx) => {
                 const depth = item.level - 1;
                 const isSub = depth > 0;
                 return (
                   <div
                     key={idx}
-                    style={{ display: "flex", alignItems: "stretch", position: "relative" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "stretch",
+                      position: "relative",
+                    }}
                   >
                     {isSub && (
                       <div
                         style={{
-                          width: 12,
+                          width: 10,
                           position: "relative",
                           flex: "0 0 auto",
-                          borderLeft: "1.5px solid rgba(96, 165, 250, 0.35)",
-                          marginLeft: (depth - 1) * 10,
+                          borderLeft: "1.5px solid rgba(139, 92, 246, 0.35)",
+                          marginLeft: (depth - 1) * 8,
                         }}
-                      >
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: 0,
-                            width: 10,
-                            height: 1.5,
-                            background: "rgba(96, 165, 250, 0.35)",
-                          }}
-                        />
-                      </div>
+                      />
                     )}
                     <a
                       href="#"
@@ -216,34 +209,39 @@ export function KpssWikiReader({
                         handleTocNavigate(idx);
                       }}
                       style={{
-                        color: isSub ? "#7da7d9" : "#94a3b8",
-                        fontSize: isSub ? "0.71rem" : "0.75rem",
-                        fontWeight: isSub ? 500 : 600,
+                        color: isSub ? "var(--text-secondary)" : "#e2e8f0",
+                        fontSize: isSub ? "0.76rem" : "0.8rem",
+                        fontWeight: isSub ? 400 : 600,
                         textDecoration: "none",
-                        paddingLeft: isSub ? 6 : 0,
-                        paddingRight: 4,
-                        paddingTop: 2,
-                        paddingBottom: 2,
-                        borderRadius: 4,
+                        paddingLeft: isSub ? "4px" : "0px",
+                        paddingTop: "3px",
+                        paddingBottom: "3px",
+                        borderRadius: "4px",
                         lineHeight: 1.4,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
-                        cursor: "pointer",
                         flex: 1,
                         minWidth: 0,
+                        transition: "color 0.2s ease",
                       }}
                       onMouseEnter={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color = "#60a5fa")
+                        ((e.currentTarget as HTMLElement).style.color = "#c084fc")
                       }
                       onMouseLeave={(e) =>
                         ((e.currentTarget as HTMLElement).style.color = isSub
-                          ? "#7da7d9"
-                          : "#94a3b8")
+                          ? "var(--text-secondary)"
+                          : "#e2e8f0")
                       }
                     >
-                      <span style={{ color: "#475569", marginRight: 5, fontSize: "0.66rem" }}>
-                        {idx + 1}
+                      <span
+                        style={{
+                          color: "#64748b",
+                          marginRight: "6px",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        {idx + 1}.
                       </span>
                       {item.text}
                     </a>
@@ -254,22 +252,22 @@ export function KpssWikiReader({
           </div>
         )}
 
-        {/* Center Column: Article Body */}
+        {/* Ana Makale İçeriği */}
         <WikiArticleBody
           note={note}
           allNotes={allNotes}
           onWikilinkClick={onWikilinkClick}
         />
 
-        {/* Right Column: Infobox Card */}
+        {/* Sağ Bilgi Kutusu (Infobox) */}
         <WikiInfobox
           note={note}
           displayTitle={displayTitle}
-          subject={note.subject}
+          subject={note.subject || "Tarih"}
           imageUrl={imageUrl}
           readingTimeMinutes={readingTimeMinutes}
           wordCount={wordCount}
-          updatedAt={note.updatedAt || note.createdAt}
+          updatedAt={note.updatedAt || Date.now()}
           outboundWikilinks={outboundWikilinks}
           backlinks={backlinks}
           onWikilinkClick={onWikilinkClick}

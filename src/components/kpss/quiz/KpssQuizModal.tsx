@@ -126,7 +126,7 @@ export function KpssQuizModal({
         </div>
 
         {/* Body Content */}
-        <div className="settings-body" style={{ padding: "20px" }}>
+        <div className="settings-body" style={{ padding: "10px 20px 20px" }}>
           {/* ── Harici AI Launcher ── */}
           {isInExternalFlow && internalMode === "external-launcher" && (
             <KpssExternalQuizLauncher

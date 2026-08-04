@@ -3,8 +3,36 @@ import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 
 interface KpssPastExamsDashboardProps {
   t: Record<string, string>;
-  onStartPastExam: (year: string, subject: string) => void;
+  onStartPastExam: (
+    year: string,
+    subject: string,
+    countLimit?: number,
+    selectedChapter?: string,
+  ) => void;
 }
+
+// 📜 KPSS Tarih Çıkmış Sorular PDF Tam 18 Ünite Listesi
+const TARIH_CHAPTERS = [
+  { id: "all", label: "Tüm Üniteler (Karma)" },
+  { id: "İslamiyet Öncesi Türk Tarihi", label: "1. İslamiyet Öncesi Türk Tarihi" },
+  { id: "İlk Türk İslam Devletleri ve Türkiye Tarihi", label: "2. İlk Türk İslam Devletleri ve Türkiye Tarihi" },
+  { id: "Osmanlı Kültür ve Medeniyeti", label: "3. Osmanlı Kültür ve Medeniyeti" },
+  { id: "Osmanlı Devleti'nde Yenileşme ve Demokratikleşme Hareketleri", label: "4. Osmanlı Devleti'nde Yenileşme ve Demokratikleşme Hareketleri" },
+  { id: "Birinci Dünya Savaşı ve Sonuçları", label: "5. Birinci Dünya Savaşı ve Sonuçları" },
+  { id: "Kurtuluş Savaşı Hazırlık Dönemi", label: "6. Kurtuluş Savaşı Hazırlık Dönemi" },
+  { id: "TBMM'nin Açılışı", label: "7. TBMM'nin Açılışı" },
+  { id: "Kurtuluş Savaşı - Lozan Antlaşması", label: "8. Kurtuluş Savaşı - Lozan Antlaşması" },
+  { id: "Atatürk İnkılapları Siyasi", label: "9. Atatürk İnkılapları Siyasi" },
+  { id: "Atatürk İnkılapları Ekonomik", label: "10. Atatürk İnkılapları Ekonomik" },
+  { id: "Atatürk İnkılapları Eğitim", label: "11. Atatürk İnkılapları Eğitim" },
+  { id: "Atatürk İnkılapları Hukuki", label: "12. Atatürk İnkılapları Hukuki" },
+  { id: "Atatürk İnkılapları Toplumsal", label: "13. Atatürk İnkılapları Toplumsal" },
+  { id: "Atatürk İnkılapları Kronoloji", label: "14. Atatürk İnkılapları Kronoloji" },
+  { id: "Çok Partili Yaşama Geçiş Denemeleri", label: "15. Çok Partili Yaşama Geçiş Denemeleri" },
+  { id: "Atatürk İlkeleri", label: "16. Atatürk İlkeleri" },
+  { id: "Dış Politika", label: "17. Dış Politika" },
+  { id: "Atatürk Sonrası Gelişmeler", label: "18. Atatürk Sonrası Gelişmeler" },
+];
 
 export function KpssPastExamsDashboard({
   t,
@@ -12,6 +40,8 @@ export function KpssPastExamsDashboard({
 }: KpssPastExamsDashboardProps) {
   const [selectedYear, setSelectedYear] = useState<string>("2019");
   const [selectedSubject, setSelectedSubject] = useState<string>("cografya");
+  const [selectedCountLimit, setSelectedCountLimit] = useState<number>(20);
+  const [selectedChapter, setSelectedChapter] = useState<string>("all");
 
   const years = [
     { id: "2021", label: "2021" },
@@ -28,15 +58,18 @@ export function KpssPastExamsDashboard({
     { id: "2009", label: "2009" },
     {
       id: "tarih_arsivi",
-      label: t.kpss_past_exams_history_q,
+      label: t.kpss_past_exams_history_q || "Tarih Soru Arşivi (ÖSYM PDF)",
     },
     {
       id: "karma",
-      label: t.kpss_past_exams_mixed,
+      label: t.kpss_past_exams_mixed || "Karma Sınav (Tüm Yıllar Karışık)",
     },
   ];
 
   const getSubjectCount = (year: string, subject: string) => {
+    if (year === "tarih_arsivi") {
+      return subject === "tarih" || subject === "all" ? 915 : 0;
+    }
     if (year === "karma") {
       let sum = 0;
       Object.entries(KPSS_YEARLY_DATA).forEach(([yKey, yData]) => {
@@ -94,7 +127,12 @@ export function KpssPastExamsDashboard({
   ];
 
   const handleStart = () => {
-    onStartPastExam(selectedYear, selectedSubject);
+    onStartPastExam(
+      selectedYear,
+      selectedSubject,
+      selectedCountLimit,
+      selectedYear === "tarih_arsivi" ? selectedChapter : undefined,
+    );
   };
 
   return (
@@ -128,6 +166,86 @@ export function KpssPastExamsDashboard({
         </p>
       </div>
 
+      {/* Karma Sınav Açıklama Kutusu */}
+      {selectedYear === "karma" && (
+        <div
+          style={{
+            background: "rgba(139, 92, 246, 0.08)",
+            border: "1px solid rgba(139, 92, 246, 0.25)",
+            borderRadius: "10px",
+            padding: "12px 16px",
+            fontSize: "0.85rem",
+            color: "#e2e8f0",
+            lineHeight: 1.5,
+          }}
+        >
+          <strong style={{ color: "#c084fc" }}>💡 Karma Sınav Modu Nedir?</strong>
+          <p style={{ margin: "4px 0 0 0", opacity: 0.85 }}>
+            Tüm geçmiş KPSS yıllarından (2006-2021) ve seçtiğiniz derslerden rastgele karışık deneme testi oluşturur.
+          </p>
+        </div>
+      )}
+
+      {/* Soru Sayısı Limit Seçimi */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          flexWrap: "wrap",
+          background: "rgba(255, 255, 255, 0.02)",
+          padding: "12px 16px",
+          borderRadius: "10px",
+          border: "1px solid var(--card-border)",
+        }}
+      >
+        <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)" }}>
+          ⚡ Çekilecek Soru Sayısı:
+        </span>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+          {[10, 20, 27, 30, 60].map((count) => (
+            <button
+              key={count}
+              className={`kpss-qcount-btn ${selectedCountLimit === count ? "active" : ""}`}
+              onClick={() => setSelectedCountLimit(count)}
+              style={{ padding: "6px 12px", fontSize: "0.8rem" }}
+            >
+              {count} Soru
+            </button>
+          ))}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "4px" }}>
+            <span style={{ fontSize: "0.8rem", opacity: 0.6 }}>veya</span>
+            <input
+              type="number"
+              min={1}
+              max={915}
+              value={selectedCountLimit}
+              onInput={(e) => {
+                const val = parseInt((e.target as HTMLInputElement).value, 10);
+                if (!isNaN(val) && val > 0) {
+                  setSelectedCountLimit(val);
+                }
+              }}
+              placeholder="Örn: 27"
+              style={{
+                width: "75px",
+                background: "#161622",
+                border: "1px solid var(--accent-color)",
+                borderRadius: "6px",
+                color: "white",
+                padding: "6px 8px",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+                textAlign: "center",
+                outline: "none",
+              }}
+            />
+            <span style={{ fontSize: "0.8rem", color: "#c084fc", fontWeight: 600 }}>Özel Soru</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3 Adımlı Grid Düzeni */}
       <div
         style={{
           display: "grid",
@@ -135,7 +253,7 @@ export function KpssPastExamsDashboard({
           gap: "20px",
         }}
       >
-        {/* Year Selection Box */}
+        {/* Adım 1: Sınav Yılını Seçin */}
         <div>
           <label
             style={{
@@ -154,7 +272,9 @@ export function KpssPastExamsDashboard({
                 key={y.id}
                 onClick={() => {
                   setSelectedYear(y.id);
-                  // Auto-adjust default subject if needed
+                  if (y.id === "tarih_arsivi") {
+                    setSelectedSubject("tarih");
+                  }
                 }}
                 style={{
                   padding: "12px 16px",
@@ -190,7 +310,7 @@ export function KpssPastExamsDashboard({
           </div>
         </div>
 
-        {/* Subject Selection Box */}
+        {/* Adım 2: Ders Seçin */}
         <div>
           <label
             style={{
@@ -247,6 +367,68 @@ export function KpssPastExamsDashboard({
             ))}
           </div>
         </div>
+
+        {/* Adım 3: Ünite Seçin */}
+        {selectedYear === "tarih_arsivi" && (
+          <div>
+            <label
+              style={{
+                display: "block",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                marginBottom: "8px",
+                opacity: 0.9,
+              }}
+            >
+              3. Ünite Seçin
+            </label>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+                maxHeight: "520px",
+                overflowY: "auto",
+                paddingRight: "4px",
+              }}
+            >
+              {TARIH_CHAPTERS.map((ch) => (
+                <div
+                  key={ch.id}
+                  onClick={() => setSelectedChapter(ch.id)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: "8px",
+                    background:
+                      selectedChapter === ch.id
+                        ? "rgba(16, 185, 129, 0.15)"
+                        : "rgba(255,255,255,0.02)",
+                    border:
+                      selectedChapter === ch.id
+                        ? "1px solid #10b981"
+                        : "1px solid rgba(255,255,255,0.06)",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: "0.8rem",
+                  }}
+                  className="past-exam-option-card"
+                >
+                  <span style={{ fontWeight: selectedChapter === ch.id ? 600 : 400 }}>
+                    {ch.label}
+                  </span>
+                  {selectedChapter === ch.id && (
+                    <span style={{ color: "#34d399", fontSize: "0.85rem" }}>
+                      ✓
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div

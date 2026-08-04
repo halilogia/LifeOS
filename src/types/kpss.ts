@@ -19,6 +19,7 @@ export interface KpssWikiNote {
 export interface HeadingItem {
   text: string;
   level: number;
+  noteId?: string;
 }
 
 export interface KpssPastQuiz {

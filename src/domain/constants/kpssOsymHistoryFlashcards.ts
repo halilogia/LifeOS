@@ -2,10 +2,8 @@
  * kpssOsymHistoryFlashcards.ts
  * KPSS SRS — Tarih Çıkmış Sorular kaynağı.
  * Kaynak: ÖSYM çıkmış questions.json (915 tarih sorusu).
- * Sorular KpssFlashcard formatına çevrilir:
- *  - chapter → category (bölüm)
- *  - header (yıl/sınav) → hint
- *  - doğru şık + açıklama → answer
+ * 
+ * Kart Arka Yüzü Sadece Doğru Cevap + Temiz İpucu gösterecek biçimde biçimlendirilmiştir.
  */
 
 import osymData from "@/data/kpss/osymHistoryQuestions.json";
@@ -32,16 +30,28 @@ interface OsymQuestion {
 export const kpssOsymHistoryFlashcards: KpssFlashcard[] = (
   (osymData as { history?: OsymQuestion[] }).history || []
 ).map((q) => {
-  const answerText = q.options[q.answer] || "";
-  const answerParts = [`${q.answer}) ${answerText}`.trim()];
-  if (q.explanation) {
-    answerParts.push(q.explanation.trim());
-  }
+  // answer harfini temizle (örn. "A", " Yanıt A", "A 2" -> "A")
+  const rawAns = (q.answer || "").trim();
+  const cleanAnsLetter = rawAns.charAt(0).toUpperCase();
+  const optionText =
+    q.options?.[cleanAnsLetter] || q.options?.[rawAns] || "";
+
+  // Arka yüzde SADECE Doğru Şık Harfi + Cevap Metni gösterilir
+  const answerDisplay = optionText
+    ? `${cleanAnsLetter}) ${optionText}`
+    : rawAns
+      ? `Cevap: ${rawAns}`
+      : "Açıklamaya bakınız";
+
+  const hintText = [q.header || "", q.explanation || ""]
+    .filter(Boolean)
+    .join(" — ");
+
   return {
     id: `osym_hist_${q.id}`,
     question: q.question,
-    answer: answerParts.join(" — "),
-    hint: q.header || "",
+    answer: answerDisplay,
+    hint: hintText,
     category: q.chapter || "Tarih",
   };
 });
