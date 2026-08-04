@@ -211,7 +211,7 @@ export function useKpssQuiz({
 
     const yearName = year === "karma" ? t.kpss_exam_mixed_years : year;
 
-    setActiveQuizTopic(`${yearName} KPSS Past Questions (${subjectName})`);
+    setActiveQuizTopic(`${yearName} Past Questions (${subjectName})`);
     setQuizLoading(false);
     setIsBackgroundLoading(false);
   };

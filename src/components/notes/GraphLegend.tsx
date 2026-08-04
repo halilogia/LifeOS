@@ -1,9 +1,9 @@
 const LEGEND_ITEMS = [
-  { color: "#a855f7", label: "KPSS Tarih" },
-  { color: "#10b981", label: "KPSS Coğrafya" },
-  { color: "#3b82f6", label: "KPSS Vatandaşlık" },
-  { color: "#f59e0b", label: "KPSS Türkçe" },
-  { color: "#ef4444", label: "KPSS Matematik" },
+  { color: "#a855f7", label: "Tarih" },
+  { color: "#10b981", label: "Coğrafya" },
+  { color: "#3b82f6", label: "Vatandaşlık" },
+  { color: "#f59e0b", label: "Türkçe" },
+  { color: "#ef4444", label: "Matematik" },
   { color: "#6366f1", label: "Genel Notlar" },
 ];
 
