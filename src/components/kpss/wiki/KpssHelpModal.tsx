@@ -60,7 +60,7 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
               fontWeight: 800,
             }}
           >
-            {t.kpss_notes_help_title || "KPSS Not Alma Rehberi"}
+            {t.kpss_notes_help_title || "Not Alma Rehberi"}
           </h3>
           <button
             type="button"
@@ -106,7 +106,7 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
               2. Kısa Metin, Net Bilgi:
             </strong>
             <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-              Her alt başlığa 1-3 cümlelik özet yaz. KPSS'de ezber yerine
+              Her alt başlığa 1-3 cümlelik özet yaz. Ezber yerine
               kavram netliği önemli. Örnek:{" "}
               <em>
                 "Vezir-i Azam: Büyük Selçuklu'da başkent yönetiminden sorumlu,

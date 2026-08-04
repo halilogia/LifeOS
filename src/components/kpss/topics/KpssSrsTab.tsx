@@ -91,7 +91,7 @@ export function KpssSrsTab({
             transition: "all 0.2s ease",
           }}
         >
-          {t.kpss_srs_source_preset || "Hazır KPSS Kartları"}
+          {t.kpss_srs_source_preset || "Hazır Kartlar"}
         </button>
 
         <button

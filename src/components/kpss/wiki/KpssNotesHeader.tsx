@@ -31,7 +31,7 @@ export function KpssNotesHeader({ t, syncMsg }: KpssNotesHeaderProps) {
           backgroundClip: "text",
         }}
       >
-        {t.kpss_notes_title || "KPSS Ders Notları Stüdyosu"}
+        {t.kpss_notes_title || "Ders Notları Stüdyosu"}
       </h2>
       {syncMsg && (
         <span

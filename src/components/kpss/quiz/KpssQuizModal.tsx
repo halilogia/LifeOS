@@ -103,8 +103,7 @@ export function KpssQuizModal({
         <div className="settings-header">
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <h3>{activeQuizTopic}</h3>
-            {activeQuizTopic.includes("KPSS") && (
-              <button
+            <button
                 onClick={() => setShowInfo(true)}
                 style={{
                   background: "rgba(139, 92, 246, 0.15)",
@@ -126,7 +125,6 @@ export function KpssQuizModal({
               >
                 !
               </button>
-            )}
           </div>
           <button className="close-btn" onClick={onClose}>
             <svg

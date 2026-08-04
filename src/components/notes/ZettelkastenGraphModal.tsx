@@ -126,7 +126,7 @@ export function ZettelkastenGraphModal({
                   color: "#f8fafc",
                 }}
               >
-                Obsidian Zettelkasten — Düşünce Ağı (Graph View)
+                Düşünce Ağı (Graph View)
               </h3>
               <p
                 style={{
