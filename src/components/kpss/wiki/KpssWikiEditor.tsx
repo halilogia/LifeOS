@@ -77,7 +77,16 @@ export function KpssWikiEditor({
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", gap: "12px", flex: 1 }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "12px",
+        flex: 1,
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+      }}
     >
       {/* Article Form Controls */}
       <div style={{ display: "flex", gap: "10px" }}>

@@ -214,8 +214,6 @@ interface SchemaBuilderProps {
   onChange?: (text: string) => void;
   /** Kutu sayısıyla sınırlı animasyonlu belirme (opsiyonel) */
   revealedCount?: number;
-  /** Şema tuvalinin maksimum genişliği (okuma alanı için sabitleme) */
-  maxWidth?: number;
 }
 
 export function SchemaBuilder({
@@ -224,7 +222,6 @@ export function SchemaBuilder({
   editable = false,
   onChange,
   revealedCount,
-  maxWidth = 900,
 }: SchemaBuilderProps) {
   const [internalText, setInternalText] = useState<string>(outline ?? DEFAULT_OUTLINE);
   const text = outline ?? internalText;
@@ -250,7 +247,10 @@ export function SchemaBuilder({
         gap: 12,
         flex: 1,
         minWidth: 0,
+        maxWidth: "100%",
+        width: "100%",
         height: "100%",
+        boxSizing: "border-box",
       }}
     >
       <style>{SCHEMA_ANIM_CSS}</style>
@@ -262,6 +262,7 @@ export function SchemaBuilder({
           placeholder={'Her satır bir kutu. Alt dal için satır başına "-" koy (ne kadar çok tire, o kadar derin).'}
           style={{
             width: "100%",
+            maxWidth: "100%",
             minHeight: 140,
             fontFamily: "'Consolas','Courier New',monospace",
             fontSize: 13,
@@ -278,12 +279,15 @@ export function SchemaBuilder({
         />
       )}
 
-      {/* Şema tuvali */}
+      {/* Şema tuvali — genişliği her zaman tam; içerik taşarsa scroll */}
       <div
         style={{
           position: "relative",
           flex: 1,
           minHeight: 320,
+          minWidth: 0,
+          width: "100%",
+          maxWidth: "100%",
           overflow: "auto",
           background: "#f2e6cc",
           borderRadius: 12,
@@ -291,14 +295,6 @@ export function SchemaBuilder({
           boxSizing: "border-box",
         }}
       >
-        {/* Sabit genişlik sarmalayıcı — okuma alanında taşmayı önler */}
-        <div
-          style={{
-            maxWidth,
-            margin: "0 auto",
-            minWidth: 0,
-          }}
-        >
         {/* Başlık */}
         <div
           style={{
@@ -319,12 +315,12 @@ export function SchemaBuilder({
           {title}
         </div>
 
-        {/* Şema alanı — kutular + çizgiler aynı koordinat sisteminde */}
+        {/* Şema alanı — genişliği her zaman tam; şema darsa ortalanır, genişse scroll */}
         <div
           style={{
             position: "relative",
             margin: "0 auto",
-            width: all.length === 0 ? "100%" : Math.max(totalWidth, 1),
+            width: "100%",
             height: all.length === 0 ? 200 : Math.max(totalHeight, 1),
           }}
         >
@@ -347,6 +343,16 @@ export function SchemaBuilder({
               (satır başına "-" koyarak alt dal ekleyin)
             </div>
           )}
+
+          {/* Merkez konteyner — şemanın gerçek genişliği; tuvalde ortalanır */}
+          <div
+            style={{
+              position: "relative",
+              margin: "0 auto",
+              width: Math.max(totalWidth, 1),
+              height: Math.max(totalHeight, 1),
+            }}
+          >
           {/* Eğri bağlantı çizgileri */}
           <svg
             width={totalWidth}
@@ -424,7 +430,7 @@ export function SchemaBuilder({
               </div>
             );
           })}
-        </div>
+          </div>
         </div>
 
         {/* Sayaç */}
