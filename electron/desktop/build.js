@@ -10,7 +10,7 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-const ROOT = path.resolve(__dirname, "..");
+const ROOT = path.resolve(__dirname, "../..");
 const EXT_DIST = path.join(ROOT, "dist");
 const WEB_DIR = path.join(__dirname, "web");
 
@@ -20,7 +20,7 @@ if (fs.existsSync(WEB_DIR)) {
 }
 fs.mkdirSync(WEB_DIR, { recursive: true });
 fs.cpSync(EXT_DIST, WEB_DIR, { recursive: true });
-console.log(`[build] dist/ kopyalandı → desktop/web/ (${fs.readdirSync(WEB_DIR).length} öğe)`);
+console.log(`[build] dist/ kopyalandı → electron/desktop/web/ (${fs.readdirSync(WEB_DIR).length} öğe)`);
 
 // file:// protokolü için absolute /assets/ → relative ./assets/ (Electron)
 const htmlFiles = ["newtab.html", "popup.html", "sidepanel.html", "offscreen.html"];

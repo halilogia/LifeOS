@@ -3,9 +3,9 @@
  * Türkiye Fiziki Haritası — konu seçici (volkanik dağlar, ovalar, göller, akarsular, platolar).
  * Video oynatıcı mantığı: ileri/geri sarma, fullscreen, başlangıçta tüm pinler görünür.
  * Veri: src/domain/constants/TurkeyGeographyData.ts + TurkeyProvincePaths.ts
- * Parçalar: MapControls, MapTopicSidebar, MapCanvas.
+ * Parçalar: MapControls, MapTopicSidebar, MapCanvas, useMapPlayback (ortak mantık).
  */
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import {
   MAP_TOPICS,
   TOPIC_PINS,
@@ -15,6 +15,7 @@ import {
 import { MapControls } from "./MapControls.js";
 import { MapTopicSidebar } from "./MapTopicSidebar.js";
 import { MapCanvas } from "./MapCanvas.js";
+import { useMapPlayback } from "./useMapPlayback.js";
 
 interface TurkeyMapViewProps {
   t: Record<string, string>;
@@ -34,174 +35,59 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
   const [selectedTopic, setSelectedTopic] =
     useState<TurkeyMapTopic>("volcanic");
   // Başlangıçta tüm pinler görünür (göz aşinalığı) — play basınca 0'dan başlar
-  const [revealedCount, setRevealedCount] = useState(VOLCANIC_MOUNTAINS.length);
-  const [currentIndex, setCurrentIndex] = useState(-1);
-  const [playing, setPlaying] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
-  // viewRef — wheel handler'da güncel view'a erişim
-  const viewRef = useRef(view);
-  viewRef.current = view;
-  const timerRef = useRef<number | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const playback = useMapPlayback({
+    initialCount: VOLCANIC_MOUNTAINS.length,
+    stepMs: STEP_MS,
+  });
+  const {
+    revealedCount,
+    currentIndex,
+    playing,
+    isFullscreen,
+    view,
+    containerRef,
+    svgWrapRef,
+    total,
+    setTotal,
+    handleUnitChange,
+    handlePlay,
+    handleStep,
+    handleReset,
+    toggleFullscreen,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onWheel,
+  } = playback;
 
   const pins = TOPIC_PINS[selectedTopic];
-  const total = pins.length;
   const topicMeta = MAP_TOPICS.find((m) => m.id === selectedTopic) || MAP_TOPICS[0];
   const topicColor = topicMeta.color;
 
-  const clearTimer = () => {
-    if (timerRef.current !== null) {
-      window.clearInterval(timerRef.current);
-      timerRef.current = null;
+  // Seçili konu değişince toplam pin sayısını senkronla
+  const nextTotal = pins.length;
+  useEffect(() => {
+    if (total !== nextTotal) {
+      setTotal(nextTotal);
     }
-  };
-
-  useEffect(() => {
-    return () => clearTimer();
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
-  }, []);
-
-  const stopPlayback = () => {
-    clearTimer();
-    setPlaying(false);
-    setCurrentIndex(-1);
-  };
+  }, [total, nextTotal, setTotal]);
 
   const handleTopicChange = (topic: TurkeyMapTopic) => {
     if (topic === selectedTopic) {
       return;
     }
-    stopPlayback();
-    // Yeni konu da son haliyle (tüm pinler) açılır
-    setRevealedCount(TOPIC_PINS[topic].length);
     setSelectedTopic(topic);
+    // Yeni konu da son haliyle (tüm pinler) açılır
+    handleUnitChange(TOPIC_PINS[topic].length);
   };
 
-  const handlePlay = () => {
-    if (playing) {
-      stopPlayback();
-      return;
-    }
-    // Başlat → her zaman 0'dan başla
-    setRevealedCount(0);
-    setCurrentIndex(-1);
-    setPlaying(true);
-    timerRef.current = window.setInterval(() => {
-      setCurrentIndex((prev) => {
-        if (prev >= total - 1) {
-          clearTimer();
-          setPlaying(false);
-          return -1;
-        }
-        const next = prev + 1;
-        setRevealedCount(next + 1);
-        return next;
-      });
-    }, STEP_MS);
-  };
-
-  const handleReset = () => {
-    stopPlayback();
-    // Sıfırla → son haliyle (tüm pinler görünür)
-    setRevealedCount(total);
-    // Fare kaydırma/zoom'dan oluşan konum değişikliğini de sıfırla
-    setView({ x: 0, y: 0, scale: 1 });
-  };
-
-  // --- Fare sol click basılı tutarak sürükleme (Google Maps tarzı PAN) ---
-  const dragRef = useRef<{
-    active: boolean;
-    startX: number;
-    startY: number;
-    originX: number;
-    originY: number;
-  }>({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
-  const svgWrapRef = useRef<HTMLDivElement | null>(null);
-
-  const handlePointerDown = (e: PointerEvent) => {
-    if (e.button !== 0) {
-      return;
-    }
-    const v = viewRef.current;
-    dragRef.current = {
-      active: true,
-      startX: e.clientX,
-      startY: e.clientY,
-      originX: v.x,
-      originY: v.y,
-    };
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    stopPlayback();
-  };
-
-  const handlePointerMove = (e: PointerEvent) => {
-    const drag = dragRef.current;
-    if (!drag.active) {
-      return;
-    }
-    const dx = e.clientX - drag.startX;
-    const dy = e.clientY - drag.startY;
-    setView({
-      ...viewRef.current,
-      x: drag.originX + dx,
-      y: drag.originY + dy,
-    });
-  };
-
-  const handlePointerUp = () => {
-    dragRef.current.active = false;
-  };
-
-  // Wheel ile zoom — imleç merkezli
-  const handleWheel = (e: WheelEvent) => {
-    e.preventDefault();
-    const wrap = svgWrapRef.current;
-    if (!wrap) {
-      return;
-    }
-    const rect = wrap.getBoundingClientRect();
-    const v = viewRef.current;
-    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-    const newScale = Math.min(5, Math.max(0.5, v.scale * factor));
-    // İmleç pozisyonu harita koordinatı
-    const px = e.clientX - rect.left;
-    const py = e.clientY - rect.top;
-    const wx = (px - v.x) / v.scale;
-    const wy = (py - v.y) / v.scale;
-    setView({
-      scale: newScale,
-      x: px - wx * newScale,
-      y: py - wy * newScale,
-    });
-  };
-
-  // viewRef — wheel handler'da güncel view'a erişim
-
-  // Video oynatıcı gibi manuel ileri/geri sarma
-  const handleStep = (dir: 1 | -1) => {
-    stopPlayback();
-    const next = Math.min(total, Math.max(0, revealedCount + dir));
-    setRevealedCount(next);
-    setCurrentIndex(next > 0 ? next - 1 : -1);
-  };
-
-  const toggleFullscreen = () => {
-    const el = containerRef.current;
-    if (!el) {
-      return;
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    } else {
-      el.requestFullscreen().catch(() => {});
-    }
-  };
+  const title = useMemo(
+    () =>
+      t[TOPIC_TITLE_KEYS[selectedTopic]] ||
+      t.kpss_map_title ||
+      "Türkiye Fiziki Haritası",
+    [t, selectedTopic],
+  );
 
   return (
     <div
@@ -225,17 +111,13 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
       {/* Harita Başlığı + Kontroller */}
       <MapControls
         t={t}
-        title={
-          t[TOPIC_TITLE_KEYS[selectedTopic]] ||
-          t.kpss_map_title ||
-          "Türkiye Fiziki Haritası"
-        }
+        title={title}
         total={total}
         revealedCount={revealedCount}
         playing={playing}
         isFullscreen={isFullscreen}
         onStep={handleStep}
-        onReset={handleReset}
+        onReset={() => handleReset(total)}
         onPlayToggle={handlePlay}
         onToggleFullscreen={toggleFullscreen}
       />
@@ -267,10 +149,10 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
           isFullscreen={isFullscreen}
           svgWrapRef={svgWrapRef}
           view={view}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onWheel={handleWheel}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onWheel={onWheel}
         />
       </div>
 

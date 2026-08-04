@@ -1,5 +1,6 @@
 import type { KpssWikiNote } from "@/services/kpss/kpssWikiService.js";
 import { renderCustomArticleMarkdown } from "@/services/kpss/kpssWikiService.js";
+import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
 
 interface WikiArticleBodyProps {
   note: KpssWikiNote;
@@ -12,6 +13,10 @@ export function WikiArticleBody({
   allNotes,
   onWikilinkClick,
 }: WikiArticleBodyProps) {
+  // "```sema ... ```" bloklarını ayır; şema blokları SchemaBuilder ile görsel çizilir
+  const content = note.content || "";
+  const parts = content.split(/```sema\s*\n([\s\S]*?)```/g);
+
   return (
     <div
       style={{
@@ -22,9 +27,32 @@ export function WikiArticleBody({
           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
       onClick={onWikilinkClick}
-      dangerouslySetInnerHTML={{
-        __html: renderCustomArticleMarkdown(note.content, allNotes),
-      }}
-    />
+    >
+      {parts.map((part, idx) => {
+        // split sonucu: [text, sema1, text, sema2, ...] — tek indeksler sema bloğu
+        if (idx % 2 === 1) {
+          const outline = part.trim();
+          if (!outline) {
+            return null;
+          }
+          return (
+            <div key={idx} style={{ margin: "16px 0" }}>
+              <SchemaBuilder outline={outline} title={note.title} />
+            </div>
+          );
+        }
+        if (!part.trim()) {
+          return null;
+        }
+        return (
+          <div
+            key={idx}
+            dangerouslySetInnerHTML={{
+              __html: renderCustomArticleMarkdown(part, allNotes),
+            }}
+          />
+        );
+      })}
+    </div>
   );
 }

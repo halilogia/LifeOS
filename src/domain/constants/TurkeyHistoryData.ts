@@ -5,7 +5,7 @@
  * 3 görüntüleme modu:
  *  - territory: her olay kendi döneminin sınır illerini boyar (birikimli)
  *  - points: nokta + etiket (ekonomi/kültür merkezleri)
- *  - diagram: hiyerarşi şeması (devlet teşkilatı)
+ *  - diagram: hiyerarşi şeması (devlet teşkilatı) — SchemaBuilder ile çizilir
  */
 
 export type HistoryMode = "territory" | "points" | "diagram";
@@ -23,16 +23,6 @@ export interface HistoryEvent {
   y: number;
 }
 
-export interface HistoryDiagramNode {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-  parent?: string;
-  tag?: string;
-  desc: string;
-}
-
 export interface HistoryLegendRow {
   c: string;
   l: string;
@@ -48,7 +38,6 @@ export interface HistoryUnit {
   color: string;
   legend: HistoryLegendRow[] | null;
   events?: HistoryEvent[];
-  nodes?: HistoryDiagramNode[];
 }
 
 export const HISTORY_VIEWBOX = "0 0 1000.0 421.9991241865445";
@@ -192,17 +181,6 @@ export const HISTORY_UNITS: HistoryUnit[] = [
     legend: [
       { c: "#c99a3c", l: "Hükümdar / merkez" },
       { c: "#e5a967", l: "Divan üyeleri" },
-    ],
-    nodes: [
-      { id: "sultan", label: "SULTAN", x: 500, y: 55, parent: undefined, tag: "Hükümdar", desc: "Devletin en yüksek yetkilisi; siyasi, askeri ve hukuki tüm yetkiler onda toplanırdı." },
-      { id: "melik", label: "MELİK", x: 230, y: 155, parent: "sultan", tag: "Şehzade", desc: "Sultanın oğulları; illerde (sancaklarda) valilik yaparak yönetim tecrübesi kazanırlardı." },
-      { id: "atabey", label: "ATABEY", x: 500, y: 155, parent: "sultan", tag: "Eğitmen/Vasi", desc: "Şehzadelerin eğitmeni ve vasisiydi; melikleri devlet işlerinde yönlendirirdi." },
-      { id: "divan", label: "DİVAN-I SALTANAT", x: 770, y: 155, parent: "sultan", tag: "Üst Kurul", desc: "Devlet işlerinin görüşülüp karara bağlandığı en üst kuruldu; sultana bağlı çalışırdı." },
-      { id: "tugraci", label: "TUĞRACI", x: 610, y: 270, parent: "divan", tag: "Divan Üyesi", desc: "Fermanları ve resmî yazışmaları hazırlar, üzerlerine tuğrayı çekerdi." },
-      { id: "pervane", label: "PERVANE", x: 770, y: 270, parent: "divan", tag: "Divan Üyesi", desc: "Divanın günlük işlerini yürütür, mühür işlerine bakardı." },
-      { id: "mustevfi", label: "MÜSTEVFİ", x: 930, y: 270, parent: "divan", tag: "Divan Üyesi", desc: "Mali işlerden ve hazineden sorumluydu." },
-      { id: "emir-i-dad", label: "EMİR-İ DAD", x: 770, y: 360, parent: "divan", tag: "Divan Üyesi", desc: "Adalet işlerine ve halkın şikâyetlerine bakardı." },
-      { id: "ikta", label: "IKTA SİSTEMİ", x: 200, y: 270, parent: "sultan", tag: "Toprak Düzeni", desc: "Topraklar hizmet karşılığında sipahilere dirlik olarak verilirdi; ordu ve tarım bu sistemle sürdürülürdü." },
     ],
   },
   {
