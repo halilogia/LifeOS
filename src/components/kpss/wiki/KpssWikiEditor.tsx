@@ -3,13 +3,15 @@
  * Presentational Article Editor Component.
  * Controls Title input, Subject category dropdown, Content textarea, and Save bar.
  * "Şema" modu: not içeriğinde görsel şema oluşturmak için SchemaBuilder (editable).
- * Şema outline'ı "```sema\n...\n```" bloğu olarak editorContent'e işlenir.
+ * "Harita" modu: tıklayarak pin eklemek için MapBuilder (editable).
+ * Bloklar "```sema" / "```harita" olarak editorContent'e işlenir.
  */
 
 import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
+import { MapBuilder, parseHaritaBlock } from "@/components/kpss/map/MapBuilder.js";
 
 interface KpssWikiEditorProps {
   lang: Language;
@@ -31,6 +33,12 @@ function extractSemaOutline(content: string): string {
   return m ? m[1].trim() : "";
 }
 
+/** "```harita" bloğunun tamamını (```harita...```) çıkar */
+function extractHaritaBlock(content: string): string {
+  const m = content.match(/```harita\s*\n[\s\S]*?```/);
+  return m ? m[0].trim() : "";
+}
+
 /** Outline metnini "```sema" bloğu olarak content'e yerleştir (eskisini değiştirir) */
 function upsertSemaOutline(content: string, outline: string): string {
   const trimmed = outline.trim();
@@ -45,6 +53,18 @@ function upsertSemaOutline(content: string, outline: string): string {
   return content.trimEnd() + "\n\n" + block + "\n";
 }
 
+/** Harita bloğu metnini content'e yerleştir (eskisini değiştirir) */
+function upsertHaritaBlock(content: string, block: string): string {
+  const trimmed = block.trim();
+  if (!trimmed) {
+    return content.replace(/```harita\s*\n[\s\S]*?```/g, "").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+  }
+  if (/```harita\s*\n[\s\S]*?```/.test(content)) {
+    return content.replace(/```harita\s*\n[\s\S]*?```/, trimmed);
+  }
+  return content.trimEnd() + "\n\n" + trimmed + "\n";
+}
+
 export function KpssWikiEditor({
   lang,
   editorTitle,
@@ -57,9 +77,11 @@ export function KpssWikiEditor({
   onSave,
 }: KpssWikiEditorProps) {
   const t = getTranslation(lang);
-  const [mode, setMode] = useState<"write" | "sema">("write");
+  const [mode, setMode] = useState<"write" | "sema" | "harita">("write");
   const initialSema = extractSemaOutline(editorContent);
   const [semaText, setSemaText] = useState<string>(initialSema || "");
+  const initialHarita = extractHaritaBlock(editorContent);
+  const [haritaBlock, setHaritaBlock] = useState<string>(initialHarita || "");
 
   const switchToSema = () => {
     // Mevcut content'teki şema bloğunu kullan, yoksa mevcut outline'ı al
@@ -70,8 +92,24 @@ export function KpssWikiEditor({
     setMode("sema");
   };
 
+  const switchToHarita = () => {
+    // Mevcut harita bloğunu kullan
+    const existing = extractHaritaBlock(editorContent);
+    if (existing) {
+      setHaritaBlock(existing);
+    }
+    setMode("harita");
+  };
+
   const switchToWrite = () => {
-    onContentChange(upsertSemaOutline(editorContent, semaText));
+    // Şema ve harita bloklarını content'e işle
+    let merged = editorContent;
+    if (mode === "sema") {
+      merged = upsertSemaOutline(merged, semaText);
+    } else if (mode === "harita") {
+      merged = upsertHaritaBlock(merged, haritaBlock);
+    }
+    onContentChange(merged);
     setMode("write");
   };
 
@@ -133,12 +171,12 @@ export function KpssWikiEditor({
         </select>
       </div>
 
-      {/* Mod seçici: Yaz / Şema */}
-      <div style={{ display: "flex", gap: "8px" }}>
+      {/* Mod seçici: Yaz / Şema / Harita */}
+      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
         <button
           type="button"
           onClick={() => {
-            if (mode === "sema") {
+            if (mode !== "write") {
               switchToWrite();
             } else {
               setMode("write");
@@ -173,6 +211,22 @@ export function KpssWikiEditor({
         >
           🧩 Şema
         </button>
+        <button
+          type="button"
+          onClick={switchToHarita}
+          style={{
+            background: mode === "harita" ? "#c8511f" : "rgba(255,255,255,0.06)",
+            color: mode === "harita" ? "#fff" : "#94a3b8",
+            border: "none",
+            borderRadius: "8px",
+            padding: "6px 14px",
+            fontSize: "0.78rem",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          🗺️ Harita
+        </button>
       </div>
 
       {mode === "write" ? (
@@ -203,12 +257,21 @@ export function KpssWikiEditor({
             }}
           />
         </>
-      ) : (
+      ) : mode === "sema" ? (
         <SchemaBuilder
           outline={semaText}
-          title={editorTitle || "ŞEMA"}
+          title={editorTitle}
           editable
           onChange={setSemaText}
+        />
+      ) : (
+        <MapBuilder
+          initialPins={parseHaritaBlock(haritaBlock)}
+          onChange={(serialized) => {
+            // Serialized: "```harita\n...\n```" — haritaBlock'a kaydet
+            setHaritaBlock(serialized);
+          }}
+          editable
         />
       )}
 
@@ -233,9 +296,11 @@ export function KpssWikiEditor({
         </span>
 
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          {mode === "sema" && (
+          {(mode === "sema" || mode === "harita") && (
             <span style={{ fontSize: "0.72rem", color: "#94a3b8" }}>
-              Şema, notun içine "```sema" bloğu olarak kaydedilir.
+              {mode === "sema"
+                ? 'Şema, notun içine "```sema" bloğu olarak kaydedilir.'
+                : 'Harita, notun içine "```harita" bloğu olarak kaydedilir.'}
             </span>
           )}
           <button
@@ -244,6 +309,12 @@ export function KpssWikiEditor({
               if (mode === "sema") {
                 // Şemayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
                 const merged = upsertSemaOutline(editorContent, semaText);
+                onContentChange(merged);
+                setMode("write");
+                window.setTimeout(() => onSave(), 0);
+              } else if (mode === "harita") {
+                // Haritayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
+                const merged = upsertHaritaBlock(editorContent, haritaBlock);
                 onContentChange(merged);
                 setMode("write");
                 window.setTimeout(() => onSave(), 0);

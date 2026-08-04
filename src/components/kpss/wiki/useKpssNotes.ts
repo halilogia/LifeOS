@@ -4,7 +4,7 @@
  * Storage erişimi kpssWikiService üzerinden yapılır (components → service katmanı).
  */
 
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import {
   KpssWikiNote,
   HeadingItem,
@@ -47,7 +47,7 @@ export interface UseKpssNotesResult {
 }
 
 export function useKpssNotes(
-  t: Record<string, string>,
+  _t: Record<string, string>,
   subjectFilter: string,
 ): UseKpssNotesResult {
   const [notes, setNotes] = useState<KpssWikiNote[]>([]);
@@ -58,6 +58,14 @@ export function useKpssNotes(
   const [editorContent, setEditorContent] = useState("");
   const [saveStatus, setSaveStatus] = useState(false);
   const [autoTitleEnabled, setAutoTitleEnabled] = useState(false);
+  // Otomatik kayıt için gerekli ref'ler (debounce timer + en son değerler)
+  const autoSaveTimer = useRef<number | null>(null);
+  const notesRef = useRef(notes);
+  notesRef.current = notes;
+  const selectedNoteIdRef = useRef(selectedNoteId);
+  selectedNoteIdRef.current = selectedNoteId;
+  const editorRef = useRef({ title: "", subject: editorSubject, content: "" });
+  editorRef.current = { title: editorTitle, subject: editorSubject, content: editorContent };
 
   useEffect(() => {
     void loadNotes();
@@ -132,41 +140,69 @@ export function useKpssNotes(
     setViewMode("edit");
   };
 
-  const handleSaveArticle = async () => {
-    if (!selectedNoteId) {
-      return;
-    }
-
-    let finalTitle = editorTitle.trim();
-
-    // If auto title is enabled AND user left title empty, extract ONLY the first word
-    if (autoTitleEnabled && !finalTitle && editorContent) {
-      finalTitle = extractTitleFromContent(editorContent);
-    }
-
-    if (!finalTitle) {
-      finalTitle = t.kpss_notes_untitled;
-    }
-
-    const updatedNotes = notes.map((n) => {
-      if (n.id === selectedNoteId) {
-        return {
-          ...n,
-          title: finalTitle,
-          subject: editorSubject,
-          content: editorContent,
-          updatedAt: new Date().toISOString(),
-        };
+  const persistArticle = useCallback(
+    async (opts?: { silent?: boolean }) => {
+      const id = selectedNoteIdRef.current;
+      if (!id) {
+        return;
       }
-      return n;
-    });
+      const { title, subject, content } = editorRef.current;
+      let finalTitle = title.trim();
 
-    await saveKpssWikiNotes(updatedNotes);
-    setNotes(updatedNotes);
-    setEditorTitle(finalTitle);
-    setSaveStatus(true);
-    setTimeout(() => setSaveStatus(false), 2000);
-  };
+      // If auto title is enabled AND user left title empty, extract ONLY the first word
+      if (autoTitleEnabled && !finalTitle && content) {
+        finalTitle = extractTitleFromContent(content);
+      }
+
+      // Boş başlığı "Başlıksız Ders Notu" ile doldurma — boş kalsın
+      if (!finalTitle) {
+        finalTitle = "";
+      }
+
+      const updatedNotes = notesRef.current.map((n) => {
+        if (n.id === id) {
+          return {
+            ...n,
+            title: finalTitle,
+            subject,
+            content,
+            updatedAt: new Date().toISOString(),
+          };
+        }
+        return n;
+      });
+
+      await saveKpssWikiNotes(updatedNotes);
+      setNotes(updatedNotes);
+      if (finalTitle !== editorRef.current.title) {
+        setEditorTitle(finalTitle);
+      }
+      if (!opts?.silent) {
+        setSaveStatus(true);
+        setTimeout(() => setSaveStatus(false), 2000);
+      }
+    },
+    [autoTitleEnabled],
+  );
+
+  const handleSaveArticle = useCallback(async () => {
+    await persistArticle();
+  }, [persistArticle]);
+
+  // Otomatik kaydetme: editör değerleri değişince 1.5s bekleyip kaydet
+  useEffect(() => {
+    if (autoSaveTimer.current !== null) {
+      window.clearTimeout(autoSaveTimer.current);
+    }
+    autoSaveTimer.current = window.setTimeout(() => {
+      void persistArticle({ silent: true });
+    }, 1500);
+    return () => {
+      if (autoSaveTimer.current !== null) {
+        window.clearTimeout(autoSaveTimer.current);
+      }
+    };
+  }, [editorTitle, editorSubject, editorContent, persistArticle]);
 
   const handleDeleteArticle = async () => {
     if (!selectedNoteId) {
