@@ -67,6 +67,7 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
     }): Promise<{
       scorePercentage: number;
       updatedPastQuizzes: Record<string, KpssPastQuiz>;
+      cumulative: { totalQuestions: number; totalCorrect: number };
     }> {
       const {
         currentSubject,
@@ -90,6 +91,8 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
           activeQuizTopic,
           newStatus,
           scorePercentage,
+          correctCount,
+          totalCount,
         );
       }
 
@@ -109,10 +112,22 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       );
       await kpssService.saveKpssDailyStats(totalCount, 0, currentSubject);
 
-      return { scorePercentage, updatedPastQuizzes };
+      const progressList = await kpssService.getKpssProgress();
+      const rec = progressList.find(
+        (p) => p.subject === currentSubject && p.topic === activeQuizTopic,
+      );
+
+      return {
+        scorePercentage,
+        updatedPastQuizzes,
+        cumulative: {
+          totalQuestions: rec?.totalQuestions ?? 0,
+          totalCorrect: rec?.totalCorrect ?? 0,
+        },
+      };
     },
 
-    /** Evaluates quiz score, updates topic status, saves past quiz to repo. */
+    /** Evaluates quiz score, updates topic status (cumulative), saves past quiz to repo. */
     async evaluateAndSaveQuizResult(params: {
       currentSubject: string;
       activeQuizTopic: string;
@@ -122,6 +137,7 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
     }): Promise<{
       scorePercentage: number;
       updatedPastQuizzes: Record<string, KpssPastQuiz>;
+      cumulative: { totalQuestions: number; totalCorrect: number };
     }> {
       const {
         currentSubject,
@@ -153,6 +169,8 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
           activeQuizTopic,
           newStatus,
           scorePercentage,
+          correctCount,
+          quizQuestions.length,
         );
       }
 
@@ -178,7 +196,20 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
         currentSubject,
       );
 
-      return { scorePercentage, updatedPastQuizzes };
+      // Birikimli istatistiği döndür (sonuç ekranında göstermek için)
+      const progressList = await kpssService.getKpssProgress();
+      const rec = progressList.find(
+        (p) => p.subject === currentSubject && p.topic === activeQuizTopic,
+      );
+
+      return {
+        scorePercentage,
+        updatedPastQuizzes,
+        cumulative: {
+          totalQuestions: rec?.totalQuestions ?? 0,
+          totalCorrect: rec?.totalCorrect ?? 0,
+        },
+      };
     },
   };
 }

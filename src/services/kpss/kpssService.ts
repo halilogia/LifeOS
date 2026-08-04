@@ -10,22 +10,39 @@
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 import { kpssData, type KpssTopic } from "@/domain/constants/kpssCurriculum.js";
-import {
-  kpssDummyFlashcards,
-  type KpssFlashcard,
-} from "@/domain/constants/kpssFlashcards.js";
+import type { KpssFlashcard } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
 
 // Re-export constants and types for backwards compatibility
 export { kpssData, type KpssTopic };
-export { kpssDummyFlashcards, type KpssFlashcard };
+export type { KpssFlashcard };
 
 export function createKpssService(kpssRepo: IKpssRepository) {
   return {
     /**
      * Retrieves user's KPSS topic checkmark progress.
+     * 100 soru %80 kuralı migrasyonu: eski "tamamlandı" (status 2) kayıtları,
+     * totalQuestions >= 100 ve birikimli başarı >= %80 sağlamıyorsa
+     * "çalışılıyor" (status 1) olarak düzeltilir.
      */
-    getKpssProgress(): Promise<KpssProgress[]> {
-      return kpssRepo.getAllProgress();
+    async getKpssProgress(): Promise<KpssProgress[]> {
+      const progressList = await kpssRepo.getAllProgress();
+      let changed = false;
+      progressList.forEach((p) => {
+        if (p.status !== 2) {
+          return;
+        }
+        const tq = p.totalQuestions ?? 0;
+        const tc = p.totalCorrect ?? 0;
+        const cumPercent = tq >= 100 ? Math.round((tc / tq) * 100) : 0;
+        if (tq < 100 || cumPercent < 80) {
+          p.status = 1;
+          changed = true;
+        }
+      });
+      if (changed) {
+        await kpssRepo.saveAllProgress(progressList);
+      }
+      return progressList;
     },
 
     /**
@@ -51,18 +68,62 @@ export function createKpssService(kpssRepo: IKpssRepository) {
 
     /**
      * Toggles the status of a specific subject topic.
+     * Birikimli kural: quiz sonucu (correctCount/totalCount) verilirse
+     * konunun toplam soru/doğru sayacına eklenir. Konu yalnızca
+     * toplam >= 100 soru ve birikimli başarı >= %80 ise "tamamlandı" olur.
      */
     async updateTopicStatus(
       subject: string,
       topic: string,
       status: 0 | 1 | 2,
       score?: number,
+      correctCount?: number,
+      totalCount?: number,
     ): Promise<void> {
       const progressList = await kpssRepo.getAllProgress();
       const index = progressList.findIndex(
         (p) => p.subject === subject && p.topic === topic,
       );
 
+      let record: KpssProgress | undefined =
+        index !== -1 ? progressList[index] : undefined;
+
+      // Birikimli sayım
+      if (correctCount !== undefined && totalCount !== undefined) {
+        const prevQ = record?.totalQuestions ?? 0;
+        const prevC = record?.totalCorrect ?? 0;
+        const newTotalQ = prevQ + totalCount;
+        const newTotalC = prevC + correctCount;
+
+        if (!record) {
+          record = { subject, topic, status: 1, totalQuestions: 0, totalCorrect: 0 };
+        }
+        record.totalQuestions = newTotalQ;
+        record.totalCorrect = newTotalC;
+        record.score = score;
+
+        // Yeni durum: min 100 soru + %80 birikimli başarı
+        const cumPercent =
+          newTotalQ >= 100 ? Math.round((newTotalC / newTotalQ) * 100) : 0;
+        record.status =
+          newTotalQ >= 100 && cumPercent >= 80
+            ? 2
+            : cumPercent >= 40
+              ? 1
+              : record.status === 2
+                ? 2
+                : 1;
+
+        if (index !== -1) {
+          progressList[index] = record;
+        } else {
+          progressList.push(record);
+        }
+        await kpssRepo.saveAllProgress(progressList);
+        return;
+      }
+
+      // Eski davranış: manuel tamamlama / sıfırlama (birikimli sayıma dokunmaz)
       if (index !== -1) {
         if (status === 0 && score === undefined) {
           progressList.splice(index, 1);

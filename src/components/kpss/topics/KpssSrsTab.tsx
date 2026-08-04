@@ -7,15 +7,15 @@ import { KpssSrsCard } from "@/components/kpss/srs/KpssSrsCard.js";
 
 interface KpssSrsTabProps {
   t: Record<string, string>;
-  srsSourceMode: "all" | "preset" | "notes";
-  userNotesCount: number;
   srsLoading: boolean;
   srsQueue: WordReviewData[];
   srsIndex: number;
   srsFlipped: boolean;
   srsFadeState: "normal" | "slide-out";
   flashcardsUniverse: KpssFlashcard[];
-  onSourceModeChange: (mode: "all" | "preset" | "notes") => void;
+  srsChapter: string;
+  srsChapters: string[];
+  onChapterChange: (chapter: string) => void;
   onFlipChange: (flipped: boolean) => void;
   onReviewQuality: (quality: ReviewQuality) => void;
   onReloadQueue: () => void;
@@ -23,15 +23,15 @@ interface KpssSrsTabProps {
 
 export function KpssSrsTab({
   t,
-  srsSourceMode,
-  userNotesCount,
   srsLoading,
   srsQueue,
   srsIndex,
   srsFlipped,
   srsFadeState,
   flashcardsUniverse,
-  onSourceModeChange,
+  srsChapter,
+  srsChapters,
+  onChapterChange,
   onFlipChange,
   onReviewQuality,
   onReloadQueue,
@@ -46,72 +46,54 @@ export function KpssSrsTab({
         width: "100%",
       }}
     >
-      {/* SRS Source Selector Filter Bar */}
-      <div
-        style={{
-          display: "flex",
-          gap: "8px",
-          background: "rgba(15, 23, 42, 0.6)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-          borderRadius: "12px",
-          padding: "6px",
-          backdropFilter: "blur(8px)",
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => onSourceModeChange("all")}
+      {/* Bölüm (Ünite) Seçici — ÖSYM çıkmış arşivi tarzı dropdown */}
+      {srsChapters.length > 0 && (
+        <div
           style={{
-            background: srsSourceMode === "all" ? "#2563eb" : "transparent",
-            color: srsSourceMode === "all" ? "#ffffff" : "#94a3b8",
-            border: "none",
-            borderRadius: "8px",
-            padding: "6px 14px",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            background: "rgba(15, 23, 42, 0.6)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "12px",
+            padding: "8px 12px",
           }}
         >
-          {t.kpss_srs_source_all || "Tüm Kartlar"}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => onSourceModeChange("preset")}
-          style={{
-            background: srsSourceMode === "preset" ? "#2563eb" : "transparent",
-            color: srsSourceMode === "preset" ? "#ffffff" : "#94a3b8",
-            border: "none",
-            borderRadius: "8px",
-            padding: "6px 14px",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {t.kpss_srs_source_preset || "Hazır Kartlar"}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => onSourceModeChange("notes")}
-          style={{
-            background: srsSourceMode === "notes" ? "#7c3aed" : "transparent",
-            color: srsSourceMode === "notes" ? "#ffffff" : "#94a3b8",
-            border: "none",
-            borderRadius: "8px",
-            padding: "6px 14px",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {t.kpss_srs_source_notes || "Sadece Benim Notlarım"} ({userNotesCount})
-        </button>
-      </div>
+          <span
+            style={{
+              fontSize: "0.78rem",
+              color: "#94a3b8",
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {t.kpss_srs_source_all || "Ünite:"}
+          </span>
+          <select
+            value={srsChapter}
+            onChange={(e) => onChapterChange((e.target as HTMLSelectElement).value)}
+            style={{
+              background: "rgba(0, 0, 0, 0.4)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: "8px",
+              padding: "6px 10px",
+              color: "#e2e8f0",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              outline: "none",
+              cursor: "pointer",
+              maxWidth: 260,
+            }}
+          >
+            <option value="all">Tüm Bölümler</option>
+            {srsChapters.map((ch) => (
+              <option key={ch} value={ch}>
+                {ch}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <KpssSrsCard
         t={t}

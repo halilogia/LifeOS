@@ -5,6 +5,7 @@ import { CSSProperties } from "preact";
  * KPSS Sınavı sorularının gösterim ekranı (İlerleme çubuğu, Canvas, Harita, Şıklar, Çözüm kutusu ve Navigasyon).
  */
 
+import { useEffect, useState } from "preact/hooks";
 import { KpssQuestionCanvas } from "@/components/kpss/topics/KpssQuestionCanvas.js";
 import { KpssQuestionMap } from "@/components/kpss/exams/KpssQuestionMap.js";
 import { MathRenderer } from "@/components/kpss/quiz/MathRenderer.js";
@@ -58,6 +59,33 @@ export function KpssQuizQuestionsStep({
   onNextQuestion,
   onFinishQuiz,
 }: KpssQuizQuestionsStepProps) {
+  // Zamanlayıcı: her soru için 1 dk (5 soru=5dk, 10=10dk...). Süre bitince otomatik sonuç.
+  const [remainingSec, setRemainingSec] = useState(totalQuizLength * 60);
+
+  useEffect(() => {
+    setRemainingSec(totalQuizLength * 60);
+  }, [totalQuizLength]);
+
+  useEffect(() => {
+    if (quizLoading || quizError || quizQuestions.length === 0) {
+      return;
+    }
+    if (remainingSec <= 0) {
+      onFinishQuiz();
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setRemainingSec((s) => Math.max(0, s - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [remainingSec, quizLoading, quizError, quizQuestions.length]);
+
+  const fmt = (sec: number) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
   if (quizLoading) {
     return (
       <div className="ha-loading" style={{ minHeight: "200px" }}>
@@ -107,6 +135,16 @@ export function KpssQuizQuestionsStep({
       >
         <span>
           {`${t.kpss_quiz_questions} ${currentQuestionIndex + 1} / ${totalQuizLength}`}
+        </span>
+        {/* Zamanlayıcı — süre bitince otomatik sonuç */}
+        <span
+          style={{
+            fontWeight: 700,
+            fontVariantNumeric: "tabular-nums",
+            color: remainingSec <= 60 ? "#f87171" : "inherit",
+          }}
+        >
+          ⏱ {fmt(remainingSec)}
         </span>
       </div>
 

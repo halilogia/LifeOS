@@ -42,6 +42,9 @@ export interface KpssProgress {
   topic: string;
   status: 0 | 1 | 2; // 0: reset, 1: working, 2: finished
   score?: number; // test percentage score (0-100)
+  // Birikimli istatistik — konu tamamlanması için min 100 soru + %80 başarı
+  totalQuestions?: number;
+  totalCorrect?: number;
 }
 
 export interface CustomQuote {

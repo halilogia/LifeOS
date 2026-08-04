@@ -2,9 +2,9 @@ import { useState, useEffect } from "preact/hooks";
 import {
   kpssService,
   kpssData,
-  kpssDummyFlashcards,
 } from "@/services/kpss/kpssService.js";
 import { kpssSrsService } from "@/services/kpss/kpssSrsService.js";
+import { kpssOsymHistoryFlashcards } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
 import { KpssDailyStats, Language } from "@/types/types.js";
 import { useKpssQuiz } from "@/presentation/hooks/useKpssQuiz.js";
 import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
@@ -80,6 +80,7 @@ export function KpssView({
   const [activeTopic, setActiveTopic] = useState<{
     title: string;
     description: string;
+    questionsCount?: number;
   } | null>(null);
 
   // Quiz state ve handler'lar useKpssQuiz hook'unda yaÅŸar (aÅŸaÄŸÄ±da, baÄŸÄ±mlÄ±lÄ±klardan sonra Ã§aÄŸrÄ±lÄ±r)
@@ -115,29 +116,23 @@ export function KpssView({
   const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">(
     "normal",
   );
-  const [srsSourceMode, setSrsSourceMode] = useState<"all" | "preset" | "notes">("all");
-  const [flashcardsUniverse, setFlashcardsUniverse] = useState<any[]>(kpssDummyFlashcards);
-  const [userNotesCount, setUserNotesCount] = useState<number>(0);
+  const [flashcardsUniverse, setFlashcardsUniverse] = useState<any[]>(kpssOsymHistoryFlashcards);
+  const [srsChapter, setSrsChapter] = useState<string>("all");
+  const [srsChapters, setSrsChapters] = useState<string[]>([]);
 
-  const loadKpssSrsQueue = async (mode = srsSourceMode) => {
+  const loadKpssSrsQueue = async (chapter: string = srsChapter) => {
     setSrsLoading(true);
     try {
-      const res = await kpssSrsService.loadSrsQueue(mode);
-      const userCards = await kpssSrsService.getUserNotesFlashcards();
-      setUserNotesCount(userCards.length);
+      const res = await kpssSrsService.loadSrsQueue(chapter);
       setSrsQueue(res.queue);
       setFlashcardsUniverse(res.universe);
+      setSrsChapters(res.chapters);
       setSrsIndex(0);
       setSrsLoading(false);
     } catch (e) {
       logger.error("Failed to load KPSS SRS Queue:", e);
       setSrsLoading(false);
     }
-  };
-
-  const handleSourceModeChange = (mode: "all" | "preset" | "notes") => {
-    setSrsSourceMode(mode);
-    loadKpssSrsQueue(mode);
   };
 
   const handleKpssSrsReview = async (quality: ReviewQuality) => {
@@ -158,7 +153,7 @@ export function KpssView({
 
   useEffect(() => {
     if (activeTab === "srs") {
-      loadKpssSrsQueue(srsSourceMode);
+      loadKpssSrsQueue();
     }
   }, [activeTab]);
 
@@ -378,18 +373,21 @@ export function KpssView({
         ) : activeTab === "srs" ? (
           <KpssSrsTab
             t={t}
-            srsSourceMode={srsSourceMode}
-            userNotesCount={userNotesCount}
             srsLoading={srsLoading}
             srsQueue={srsQueue}
             srsIndex={srsIndex}
             srsFlipped={srsFlipped}
             srsFadeState={srsFadeState}
             flashcardsUniverse={flashcardsUniverse}
-            onSourceModeChange={handleSourceModeChange}
+            srsChapter={srsChapter}
+            srsChapters={srsChapters}
+            onChapterChange={(ch) => {
+              setSrsChapter(ch);
+              loadKpssSrsQueue(ch);
+            }}
             onFlipChange={(flipped) => setSrsFlipped(flipped)}
             onReviewQuality={handleKpssSrsReview}
-            onReloadQueue={() => loadKpssSrsQueue(srsSourceMode)}
+            onReloadQueue={() => loadKpssSrsQueue(srsChapter)}
           />
         ) : activeTab === "map" ? (
           <div
@@ -489,6 +487,7 @@ export function KpssView({
         selectedAnswers={quiz.selectedAnswers}
         quizResultScore={quiz.quizResultScore}
         quizError={quiz.quizError}
+        cumulative={quiz.cumulative}
         aiApiKey={aiApiKey}
         aiEndpoint={aiEndpoint}
         onClose={() => {

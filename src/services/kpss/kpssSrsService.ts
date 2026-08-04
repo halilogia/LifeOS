@@ -1,7 +1,7 @@
 /**
  * kpssSrsService.ts
  * Service for loading SRS queues and saving review qualities for KPSS flashcards.
- * Supports preset cards, user notes cards, or combined cards.
+ * Kaynak: yalnızca tarih çıkmış sorular (kpssOsymHistoryFlashcards).
  */
 
 import {
@@ -12,99 +12,47 @@ import {
   type ReviewQuality,
   type WordReviewData,
 } from "@/domain/services/SrsService.js";
-import { kpssDummyFlashcards } from "@/domain/constants/kpssFlashcards.js";
+import { kpssOsymHistoryFlashcards } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
 import { KpssFlashcard } from "@/services/kpss/kpssService.js";
-import {
-  getKpssWikiNotes,
-  getSubjectLabel,
-  type KpssWikiNote,
-} from "@/services/kpss/kpssWikiService.js";
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
-
-export function extractCardsFromUserNotes(notes: KpssWikiNote[]): KpssFlashcard[] {
-  const cards: KpssFlashcard[] = [];
-  notes.forEach((note) => {
-    if (!note.content) {
-      return;
-    }
-    const lines = note.content.split("\n");
-    let foundLineCard = false;
-    lines.forEach((l, idx) => {
-      const trimmed = l.trim();
-      if (
-        !trimmed ||
-        trimmed.startsWith("#") ||
-        trimmed.startsWith("http") ||
-        trimmed.startsWith("![")
-      ) {
-        return;
-      }
-      const colonIdx = trimmed.indexOf(":");
-      if (colonIdx > 0 && colonIdx < 30) {
-        const key = trimmed
-          .slice(0, colonIdx)
-          .replace(/^[-*_`\s]+/, "")
-          .trim();
-        const val = trimmed.slice(colonIdx + 1).trim();
-        if (key && val && key.length < 35 && val.length <= 90 && !val.includes(". ")) {
-          cards.push({
-            id: `note-card-${note.id}-${idx}`,
-            question: key,
-            answer: val,
-            category: getSubjectLabel(note.subject),
-            hint: note.title ? `Ders Notu: ${note.title}` : "",
-          });
-          foundLineCard = true;
-        }
-      }
-    });
-
-    if (!foundLineCard && note.title) {
-      const cleanContent = note.content
-        .replace(/^#+\s*.*/gm, "")
-        .trim();
-      if (cleanContent) {
-        cards.push({
-          id: `note-card-${note.id}-summary`,
-          question: `Ders Notu: ${note.title}`,
-          answer: cleanContent.slice(0, 160) + (cleanContent.length > 160 ? "..." : ""),
-          category: getSubjectLabel(note.subject),
-          hint: note.title ? `Ders Notu: ${note.title}` : "",
-        });
-      }
-    }
-  });
-
-  return cards;
-}
 
 export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
   return {
-    /** Extracts flashcards from user's custom notes. */
-    async getUserNotesFlashcards(): Promise<KpssFlashcard[]> {
-      const notes = await getKpssWikiNotes();
-      return extractCardsFromUserNotes(notes);
-    },
-
-    /** Loads enriched SRS flashcard queue and universe based on source mode. */
+    /** Loads enriched SRS flashcard queue from tarih çıkmış soruları. */
     async loadSrsQueue(
-      sourceMode: "all" | "preset" | "notes" = "all",
-    ): Promise<{ queue: WordReviewData[]; universe: KpssFlashcard[] }> {
+      chapter: string = "all",
+    ): Promise<{
+      queue: WordReviewData[];
+      universe: KpssFlashcard[];
+      chapters: string[];
+    }> {
       const progress: Record<string, unknown>[] = await srsRepo.getAll();
-      const userNotes = await getKpssWikiNotes();
-      const userNoteCards = extractCardsFromUserNotes(userNotes);
 
-      let activeUniverseCards: KpssFlashcard[] = [];
-      if (sourceMode === "preset") {
-        activeUniverseCards = kpssDummyFlashcards;
-      } else if (sourceMode === "notes") {
-        activeUniverseCards = userNoteCards;
+      // Benzersiz bölüm listesi (ÖSYM çıkmış'taki ünite seçici gibi)
+      const chapters = Array.from(
+        new Set(kpssOsymHistoryFlashcards.map((c) => c.category)),
+      ).sort();
+
+      let activeUniverseCards: KpssFlashcard[];
+      if (chapter === "all") {
+        activeUniverseCards = kpssOsymHistoryFlashcards;
       } else {
-        activeUniverseCards = [...kpssDummyFlashcards, ...userNoteCards];
+        activeUniverseCards = kpssOsymHistoryFlashcards.filter(
+          (c) => c.category === chapter,
+        );
+      }
+
+      // Eski kayıtları temizle: universe'te olmayan (notlardan gelen) kartlar atılır
+      const validIds = new Set(activeUniverseCards.map((c) => c.id));
+      const filteredProgress = progress.filter((p) =>
+        validIds.has(p.wordId as string),
+      );
+      if (filteredProgress.length !== progress.length) {
+        await srsRepo.saveAll(filteredProgress);
       }
 
       const progressMap = new Map<string, WordReviewData>();
-      progress.forEach((p) =>
+      filteredProgress.forEach((p) =>
         progressMap.set(p.wordId as string, p as unknown as WordReviewData),
       );
 
@@ -114,13 +62,12 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
         return { ...p, level: w.category, listType: "kpss", freq: 0 };
       });
 
-      const enrichedProgress: SRSWordWithInfo[] = progress
-        .filter((p) => activeUniverseCards.some((c) => c.id === p.wordId))
+      const enrichedProgress: SRSWordWithInfo[] = filteredProgress
         .map((p) => {
           const wInfo = activeUniverseCards.find((w) => w.id === p.wordId);
           return {
             ...p,
-            level: wInfo?.category || "KPSS",
+            level: wInfo?.category || "Tarih",
             listType: "kpss",
             freq: 0,
           } as unknown as SRSWordWithInfo;
@@ -133,7 +80,7 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
         universe: srsUniverse,
       });
 
-      return { queue, universe: activeUniverseCards };
+      return { queue, universe: activeUniverseCards, chapters };
     },
 
     /** Processes review quality rating with SM-2 algorithm and persists. */
@@ -168,4 +115,3 @@ const _defaultSrsRepo = new ChromeStorageSrsProgressRepository();
 const _defaultSrsService = createKpssSrsService(_defaultSrsRepo);
 
 export const kpssSrsService = _defaultSrsService;
-

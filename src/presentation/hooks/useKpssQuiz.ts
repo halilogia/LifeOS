@@ -1,4 +1,4 @@
-﻿import { useState } from "preact/hooks";
+﻿import { useState, useEffect } from "preact/hooks";
 import {
   kpssQuizFlowService,
   AIConfig,
@@ -44,6 +44,11 @@ export function useKpssQuiz({
   const [pastQuizzes, setPastQuizzes] = useState<Record<string, KpssPastQuiz>>(
     {},
   );
+  // Birikimli başarı: konuda çözülen toplam soru / doğru (min 100 soru + %80 şartı)
+  const [cumulative, setCumulative] = useState<{
+    totalQuestions: number;
+    totalCorrect: number;
+  }>({ totalQuestions: 0, totalCorrect: 0 });
 
   const fetchQuizFromAI = async (
     subjectKey: string,
@@ -117,7 +122,7 @@ export function useKpssQuiz({
 
   const handleFinishQuiz = async () => {
     try {
-      const { scorePercentage, updatedPastQuizzes } =
+      const { scorePercentage, updatedPastQuizzes, cumulative: cum } =
         await kpssQuizFlowService.evaluateAndSaveQuizResult({
           currentSubject: currentSubject(),
           activeQuizTopic: activeQuizTopic!,
@@ -127,6 +132,7 @@ export function useKpssQuiz({
         });
 
       setQuizResultScore(scorePercentage);
+      setCumulative(cum);
       setQuizStep("result");
       setPastQuizzes(updatedPastQuizzes);
       await onQuizCompleted();
@@ -140,7 +146,7 @@ export function useKpssQuiz({
 
   const handleSaveExternalResult = async (correct: number, total: number) => {
     try {
-      const { scorePercentage, updatedPastQuizzes } =
+      const { scorePercentage, updatedPastQuizzes, cumulative: cum } =
         await kpssQuizFlowService.saveExternalQuizResult({
           currentSubject: currentSubject(),
           activeQuizTopic: activeQuizTopic!,
@@ -150,6 +156,7 @@ export function useKpssQuiz({
         });
 
       setQuizResultScore(scorePercentage);
+      setCumulative(cum);
       setQuizQuestions([]);
       setSelectedAnswers([]);
       setQuizStep("result");
@@ -181,6 +188,7 @@ export function useKpssQuiz({
       setQuizQuestions([]);
       setSelectedAnswers([]);
       setQuizError(null);
+      setCumulative({ totalQuestions: 0, totalCorrect: 0 });
     }
   };
 
@@ -221,6 +229,11 @@ export function useKpssQuiz({
     setPastQuizzes(loaded);
   };
 
+  // Başlangıçta geçmiş testleri yükle — aynı konuya tekrar girilince sonuç/sorular görünsün
+  useEffect(() => {
+    void loadPastQuizzes();
+  }, []);
+
   return {
     activeQuizTopic,
     setActiveQuizTopic,
@@ -241,6 +254,7 @@ export function useKpssQuiz({
     quizError,
     setQuizError,
     pastQuizzes,
+    cumulative,
     fetchQuizFromAI,
     handleFinishQuiz,
     handleSaveExternalResult,
