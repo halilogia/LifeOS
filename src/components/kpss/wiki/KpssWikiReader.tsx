@@ -41,49 +41,6 @@ export function KpssWikiReader({
     return extractFirstImageUrl(note.content);
   }, [note.content]);
 
-  // Extract key-value summary pairs from content lines containing ":" (only concise metadata, not prose)
-  const keySummaryRows = useMemo(() => {
-    if (!note || !note.content) {
-      return [];
-    }
-    const lines = note.content.split("\n");
-    const rows: { key: string; val: string }[] = [];
-
-    for (const l of lines) {
-      const trimmed = l.trim();
-      if (
-        !trimmed ||
-        trimmed.startsWith("#") ||
-        trimmed.startsWith("http") ||
-        trimmed.startsWith("![")
-      ) {
-        continue;
-      }
-      const colonIdx = trimmed.indexOf(":");
-      if (colonIdx > 0 && colonIdx < 30) {
-        const key = trimmed
-          .slice(0, colonIdx)
-          .replace(/^[-*_`\s]+/, "")
-          .trim();
-        const val = trimmed.slice(colonIdx + 1).trim();
-        // Strict filter: value must be a concise fact (<= 40 chars) and not a full sentence
-        if (
-          key &&
-          val &&
-          key.length < 25 &&
-          val.length <= 40 &&
-          !val.includes(". ")
-        ) {
-          rows.push({ key, val });
-          if (rows.length >= 5) {
-            break;
-          }
-        }
-      }
-    }
-    return rows;
-  }, [note.content]);
-
   // Extract outbound wikilinks from article content [[Target Title]]
   const outboundWikilinks = useMemo(() => {
     if (!note || !note.content) {
@@ -310,7 +267,6 @@ export function KpssWikiReader({
           displayTitle={displayTitle}
           subject={note.subject}
           imageUrl={imageUrl}
-          keySummaryRows={keySummaryRows}
           readingTimeMinutes={readingTimeMinutes}
           wordCount={wordCount}
           updatedAt={note.updatedAt || note.createdAt}
