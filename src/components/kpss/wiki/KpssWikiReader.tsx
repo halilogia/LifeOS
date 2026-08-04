@@ -140,6 +140,10 @@ export function KpssWikiReader({
         flex: 1,
         overflowY: "auto",
         paddingRight: "6px",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
       }}
     >
       {/* Article Title Header */}

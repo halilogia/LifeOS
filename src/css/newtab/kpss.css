@@ -7,6 +7,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-7);
+  min-width: 0;
+  width: 100%;
+  /* overflow-x: clip — yatay taşmayı gizler ama scrollbar oluşturmaz
+     (overflow-x: hidden, overflow-y'yi auto'ya çevirip scrollbar'ı içeri çeker). */
+  overflow-x: clip;
+  box-sizing: border-box;
   /* height:100% YOK — view-content.active zaten scroll'lu (overflow-y:auto).
      Container doğal yükseklikte büyür, konular asla sıkışmaz. */
 }

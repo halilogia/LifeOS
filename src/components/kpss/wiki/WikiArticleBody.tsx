@@ -25,6 +25,10 @@ export function WikiArticleBody({
         lineHeight: 1.85,
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
       }}
       onClick={onWikilinkClick}
     >
@@ -36,7 +40,16 @@ export function WikiArticleBody({
             return null;
           }
           return (
-            <div key={idx} style={{ margin: "16px 0" }}>
+            <div
+              key={idx}
+              style={{
+                margin: "16px 0",
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: 0,
+                boxSizing: "border-box",
+              }}
+            >
               <SchemaBuilder outline={outline} title={note.title} />
             </div>
           );

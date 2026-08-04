@@ -122,6 +122,10 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
         flexDirection: "column",
         gap: "14px",
         marginTop: "14px",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
       }}
     >
       <KpssNotesHeader t={t} syncMsg={syncMsg} />
@@ -133,6 +137,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           gridTemplateColumns: "270px 1fr",
           gap: "16px",
           minHeight: "680px",
+          width: "100%",
+          maxWidth: "100%",
+          minWidth: 0,
         }}
       >
         <KpssWikiSidebar
@@ -158,6 +165,9 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
             display: "flex",
             flexDirection: "column",
             gap: "16px",
+            minWidth: 0,
+            maxWidth: "100%",
+            boxSizing: "border-box",
           }}
         >
           {selectedNote ? (
