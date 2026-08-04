@@ -26,19 +26,41 @@ export function createKpssService(kpssRepo: IKpssRepository) {
      */
     async getKpssProgress(): Promise<KpssProgress[]> {
       const progressList = await kpssRepo.getAllProgress();
+      const pastQuizzes = await kpssRepo.getPastQuizzes();
       let changed = false;
+
       progressList.forEach((p) => {
-        if (p.status !== 2) {
-          return;
-        }
-        const tq = p.totalQuestions ?? 0;
-        const tc = p.totalCorrect ?? 0;
-        const cumPercent = tq >= 100 ? Math.round((tc / tq) * 100) : 0;
-        if (tq < 100 || cumPercent < 80) {
-          p.status = 1;
+        // Eski score'u olan fakat totalQuestions verisi boş olan kayıtları onar
+        if ((p.totalQuestions === undefined || p.totalQuestions === 0) && p.score !== undefined) {
+          const quizKey = `${p.subject}_${p.topic}`;
+          const pastQuiz = pastQuizzes[quizKey];
+
+          if (pastQuiz && pastQuiz.questions && pastQuiz.questions.length > 0) {
+            p.totalQuestions = pastQuiz.questions.length;
+            const correctCount = (pastQuiz.selectedAnswers || []).filter(
+              (ans, idx) => ans === pastQuiz.questions[idx]?.correctAnswer,
+            ).length;
+            p.totalCorrect = correctCount;
+          } else {
+            // standart 5 soruluk test varsayımı
+            p.totalQuestions = 5;
+            p.totalCorrect = Math.round((5 * p.score) / 100);
+          }
           changed = true;
         }
+
+        // Tamamlandı (status 2) olan kayıtların 100 soru + %80 başarı kuralına uyum kontrolü
+        if (p.status === 2) {
+          const tq = p.totalQuestions ?? 0;
+          const tc = p.totalCorrect ?? 0;
+          const cumPercent = tq > 0 ? Math.round((tc / tq) * 100) : 0;
+          if (tq < 100 || cumPercent < 80) {
+            p.status = 1;
+            changed = true;
+          }
+        }
       });
+
       if (changed) {
         await kpssRepo.saveAllProgress(progressList);
       }

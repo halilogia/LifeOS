@@ -14,4 +14,6 @@ export interface IKpssRepository {
   removeAll(): Promise<void>;
   /** Save/overwrite past quizzes map. */
   savePastQuizzes(quizzes: Record<string, unknown>): Promise<void>;
+  /** Retrieve past quizzes map. */
+  getPastQuizzes(): Promise<Record<string, any>>;
 }

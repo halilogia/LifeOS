@@ -7,6 +7,16 @@
 import { KPSS_YEARLY_DATA } from "@/data/kpss/kpssDataRegistry.js";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
+export interface KpssPastQuizSession {
+  id: string;
+  date: string;
+  questionCount: number;
+  score: number;
+  questions: QuizQuestion[];
+  selectedAnswers: number[];
+  mode?: "local" | "external";
+}
+
 export interface KpssPastQuiz {
   subject: string;
   topic: string;
@@ -14,6 +24,7 @@ export interface KpssPastQuiz {
   questions: QuizQuestion[];
   selectedAnswers: number[];
   date: string;
+  history?: KpssPastQuizSession[];
 }
 
 /**

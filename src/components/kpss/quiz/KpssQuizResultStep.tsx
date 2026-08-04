@@ -1,12 +1,14 @@
 /**
  * KpssQuizResultStep.tsx
- * KPSS Sınavı tamamlanma ekranı (Skor yüzdesi, soru inceleme listesi, TXT rapor aktarımı).
- * Tuval: TXT export + skor hesapları + QuizResultHero/QuizReviewList/QuizResultActions.
+ * KPSS Sınavı tamamlanma ekranı (Skor yüzdesi, pop-up soru inceleme butonu, aksiyonlar).
  */
+import { useState } from "preact/hooks";
 import type { QuizQuestion } from "@/components/kpss/quiz/KpssQuizQuestionsStep.js";
 import { QuizResultHero } from "./QuizResultHero.js";
-import { QuizReviewList } from "./QuizReviewList.js";
 import { QuizResultActions } from "./QuizResultActions.js";
+import { KpssQuizReviewModal } from "./KpssQuizReviewModal.js";
+
+import { KpssPastQuizSession } from "@/services/kpss/kpssQuizService.js";
 
 interface KpssQuizResultStepProps {
   lang: string;
@@ -17,6 +19,7 @@ interface KpssQuizResultStepProps {
   cumulative: { totalQuestions: number; totalCorrect: number };
   quizQuestions: QuizQuestion[];
   selectedAnswers: number[];
+  historySessions?: KpssPastQuizSession[];
   subjectNames: Record<string, string>;
   onRetakeQuiz: () => void;
   onClose: () => void;
@@ -31,10 +34,13 @@ export function KpssQuizResultStep({
   cumulative,
   quizQuestions,
   selectedAnswers,
+  historySessions,
   subjectNames,
   onRetakeQuiz,
   onClose,
 }: KpssQuizResultStepProps) {
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   const handleExportTxt = () => {
     let text = `Sınav Raporu\n`;
     text += `Ders: ${subjectNames[currentSubject] || currentSubject}\n`;
@@ -78,89 +84,44 @@ export function KpssQuizResultStep({
   // Birikimli başarı: konu tamamlanması için min 100 soru + %80 şartı
   const cumTotal = cumulative?.totalQuestions ?? 0;
   const cumCorrect = cumulative?.totalCorrect ?? 0;
-  const cumPercent = cumTotal >= 100 ? Math.round((cumCorrect / cumTotal) * 100) : cumTotal > 0 ? Math.round((cumCorrect / cumTotal) * 100) : 0;
+  const cumPercent =
+    cumTotal >= 100
+      ? Math.round((cumCorrect / cumTotal) * 100)
+      : cumTotal > 0
+        ? Math.round((cumCorrect / cumTotal) * 100)
+        : 0;
   const cumPassed = cumTotal >= 100 && cumPercent >= 80;
   const barPct = Math.min(100, Math.round((cumTotal / 100) * 100));
 
   return (
     <div style={{ padding: "4px" }}>
-      {/* ─── Score Hero ─── */}
+      {/* ─── Unified Score & Dual Progress Hero ─── */}
       <QuizResultHero
         t={t}
         score={quizResultScore}
         correctCount={correctCount}
         totalQuestions={totalQuestions}
+        cumulative={cumulative}
       />
 
-      {/* ─── Birikimli Başarı ─── */}
-      <div
-        style={{
-          marginTop: "12px",
-          background: "rgba(139, 92, 246, 0.1)",
-          border: "1px solid rgba(139, 92, 246, 0.3)",
-          borderRadius: "10px",
-          padding: "10px 14px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontSize: "0.78rem",
-            fontWeight: 700,
-            color: "#e2e8f0",
-            marginBottom: 6,
-          }}
-        >
-          <span>Konu Başarı Durumu</span>
-          <span style={{ color: "#c084fc" }}>
-            {cumTotal} / 100 soru · %{cumPercent} başarı
-          </span>
-        </div>
-        {/* İlerleme çubuğu */}
-        <div
-          style={{
-            height: 8,
-            background: "rgba(255,255,255,0.08)",
-            borderRadius: 4,
-            overflow: "hidden",
-          }}
-        >
-          <div
+      {/* ─── Soruları İncele Pop-Up Butonu ─── */}
+      {quizQuestions.length > 0 && (
+        <div style={{ marginTop: "16px" }}>
+          <button
+            className="kpss-external-open-btn"
             style={{
-              height: "100%",
-              width: `${barPct}%`,
-              background: cumPassed
-                ? "linear-gradient(90deg,#22c55e,#4ade80)"
-                : "linear-gradient(90deg,#a855f7,#c084fc)",
-              borderRadius: 4,
-              transition: "width 0.4s ease",
+              width: "100%",
+              padding: "12px",
+              fontSize: "0.95rem",
+              justifyContent: "center",
+              background: "rgba(255, 255, 255, 0.04)",
             }}
-          />
+            onClick={() => setShowReviewModal(true)}
+          >
+            🔍 Soruları İncele ({quizQuestions.length} Soru)
+          </button>
         </div>
-        <div
-          style={{
-            fontSize: "0.72rem",
-            color: cumPassed ? "#4ade80" : "#94a3b8",
-            marginTop: 6,
-            fontWeight: 600,
-          }}
-        >
-          {cumPassed
-            ? "✓ Konu tamamlandı! (100+ soru, %80+ başarı)"
-            : cumTotal >= 100
-              ? "100+ soru çözdün ama %80 başarıya henüz ulaşmadın. Daha fazla soru çözerek başarını yükselt."
-              : `Bu konuda en az 100 soru çözüp %80 başarıya ulaşınca "Tamamlandı" olur. Şu an ${cumTotal} soru çözüldü.`}
-        </div>
-      </div>
-
-      {/* ─── Scrollable Questions Review ─── */}
-      <QuizReviewList
-        t={t}
-        questions={quizQuestions}
-        selectedAnswers={selectedAnswers}
-      />
+      )}
 
       {/* ─── Actions ─── */}
       <QuizResultActions
@@ -169,6 +130,23 @@ export function KpssQuizResultStep({
         onExport={handleExportTxt}
         onClose={onClose}
       />
+
+      {/* ─── Soruları İncele Pop-up Modali ─── */}
+      {showReviewModal && (
+        <KpssQuizReviewModal
+          lang={lang}
+          t={t}
+          subjectTitle={subjectNames[currentSubject] || currentSubject}
+          topicTitle={activeQuizTopic || ""}
+          score={quizResultScore}
+          quizQuestions={quizQuestions}
+          selectedAnswers={selectedAnswers}
+          historySessions={historySessions}
+          onClose={() => setShowReviewModal(false)}
+          onRetake={onRetakeQuiz}
+          onExport={handleExportTxt}
+        />
+      )}
     </div>
   );
 }

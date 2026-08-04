@@ -6,12 +6,12 @@
  */
 
 import { useState } from "preact/hooks";
-import { KpssQuizInfoModal } from "@/components/kpss/quiz/KpssQuizInfoModal.js";
 import { KpssQuizIntroStep } from "@/components/kpss/quiz/KpssQuizIntroStep.js";
 import {
   KpssQuizQuestionsStep,
   QuizQuestion,
 } from "@/components/kpss/quiz/KpssQuizQuestionsStep.js";
+import { KpssPastQuiz } from "@/services/kpss/kpssQuizService.js";
 import { KpssQuizResultStep } from "@/components/kpss/quiz/KpssQuizResultStep.js";
 import { KpssExternalQuizLauncher } from "@/components/kpss/quiz/KpssExternalQuizLauncher.js";
 import { KpssExternalResultModal } from "@/components/kpss/quiz/KpssExternalResultModal.js";
@@ -34,6 +34,7 @@ interface KpssQuizModalProps {
   cumulative: { totalQuestions: number; totalCorrect: number };
   aiApiKey: string;
   aiEndpoint: string;
+  pastQuizzes?: Record<string, KpssPastQuiz>;
   onClose: () => void;
   onSetSelectedQuizCount: (count: number) => void;
   onStartQuiz: () => void;
@@ -43,6 +44,7 @@ interface KpssQuizModalProps {
   onFinishQuiz: () => void;
   onRetakeQuiz: () => void;
   onSaveExternalResult: (correct: number, total: number) => void;
+  onReviewPastQuiz?: (topic: string) => void;
   subjectNames: Record<string, string>;
 }
 
@@ -63,6 +65,7 @@ export function KpssQuizModal({
   cumulative,
   aiApiKey,
   aiEndpoint,
+  pastQuizzes,
   onClose,
   onSetSelectedQuizCount,
   onStartQuiz,
@@ -72,14 +75,13 @@ export function KpssQuizModal({
   onFinishQuiz,
   onRetakeQuiz,
   onSaveExternalResult,
+  onReviewPastQuiz,
   subjectNames,
 }: KpssQuizModalProps) {
   if (!activeQuizTopic) {
     return null;
   }
 
-  const [showInfo, setShowInfo] = useState(false);
-  // "local-intro" | "external-launcher" | "external-result"
   const [internalMode, setInternalMode] = useState<
     "local-intro" | "external-launcher" | "external-result"
   >("local-intro");
@@ -105,28 +107,6 @@ export function KpssQuizModal({
         <div className="settings-header">
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <h3>{activeQuizTopic}</h3>
-            <button
-                onClick={() => setShowInfo(true)}
-                style={{
-                  background: "rgba(139, 92, 246, 0.15)",
-                  border: "1px solid rgba(139, 92, 246, 0.3)",
-                  borderRadius: "50%",
-                  width: "22px",
-                  height: "22px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-color)",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  fontSize: "0.85rem",
-                  transition: "all 0.2s ease",
-                }}
-                title={t.kpss_quiz_new_gen_info}
-                className="kpss-info-toggle-btn"
-              >
-                !
-              </button>
           </div>
           <button className="close-btn" onClick={onClose}>
             <svg
@@ -144,11 +124,6 @@ export function KpssQuizModal({
             </svg>
           </button>
         </div>
-
-        {/* Reform Milatları Bilgilendirme Modal'ı */}
-        {showInfo && (
-          <KpssQuizInfoModal t={t} onClose={() => setShowInfo(false)} />
-        )}
 
         {/* Body Content */}
         <div className="settings-body" style={{ padding: "20px" }}>
@@ -193,6 +168,12 @@ export function KpssQuizModal({
                   onSetSelectedQuizCount={onSetSelectedQuizCount}
                   onStartQuiz={onStartQuiz}
                   onOpenExternal={() => setInternalMode("external-launcher")}
+                  onReviewPastQuiz={
+                    onReviewPastQuiz && activeQuizTopic
+                      ? () => onReviewPastQuiz(activeQuizTopic)
+                      : undefined
+                  }
+                  hasPastQuiz={quizQuestions.length > 0}
                 />
               )}
 
@@ -223,6 +204,9 @@ export function KpssQuizModal({
                   cumulative={cumulative}
                   quizQuestions={quizQuestions}
                   selectedAnswers={selectedAnswers}
+                  historySessions={
+                    pastQuizzes?.[`${currentSubject}_${activeQuizTopic}`]?.history
+                  }
                   subjectNames={subjectNames}
                   onRetakeQuiz={onRetakeQuiz}
                   onClose={onClose}
