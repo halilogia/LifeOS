@@ -27,26 +27,61 @@ interface KpssWikiEditorProps {
   onSave: () => void;
 }
 
-/** "```sema" bloğundan outline metnini çıkar */
+/** "```sema" bloğundan outline metnini çıkar (başlık satırı hariç) */
 function extractSemaOutline(content: string): string {
   const m = content.match(/```sema\s*\n([\s\S]*?)```/);
-  return m ? m[1].trim() : "";
+  if (!m) {
+    return "";
+  }
+  const lines = m[1].split("\n");
+  if (lines[0]?.trim().startsWith("#")) {
+    return lines.slice(1).join("\n").trim();
+  }
+  return m[1].trim();
 }
 
-/** "```harita" bloğunun tamamını (```harita...```) çıkar */
+/** "```sema" bloğunun başlığını çıkar (# Başlık) */
+function extractSemaTitle(content: string): string {
+  const m = content.match(/```sema\s*\n([\s\S]*?)```/);
+  if (!m) {
+    return "";
+  }
+  const first = m[1].split("\n")[0]?.trim() || "";
+  return first.startsWith("#") ? first.replace(/^#+\s*/, "").trim() : "";
+}
+
+/** "```harita" bloğunun içeriğini çıkar (başlık satırı hariç) */
 function extractHaritaBlock(content: string): string {
-  const m = content.match(/```harita\s*\n[\s\S]*?```/);
-  return m ? m[0].trim() : "";
+  const m = content.match(/```harita\s*\n([\s\S]*?)```/);
+  if (!m) {
+    return "";
+  }
+  const lines = m[1].split("\n");
+  if (lines[0]?.trim().startsWith("#")) {
+    return lines.slice(1).join("\n").trim();
+  }
+  return m[1].trim();
+}
+
+/** "```harita" bloğunun başlığını çıkar (# Başlık) */
+function extractHaritaTitle(content: string): string {
+  const m = content.match(/```harita\s*\n([\s\S]*?)```/);
+  if (!m) {
+    return "";
+  }
+  const first = m[1].split("\n")[0]?.trim() || "";
+  return first.startsWith("#") ? first.replace(/^#+\s*/, "").trim() : "";
 }
 
 /** Outline metnini "```sema" bloğu olarak content'e yerleştir (eskisini değiştirir) */
-function upsertSemaOutline(content: string, outline: string): string {
+function upsertSemaOutline(content: string, outline: string, title: string): string {
   const trimmed = outline.trim();
   // Şema boşsa bloğu tamamen kaldır
-  if (!trimmed) {
+  if (!trimmed && !title.trim()) {
     return content.replace(/```sema\s*\n[\s\S]*?```/g, "").replace(/\n{3,}/g, "\n\n").trim() + "\n";
   }
-  const block = "```sema\n" + trimmed + "\n```";
+  const header = title.trim() ? `# ${title.trim()}\n` : "";
+  const block = "```sema\n" + header + trimmed + "\n```";
   if (/```sema\s*\n[\s\S]*?```/.test(content)) {
     return content.replace(/```sema\s*\n[\s\S]*?```/, block);
   }
@@ -54,15 +89,16 @@ function upsertSemaOutline(content: string, outline: string): string {
 }
 
 /** Harita bloğu metnini content'e yerleştir (eskisini değiştirir) */
-function upsertHaritaBlock(content: string, block: string): string {
+function upsertHaritaBlock(content: string, block: string, title: string): string {
   const trimmed = block.trim();
-  if (!trimmed) {
+  if (!trimmed && !title.trim()) {
     return content.replace(/```harita\s*\n[\s\S]*?```/g, "").replace(/\n{3,}/g, "\n\n").trim() + "\n";
   }
+  const header = title.trim() ? `# ${title.trim()}\n` : "";
   if (/```harita\s*\n[\s\S]*?```/.test(content)) {
-    return content.replace(/```harita\s*\n[\s\S]*?```/, trimmed);
+    return content.replace(/```harita\s*\n[\s\S]*?```/, header + trimmed);
   }
-  return content.trimEnd() + "\n\n" + trimmed + "\n";
+  return content.trimEnd() + "\n\n" + "```harita\n" + header + trimmed + "\n```\n";
 }
 
 export function KpssWikiEditor({
@@ -80,8 +116,10 @@ export function KpssWikiEditor({
   const [mode, setMode] = useState<"write" | "sema" | "harita">("write");
   const initialSema = extractSemaOutline(editorContent);
   const [semaText, setSemaText] = useState<string>(initialSema || "");
+  const [semaTitle, setSemaTitle] = useState<string>(extractSemaTitle(editorContent) || "");
   const initialHarita = extractHaritaBlock(editorContent);
   const [haritaBlock, setHaritaBlock] = useState<string>(initialHarita || "");
+  const [haritaTitle, setHaritaTitle] = useState<string>(extractHaritaTitle(editorContent) || "");
 
   const switchToSema = () => {
     // Mevcut content'teki şema bloğunu kullan, yoksa mevcut outline'ı al
@@ -89,6 +127,7 @@ export function KpssWikiEditor({
     if (existing) {
       setSemaText(existing);
     }
+    setSemaTitle(extractSemaTitle(editorContent) || "");
     setMode("sema");
   };
 
@@ -98,6 +137,7 @@ export function KpssWikiEditor({
     if (existing) {
       setHaritaBlock(existing);
     }
+    setHaritaTitle(extractHaritaTitle(editorContent) || "");
     setMode("harita");
   };
 
@@ -105,9 +145,9 @@ export function KpssWikiEditor({
     // Şema ve harita bloklarını content'e işle
     let merged = editorContent;
     if (mode === "sema") {
-      merged = upsertSemaOutline(merged, semaText);
+      merged = upsertSemaOutline(merged, semaText, semaTitle);
     } else if (mode === "harita") {
-      merged = upsertHaritaBlock(merged, haritaBlock);
+      merged = upsertHaritaBlock(merged, haritaBlock, haritaTitle);
     }
     onContentChange(merged);
     setMode("write");
@@ -229,6 +269,39 @@ export function KpssWikiEditor({
         </button>
       </div>
 
+      {/* Şema / Harita başlığı — ayrı başlık, not başlığından bağımsız */}
+      {(mode === "sema" || mode === "harita") && (
+        <input
+          type="text"
+          value={mode === "sema" ? semaTitle : haritaTitle}
+          onInput={(e) => {
+            const v = (e.target as HTMLInputElement).value;
+            if (mode === "sema") {
+              setSemaTitle(v);
+            } else {
+              setHaritaTitle(v);
+            }
+          }}
+          placeholder={
+            mode === "sema"
+              ? "Şema başlığı (isteğe bağlı — boşsa gizli)"
+              : "Harita başlığı (isteğe bağlı — boşsa gizli)"
+          }
+          style={{
+            width: "100%",
+            background: "rgba(0, 0, 0, 0.4)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "8px",
+            padding: "8px 12px",
+            color: "#ffffff",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+        />
+      )}
+
       {mode === "write" ? (
         <>
           {/* Content Textarea */}
@@ -260,7 +333,7 @@ export function KpssWikiEditor({
       ) : mode === "sema" ? (
         <SchemaBuilder
           outline={semaText}
-          title={editorTitle}
+          title={semaTitle}
           editable
           onChange={setSemaText}
         />
@@ -272,6 +345,7 @@ export function KpssWikiEditor({
             setHaritaBlock(serialized);
           }}
           editable
+          title={haritaTitle}
         />
       )}
 
@@ -308,13 +382,13 @@ export function KpssWikiEditor({
             onClick={() => {
               if (mode === "sema") {
                 // Şemayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
-                const merged = upsertSemaOutline(editorContent, semaText);
+                const merged = upsertSemaOutline(editorContent, semaText, semaTitle);
                 onContentChange(merged);
                 setMode("write");
                 window.setTimeout(() => onSave(), 0);
               } else if (mode === "harita") {
                 // Haritayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
-                const merged = upsertHaritaBlock(editorContent, haritaBlock);
+                const merged = upsertHaritaBlock(editorContent, haritaBlock, haritaTitle);
                 onContentChange(merged);
                 setMode("write");
                 window.setTimeout(() => onSave(), 0);

@@ -15,16 +15,28 @@ const VIEWBOX = MAP_VIEWBOX.split(" ").map(Number); // [0, 0, 1000, 421.99]
 const VB_W = VIEWBOX[2];
 const VB_H = VIEWBOX[3];
 
-/** Harita oluşturucu pin'i — GeoPin + isteğe bağlı açıklama */
+/** Pin tipleri — haritada farklı ikonlarla gösterilir */
+export type MapPinKind = "flag" | "mountain" | "volcano" | "lake" | "city" | "star";
+
+export const PIN_KINDS: { id: MapPinKind; label: string; icon: string }[] = [
+  { id: "flag", label: "Bayrak", icon: "🚩" },
+  { id: "city", label: "Şehir", icon: "🏙️" },
+  { id: "mountain", label: "Dağ", icon: "⛰️" },
+  { id: "volcano", label: "Volkan", icon: "🌋" },
+  { id: "lake", label: "Göl", icon: "💧" },
+  { id: "star", label: "Önemli", icon: "⭐" },
+];
+
+/** Harita oluşturucu pin'i — konum + isteğe bağlı açıklama + tip */
 export interface MapPin {
   name: string;
-  city: string;
+  kind: MapPinKind;
   desc: string;
   x: number;
   y: number;
 }
 
-/** "```harita" bloğunu MapPin dizisine çevir (format: İsim|Şehir|Açıklama|x|y) */
+/** "```harita" bloğunu MapPin dizisine çevir (format: İsim|Tip|Açıklama|x|y) */
 export function parseHaritaBlock(content: string): MapPin[] {
   const m = content.match(/```harita\s*\n([\s\S]*?)```/);
   if (!m) {
@@ -37,9 +49,10 @@ export function parseHaritaBlock(content: string): MapPin[] {
       const x = parseFloat(parts[parts.length - 2]);
       const y = parseFloat(parts[parts.length - 1]);
       if (!isNaN(x) && !isNaN(y)) {
+        const kind = (parts[1] as MapPinKind) || "flag";
         pins.push({
           name: parts[0] || "",
-          city: parts[1] || "",
+          kind: PIN_KINDS.some((k) => k.id === kind) ? kind : "flag",
           desc: parts.length >= 5 ? parts[2] || "" : "",
           x,
           y,
@@ -55,8 +68,26 @@ export function serializeHaritaBlock(pins: MapPin[]): string {
   if (pins.length === 0) {
     return "";
   }
-  const lines = pins.map((p) => `${p.name}|${p.city}|${p.desc}|${p.x}|${p.y}`);
+  const lines = pins.map((p) => `${p.name}|${p.kind}|${p.desc}|${p.x}|${p.y}`);
   return "```harita\n" + lines.join("\n") + "\n```";
+}
+
+/** Pin tipine göre renk */
+export function pinKindColor(kind: MapPinKind): string {
+  switch (kind) {
+    case "mountain":
+      return "#6b4226";
+    case "volcano":
+      return "#c8511f";
+    case "lake":
+      return "#2563eb";
+    case "city":
+      return "#0ea5e9";
+    case "star":
+      return "#c99a3c";
+    default:
+      return "#8c2a1f";
+  }
 }
 
 interface MapBuilderProps {
@@ -66,13 +97,15 @@ interface MapBuilderProps {
   onChange?: (serialized: string) => void;
   /** Pin düzenlemesine izin ver (editör modu) */
   editable?: boolean;
+  /** Harita başlığı (opsiyonel — boşsa gizli) */
+  title?: string;
 }
 
-export function MapBuilder({ initialPins = [], onChange, editable = true }: MapBuilderProps) {
+export function MapBuilder({ initialPins = [], onChange, editable = true, title }: MapBuilderProps) {
   const [pins, setPins] = useState<MapPin[]>(initialPins);
   const [editingIdx, setEditingIdx] = useState<number>(-1);
   const [name, setName] = useState("");
-  const [city, setCity] = useState("");
+  const [kind, setKind] = useState<MapPinKind>("flag");
   const [desc, setDesc] = useState("");
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -95,10 +128,10 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
     const x = (px / rect.width) * VB_W;
     const y = (py / rect.height) * VB_H;
     // Başlık girilmediyse boş kalsın — "Pin N" otomatik adı yok
-    setPins((prev) => [...prev, { name: "", city: "", desc: "", x, y }]);
+    setPins((prev) => [...prev, { name: "", kind: "flag", desc: "", x, y }]);
     setEditingIdx(pins.length);
     setName("");
-    setCity("");
+    setKind("flag");
     setDesc("");
   };
 
@@ -111,7 +144,7 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
       next[editingIdx] = {
         ...next[editingIdx],
         name: name.trim(),
-        city: city.trim(),
+        kind,
         desc: desc.trim(),
       };
       return next;
@@ -154,6 +187,23 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
         boxSizing: "border-box",
       }}
     >
+      {/* Harita başlığı — boşsa gizli */}
+      {title && title.trim() && (
+        <div
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 14,
+            color: "#7a1414",
+            background: "rgba(255,255,255,0.5)",
+            borderRadius: 6,
+            padding: "6px 14px",
+          }}
+        >
+          {title}
+        </div>
+      )}
+
       {/* Harita tuvali */}
       <div
         style={{
@@ -193,20 +243,39 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
           {/* Pin'ler */}
           {pins.map((pin, idx) => (
             <g key={`pin-${idx}`} transform={`translate(${pin.x} ${pin.y})`}>
-              <circle r={5} fill="#c8511f" stroke="#3a1408" strokeWidth={1.2} />
+              <circle
+                r={7}
+                fill={pinKindColor(pin.kind)}
+                stroke="#3a1408"
+                strokeWidth={1.2}
+                opacity={0.85}
+              />
               <text
-                y={-10}
+                y={1}
                 textAnchor="middle"
+                dominantBaseline="central"
                 style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: 11,
-                  fill: "#3a1408",
-                  fontWeight: 700,
+                  fontSize: 9,
                   pointerEvents: "none",
                 }}
               >
-                {pin.name}
+                {PIN_KINDS.find((k) => k.id === pin.kind)?.icon || "🚩"}
               </text>
+              {pin.name && (
+                <text
+                  y={-12}
+                  textAnchor="middle"
+                  style={{
+                    fontFamily: "Georgia, serif",
+                    fontSize: 11,
+                    fill: "#3a1408",
+                    fontWeight: 700,
+                    pointerEvents: "none",
+                  }}
+                >
+                  {pin.name}
+                </text>
+              )}
             </g>
           ))}
         </svg>
@@ -242,22 +311,39 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
               outline: "none",
             }}
           />
-          <input
-            value={city}
-            onInput={(e) => setCity((e.target as HTMLInputElement).value)}
-            placeholder="Şehir / bölge (isteğe bağlı)"
+          {/* Pin tipi seçici: bayrak / şehir / dağ / volkan / göl / önemli */}
+          <div
             style={{
-              flex: 1,
-              minWidth: 120,
-              background: "rgba(0,0,0,0.4)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 6,
-              padding: "6px 10px",
-              color: "#fff",
-              fontSize: "0.8rem",
-              outline: "none",
+              display: "flex",
+              gap: 4,
+              alignItems: "center",
+              flexWrap: "wrap",
             }}
-          />
+          >
+            {PIN_KINDS.map((k) => (
+              <button
+                key={k.id}
+                type="button"
+                onClick={() => setKind(k.id)}
+                title={k.label}
+                style={{
+                  background:
+                    kind === k.id ? "rgba(200,81,31,0.4)" : "rgba(255,255,255,0.06)",
+                  border:
+                    kind === k.id
+                      ? "1px solid #c8511f"
+                      : "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: 6,
+                  padding: "4px 8px",
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  lineHeight: 1,
+                }}
+              >
+                {k.icon}
+              </button>
+            ))}
+          </div>
           <input
             value={desc}
             onInput={(e) => setDesc((e.target as HTMLInputElement).value)}
@@ -335,8 +421,10 @@ export function MapBuilder({ initialPins = [], onChange, editable = true }: MapB
               }}
             >
               <span style={{ fontWeight: 700, color: "#c8511f" }}>{idx + 1}.</span>
+              <span style={{ fontSize: "0.8rem" }}>
+                {PIN_KINDS.find((k) => k.id === pin.kind)?.icon || "🚩"}
+              </span>
               <span style={{ fontWeight: 600 }}>{pin.name}</span>
-              {pin.city && <span style={{ color: "#94a3b8" }}>— {pin.city}</span>}
               {pin.desc && (
                 <span
                   style={{
@@ -470,24 +558,34 @@ export function HaritaBlock({ content, title }: HaritaBlockProps): JSX.Element {
             style={{ cursor: "pointer" }}
           >
             <circle
-              r={selected === idx ? 7 : 5}
-              fill={selected === idx ? "#c99a3c" : "#c8511f"}
+              r={selected === idx ? 8 : 6}
+              fill={pinKindColor(pin.kind)}
               stroke="#3a1408"
               strokeWidth={1.2}
             />
             <text
-              y={-10}
+              y={1}
               textAnchor="middle"
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 11,
-                fill: "#3a1408",
-                fontWeight: 700,
-                pointerEvents: "none",
-              }}
+              dominantBaseline="central"
+              style={{ fontSize: 9, pointerEvents: "none" }}
             >
-              {pin.name}
+              {PIN_KINDS.find((k) => k.id === pin.kind)?.icon || "🚩"}
             </text>
+            {pin.name && (
+              <text
+                y={-11}
+                textAnchor="middle"
+                style={{
+                  fontFamily: "Georgia, serif",
+                  fontSize: 11,
+                  fill: "#3a1408",
+                  fontWeight: 700,
+                  pointerEvents: "none",
+                }}
+              >
+                {pin.name}
+              </text>
+            )}
           </g>
         ))}
       </svg>
@@ -512,20 +610,17 @@ export function HaritaBlock({ content, title }: HaritaBlockProps): JSX.Element {
         >
           {pins[selected].name && (
             <div style={{ fontWeight: 700, color: "#fff4e4", marginBottom: 3 }}>
+              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon || "🚩"}{" "}
               {pins[selected].name}
-            </div>
-          )}
-          {pins[selected].city && (
-            <div style={{ color: "#c99a3c", fontStyle: "italic", marginBottom: 3 }}>
-              {pins[selected].city}
             </div>
           )}
           {pins[selected].desc && (
             <div style={{ color: "#cfc3aa" }}>{pins[selected].desc}</div>
           )}
-          {!pins[selected].name && !pins[selected].city && !pins[selected].desc && (
+          {!pins[selected].name && !pins[selected].desc && (
             <div style={{ color: "#a99a82" }}>
-              ({Math.round(pins[selected].x)}, {Math.round(pins[selected].y)})
+              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon || "🚩"} (
+              {Math.round(pins[selected].x)}, {Math.round(pins[selected].y)})
             </div>
           )}
         </div>
