@@ -14,11 +14,7 @@ import {
 } from "@/services/kpss/kpssWikiService.js";
 
 export type KpssSubject =
-  | "tarih"
-  | "cografya"
-  | "vatandaslik"
-  | "turkce"
-  | "matematik";
+  "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik";
 
 export interface UseKpssNotesResult {
   notes: KpssWikiNote[];
@@ -62,7 +58,11 @@ export function useKpssNotes(
   const selectedNoteIdRef = useRef(selectedNoteId);
   selectedNoteIdRef.current = selectedNoteId;
   const editorRef = useRef({ title: "", subject: editorSubject, content: "" });
-  editorRef.current = { title: editorTitle, subject: editorSubject, content: editorContent };
+  editorRef.current = {
+    title: editorTitle,
+    subject: editorSubject,
+    content: editorContent,
+  };
 
   useEffect(() => {
     void loadNotes();

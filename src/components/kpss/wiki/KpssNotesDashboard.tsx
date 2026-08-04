@@ -243,7 +243,11 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
       {/* Zettelkasten Interactive 2D Neural Graph Modal */}
       {showGraphModal && (
         <ZettelkastenGraphModal
-          notes={notes as unknown as Parameters<typeof ZettelkastenGraphModal>[0]["notes"]}
+          notes={
+            notes as unknown as Parameters<
+              typeof ZettelkastenGraphModal
+            >[0]["notes"]
+          }
           onClose={() => setShowGraphModal(false)}
           onSelectNote={(n) => {
             selectNote(n as unknown as KpssWikiNote);
