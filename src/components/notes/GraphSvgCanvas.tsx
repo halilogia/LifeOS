@@ -1,7 +1,5 @@
 import type { Note } from "@/types/types.js";
-import {
-  buildKnowledgeGraph,
-} from "@/services/zettelkastenEngine.js";
+import { buildKnowledgeGraph } from "@/services/zettelkastenEngine.js";
 
 export const CANVAS_WIDTH = 850;
 export const CANVAS_HEIGHT = 520;
@@ -76,7 +74,7 @@ export function GraphSvgCanvas({
             </filter>
           </defs>
 
-          {/* Render Edges (Connecting Lines) */}
+          {/* Render Edges (Connecting Lines) — type-based styling */}
           {graph.edges.map((edge, idx) => {
             const sourceNode = graph.nodes.find((n) => n.id === edge.source);
             const targetNode = graph.nodes.find((n) => n.id === edge.target);
@@ -88,10 +86,15 @@ export function GraphSvgCanvas({
               hoveredNodeId &&
               (edge.source === hoveredNodeId || edge.target === hoveredNodeId);
 
+            const isParent = edge.type === "parent";
+
             const strokeColor = isConnectedToHover
-              ? "#a855f7"
-              : "rgba(148, 163, 184, 0.25)";
-            const strokeWidth = isConnectedToHover ? 2.5 : 1.2;
+              ? "#fbbf24"
+              : isParent
+                ? "#10b981"
+                : "rgba(168, 85, 247, 0.55)";
+            const strokeWidth = isParent ? 2.5 : 1.2;
+            const dashArray = isParent ? "none" : "4 3";
 
             return (
               <line
@@ -101,8 +104,8 @@ export function GraphSvgCanvas({
                 x2={targetNode.x}
                 y2={targetNode.y}
                 stroke={strokeColor}
-                strokeWidth={strokeWidth}
-                strokeDasharray={isConnectedToHover ? "none" : "4 2"}
+                strokeWidth={isConnectedToHover ? 2.5 : strokeWidth}
+                strokeDasharray={isConnectedToHover ? "none" : dashArray}
                 style={{
                   transition: "stroke 0.2s ease, stroke-width 0.2s ease",
                 }}

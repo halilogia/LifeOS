@@ -8,26 +8,32 @@ import { useState, useMemo } from "preact/hooks";
 import { Note } from "@/types/types.js";
 import { buildKnowledgeGraph } from "@/services/zettelkastenEngine.js";
 import { GraphLegend } from "./GraphLegend.js";
-import { GraphSvgCanvas, CANVAS_WIDTH, CANVAS_HEIGHT } from "./GraphSvgCanvas.js";
+import {
+  GraphSvgCanvas,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+} from "./GraphSvgCanvas.js";
 
 interface ZettelkastenGraphModalProps {
   notes: Note[];
   onClose: () => void;
   onSelectNote: (note: Note) => void;
+  parentIdMap?: Map<string, string>;
 }
 
 export function ZettelkastenGraphModal({
   notes,
   onClose,
   onSelectNote,
+  parentIdMap,
 }: ZettelkastenGraphModalProps) {
   const [filterQuery, setFilterQuery] = useState("");
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   // Build Graph
   const graph = useMemo(() => {
-    return buildKnowledgeGraph(notes, CANVAS_WIDTH, CANVAS_HEIGHT);
-  }, [notes]);
+    return buildKnowledgeGraph(notes, CANVAS_WIDTH, CANVAS_HEIGHT, parentIdMap);
+  }, [notes, parentIdMap]);
 
   // Filtered / Highlighted Node IDs
   const activeNodeIds = useMemo(() => {
