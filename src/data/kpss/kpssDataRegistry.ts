@@ -12,7 +12,7 @@ import exam2010 from "./exam2010.json";
 import exam2009 from "./exam2009.json";
 import examTarihArsivi from "./exam_tarih_arsivi.json";
 
-export const KPSS_YEARLY_DATA: Record<string, any> = {
+export const KPSS_YEARLY_DATA: Record<string, Record<string, unknown[]>> = {
   "2021": exam2021,
   "2020": exam2020,
   "2019": exam2019,

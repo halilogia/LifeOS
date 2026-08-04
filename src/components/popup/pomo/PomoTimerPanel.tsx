@@ -59,8 +59,7 @@ export function PomoTimerPanel({
               background:
                 pomoState.mode === m ? "var(--accent-color)" : "transparent",
               border: "none",
-              color:
-                pomoState.mode === m ? "white" : "var(--text-secondary)",
+              color: pomoState.mode === m ? "white" : "var(--text-secondary)",
               borderRadius: "6px",
               fontSize: "0.65rem",
               padding: "4px 0",
@@ -160,22 +159,12 @@ export function PomoTimerPanel({
           }}
         >
           {pomoState.running ? (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <rect x="4" y="4" width="4" height="16" rx="1" />
               <rect x="16" y="4" width="4" height="16" rx="1" />
             </svg>
           ) : (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M8 5v14l11-7z" />
             </svg>
           )}

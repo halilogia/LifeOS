@@ -126,8 +126,7 @@ export function drawStockChart(
       const closeY =
         paddingTop +
         chartHeight -
-        ((hoveredPoint.close - minPrice) / (maxPrice - minPrice)) *
-          chartHeight;
+        ((hoveredPoint.close - minPrice) / (maxPrice - minPrice)) * chartHeight;
       ctx.beginPath();
       ctx.moveTo(paddingLeft, closeY);
       ctx.lineTo(width - paddingRight, closeY);

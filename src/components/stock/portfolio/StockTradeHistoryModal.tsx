@@ -155,8 +155,14 @@ export function StockTradeHistoryModal({
                         color: "var(--text-secondary)",
                       }}
                     >
-                      Alış {t.buyPrice.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}{" "}
-                      → Satış {t.sellPrice.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}
+                      Alış{" "}
+                      {t.buyPrice.toLocaleString("tr-TR", {
+                        minimumFractionDigits: 2,
+                      })}{" "}
+                      → Satış{" "}
+                      {t.sellPrice.toLocaleString("tr-TR", {
+                        minimumFractionDigits: 2,
+                      })}
                     </span>
                     <span
                       style={{

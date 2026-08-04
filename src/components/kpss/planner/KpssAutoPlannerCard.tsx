@@ -106,10 +106,7 @@ export function KpssAutoPlannerCard({
         width: "100%",
       }}
     >
-      <KpssPlannerHeader
-        t={t}
-        onShowInfo={() => setShowInfoModal(true)}
-      />
+      <KpssPlannerHeader t={t} onShowInfo={() => setShowInfoModal(true)} />
 
       {totalUncompleted === 0 ? (
         <div
@@ -198,10 +195,7 @@ export function KpssAutoPlannerCard({
 
       {/* Info Explanation Modal */}
       {showInfoModal && (
-        <KpssPlannerInfoModal
-          t={t}
-          onClose={() => setShowInfoModal(false)}
-        />
+        <KpssPlannerInfoModal t={t} onClose={() => setShowInfoModal(false)} />
       )}
     </div>
   );

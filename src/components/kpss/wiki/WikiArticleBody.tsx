@@ -25,7 +25,11 @@ function splitBlocks(content: string): SplitPart[] {
   let m: RegExpExecArray | null;
   while ((m = re.exec(content)) !== null) {
     if (m.index > last) {
-      parts.push({ type: "text", value: content.slice(last, m.index), title: "" });
+      parts.push({
+        type: "text",
+        value: content.slice(last, m.index),
+        title: "",
+      });
     }
     const raw = m[2].trim();
     // Blok ilk satırı "# Başlık" şeklindeyse başlık sayılır (markdown işaretiyle)

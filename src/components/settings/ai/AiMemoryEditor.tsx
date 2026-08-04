@@ -90,9 +90,7 @@ export function AiMemoryEditor({
       </span>
       <textarea
         value={userMemory}
-        onInput={(e) =>
-          onMemoryChange((e.target as HTMLTextAreaElement).value)
-        }
+        onInput={(e) => onMemoryChange((e.target as HTMLTextAreaElement).value)}
         rows={7}
         style={{
           width: "100%",

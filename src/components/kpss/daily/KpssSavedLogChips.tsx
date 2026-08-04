@@ -44,7 +44,8 @@ export function KpssSavedLogChips({
               {stat.date}
             </span>
             <span style={{ color: "#cbd5e1" }}>
-              {stat.questions > 0 && `${stat.questions} ${t.kpss_filter_questions} `}
+              {stat.questions > 0 &&
+                `${stat.questions} ${t.kpss_filter_questions} `}
               {stat.videos ? `${stat.videos} ${t.kpss_filter_videos}` : ""}
             </span>
             {onDeleteStat && (

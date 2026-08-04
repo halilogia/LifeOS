@@ -16,7 +16,8 @@ const VB_W = VIEWBOX[2];
 const VB_H = VIEWBOX[3];
 
 /** Pin tipleri — haritada farklı ikonlarla gösterilir */
-export type MapPinKind = "flag" | "mountain" | "volcano" | "lake" | "city" | "star";
+export type MapPinKind =
+  "flag" | "mountain" | "volcano" | "lake" | "city" | "star";
 
 export const PIN_KINDS: { id: MapPinKind; label: string; icon: string }[] = [
   { id: "flag", label: "Bayrak", icon: "🚩" },
@@ -101,7 +102,12 @@ interface MapBuilderProps {
   title?: string;
 }
 
-export function MapBuilder({ initialPins = [], onChange, editable = true, title }: MapBuilderProps) {
+export function MapBuilder({
+  initialPins = [],
+  onChange,
+  editable = true,
+  title,
+}: MapBuilderProps) {
   const [pins, setPins] = useState<MapPin[]>(initialPins);
   const [editingIdx, setEditingIdx] = useState<number>(-1);
   const [name, setName] = useState("");
@@ -328,7 +334,9 @@ export function MapBuilder({ initialPins = [], onChange, editable = true, title 
                 title={k.label}
                 style={{
                   background:
-                    kind === k.id ? "rgba(200,81,31,0.4)" : "rgba(255,255,255,0.06)",
+                    kind === k.id
+                      ? "rgba(200,81,31,0.4)"
+                      : "rgba(255,255,255,0.06)",
                   border:
                     kind === k.id
                       ? "1px solid #c8511f"
@@ -420,7 +428,9 @@ export function MapBuilder({ initialPins = [], onChange, editable = true, title 
                 color: "#e2e8f0",
               }}
             >
-              <span style={{ fontWeight: 700, color: "#c8511f" }}>{idx + 1}.</span>
+              <span style={{ fontWeight: 700, color: "#c8511f" }}>
+                {idx + 1}.
+              </span>
               <span style={{ fontSize: "0.8rem" }}>
                 {PIN_KINDS.find((k) => k.id === pin.kind)?.icon || "🚩"}
               </span>
@@ -439,7 +449,13 @@ export function MapBuilder({ initialPins = [], onChange, editable = true, title 
                   · {pin.desc}
                 </span>
               )}
-              <span style={{ marginLeft: "auto", color: "#64748b", fontSize: "0.7rem" }}>
+              <span
+                style={{
+                  marginLeft: "auto",
+                  color: "#64748b",
+                  fontSize: "0.7rem",
+                }}
+              >
                 ({Math.round(pin.x)}, {Math.round(pin.y)})
               </span>
               <button
@@ -491,8 +507,9 @@ export function MapBuilder({ initialPins = [], onChange, editable = true, title 
 
       {/* Yardım */}
       <div style={{ fontSize: "0.72rem", color: "#64748b" }}>
-        Haritaya tıklayarak pin ekle. Pin'i seçip isim/şehir gir, kaydet. Pin'ler "```harita"
-        bloğu olarak nota gömülür — okuma modunda canlı harita olarak görünür.
+        Haritaya tıklayarak pin ekle. Pin'i seçip isim/şehir gir, kaydet.
+        Pin'ler "```harita" bloğu olarak nota gömülür — okuma modunda canlı
+        harita olarak görünür.
       </div>
     </div>
   );
@@ -536,7 +553,12 @@ export function HaritaBlock({ content, title }: HaritaBlockProps): JSX.Element {
       <svg
         viewBox={MAP_VIEWBOX}
         preserveAspectRatio="xMidYMid meet"
-        style={{ width: "100%", height: "auto", display: "block", cursor: "pointer" }}
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "block",
+          cursor: "pointer",
+        }}
       >
         {TURKEY_PROVINCE_PATHS.map((province) => (
           <path
@@ -610,7 +632,8 @@ export function HaritaBlock({ content, title }: HaritaBlockProps): JSX.Element {
         >
           {pins[selected].name && (
             <div style={{ fontWeight: 700, color: "#fff4e4", marginBottom: 3 }}>
-              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon || "🚩"}{" "}
+              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon ||
+                "🚩"}{" "}
               {pins[selected].name}
             </div>
           )}
@@ -619,8 +642,9 @@ export function HaritaBlock({ content, title }: HaritaBlockProps): JSX.Element {
           )}
           {!pins[selected].name && !pins[selected].desc && (
             <div style={{ color: "#a99a82" }}>
-              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon || "🚩"} (
-              {Math.round(pins[selected].x)}, {Math.round(pins[selected].y)})
+              {PIN_KINDS.find((k) => k.id === pins[selected].kind)?.icon ||
+                "🚩"}{" "}
+              ({Math.round(pins[selected].x)}, {Math.round(pins[selected].y)})
             </div>
           )}
         </div>

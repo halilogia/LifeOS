@@ -85,9 +85,7 @@ export class ChromeStorageStockRepository {
   async getTradeHistory(): Promise<StockTradeHistory[]> {
     return new Promise((resolve) => {
       chrome.storage.sync.get([TRADE_HISTORY_KEY], (res) => {
-        const items = res[TRADE_HISTORY_KEY] as
-          | StockTradeHistory[]
-          | undefined;
+        const items = res[TRADE_HISTORY_KEY] as StockTradeHistory[] | undefined;
         resolve(items || []);
       });
     });

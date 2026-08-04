@@ -257,8 +257,10 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     const rawEndpoint = aiConfig.aiEndpoint;
 
     const userMemory: string = await new Promise<string>((r) =>
-      chrome.storage.sync.get(["aiUserMemory"], (res: Record<string, any>) =>
-        r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
+      chrome.storage.sync.get(
+        ["aiUserMemory"],
+        (res: { aiUserMemory?: string }) =>
+          r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),
       ),
     );
 
@@ -370,7 +372,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         }
 
         const rawBody = await resp.text();
-        let data: Record<string, any> = {};
+        let data: Record<string, unknown> = {};
         try {
           data = JSON.parse(rawBody);
         } catch {

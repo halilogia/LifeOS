@@ -190,11 +190,13 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
           0,
           Math.floor((Date.now() - swStartTime) / 1000),
         );
-        chrome.storage.local.get(["stopwatch_state"], (resData) => {
-          const res = resData as Record<string, any>;
-          const offset = res["stopwatch_state"]?.time || 0;
-          setSwTime(offset + elapsed);
-        });
+        chrome.storage.local.get(
+          ["stopwatch_state"],
+          (resData: { stopwatch_state?: { time?: number } }) => {
+            const offset = resData?.stopwatch_state?.time || 0;
+            setSwTime(offset + elapsed);
+          },
+        );
       }, 1000);
     }
     return () => {

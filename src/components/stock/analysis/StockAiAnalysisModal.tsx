@@ -104,9 +104,9 @@ export function StockAiAnalysisModal({
               {isAllPortfolio
                 ? t.stock_analysis_morning_report
                 : t.stock_analysis_for_symbol.replace(
-                  "{symbol}",
-                  symbol.toUpperCase(),
-                )}
+                    "{symbol}",
+                    symbol.toUpperCase(),
+                  )}
             </span>
           </div>
           <button

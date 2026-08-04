@@ -73,7 +73,9 @@ export function KpssTopicDetailModal({
               >
                 {topic.questionsCount}
               </span>
-              <span>soru — KPSS Lisans sınavında bu konudan çıkan soru sayısı</span>
+              <span>
+                soru — KPSS Lisans sınavında bu konudan çıkan soru sayısı
+              </span>
             </div>
           )}
         </div>

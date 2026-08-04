@@ -216,7 +216,10 @@ export function App() {
   // â”€â”€â”€ JSX Template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const t = getTranslation(lang as Language);
 
-  if (typeof window !== "undefined" && window.location.search.includes("view=kpss-notes")) {
+  if (
+    typeof window !== "undefined" &&
+    window.location.search.includes("view=kpss-notes")
+  ) {
     return <KpssNotesDashboard lang={lang as Language} t={t} />;
   }
 

@@ -170,7 +170,11 @@ export function useMapPlayback({
     }
     const dx = e.clientX - d.startX;
     const dy = e.clientY - d.startY;
-    setView({ x: d.originX + dx, y: d.originY + dy, scale: viewRef.current.scale });
+    setView({
+      x: d.originX + dx,
+      y: d.originY + dy,
+      scale: viewRef.current.scale,
+    });
   }, []);
 
   const onPointerUp = useCallback(() => {

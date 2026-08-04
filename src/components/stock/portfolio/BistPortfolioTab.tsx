@@ -6,7 +6,12 @@
 
 import { useState } from "preact/hooks";
 import type { StockQuote } from "@/types/bist.js";
-import type { StockPortfolioItem, StockTradeHistory, StockRule, StockCashBalance } from "@/types/stock.js";
+import type {
+  StockPortfolioItem,
+  StockTradeHistory,
+  StockRule,
+  StockCashBalance,
+} from "@/types/stock.js";
 import { PortfolioSummaryCard } from "@/components/stock/portfolio/PortfolioSummaryCard.js";
 import { PortfolioTable } from "@/components/stock/portfolio/PortfolioTable.js";
 import { SellStockModal } from "@/components/stock/portfolio/SellStockModal.js";
@@ -29,11 +34,28 @@ export interface BistPortfolioTabProps {
   onAddRuleClick: (sym: string) => void;
   onDeleteRule: (id: string) => void;
   onDeleteItem: (id: string) => void;
-  onSellItem: (id: string, symbol: string, currentLot: number, currentPrice: number) => void;
+  onSellItem: (
+    id: string,
+    symbol: string,
+    currentLot: number,
+    currentPrice: number,
+  ) => void;
   onAiAnalyzeClick: (sym: string) => void;
   onOpenChart: (sym: string) => void;
-  sellModal: { id: string; symbol: string; currentLot: number; currentPrice: number } | null;
-  setSellModal: (m: { id: string; symbol: string; currentLot: number; currentPrice: number } | null) => void;
+  sellModal: {
+    id: string;
+    symbol: string;
+    currentLot: number;
+    currentPrice: number;
+  } | null;
+  setSellModal: (
+    m: {
+      id: string;
+      symbol: string;
+      currentLot: number;
+      currentPrice: number;
+    } | null,
+  ) => void;
   handleConfirmSell: (lotToSell: number, sellPrice: number) => void;
   updateCashBalance: (amount: number) => void;
   getBuyPrice: (id: string) => number;

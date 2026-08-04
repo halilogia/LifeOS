@@ -240,9 +240,7 @@ export function AiConfigForm({
               outline: "none",
             }}
           >
-            {loadingModels
-              ? t.settings_ai_loading
-              : t.settings_ai_fetch_models}
+            {loadingModels ? t.settings_ai_loading : t.settings_ai_fetch_models}
           </button>
         </div>
 
@@ -300,11 +298,7 @@ export function AiConfigForm({
                 }}
               >
                 {groupedModels[provider].map((m) => (
-                  <option
-                    key={m.id}
-                    value={m.id}
-                    style={{ color: "#f1f5f9" }}
-                  >
+                  <option key={m.id} value={m.id} style={{ color: "#f1f5f9" }}>
                     {m.name}
                   </option>
                 ))}

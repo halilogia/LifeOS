@@ -89,7 +89,10 @@ export function KpssTopicList({
           <select
             value={sortBy}
             onChange={(e) =>
-              onSortByChange((e.target as HTMLSelectElement).value as any)
+              onSortByChange(
+                (e.target as HTMLSelectElement).value as
+                  "default" | "questions" | "status",
+              )
             }
             style={{
               background: "#161622",

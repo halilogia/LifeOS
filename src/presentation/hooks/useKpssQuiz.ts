@@ -122,14 +122,17 @@ export function useKpssQuiz({
 
   const handleFinishQuiz = async () => {
     try {
-      const { scorePercentage, updatedPastQuizzes, cumulative: cum } =
-        await kpssQuizFlowService.evaluateAndSaveQuizResult({
-          currentSubject: currentSubject(),
-          activeQuizTopic: activeQuizTopic!,
-          quizQuestions,
-          selectedAnswers,
-          pastQuizzes,
-        });
+      const {
+        scorePercentage,
+        updatedPastQuizzes,
+        cumulative: cum,
+      } = await kpssQuizFlowService.evaluateAndSaveQuizResult({
+        currentSubject: currentSubject(),
+        activeQuizTopic: activeQuizTopic!,
+        quizQuestions,
+        selectedAnswers,
+        pastQuizzes,
+      });
 
       setQuizResultScore(scorePercentage);
       setCumulative(cum);
@@ -146,14 +149,17 @@ export function useKpssQuiz({
 
   const handleSaveExternalResult = async (correct: number, total: number) => {
     try {
-      const { scorePercentage, updatedPastQuizzes, cumulative: cum } =
-        await kpssQuizFlowService.saveExternalQuizResult({
-          currentSubject: currentSubject(),
-          activeQuizTopic: activeQuizTopic!,
-          correctCount: correct,
-          totalCount: total,
-          pastQuizzes,
-        });
+      const {
+        scorePercentage,
+        updatedPastQuizzes,
+        cumulative: cum,
+      } = await kpssQuizFlowService.saveExternalQuizResult({
+        currentSubject: currentSubject(),
+        activeQuizTopic: activeQuizTopic!,
+        correctCount: correct,
+        totalCount: total,
+        pastQuizzes,
+      });
 
       setQuizResultScore(scorePercentage);
       setCumulative(cum);
@@ -252,7 +258,9 @@ export function useKpssQuiz({
     }
 
     // Cumulative verisini veritabanından çek
-    let rec: { totalQuestions?: number; totalCorrect?: number; score?: number } | undefined;
+    let rec:
+      | { totalQuestions?: number; totalCorrect?: number; score?: number }
+      | undefined;
     try {
       const progressList = await kpssQuizFlowService.getKpssProgress();
       rec = progressList.find(
@@ -271,7 +279,11 @@ export function useKpssQuiz({
       setSelectedAnswers(pastQuiz.selectedAnswers || []);
       setQuizResultScore(pastQuiz.score);
       setQuizStep("result");
-    } else if (rec && ((rec.totalQuestions ?? 0) > 0 || (rec.score !== undefined && rec.score > 0))) {
+    } else if (
+      rec &&
+      ((rec.totalQuestions ?? 0) > 0 ||
+        (rec.score !== undefined && rec.score > 0))
+    ) {
       // Eğer geçmiş sınav kaydı detay soru içermiyorsa ama konu çözülmüşse yine de Sonuç/İnceleme ekranını aç
       setQuizQuestions([]);
       setSelectedAnswers([]);

@@ -119,9 +119,9 @@ export default ts.config(
       // Dosya boyutu: 1200 satır üstü uyar (bakım zorluğu)
       'max-lines': ['warn', { 'max': 1200, 'skipBlankLines': true, 'skipComments': true }],
       // any kullanımı: tip güvenliği zayıf
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
       // Kullanılmayan değişken/import: temizlik
-      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+      '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       // console: content script'lerde gerekli — projene göre ayarla
       'no-console': 'off',
       // Noktalı virgül: stil tutarlılığı (prettier ile çakışmaz)

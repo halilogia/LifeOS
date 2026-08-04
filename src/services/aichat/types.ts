@@ -30,4 +30,9 @@ export interface AiChatDependencies {
   noteRepo: INoteRepository;
 }
 
-export type { INoteRepository, IMemoryRepository, ITodoRepository, IAiConfigRepository };
+export type {
+  INoteRepository,
+  IMemoryRepository,
+  ITodoRepository,
+  IAiConfigRepository,
+};

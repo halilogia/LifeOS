@@ -132,9 +132,6 @@ export async function resolveGameURL(
     /<meta\s+[^>]*http-equiv\s*=\s*["']?(x-frame-options|content-security-policy)["']?[^>]*>/gi,
     "",
   );
-  rewritten = rewritten.replace(
-    /\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi,
-    "",
-  );
+  rewritten = rewritten.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "");
   return rewritten;
 }

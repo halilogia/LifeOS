@@ -15,11 +15,16 @@ export interface GeoPin {
   y: number;
 }
 
-export type TurkeyMapTopic = "volcanic" | "plains" | "lakes" | "rivers" | "plateaus";
+export type TurkeyMapTopic =
+  "volcanic" | "plains" | "lakes" | "rivers" | "plateaus";
 
 export const MAP_VIEWBOX = "0 0 1000.0 421.9991241865445";
 
-export const MAP_TOPICS: { id: TurkeyMapTopic; color: string; legendKey: string }[] = [
+export const MAP_TOPICS: {
+  id: TurkeyMapTopic;
+  color: string;
+  legendKey: string;
+}[] = [
   { id: "volcanic", color: "#c8511f", legendKey: "kpss_map_legend_volcanic" },
   { id: "plains", color: "#4f8f5b", legendKey: "kpss_map_legend_plains" },
   { id: "lakes", color: "#2563eb", legendKey: "kpss_map_legend_lakes" },
@@ -72,7 +77,12 @@ export const TURKEY_LAKES: GeoPin[] = [
 ];
 
 export const TURKEY_RIVERS: GeoPin[] = [
-  { name: "Kızılırmak", city: "İç Anadolu'dan Karadeniz'e", x: 514.0, y: 174.5 },
+  {
+    name: "Kızılırmak",
+    city: "İç Anadolu'dan Karadeniz'e",
+    x: 514.0,
+    y: 174.5,
+  },
   { name: "Fırat", city: "Doğu Anadolu'dan Suriye'ye", x: 670.6, y: 242.0 },
   { name: "Dicle", city: "Doğu Anadolu'dan Irak'a", x: 775.0, y: 275.8 },
   { name: "Seyhan", city: "Adana", x: 488.0, y: 309.5 },

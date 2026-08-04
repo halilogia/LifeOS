@@ -122,7 +122,9 @@ export function BistView({ lang, onContinueToChat }: BistViewProps) {
           setSellModal={setSellModal}
           handleConfirmSell={handleConfirmSell}
           updateCashBalance={updateCashBalance}
-          getBuyPrice={(id) => portfolio.find((p) => p.id === id)?.buyPrice ?? 0}
+          getBuyPrice={(id) =>
+            portfolio.find((p) => p.id === id)?.buyPrice ?? 0
+          }
         />
       )}
 

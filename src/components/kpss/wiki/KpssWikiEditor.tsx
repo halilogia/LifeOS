@@ -11,7 +11,10 @@ import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
-import { MapBuilder, parseHaritaBlock } from "@/components/kpss/map/MapBuilder.js";
+import {
+  MapBuilder,
+  parseHaritaBlock,
+} from "@/components/kpss/map/MapBuilder.js";
 
 interface KpssWikiEditorProps {
   lang: Language;
@@ -74,11 +77,20 @@ function extractHaritaTitle(content: string): string {
 }
 
 /** Outline metnini "```sema" bloğu olarak content'e yerleştir (eskisini değiştirir) */
-function upsertSemaOutline(content: string, outline: string, title: string): string {
+function upsertSemaOutline(
+  content: string,
+  outline: string,
+  title: string,
+): string {
   const trimmed = outline.trim();
   // Şema boşsa bloğu tamamen kaldır
   if (!trimmed && !title.trim()) {
-    return content.replace(/```sema\s*\n[\s\S]*?```/g, "").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+    return (
+      content
+        .replace(/```sema\s*\n[\s\S]*?```/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim() + "\n"
+    );
   }
   const header = title.trim() ? `# ${title.trim()}\n` : "";
   const block = "```sema\n" + header + trimmed + "\n```";
@@ -89,16 +101,27 @@ function upsertSemaOutline(content: string, outline: string, title: string): str
 }
 
 /** Harita bloğu metnini content'e yerleştir (eskisini değiştirir) */
-function upsertHaritaBlock(content: string, block: string, title: string): string {
+function upsertHaritaBlock(
+  content: string,
+  block: string,
+  title: string,
+): string {
   const trimmed = block.trim();
   if (!trimmed && !title.trim()) {
-    return content.replace(/```harita\s*\n[\s\S]*?```/g, "").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+    return (
+      content
+        .replace(/```harita\s*\n[\s\S]*?```/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim() + "\n"
+    );
   }
   const header = title.trim() ? `# ${title.trim()}\n` : "";
   if (/```harita\s*\n[\s\S]*?```/.test(content)) {
     return content.replace(/```harita\s*\n[\s\S]*?```/, header + trimmed);
   }
-  return content.trimEnd() + "\n\n" + "```harita\n" + header + trimmed + "\n```\n";
+  return (
+    content.trimEnd() + "\n\n" + "```harita\n" + header + trimmed + "\n```\n"
+  );
 }
 
 export function KpssWikiEditor({
@@ -116,10 +139,14 @@ export function KpssWikiEditor({
   const [mode, setMode] = useState<"write" | "sema" | "harita">("write");
   const initialSema = extractSemaOutline(editorContent);
   const [semaText, setSemaText] = useState<string>(initialSema || "");
-  const [semaTitle, setSemaTitle] = useState<string>(extractSemaTitle(editorContent) || "");
+  const [semaTitle, setSemaTitle] = useState<string>(
+    extractSemaTitle(editorContent) || "",
+  );
   const initialHarita = extractHaritaBlock(editorContent);
   const [haritaBlock, setHaritaBlock] = useState<string>(initialHarita || "");
-  const [haritaTitle, setHaritaTitle] = useState<string>(extractHaritaTitle(editorContent) || "");
+  const [haritaTitle, setHaritaTitle] = useState<string>(
+    extractHaritaTitle(editorContent) || "",
+  );
 
   const switchToSema = () => {
     // Mevcut content'teki şema bloğunu kullan, yoksa mevcut outline'ı al
@@ -172,7 +199,10 @@ export function KpssWikiEditor({
           type="text"
           value={editorTitle}
           onInput={(e) => onTitleChange((e.target as HTMLInputElement).value)}
-          placeholder={t.kpss_wiki_editor_placeholder || "Ders Notu Başlığı (örneğin: Çorum)..."}
+          placeholder={
+            t.kpss_wiki_editor_placeholder ||
+            "Ders Notu Başlığı (örneğin: Çorum)..."
+          }
           style={{
             flex: 1,
             background: "rgba(0, 0, 0, 0.4)",
@@ -189,7 +219,10 @@ export function KpssWikiEditor({
         <select
           value={editorSubject}
           onChange={(e) =>
-            onSubjectChange((e.target as HTMLSelectElement).value as any)
+            onSubjectChange(
+              (e.target as HTMLSelectElement).value as
+                "tarih" | "cografya" | "vatandaslik" | "turkce" | "matematik",
+            )
           }
           style={{
             background: "rgba(0, 0, 0, 0.4)",
@@ -255,7 +288,8 @@ export function KpssWikiEditor({
           type="button"
           onClick={switchToHarita}
           style={{
-            background: mode === "harita" ? "#c8511f" : "rgba(255,255,255,0.06)",
+            background:
+              mode === "harita" ? "#c8511f" : "rgba(255,255,255,0.06)",
             color: mode === "harita" ? "#fff" : "#94a3b8",
             border: "none",
             borderRadius: "8px",
@@ -310,7 +344,10 @@ export function KpssWikiEditor({
             onInput={(e) =>
               onContentChange((e.target as HTMLTextAreaElement).value)
             }
-            placeholder={t.kpss_wiki_textarea_placeholder || "Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz..."}
+            placeholder={
+              t.kpss_wiki_textarea_placeholder ||
+              "Ders notunuzu yazın. Diğer notlarınıza bağlantı vermek için [[Çorum]] şeklinde yazabilirsiniz..."
+            }
             style={{
               width: "100%",
               flex: 1,
@@ -365,8 +402,10 @@ export function KpssWikiEditor({
           }}
         >
           {saveStatus
-            ? (t.kpss_wiki_save_success || "✓ Değişiklikler başarıyla kaydedildi!")
-            : (t.kpss_wiki_save_remind || "Değişikliklerinizi kaydetmeyi unutmayın.")}
+            ? t.kpss_wiki_save_success ||
+              "✓ Değişiklikler başarıyla kaydedildi!"
+            : t.kpss_wiki_save_remind ||
+              "Değişikliklerinizi kaydetmeyi unutmayın."}
         </span>
 
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -382,13 +421,21 @@ export function KpssWikiEditor({
             onClick={() => {
               if (mode === "sema") {
                 // Şemayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
-                const merged = upsertSemaOutline(editorContent, semaText, semaTitle);
+                const merged = upsertSemaOutline(
+                  editorContent,
+                  semaText,
+                  semaTitle,
+                );
                 onContentChange(merged);
                 setMode("write");
                 window.setTimeout(() => onSave(), 0);
               } else if (mode === "harita") {
                 // Haritayı content'e işle ve state'in commit edilmesini bekle, sonra kaydet
-                const merged = upsertHaritaBlock(editorContent, haritaBlock, haritaTitle);
+                const merged = upsertHaritaBlock(
+                  editorContent,
+                  haritaBlock,
+                  haritaTitle,
+                );
                 onContentChange(merged);
                 setMode("write");
                 window.setTimeout(() => onSave(), 0);

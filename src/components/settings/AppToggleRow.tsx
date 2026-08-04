@@ -9,10 +9,7 @@ interface AppToggleRowProps {
   onClick: () => void;
 }
 
-const ICON_PATHS: Record<
-  AppToggleRowProps["icon"],
-  JSX.Element
-> = {
+const ICON_PATHS: Record<AppToggleRowProps["icon"], JSX.Element> = {
   globe: (
     <>
       <circle cx="12" cy="12" r="10"></circle>

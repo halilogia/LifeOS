@@ -92,12 +92,12 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
             </strong>
             <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
               Önce ana not oluştur (ör.{" "}
-              <code style={{ color: "#a78bfa" }}>Büyük Selçuklu</code>).
-              Notun üzerine gelip{" "}
-              <code style={{ color: "#60a5fa" }}>+</code> butonuyla alt not
-              ekle (ör. <code style={{ color: "#a78bfa" }}>Devlet Teşkilatı</code>).
-              Alt notlara da <code style={{ color: "#60a5fa" }}>+</code> ile
-              devam et — iç içe hiyerarşi oluşur.
+              <code style={{ color: "#a78bfa" }}>Büyük Selçuklu</code>). Notun
+              üzerine gelip <code style={{ color: "#60a5fa" }}>+</code>{" "}
+              butonuyla alt not ekle (ör.{" "}
+              <code style={{ color: "#a78bfa" }}>Devlet Teşkilatı</code>). Alt
+              notlara da <code style={{ color: "#60a5fa" }}>+</code> ile devam
+              et — iç içe hiyerarşi oluşur.
             </p>
           </div>
 
@@ -106,8 +106,8 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
               2. Kısa Metin, Net Bilgi:
             </strong>
             <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-              Her alt başlığa 1-3 cümlelik özet yaz. Ezber yerine
-              kavram netliği önemli. Örnek:{" "}
+              Her alt başlığa 1-3 cümlelik özet yaz. Ezber yerine kavram netliği
+              önemli. Örnek:{" "}
               <em>
                 "Vezir-i Azam: Büyük Selçuklu'da başkent yönetiminden sorumlu,
                 Nizamülmülk en meşhur örneğidir."
@@ -142,8 +142,8 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
               5. Başlık Otomatik Doldurma:
             </strong>
             <p style={{ margin: "4px 0 0 0", color: "#cbd5e1" }}>
-              Başlık boş bırakılırsa ilk satırdan otomatik alınır. Manuel
-              başlık yazarsan ona asla dokunulmaz.
+              Başlık boş bırakılırsa ilk satırdan otomatik alınır. Manuel başlık
+              yazarsan ona asla dokunulmaz.
             </p>
           </div>
         </div>

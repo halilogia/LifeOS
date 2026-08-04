@@ -16,7 +16,9 @@ import { logger } from "@/utils/logger.js";
  * AuraLingo'daki 4 ayrı koleksiyon mantığının tek-koleksiyon karşılığı:
  *   idiom → idiom, phrasal → phrasal, irregular → verb, diğerleri → vocabulary.
  */
-function resolveWordType(word: Word): "vocabulary" | "verb" | "phrasal" | "idiom" {
+function resolveWordType(
+  word: Word,
+): "vocabulary" | "verb" | "phrasal" | "idiom" {
   const level = (word.level || "").toLowerCase();
   if (level === "idiom") {
     return "idiom";
@@ -60,7 +62,8 @@ export function useSrs() {
 
       const srsUniverse: SRSWordWithInfo[] = data.slice(0, 1500).map((w) => {
         const p =
-          progressMap.get(w.id) || createInitialSRSWord(w.id, resolveWordType(w));
+          progressMap.get(w.id) ||
+          createInitialSRSWord(w.id, resolveWordType(w));
         return {
           ...p,
           level: w.level || "unknown",

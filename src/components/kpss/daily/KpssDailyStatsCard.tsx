@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState } from "preact/hooks";
+import { useRef, useEffect } from "preact/hooks";
 import { Language, KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { drawKpssStatsChart } from "@/utils/kpssChartDrawer.js";
 import { KpssStatsInputForm } from "./KpssStatsInputForm.js";
 import { KpssChartToolbar } from "./KpssChartToolbar.js";
 import { KpssSavedLogChips } from "./KpssSavedLogChips.js";
+import { useKpssChartMetric } from "@/presentation/hooks/useKpssChartMetric.js";
 
 interface KpssDailyStatsCardProps {
   lang: Language;
@@ -58,22 +59,10 @@ export function KpssDailyStatsCard({
   kpssTargetDate,
 }: KpssDailyStatsCardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [chartMetric, setChartMetric] = useState<
-    "all" | "questions" | "videos"
-  >("all");
-
-  useEffect(() => {
-    chrome.storage.sync.get(["kpss_chart_metric_mode"], (res) => {
-      const mode = res?.kpss_chart_metric_mode;
-      if (mode === "all" || mode === "questions" || mode === "videos") {
-        setChartMetric(mode);
-      }
-    });
-  }, []);
+  const { chartMetric, saveChartMetric } = useKpssChartMetric();
 
   const handleMetricModeChange = (mode: "all" | "questions" | "videos") => {
-    setChartMetric(mode);
-    chrome.storage.sync.set({ kpss_chart_metric_mode: mode });
+    saveChartMetric(mode);
   };
 
   useEffect(() => {

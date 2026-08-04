@@ -391,8 +391,7 @@ export const en = {
   kpss_planner_title: "Daily Topic Auto-Planner",
   kpss_planner_how_works: "How does it work?",
   kpss_planner_info_title: "How does the Planner work?",
-  kpss_planner_all_done:
-    "Congrats! You successfully completed all topics.",
+  kpss_planner_all_done: "Congrats! You successfully completed all topics.",
   kpss_planner_desc:
     "Recommended topics to review today based on remaining time and topic density (Click to start):",
   kpss_status_working: "Working",
@@ -448,7 +447,8 @@ export const en = {
   kpss_wiki_save_remind: "Remember to save your changes.",
   kpss_wiki_save_btn: "Save Changes",
   kpss_wiki_editor_placeholder: "Note Title (e.g. History)...",
-  kpss_wiki_textarea_placeholder: "Write your note here. To link to other notes, write [[Title]]...",
+  kpss_wiki_textarea_placeholder:
+    "Write your note here. To link to other notes, write [[Title]]...",
   kpss_sort_by: "Sort By:",
   kpss_sort_syllabus: "Syllabus Order",
   kpss_sort_completion: "Completion Status",
@@ -777,8 +777,7 @@ export const en = {
   kpss_quiz_status_working: "Topic set to 'Working' status.",
   kpss_quiz_status_not_started: "Topic reset to 'Not Started'.",
   kpss_srs_preparing: "Preparing repetition cards...",
-  kpss_srs_all_done:
-    "You have reviewed all due repetition cards for today.",
+  kpss_srs_all_done: "You have reviewed all due repetition cards for today.",
   kpss_srs_click_to_see: "Click to see answer",
   kpss_srs_card_label: "Card",
   kpss_topic_syllabus: "Topic Syllabus & Progress",

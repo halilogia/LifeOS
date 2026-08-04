@@ -71,7 +71,9 @@ export function KpssSrsTab({
           </span>
           <select
             value={srsChapter}
-            onChange={(e) => onChapterChange((e.target as HTMLSelectElement).value)}
+            onChange={(e) =>
+              onChapterChange((e.target as HTMLSelectElement).value)
+            }
             style={{
               background: "rgba(0, 0, 0, 0.4)",
               border: "1px solid rgba(255, 255, 255, 0.12)",

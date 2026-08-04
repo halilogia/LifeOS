@@ -47,20 +47,20 @@ export function ArcadeDevTab({
       <div className="arcade-dev-section">
         <h3>{tr.arcade_dev_status}</h3>
         <div className="arcade-status-buttons">
-          {(
-            ["playable", "in_progress", "concept", "archived"] as const
-          ).map((status) => (
-            <button
-              key={status}
-              className={`arcade-status-btn ${game.status === status ? "active" : ""}`}
-              onClick={() => onStatusChange(game.id, status)}
-            >
-              {status === "playable" && tr.arcade_status_playable}
-              {status === "in_progress" && tr.arcade_status_in_progress}
-              {status === "concept" && tr.arcade_status_concept}
-              {status === "archived" && tr.arcade_status_archived}
-            </button>
-          ))}
+          {(["playable", "in_progress", "concept", "archived"] as const).map(
+            (status) => (
+              <button
+                key={status}
+                className={`arcade-status-btn ${game.status === status ? "active" : ""}`}
+                onClick={() => onStatusChange(game.id, status)}
+              >
+                {status === "playable" && tr.arcade_status_playable}
+                {status === "in_progress" && tr.arcade_status_in_progress}
+                {status === "concept" && tr.arcade_status_concept}
+                {status === "archived" && tr.arcade_status_archived}
+              </button>
+            ),
+          )}
         </div>
       </div>
 
@@ -98,7 +98,9 @@ export function ArcadeDevTab({
         <textarea
           className="arcade-notes-textarea"
           value={notes}
-          onInput={(e) => onNotesChange((e.target as HTMLTextAreaElement).value)}
+          onInput={(e) =>
+            onNotesChange((e.target as HTMLTextAreaElement).value)
+          }
           placeholder={tr.arcade_dev_notes_placeholder}
           rows={5}
         />

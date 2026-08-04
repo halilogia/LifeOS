@@ -4,11 +4,7 @@ interface AppHotkeySelectProps {
   onChange: (val: string) => void;
 }
 
-export function AppHotkeySelect({
-  t,
-  value,
-  onChange,
-}: AppHotkeySelectProps) {
+export function AppHotkeySelect({ t, value, onChange }: AppHotkeySelectProps) {
   return (
     <div
       style={{
@@ -21,9 +17,7 @@ export function AppHotkeySelect({
         margin: "2px 0 6px 0",
       }}
     >
-      <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>
-        {t.uib_hotkey}:
-      </span>
+      <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>{t.uib_hotkey}:</span>
       <select
         value={value}
         onChange={(e) => onChange((e.target as HTMLSelectElement).value)}
@@ -39,16 +33,25 @@ export function AppHotkeySelect({
           cursor: "pointer",
         }}
       >
-        <option style={{ background: "#1e1e24", color: "#f1f5f9" }} value="none">
+        <option
+          style={{ background: "#1e1e24", color: "#f1f5f9" }}
+          value="none"
+        >
           {t.uib_hotkey_none}
         </option>
         <option style={{ background: "#1e1e24", color: "#f1f5f9" }} value="alt">
           {t.uib_hotkey_alt}
         </option>
-        <option style={{ background: "#1e1e24", color: "#f1f5f9" }} value="ctrl">
+        <option
+          style={{ background: "#1e1e24", color: "#f1f5f9" }}
+          value="ctrl"
+        >
           {t.uib_hotkey_ctrl}
         </option>
-        <option style={{ background: "#1e1e24", color: "#f1f5f9" }} value="shift">
+        <option
+          style={{ background: "#1e1e24", color: "#f1f5f9" }}
+          value="shift"
+        >
           {t.uib_hotkey_shift}
         </option>
       </select>

@@ -33,7 +33,13 @@ export function NoteEditorBody({
           marginTop: "10px",
         }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "12px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 2fr",
+            gap: "12px",
+          }}
+        >
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <label
               style={{

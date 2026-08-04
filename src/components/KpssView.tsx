@@ -2,6 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import {
   kpssService,
   kpssData,
+  type KpssFlashcard,
 } from "@/services/kpss/kpssService.js";
 import { kpssSrsService } from "@/services/kpss/kpssSrsService.js";
 import { kpssOsymHistoryFlashcards } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
@@ -40,6 +41,7 @@ import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js
 import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
 import { HistoryMapView } from "@/components/kpss/map/HistoryMapView.js";
 import { logger } from "@/utils/logger.js";
+import { useKpssChartSettings } from "@/presentation/hooks/useKpssChartSettings.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -75,7 +77,6 @@ export function KpssView({
   const [questionsInput, setQuestionsInput] = useState("");
   const [videosInput, setVideosInput] = useState("");
   const [subjectInput, setSubjectInput] = useState("turkce");
-  const [chartDays, setChartDays] = useState<7 | 30>(7);
 
   const [activeTopic, setActiveTopic] = useState<{
     title: string;
@@ -106,7 +107,8 @@ export function KpssView({
   );
 
   // KPSS Hedef ve Grafik Sistemleri
-  const [chartType, setChartType] = useState<"line" | "bar">("line");
+  const { chartType, chartDays, saveChartType, saveChartDays } =
+    useKpssChartSettings();
 
   // KPSS SRS States
   const [srsLoading, setSrsLoading] = useState(true);
@@ -116,7 +118,9 @@ export function KpssView({
   const [srsFadeState, setSrsFadeState] = useState<"normal" | "slide-out">(
     "normal",
   );
-  const [flashcardsUniverse, setFlashcardsUniverse] = useState<any[]>(kpssOsymHistoryFlashcards);
+  const [flashcardsUniverse, setFlashcardsUniverse] = useState<KpssFlashcard[]>(
+    kpssOsymHistoryFlashcards,
+  );
   const [srsChapter, setSrsChapter] = useState<string>("all");
   const [srsChapters, setSrsChapters] = useState<string[]>([]);
 
@@ -160,31 +164,9 @@ export function KpssView({
   const loadKpssData = async () => {
     const progress = await kpssService.getKpssProgress();
     const stats = await kpssService.getKpssDailyStats();
-    const cType: "line" | "bar" = await new Promise((r) =>
-      chrome.storage.sync.get(["kpssChartType"], (res) =>
-        r((res.kpssChartType as "line" | "bar") || "line"),
-      ),
-    );
-    const cDays: 7 | 30 = await new Promise((r) =>
-      chrome.storage.sync.get(["kpssChartDays"], (res) =>
-        r(res.kpssChartDays === 30 ? 30 : 7),
-      ),
-    );
 
     setKpssProgress(progress);
     setDailyStats(stats);
-    setChartType(cType);
-    setChartDays(cDays);
-  };
-
-  const handleChartTypeChange = async (type: "line" | "bar") => {
-    setChartType(type);
-    chrome.storage.sync.set({ kpssChartType: type });
-  };
-
-  const handleChartDaysChange = async (days: 7 | 30) => {
-    setChartDays(days);
-    chrome.storage.sync.set({ kpssChartDays: days });
   };
 
   useEffect(() => {
@@ -235,13 +217,7 @@ export function KpssView({
     aiConfig,
     onQuizCompleted: loadKpssData,
     onLoadPastQuizzes: () =>
-      new Promise<Record<string, KpssPastQuiz>>((resolve) => {
-        chrome.storage.local.get(["kpss_past_quizzes"], (res) => {
-          const stored = res.kpss_past_quizzes as
-            Record<string, KpssPastQuiz> | undefined;
-          resolve(stored ?? {});
-        });
-      }),
+      kpssService.getPastQuizzes() as Promise<Record<string, KpssPastQuiz>>,
     onSubjectChange: setCurrentSubject,
     onCloseDetail: () => setActiveTopic(null),
   });
@@ -350,16 +326,14 @@ export function KpssView({
             onSaveStats={handleSaveStats}
             onResetStats={handleResetStats}
             onDeleteStat={handleDeleteStat}
-            onChartDaysChange={handleChartDaysChange}
-            onChartTypeChange={handleChartTypeChange}
+            onChartDaysChange={saveChartDays}
+            onChartTypeChange={saveChartType}
             onSelectSubject={setCurrentSubject}
             onSortByChange={setSortBy}
             onStartQuiz={(topic, subject) =>
               quiz.handleStartQuiz(topic, subject)
             }
-            onReviewPastQuiz={(topic) =>
-              quiz.handleReviewPastQuiz(topic)
-            }
+            onReviewPastQuiz={(topic) => quiz.handleReviewPastQuiz(topic)}
             onShowDetail={(topic) => setActiveTopic(topic)}
             onOpenYoutube={(topic) =>
               window.open(

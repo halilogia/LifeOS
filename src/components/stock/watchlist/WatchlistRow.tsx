@@ -1,6 +1,10 @@
 import type { StockQuote } from "@/types/bist.js";
 import { formatPrice } from "@/services/bistService.js";
-import { IconChart, IconPlus, IconSparkles } from "@/components/stock/portfolio/portfolioIcons.js";
+import {
+  IconChart,
+  IconPlus,
+  IconSparkles,
+} from "@/components/stock/portfolio/portfolioIcons.js";
 
 interface WatchlistRowProps {
   symbol: string;
@@ -56,9 +60,7 @@ export function WatchlistRow({
         </span>
       </td>
       <td style={{ textAlign: "right", color: "#cbd5e1" }}>
-        {quote?.dayHigh && quote.dayHigh > 0
-          ? formatPrice(quote.dayHigh)
-          : "—"}
+        {quote?.dayHigh && quote.dayHigh > 0 ? formatPrice(quote.dayHigh) : "—"}
       </td>
       <td style={{ textAlign: "right", color: "#cbd5e1" }}>
         {quote?.dayLow && quote.dayLow > 0 ? formatPrice(quote.dayLow) : "—"}

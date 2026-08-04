@@ -29,7 +29,9 @@ export function useCalendar({ todos }: UseCalendarOptions) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeModalData, setActiveModalData] =
     useState<CalendarModalData | null>(null);
-  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<
+    { start?: { dateTime?: string; date?: string }; date?: { date?: string } }[]
+  >([]);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -45,7 +47,7 @@ export function useCalendar({ todos }: UseCalendarOptions) {
   useEffect(() => {
     let isMounted = true;
     const fetchCalendar = async () => {
-      const syncData = await new Promise<any>((resolve) =>
+      const syncData = await new Promise<Record<string, unknown>>((resolve) =>
         chrome.storage.sync.get(["syncEnabled", "syncCalendarEnabled"], (res) =>
           resolve(res),
         ),
@@ -123,7 +125,10 @@ export function useCalendar({ todos }: UseCalendarOptions) {
   });
 
   // Group events by date key: YYYY-MM-DD
-  const eventsByDate: Record<string, any[]> = {};
+  const eventsByDate: Record<
+    string,
+    { start?: { dateTime?: string; date?: string }; summary?: string }[]
+  > = {};
   calendarEvents.forEach((event) => {
     if (!event.start) {
       return;

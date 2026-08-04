@@ -38,15 +38,10 @@ export async function executeAIAction(
       lastCompletedDate: null,
     });
     await todoRepo.saveAll(todos);
-  } else if (
-    aiResult.action === "add_note" &&
-    aiResult.params?.note_content
-  ) {
+  } else if (aiResult.action === "add_note" && aiResult.params?.note_content) {
     await handleAddNoteFromAI(
       (String(aiResult.params.note_type) || "note") as
-        | "note"
-        | "diary"
-        | "cornell",
+        "note" | "diary" | "cornell",
       aiResult.params.note_content as string,
       lang,
       noteRepo,
@@ -116,9 +111,7 @@ export async function handleUpdateMemoryFromAI(
   let updatedMemory = currentMemory;
   if (!updatedMemory || !updatedMemory.trim()) {
     updatedMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
-  } else if (
-    updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")
-  ) {
+  } else if (updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")) {
     updatedMemory = updatedMemory.replace(
       "## 💡 AI Tarafından Öğrenilen Bilgiler",
       `## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`,

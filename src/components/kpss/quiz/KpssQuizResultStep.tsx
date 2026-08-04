@@ -108,7 +108,8 @@ export function KpssQuizResultStep({
       <QuizResultActions
         t={t}
         hasPastQuestions={
-          quizQuestions.length > 0 || (historySessions && historySessions.length > 0)
+          quizQuestions.length > 0 ||
+          (historySessions && historySessions.length > 0)
         }
         onReviewQuestions={() => setShowReviewModal(true)}
         onRetakeQuiz={onRetakeQuiz}

@@ -167,7 +167,9 @@ function parseQuestions(rawText: string): QuizQuestion[] {
       if (num === 1 && questions.length > 0) {
         questions.length = 0;
         seenNumbers.clear();
-        contentLog("[QuizPanel] yeni test algılandı — önceki sorular temizlendi");
+        contentLog(
+          "[QuizPanel] yeni test algılandı — önceki sorular temizlendi",
+        );
       }
       flush();
       seenNumbers.add(num);
@@ -205,9 +207,7 @@ function parseQuestions(rawText: string): QuizQuestion[] {
     // question text instead of being dropped.
     if (current) {
       current.question =
-        current.question.length > 0
-          ? `${current.question}\n${line}`
-          : line;
+        current.question.length > 0 ? `${current.question}\n${line}` : line;
     }
   }
 

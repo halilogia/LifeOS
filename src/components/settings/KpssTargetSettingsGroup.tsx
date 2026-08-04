@@ -39,7 +39,9 @@ export function KpssTargetSettingsGroup({
             alignItems: "center",
           }}
         >
-          <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+          <span
+            style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}
+          >
             {t.settings_kpss_goal_type}
           </span>
           <div
@@ -57,7 +59,9 @@ export function KpssTargetSettingsGroup({
               onClick={() => onKpssGoalTypeChange("net")}
               style={{
                 background:
-                  kpssGoalType === "net" ? "var(--accent-color)" : "transparent",
+                  kpssGoalType === "net"
+                    ? "var(--accent-color)"
+                    : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -75,7 +79,9 @@ export function KpssTargetSettingsGroup({
               onClick={() => onKpssGoalTypeChange("score")}
               style={{
                 background:
-                  kpssGoalType === "score" ? "var(--accent-color)" : "transparent",
+                  kpssGoalType === "score"
+                    ? "var(--accent-color)"
+                    : "transparent",
                 border: "none",
                 color: "white",
                 fontSize: "0.65rem",
@@ -99,7 +105,9 @@ export function KpssTargetSettingsGroup({
             alignItems: "center",
           }}
         >
-          <span style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}>
+          <span
+            style={{ fontSize: "0.85rem", color: "white", fontWeight: "600" }}
+          >
             {kpssGoalType === "net"
               ? t.settings_kpss_target_net
               : t.settings_kpss_target_score}

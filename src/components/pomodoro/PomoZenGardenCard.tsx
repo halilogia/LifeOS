@@ -9,7 +9,7 @@ interface PomoZenGardenCardProps {
   onSetFocusNote: (val: string) => void;
   onSetSelectedElement: (el: PomodoroLog["element"]) => void;
   onPlantElement: () => void;
-  renderZenElementSvg: (element: PomodoroLog["element"]) => any;
+  renderZenElementSvg: (element: PomodoroLog["element"]) => preact.VNode | null;
 }
 
 export function PomoZenGardenCard({

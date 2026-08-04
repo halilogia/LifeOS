@@ -3,6 +3,7 @@ import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { DetoxUsageCard } from "@/components/detox/DetoxUsageCard.js";
 import { DetoxStatusCard } from "@/components/detox/DetoxStatusCard.js";
+import { useDetox } from "@/presentation/hooks/useDetox.js";
 
 interface DetoxViewProps {
   lang: Language;
@@ -28,55 +29,23 @@ const DURATIONS = [
 export function DetoxView({ lang }: DetoxViewProps) {
   const t = translations[lang];
 
-  const [enabled, setEnabled] = useState(false);
-  const [blockedSites, setBlockedSites] = useState<string[]>([]);
-  const [endTime, setEndTime] = useState(0);
+  const {
+    enabled,
+    setEnabled,
+    blockedSites,
+    setBlockedSites,
+    endTime,
+    setEndTime,
+    screenTimeStats,
+    saveBlockedSites,
+    enableDetox,
+    disableDetox,
+  } = useDetox();
+
   const [selectedDuration, setSelectedDuration] = useState(30 * 60 * 1000); // 30m default
   const [timeLeft, setTimeLeft] = useState(0);
   const [customSiteInput, setCustomSiteInput] = useState("");
-
-  // Screen Time Stats
-  const [screenTimeStats, setScreenTimeStats] = useState<
-    Record<string, number>
-  >({});
   const [showAllStats, setShowAllStats] = useState(false);
-
-  // Load configuration from storage
-  useEffect(() => {
-    chrome.storage.sync.get(
-      ["detox_enabled", "detox_blocked_sites", "detox_end_time"],
-      (resData) => {
-        const res = resData as Record<string, any>;
-        const isEnabled = res.detox_enabled || false;
-        const sites = res.detox_blocked_sites || [];
-        const end = res.detox_end_time || 0;
-
-        // Check if time expired
-        if (isEnabled && end !== -1 && end <= Date.now()) {
-          handleDisableDetox();
-        } else {
-          setEnabled(isEnabled);
-          setBlockedSites(sites);
-          setEndTime(end);
-        }
-      },
-    );
-  }, []);
-
-  // Load screen time tracking stats
-  useEffect(() => {
-    const loadStats = () => {
-      const todayStr = new Date().toLocaleDateString("sv");
-      chrome.storage.local.get(["screen_time_stats"], (res) => {
-        const stats = res.screen_time_stats?.[todayStr] || {};
-        setScreenTimeStats(stats);
-      });
-    };
-
-    loadStats();
-    const interval = setInterval(loadStats, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
 
   // Tick local countdown timer if active
   useEffect(() => {
@@ -117,7 +86,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
         updated = [...prev, ...siteDomains];
       }
       if (enabled) {
-        chrome.storage.sync.set({ detox_blocked_sites: updated });
+        saveBlockedSites(updated);
       }
       return updated;
     });
@@ -138,7 +107,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
         return prev;
       }
       const updated = [...prev, site];
-      chrome.storage.sync.set({ detox_blocked_sites: updated });
+      saveBlockedSites(updated);
       return updated;
     });
     setCustomSiteInput("");
@@ -147,7 +116,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
   const handleRemoveCustomSite = (site: string) => {
     setBlockedSites((prev) => {
       const updated = prev.filter((s) => s !== site);
-      chrome.storage.sync.set({ detox_blocked_sites: updated });
+      saveBlockedSites(updated);
       return updated;
     });
   };
@@ -157,32 +126,12 @@ export function DetoxView({ lang }: DetoxViewProps) {
       alert(t.detox_no_sites_alert || "Lütfen en az bir site seçin.");
       return;
     }
-
-    const calculatedEndTime =
-      selectedDuration === -1 ? -1 : Date.now() + selectedDuration;
-    const settings = {
-      detox_enabled: true,
-      detox_blocked_sites: blockedSites,
-      detox_end_time: calculatedEndTime,
-    };
-
-    chrome.storage.sync.set(settings, () => {
-      setEnabled(true);
-      setEndTime(calculatedEndTime);
-    });
+    enableDetox(blockedSites, selectedDuration);
   };
 
   const handleDisableDetox = async () => {
-    const settings = {
-      detox_enabled: false,
-      detox_end_time: 0,
-    };
-
-    chrome.storage.sync.set(settings, () => {
-      setEnabled(false);
-      setEndTime(0);
-      setTimeLeft(0);
-    });
+    disableDetox();
+    setTimeLeft(0);
   };
 
   const formatTime = (secs: number) => {

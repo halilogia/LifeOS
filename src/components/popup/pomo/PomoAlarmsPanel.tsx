@@ -57,7 +57,9 @@ export function PomoAlarmsPanel({
           className="mini-alarm-input"
           style={{ flex: 1 }}
           value={alarmInput}
-          onInput={(e) => onAlarmInputChange((e.target as HTMLInputElement).value)}
+          onInput={(e) =>
+            onAlarmInputChange((e.target as HTMLInputElement).value)
+          }
         />
         <button
           className="popup-alarm-add-btn"
