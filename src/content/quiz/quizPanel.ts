@@ -17,22 +17,50 @@ const AI_SITES: Array<{ host: string; name: string }> = [
   { host: "copilot.microsoft.com", name: "Copilot" },
 ];
 
-/** Flexible option marker: "A." "A)" "* A)" "**A)**" etc. */
-const OPTION_RE = /^\s*[*_]*([A-E])[.)]\s*(.*)$/i;
+/** Flexible option marker. Tolerates "A)", "A.", "A-", "* A)", "- A)", "(A)". */
+const OPTION_RE = /^(?:[•\-*]\s*)?\(?([A-Ea-e])[.)\-:]\s+(.*)$/;
 
-/** Question start marker: "Soru 1:", "**1. Soru:**", "1.", "1)", "1-)" etc. */
-const QUESTION_RE =
-  /^\s*[*_#]*\s*(?:Soru\s*)?(\d{1,2})\s*[.):\-–]?\s*(?:Soru\s*)?[:*_#]*\s*(.*)$/i;
+/**
+ * Question start — "Soru" prefix form: "Soru 1:", "Soru 1 (Orta – Öncüllü)",
+ * "### **Soru 1 (Kolay – Kavram Bilgisi)**" (after normalizeLine).
+ */
+const QUESTION_WITH_SORU_RE =
+  /^Soru\s+(\d{1,2})\s*[.):\-–]?\s*(?:\([^)]*\)\s*)?(.*)$/i;
 
-/** Correct answer marker: "Doğru Cevap: X", "✓ X", "Cevap: X". */
-const ANSWER_RE = /(?:doğru\s*cevap|✓|cevap)\s*[:*\-–]?\s*([A-E])/i;
+/** Question start — bare numbered form: "1. Soru:", "1)", "1- Soru metni". */
+const QUESTION_BARE_RE =
+  /^(\d{1,2})\s*[.):\-–]\s*(?:Soru\s*)?[:.]*\s*(.*)$/i;
+
+/**
+ * Correct answer marker — "Doğru Cevap: A", "Cevap: A", "✓ A",
+ * "✓ Doğru Cevap: A", "**✓ Doğru Cevap: A**" (after normalizeLine).
+ * Group 1 = the letter.
+ */
+const ANSWER_RE =
+  /(?:doğru\s*cevap|cevap|✓|✔)\s*[:：\-–—]?\s*([A-Ea-e])\b/i;
+
+/** "Açıklama: ..." line — attaches explanation to the current question. */
+const EXPLANATION_RE = /^açıklama\s*[:：]?\s*(.*)$/i;
+
+/** Markdown table row: "| Soru | Cevap |", "|---|---|". */
+const TABLE_ROW_RE = /^\s*\|.*\|\s*$/;
+
+/** Answer-key table row: "| 1 | A |" → { num: 1, letter: "A" }. */
+const ANSWER_KEY_ROW_RE = /^\s*\|?\s*(\d{1,2})\s*\|\s*([A-Ea-e])\s*\|?\s*$/;
+
+/** Metadata/summary lines to ignore: "Cevap Anahtarı", "Zorluk dağılımı:", "Not:" etc. */
+const METADATA_RE =
+  /^(cevap\s*anahtarı|zorluk\s*dağılımı|soru\s*tipleri?|soru\s*tipi\s*dağılımı|not\s*[:：]?)/i;
+
+/** Dashes-only separator line: "---", "———". */
+const DASH_ONLY_RE = /^[-–—\s]+$/;
 
 const STORAGE_KEY = "lifos_quiz_stats";
 
 interface QuizQuestion {
   num: number;
   question: string;
-  options: Array<{ letter: string; text: string }>;
+  options: Array<{ letter: string; text: string; explanation?: string }>;
   correctAnswer: string | null;
   explanation?: string;
 }
@@ -128,12 +156,22 @@ function collectPageText(): string {
   return parts.join("\n");
 }
 
+/** Strips markdown decoration so matching is robust against **, ###, *, _ */
+function normalizeLine(line: string): string {
+  return line
+    .replace(/^[\s#>]*/, "") // leading spaces, #, >
+    .replace(/[*_`~]{1,3}/g, "") // bold/italic/code markers
+    .replace(/^[-–—]+\s*/, "") // leading dashes
+    .trim();
+}
+
 /** Parses collected text into structured questions. */
 function parseQuestions(rawText: string): QuizQuestion[] {
-  const lines = rawText
+  const rawLines = rawText
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
+  const lines = rawLines.map(normalizeLine);
 
   // User prompt templates like "Soru 1: [soru metni]" / "A) [şıkkı]"
   // are collected too (the user's own message is in the DOM). Drop them.
@@ -142,6 +180,8 @@ function parseQuestions(rawText: string): QuizQuestion[] {
 
   const questions: QuizQuestion[] = [];
   const seenNumbers = new Set<number>();
+  // Fallback answer key collected from a trailing "Cevap Anahtarı" table.
+  const answerKey = new Map<number, string>();
   let current: QuizQuestion | null = null;
 
   const flush = () => {
@@ -157,16 +197,28 @@ function parseQuestions(rawText: string): QuizQuestion[] {
     current = null;
   };
 
-  for (const line of lines) {
-    const qMatch = QUESTION_RE.exec(line);
-    if (qMatch && qMatch[1]) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // --- Answer-key table: "| 1 | A |" (may appear mid-chat) ---
+    if (TABLE_ROW_RE.test(line) && ANSWER_KEY_ROW_RE.test(line)) {
+      const m = ANSWER_KEY_ROW_RE.exec(line);
+      if (m) {
+        answerKey.set(parseInt(m[1], 10), m[2].toUpperCase());
+      }
+      continue;
+    }
+
+    // --- New question start ---
+    let qMatch =
+      QUESTION_WITH_SORU_RE.exec(line) || QUESTION_BARE_RE.exec(line);
+    if (qMatch) {
       const num = parseInt(qMatch[1], 10);
       // "Soru 1" appearing again = a NEW test started in the same chat.
-      // The user's template questions (with [soru metni] placeholders) are
-      // never pushed, so a real "Soru 1" only comes from an AI answer.
       if (num === 1 && questions.length > 0) {
         questions.length = 0;
         seenNumbers.clear();
+        answerKey.clear();
         contentLog(
           "[QuizPanel] yeni test algılandı — önceki sorular temizlendi",
         );
@@ -182,37 +234,88 @@ function parseQuestions(rawText: string): QuizQuestion[] {
       continue;
     }
 
-    const optMatch = OPTION_RE.exec(line);
-    if (optMatch && current) {
-      current.options.push({
-        letter: optMatch[1].toUpperCase(),
-        text: optMatch[2],
-      });
-      continue;
-    }
-
-    const ansMatch = ANSWER_RE.exec(line);
-    if (ansMatch && current) {
-      current.correctAnswer = ansMatch[1].toUpperCase();
-      // Capture the explanation after "— Açıklama: ..." if present.
-      const expl = line.split(/—|–|-/)[1]?.trim();
-      if (expl && expl.length > 0) {
-        current.explanation = expl.replace(/^açıklama\s*:?\s*/i, "");
-      }
-      continue;
-    }
-
-    // Fallback: a paragraph line that matches nothing (multi-line question
-    // stems, ÖSYM-style long questions) gets appended to the current
-    // question text instead of being dropped.
     if (current) {
+      // --- Options ---
+      //
+      // Before "Doğru Cevap": collect real options (A-E).
+      const optMatch = OPTION_RE.exec(line);
+      if (optMatch && !current.correctAnswer) {
+        current.options.push({
+          letter: optMatch[1].toUpperCase(),
+          text: optMatch[2],
+        });
+        continue;
+      }
+
+      // --- Per-option explanation AFTER the answer line ---
+      // AI sometimes follows "Doğru Cevap: X — Açıklama: ..." with one line
+      // per option: "A) ... yanlıştır", "B) doğru cevaptır", etc. Attach
+      // those to the matching option instead of treating them as options.
+      if (optMatch && current.correctAnswer) {
+        const letter = optMatch[1].toUpperCase();
+        const existing = current.options.find((o) => o.letter === letter);
+        if (existing) {
+          existing.explanation = optMatch[2];
+        }
+        continue;
+      }
+
+      // --- Correct answer ---
+      const ansMatch = ANSWER_RE.exec(line);
+      if (ansMatch) {
+        const letter = (ansMatch[1] || ansMatch[2] || "").toUpperCase();
+        if (letter) {
+          current.correctAnswer = letter;
+        }
+        // Capture the explanation after "— Açıklama: ..." if present.
+        const expl = line.split(/—|–|-/)[1]?.trim();
+        if (expl && expl.length > 0) {
+          current.explanation = expl.replace(/^açıklama\s*:?\s*/i, "");
+        }
+        continue;
+      }
+
+      // --- Explanation line: "Açıklama: ..." ---
+      const explMatch = EXPLANATION_RE.exec(line);
+      if (explMatch && explMatch[1]) {
+        current.explanation = explMatch[1];
+        continue;
+      }
+
+      // --- Metadata / separators / tables — ignore ---
+      if (
+        METADATA_RE.test(line) ||
+        DASH_ONLY_RE.test(line) ||
+        TABLE_ROW_RE.test(line)
+      ) {
+        continue;
+      }
+
+      // Fallback: a paragraph line that matches nothing (multi-line question
+      // stems, ÖSYM-style long questions) gets appended to the current
+      // question text instead of being dropped.
       current.question =
-        current.question.length > 0 ? `${current.question}\n${line}` : line;
+        current.question.length > 0
+          ? `${current.question}\n${line}`
+          : line;
     }
   }
 
   flush();
-  return questions;
+
+  // Backfill correct answers from the trailing answer-key table for any
+  // question that lacks an inline "Doğru Cevap:" line.
+  for (const q of questions) {
+    if (!q.correctAnswer) {
+      const letter = answerKey.get(q.num);
+      if (letter) {
+        q.correctAnswer = letter;
+      }
+    }
+  }
+
+  // Drop any question that still has no correct answer — unusable.
+  return questions.filter((q) => q.correctAnswer !== null);
 }
 
 function tryParse(): void {
@@ -604,14 +707,31 @@ function renderQuestionView(panel: HTMLElement): void {
   });
 
   // Explanation box — shown AFTER the options, once answered.
-  if (showResult && q.explanation) {
-    const explanationEl = document.createElement("div");
-    explanationEl.className = "explanation";
-    const label = document.createElement("strong");
-    label.textContent = "Açıklama: ";
-    explanationEl.appendChild(label);
-    explanationEl.appendChild(renderRichText(q.explanation));
-    panel.appendChild(explanationEl);
+  if (showResult) {
+    const selectedOpt = q.options.find(
+      (o) => o.letter === selectedAnswers[currentIndex],
+    );
+    const selectedExpl = selectedOpt?.explanation;
+
+    if (q.explanation || selectedExpl) {
+      const explanationEl = document.createElement("div");
+      explanationEl.className = "explanation";
+
+      if (q.explanation) {
+        const label = document.createElement("strong");
+        label.textContent = "Açıklama: ";
+        explanationEl.appendChild(label);
+        explanationEl.appendChild(renderRichText(q.explanation));
+      }
+      if (selectedExpl) {
+        const optLabel = document.createElement("strong");
+        optLabel.textContent = `Seçtiğin şık (${selectedOpt!.letter}): `;
+        explanationEl.appendChild(document.createElement("br"));
+        explanationEl.appendChild(optLabel);
+        explanationEl.appendChild(renderRichText(selectedExpl));
+      }
+      panel.appendChild(explanationEl);
+    }
   }
 
   // Nav
