@@ -1,0 +1,23 @@
+export const zen = {
+  zen_garden_title: "Your Focus Garden",
+  zen_garden_subtitle:
+    "Grow and populate your garden with your focus sessions.",
+  zen_modal_title: "Congratulations! Session Completed",
+  zen_modal_question: "What did you focus on today?",
+  zen_modal_placeholder: "Write your focus topic... (e.g. Math, Coding)",
+  zen_modal_select: "Choose your Focus Element to plant:",
+  zen_modal_plant: "Plant in Garden",
+  zen_elem_bonsai: "Bonsai Tree",
+  zen_elem_koi: "Koi Pond",
+  zen_elem_pagoda: "Stone Pagoda",
+  zen_elem_lantern: "Stone Lantern",
+  zen_elem_bamboo: "Green Bamboo",
+  zen_elem_pebble: "Focus Pebbles",
+  zen_history_title: "Focus History",
+  zen_history_search: "Search logs...",
+  zen_history_empty: "No completed focus sessions yet.",
+  zen_history_col_date: "Date",
+  zen_history_col_duration: "Duration",
+  zen_history_col_note: "Focus Subject",
+  zen_history_col_elem: "Earned Element",
+};

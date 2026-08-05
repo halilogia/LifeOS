@@ -1,0 +1,16 @@
+export const srs = {
+  srs_review_title: "Gözden Geçirilecekler",
+  srs_no_words: "Çalışılacak Kelime Kalmadı!",
+  srs_great_job: "Harika İş!",
+  srs_restart: "Yeniden Başla",
+  srs_def_missing: "Tanım bulunamadı",
+  srs_spaced_repetition: "Aralıklı Tekrar",
+  srs_hard: "Zor",
+  srs_medium: "Orta",
+  srs_easy: "Kolay",
+  srs_preparing: "Kelime havuzu hazırlanıyor...",
+  srs_error_loading: "Kelime havuzu yüklenirken bir hata oluştu.",
+  srs_finished_message: "Bugünkü tüm kelime tekrarlarını tamamladın.",
+  srs_click_to_see: "Anlamını görmek için tıklayın",
+  srs_click_to_see_meaning: "Anlamını görmek için tıklayın",
+};

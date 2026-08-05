@@ -1,6 +1,6 @@
 import { Language } from "@/types/types.js";
-import { tr } from "@/utils/translations/tr.js";
-import { en } from "@/utils/translations/en.js";
+import { tr } from "@/utils/translations/tr/index.js";
+import { en } from "@/utils/translations/en/index.js";
 
 export const translations = {
   tr,
