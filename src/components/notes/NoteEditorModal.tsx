@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "preact/hooks";
-import { Note } from "@/types/types.js";
+import { Note, DayScores } from "@/types/types.js";
 import { extractInternalLinks } from "@/services/zettelkastenEngine.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
@@ -7,6 +7,7 @@ import { NoteEditorHeader } from "./NoteEditorHeader.js";
 import { NoteEditorBody } from "./NoteEditorBody.js";
 import { WikiAutocomplete } from "./WikiAutocomplete.js";
 import { NoteBacklinksPanel } from "./NoteBacklinksPanel.js";
+import { NotesDayScorePanel } from "./NotesDayScorePanel.js";
 
 export type NoteType = "note" | "diary" | "cornell";
 
@@ -21,6 +22,8 @@ interface NoteEditorModalProps {
   notesPlaceholder: string;
   notesContentPlaceholder: string;
   availableNotes?: Note[];
+  dayScores?: DayScores;
+  onSetDayScore?: (dateKey: string, score: number) => void;
   onClose: () => void;
   onNoteTypeChange: (type: NoteType) => void;
   onNoteTitleChange: (val: string) => void;
@@ -41,6 +44,8 @@ export function NoteEditorModal({
   notesPlaceholder,
   notesContentPlaceholder,
   availableNotes,
+  dayScores,
+  onSetDayScore,
   onClose,
   onNoteTypeChange,
   onNoteTitleChange,
@@ -132,6 +137,14 @@ export function NoteEditorModal({
           className="note-editor-body"
           style={{ padding: "0 10px", position: "relative" }}
         >
+          {noteType === "diary" && dayScores && onSetDayScore && (
+            <NotesDayScorePanel
+              lang={lang}
+              dayScores={dayScores}
+              onSetScore={onSetDayScore}
+            />
+          )}
+
           <NoteEditorBody
             t={t}
             noteType={noteType}

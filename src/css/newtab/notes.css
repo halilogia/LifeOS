@@ -114,6 +114,19 @@
   opacity: 0.7;
 }
 
+/* Modal içinde (günlük tipi) kompakt görünüm */
+.note-modal-content .day-score-panel {
+  background: transparent;
+  border: 1px dashed var(--card-border);
+  border-radius: 14px;
+  padding: var(--space-5) var(--space-7);
+  margin-bottom: var(--space-5);
+}
+
+.note-modal-content .day-score-strip {
+  margin-top: var(--space-3);
+}
+
 .add-note-action-btn {
   border: 1px solid transparent;
   border-radius: 12px;
