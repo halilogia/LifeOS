@@ -7,7 +7,7 @@ interface AiMemoryEditorProps {
 }
 
 export function AiMemoryEditor({
-  t: _t,
+  t,
   userMemory,
   memorySavedSuccess,
   onMemoryChange,
@@ -56,7 +56,7 @@ export function AiMemoryEditor({
             <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
             <path d="M12 6v6l4 2" />
           </svg>
-          <span>Kişisel AI Hafızası (memory.md)</span>
+          <span>{t.ai_memory_title}</span>
         </label>
         {memorySavedSuccess && (
           <span
@@ -73,7 +73,7 @@ export function AiMemoryEditor({
               gap: "4px",
             }}
           >
-            ✓ Hafıza Kaydedildi!
+            {t.ai_memory_saved_badge}
           </span>
         )}
       </div>
@@ -84,9 +84,7 @@ export function AiMemoryEditor({
           lineHeight: 1.4,
         }}
       >
-        Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel
-        tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu alana
-        özel notlarınızı yazabilirsiniz.
+        {t.ai_memory_desc}
       </span>
       <textarea
         value={userMemory}
@@ -105,7 +103,7 @@ export function AiMemoryEditor({
           outline: "none",
           resize: "vertical",
         }}
-        placeholder="# Kişisel Hafıza notlarınızı buraya yazın..."
+        placeholder={t.ai_memory_placeholder}
       />
       <button
         type="button"
@@ -141,7 +139,7 @@ export function AiMemoryEditor({
           <polyline points="17 21 17 13 7 13 7 21"></polyline>
           <polyline points="7 3 7 8 15 8"></polyline>
         </svg>
-        <span>Kişisel Hafızayı Kaydet (memory.md)</span>
+        <span>{t.ai_memory_save_btn}</span>
       </button>
     </div>
   );

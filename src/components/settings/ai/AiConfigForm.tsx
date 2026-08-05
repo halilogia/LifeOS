@@ -6,7 +6,6 @@ interface AiConfigFormProps {
   showKey: boolean;
   models: string[];
   filterText: string;
-  filteredModels: string[];
   groupedModels: Record<string, { id: string; name: string }[]>;
   loadingModels: boolean;
   modelError: string;
@@ -29,7 +28,6 @@ export function AiConfigForm({
   showKey,
   models,
   filterText,
-  filteredModels,
   groupedModels,
   loadingModels,
   modelError,
@@ -63,7 +61,7 @@ export function AiConfigForm({
             color: "var(--accent-color)",
           }}
         >
-          9Router Proxy (OpenAI Uyumlu)
+          {t.settings_ai_provider_label}
         </span>
       </div>
 
@@ -87,7 +85,7 @@ export function AiConfigForm({
           <input
             type={showKey ? "text" : "password"}
             value={aiApiKey}
-            placeholder="9Router API Key (Örn: sk-72l... veya bos bırakın)"
+            placeholder={t.settings_ai_key_placeholder}
             onInput={(e) =>
               onConfigChange(
                 "openrouter",

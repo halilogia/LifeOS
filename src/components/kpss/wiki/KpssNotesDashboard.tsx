@@ -146,13 +146,14 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: sidebarCollapsed ? "auto 1fr" : "270px 1fr",
+          gridTemplateColumns: sidebarCollapsed ? "38px 1fr" : "270px 1fr",
           gap: "16px",
           minHeight: "680px",
           width: "100%",
           maxWidth: "100%",
           minWidth: 0,
-          transition: "grid-template-columns 0.25s ease",
+          transition:
+            "grid-template-columns 0.28s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
         <KpssWikiSidebar

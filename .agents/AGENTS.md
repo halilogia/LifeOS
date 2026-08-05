@@ -162,7 +162,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 6.1 Dosya Boyut Rehberi (Esnek Kural — Sorumluluk Esaslı)
 * **Katı satır limiti YOKTUR**: Dosyalar satır sayısına göre değil, sorumluluk yoğunluğuna göre değerlendirilir. Büyük bir dosya tek sorumluluk taşıyorsa sorun değildir; küçük bir dosya bile birden fazla işi üstleniyorsa bölünür.
 * **BÖLÜNÜR (birden fazla sorumluluk)**: Farklı domain/sorumluluklar tek dosyada toplanmışsa (örn. view içinde hem state hem 3 ayrı UI bloğu, service içinde hem fetch hem hesaplama hem storage) → alt bileşenlere/alt modüllere bölünür (`src/components/<feature>/`, `src/services/<feature>/`).
-* **BÖLÜNMEZ (tek sorumluluk)**: Dosya tek bir sorumluluğa sahipse ve içerik o sorumluluğa hizmet ediyorsa bölünmez — ne kadar büyük olursa olsun. Örnekler: çeviri dosyaları (`tr.ts`, `en.ts` — saf anahtar-değer verisi), sabit veri setleri (`TurkeyProvincePaths.ts`), merkezi tema token'ları (`base.css`), tek-sorumluluk hook'ları (`useSidePanelChat.ts`), yoğun mesaj işleyicileri (`whatsappBridge.ts`).
+* **BÖLÜNMEZ (tek sorumluluk)**: Dosya tek bir sorumluluğa sahipse ve içerik o sorumluluğa hizmet ediyorsa bölünmez — ne kadar büyük olursa olsun.
 * **Karar kriteri — "Tek Sorumluluk Testi"**: Dosyanın başlığı tek cümleyle özetlenebiliyorsa ve tüm içerik o cümleye hizmet ediyorsa → bölünmez. Başlık birden fazla cümle gerektiriyorsa → bölünür.
 * **Bölme sırası**: En büyükten değil, en çok sorumluluk taşıyandan başlanır. Öncelik ana view'lar → not modülleri → servisler → alt limit dosyaları.
 

@@ -1,3 +1,5 @@
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
+
 interface KpssAutoTitleToggleProps {
   t: Record<string, string>;
   enabled: boolean;
@@ -11,7 +13,7 @@ export function KpssAutoTitleToggle({
 }: KpssAutoTitleToggleProps) {
   return (
     <div className="settings-group">
-      <h3>{t.settings_kpss_notes_wiki}</h3>
+      <SettingsSection title={t.settings_kpss_notes_wiki} />
       <div
         style={{
           display: "flex",

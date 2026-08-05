@@ -1,15 +1,17 @@
 /**
  * AppSettingsGroup.tsx
- * Genel Ayarlar > Uygulama Ayarları grubu — tüm toggle/hotkey butonları.
- * GeneralSettingsTab dosya limitini aşmasın diye ayrı (6.1).
+ * Genel Ayarlar > kategorize edilmiş toggle/hotkey butonları.
+ * Bölümler: Arayüz & Dil / Bildirimler / Odak Araçları / Entegrasyonlar.
  * Tuval: BridgeToggles + AppToggleRow/AppHotkeySelect/AppShortcutRow parçaları.
  */
 
+import type { ComponentChildren } from "preact";
 import { Language } from "@/types/types.js";
 import { BridgeToggles } from "@/components/settings/BridgeToggles.js";
 import { AppToggleRow } from "./AppToggleRow.js";
 import { AppHotkeySelect } from "./AppHotkeySelect.js";
 import { AppShortcutRow } from "./AppShortcutRow.js";
+import { SettingsSection } from "./SettingsSection.js";
 
 export interface AppSettingsGroupProps {
   lang: Language;
@@ -31,6 +33,20 @@ export interface AppSettingsGroupProps {
   onToggleTelegramBridge: () => void;
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
+}
+
+interface GroupCardProps {
+  title: string;
+  children: ComponentChildren;
+}
+
+function GroupCard({ title, children }: GroupCardProps) {
+  return (
+    <div className="settings-group">
+      <SettingsSection title={title} />
+      <div className="settings-actions">{children}</div>
+    </div>
+  );
 }
 
 export function AppSettingsGroup({
@@ -55,31 +71,24 @@ export function AppSettingsGroup({
   onToggleAutoGroupTabs,
 }: AppSettingsGroupProps) {
   return (
-    <div className="settings-group">
-      <h3
-        style={{
-          margin: "0 0 12px 0",
-          fontSize: "0.85rem",
-          textTransform: "uppercase",
-          letterSpacing: "0.05em",
-          color: "var(--text-secondary)",
-          opacity: 0.8,
-        }}
-      >
-        {t.settings_app_settings_title}
-      </h3>
-      <div className="settings-actions">
-        {/* Language Switch */}
-        <AppToggleRow
-          label={t.change_lang}
-          icon="globe"
-          enabled={true}
-          enabledText={lang.toUpperCase()}
-          disabledText={lang.toUpperCase()}
-          onClick={onToggleLang}
-        />
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      {/* Arayüz & Dil */}
+      <GroupCard title={t.settings_category_ui}>
+        <>
+          <AppToggleRow
+            label={t.change_lang}
+            icon="globe"
+            enabled={true}
+            enabledText={lang.toUpperCase()}
+            disabledText={lang.toUpperCase()}
+            onClick={onToggleLang}
+          />
+          <AppShortcutRow t={t} />
+        </>
+      </GroupCard>
 
-        {/* Free Games Notifications Toggle */}
+      {/* Bildirimler */}
+      <GroupCard title={t.settings_category_notifications}>
         <AppToggleRow
           label={t.free_games_notifications_title}
           icon="bell"
@@ -88,8 +97,6 @@ export function AppSettingsGroup({
           disabledText={t.disabled}
           onClick={onToggleFreeGamesNotifications}
         />
-
-        {/* Calendar Tasks Notifications Toggle */}
         <AppToggleRow
           label={t.settings_notify_tasks}
           icon="calendar"
@@ -98,8 +105,10 @@ export function AppSettingsGroup({
           disabledText={t.disabled}
           onClick={onToggleCalendarNotifications}
         />
+      </GroupCard>
 
-        {/* Pomodoro Focus Block Toggle */}
+      {/* Odak Araçları */}
+      <GroupCard title={t.settings_category_focus}>
         <AppToggleRow
           label={t.settings_pomo_blocker}
           icon="lock"
@@ -108,8 +117,10 @@ export function AppSettingsGroup({
           disabledText={t.disabled}
           onClick={onTogglePomoBlock}
         />
+      </GroupCard>
 
-        {/* Universal Info Box Toggle */}
+      {/* Entegrasyonlar */}
+      <GroupCard title={t.settings_category_integrations}>
         <AppToggleRow
           label={t.uib_title}
           icon="info"
@@ -118,8 +129,13 @@ export function AppSettingsGroup({
           disabledText={t.disabled}
           onClick={onToggleUniversalInfoBox}
         />
-
-        {/* WhatsApp & Telegram Köprü Toggle'ları */}
+        {universalInfoBoxEnabled && (
+          <AppHotkeySelect
+            t={t}
+            value={universalInfoBoxHotkey}
+            onChange={onUniversalInfoBoxHotkeyChange}
+          />
+        )}
         <BridgeToggles
           t={t}
           whatsappBridgeEnabled={whatsappBridgeEnabled}
@@ -127,8 +143,6 @@ export function AppSettingsGroup({
           telegramBridgeEnabled={telegramBridgeEnabled}
           onToggleTelegramBridge={onToggleTelegramBridge}
         />
-
-        {/* Auto Tab Grouping Toggle */}
         {onToggleAutoGroupTabs && (
           <AppToggleRow
             label={t.settings_auto_group_tabs}
@@ -139,19 +153,7 @@ export function AppSettingsGroup({
             onClick={onToggleAutoGroupTabs}
           />
         )}
-
-        {/* Universal Info Box Hotkey Selection */}
-        {universalInfoBoxEnabled && (
-          <AppHotkeySelect
-            t={t}
-            value={universalInfoBoxHotkey}
-            onChange={onUniversalInfoBoxHotkeyChange}
-          />
-        )}
-
-        {/* Side Panel Copilot Hotkey Management */}
-        <AppShortcutRow t={t} />
-      </div>
+      </GroupCard>
     </div>
   );
 }

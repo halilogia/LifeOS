@@ -1,3 +1,5 @@
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
+
 interface KpssResetSectionProps {
   t: Record<string, string>;
   onReset: () => void;
@@ -6,7 +8,7 @@ interface KpssResetSectionProps {
 export function KpssResetSection({ t, onReset }: KpssResetSectionProps) {
   return (
     <div className="settings-group">
-      <h3>{t.settings_kpss_data_reset}</h3>
+      <SettingsSection title={t.settings_kpss_data_reset} />
       <div
         style={{
           display: "flex",
