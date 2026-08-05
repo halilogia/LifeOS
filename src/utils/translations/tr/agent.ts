@@ -1,0 +1,58 @@
+export const agent = {
+  agent_tool_filled_form_fields: "✓ $count adet form alanı dolduruldu.",
+  agent_tool_typing_label: "$count yazma",
+  agent_tool_click_label: "$count tıklama",
+  agent_tool_executed_template:
+    "✓ $count adet işlem başarıyla yürütüldü ($details).",
+
+  agent_tool_clicked: '✓ "$target" bağlantısına/sekmesine tıklandı.',
+  agent_tool_typed: '✓ "$target" alanına metin yazıldı.',
+  agent_tool_scrolled: "✓ Sayfa $direction kaydırıldı.",
+  agent_tool_scrolled_up: "yukarı",
+  agent_tool_scrolled_down: "aşağı",
+  agent_tool_extracted: "✓ Sayfa verileri başarıyla analiz edildi.",
+  agent_tool_highlighted: '✓ "$target" öğesi vurgulandı.',
+  agent_tool_executed_single: "✓ $count adet işlem yürütüldü.",
+  agent_tool_element: "Öğe",
+
+  answer_language: "Türkçe",
+  agent_analyze_desc:
+    "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
+  agent_ready: "Life OS Agent Hazır",
+  agent_thinking: "Yapay zeka yanıtlıyor...",
+  autofill_form: "Formu Doldur (memory.md)",
+  chip_ask: "Soru Sor",
+  chip_extract: "Veri Çıkar",
+  chip_summarize: "Özetle",
+  chip_takeaways: "Ana Fikirler",
+  copy_label: "Kopyala",
+  copy_label_copied: "Kopyalandı",
+  copy_title: "Metni Kopyala",
+  copy_title_copied: "Kopyalandı!",
+  executing_actions: "Aksiyon yürütülüyor ({count} işlem)...",
+  failed_response:
+    "Yanıt alınamadı. Lütfen Ayarlar'dan API Anahtarınızı kontrol edin.",
+  input_placeholder: "Sayfa hakkında soru yazın veya sesli komut verin...",
+  listening_placeholder: "Konuşun, dinleniyor...",
+  listening_tooltip: "Dinleniyor...",
+  memory_saved: '✓ "{fact}" bilgisi kişisel hafızanıza (memory.md) eklendi.',
+  prompt_ask: "Bu sayfa ne anlatıyor ve ne amaçla yazılmıştır?",
+  prompt_extract: "Bu sayfadaki önemli veri veya listeleri çıkar.",
+  prompt_summarize: "Bu sayfayı 3 ana maddede özetle.",
+  prompt_takeaways:
+    "Bu sayfadaki en önemli çıkarımları ve eylem maddelerini yaz.",
+  prompt_yt_quiz:
+    "Bu YouTube videosunun içeriğini/transkriptini incele. Konuyu pekiştirmek için video içeriğinden 5 soruluk çoktan seçmeli (A, B, C, D seçenekli) soru testi oluştur ve en alt kısımda cevap anahtarı ile açıklamalarını ver.",
+  prompt_yt_summarize:
+    "Bu YouTube videosunun alt yazılarını/transkriptini analiz et, 3 ana maddede özetle ve kilit zaman damgalarını çıkar.",
+  question_placeholder: "Sayfa hakkında soru yazın veya sesli komut verin...",
+  rescan_page: "Sayfayı Yeniden Tara",
+  speech_not_supported: "Tarayıcınız sesli komutu desteklemiyor.",
+  starter_summarize: "Sayfayı Özetle",
+  starter_summarize_desc: "3 ana maddede özetle",
+  starter_takeaways: "Ana Fikirler",
+  starter_takeaways_desc: "Kilit çıkarımlar & aksiyonlar",
+  summarize_video: "Videoyu Özetle",
+  video_quiz: "5 Soruluk Test",
+  voice_command_tooltip: "Sesli Komut Ver",
+};
