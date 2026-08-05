@@ -1,0 +1,1 @@
+Coğrafya soruları için: Bilimsel ve akademik doğruluk şart. Türkiye'de doğu-batı sıcaklık farklarını enlemle açıklama — bu yanlıştır. "Matematik (Mutlak) Konum" ile "Göreceli (Özel) Konum" ayrımını net belirt. Eğer harita gerektiren soru soruyorsan haritada hangi bölgenin numaralandırıldığını yazıyla tarif et.

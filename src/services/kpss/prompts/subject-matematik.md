@@ -1,0 +1,1 @@
+Matematik/Geometri soruları için: Eğer grafik okuma, tablo, çizgi grafik veya geometri sorusu ise sorunun hemen altında şeklin nasıl göründüğünü metin olarak tarif et (örn: "Şekilde ABC üçgeninde A=60°, B=x, C=80° verilmiştir.").
