@@ -204,4 +204,6 @@ export const kpss = {
   kpss_external_quiz_copy_prompt: "Copy Prompt",
   kpss_external_quiz_clipboard_hint:
     "Prompt copied! Paste it (Ctrl+V) after the AI tab opens.",
+  kpss_topic_avg_questions:
+    "Average Questions in 2019–2025 KPSS Undergraduate Exams",
 };

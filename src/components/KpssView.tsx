@@ -446,6 +446,7 @@ export function KpssView({
         <KpssTopicDetailModal
           topic={activeTopic}
           detailsTitle={labels.details_title}
+          t={t}
           onClose={() => setActiveTopic(null)}
         />
       )}

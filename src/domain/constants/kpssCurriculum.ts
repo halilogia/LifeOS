@@ -1,6 +1,7 @@
 /**
  * kpssCurriculum.ts
  * Static KPSS exam subjects & curriculum topic breakdown dataset.
+ * Data source: archives/ders_konu_analizi.xlsx (2019-2025 KPSS Lisans ortalamaları)
  */
 
 export interface KpssTopic {
@@ -15,25 +16,19 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Sözcükte Anlam",
       description:
         "Gerçek anlam, yan anlam, mecaz anlam, eş ve zıt anlamlı kelimeler, deyimler ve atasözleri konularını kapsar.",
-      questionsCount: 1.0,
+      questionsCount: 1.17,
     },
     {
       title: "Cümlede Anlam",
       description:
         "Öznel-nesnel yargılar, neden-sonuç, amaç-sonuç, koşul cümleleri ve cümle yorumlama.",
-      questionsCount: 2.0,
+      questionsCount: 1.67,
     },
     {
-      title: "Paragraf Yapısı ve Anlamı",
+      title: "Paragraf",
       description:
         "Ana düşünce, yardımcı düşünceler, paragrafın yapısı (giriş, gelişme, sonuç) ve akışı bozan cümleler.",
-      questionsCount: 17.0,
-    },
-    {
-      title: "Anlatım Teknikleri",
-      description:
-        "Öyküleme, betimleme, açıklama, tartışma yöntemleri ve düşünceyi geliştirme yolları.",
-      questionsCount: 1.0,
+      questionsCount: 15.0,
     },
     {
       title: "Ses Bilgisi",
@@ -45,37 +40,31 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Sözcükte Yapı",
       description:
         "Kök, gövde, yapım ve çekim ekleri, basit, türemiş ve birleşik sözcük yapıları.",
-      questionsCount: 0.5,
+      questionsCount: 1.17,
     },
     {
-      title: "Sözcük Türleri (İsim, Sıfat, Zamir...)",
+      title: "Sözcük Türleri",
       description:
         "İsim, sıfat, zamir, zarf, edat, bağlaç, ünlem ve fiillerin özellikleri.",
-      questionsCount: 0.5,
-    },
-    {
-      title: "Fiilimsiler ve Fiilde Çatı",
-      description:
-        "İsim-fiil, sıfat-fiil, zarf-fiil özellikleri ve etken, edilgen, geçişli, geçişsiz fiil çatıları.",
-      questionsCount: 0.5,
+      questionsCount: 1.67,
     },
     {
       title: "Cümlenin Ögeleri",
       description:
         "Özne, yüklem, nesne, dolaylı tümleç ve zarf tümleci bulma yöntemleri.",
-      questionsCount: 0.5,
+      questionsCount: 1.17,
     },
     {
       title: "Cümle Türleri",
       description:
         "Yüklemin türü, yeri, anlamı ve yapısı (basit, birleşik, sıralı, bağlı) yönünden cümle çeşitleri; Karma Dil Bilgisi sorularında sıkça çıkar.",
-      questionsCount: 0.5,
+      questionsCount: 0.17,
     },
     {
       title: "Yazım Kuralları",
       description:
         "Büyük harflerin kullanımı, sayıların yazımı, birleşik sözcüklerin yazımı ve kısaltmalar.",
-      questionsCount: 1.0,
+      questionsCount: 1.17,
     },
     {
       title: "Noktalama İşaretleri",
@@ -87,13 +76,13 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Anlatım Bozuklukları",
       description:
         "Anlamsal ve yapısal anlatım bozuklukları, gereksiz sözcük kullanımı ve mantık hataları.",
-      questionsCount: 0.5,
+      questionsCount: 0.67,
     },
     {
       title: "Sözel Mantık",
       description:
         "Verilen bilgiler ışığında akıl yürütme, tablolama ve çıkarım yapma soruları.",
-      questionsCount: 3.0,
+      questionsCount: 4.0,
     },
   ],
   matematik: [
@@ -101,48 +90,60 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Temel Kavramlar",
       description:
         "Rakamlar, sayılar, tam sayılar, doğal sayılar ve temel aritmetik işlemler.",
-      questionsCount: 1.0,
+      questionsCount: 0.43,
     },
     {
       title: "Tek / Çift Sayılar",
       description:
         "Sayıların teklik ve çiftlik özellikleri ve bu sayılarla yapılan işlemlerin kuralları.",
-      questionsCount: 1.0,
+      questionsCount: 0.86,
     },
     {
       title: "Ardışık Sayılar",
       description:
         "Belli bir kurala göre ardı ardına gelen sayı dizileri ve bunların toplam formülleri.",
-      questionsCount: 1.0,
+      questionsCount: 0.43,
     },
     {
       title: "Sayı Basamakları",
       description: "Çözümleme, basamak değeri ve basamaklar arası işlemler.",
-      questionsCount: 0.5,
+      questionsCount: 0.43,
+    },
+    {
+      title: "Dört İşlem",
+      description:
+        "Toplama, çıkarma, çarpma ve bölme işlemlerinde işlem önceliği ve stratejileri.",
+      questionsCount: 0.57,
     },
     {
       title: "Bölünebilme Kuralları",
       description:
         "2, 3, 4, 5, 8, 9, 10 ve 11 ile bölünebilme kuralları ve kalan bulma.",
-      questionsCount: 0.5,
+      questionsCount: 0.86,
     },
     {
-      title: "EBOB - EKOK",
+      title: "Faktöriyel",
       description:
-        "En büyük ortak bölen, en küçük ortak kat bulma formülleri ve EBOB-EKOK problemleri.",
-      questionsCount: 0.5,
+        "Faktöriyel kavramı, faktöriyelli işlemler ve sondan kaç basamağın sıfır olduğunu bulma.",
+      questionsCount: 0.14,
     },
     {
-      title: "Faktöriyel / Asal Sayılar",
+      title: "Asal Sayılar",
       description:
-        "Faktöriyel kavramı, asal sayılar ve aralarında asal sayılar özellikleri.",
-      questionsCount: 0.5,
+        "Asal sayılar, aralarında asal sayılar, asal çarpanlara ayırma ve bölen sayısı.",
+      questionsCount: 0.29,
+    },
+    {
+      title: "OBEB - OKEK",
+      description:
+        "En büyük ortak bölen, en küçük ortak kat bulma formülleri ve OBEB-OKEK problemleri.",
+      questionsCount: 0.0,
     },
     {
       title: "Basit Eşitsizlikler",
       description:
         "Büyüklük-küçüklük bağıntıları ve eşitsizliklerin çözüm kümeleri.",
-      questionsCount: 0.5,
+      questionsCount: 1.29,
     },
     {
       title: "Mutlak Değer",
@@ -154,144 +155,152 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "Rasyonel Sayılar",
       description:
         "Kesirler, ondalık gösterimler ve rasyonel sayılarda dört işlem.",
-      questionsCount: 1.0,
+      questionsCount: 1.57,
     },
     {
-      title: "Üslü / Köklü Sayılar",
+      title: "Üslü Sayılar",
       description:
-        "Üslü ifadeler, köklü ifadeler ve bu ifadelerle yapılan temel matematiksel işlemler.",
-      questionsCount: 2.0,
+        "Üslü ifadeler, üslü sayılarda dört işlem ve üslü denklemler.",
+      questionsCount: 2.14,
+    },
+    {
+      title: "Köklü Sayılar",
+      description:
+        "Köklü ifadeler, kök dışına çıkarma, payda rasyonelleştirme ve köklü denklemler.",
+      questionsCount: 1.0,
     },
     {
       title: "Çarpanlara Ayırma",
       description:
         "Özdeşlikler, ortak çarpan parantezine alma ve sadeleştirme yöntemleri.",
-      questionsCount: 0.5,
+      questionsCount: 0.43,
     },
     {
       title: "1. Dereceden Denklemler",
       description: "Bilinmeyenli denklemler ve çözüm yolları.",
-      questionsCount: 0.5,
+      questionsCount: 0.43,
     },
     {
       title: "Oran Orantı",
       description:
         "Doğru orantı, ters orantı, bileşik orantı ve ortalama kavramları.",
-      questionsCount: 0.5,
+      questionsCount: 0.43,
     },
     {
-      title: "Sayı / Kesir Problemleri",
+      title: "Sayı Problemleri",
       description:
-        "Muhakeme yeteneğini ölçen sayısal ve kesirli problem türleri.",
-      questionsCount: 4.0,
-    },
-    {
-      title: "Yaş / Hareket Problemleri",
-      description:
-        "Yaş hesaplama ve hız-zaman-yol ilişkisi üzerine kurulu problemler.",
+        "Denklem kurma becerisini ölçen klasik sayı problemleri ve muhakeme soruları.",
       questionsCount: 2.0,
     },
     {
-      title: "Yüzde / Kar / Zarar / Karışım",
+      title: "Kesir Problemleri",
       description:
-        "Yüzde hesaplamaları, ticari kar-zarar ve madde karışım problemleri.",
-      questionsCount: 2.0,
+        "Kesirlerle ifade edilen parça-bütün ilişkisi ve problem çözümleri.",
+      questionsCount: 0.43,
+    },
+    {
+      title: "Yaş Problemleri",
+      description:
+        "Geçmiş ve gelecek yaş hesaplamaları ile kişilerin yaş farkı sabitliği.",
+      questionsCount: 0.71,
+    },
+    {
+      title: "Yüzde / Kâr / Zarar",
+      description:
+        "Yüzde hesaplamaları, ticari kâr-zarar ve alış-satış fiyatı problemleri.",
+      questionsCount: 0.86,
+    },
+    {
+      title: "Karışım Problemleri",
+      description:
+        "Madde miktarı değişmeyen karışım formülü ve saf madde oranı hesaplamaları.",
+      questionsCount: 0.0,
+    },
+    {
+      title: "Hareket Problemleri",
+      description:
+        "Yol, hız ve zaman arasındaki ilişki; karşılaşma ve yetişme problemleri.",
+      questionsCount: 1.0,
+    },
+    {
+      title: "İşçi Problemleri",
+      description:
+        "İş, işçi ve zaman ilişkisi; birlikte iş yapma ve havuz problemleri.",
+      questionsCount: 0.0,
     },
     {
       title: "Grafik ve Tablo Problemleri",
       description:
         "Daire, sütun ve çizgi grafikleri ile tabloları okuma, analiz etme ve yorumlama.",
-      questionsCount: 2.0,
-    },
-    {
-      title: "İstatistik",
-      description:
-        "Mod, medyan, açıklık ve standart sapma gibi temel istatistiksel veriler.",
-      questionsCount: 0.5,
+      questionsCount: 1.14,
     },
     {
       title: "Kümeler",
       description:
         "Kümelerde temel kavramlar, birleşim, kesişim, fark işlemleri ve küme problemleri.",
-      questionsCount: 1.0,
-    },
-    {
-      title: "Fonksiyonlar",
-      description:
-        "Fonksiyon tanımı, çeşitleri, bileşke ve ters fonksiyon işlemleri.",
-      questionsCount: 1.0,
+      questionsCount: 0.71,
     },
     {
       title: "Permütasyon / Kombinasyon / Olasılık",
       description:
         "Sıralama (permütasyon), seçme (kombinasyon) ve olasılık hesabı kuralları.",
-      questionsCount: 1.0,
+      questionsCount: 1.29,
     },
     {
-      title: "Modüler Aritmetik / İşlem",
+      title: "Fonksiyonlar",
       description:
-        "Özel tanımlı işlemler, modül bulma ve periyodik tekrar eden problemler.",
-      questionsCount: 0.5,
+        "Fonksiyon tanımı, çeşitleri, bileşke ve ters fonksiyon işlemleri.",
+      questionsCount: 0.86,
+    },
+    {
+      title: "İşlem",
+      description:
+        "Özel tanımlı işlemler ve işlem tablosu ile soru çözümleri.",
+      questionsCount: 0.29,
+    },
+    {
+      title: "Modüler Aritmetik",
+      description:
+        "Modül bulma, dönemsel tekrar eden işlemler ve modüler denklemler.",
+      questionsCount: 0.0,
     },
     {
       title: "Sayısal Mantık",
       description:
         "Şekil yeteneği, sayı dizileri ve mantıksal çıkarım soruları.",
-      questionsCount: 2.0,
+      questionsCount: 4.43,
     },
   ],
   geometri: [
     {
       title: "Geometrik Kavramlar ve Açılar",
-      description: "Nokta, doğru, düzlem kavramları ve temel açı çeşitleri.",
-      questionsCount: 0.2,
-    },
-    {
-      title: "Doğruda ve Üçgende Açılar",
       description:
-        "Paralel doğrular arası açılar ve üçgenin iç/dış açılarının özellikleri.",
-      questionsCount: 0.3,
-    },
-    {
-      title: "Özel Üçgenler",
-      description:
-        "Dik üçgen, ikizkenar üçgen ve eşkenar üçgenin kendine has özellikleri ve Pisagor teoremi.",
-      questionsCount: 0.5,
-    },
-    {
-      title: "Açıortay / Kenarortay",
-      description: "Üçgende iç ve dış açıortay ile kenarortay teoremleri.",
-      questionsCount: 0.2,
-    },
-    {
-      title: "Üçgende Alan / Benzerlik",
-      description:
-        "Üçgenin alan formülleri ve üçgenler arasındaki benzerlik oranları.",
-      questionsCount: 0.4,
+        "Nokta, doğru, düzlem kavramları; paralel doğrular arası açı ilişkileri; üçgende iç/dış açılar, özel üçgenler (dik, ikizkenar, eşkenar), Pisagor teoremi; açıortay ve kenarortay teoremleri; üçgenin alan formülleri ve benzerlik oranları.",
+      questionsCount: 1.14,
     },
     {
       title: "Çokgenler ve Dörtgenler",
       description:
         "Kare, dikdörtgen, paralelkenar ve yamuk gibi geometrik şekillerin özellikleri.",
-      questionsCount: 0.5,
+      questionsCount: 1.14,
     },
     {
       title: "Çember ve Daire",
       description:
         "Çemberde açılar, uzunluk ve dairenin alan/çevre hesaplamaları.",
-      questionsCount: 0.4,
+      questionsCount: 1.0,
     },
     {
       title: "Analitik Geometri",
       description:
         "Koordinat sistemi, doğru denklemleri ve nokta-doğru ilişkileri.",
-      questionsCount: 0.3,
+      questionsCount: 0.71,
     },
     {
       title: "Katı Cisimler",
       description:
         "Prizmalar, silindir, piramit ve küre gibi üç boyutlu şekillerin hacim ve alanları.",
-      questionsCount: 0.2,
+      questionsCount: 0.0,
     },
   ],
   tarih: [
@@ -299,73 +308,67 @@ export const kpssData: Record<string, KpssTopic[]> = {
       title: "İslamiyet Öncesi Türk Tarihi",
       description:
         "Orta Asya Türk devletleri (Hunlar, Göktürkler, Uygurlar) ve göç hareketleri.",
+      questionsCount: 0.17,
+    },
+    {
+      title: "İslamiyet Öncesi Kültür ve Uygarlık",
+      description:
+        "İslamiyet öncesi Türk devletlerinde devlet yönetimi, ordu yapısı, toplumsal hayat, hukuk sistemi ve kültürel özellikler.",
       questionsCount: 1.0,
+    },
+    {
+      title: "Türklerin İslamiyet'i Kabulü",
+      description:
+        "Talas Savaşı, Türklerin İslamiyet'e geçiş süreci ve ilk Müslüman Türk boyları.",
+      questionsCount: 0.0,
     },
     {
       title: "İlk Türk İslam Devletleri",
       description:
         "Karahanlılar, Gazneliler ve Selçuklular dönemi siyasi ve kültürel gelişmeler.",
-      questionsCount: 2.0,
+      questionsCount: 1.83,
     },
     {
-      title: "Anadolu Selçuklu ve Beylikler",
-      description:
-        "Anadolu'nun türkleşmesi, Selçuklu devleti ve II. Beylikler dönemi.",
-      questionsCount: 1.0,
-    },
-    {
-      title: "Osmanlı Kültür ve Medeniyeti",
-      description:
-        "Devlet yönetimi, ordu, eğitim ve toplumsal yapı gibi Osmanlı kurumları.",
-      questionsCount: 3.0,
-    },
-    {
-      title: "Osmanlı Siyaseti (Kuruluş-Dağılma)",
+      title: "Osmanlı Devleti Siyaseti",
       description:
         "Padişahlar dönemi fetihler, antlaşmalar ve devletin siyasi gelişimi.",
       questionsCount: 3.0,
     },
     {
+      title: "Osmanlı Kültür ve Uygarlık",
+      description:
+        "Devlet yönetimi, ordu, eğitim ve toplumsal yapı gibi Osmanlı kurumları.",
+      questionsCount: 5.0,
+    },
+    {
       title: "20. Yüzyılda Osmanlı",
       description:
         "Trablusgarp Savaşı, Balkan Savaşları ve I. Dünya Savaşı süreci.",
-      questionsCount: 2.0,
-    },
-    {
-      title: "Kurtuluş Savaşı Hazırlık",
-      description:
-        "Genelgeler, kongreler ve Milli Mücadele'nin teşkilatlanma aşaması.",
-      questionsCount: 3.0,
-    },
-    {
-      title: "I. TBMM ve Ayaklanmalar",
-      description:
-        "Meclisin açılışı, kabul edilen kanunlar ve iç isyanlara karşı önlemler.",
-      questionsCount: 1.0,
-    },
-    {
-      title: "Kurtuluş Savaşı Cepheler",
-      description:
-        "Doğu, Güney ve Batı cepheleri; düzenli ordunun savaşları (Sakarya, Büyük Taarruz).",
-      questionsCount: 3.0,
-    },
-    {
-      title: "Cumhuriyet ve İnkılaplar",
-      description:
-        "Siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları.",
       questionsCount: 4.0,
     },
     {
-      title: "Atatürk İlkeleri",
+      title: "Kurtuluş Savaşı",
       description:
-        "Cumhuriyetçilik, Milliyetçilik, Halkçılık, Laiklik, Devletçilik, İnkılapçılık.",
-      questionsCount: 1.0,
+        "Genelgeler, kongreler, I. TBMM'nin açılışı ve ayaklanmalar; Doğu, Güney ve Batı cepheleri; düzenli ordunun savaşları (Sakarya, Büyük Taarruz).",
+      questionsCount: 2.0,
     },
     {
-      title: "Atatürk Dönemi Politika",
+      title: "İnkılap Tarihi",
+      description:
+        "Cumhuriyetin ilanı, siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları.",
+      questionsCount: 5.0,
+    },
+    {
+      title: "Atatürk Dönemi Politikalar",
       description:
         "İç politika gelişmeleri ve yurtta sulh cihanda sulh temelli dış politika.",
-      questionsCount: 1.0,
+      questionsCount: 2.0,
+    },
+    {
+      title: "Atatürk İlke ve İnkılapları",
+      description:
+        "Cumhuriyetçilik, Milliyetçilik, Halkçılık, Laiklik, Devletçilik, İnkılapçılık.",
+      questionsCount: 2.0,
     },
     {
       title: "Çağdaş Türk ve Dünya Tarihi",
@@ -382,63 +385,69 @@ export const kpssData: Record<string, KpssTopic[]> = {
       questionsCount: 1.0,
     },
     {
-      title: "Türkiye'nin Fiziki Özellikleri",
-      description:
-        "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri.",
-      questionsCount: 3.0,
-    },
-    {
-      title: "Türkiye'nin Toprak, Su ve Doğal Varlıkları",
-      description:
-        "Toprak tipleri, akarsu rejimleri, göller, yer altı suları ve doğal çevre özellikleri.",
-      questionsCount: 1.0,
-    },
-    {
-      title: "Türkiye'nin İklimi / Bitki Örtüsü",
+      title: "İklim ve Bitki Örtüsü",
       description:
         "Sıcaklık, basınç ve rüzgarların Türkiye üzerindeki etkileri ve bitki türleri.",
-      questionsCount: 2.0,
+      questionsCount: 1.5,
+    },
+    {
+      title: "Fiziki Özellikler",
+      description:
+        "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri; toprak tipleri, akarsu rejimleri, göller, yer altı suları; deprem, heyelan, erozyon ve sel gibi doğal afetlerin nedenleri ve sonuçları.",
+      questionsCount: 5.17,
     },
     {
       title: "Nüfus ve Yerleşme",
       description:
         "Nüfus sayımları, göçler, yerleşme tipleri ve nüfusun dağılışı.",
-      questionsCount: 3.0,
+      questionsCount: 2.17,
     },
     {
-      title: "Doğal Afetler",
+      title: "Tarım",
       description:
-        "Deprem, heyelan, erozyon ve sel gibi olayların nedenleri ve sonuçları.",
-      questionsCount: 0.5,
+        "Yetiştirilen tarım ürünleri ve bölgelere göre tarım faaliyetlerinin dağılışı.",
+      questionsCount: 1.67,
     },
     {
-      title: "Tarım / Hayvancılık",
+      title: "Hayvancılık",
       description:
-        "Yetiştirilen tarım ürünleri ve bölgelere göre hayvancılık faaliyetleri.",
-      questionsCount: 2.5,
+        "Bölgelere göre hayvancılık türleri, büyükbaş, küçükbaş ve kümes hayvancılığı faaliyetleri.",
+      questionsCount: 0.83,
     },
     {
-      title: "Madenler / Enerji Kaynakları",
+      title: "Madenler ve Enerji",
       description:
         "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez enerji kaynakları.",
-      questionsCount: 2.0,
+      questionsCount: 2.17,
     },
     {
       title: "Sanayi ve Endüstri",
       description: "Sanayi kollarının dağılışı, hammadde ve pazar ilişkileri.",
-      questionsCount: 1.5,
-    },
-    {
-      title: "Ulaşım / Ticaret / Turizm",
-      description:
-        "Türkiye'nin iç ve dış ticareti, ulaşım ağları ve önemli turizm merkezleri.",
       questionsCount: 1.0,
     },
     {
-      title: "Bölgesel Kalkınma Projeleri",
+      title: "Ulaşım",
       description:
-        "GAP, DAP, KOP, DOKAP, ZBK gibi bölgesel kalkınma projelerinin kapsamı ve amaçları.",
-      questionsCount: 0.5,
+        "Türkiye'nin kara, deniz, hava ve demiryolu ulaşım ağları.",
+      questionsCount: 0.83,
+    },
+    {
+      title: "Ticaret",
+      description:
+        "Türkiye'nin iç ve dış ticareti, ihracat ve ithalat ürünlerinin dağılımı.",
+      questionsCount: 0.17,
+    },
+    {
+      title: "Turizm",
+      description:
+        "Türkiye'nin önemli turizm merkezleri ve turizm çeşitlerinin bölgesel dağılımı.",
+      questionsCount: 1.33,
+    },
+    {
+      title: "Bölgeler Coğrafyası",
+      description:
+        "Coğrafi bölgelerin fiziki, beşeri ve ekonomik özellikleri; GAP, DAP, KOP gibi bölgesel kalkınma projeleri.",
+      questionsCount: 0.17,
     },
   ],
   vatandaslik: [
@@ -448,14 +457,14 @@ export const kpssData: Record<string, KpssTopic[]> = {
       questionsCount: 2.5,
     },
     {
-      title: "Anayasa Hukuku ve Devlet Yapısı",
+      title: "Anayasal Kavramlar",
       description: "Devletin temel nitelikleri ve anayasal ilkeler.",
-      questionsCount: 1.0,
+      questionsCount: 0.17,
     },
     {
       title: "Türk Anayasa Tarihi",
       description: "1921, 1924, 1961 ve 1982 anayasalarının temel özellikleri.",
-      questionsCount: 0.5,
+      questionsCount: 1.5,
     },
     {
       title: "Temel Hak ve Ödevler",
@@ -463,38 +472,28 @@ export const kpssData: Record<string, KpssTopic[]> = {
       questionsCount: 0.5,
     },
     {
-      title: "Yasama / Yürütme / Yargı",
+      title: "Yasama",
       description:
-        "TBMM, Cumhurbaşkanlığı ve mahkemelerin görev, yetki ve işleyişleri.",
-      questionsCount: 3.0,
+        "TBMM'nin kuruluşu, görev ve yetkileri ile kanun yapım süreci.",
+      questionsCount: 0.67,
+    },
+    {
+      title: "Yürütme",
+      description:
+        "Cumhurbaşkanlığı Hükümet Sistemi ve yürütme organının yapısı; Cumhurbaşkanı, yardımcıları ve bakanların görev ve yetkileri.",
+      questionsCount: 1.17,
+    },
+    {
+      title: "Yargı",
+      description:
+        "Anayasa Mahkemesi, Yargıtay, Danıştay ve diğer yargı organlarının yapısı ve işleyişi.",
+      questionsCount: 0.83,
     },
     {
       title: "İdare Hukuku",
       description:
         "Merkezden ve yerinden yönetim kuruluşları ve kamu görevlileri.",
-      questionsCount: 2.0,
-    },
-    {
-      title: "Seçim ve Siyasi Partiler",
-      description: "Seçim sistemleri, partilerin kurulması ve siyasi katılım.",
-      questionsCount: 0.5,
-    },
-    {
-      title: "Uluslararası Örgütler",
-      description:
-        "BM, NATO, AB ve Türkiye'nin üye olduğu diğer uluslararası kuruluşlar.",
-      questionsCount: 1.0,
-    },
-    {
-      title: "Bilim ve Teknoloji Gelişmeleri",
-      description: "Son yıllardaki bilimsel keşifler ve teknolojik yenilikler.",
-      questionsCount: 2.0,
-    },
-    {
-      title: "Güncel Olaylar",
-      description:
-        "Yılın önemli haberleri, kültürel başarılar ve güncel tartışmalar.",
-      questionsCount: 2.0,
+      questionsCount: 1.67,
     },
   ],
 };

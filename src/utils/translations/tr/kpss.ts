@@ -205,4 +205,6 @@ export const kpss = {
   kpss_external_quiz_copy_prompt: "Promptu Kopyala",
   kpss_external_quiz_clipboard_hint:
     "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
+  kpss_topic_avg_questions:
+    "2019-2025 KPSS Lisans Sınavlarındaki Ortalama Soru Sayısı",
 };
