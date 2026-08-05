@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import { Note, CustomQuote, Language } from "@/types/types.js";
+import { Note, CustomQuote, DayScores, Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { NoteFilterType } from "@/components/notes/NotesFilterBar.js";
 import { NoteType } from "@/components/notes/NoteEditorModal.js";
+import { SYNC_DAY_SCORES } from "@/infrastructure/storage/keys.js";
 
 interface UseNotesOptions {
   lang: Language;
@@ -18,6 +19,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [quotes, setQuotes] = useState<CustomQuote[]>([]);
+  const [dayScores, setDayScores] = useState<DayScores>({});
   const [filterType, setFilterType] = useState<NoteFilterType>("all");
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
 
@@ -55,6 +57,11 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
         r((res.customQuotes as CustomQuote[]) || []),
       ),
     );
+    const loadedScores: DayScores = await new Promise((r) =>
+      chrome.storage.sync.get([SYNC_DAY_SCORES], (res) =>
+        r((res[SYNC_DAY_SCORES] as DayScores) || {}),
+      ),
+    );
     setNotes(
       loadedNotes.sort(
         (a, b) =>
@@ -62,6 +69,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       ),
     );
     setQuotes(loadedQuotes);
+    setDayScores(loadedScores);
   }, []);
 
   useEffect(() => {
@@ -241,9 +249,30 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     });
   };
 
+  // Day Score (Mood Tracker) Operations
+  const handleSetDayScore = async (dateKey: string, score: number) => {
+    const currentScores: DayScores = await new Promise((r) =>
+      chrome.storage.sync.get([SYNC_DAY_SCORES], (res) =>
+        r((res[SYNC_DAY_SCORES] as DayScores) || {}),
+      ),
+    );
+    const next: DayScores = { ...currentScores };
+    if (score <= 0) {
+      delete next[dateKey];
+    } else {
+      next[dateKey] = score;
+    }
+    await new Promise<void>((r) =>
+      chrome.storage.sync.set({ [SYNC_DAY_SCORES]: next }, r),
+    );
+    setDayScores(next);
+  };
+
   return {
     notes,
     quotes,
+    dayScores,
+    handleSetDayScore,
     filterType,
     setFilterType,
     isGraphModalOpen,

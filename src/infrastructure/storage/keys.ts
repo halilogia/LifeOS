@@ -42,6 +42,9 @@ export const SYNC_STOCK_WATCHLISTS = "stockWatchlists";
 export const SYNC_STOCK_TRADE_HISTORY = "stockTradeHistory";
 export const SYNC_STOCK_CASH = "stockCash";
 
+/** Day scores (mood tracker): `Record<"YYYY-MM-DD", 1-10>`. */
+export const SYNC_DAY_SCORES = "dayScores";
+
 /** All AI-config keys for batch reads. */
 export const SYNC_AI_KEYS = [
   SYNC_AI_PROVIDER,
@@ -113,6 +116,7 @@ export const SYNC_ALL_KEYS = [
   SYNC_STOCK_TRADE_HISTORY,
   SYNC_STOCK_CASH,
   SYNC_AI_USER_MEMORY,
+  SYNC_DAY_SCORES,
 ];
 
 // ============================================================

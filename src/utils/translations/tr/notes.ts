@@ -25,6 +25,7 @@ export const notes = {
   notes_card_notes_label: "Notlar:",
   notes_card_summary_label: "Özet:",
   notes_card_export_md: ".md Olarak İndir",
+  notes_card_copy: "Markdown'ı Kopyala",
   notes_header_graph: "Düşünce Ağı (Graph View)",
   notes_header_new_quote: "Yeni Söz",
   notes_header_new_note: "Yeni Not",
@@ -59,4 +60,6 @@ export const notes = {
   note_cornell_title: "Ders Notu - {date}",
   note_diary_title: "Günlük - {date}",
   note_title: "Not - {date}",
+  notes_day_score_label: "Bugünü Puanla",
+  notes_day_score_strip_title: "Son 7 günün ruh hali",
 };

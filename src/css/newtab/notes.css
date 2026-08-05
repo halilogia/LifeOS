@@ -21,6 +21,99 @@
   color: var(--text-primary);
 }
 
+/* Day Score / Mood Tracker Panel */
+.day-score-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: var(--space-7) var(--space-9);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.day-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.day-score-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+}
+
+.day-score-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.day-score-picker button {
+  background: transparent;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.day-score-picker button:hover {
+  transform: scale(1.25);
+}
+
+.day-score-value {
+  min-width: 3.2rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  margin-left: var(--space-2);
+}
+
+.day-score-strip {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.day-score-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.day-score-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.day-score-dot:hover {
+  transform: translateY(-2px) scale(1.1);
+}
+
+.day-score-day {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
 .add-note-action-btn {
   border: 1px solid transparent;
   border-radius: 12px;

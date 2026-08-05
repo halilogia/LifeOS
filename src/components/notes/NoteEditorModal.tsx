@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState, useRef, useEffect } from "preact/hooks";
 import { Note } from "@/types/types.js";
 import { extractInternalLinks } from "@/services/zettelkastenEngine.js";
 import { getTranslation } from "@/utils/i18n.js";
@@ -51,6 +51,16 @@ export function NoteEditorModal({
 }: NoteEditorModalProps) {
   const [showLinkSuggestions, setShowLinkSuggestions] = useState(false);
   const [linkQuery, setLinkQuery] = useState("");
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        contentRef.current?.focus();
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   const t = getTranslation(lang);
   if (!isOpen) {
@@ -129,6 +139,7 @@ export function NoteEditorModal({
             noteCues={noteCues}
             noteSummary={noteSummary}
             notesContentPlaceholder={notesContentPlaceholder}
+            contentRef={contentRef}
             onContentInput={handleContentInput}
             onCuesChange={onNoteCuesChange}
             onSummaryChange={onNoteSummaryChange}
