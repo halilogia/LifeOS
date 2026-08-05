@@ -7,10 +7,21 @@
  * sayfa yüklendiğinde otomatik olarak textarea'ya doldurulur.
  * Bu sayede Claude, Gemini, ChatGPT, Copilot ve diğer tüm AI sitelerinde
  * kullanıcının hiçbir şey yapmasına gerek kalmaz.
+ *
+ * Prompt metinleri kod içinde değil, `./prompts/*.md` şablonlarında yaşar.
+ * Dinamik değerler (soru sayısı, ders adı, konu adı) placeholder olarak
+ * şablona gömülür ve `buildKpssQuizPrompt` içinde replace edilir.
  */
 
 import { Language } from "@/types/types.js";
 import { SUBJECT_NAMES } from "@/domain/constants/kpssConstants.js";
+
+import baseRulesMd from "./prompts/base-rules.md?raw";
+import subjectTarihMd from "./prompts/subject-tarih.md?raw";
+import subjectMatematikMd from "./prompts/subject-matematik.md?raw";
+import subjectCografyaMd from "./prompts/subject-cografya.md?raw";
+import subjectTurkceMd from "./prompts/subject-turkce.md?raw";
+import subjectVatandaslikMd from "./prompts/subject-vatandaslik.md?raw";
 
 export type ExternalAIService = "gemini" | "chatgpt" | "claude" | "copilot";
 
@@ -30,6 +41,24 @@ const SERVICE_NAMES: Record<ExternalAIService, string> = {
   copilot: "Copilot",
 };
 
+/** Ders bazlı özel kurallar — `prompts/subject-*.md` şablonlarından yüklenir */
+const SUBJECT_RULES: Record<string, string> = {
+  geometri: subjectMatematikMd,
+  matematik: subjectMatematikMd,
+  cografya: subjectCografyaMd,
+  turkce: subjectTurkceMd,
+  tarih: subjectTarihMd,
+  vatandaslik: subjectVatandaslikMd,
+};
+
+/** Prompt şablonundaki dinamik placeholder'lar */
+const PLACEHOLDERS = {
+  subjectRules: "__SUBJECT_RULES__",
+  subject: "__SUBJECT__",
+  topic: "__TOPIC__",
+  count: "__COUNT__",
+} as const;
+
 /**
  * Yerel AI ile aynı gelişmiş prompt metnini oluşturur.
  */
@@ -42,50 +71,13 @@ export function buildKpssQuizPrompt(
   const subjectNames = SUBJECT_NAMES[lang] || SUBJECT_NAMES.tr;
   const subjectLabel = subjectNames[subjectKey] || subjectKey;
 
-  let subjectRules = "";
+  const subjectRules = SUBJECT_RULES[subjectKey] ?? "";
 
-  switch (subjectKey) {
-    case "geometri":
-    case "matematik":
-      subjectRules = `
-Matematik/Geometri soruları için: Eğer grafik okuma, tablo, çizgi grafik veya geometri sorusu ise sorunun hemen altında şeklin nasıl göründüğünü metin olarak tarif et (örn: "Şekilde ABC üçgeninde A=60°, B=x, C=80° verilmiştir.").`;
-      break;
-    case "cografya":
-      subjectRules = `
-Coğrafya soruları için: Bilimsel ve akademik doğruluk şart. Türkiye'de doğu-batı sıcaklık farklarını enlemle açıklama — bu yanlıştır. "Matematik (Mutlak) Konum" ile "Göreceli (Özel) Konum" ayrımını net belirt. Eğer harita gerektiren soru soruyorsan haritada hangi bölgenin numaralandırıldığını yazıyla tarif et.`;
-      break;
-    case "turkce":
-      subjectRules = `
-Türkçe soruları için: Paragraf sorularında edebi/felsefi derinlik içeren, ÖSYM'nin uzun sınav paragraflarına tam uyumlu zengin metinler oluştur. Şıklar arasında anlamsal çelişki olmamalıdır.`;
-      break;
-    case "tarih":
-      subjectRules = `
-Tarih soruları için: Kronolojik olarak tamamen doğru, bilimsel literatüre uygun olmalı. Padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihine yönelik bağlamları kusursuz kurgula. Uydurma/kurgusal olaylar kesinlikle yasak.`;
-      break;
-    case "vatandaslik":
-      subjectRules = `
-Vatandaşlık soruları için: TC Anayasası, idare hukuku ve temel hukuk kavramlarına %100 sadık kal. Güncel olmayan anayasa kuralları veya uydurulmuş maddeler kesinlikle kullanılmamalı.`;
-      break;
-  }
-
-  return `Sen KPSS Lisans düzeyinde uzman bir öğretmensin. Aşağıdaki talimatlara göre sınav soruları hazırla.
-
-### ÖSYM Formatı ve Soru Kalitesi Kuralları:
-1. Sorular ÖSYM'nin KPSS Lisans sınavlarındaki gibi zengin, ayrıntılı, paragraflı veya öncüllü (I, II, III şeklinde maddeler içeren) olmalıdır. Çok kısa, tek cümlelik yüzeysel sorulardan KESİNLİKLE kaçın.
-2. Soru kökleri yoruma kapalı, neyi sorduğu %100 açık olmalıdır.
-3. Her sorunun A, B, C, D, E olmak üzere tam 5 seçeneği olmalıdır.
-4. Diğer 4 yanlış seçenek akademik olarak tamamen yanlış olmalı, doğru seçenek ise tartışmaya yer bırakmayacak şekilde kesin olmalıdır.
-5. Her sorunun sonunda "Doğru Cevap: X — Açıklama: ..." formatında çözüm açıklaması yaz.${subjectRules}
-
-### Görev:
-${subjectLabel} dersinin "${topicName}" konusu hakkında tam ${count} adet zorlayıcı KPSS seviye tespit sorusu oluştur.
-
-Soru formatı:
-**Soru 1:** [Soru metni]
-A) ...  B) ...  C) ...  D) ...  E) ...
-✓ Doğru Cevap: [Harf] — [Kısa çözüm açıklaması]
-
----`;
+  return baseRulesMd
+    .replaceAll(PLACEHOLDERS.subjectRules, subjectRules)
+    .replaceAll(PLACEHOLDERS.subject, subjectLabel)
+    .replaceAll(PLACEHOLDERS.topic, topicName)
+    .replaceAll(PLACEHOLDERS.count, String(count));
 }
 
 /**
