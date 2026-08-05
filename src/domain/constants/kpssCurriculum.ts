@@ -317,16 +317,16 @@ export const kpssData: Record<string, KpssTopic[]> = {
       questionsCount: 1.0,
     },
     {
-      title: "Türklerin İslamiyet'i Kabulü",
-      description:
-        "Talas Savaşı, Türklerin İslamiyet'e geçiş süreci ve ilk Müslüman Türk boyları.",
-      questionsCount: 0.0,
-    },
-    {
       title: "İlk Türk İslam Devletleri",
       description:
-        "Karahanlılar, Gazneliler ve Selçuklular dönemi siyasi ve kültürel gelişmeler.",
-      questionsCount: 1.83,
+        "Karahanlılar, Gazneliler ve Selçuklular dönemi siyasi tarihi; devletlerin kuruluşu, yıkılışı ve mücadeleleri.",
+      questionsCount: 1.0,
+    },
+    {
+      title: "İlk Türk İslam Devletlerinde Kültür ve Uygarlık",
+      description:
+        "İlk Türk İslam devletlerinde devlet yönetimi, ordu, hukuk, eğitim, dil ve edebiyat, sanat ve mimari özellikleri.",
+      questionsCount: 1.0,
     },
     {
       title: "Osmanlı Devleti Siyaseti",
