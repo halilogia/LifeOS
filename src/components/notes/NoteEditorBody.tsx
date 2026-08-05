@@ -10,6 +10,7 @@ interface NoteEditorBodyProps {
   onContentInput: (val: string) => void;
   onCuesChange: (val: string) => void;
   onSummaryChange: (val: string) => void;
+  contentRef?: import("preact").Ref<HTMLTextAreaElement>;
 }
 
 export function NoteEditorBody({
@@ -22,6 +23,7 @@ export function NoteEditorBody({
   onContentInput,
   onCuesChange,
   onSummaryChange,
+  contentRef,
 }: NoteEditorBodyProps) {
   if (noteType === "cornell") {
     return (
@@ -135,6 +137,7 @@ export function NoteEditorBody({
   return (
     <textarea
       id="note-content-input"
+      ref={contentRef}
       className="note-content-input"
       value={noteContent}
       onInput={(e) => onContentInput((e.target as HTMLTextAreaElement).value)}

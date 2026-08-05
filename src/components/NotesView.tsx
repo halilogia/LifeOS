@@ -7,6 +7,7 @@ import { useNotes } from "@/presentation/hooks/useNotes.js";
 import { NoteCard } from "@/components/notes/NoteCard.js";
 import { NotesHeaderBar } from "@/components/notes/NotesHeaderBar.js";
 import { NotesFilterBar } from "@/components/notes/NotesFilterBar.js";
+import { NotesDayScorePanel } from "@/components/notes/NotesDayScorePanel.js";
 import { CustomQuotesSection } from "@/components/notes/CustomQuotesSection.js";
 import { NoteEditorModal } from "@/components/notes/NoteEditorModal.js";
 import { QuoteEditorModal } from "@/components/notes/QuoteEditorModal.js";
@@ -22,6 +23,8 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
   const {
     notes,
     quotes,
+    dayScores,
+    handleSetDayScore,
     filterType,
     setFilterType,
     isGraphModalOpen,
@@ -72,6 +75,13 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
           lang={lang}
           onOpenQuoteModal={() => setIsQuoteModalOpen(true)}
           onOpenNoteModal={() => handleOpenNoteModal()}
+        />
+
+        {/* Mood / Day Score Panel */}
+        <NotesDayScorePanel
+          lang={lang}
+          dayScores={dayScores}
+          onSetScore={handleSetDayScore}
         />
 
         {/* Custom Quotes List */}

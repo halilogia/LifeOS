@@ -52,6 +52,9 @@ export interface CustomQuote {
   author?: string;
 }
 
+/** Day score / mood tracker entry — `Record<"YYYY-MM-DD", number>` 1..10. */
+export type DayScores = Record<string, number>;
+
 export interface KpssDailyStats {
   date: string;
   questions: number;

@@ -25,6 +25,7 @@ export const notes = {
   notes_card_notes_label: "Notes:",
   notes_card_summary_label: "Summary:",
   notes_card_export_md: "Export .md",
+  notes_card_copy: "Copy Markdown",
   notes_header_graph: "Graph View",
   notes_header_new_quote: "New Quote",
   notes_header_new_note: "New Note",
@@ -59,4 +60,6 @@ export const notes = {
   note_cornell_title: "Study Note - {date}",
   note_diary_title: "Diary - {date}",
   note_title: "Note - {date}",
+  notes_day_score_label: "Rate Today",
+  notes_day_score_strip_title: "Last 7 days mood",
 };
