@@ -5,6 +5,7 @@ import {
   downloadLogsMd,
 } from "@/services/errorReportService.js";
 import type { LogEntry } from "@/utils/logger.js";
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface ErrorReportSettingsTabProps {
   t: Record<string, string>;
@@ -60,18 +61,7 @@ export function ErrorReportSettingsTab({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {t.settings_error_reporting_title}
-        </h3>
+        <SettingsSection title={t.settings_error_reporting_title} />
         <p
           style={{
             margin: "0 0 12px 0",

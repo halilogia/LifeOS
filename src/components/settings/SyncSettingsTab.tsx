@@ -1,5 +1,6 @@
 import { Language } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface SyncSettingsTabProps {
   t: Record<string, string>;
@@ -34,7 +35,7 @@ export function SyncSettingsTab({
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {/* Google Cloud Sync Section */}
       <div className="settings-group">
-        <h3>{t.google_sync_title}</h3>
+        <SettingsSection title={t.google_sync_title} />
         <div className="google-sync-card">
           {!googleUserEmail ? (
             <button
@@ -156,18 +157,7 @@ export function SyncSettingsTab({
 
       {/* Manual Backup and Restore Actions */}
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {t.settings_sync_data_manual}
-        </h3>
+        <SettingsSection title={t.settings_sync_data_manual} />
         <div className="settings-actions">
           {/* Export Backup */}
           <button className="settings-action-btn" onClick={onExportBackup}>

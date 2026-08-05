@@ -1,3 +1,5 @@
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
+
 interface KpssTargetSettingsGroupProps {
   t: Record<string, string>;
   kpssGoalType: "net" | "score";
@@ -19,7 +21,7 @@ export function KpssTargetSettingsGroup({
 }: KpssTargetSettingsGroupProps) {
   return (
     <div className="settings-group">
-      <h3>{t.settings_kpss_title}</h3>
+      <SettingsSection title={t.settings_kpss_title} />
       <div
         style={{
           display: "flex",

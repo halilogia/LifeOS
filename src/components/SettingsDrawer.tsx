@@ -200,7 +200,6 @@ export function SettingsDrawer({
         {/* TAB 2: KPSS SETTINGS */}
         {settingsTab === "kpss" && (
           <KpssSettingsTab
-            lang={lang}
             t={t}
             kpssGoalType={kpssGoalType}
             kpssTargetNet={kpssTargetNet}

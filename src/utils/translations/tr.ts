@@ -463,6 +463,10 @@ export const tr = {
   kpss_subject_mixed: "GY-GK Karma",
   kpss_exam_mixed_years: "Karma Yıllar",
   settings_app_settings_title: "Uygulama Ayarları",
+  settings_category_ui: "Arayüz & Dil",
+  settings_category_notifications: "Bildirimler",
+  settings_category_focus: "Odak Araçları",
+  settings_category_integrations: "Entegrasyonlar",
   settings_notify_tasks: "Bugünkü Görevleri Bildir",
   settings_pomo_blocker: "Pomodoro Odak Engelleyici",
   settings_uib_hotkey: "Kısayol Tuşu",
@@ -477,6 +481,9 @@ export const tr = {
     "Üstteki listeden model seçebilir veya buraya manuel olarak tam model ID'si yazabilirsiniz.",
   settings_ai_show_thinking: "Düşünme Sürecini (Thinking) Göster:",
   settings_ai_combos: "9Router Kombinasyonları (Combos)",
+  settings_ai_provider_label: "9Router Proxy (OpenAI Uyumlu)",
+  settings_ai_key_placeholder:
+    "9Router API Key (Örn: sk-72l... veya boş bırakın)",
   settings_ai_hide: "Gizle",
   settings_ai_show: "Göster",
   settings_ai_endpoint_desc:
@@ -1135,6 +1142,12 @@ export const tr = {
   listening_placeholder: "Konuşun, dinleniyor...",
   listening_tooltip: "Dinleniyor...",
   memory_saved: '✓ "{fact}" bilgisi kişisel hafızanıza (memory.md) eklendi.',
+  ai_memory_title: "Kişisel AI Hafızası (memory.md)",
+  ai_memory_desc:
+    "Yapay zeka asistanınızın sizi her sohbet seansında tanıması, kişisel tercihlerinizi, mesleğinizi ve hedeflerinizi hatırlaması için bu alana özel notlarınızı yazabilirsiniz.",
+  ai_memory_placeholder: "# Kişisel Hafıza notlarınızı buraya yazın...",
+  ai_memory_save_btn: "Kişisel Hafızayı Kaydet (memory.md)",
+  ai_memory_saved_badge: "✓ Hafıza Kaydedildi!",
   new_chat_label: "Yeni Sohbet",
   new_chat_tooltip: "Yeni Sohbet Başlat",
   page_loading: "Sayfa Yükleniyor...",

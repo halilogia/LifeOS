@@ -1,5 +1,6 @@
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface DetoxSettingsTabProps {
   lang: Language;
@@ -16,18 +17,7 @@ export function DetoxSettingsTab({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div className="settings-group">
-        <h3
-          style={{
-            margin: "0 0 12px 0",
-            fontSize: "0.85rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            color: "var(--text-secondary)",
-            opacity: 0.8,
-          }}
-        >
-          {t.settings_detox_limits_title}
-        </h3>
+        <SettingsSection title={t.settings_detox_limits_title} />
         <div
           style={{
             display: "flex",

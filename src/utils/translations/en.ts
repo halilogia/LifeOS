@@ -462,6 +462,10 @@ export const en = {
   kpss_subject_mixed: "GY-GK Mixed",
   kpss_exam_mixed_years: "Mixed Years",
   settings_app_settings_title: "App Settings",
+  settings_category_ui: "Interface & Language",
+  settings_category_notifications: "Notifications",
+  settings_category_focus: "Focus Tools",
+  settings_category_integrations: "Integrations",
   settings_notify_tasks: "Notify Today's Tasks",
   settings_pomo_blocker: "Pomodoro Focus Blocker",
   settings_uib_hotkey: "Trigger Hotkey",
@@ -477,6 +481,9 @@ export const en = {
     "You can select from the list above or manually type the full model ID here.",
   settings_ai_show_thinking: "Show Thinking Process:",
   settings_ai_combos: "9Router Combos",
+  settings_ai_provider_label: "9Router Proxy (OpenAI Compatible)",
+  settings_ai_key_placeholder:
+    "9Router API Key (e.g. sk-72l... or leave blank)",
   settings_ai_hide: "Hide",
   settings_ai_show: "Show",
   settings_ai_endpoint_desc:
@@ -1132,6 +1139,12 @@ export const en = {
   listening_placeholder: "Listening, speak now...",
   listening_tooltip: "Listening...",
   memory_saved: '✓ "{fact}" saved to personal memory (memory.md).',
+  ai_memory_title: "Personal AI Memory (memory.md)",
+  ai_memory_desc:
+    "Write private notes here so your assistant can recognize you, remember your preferences, profession and goals in every chat session.",
+  ai_memory_placeholder: "# Write your personal memory notes here...",
+  ai_memory_save_btn: "Save Personal Memory (memory.md)",
+  ai_memory_saved_badge: "✓ Memory Saved!",
   new_chat_label: "New Chat",
   new_chat_tooltip: "Start New Chat",
   page_loading: "Loading page...",

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "preact/hooks";
-import { Language } from "@/types/types.js";
 import {
   getAutoTitleSetting,
   saveAutoTitleSetting,
@@ -9,7 +8,6 @@ import { KpssAutoTitleToggle } from "./KpssAutoTitleToggle.js";
 import { KpssResetSection } from "./KpssResetSection.js";
 
 interface KpssSettingsTabProps {
-  lang: Language;
   t: Record<string, string>;
   kpssGoalType: "net" | "score";
   kpssTargetNet: number;
@@ -21,7 +19,6 @@ interface KpssSettingsTabProps {
 }
 
 export function KpssSettingsTab({
-  lang,
   t,
   kpssGoalType,
   kpssTargetNet,

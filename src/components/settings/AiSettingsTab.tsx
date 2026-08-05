@@ -5,6 +5,7 @@ import { AiThinkingToggle } from "@/components/settings/ai/AiThinkingToggle.js";
 import { AiMemoryEditor } from "@/components/settings/ai/AiMemoryEditor.js";
 import { useAiUserMemory } from "@/presentation/hooks/useAiUserMemory.js";
 import { fetchAvailableModels } from "@/services/aichat/modelFetcher.js";
+import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface AiSettingsTabProps {
   t: Record<string, string>;
@@ -104,7 +105,7 @@ export function AiSettingsTab({
 
   return (
     <div className="settings-group">
-      <h3>{t.settings_ai_title}</h3>
+      <SettingsSection title={t.settings_ai_title} />
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         <AiConfigForm
           t={t}
@@ -114,7 +115,6 @@ export function AiSettingsTab({
           showKey={showKey}
           models={models}
           filterText={filterText}
-          filteredModels={filteredModels}
           groupedModels={groupedModels}
           loadingModels={loadingModels}
           modelError={modelError}
