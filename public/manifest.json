@@ -41,7 +41,11 @@
     "https://web.whatsapp.com/*",
     "https://web.telegram.org/*",
     "http://localhost/*",
-    "http://127.0.0.1/*"
+    "http://127.0.0.1/*",
+    "https://chatgpt.com/*",
+    "https://gemini.google.com/*",
+    "https://claude.ai/*",
+    "https://copilot.microsoft.com/*"
   ],
   "oauth2": {
     "client_id": "1061579928611-pgijn1nbhseg9pvkf72ooo6j8re44flb.apps.googleusercontent.com",

@@ -102,73 +102,97 @@ function autoFillPromptOnTab(tabId: number, prompt: string): void {
 
     // Kısa bir gecikme — SPA framework'lerin input'u hazır hale getirmesi için
     setTimeout(() => {
-      chrome.scripting
-        .executeScript({
-          target: { tabId },
-          world: "MAIN",
-          func: (text: string) => {
-            // Tüm AI siteleri için ortak seçiciler
-            const selectors = [
-              "textarea",
-              "[contenteditable='true']",
-              "[role='textbox']",
-              ".ProseMirror", // Claude
-              "div[contenteditable='true']",
-              "textarea[placeholder*='Message']",
-              "textarea[placeholder*='prompt']",
-              "textarea[placeholder*='yaz']",
-              "textarea[placeholder*='sor']",
-            ];
+      let attempts = 0;
+      const MAX_ATTEMPTS = 8;
+      const RETRY_DELAY = 1200;
 
-            for (const sel of selectors) {
-              const el = document.querySelector(sel) as HTMLElement | null;
-              if (!el || !el.isConnected) {
-                continue;
-              }
+      const tryFill = () => {
+        attempts++;
+        chrome.scripting
+          .executeScript({
+            target: { tabId },
+            world: "MAIN",
+            func: (text: string) => {
+              // Tüm AI siteleri için ortak seçiciler
+              const selectors = [
+                "textarea",
+                "[contenteditable='true']",
+                "[role='textbox']",
+                ".ProseMirror", // Claude
+                "div[contenteditable='true']",
+                "textarea[placeholder*='Message']",
+                "textarea[placeholder*='prompt']",
+                "textarea[placeholder*='yaz']",
+                "textarea[placeholder*='sor']",
+              ];
 
-              try {
-                // Textarea / input
-                if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
-                  const inputEl = el as HTMLTextAreaElement;
-                  inputEl.value = text;
+              for (const sel of selectors) {
+                const el = document.querySelector(sel) as HTMLElement | null;
+                if (!el || !el.isConnected) {
+                  continue;
                 }
-                // Contenteditable (Claude, ChatGPT, Gemini)
-                else if (el.isContentEditable) {
-                  el.focus();
-                  el.innerText = text;
+                // Skip hidden/zero-size inputs (React lazy mounts them late)
+                const r = el.getBoundingClientRect();
+                if (r.width === 0 || r.height === 0) {
+                  continue;
+                }
 
-                  // React/Vue state güncellemesi için native input setter
-                  const nativeInputValueSetter =
-                    Object.getOwnPropertyDescriptor(
-                      window.HTMLTextAreaElement?.prototype ||
-                        window.HTMLInputElement?.prototype,
+                try {
+                  // Textarea / input
+                  if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
+                    const inputEl = el as HTMLTextAreaElement;
+                    const setter = Object.getOwnPropertyDescriptor(
+                      window.HTMLTextAreaElement.prototype,
                       "value",
                     )?.set;
-                  if (nativeInputValueSetter) {
-                    nativeInputValueSetter.call(el, text);
+                    if (setter) {
+                      setter.call(inputEl, text); // React-controlled
+                    } else {
+                      inputEl.value = text;
+                    }
                   }
-                }
+                  // Contenteditable (Claude, ChatGPT, Gemini)
+                  else if (el.isContentEditable) {
+                    el.focus();
+                    // Use execCommand for contenteditable (more reliable than innerText)
+                    document.execCommand("selectAll", false);
+                    document.execCommand("insertText", false, text);
+                  }
 
-                // Event'leri dispatch et (React state güncellemesi için)
-                el.focus();
-                el.dispatchEvent(new Event("focus", { bubbles: true }));
-                el.dispatchEvent(new Event("input", { bubbles: true }));
-                el.dispatchEvent(new Event("change", { bubbles: true }));
-                el.dispatchEvent(
-                  new KeyboardEvent("keyup", { key: " ", bubbles: true }),
-                );
-              } catch {
-                // Sessizce dene — bir seçici çalışmazsa diğerine geç
+                  // Event'leri dispatch et (React state güncellemesi için)
+                  el.focus();
+                  el.dispatchEvent(new Event("focus", { bubbles: true }));
+                  el.dispatchEvent(new Event("input", { bubbles: true }));
+                  el.dispatchEvent(new Event("change", { bubbles: true }));
+                  el.dispatchEvent(
+                    new KeyboardEvent("keyup", { key: " ", bubbles: true }),
+                  );
+                  return true;
+                } catch {
+                  // Sessizce dene — bir seçici çalışmazsa diğerine geç
+                }
               }
+              return false;
+            },
+            args: [prompt],
+          })
+          .then((results) => {
+            // Filled successfully — stop retrying.
+            const filled = results?.some((r) => r.result === true);
+            if (!filled && attempts < MAX_ATTEMPTS) {
+              setTimeout(tryFill, RETRY_DELAY);
             }
-          },
-          args: [prompt],
-        })
-        .catch(() => {
-          // executeScript fail olursa (sayfa henüz hazır değilse) sessizce devam et
-          // Kullanıcı zaten clipboard'dan yapıştırabilir
-        });
-    }, 1200);
+          })
+          .catch(() => {
+            // executeScript fail olursa (sayfa henüz hazır değilse) tekrar dene
+            if (attempts < MAX_ATTEMPTS) {
+              setTimeout(tryFill, RETRY_DELAY);
+            }
+          });
+      };
+
+      tryFill();
+    }, 800);
   };
 
   chrome.tabs.onUpdated.addListener(onUpdated);
