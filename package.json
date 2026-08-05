@@ -33,7 +33,8 @@
     "tsc-alias": "^1.9.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^8.1.4"
+    "vite": "^8.1.4",
+    "xlsx": "^0.18.5"
   },
   "dependencies": {
     "katex": "^0.18.0",

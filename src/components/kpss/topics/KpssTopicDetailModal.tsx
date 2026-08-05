@@ -10,6 +10,7 @@ interface KpssTopicDetailModalProps {
     questionsCount?: number;
   };
   detailsTitle: string;
+  t: Record<string, string>;
   onClose: () => void;
 }
 
@@ -34,6 +35,7 @@ function IconX() {
 export function KpssTopicDetailModal({
   topic,
   detailsTitle,
+  t,
   onClose,
 }: KpssTopicDetailModalProps) {
   return (
@@ -71,10 +73,10 @@ export function KpssTopicDetailModal({
                   fontSize: "1rem",
                 }}
               >
-                {topic.questionsCount}
+                {Math.round(topic.questionsCount)}
               </span>
               <span>
-                soru — KPSS Lisans sınavında bu konudan çıkan soru sayısı
+                {t.kpss_topic_avg_questions}
               </span>
             </div>
           )}

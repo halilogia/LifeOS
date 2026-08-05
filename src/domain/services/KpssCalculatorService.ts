@@ -116,7 +116,7 @@ export function getSubjectNets(
       }
     }
   });
-  return { net: Math.round(totalNet * 10) / 10, max: totalQuestions };
+ return { net: Math.round(totalNet), max: Math.round(totalQuestions) };
 }
 
 /**
@@ -134,5 +134,5 @@ export function getOverallNets(
     totalNet += net;
     totalMax += max;
   });
-  return { net: Math.round(totalNet * 10) / 10, max: totalMax };
+  return { net: Math.round(totalNet), max: Math.round(totalMax) };
 }
