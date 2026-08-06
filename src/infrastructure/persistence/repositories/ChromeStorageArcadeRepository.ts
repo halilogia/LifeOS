@@ -3,7 +3,7 @@
  * Infrastructure implementation of IArcadeRepository.
  *
  * Uses chrome.storage.local for game metadata, IndexedDB for
- * FileSystemDirectoryHandle objects, and chrome.storage.sync for
+ * FileSystemDirectoryHandle objects, and chrome.storage.local for
  * legacy migration.
  */
 
@@ -166,7 +166,7 @@ export class ChromeStorageArcadeRepository implements IArcadeRepository {
       return null;
     }
     return new Promise<GameEntry[] | null>((resolve) => {
-      chrome.storage.sync.get([LEGACY_SYNC_KEY_GAMES], (res) => {
+      chrome.storage.local.get([LEGACY_SYNC_KEY_GAMES], (res) => {
         const data = res?.[LEGACY_SYNC_KEY_GAMES];
         resolve(Array.isArray(data) ? (data as GameEntry[]) : null);
       });

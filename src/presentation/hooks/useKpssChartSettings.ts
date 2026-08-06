@@ -7,12 +7,12 @@ export function useKpssChartSettings() {
   useEffect(() => {
     void (async () => {
       const cType: "line" | "bar" = await new Promise((r) =>
-        chrome.storage.sync.get(["kpssChartType"], (res) =>
+        chrome.storage.local.get(["kpssChartType"], (res) =>
           r((res.kpssChartType as "line" | "bar") || "line"),
         ),
       );
       const cDays: 7 | 30 = await new Promise((r) =>
-        chrome.storage.sync.get(["kpssChartDays"], (res) =>
+        chrome.storage.local.get(["kpssChartDays"], (res) =>
           r(res.kpssChartDays === 30 ? 30 : 7),
         ),
       );
@@ -23,12 +23,12 @@ export function useKpssChartSettings() {
 
   const saveChartType = useCallback(async (type: "line" | "bar") => {
     setChartType(type);
-    chrome.storage.sync.set({ kpssChartType: type });
+    chrome.storage.local.set({ kpssChartType: type });
   }, []);
 
   const saveChartDays = useCallback(async (days: 7 | 30) => {
     setChartDays(days);
-    chrome.storage.sync.set({ kpssChartDays: days });
+    chrome.storage.local.set({ kpssChartDays: days });
   }, []);
 
   return { chartType, chartDays, saveChartType, saveChartDays };

@@ -1,6 +1,6 @@
 /**
  * ChromeStorageKpssRepository
- * Infrastructure implementation of IKpssRepository using chrome.storage.sync
+ * Infrastructure implementation of IKpssRepository using chrome.storage.local
  * for KPSS progress and daily stats.
  */
 
@@ -19,7 +19,7 @@ const KPSS_DAILY_STATS_KEY = SYNC_KPSS_DAILY_STATS;
 export class ChromeStorageKpssRepository implements IKpssRepository {
   async getAllProgress(): Promise<KpssProgress[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([KPSS_PROGRESS_KEY], (result) => {
+      chrome.storage.local.get([KPSS_PROGRESS_KEY], (result) => {
         resolve((result[KPSS_PROGRESS_KEY] as KpssProgress[]) || []);
       });
     });
@@ -27,13 +27,13 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
 
   async saveAllProgress(items: KpssProgress[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [KPSS_PROGRESS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [KPSS_PROGRESS_KEY]: items }, resolve);
     });
   }
 
   async getAllDailyStats(): Promise<KpssDailyStats[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([KPSS_DAILY_STATS_KEY], (result) => {
+      chrome.storage.local.get([KPSS_DAILY_STATS_KEY], (result) => {
         resolve((result[KPSS_DAILY_STATS_KEY] as KpssDailyStats[]) || []);
       });
     });
@@ -41,13 +41,13 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
 
   async saveAllDailyStats(items: KpssDailyStats[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [KPSS_DAILY_STATS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [KPSS_DAILY_STATS_KEY]: items }, resolve);
     });
   }
 
   async removeAll(): Promise<void> {
     await new Promise<void>((resolve) => {
-      chrome.storage.sync.remove(
+      chrome.storage.local.remove(
         [
           KPSS_PROGRESS_KEY,
           KPSS_DAILY_STATS_KEY,

@@ -48,7 +48,7 @@ export function useCalendar({ todos }: UseCalendarOptions) {
     let isMounted = true;
     const fetchCalendar = async () => {
       const syncData = await new Promise<Record<string, unknown>>((resolve) =>
-        chrome.storage.sync.get(["syncEnabled", "syncCalendarEnabled"], (res) =>
+        chrome.storage.local.get(["syncEnabled", "syncCalendarEnabled"], (res) =>
           resolve(res),
         ),
       );

@@ -9,16 +9,16 @@ import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
 import { UpdateSettingsUseCase } from "@/application/use-cases/settings/UpdateSettingsUseCase.js";
 
-// Helper for simple chrome.storage.sync get/set
+// Helper for simple chrome.storage.local get/set
 function syncGet<T>(keys: string[]): Promise<Record<string, T>> {
   return new Promise((resolve) => {
-    chrome.storage.sync.get(keys, (result) =>
+    chrome.storage.local.get(keys, (result) =>
       resolve(result as Record<string, T>),
     );
   });
 }
 function syncSet(data: Record<string, unknown>): Promise<void> {
-  return new Promise((resolve) => chrome.storage.sync.set(data, resolve));
+  return new Promise((resolve) => chrome.storage.local.set(data, resolve));
 }
 
 export function useSettings() {

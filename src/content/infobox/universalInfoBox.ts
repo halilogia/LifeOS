@@ -14,7 +14,7 @@ import { contentWarn, contentError } from "@/content/contentLogger.js";
 let bubbleHost: HTMLDivElement | null = null;
 
 export function initUniversalInfoBox(): void {
-  chrome.storage.sync.get(
+  chrome.storage.local.get(
     ["universalInfoBoxEnabled", "universalInfoBoxHotkey"],
     (settings) => {
       const enabled = (settings.universalInfoBoxEnabled as boolean) ?? true;

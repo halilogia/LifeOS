@@ -1,6 +1,6 @@
 /**
  * ChromeStorageNoteRepository
- * Infrastructure implementation of INoteRepository using chrome.storage.sync
+ * Infrastructure implementation of INoteRepository using chrome.storage.local
  * directly (not wrapping legacy storage.ts).
  */
 
@@ -13,7 +13,7 @@ import { SYNC_NOTES } from "@/infrastructure/storage/keys.js";
 export class ChromeStorageNoteRepository implements INoteRepository {
   async getAll(): Promise<Note[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([SYNC_NOTES], (result) => {
+      chrome.storage.local.get([SYNC_NOTES], (result) => {
         resolve((result[SYNC_NOTES] as Note[]) || []);
       });
     });
@@ -21,7 +21,7 @@ export class ChromeStorageNoteRepository implements INoteRepository {
 
   async saveAll(notes: Note[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_NOTES]: notes }, resolve);
+      chrome.storage.local.set({ [SYNC_NOTES]: notes }, resolve);
     });
   }
 }

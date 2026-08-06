@@ -1,13 +1,13 @@
 /**
  * keys.ts
- * Centralized storage key definitions for chrome.storage.sync and chrome.storage.local.
+ * Centralized storage key definitions for chrome.storage.local and chrome.storage.local.
  * All persistence implementations MUST import keys from here, never hardcode strings.
  *
- * Convention: SYNC_ prefix = chrome.storage.sync, LOCAL_ prefix = chrome.storage.local
+ * Convention: SYNC_ prefix = chrome.storage.local, LOCAL_ prefix = chrome.storage.local
  */
 
 // ============================================================
-// chrome.storage.sync keys
+// chrome.storage.local keys
 // ============================================================
 export const SYNC_TODOS = "todos";
 export const SYNC_NOTES = "notes";
@@ -80,6 +80,9 @@ export const SYNC_ALL_KEYS = [
   "customQuotes",
   "yeterlikler",
   SYNC_KPSS_DAILY_STATS,
+  SYNC_KPSS_WIKI_NOTES,
+  SYNC_KPSS_AUTO_TITLE,
+  SYNC_AI_API_KEY,
   SYNC_LANG,
   SYNC_SIDEBAR_OPEN,
   "prayerCity",

@@ -35,12 +35,12 @@ export function useHifiz() {
 
   const loadData = useCallback(async () => {
     const progress: HifizProgress[] = await new Promise((r) =>
-      chrome.storage.sync.get(["hifizProgress"], (res) =>
+      chrome.storage.local.get(["hifizProgress"], (res) =>
         r((res.hifizProgress as HifizProgress[]) || []),
       ),
     );
     const completedYeterlikler: number[] = await new Promise((r) =>
-      chrome.storage.sync.get(["yeterlikler"], (res) =>
+      chrome.storage.local.get(["yeterlikler"], (res) =>
         r((res.yeterlikler as number[]) || []),
       ),
     );
@@ -95,7 +95,7 @@ export function useHifiz() {
   const handleCycleStatus = async (itemId: string) => {
     const itemData = INITIAL_HIFIZ_ITEMS.find((i) => i.id === itemId);
     const progress: HifizProgress[] = await new Promise((r) =>
-      chrome.storage.sync.get(["hifizProgress"], (res) =>
+      chrome.storage.local.get(["hifizProgress"], (res) =>
         r((res.hifizProgress as HifizProgress[]) || []),
       ),
     );
@@ -133,7 +133,7 @@ export function useHifiz() {
     }
 
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ hifizProgress: progress }, r),
+      chrome.storage.local.set({ hifizProgress: progress }, r),
     );
     setHifizProgress(progress);
   };
@@ -146,7 +146,7 @@ export function useHifiz() {
     }
 
     const progress: HifizProgress[] = await new Promise((r) =>
-      chrome.storage.sync.get(["hifizProgress"], (res) =>
+      chrome.storage.local.get(["hifizProgress"], (res) =>
         r((res.hifizProgress as HifizProgress[]) || []),
       ),
     );
@@ -194,7 +194,7 @@ export function useHifiz() {
     }
 
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ hifizProgress: progress }, r),
+      chrome.storage.local.set({ hifizProgress: progress }, r),
     );
     setHifizProgress(progress);
   };
@@ -202,7 +202,7 @@ export function useHifiz() {
   // Yeterlik items checkbox toggle
   const handleToggleYeterlik = async (index: number) => {
     const currentCompleted: number[] = await new Promise((r) =>
-      chrome.storage.sync.get(["yeterlikler"], (res) =>
+      chrome.storage.local.get(["yeterlikler"], (res) =>
         r((res.yeterlikler as number[]) || []),
       ),
     );
@@ -210,7 +210,7 @@ export function useHifiz() {
       ? currentCompleted.filter((i) => i !== index)
       : [...currentCompleted, index];
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ yeterlikler: next }, r),
+      chrome.storage.local.set({ yeterlikler: next }, r),
     );
     setYeterlikler(next);
   };

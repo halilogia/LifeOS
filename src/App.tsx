@@ -12,7 +12,7 @@ import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/reposi
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
-import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
+import { SyncToLocalMigration } from "@/infrastructure/persistence/migrations/SyncToLocalMigration.js";
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
@@ -35,7 +35,7 @@ const todoRepository = new ChromeStorageTodoRepository();
 const syncRepo: ISyncRepository = new ChromeStorageSyncRepository();
 const syncPort: ITodoSyncPort = createSyncPort();
 const settingsRepo: ISettingsRepository = new ChromeStorageSettingsRepository();
-const migration = new LocalToSyncMigration();
+const migration = new SyncToLocalMigration();
 const appInitDeps: AppInitDependencies = {
   settingsRepo,
   todoRepo: todoRepository,

@@ -12,7 +12,7 @@ export function useAiUserMemory() {
 
   useEffect(() => {
     const loadMemory = () => {
-      chrome.storage.sync.get(
+      chrome.storage.local.get(
         ["aiUserMemory"],
         (syncRes: { aiUserMemory?: string }) => {
           if (syncRes && typeof syncRes.aiUserMemory === "string") {
@@ -43,7 +43,7 @@ export function useAiUserMemory() {
   }, []);
 
   const saveMemory = useCallback((memory: string, onSuccess?: () => void) => {
-    chrome.storage.sync.set({ aiUserMemory: memory }, () => {
+    chrome.storage.local.set({ aiUserMemory: memory }, () => {
       onSuccess?.();
     });
   }, []);

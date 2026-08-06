@@ -40,7 +40,7 @@ export function usePopup() {
   const [detoxTimeLeft, setDetoxTimeLeft] = useState(0);
 
   const loadDetoxSettings = useCallback(() => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
       ["detox_enabled", "detox_blocked_sites", "detox_end_time"],
       (resData: {
         detox_enabled?: boolean;
@@ -59,7 +59,7 @@ export function usePopup() {
   // 1. Initial State Retrieval & Synchronization Subscriptions
   useEffect(() => {
     // Load UI Language
-    chrome.storage.sync.get(["lang"], (res) => {
+    chrome.storage.local.get(["lang"], (res) => {
       if (res.lang) {
         setLang(res.lang as Language);
       } else if (typeof chrome !== "undefined" && chrome.i18n) {
@@ -289,7 +289,7 @@ export function usePopup() {
         updated = [...detoxBlockedSites, ...siteDomains];
       }
       setDetoxBlockedSites(updated);
-      chrome.storage.sync.set({ detox_blocked_sites: updated });
+      chrome.storage.local.set({ detox_blocked_sites: updated });
     },
     [detoxBlockedSites],
   );
@@ -299,7 +299,7 @@ export function usePopup() {
       return;
     }
     const end = detoxDuration === -1 ? -1 : Date.now() + detoxDuration;
-    chrome.storage.sync.set(
+    chrome.storage.local.set(
       {
         detox_enabled: true,
         detox_blocked_sites: detoxBlockedSites,
@@ -313,7 +313,7 @@ export function usePopup() {
   }, [detoxBlockedSites, detoxDuration]);
 
   const handleDisableDetox = useCallback(() => {
-    chrome.storage.sync.set(
+    chrome.storage.local.set(
       {
         detox_enabled: false,
         detox_end_time: 0,

@@ -33,7 +33,7 @@ export async function handleRuntimeMessage(
   // Translation Relay Service
   if (message.type === "translate_text") {
     const textToTranslate = message.text ?? "";
-    chrome.storage.sync.get(["lang"], async (res) => {
+    chrome.storage.local.get(["lang"], async (res) => {
       const targetLang = res.lang === "tr" ? "tr" : "en";
       try {
         const textToTranslate = String(message.text ?? "");

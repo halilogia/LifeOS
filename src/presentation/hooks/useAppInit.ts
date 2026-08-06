@@ -17,7 +17,7 @@ import type { ISettingsRepository } from "@/domain/repositories/ISettingsReposit
 import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
 import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleTasksUseCase.js";
-import { LocalToSyncMigration } from "@/infrastructure/persistence/migrations/LocalToSyncMigration.js";
+import { SyncToLocalMigration } from "@/infrastructure/persistence/migrations/SyncToLocalMigration.js";
 import { logger } from "@/utils/logger.js";
 
 export interface AppInitDependencies {
@@ -25,7 +25,7 @@ export interface AppInitDependencies {
   todoRepo: ITodoRepository;
   syncRepo: ISyncRepository;
   syncPort: ITodoSyncPort;
-  migration: LocalToSyncMigration;
+  migration: SyncToLocalMigration;
 }
 
 export interface AppInitCallbacks {

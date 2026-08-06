@@ -1,6 +1,6 @@
 /**
  * ChromeStorageSyncRepository
- * Infrastructure implementation of ISyncRepository using chrome.storage.sync
+ * Infrastructure implementation of ISyncRepository using chrome.storage.local
  * directly (not wrapping legacy storage.ts).
  */
 
@@ -13,7 +13,7 @@ import { SYNC_SETTINGS } from "@/infrastructure/storage/keys.js";
 export class ChromeStorageSyncRepository implements ISyncRepository {
   async getSyncSettings(): Promise<GoogleSyncSettings> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([SYNC_SETTINGS], (result) => {
+      chrome.storage.local.get([SYNC_SETTINGS], (result) => {
         const settings = result[SYNC_SETTINGS] as
           GoogleSyncSettings | undefined;
         resolve(
@@ -29,7 +29,7 @@ export class ChromeStorageSyncRepository implements ISyncRepository {
 
   async setSyncSettings(settings: GoogleSyncSettings): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_SETTINGS]: settings }, resolve);
+      chrome.storage.local.set({ [SYNC_SETTINGS]: settings }, resolve);
     });
   }
 }

@@ -48,7 +48,7 @@ export function usePrayer() {
       setError(false);
       try {
         const res = await new Promise<{ prayerCity?: string }>((resolve) =>
-          chrome.storage.sync.get(["prayerCity"], (r) => resolve(r)),
+          chrome.storage.local.get(["prayerCity"], (r) => resolve(r)),
         );
         const activeCity =
           targetCity || (res.prayerCity as string) || "Istanbul";
@@ -79,7 +79,7 @@ export function usePrayer() {
       if (!newCity) {
         return;
       }
-      chrome.storage.sync.set({ prayerCity: newCity, prayerCountry: "Turkey" });
+      chrome.storage.local.set({ prayerCity: newCity, prayerCountry: "Turkey" });
       setIsFormOpen(false);
       loadPrayers(newCity);
     },

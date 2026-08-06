@@ -6,7 +6,7 @@ export function useKpssChartMetric() {
   >("all");
 
   useEffect(() => {
-    chrome.storage.sync.get(["kpss_chart_metric_mode"], (res) => {
+    chrome.storage.local.get(["kpss_chart_metric_mode"], (res) => {
       const mode = res?.kpss_chart_metric_mode;
       if (mode === "all" || mode === "questions" || mode === "videos") {
         setChartMetric(mode);
@@ -17,7 +17,7 @@ export function useKpssChartMetric() {
   const saveChartMetric = useCallback(
     (mode: "all" | "questions" | "videos") => {
       setChartMetric(mode);
-      chrome.storage.sync.set({ kpss_chart_metric_mode: mode });
+      chrome.storage.local.set({ kpss_chart_metric_mode: mode });
     },
     [],
   );

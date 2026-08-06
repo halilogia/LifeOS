@@ -28,7 +28,7 @@ function safeInit(name: string, fn: () => void): void {
   safeInit("VolumeBooster", initVolumeBoosterListener);
 
   // WP/Telegram köprüleri varsayılan KAPALI — Ayarlar > Genel'den açılır.
-  chrome.storage.sync.get(
+  chrome.storage.local.get(
     ["whatsappBridgeEnabled", "telegramBridgeEnabled"],
     (settings) => {
       if (settings.whatsappBridgeEnabled) {

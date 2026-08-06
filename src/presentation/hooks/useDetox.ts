@@ -10,7 +10,7 @@ export function useDetox() {
 
   // Load config from storage
   useEffect(() => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
       ["detox_enabled", "detox_blocked_sites", "detox_end_time"],
       (resData: {
         detox_enabled?: boolean;
@@ -23,7 +23,7 @@ export function useDetox() {
 
         if (isEnabled && end !== -1 && end <= Date.now()) {
           // Time expired, disable
-          chrome.storage.sync.set({
+          chrome.storage.local.set({
             detox_enabled: false,
             detox_end_time: 0,
           });
@@ -55,7 +55,7 @@ export function useDetox() {
   }, []);
 
   const saveBlockedSites = useCallback((sites: string[]) => {
-    chrome.storage.sync.set({ detox_blocked_sites: sites });
+    chrome.storage.local.set({ detox_blocked_sites: sites });
   }, []);
 
   const enableDetox = useCallback((sites: string[], duration: number) => {
@@ -65,7 +65,7 @@ export function useDetox() {
       detox_blocked_sites: sites,
       detox_end_time: calculatedEndTime,
     };
-    chrome.storage.sync.set(settings, () => {
+    chrome.storage.local.set(settings, () => {
       setEnabled(true);
       setEndTime(calculatedEndTime);
     });
@@ -76,7 +76,7 @@ export function useDetox() {
       detox_enabled: false,
       detox_end_time: 0,
     };
-    chrome.storage.sync.set(settings, () => {
+    chrome.storage.local.set(settings, () => {
       setEnabled(false);
       setEndTime(0);
     });

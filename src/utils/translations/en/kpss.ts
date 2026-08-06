@@ -167,6 +167,8 @@ export const kpss = {
   kpss_srs_all_done: "You have reviewed all due repetition cards for today.",
   kpss_srs_click_to_see: "Click to see answer",
   kpss_srs_card_label: "Card",
+  kpss_srs_generate: "✨ Generate AI Cards (5)",
+  kpss_srs_generating: "AI is generating history cards...",
   kpss_topic_syllabus: "Topic Syllabus & Progress",
   kpss_topic_frequency: "Question Frequency",
   kpss_topic_proficiency_test: "Solve Proficiency Test",

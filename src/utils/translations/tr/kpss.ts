@@ -168,6 +168,8 @@ export const kpss = {
   kpss_srs_all_done: "Bugünlük tüm tekrar kartlarını tamamladınız.",
   kpss_srs_click_to_see: "Cevabı görmek için tıkla",
   kpss_srs_card_label: "Kart",
+  kpss_srs_generate: "✨ AI Kart Üret (5)",
+  kpss_srs_generating: "Yapay zeka tarih kartları oluşturuyor...",
   kpss_topic_syllabus: "Konu Dağılımı ve Çalışma Takibi",
   kpss_topic_frequency: "Soru Sıklığı (Çoktan Aza)",
   kpss_topic_proficiency_test: "Seviye Tespit Sınavı Çöz",

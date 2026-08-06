@@ -73,7 +73,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       return;
     }
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.sync.get(["notes"], (res) =>
+      chrome.storage.local.get(["notes"], (res) =>
         r((res.notes as Note[]) || []),
       ),
     );
@@ -104,7 +104,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       editingNoteIdRef.current = newId;
     }
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ notes: currentNotes }, r),
+      chrome.storage.local.set({ notes: currentNotes }, r),
     );
     setNotes(
       currentNotes.sort(
@@ -164,17 +164,17 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
 
   const loadData = useCallback(async () => {
     const loadedNotes: Note[] = await new Promise((r) =>
-      chrome.storage.sync.get(["notes"], (res) =>
+      chrome.storage.local.get(["notes"], (res) =>
         r((res.notes as Note[]) || []),
       ),
     );
     const loadedQuotes: CustomQuote[] = await new Promise((r) =>
-      chrome.storage.sync.get(["customQuotes"], (res) =>
+      chrome.storage.local.get(["customQuotes"], (res) =>
         r((res.customQuotes as CustomQuote[]) || []),
       ),
     );
     const loadedScores: DayScores = await new Promise((r) =>
-      chrome.storage.sync.get([SYNC_DAY_SCORES], (res) =>
+      chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
         r((res[SYNC_DAY_SCORES] as DayScores) || {}),
       ),
     );
@@ -224,7 +224,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
 
   const handleSaveInlineNote = async (id: string) => {
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.sync.get(["notes"], (res) =>
+      chrome.storage.local.get(["notes"], (res) =>
         r((res.notes as Note[]) || []),
       ),
     );
@@ -236,7 +236,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       currentNotes[idx].summary = inlineSummary;
       currentNotes[idx].createdAt = new Date().toISOString();
       await new Promise<void>((r) =>
-        chrome.storage.sync.set({ notes: currentNotes }, r),
+        chrome.storage.local.set({ notes: currentNotes }, r),
       );
       setInlineEditingId(null);
       loadData();
@@ -275,7 +275,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     }
 
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.sync.get(["notes"], (res) =>
+      chrome.storage.local.get(["notes"], (res) =>
         r((res.notes as Note[]) || []),
       ),
     );
@@ -302,7 +302,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     }
 
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ notes: currentNotes }, r),
+      chrome.storage.local.set({ notes: currentNotes }, r),
     );
     setIsNoteModalOpen(false);
     setNoteSaveStatus(true);
@@ -321,13 +321,13 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     const confirmMsg = t.delete_confirm_note;
     onShowConfirm(confirmMsg, async () => {
       const currentNotes: Note[] = await new Promise((r) =>
-        chrome.storage.sync.get(["notes"], (res) =>
+        chrome.storage.local.get(["notes"], (res) =>
           r((res.notes as Note[]) || []),
         ),
       );
       const filtered = currentNotes.filter((n) => n.id !== id);
       await new Promise<void>((r) =>
-        chrome.storage.sync.set({ notes: filtered }, r),
+        chrome.storage.local.set({ notes: filtered }, r),
       );
       loadData();
     });
@@ -341,7 +341,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     }
 
     const currentQuotes: CustomQuote[] = await new Promise((r) =>
-      chrome.storage.sync.get(["customQuotes"], (res) =>
+      chrome.storage.local.get(["customQuotes"], (res) =>
         r((res.customQuotes as CustomQuote[]) || []),
       ),
     );
@@ -351,7 +351,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     });
 
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ customQuotes: currentQuotes }, r),
+      chrome.storage.local.set({ customQuotes: currentQuotes }, r),
     );
     setIsQuoteModalOpen(false);
     loadData();
@@ -361,13 +361,13 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     const confirmMsg = t.delete_confirm_quote;
     onShowConfirm(confirmMsg, async () => {
       const currentQuotes: CustomQuote[] = await new Promise((r) =>
-        chrome.storage.sync.get(["customQuotes"], (res) =>
+        chrome.storage.local.get(["customQuotes"], (res) =>
           r((res.customQuotes as CustomQuote[]) || []),
         ),
       );
       currentQuotes.splice(index, 1);
       await new Promise<void>((r) =>
-        chrome.storage.sync.set({ customQuotes: currentQuotes }, r),
+        chrome.storage.local.set({ customQuotes: currentQuotes }, r),
       );
       loadData();
     });
@@ -376,7 +376,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
   // Day Score (Mood Tracker) Operations
   const handleSetDayScore = async (dateKey: string, score: number) => {
     const currentScores: DayScores = await new Promise((r) =>
-      chrome.storage.sync.get([SYNC_DAY_SCORES], (res) =>
+      chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
         r((res[SYNC_DAY_SCORES] as DayScores) || {}),
       ),
     );
@@ -387,7 +387,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       next[dateKey] = score;
     }
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ [SYNC_DAY_SCORES]: next }, r),
+      chrome.storage.local.set({ [SYNC_DAY_SCORES]: next }, r),
     );
     setDayScores(next);
   };

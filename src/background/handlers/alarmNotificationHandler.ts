@@ -9,7 +9,7 @@ import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
 
 async function checkFreeGames(): Promise<void> {
-  chrome.storage.sync.get(
+  chrome.storage.local.get(
     ["freeGamesNotificationsEnabled", "lang"],
     async (syncRes) => {
       const notificationsEnabled =
@@ -92,7 +92,7 @@ async function checkFreeGames(): Promise<void> {
 }
 
 async function checkCalendarTasks(): Promise<void> {
-  chrome.storage.sync.get(
+  chrome.storage.local.get(
     ["calendarNotificationsEnabled", "lang", "todos"],
     (syncRes) => {
       const notificationsEnabled =
@@ -164,7 +164,7 @@ async function checkBistStockRules(): Promise<void> {
     return;
   }
 
-  chrome.storage.sync.get(["stockPortfolio", "stockRules"], async (res) => {
+  chrome.storage.local.get(["stockPortfolio", "stockRules"], async (res) => {
     const portfolio = (res.stockPortfolio as Array<{ symbol: string }>) || [];
     const rules =
       (res.stockRules as Array<{

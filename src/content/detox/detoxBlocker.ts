@@ -23,7 +23,7 @@ export function initDetoxBlocker(): void {
         return;
       }
 
-      chrome.storage.sync.get(
+      chrome.storage.local.get(
         [
           "detox_enabled",
           "detox_blocked_sites",
