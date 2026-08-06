@@ -1,5 +1,3 @@
-import { CSSProperties } from "preact";
-
 /**
  * KpssQuizQuestionsStep.tsx
  * KPSS Sınavı sorularının gösterim ekranı (İlerleme çubuğu, Canvas, Harita, Şıklar, Çözüm kutusu ve Navigasyon).
@@ -38,6 +36,8 @@ interface KpssQuizQuestionsStepProps {
   currentQuestionIndex: number;
   selectedAnswers: number[];
   totalQuizLength: number;
+  isInCollection: boolean;
+  onToggleCollection: (q: QuizQuestion) => void;
   onStartQuiz: () => void;
   onSelectAnswer: (oIdx: number) => void;
   onPreviousQuestion: () => void;
@@ -53,6 +53,8 @@ export function KpssQuizQuestionsStep({
   currentQuestionIndex,
   selectedAnswers,
   totalQuizLength,
+  isInCollection,
+  onToggleCollection,
   onStartQuiz,
   onSelectAnswer,
   onPreviousQuestion,
@@ -155,6 +157,28 @@ export function KpssQuizQuestionsStep({
         <div className="kpss-quiz-question-text">
           <MathRenderer text={currentQ.question} />
         </div>
+        <button
+          className={`koleksiyon-btn ${isInCollection ? "saved" : ""}`}
+          onClick={() => onToggleCollection(currentQ)}
+          title={
+            isInCollection
+              ? t.kpss_koleksiyon_remove
+              : t.kpss_koleksiyon_add
+          }
+          style={{
+            position: "absolute",
+            top: "8px",
+            right: "8px",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1.35rem",
+            filter: isInCollection ? "none" : "grayscale(1) opacity(0.5)",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {isInCollection ? "📥" : "📥"}
+        </button>
       </div>
 
       <div className="kpss-quiz-options-grid">

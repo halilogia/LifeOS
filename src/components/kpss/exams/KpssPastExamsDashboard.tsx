@@ -94,6 +94,14 @@ export function KpssPastExamsDashboard({
       label: t.kpss_past_exams_history_q || "Tarih Soru Arşivi (ÖSYM PDF)",
     },
     {
+      id: "yanlis",
+      label: t.kpss_past_exams_wrong || "❌ Yanlışlarım",
+    },
+    {
+      id: "koleksiyon",
+      label: t.kpss_koleksiyon_cap || "📥 Koleksiyonum",
+    },
+    {
       id: "karma",
       label: t.kpss_past_exams_mixed || "Karma Sınav (Tüm Yıllar Karışık)",
     },
@@ -315,7 +323,11 @@ export function KpssPastExamsDashboard({
                 key={y.id}
                 onClick={() => {
                   setSelectedYear(y.id);
-                  if (y.id === "tarih_arsivi") {
+                  if (
+                    y.id === "tarih_arsivi" ||
+                    y.id === "yanlis" ||
+                    y.id === "koleksiyon"
+                  ) {
                     setSelectedSubject("tarih");
                   }
                 }}
