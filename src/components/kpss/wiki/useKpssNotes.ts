@@ -33,6 +33,10 @@ export interface UseKpssNotesResult {
   selectNote: (note: KpssWikiNote) => void;
   handleCreateNewNote: () => Promise<void>;
   handleAddChildNote: (parent: KpssWikiNote) => Promise<void>;
+  handleReparentNote: (
+    childId: string,
+    newParentId: string | null,
+  ) => Promise<void>;
   handleSaveArticle: () => Promise<void>;
   handleDeleteArticle: () => Promise<void>;
   handleDownloadMarkdown: () => void;
@@ -137,6 +141,50 @@ export function useKpssNotes(
     setViewMode("edit");
   };
 
+  const handleReparentNote = async (
+    childId: string,
+    newParentId: string | null,
+  ) => {
+    if (!childId || newParentId === childId) {
+      return;
+    }
+    // Döngü koruması: yeni parent, child'ın kendisi veya bir alt notu olamaz
+    // (kök düzleme bırakma — newParentId null — bu kontrolden geçer)
+    if (newParentId) {
+      const isDescendant = (ancestorId: string, targetId: string): boolean => {
+        const parentMap = new Map<string, string>();
+        notes.forEach((n) => {
+          if (n.parentId) {
+            parentMap.set(n.id, n.parentId);
+          }
+        });
+        let cur = targetId;
+        while (cur) {
+          const p = parentMap.get(cur);
+          if (!p) {
+            return false;
+          }
+          if (p === ancestorId) {
+            return true;
+          }
+          cur = p;
+        }
+        return false;
+      };
+      if (isDescendant(childId, newParentId)) {
+        return;
+      }
+    }
+
+    const updated = notes.map((n) =>
+      n.id === childId
+        ? { ...n, parentId: newParentId, updatedAt: new Date().toISOString() }
+        : n,
+    );
+    await saveKpssWikiNotes(updated);
+    setNotes(updated);
+  };
+
   const persistArticle = useCallback(
     async (opts?: { silent?: boolean }) => {
       const id = selectedNoteIdRef.current;
@@ -200,6 +248,23 @@ export function useKpssNotes(
       }
     };
   }, [editorTitle, editorSubject, editorContent, persistArticle]);
+
+  // Sayfa gizlendiğinde / sekme değiştirilirken beklemeden anında kaydet.
+  // Bu, kullanıcı direkt "Kaydet"e basmadan başka sekmeye geçip / sayfa
+  // açılıp ders notlarına geri döndüğünde 1.5s debounce beklemeden kaybı önler.
+  useEffect(() => {
+    const flushOnHide = () => {
+      if (document.visibilityState === "hidden") {
+        void persistArticle({ silent: true });
+      }
+    };
+    document.addEventListener("visibilitychange", flushOnHide);
+    window.addEventListener("pagehide", flushOnHide);
+    return () => {
+      document.removeEventListener("visibilitychange", flushOnHide);
+      window.removeEventListener("pagehide", flushOnHide);
+    };
+  }, [persistArticle]);
 
   const handleDeleteArticle = async () => {
     if (!selectedNoteId) {
@@ -274,6 +339,7 @@ export function useKpssNotes(
     selectNote,
     handleCreateNewNote,
     handleAddChildNote,
+    handleReparentNote,
     handleSaveArticle,
     handleDeleteArticle,
     handleDownloadMarkdown,

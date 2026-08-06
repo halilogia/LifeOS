@@ -10,6 +10,8 @@ export const notes = {
   notes_editor_type_quote: "Quote",
   notes_editor_type_idea: "Idea",
   notes_editor_save: "Save",
+  notes_editor_autosave_done: "✓ Auto-saved",
+  notes_editor_autosave_hint: "Auto-saves as you type",
   notes_editor_tags_label: "Tags:",
   notes_editor_tags_placeholder: "e.g. work, personal, project-x",
   notes_editor_summary_label: "Summary:",

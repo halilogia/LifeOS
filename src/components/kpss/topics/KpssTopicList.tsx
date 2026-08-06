@@ -1,8 +1,7 @@
-import { Language, KpssProgress } from "@/types/types.js";
+import { KpssProgress } from "@/types/types.js";
 import { KpssTopic } from "@/services/kpss/kpssService.js";
 
 interface KpssTopicListProps {
-  lang: Language;
   t: Record<string, string>;
   topics: KpssTopic[];
   kpssProgress: KpssProgress[];
@@ -14,13 +13,13 @@ interface KpssTopicListProps {
     title: string;
     description: string;
     questionsCount?: number;
+    subtopics?: string[];
   }) => void;
   onOpenYoutube: (topic: string) => void;
   onReviewPastQuiz?: (topic: string) => void;
 }
 
 export function KpssTopicList({
-  lang,
   t,
   topics,
   kpssProgress,
@@ -243,6 +242,7 @@ export function KpssTopicList({
                     title: topic.title,
                     description: topic.description,
                     questionsCount: topic.questionsCount,
+                    subtopics: topic.subtopics,
                   });
                 }}
               >

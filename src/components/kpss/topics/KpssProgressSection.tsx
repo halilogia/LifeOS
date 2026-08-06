@@ -16,9 +16,11 @@ interface KpssProgressSectionProps {
   remainingCount: number;
   kpssProgress: KpssProgress[];
   dailyStats: KpssDailyStats[];
-  questionsInput: string;
   videosInput: string;
   subjectInput: string;
+  statsTopicInput: string;
+  statsCorrectInput: string;
+  statsWrongInput: string;
   chartDays: 7 | 30;
   chartType: "line" | "bar";
   sortBy: "default" | "questions" | "status";
@@ -33,9 +35,11 @@ interface KpssProgressSectionProps {
   estimatedScore: number;
   getSubjectNets: (subKey: string) => { net: number; max: number };
   topics: KpssTopic[];
-  onQuestionsInputChange: (v: string) => void;
   onVideosInputChange: (v: string) => void;
   onSubjectInputChange: (v: string) => void;
+  onStatsTopicInputChange: (v: string) => void;
+  onStatsCorrectInputChange: (v: string) => void;
+  onStatsWrongInputChange: (v: string) => void;
   onSaveStats: () => void;
   onResetStats: () => void;
   onDeleteStat: (date: string) => void;
@@ -58,9 +62,11 @@ export function KpssProgressSection({
   remainingCount,
   kpssProgress,
   dailyStats,
-  questionsInput,
   videosInput,
   subjectInput,
+  statsTopicInput,
+  statsCorrectInput,
+  statsWrongInput,
   chartDays,
   chartType,
   sortBy,
@@ -75,9 +81,11 @@ export function KpssProgressSection({
   estimatedScore,
   getSubjectNets,
   topics,
-  onQuestionsInputChange,
   onVideosInputChange,
   onSubjectInputChange,
+  onStatsTopicInputChange,
+  onStatsCorrectInputChange,
+  onStatsWrongInputChange,
   onSaveStats,
   onResetStats,
   onDeleteStat,
@@ -110,14 +118,18 @@ export function KpssProgressSection({
       <KpssDailyStatsCard
         lang={lang}
         t={t}
-        questionsInput={questionsInput}
         videosInput={videosInput}
         subjectInput={subjectInput}
+        statsTopicInput={statsTopicInput}
+        statsCorrectInput={statsCorrectInput}
+        statsWrongInput={statsWrongInput}
         chartDays={chartDays}
         chartType={chartType}
-        onQuestionsInputChange={onQuestionsInputChange}
         onVideosInputChange={onVideosInputChange}
         onSubjectInputChange={onSubjectInputChange}
+        onStatsTopicInputChange={onStatsTopicInputChange}
+        onStatsCorrectInputChange={onStatsCorrectInputChange}
+        onStatsWrongInputChange={onStatsWrongInputChange}
         onSaveStats={onSaveStats}
         onResetStats={onResetStats}
         onDeleteStat={onDeleteStat}
@@ -149,7 +161,6 @@ export function KpssProgressSection({
       />
 
       <KpssTopicList
-        lang={lang}
         t={t}
         topics={topics}
         kpssProgress={kpssProgress}

@@ -207,4 +207,9 @@ export const kpss = {
     "Prompt panoya kopyalandı! AI açıldıktan sonra yapıştırın (Ctrl+V).",
   kpss_topic_avg_questions:
     "2019-2025 KPSS Lisans Sınavlarındaki Ortalama Soru Sayısı",
+  kpss_topic_subtopics: "Alt Konular",
+  kpss_stats_topic: "Konu",
+  kpss_stats_correct: "Doğru Sayısı",
+  kpss_stats_wrong: "Yanlış",
+  kpss_stats_topic_placeholder: "Konu seçin",
 };

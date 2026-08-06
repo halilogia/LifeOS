@@ -8,6 +8,8 @@ export interface KpssTopic {
   title: string;
   description: string;
   questionsCount: number;
+  /** Kitaptaki bölüm başlıklarından türetilmiş alt konular (bilgilendirme amaçlı) */
+  subtopics?: string[];
 }
 
 export const kpssData: Record<string, KpssTopic[]> = {
@@ -333,6 +335,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "Padişahlar dönemi fetihler, antlaşmalar ve devletin siyasi gelişimi.",
       questionsCount: 3.0,
+      subtopics: ["Osmanlı Devleti'nde Yenileşme ve Demokratikleşme Hareketleri"],
     },
     {
       title: "Osmanlı Kültür ve Uygarlık",
@@ -345,24 +348,42 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "Trablusgarp Savaşı, Balkan Savaşları ve I. Dünya Savaşı süreci.",
       questionsCount: 4.0,
+      subtopics: ["Birinci Dünya Savaşı ve Sonuçları"],
     },
     {
       title: "Kurtuluş Savaşı",
       description:
         "Genelgeler, kongreler, I. TBMM'nin açılışı ve ayaklanmalar; Doğu, Güney ve Batı cepheleri; düzenli ordunun savaşları (Sakarya, Büyük Taarruz).",
       questionsCount: 2.0,
+      subtopics: [
+        "Kurtuluş Savaşı Hazırlık Dönemi",
+        "TBMM'nin Açılışı",
+        "Kurtuluş Savaşı - Lozan Antlaşması",
+      ],
     },
     {
       title: "İnkılap Tarihi",
       description:
-        "Cumhuriyetin ilanı, siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları.",
+        "Cumhuriyetin ilanı, siyasi, sosyal ve hukuk alanında yapılan modernleşme adımları ve Atatürk dönemi inkılaplarının tüm alanları.",
       questionsCount: 5.0,
+      subtopics: [
+        "Atatürk İnkılapları - Siyasi",
+        "Atatürk İnkılapları - Ekonomik",
+        "Atatürk İnkılapları - Eğitim",
+        "Atatürk İnkılapları - Hukuki",
+        "Atatürk İnkılapları - Toplumsal",
+        "Atatürk İnkılapları - Kronolojik Gelişimi",
+      ],
     },
     {
       title: "Atatürk Dönemi Politikalar",
       description:
         "İç politika gelişmeleri ve yurtta sulh cihanda sulh temelli dış politika.",
       questionsCount: 2.0,
+      subtopics: [
+        "Çok Partili Yaşama Geçiş Denemeleri",
+        "Dış Politika",
+      ],
     },
     {
       title: "Atatürk İlke ve İnkılapları",
@@ -375,6 +396,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "II. Dünya Savaşı sonrası Türkiye ve dünyadaki önemli gelişmeler.",
       questionsCount: 2.0,
+      subtopics: ["Atatürk Sonrası Gelişmeler"],
     },
   ],
   cografya: [
@@ -395,6 +417,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "Dağlar, ovalar, platolar, akarsular ve yer şekillerinin oluşum süreçleri; toprak tipleri, akarsu rejimleri, göller, yer altı suları; deprem, heyelan, erozyon ve sel gibi doğal afetlerin nedenleri ve sonuçları.",
       questionsCount: 5.17,
+      subtopics: ["Türkiye'nin Yeryüzü Şekilleri"],
     },
     {
       title: "Nüfus ve Yerleşme",
@@ -419,6 +442,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "Yeraltı zenginlikleri, yenilenebilir ve yenilenemez enerji kaynakları.",
       questionsCount: 2.17,
+      subtopics: ["Ormancılık"],
     },
     {
       title: "Sanayi ve Endüstri",

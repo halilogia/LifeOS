@@ -5,7 +5,7 @@
  * State yönetimi useKpssNotes hook'unda, görsel parçalar alt bileşenlerde.
  */
 
-import { useState, useEffect, useRef, useMemo } from "preact/hooks";
+import { useState, useRef, useMemo } from "preact/hooks";
 import { Language, Note } from "@/types/types.js";
 import {
   KpssWikiNote,
@@ -51,6 +51,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     selectNote,
     handleCreateNewNote,
     handleAddChildNote,
+    handleReparentNote,
     handleSaveArticle,
     handleDeleteArticle,
     handleDownloadMarkdown,
@@ -170,6 +171,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
           onSelectNote={selectNote}
           onCreateNewNote={handleCreateNewNote}
           onAddChildNote={handleAddChildNote}
+          onReparent={handleReparentNote}
         />
 
         <div

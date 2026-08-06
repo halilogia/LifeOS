@@ -21,6 +21,7 @@ interface KpssWikiSidebarProps {
   onSelectNote: (note: KpssWikiNote) => void;
   onCreateNewNote: () => void;
   onAddChildNote: (parent: KpssWikiNote) => void;
+  onReparent: (childId: string, newParentId: string | null) => void;
 }
 
 export function KpssWikiSidebar({
@@ -37,6 +38,7 @@ export function KpssWikiSidebar({
   onSelectNote,
   onCreateNewNote,
   onAddChildNote,
+  onReparent,
 }: KpssWikiSidebarProps) {
   if (isCollapsed) {
     return (
@@ -169,6 +171,7 @@ export function KpssWikiSidebar({
           selectedNoteId={selectedNoteId}
           onSelectNote={onSelectNote}
           onAddChildNote={onAddChildNote}
+          onReparent={onReparent}
         />
       </div>
     </div>

@@ -9,14 +9,18 @@ import { useKpssChartMetric } from "@/presentation/hooks/useKpssChartMetric.js";
 interface KpssDailyStatsCardProps {
   lang: Language;
   t: Record<string, string>;
-  questionsInput: string;
   videosInput: string;
   subjectInput: string;
+  statsTopicInput: string;
+  statsCorrectInput: string;
+  statsWrongInput: string;
   chartDays: 7 | 30;
   chartType: "line" | "bar";
-  onQuestionsInputChange: (val: string) => void;
   onVideosInputChange: (val: string) => void;
   onSubjectInputChange: (val: string) => void;
+  onStatsTopicInputChange: (val: string) => void;
+  onStatsCorrectInputChange: (val: string) => void;
+  onStatsWrongInputChange: (val: string) => void;
   onSaveStats: () => void;
   onResetStats: () => void;
   onDeleteStat?: (date: string) => void;
@@ -36,14 +40,18 @@ interface KpssDailyStatsCardProps {
 export function KpssDailyStatsCard({
   lang,
   t,
-  questionsInput,
   videosInput,
   subjectInput,
+  statsTopicInput,
+  statsCorrectInput,
+  statsWrongInput,
   chartDays,
   chartType,
-  onQuestionsInputChange,
   onVideosInputChange,
   onSubjectInputChange,
+  onStatsTopicInputChange,
+  onStatsCorrectInputChange,
+  onStatsWrongInputChange,
   onSaveStats,
   onResetStats,
   onDeleteStat,
@@ -98,13 +106,17 @@ export function KpssDailyStatsCard({
       <KpssStatsInputForm
         t={t}
         labels={labels}
-        questionsInput={questionsInput}
         videosInput={videosInput}
         subjectInput={subjectInput}
+        statsTopicInput={statsTopicInput}
+        statsCorrectInput={statsCorrectInput}
+        statsWrongInput={statsWrongInput}
         subjectsList={subjectsList}
-        onQuestionsInputChange={onQuestionsInputChange}
         onVideosInputChange={onVideosInputChange}
         onSubjectInputChange={onSubjectInputChange}
+        onStatsTopicInputChange={onStatsTopicInputChange}
+        onStatsCorrectInputChange={onStatsCorrectInputChange}
+        onStatsWrongInputChange={onStatsWrongInputChange}
         onSaveStats={onSaveStats}
         onResetStats={onResetStats}
       />
