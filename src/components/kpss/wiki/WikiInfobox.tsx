@@ -101,41 +101,64 @@ export function WikiInfobox({
         </div>
       )}
 
-      {/* Key-Value Stats */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "10px",
-          gap: "6px",
-          fontSize: "0.74rem",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-            Okuma Süresi
-          </span>
-          <span style={{ color: "#60a5fa", fontWeight: 600 }}>
-            ~{readingTimeMinutes} dk
-          </span>
+      {/* Child Notes — en üstte */}
+      {childNotes.length > 0 && (
+        <div
+          style={{
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            padding: "8px 10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "6px",
+            fontSize: "0.74rem",
+            background: "rgba(15, 23, 42, 0.5)",
+          }}
+        >
+          <div
+            style={{
+              color: "#94a3b8",
+              fontWeight: 700,
+              fontSize: "0.7rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <span>Alt Notlar</span>
+            <span
+              style={{
+                background: "rgba(59, 130, 246, 0.25)",
+                color: "#60a5fa",
+                padding: "1px 5px",
+                borderRadius: "10px",
+                fontSize: "0.65rem",
+              }}
+            >
+              {childNotes.length}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+            {childNotes.map((cn) => (
+              <span
+                key={cn.id}
+                onClick={() => onSelectNote?.(cn)}
+                style={{
+                  color: "#60a5fa",
+                  background: "rgba(59, 130, 246, 0.15)",
+                  border: "1px solid rgba(59, 130, 246, 0.3)",
+                  borderRadius: "4px",
+                  padding: "2px 6px",
+                  cursor: "pointer",
+                  fontSize: "0.7rem",
+                  fontWeight: 600,
+                }}
+              >
+                {cn.title}
+              </span>
+            ))}
+          </div>
         </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-            Metin Boyutu
-          </span>
-          <span style={{ color: "#e2e8f0" }}>{wordCount} kelime</span>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
-            Son Güncelleme
-          </span>
-          <span style={{ color: "#e2e8f0" }}>
-            {new Date(updatedAt).toLocaleDateString("tr-TR")}
-          </span>
-        </div>
-      </div>
+      )}
 
       {/* Outbound Wikilinks */}
       {outboundWikilinks.length > 0 && (
@@ -257,64 +280,43 @@ export function WikiInfobox({
         </div>
       )}
 
-      {/* Child Notes */}
-      {childNotes.length > 0 && (
-        <div
-          style={{
-            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-            padding: "8px 10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "6px",
-            fontSize: "0.74rem",
-            background: "rgba(15, 23, 42, 0.5)",
-          }}
-        >
-          <div
-            style={{
-              color: "#94a3b8",
-              fontWeight: 700,
-              fontSize: "0.7rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-            }}
-          >
-            <span>Alt Notlar</span>
-            <span
-              style={{
-                background: "rgba(59, 130, 246, 0.25)",
-                color: "#60a5fa",
-                padding: "1px 5px",
-                borderRadius: "10px",
-                fontSize: "0.65rem",
-              }}
-            >
-              {childNotes.length}
-            </span>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-            {childNotes.map((cn) => (
-              <span
-                key={cn.id}
-                onClick={() => onSelectNote?.(cn)}
-                style={{
-                  color: "#60a5fa",
-                  background: "rgba(59, 130, 246, 0.15)",
-                  border: "1px solid rgba(59, 130, 246, 0.3)",
-                  borderRadius: "4px",
-                  padding: "2px 6px",
-                  cursor: "pointer",
-                  fontSize: "0.7rem",
-                  fontWeight: 600,
-                }}
-              >
-                {cn.title}
-              </span>
-            ))}
-          </div>
+      {/* Key-Value Stats — en altta */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: "10px",
+          gap: "6px",
+          fontSize: "0.74rem",
+          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+          background: "rgba(30, 41, 59, 0.5)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
+            Okuma Süresi
+          </span>
+          <span style={{ color: "#60a5fa", fontWeight: 600 }}>
+            ~{readingTimeMinutes} dk
+          </span>
         </div>
-      )}
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
+            Metin Boyutu
+          </span>
+          <span style={{ color: "#e2e8f0" }}>{wordCount} kelime</span>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span style={{ color: "#94a3b8", fontWeight: 600 }}>
+            Son Güncelleme
+          </span>
+          <span style={{ color: "#e2e8f0" }}>
+            {new Date(updatedAt).toLocaleDateString("tr-TR")}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

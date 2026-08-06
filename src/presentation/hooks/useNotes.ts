@@ -31,6 +31,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
   const [noteType, setNoteType] = useState<NoteType>("note");
   const [noteCues, setNoteCues] = useState("");
   const [noteSummary, setNoteSummary] = useState("");
+  const [noteSaveStatus, setNoteSaveStatus] = useState(false);
 
   // Quote Modal States
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -45,6 +46,121 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
   const [inlineSummary, setInlineSummary] = useState("");
 
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoSaveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  // Otomatik kayıt sırasında en güncel değerleri oku
+  const noteModalOpenRef = useRef(false);
+  noteModalOpenRef.current = isNoteModalOpen;
+  const editingNoteIdRef = useRef<string | null>(null);
+  editingNoteIdRef.current = editingNoteId;
+  const noteFieldsRef = useRef({ title: "", content: "", cues: "", summary: "" });
+  noteFieldsRef.current = {
+    title: noteTitle,
+    content: noteContent,
+    cues: noteCues,
+    summary: noteSummary,
+  };
+
+  /** Otomatik kayıt — modal açıkken alanlar değişince debounce'la kaydet */
+  const autoSaveNote = useCallback(async () => {
+    if (!noteModalOpenRef.current) {
+      return;
+    }
+    const { title, content, cues, summary } = noteFieldsRef.current;
+    if (!title.trim() && !content.trim() && !cues.trim() && !summary.trim()) {
+      return;
+    }
+    const currentNotes: Note[] = await new Promise((r) =>
+      chrome.storage.sync.get(["notes"], (res) =>
+        r((res.notes as Note[]) || []),
+      ),
+    );
+    const id = editingNoteIdRef.current;
+    if (id) {
+      const idx = currentNotes.findIndex((n) => n.id === id);
+      if (idx !== -1) {
+        currentNotes[idx].title = title;
+        currentNotes[idx].content = content;
+        currentNotes[idx].type = noteType;
+        currentNotes[idx].cues = cues;
+        currentNotes[idx].summary = summary;
+        currentNotes[idx].createdAt = new Date().toISOString();
+      }
+    } else {
+      // Yeni not — ilk otomatik kayıtta oluştur, editingNoteId'yi bağla
+      const newId = crypto.randomUUID();
+      currentNotes.push({
+        id: newId,
+        title,
+        content,
+        type: noteType,
+        cues,
+        summary,
+        createdAt: new Date().toISOString(),
+      });
+      setEditingNoteId(newId);
+      editingNoteIdRef.current = newId;
+    }
+    await new Promise<void>((r) =>
+      chrome.storage.sync.set({ notes: currentNotes }, r),
+    );
+    setNotes(
+      currentNotes.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
+    );
+    setNoteSaveStatus(true);
+    if (autoSaveStatusTimerRef.current) {
+      clearTimeout(autoSaveStatusTimerRef.current);
+    }
+    autoSaveStatusTimerRef.current = setTimeout(
+      () => setNoteSaveStatus(false),
+      2000,
+    );
+  }, [noteType]);
+
+  // Otomatik kayıt: modal açıkken alanlar değişince 1.2s debounce
+  useEffect(() => {
+    if (!isNoteModalOpen) {
+      return;
+    }
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+    autoSaveTimerRef.current = setTimeout(() => {
+      void autoSaveNote();
+    }, 1200);
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [
+    isNoteModalOpen,
+    noteTitle,
+    noteContent,
+    noteCues,
+    noteSummary,
+    autoSaveNote,
+  ]);
+
+  // Sayfa gizlenirken / sekme değişirken anında kaydet (kayıp önleme)
+  useEffect(() => {
+    const flush = () => {
+      if (document.visibilityState === "hidden") {
+        void autoSaveNote();
+      }
+    };
+    document.addEventListener("visibilitychange", flush);
+    window.addEventListener("pagehide", flush);
+    return () => {
+      document.removeEventListener("visibilitychange", flush);
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [autoSaveNote]);
 
   const loadData = useCallback(async () => {
     const loadedNotes: Note[] = await new Promise((r) =>
@@ -189,6 +305,14 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       chrome.storage.sync.set({ notes: currentNotes }, r),
     );
     setIsNoteModalOpen(false);
+    setNoteSaveStatus(true);
+    if (autoSaveStatusTimerRef.current) {
+      clearTimeout(autoSaveStatusTimerRef.current);
+    }
+    autoSaveStatusTimerRef.current = setTimeout(
+      () => setNoteSaveStatus(false),
+      2000,
+    );
     loadData();
   };
 
@@ -289,6 +413,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     setNoteCues,
     noteSummary,
     setNoteSummary,
+    noteSaveStatus,
     isQuoteModalOpen,
     setIsQuoteModalOpen,
     quoteContent,

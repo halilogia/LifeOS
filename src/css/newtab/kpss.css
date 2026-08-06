@@ -353,6 +353,14 @@
   margin-top: var(--space-4);
 }
 
+/* ── Günlük form konu bazlı kitap çözümü ── */
+.kpss-book-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
 #kpss-save-stats-btn,
 #kpss-reset-stats-btn {
   padding: var(--space-5);

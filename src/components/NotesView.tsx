@@ -40,6 +40,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
     setNoteCues,
     noteSummary,
     setNoteSummary,
+    noteSaveStatus,
     isQuoteModalOpen,
     setIsQuoteModalOpen,
     quoteContent,
@@ -149,6 +150,7 @@ export function NotesView({ lang, onShowConfirm }: NotesViewProps) {
         onNoteContentChange={setNoteContent}
         onNoteCuesChange={setNoteCues}
         onNoteSummaryChange={setNoteSummary}
+        noteSaveStatus={noteSaveStatus}
         onSave={handleSaveNote}
       />
 

@@ -10,6 +10,8 @@ export const notes = {
   notes_editor_type_quote: "Söz",
   notes_editor_type_idea: "Fikir",
   notes_editor_save: "Kaydet",
+  notes_editor_autosave_done: "✓ Otomatik kaydedildi",
+  notes_editor_autosave_hint: "Yazdıkça otomatik kaydedilir",
   notes_editor_tags_label: "Etiketler:",
   notes_editor_tags_placeholder: "Örn: iş, kişisel, proje-x",
   notes_editor_summary_label: "Özet:",

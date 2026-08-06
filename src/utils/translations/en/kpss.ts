@@ -206,4 +206,9 @@ export const kpss = {
     "Prompt copied! Paste it (Ctrl+V) after the AI tab opens.",
   kpss_topic_avg_questions:
     "Average Questions in 2019–2025 KPSS Undergraduate Exams",
+  kpss_topic_subtopics: "Subtopics",
+  kpss_stats_topic: "Topic",
+  kpss_stats_correct: "Correct Answers",
+  kpss_stats_wrong: "Wrong",
+  kpss_stats_topic_placeholder: "Select topic",
 };

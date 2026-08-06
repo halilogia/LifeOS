@@ -74,14 +74,18 @@ export function KpssView({
   const [dailyStats, setDailyStats] = useState<KpssDailyStats[]>([]);
 
   // Input states
-  const [questionsInput, setQuestionsInput] = useState("");
   const [videosInput, setVideosInput] = useState("");
   const [subjectInput, setSubjectInput] = useState("turkce");
+  // Konu bazlı kitap çözümü (konu progress'ine işlemek için)
+  const [statsTopicInput, setStatsTopicInput] = useState("");
+  const [statsCorrectInput, setStatsCorrectInput] = useState("");
+  const [statsWrongInput, setStatsWrongInput] = useState("");
 
   const [activeTopic, setActiveTopic] = useState<{
     title: string;
     description: string;
     questionsCount?: number;
+    subtopics?: string[];
   } | null>(null);
 
   // Quiz state ve handler'lar useKpssQuiz hook'unda yaÅŸar (aÅŸaÄŸÄ±da, baÄŸÄ±mlÄ±lÄ±klardan sonra Ã§aÄŸrÄ±lÄ±r)
@@ -223,12 +227,22 @@ export function KpssView({
   });
 
   const handleSaveStats = async () => {
-    const questions = parseInt(questionsInput, 10) || 0;
     const videos = parseInt(videosInput, 10) || 0;
+    const correct = parseInt(statsCorrectInput, 10) || 0;
+    const wrong = parseInt(statsWrongInput, 10) || 0;
+    const questions = correct + wrong; // toplam çözülen soru
     if (questions > 0 || videos > 0) {
-      await kpssService.saveKpssDailyStats(questions, videos, subjectInput);
-      setQuestionsInput("");
+      await kpssService.saveKpssDailyStats(
+        questions,
+        videos,
+        subjectInput,
+        statsTopicInput || undefined,
+        correct,
+      );
       setVideosInput("");
+      setStatsTopicInput("");
+      setStatsCorrectInput("");
+      setStatsWrongInput("");
       loadKpssData();
     }
   };
@@ -303,9 +317,11 @@ export function KpssView({
             remainingCount={remainingCount}
             kpssProgress={kpssProgress}
             dailyStats={dailyStats}
-            questionsInput={questionsInput}
             videosInput={videosInput}
             subjectInput={subjectInput}
+            statsTopicInput={statsTopicInput}
+            statsCorrectInput={statsCorrectInput}
+            statsWrongInput={statsWrongInput}
             chartDays={chartDays}
             chartType={chartType}
             sortBy={sortBy}
@@ -320,9 +336,11 @@ export function KpssView({
             estimatedScore={estimatedScore}
             getSubjectNets={getSubjectNets}
             topics={topics}
-            onQuestionsInputChange={setQuestionsInput}
             onVideosInputChange={setVideosInput}
             onSubjectInputChange={setSubjectInput}
+            onStatsTopicInputChange={setStatsTopicInput}
+            onStatsCorrectInputChange={setStatsCorrectInput}
+            onStatsWrongInputChange={setStatsWrongInput}
             onSaveStats={handleSaveStats}
             onResetStats={handleResetStats}
             onDeleteStat={handleDeleteStat}

@@ -98,10 +98,14 @@ export function extractFirstImageUrl(content: string): string | null {
 
 /**
  * Render Markdown with custom styled links highlighted in blue.
+ * `currentTitle` verilirse o başlığa yapılan otomatik bağlantılar
+ * linke çevrilmez — not kendi başlığını kendine bağlamaz.
+ * (Açık [[...]] wikilink'leri yine de link olarak kalır.)
  */
 export function renderCustomArticleMarkdown(
   content: string,
   allNotes: KpssWikiNote[],
+  currentTitle?: string,
 ): string {
   if (!content) {
     return "";
@@ -120,10 +124,56 @@ export function renderCustomArticleMarkdown(
     /^(https?:\/\/[^\s<>"]+\.(?:jpg|jpeg|png|gif|webp|svg)|https?:\/\/[^\s<>"']+images\?[^\s<>"']+|https?:\/\/[^\s<>"']+encrypted-tbn[^\s<>"']+)$/gim,
     (url) => `![Görsel](${url})`,
   );
+  // ── Dipnot mekanizması ─────────────────────────────────────────
+  // Paragraf içine yazılan ham URL'ler otomatik tespit edilir:
+  // gövdede üst simge [!], sayfa sonunda "Kaynaklar" listesi.
+  const footnotes: string[] = [];
+  // http(s)://..., www....  veya  domain.tld/path şeklindeki ham URL'ler
+  const urlRe =
+    /(?:https?:\/\/|www\.)[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]+|(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+\.[a-z]{2,}(?:\/[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]+)?/gi;
+  processedContent = processedContent.replace(urlRe, (urlRaw) => {
+    // Zaten Markdown link/image syntax'ı içinde olan URL'leri atla
+    const trimmed = urlRaw.trim();
+    if (
+      trimmed.endsWith(")") ||
+      trimmed.endsWith("]") ||
+      trimmed.startsWith("![") ||
+      trimmed.startsWith("[")
+    ) {
+      return urlRaw;
+    }
+    // cümle sonu noktası/noktalama varsa temizle
+    const clean = trimmed.replace(/[.,;:!?]+$/g, "");
+    if (/\.[a-z]{2,}(?:\/|$)/i.test(clean) || /^https?:\/\//i.test(clean)) {
+      footnotes.push(clean);
+      return `\uFFF9FOOT${footnotes.length}\uFFFA`;
+    }
+    return urlRaw;
+  });
+
   let html = renderMarkdown(processedContent);
 
-  // LaTeX desteği: $$...$$ (blok) ve $...$ (satır içi) KaTeX ile render edilir.
-  // ÖNCE yapılır ki wikilink dönüşümleri LaTeX içeriğine dokunmasın.
+  // Placeholder → üst simge referans
+  html = html.replace(/\uFFF9FOOT(\d+)\uFFFA/g, (_, idx) => {
+    return `<sup data-footnote="${idx}" style="color:#60a5fa;font-weight:700;font-size:0.62rem;cursor:pointer;margin-left:1px;">[${idx}]</sup>`;
+  });
+  // Sayfa sonunda Kaynaklar listesi
+  if (footnotes.length > 0) {
+    const list = footnotes
+      .map(
+        (url, i) =>
+          `<div style="display:flex;gap:8px;align-items:flex-start;font-size:0.78rem;color:var(--text-secondary);line-height:1.5;margin-top:3px;">` +
+          `<span style="color:#60a5fa;font-weight:700;flex-shrink:0;">[${i + 1}]</span>` +
+          `<a href="${/^https?:\/\//i.test(url) ? url : "https://" + url}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;word-break:break-all;">${url}</a>` +
+          `</div>`,
+      )
+      .join("");
+    html +=
+      `<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--card-border);">` +
+      `<div style="color:#94a3b8;font-weight:700;font-size:0.72rem;letter-spacing:0.4px;margin-bottom:6px;">Kaynaklar</div>` +
+      list +
+      `</div>`;
+  }
   html = html.replace(/(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g, (match) => {
     const isBlock = match.startsWith("$$") && match.endsWith("$$");
     const math = isBlock ? match.slice(2, -2) : match.slice(1, -1);
@@ -149,6 +199,14 @@ export function renderCustomArticleMarkdown(
   );
   allNotes.forEach((n) => {
     if (!n.title || n.title.trim().length < 3) {
+      return;
+    }
+    // Not kendi başlığını kendine bağlamaz — düz metin kalır
+    if (
+      currentTitle &&
+      n.title.trim().toLocaleLowerCase("tr-TR") ===
+        currentTitle.trim().toLocaleLowerCase("tr-TR")
+    ) {
       return;
     }
     const cleanTitle = n.title.trim();

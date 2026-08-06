@@ -177,11 +177,15 @@ export function createKpssService(kpssRepo: IKpssRepository) {
 
     /**
      * Appends or updates a day's KPSS question and video count stats.
+     * `topic` + `correctCount` verilirse konu ilerlemesine de işlenir:
+     * birikimli soru/doğru sayacı güncellenir (100 soru + %80 kuralı).
      */
     async saveKpssDailyStats(
       questions: number,
       videos: number,
       subject: string,
+      topic?: string,
+      correctCount?: number,
     ): Promise<void> {
       const today = new Date().toISOString().split("T")[0];
       const stats = await kpssRepo.getAllDailyStats();
@@ -201,6 +205,13 @@ export function createKpssService(kpssRepo: IKpssRepository) {
       }
 
       await kpssRepo.saveAllDailyStats(stats);
+
+      // Konu bazlı kitap çözümü → konu ilerlemesine işle
+      if (topic && questions > 0 && correctCount !== undefined) {
+        const score =
+          questions > 0 ? Math.round((correctCount / questions) * 100) : 0;
+        await this.updateTopicStatus(subject, topic, 1, score, correctCount, questions);
+      }
     },
 
     /**

@@ -30,6 +30,7 @@ interface NoteEditorModalProps {
   onNoteContentChange: (val: string) => void;
   onNoteCuesChange: (val: string) => void;
   onNoteSummaryChange: (val: string) => void;
+  noteSaveStatus?: boolean;
   onSave: () => void;
 }
 
@@ -52,6 +53,7 @@ export function NoteEditorModal({
   onNoteContentChange,
   onNoteCuesChange,
   onNoteSummaryChange,
+  noteSaveStatus,
   onSave,
 }: NoteEditorModalProps) {
   const [showLinkSuggestions, setShowLinkSuggestions] = useState(false);
@@ -171,6 +173,18 @@ export function NoteEditorModal({
         </div>
 
         <div className="settings-footer">
+          <span
+            style={{
+              fontSize: "0.75rem",
+              color: noteSaveStatus ? "#4ade80" : "var(--text-secondary)",
+              fontWeight: 600,
+              transition: "color 0.2s ease",
+            }}
+          >
+            {noteSaveStatus
+              ? t.notes_editor_autosave_done
+              : t.notes_editor_autosave_hint}
+          </span>
           <button
             id="save-note-btn"
             className="settings-add-btn"
