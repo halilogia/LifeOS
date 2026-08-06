@@ -115,8 +115,6 @@ export const kpss = {
   kpss_srs_medium: "Orta",
   kpss_srs_easy: "Kolay",
   kpss_srs_source_all: "Tüm Kartlar",
-  kpss_srs_source_preset: "Hazır Kartlar",
-  kpss_srs_source_notes: "Sadece Benim Notlarım",
   kpss_srs_note_card: "Ders Notu Kartı",
   kpss_notes_open_app: "Uygulamada Aç",
   kpss_notes_open_tab: "Sekmede Aç",

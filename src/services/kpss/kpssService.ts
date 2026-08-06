@@ -10,11 +10,18 @@
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 import { kpssData, type KpssTopic } from "@/domain/constants/kpssCurriculum.js";
-import type { KpssFlashcard } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
+
+/** AI üretimli KPSS SRS flashcard şablonu (eski sabit kart kaynağı kaldırıldı). */
+export interface KpssFlashcard {
+  id: string;
+  question: string;
+  answer: string;
+  hint: string;
+  category: string;
+}
 
 // Re-export constants and types for backwards compatibility
 export { kpssData, type KpssTopic };
-export type { KpssFlashcard };
 
 export function createKpssService(kpssRepo: IKpssRepository) {
   return {
