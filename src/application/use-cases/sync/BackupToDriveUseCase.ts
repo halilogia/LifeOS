@@ -25,9 +25,9 @@ export class BackupToDriveUseCase {
     // Get auth token from chrome.identity via chrome.storage cached token
     const token = await this.getAuthToken();
 
-    // Gather all backup data from chrome.storage.sync directly
+    // Gather all backup data from chrome.storage.local directly
     const allData = await new Promise<Record<string, unknown>>((resolve) => {
-      chrome.storage.sync.get(null, (result) => {
+      chrome.storage.local.get(null, (result) => {
         resolve(result as Record<string, unknown>);
       });
     });

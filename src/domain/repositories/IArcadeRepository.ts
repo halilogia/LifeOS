@@ -15,7 +15,7 @@ export interface IArcadeRepository {
   saveAllGames(games: GameEntry[]): Promise<void>;
 
   /**
-   * Attempt to load games from legacy chrome.storage.sync.
+   * Attempt to load games from legacy chrome.storage.local.
    * Returns null when there is nothing to migrate.
    */
   loadLegacySyncGames(): Promise<GameEntry[] | null>;

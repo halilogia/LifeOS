@@ -1,6 +1,6 @@
 /**
  * ChromeStorageSettingsRepository
- * Infrastructure implementation of ISettingsRepository using chrome.storage.sync
+ * Infrastructure implementation of ISettingsRepository using chrome.storage.local
  * directly (not wrapping legacy storage.ts).
  */
 
@@ -33,7 +33,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
     telegramBridgeEnabled: boolean;
   }> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(
+      chrome.storage.local.get(
         [...SYNC_SETTINGS_KEYS],
         (result: Record<string, unknown>) => {
           const r = result;
@@ -61,7 +61,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async getSidebarOrder(): Promise<string[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([SYNC_SIDEBAR_ORDER], (result) => {
+      chrome.storage.local.get([SYNC_SIDEBAR_ORDER], (result) => {
         resolve((result[SYNC_SIDEBAR_ORDER] as string[]) || []);
       });
     });
@@ -69,25 +69,25 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setSidebarOrder(order: string[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_SIDEBAR_ORDER]: order }, resolve);
+      chrome.storage.local.set({ [SYNC_SIDEBAR_ORDER]: order }, resolve);
     });
   }
 
   async setLang(lang: Language): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ lang }, resolve);
+      chrome.storage.local.set({ lang }, resolve);
     });
   }
 
   async setSidebarOpen(isOpen: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_SIDEBAR_OPEN]: isOpen }, resolve);
+      chrome.storage.local.set({ [SYNC_SIDEBAR_OPEN]: isOpen }, resolve);
     });
   }
 
   async setFreeGamesNotificationsEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         { [SYNC_FREE_GAMES_NOTIFICATIONS]: enabled },
         resolve,
       );
@@ -96,7 +96,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setCalendarNotificationsEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         { [SYNC_CALENDAR_NOTIFICATIONS]: enabled },
         resolve,
       );
@@ -105,13 +105,13 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setPomoBlockEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_POMO_BLOCK_ENABLED]: enabled }, resolve);
+      chrome.storage.local.set({ [SYNC_POMO_BLOCK_ENABLED]: enabled }, resolve);
     });
   }
 
   async setUniversalInfoBox(enabled: boolean, hotkey: string): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         {
           [SYNC_UNIVERSAL_INFOBOX_ENABLED]: enabled,
           [SYNC_UNIVERSAL_INFOBOX_HOTKEY]: hotkey,
@@ -123,7 +123,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setWhatsappBridgeEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         { [SYNC_WHATSAPP_BRIDGE_ENABLED]: enabled },
         resolve,
       );
@@ -132,7 +132,7 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async setTelegramBridgeEnabled(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         { [SYNC_TELEGRAM_BRIDGE_ENABLED]: enabled },
         resolve,
       );
@@ -141,8 +141,8 @@ export class ChromeStorageSettingsRepository implements ISettingsRepository {
 
   async clearAll(lang: Language): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.clear(() => {
-        chrome.storage.sync.set({ lang }, resolve);
+      chrome.storage.local.clear(() => {
+        chrome.storage.local.set({ lang }, resolve);
       });
     });
   }

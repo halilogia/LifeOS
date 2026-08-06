@@ -145,7 +145,7 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
 
   // Load language settings & initial page context
   useEffect(() => {
-    chrome.storage.sync.get(["lang", "autoGroupTabs"], (res) => {
+    chrome.storage.local.get(["lang", "autoGroupTabs"], (res) => {
       if (res.lang) {
         setLang(res.lang as Language);
       }
@@ -257,7 +257,7 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     const rawEndpoint = aiConfig.aiEndpoint;
 
     const userMemory: string = await new Promise<string>((r) =>
-      chrome.storage.sync.get(
+      chrome.storage.local.get(
         ["aiUserMemory"],
         (res: { aiUserMemory?: string }) =>
           r(typeof res?.aiUserMemory === "string" ? res.aiUserMemory : ""),

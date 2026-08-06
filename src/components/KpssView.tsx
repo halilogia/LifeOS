@@ -5,7 +5,6 @@ import {
   type KpssFlashcard,
 } from "@/services/kpss/kpssService.js";
 import { kpssSrsService } from "@/services/kpss/kpssSrsService.js";
-import { kpssOsymHistoryFlashcards } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
 import { KpssDailyStats, Language } from "@/types/types.js";
 import { useKpssQuiz } from "@/presentation/hooks/useKpssQuiz.js";
 import type { KpssProgress } from "@/domain/services/KpssCalculatorService.js";
@@ -116,6 +115,7 @@ export function KpssView({
 
   // KPSS SRS States
   const [srsLoading, setSrsLoading] = useState(true);
+  const [srsGenerating, setSrsGenerating] = useState(false);
   const [srsQueue, setSrsQueue] = useState<WordReviewData[]>([]);
   const [srsIndex, setSrsIndex] = useState(0);
   const [srsFlipped, setSrsFlipped] = useState(false);
@@ -123,7 +123,7 @@ export function KpssView({
     "normal",
   );
   const [flashcardsUniverse, setFlashcardsUniverse] = useState<KpssFlashcard[]>(
-    kpssOsymHistoryFlashcards,
+    [],
   );
   const [srsChapter, setSrsChapter] = useState<string>("all");
   const [srsChapters, setSrsChapters] = useState<string[]>([]);
@@ -140,6 +140,21 @@ export function KpssView({
     } catch (e) {
       logger.error("Failed to load KPSS SRS Queue:", e);
       setSrsLoading(false);
+    }
+  };
+
+  const handleGenerateAiCards = async () => {
+    setSrsGenerating(true);
+    try {
+      await kpssSrsService.generateAiCards(
+        srsChapter === "all" ? "Tarih" : srsChapter,
+        5,
+      );
+      await loadKpssSrsQueue(srsChapter);
+    } catch (e) {
+      logger.error("Failed to generate AI cards:", e);
+    } finally {
+      setSrsGenerating(false);
     }
   };
 
@@ -369,6 +384,7 @@ export function KpssView({
           <KpssSrsTab
             t={t}
             srsLoading={srsLoading}
+            srsGenerating={srsGenerating}
             srsQueue={srsQueue}
             srsIndex={srsIndex}
             srsFlipped={srsFlipped}
@@ -383,6 +399,7 @@ export function KpssView({
             onFlipChange={(flipped) => setSrsFlipped(flipped)}
             onReviewQuality={handleKpssSrsReview}
             onReloadQueue={() => loadKpssSrsQueue(srsChapter)}
+            onGenerateCards={handleGenerateAiCards}
           />
         ) : activeTab === "map" ? (
           <div

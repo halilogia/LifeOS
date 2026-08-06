@@ -24,7 +24,7 @@ export function useSidebarOrder() {
 
   useEffect(() => {
     new Promise<string[]>((resolve) =>
-      chrome.storage.sync.get(["sidebarOrder"], (res) =>
+      chrome.storage.local.get(["sidebarOrder"], (res) =>
         resolve((res.sidebarOrder as string[]) || []),
       ),
     ).then((saved) => {
@@ -39,7 +39,7 @@ export function useSidebarOrder() {
   }, []);
 
   const saveOrder = useCallback((nextOrder: string[]) => {
-    chrome.storage.sync.set({ sidebarOrder: nextOrder });
+    chrome.storage.local.set({ sidebarOrder: nextOrder });
   }, []);
 
   return { order, setOrder, saveOrder };

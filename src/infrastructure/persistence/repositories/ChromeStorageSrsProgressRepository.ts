@@ -1,6 +1,6 @@
 /**
  * ChromeStorageSrsProgressRepository
- * Infrastructure implementation of ISrsProgressRepository using chrome.storage.sync
+ * Infrastructure implementation of ISrsProgressRepository using chrome.storage.local
  * for KPSS SRS flashcard progress data.
  */
 
@@ -12,7 +12,7 @@ const SRS_KEY = SYNC_KPSS_SRS;
 export class ChromeStorageSrsProgressRepository implements ISrsProgressRepository {
   async getAll(): Promise<Record<string, unknown>[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([SRS_KEY], (res) => {
+      chrome.storage.local.get([SRS_KEY], (res) => {
         resolve((res[SRS_KEY] as Record<string, unknown>[]) || []);
       });
     });
@@ -20,7 +20,7 @@ export class ChromeStorageSrsProgressRepository implements ISrsProgressRepositor
 
   async saveAll(items: Record<string, unknown>[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SRS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [SRS_KEY]: items }, resolve);
     });
   }
 }

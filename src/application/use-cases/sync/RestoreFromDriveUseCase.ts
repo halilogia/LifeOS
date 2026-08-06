@@ -79,9 +79,9 @@ export class RestoreFromDriveUseCase {
         restored.notes = Array.from(mergedNotes.values());
       }
 
-      // Save all restored keys (including sidebarOrder) directly to chrome.storage.sync
+      // Save all restored keys (including sidebarOrder) directly to chrome.storage.local
       await new Promise<void>((resolve) => {
-        chrome.storage.sync.set(restored, () => resolve());
+        chrome.storage.local.set(restored, () => resolve());
       });
 
       // Restore data to repositories if available

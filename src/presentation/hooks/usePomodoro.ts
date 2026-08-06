@@ -116,12 +116,12 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
     });
 
     // 4. Pomodoro history initial state
-    chrome.storage.sync.get(["pomodoroHistory"], (res) => {
+    chrome.storage.local.get(["pomodoroHistory"], (res) => {
       setPomodoroHistory((res.pomodoroHistory as PomodoroLog[]) || []);
     });
 
     // 5. Load custom times settings
-    chrome.storage.sync.get(["pomoCustomTimes"], (res) => {
+    chrome.storage.local.get(["pomoCustomTimes"], (res) => {
       const times = res.pomoCustomTimes as
         { focus: number; short: number; long: number } | undefined;
       if (times) {
@@ -239,7 +239,7 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
     const seconds = mins * 60;
     const newTimes = { ...customTimes, [mode]: seconds };
     setCustomTimes(newTimes);
-    chrome.storage.sync.set({ pomoCustomTimes: newTimes });
+    chrome.storage.local.set({ pomoCustomTimes: newTimes });
 
     if (!pomoRunning && pomoMode === mode) {
       await pomodoroManager.resetTimer(mode, seconds);
@@ -326,7 +326,7 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
       newLog,
     ];
     await new Promise<void>((r) =>
-      chrome.storage.sync.set({ pomodoroHistory: nextHistory }, r),
+      chrome.storage.local.set({ pomodoroHistory: nextHistory }, r),
     );
     setPomodoroHistory(nextHistory);
     setShowPlantModal(false);

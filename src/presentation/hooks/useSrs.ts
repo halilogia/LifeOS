@@ -52,7 +52,7 @@ export function useSrs() {
       const data = await getAllWords();
       setWordsData(data);
       const progress: WordReviewData[] = await new Promise((resolve) =>
-        chrome.storage.sync.get(["srsProgress"], (res) =>
+        chrome.storage.local.get(["srsProgress"], (res) =>
           resolve((res.srsProgress as WordReviewData[]) || []),
         ),
       );
@@ -114,7 +114,7 @@ export function useSrs() {
     const outcome = calculateSM2(reviewData, quality, new Date());
 
     const progress: WordReviewData[] = await new Promise((resolve) =>
-      chrome.storage.sync.get(["srsProgress"], (res) =>
+      chrome.storage.local.get(["srsProgress"], (res) =>
         resolve((res.srsProgress as WordReviewData[]) || []),
       ),
     );
@@ -128,7 +128,7 @@ export function useSrs() {
       progress.push(outcome);
     }
     await new Promise<void>((resolve) =>
-      chrome.storage.sync.set({ srsProgress: progress }, resolve),
+      chrome.storage.local.set({ srsProgress: progress }, resolve),
     );
     setFadeState("slide-out");
     setTimeout(() => {

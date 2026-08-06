@@ -1,7 +1,7 @@
 /**
  * ChromeStorageAiConfigRepository
  * Infrastructure implementation of IAiConfigRepository.
- * Reads from chrome.storage.sync first, falls back to chrome.storage.local, then defaults.
+ * Reads from chrome.storage.local first, falls back to chrome.storage.local, then defaults.
  */
 
 import type {
@@ -70,7 +70,7 @@ export class ChromeStorageAiConfigRepository implements IAiConfigRepository {
   ): Promise<Record<string, unknown>> {
     return new Promise((resolve) => {
       const storage =
-        area === "sync" ? chrome.storage.sync : chrome.storage.local;
+        area === "sync" ? chrome.storage.local : chrome.storage.local;
       storage.get([...AI_KEYS], (res: Record<string, unknown>) => resolve(res));
     });
   }

@@ -1,6 +1,6 @@
 /**
  * ChromeStorageTodoRepository
- * Infrastructure implementation of ITodoRepository using chrome.storage.sync
+ * Infrastructure implementation of ITodoRepository using chrome.storage.local
  * directly (not wrapping legacy storage.ts).
  */
 
@@ -11,7 +11,7 @@ import { SYNC_TODOS } from "@/infrastructure/storage/keys.js";
 export class ChromeStorageTodoRepository implements ITodoRepository {
   async getAll(): Promise<Todo[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([SYNC_TODOS], (result) => {
+      chrome.storage.local.get([SYNC_TODOS], (result) => {
         resolve((result[SYNC_TODOS] as Todo[]) || []);
       });
     });
@@ -19,7 +19,7 @@ export class ChromeStorageTodoRepository implements ITodoRepository {
 
   async saveAll(todos: Todo[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [SYNC_TODOS]: todos }, resolve);
+      chrome.storage.local.set({ [SYNC_TODOS]: todos }, resolve);
     });
   }
 

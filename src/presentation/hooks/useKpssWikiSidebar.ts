@@ -5,7 +5,7 @@ export function useKpssWikiSidebar() {
 
   useEffect(() => {
     void (async () => {
-      const result = await chrome.storage.sync.get("kpssWikiSidebarCollapsed");
+      const result = await chrome.storage.local.get("kpssWikiSidebarCollapsed");
       if (result.kpssWikiSidebarCollapsed !== undefined) {
         setSidebarCollapsed(Boolean(result.kpssWikiSidebarCollapsed));
       }
@@ -15,7 +15,7 @@ export function useKpssWikiSidebar() {
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => {
       const next = !prev;
-      void chrome.storage.sync.set({ kpssWikiSidebarCollapsed: next });
+      void chrome.storage.local.set({ kpssWikiSidebarCollapsed: next });
       return next;
     });
   }, []);

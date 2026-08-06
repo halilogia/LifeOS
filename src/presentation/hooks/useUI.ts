@@ -1,7 +1,7 @@
 /**
  * useUI Hook
  * Presentation hook that wraps UI-related state (navigation, clock, quotes, dialogs).
- * Uses chrome.storage.sync directly instead of legacy core/storage.
+ * Uses chrome.storage.local directly instead of legacy core/storage.
  */
 
 import { useState, useCallback } from "preact/hooks";
@@ -95,7 +95,7 @@ export function useUI() {
 
   const refreshQuote = useCallback(async (activeLang: Language) => {
     const customQuotes: CustomQuote[] = await new Promise((resolve) => {
-      chrome.storage.sync.get(["customQuotes"], (result) => {
+      chrome.storage.local.get(["customQuotes"], (result) => {
         resolve((result.customQuotes as CustomQuote[]) || []);
       });
     });
@@ -147,7 +147,7 @@ export function useUI() {
 
   const loadSidebarOrder = useCallback(async () => {
     const savedOrder: string[] = await new Promise((resolve) => {
-      chrome.storage.sync.get([SIDEBAR_ORDER_KEY], (result) => {
+      chrome.storage.local.get([SIDEBAR_ORDER_KEY], (result) => {
         resolve((result[SIDEBAR_ORDER_KEY] as string[]) || []);
       });
     });

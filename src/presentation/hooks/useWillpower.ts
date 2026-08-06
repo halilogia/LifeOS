@@ -39,7 +39,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
 
   const loadData = useCallback(async () => {
     const result = await new Promise<WillpowerStreak | undefined>((resolve) =>
-      chrome.storage.sync.get(["willpowerStreak"], (res) =>
+      chrome.storage.local.get(["willpowerStreak"], (res) =>
         resolve(res.willpowerStreak as WillpowerStreak | undefined),
       ),
     );
@@ -50,7 +50,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
         bestStreakDays: 0,
         history: [],
       };
-      chrome.storage.sync.set({ willpowerStreak: streakData });
+      chrome.storage.local.set({ willpowerStreak: streakData });
     }
     setData(streakData);
     calculateTime(streakData.startDate);
@@ -104,7 +104,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
       };
 
       await new Promise<void>((resolve) =>
-        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve),
+        chrome.storage.local.set({ willpowerStreak: updatedData }, resolve),
       );
       setNote("");
       setData(updatedData);
@@ -131,7 +131,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
         history: [],
       };
       await new Promise<void>((resolve) =>
-        chrome.storage.sync.set({ willpowerStreak: updatedData }, resolve),
+        chrome.storage.local.set({ willpowerStreak: updatedData }, resolve),
       );
       setData(updatedData);
     });

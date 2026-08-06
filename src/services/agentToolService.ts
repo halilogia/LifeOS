@@ -56,7 +56,7 @@ export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
   {
     name: "update_memory",
     description:
-      "Saves new user facts to personal memory.md (chrome.storage.sync.aiUserMemory).",
+      "Saves new user facts to personal memory.md (chrome.storage.local.aiUserMemory).",
     actionType: "update_memory",
   },
 ];

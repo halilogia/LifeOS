@@ -1,9 +1,17 @@
 /**
  * kpssSrsService.ts
- * Service for loading SRS queues and saving review qualities for KPSS flashcards.
- * Kaynak: yalnızca tarih çıkmış sorular (kpssOsymHistoryFlashcards).
+ * Service for AI-generated KPSS history flashcards + SM-2 spaced repetition.
+ *
+ * Kart kaynağı artık SABİT dosya değil: Yapay zeka (local/OpenRouter/Gemini) her
+ * üretimde 5 flashcard oluşturur, kartlar chrome.storage.local'a kaydedilir
+ * (local-first; bulut senkron isteğe bağlı Drive backup). SM-2 tekrar mekaniği
+ * domain SrsService üzerinden korunur.
+ *
+ * eslint: aşağıdaki Türkçe string'ler AI'ya gönderilen PROMPT metnidir (UI değil).
  */
+/* eslint-disable local/no-turkish-literals */
 
+import { callAIConfigured, getAIConfigFromStorage } from "@/services/aichat/index.js";
 import {
   calculateSM2,
   prepareSRSQueue,
@@ -12,35 +20,147 @@ import {
   type ReviewQuality,
   type WordReviewData,
 } from "@/domain/services/SrsService.js";
-import { kpssOsymHistoryFlashcards } from "@/domain/constants/kpssOsymHistoryFlashcards.js";
-import { KpssFlashcard } from "@/services/kpss/kpssService.js";
+import type { KpssFlashcard } from "@/services/kpss/kpssService.js";
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
+
+/** localStorage key: AI-üretimli tarih flashcard kütüphanesi. */
+const AI_CARDS_KEY = "kpssAiSrsCards";
+
+/**
+ * AI'ya tarih konusundan `count` adet flashcard üretmesini söyleyen prompt.
+ * subject-tarih kuralı + JSON şema. Kod icine gömülü (repo convention,
+ * .md dosyaları repoda ölü).
+ */
+function buildSrsPrompt(subject: string, count: number): string {
+  return `Sen KPSS Tarih sınavına hazırlanan bir öğrenci için tekrar kartları (flashcard) üreten uzman tarih öğretmenisin.
+
+### Tarih Doğruluk Kuralları:
+Kronolojik olarak tamamen doğru, bilimsel literatüre uygun olmalı. Padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihi bağlamları kusursuz kurgulanmalı. Kronoloji kontrolü (olay-padişah-antlaşma-savaş eşleşmesi) üretim öncesi yapılmalı. Uydurma/kurgusal olaylar kesinlikle yasak.
+
+### Kart Özellikleri:
+- Her kartın ON YUZU: KPSS tarzı bir tarih sorusu veya eksik bilgi tamamlama (bilgi hatırlatıcı).
+- ARKA YUZU: Kısa, net, doğru cevap (1-2 cümle).
+- IPUCU: Cevabı hatırlatacak kısa anahtar kelime veya ipucu.
+- KATEGORI: Verilen konu adı.
+
+### Görev:
+"${subject}" konusu hakkında tam ${count} adet tarih flashcard'i oluştur.
+
+### Çıktı Formatı (BUNUN DIŞINA CIKMA):
+SADECE geçerli bir JSON dizisi dondur, baska hicbir metin, giriş veya kod blogu yazma:
+[
+  {
+    "question": "on yuz sorusu",
+    "answer": "kisa dogru cevap",
+    "hint": "ipucu",
+    "category": "${subject}"
+  }
+]
+Kesinlikle JSON formatı dışında hiçbir açıklama yazma.`;
+}
+
+/** AI yanıtından JSON dizisi ayiklar (markdown fance / ekstra metin guvenli). */
+function extractJsonArray(text: string): Array<Record<string, unknown>> {
+  const trimmed = text.trim();
+  // ??le/arkadaki markdown kod blogunu temizle
+  const cleaned = trimmed
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/m, "")
+    .trim();
+  const start = cleaned.indexOf("[");
+  const end = cleaned.lastIndexOf("]");
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error("AI response contains no JSON array");
+  }
+  const sliced = cleaned.slice(start, end + 1);
+  const parsed = JSON.parse(sliced);
+  if (!Array.isArray(parsed)) {
+    throw new Error("AI response is not a JSON array");
+  }
+  return parsed as Array<Record<string, unknown>>;
+}
+
+/** Kart kutuphanesini local depodan okur. */
+async function readAiCards(): Promise<KpssFlashcard[]> {
+  const res = await new Promise<Record<string, unknown>>((resolve) => {
+    chrome.storage.local.get([AI_CARDS_KEY], (r) => resolve(r as Record<string, unknown>));
+  });
+  return (res[AI_CARDS_KEY] as KpssFlashcard[]) || [];
+}
+
+/** Kart kutuphanesini local depoya yazar. */
+async function writeAiCards(cards: KpssFlashcard[]): Promise<void> {
+  await new Promise<void>((resolve) => {
+    chrome.storage.local.set({ [AI_CARDS_KEY]: cards }, () => resolve());
+  });
+}
 
 export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
   return {
-    /** Loads enriched SRS flashcard queue from tarih çıkmış soruları. */
+    /**
+     * AI'dan `count` tarih flashcard'i uretir ve local kutuphanesine ekler.
+     * Yeni kartlar mevcutlara append edilir (oncekileri korur).
+     */
+    async generateAiCards(subject: string, count: number = 5): Promise<KpssFlashcard[]> {
+      const config = await getAIConfigFromStorage();
+      const prompt = buildSrsPrompt(subject, count);
+      const aiResp = await callAIConfigured({
+        userPrompt: prompt,
+        aiProvider: config.aiProvider,
+        aiApiKey: config.aiApiKey,
+        aiModel: config.aiModel,
+        aiEndpoint: config.aiEndpoint,
+        enableWebSearch: false,
+      });
+
+      const raw = extractJsonArray(aiResp.reply);
+      const cards: KpssFlashcard[] = raw.map((item, i) => ({
+        id: `kpss_ai_${Date.now()}_${i}`,
+        question: String(item.question ?? ""),
+        answer: String(item.answer ?? ""),
+        hint: String(item.hint ?? ""),
+        category: String(item.category ?? subject),
+      }));
+
+      const existing = await readAiCards();
+      const merged = [...existing, ...cards];
+      await writeAiCards(merged);
+      return cards;
+    },
+
+    /** Tarih konusu için AI kartlarını non-select-local kutuphanesini olusturur (bos ise 5 kart). */
+    async ensureInitialCards(subject: string = "Tarih"): Promise<void> {
+      const existing = await readAiCards();
+      if (existing.length === 0) {
+        await this.generateAiCards(subject, 5);
+      }
+    },
+
+    /** Local AI kartlarından SM-2 queue kurar. Bos ise otomatik 5 kart uretir. */
     async loadSrsQueue(chapter: string = "all"): Promise<{
       queue: WordReviewData[];
       universe: KpssFlashcard[];
       chapters: string[];
     }> {
-      const progress: Record<string, unknown>[] = await srsRepo.getAll();
-
-      // Benzersiz bölüm listesi (ÖSYM çıkmış'taki ünite seçici gibi)
-      const chapters = Array.from(
-        new Set(kpssOsymHistoryFlashcards.map((c) => c.category)),
-      ).sort();
+      let cards = await readAiCards();
+      if (cards.length === 0) {
+        await this.generateAiCards("Tarih", 5);
+        cards = await readAiCards();
+      }
 
       let activeUniverseCards: KpssFlashcard[];
       if (chapter === "all") {
-        activeUniverseCards = kpssOsymHistoryFlashcards;
+        activeUniverseCards = cards;
       } else {
-        activeUniverseCards = kpssOsymHistoryFlashcards.filter(
-          (c) => c.category === chapter,
-        );
+        activeUniverseCards = cards.filter((c) => c.category === chapter);
+      }
+      if (activeUniverseCards.length === 0) {
+        activeUniverseCards = cards;
       }
 
-      // Eski kayıtları temizle: universe'te olmayan (notlardan gelen) kartlar atılır
+      const chapters = Array.from(new Set(cards.map((c) => c.category))).sort();
+
+      const progress = await srsRepo.getAll();
       const validIds = new Set(activeUniverseCards.map((c) => c.id));
       const filteredProgress = progress.filter((p) =>
         validIds.has(p.wordId as string),
@@ -55,8 +175,7 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       );
 
       const srsUniverse: SRSWordWithInfo[] = activeUniverseCards.map((w) => {
-        const p =
-          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+        const p = progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
         return { ...p, level: w.category, listType: "kpss", freq: 0 };
       });
 
@@ -80,13 +199,9 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       return { queue, universe: activeUniverseCards, chapters };
     },
 
-    /** Processes review quality rating with SM-2 algorithm and persists. */
-    async saveSrsReview(
-      reviewData: WordReviewData,
-      quality: ReviewQuality,
-    ): Promise<void> {
+    /** SM-2 ile tekrar kalitesi isler ve persist eder. */
+    async saveSrsReview(reviewData: WordReviewData, quality: ReviewQuality): Promise<void> {
       const outcome = calculateSM2(reviewData, quality, new Date());
-
       const progress = await srsRepo.getAll();
       const idx = progress.findIndex((p) => p.wordId === outcome.wordId);
       if (idx >= 0) {
@@ -94,7 +209,6 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       } else {
         progress.push(outcome as unknown as Record<string, unknown>);
       }
-
       await srsRepo.saveAll(progress);
     },
   };

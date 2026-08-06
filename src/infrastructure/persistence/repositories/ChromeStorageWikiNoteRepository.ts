@@ -1,6 +1,6 @@
 /**
  * ChromeStorageWikiNoteRepository
- * Infrastructure implementation of IWikiNoteRepository using chrome.storage.sync
+ * Infrastructure implementation of IWikiNoteRepository using chrome.storage.local
  * for KPSS wiki notes and auto-title settings.
  */
 
@@ -17,7 +17,7 @@ const AUTO_TITLE_SETTING_KEY = SYNC_KPSS_AUTO_TITLE;
 export class ChromeStorageWikiNoteRepository implements IWikiNoteRepository {
   async getAll(): Promise<KpssWikiNote[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([STORAGE_KEY], (res) => {
+      chrome.storage.local.get([STORAGE_KEY], (res) => {
         resolve((res[STORAGE_KEY] as KpssWikiNote[]) || []);
       });
     });
@@ -25,13 +25,13 @@ export class ChromeStorageWikiNoteRepository implements IWikiNoteRepository {
 
   async saveAll(notes: KpssWikiNote[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [STORAGE_KEY]: notes }, resolve);
+      chrome.storage.local.set({ [STORAGE_KEY]: notes }, resolve);
     });
   }
 
   async getAutoTitleSetting(): Promise<boolean> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([AUTO_TITLE_SETTING_KEY], (res) => {
+      chrome.storage.local.get([AUTO_TITLE_SETTING_KEY], (res) => {
         resolve(res[AUTO_TITLE_SETTING_KEY] === true);
       });
     });
@@ -39,7 +39,7 @@ export class ChromeStorageWikiNoteRepository implements IWikiNoteRepository {
 
   async saveAutoTitleSetting(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [AUTO_TITLE_SETTING_KEY]: enabled }, resolve);
+      chrome.storage.local.set({ [AUTO_TITLE_SETTING_KEY]: enabled }, resolve);
     });
   }
 }

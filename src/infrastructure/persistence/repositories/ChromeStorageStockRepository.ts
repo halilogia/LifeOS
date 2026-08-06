@@ -1,6 +1,6 @@
 /**
  * ChromeStorageStockRepository.ts
- * BIST Portföy, Kurallar ve Alarm geçmişinin chrome.storage.sync ile yönetilmesi.
+ * BIST Portföy, Kurallar ve Alarm geçmişinin chrome.storage.local ile yönetilmesi.
  */
 
 import type {
@@ -32,7 +32,7 @@ const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
 export class ChromeStorageStockRepository {
   async getPortfolio(): Promise<StockPortfolioItem[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([PORTFOLIO_KEY], (res) => {
+      chrome.storage.local.get([PORTFOLIO_KEY], (res) => {
         const items = res[PORTFOLIO_KEY] as StockPortfolioItem[] | undefined;
         resolve(items || []);
       });
@@ -41,13 +41,13 @@ export class ChromeStorageStockRepository {
 
   async savePortfolio(portfolio: StockPortfolioItem[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [PORTFOLIO_KEY]: portfolio }, resolve);
+      chrome.storage.local.set({ [PORTFOLIO_KEY]: portfolio }, resolve);
     });
   }
 
   async getRules(): Promise<StockRule[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([RULES_KEY], (res) => {
+      chrome.storage.local.get([RULES_KEY], (res) => {
         const rules = res[RULES_KEY] as StockRule[] | undefined;
         resolve(rules || []);
       });
@@ -56,13 +56,13 @@ export class ChromeStorageStockRepository {
 
   async saveRules(rules: StockRule[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [RULES_KEY]: rules }, resolve);
+      chrome.storage.local.set({ [RULES_KEY]: rules }, resolve);
     });
   }
 
   async getAlertLogs(): Promise<StockAlertLog[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([LOGS_KEY], (res) => {
+      chrome.storage.local.get([LOGS_KEY], (res) => {
         const logs = res[LOGS_KEY] as StockAlertLog[] | undefined;
         resolve(logs || []);
       });
@@ -71,7 +71,7 @@ export class ChromeStorageStockRepository {
 
   async saveAlertLogs(logs: StockAlertLog[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [LOGS_KEY]: logs }, resolve);
+      chrome.storage.local.set({ [LOGS_KEY]: logs }, resolve);
     });
   }
 
@@ -84,7 +84,7 @@ export class ChromeStorageStockRepository {
 
   async getTradeHistory(): Promise<StockTradeHistory[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([TRADE_HISTORY_KEY], (res) => {
+      chrome.storage.local.get([TRADE_HISTORY_KEY], (res) => {
         const items = res[TRADE_HISTORY_KEY] as StockTradeHistory[] | undefined;
         resolve(items || []);
       });
@@ -93,7 +93,7 @@ export class ChromeStorageStockRepository {
 
   async saveTradeHistory(items: StockTradeHistory[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [TRADE_HISTORY_KEY]: items }, resolve);
+      chrome.storage.local.set({ [TRADE_HISTORY_KEY]: items }, resolve);
     });
   }
 
@@ -106,7 +106,7 @@ export class ChromeStorageStockRepository {
 
   async getCashBalance(): Promise<StockCashBalance> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([CASH_KEY], (res) => {
+      chrome.storage.local.get([CASH_KEY], (res) => {
         const bal = res[CASH_KEY] as StockCashBalance | undefined;
         resolve(bal || { amount: 0, updatedAt: new Date().toISOString() });
       });
@@ -115,13 +115,13 @@ export class ChromeStorageStockRepository {
 
   async setCashBalance(balance: StockCashBalance): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [CASH_KEY]: balance }, resolve);
+      chrome.storage.local.set({ [CASH_KEY]: balance }, resolve);
     });
   }
 
   async getWatchlists(): Promise<StockWatchlist[]> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([WATCHLISTS_KEY], (res) => {
+      chrome.storage.local.get([WATCHLISTS_KEY], (res) => {
         const lists = res[WATCHLISTS_KEY] as StockWatchlist[] | undefined;
         resolve(lists || []);
       });
@@ -130,7 +130,7 @@ export class ChromeStorageStockRepository {
 
   async saveWatchlists(watchlists: StockWatchlist[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [WATCHLISTS_KEY]: watchlists }, resolve);
+      chrome.storage.local.set({ [WATCHLISTS_KEY]: watchlists }, resolve);
     });
   }
 
