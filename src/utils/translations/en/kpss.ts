@@ -115,8 +115,6 @@ export const kpss = {
   kpss_srs_medium: "Medium",
   kpss_srs_easy: "Easy",
   kpss_srs_source_all: "All Cards",
-  kpss_srs_source_preset: "Preset Cards",
-  kpss_srs_source_notes: "My Notes Only",
   kpss_srs_note_card: "Note Flashcard",
   kpss_notes_open_app: "Open in App",
   kpss_notes_open_tab: "Open in Tab",

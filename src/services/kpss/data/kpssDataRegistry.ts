@@ -54,10 +54,6 @@ const YEAR_FILES: Record<string, () => Promise<Record<string, unknown[]>>> = {
     import("./exam2009.json").then(
       (m) => (m as { default: Record<string, unknown[]> }).default,
     ),
-  tarih_arsivi: () =>
-    import("./exam_tarih_arsivi.json").then(
-      (m) => (m as { default: Record<string, unknown[]> }).default,
-    ),
 };
 
 /** Available exam year keys (static, ~200 bytes — no JSON loaded). */
