@@ -148,6 +148,10 @@ export const kpss = {
   kpss_planner_how_step4:
     '<strong>4. Daily Question Target:</strong> Based on your target net configured in settings, total required questions are distributed by subject weights. Your daily target updates using: <br /><code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">(Target Questions Left / Days Remaining)</code> dynamically each day.',
   kpss_past_exams_title: "ÖSYM Past Exams Practice Room",
+  kpss_past_exams_wrong: "❌ My Wrong Answers",
+  kpss_koleksiyon_cap: "📥 My Collection",
+  kpss_koleksiyon_add: "Save to collection",
+  kpss_koleksiyon_remove: "Remove from collection",
   kpss_past_exams_desc:
     "Solve original past Lisans exam questions by year or practice with randomly mixed questions from all years.",
   kpss_quiz_generating:

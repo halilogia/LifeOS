@@ -14,6 +14,7 @@ import {
 } from "@/services/kpss/kpssQuizService.js";
 import { fetchQuestionsSubsetFromAI as fetchQuestionsSubsetFromAI_service } from "@/services/kpss/kpssAiService.js";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
+import { addWrongQuestions } from "@/services/kpss/kpssQuestionBankService.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 
 export interface AIConfig {
@@ -250,6 +251,14 @@ export function createKpssQuizFlowService(kpssRepo: IKpssRepository) {
       await kpssRepo.savePastQuizzes(
         updatedPastQuizzes as unknown as Record<string, unknown>,
       );
+
+      // ❌ Yanlışları otomatik kaydet (local-first soru bankası)
+      const wrongQuestions: QuizQuestion[] = quizQuestions.filter(
+        (q, idx) => selectedAnswers[idx] !== q.correctAnswer,
+      );
+      if (wrongQuestions.length > 0) {
+        await addWrongQuestions(wrongQuestions);
+      }
 
       await kpssService.saveKpssDailyStats(
         quizQuestions.length,

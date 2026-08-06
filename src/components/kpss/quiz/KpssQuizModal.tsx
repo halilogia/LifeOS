@@ -32,6 +32,8 @@ interface KpssQuizModalProps {
   quizResultScore: number;
   quizError: string | null;
   cumulative: { totalQuestions: number; totalCorrect: number };
+  currentQuestionInCollection: boolean;
+  onToggleCollection: (q: QuizQuestion) => void;
   aiApiKey: string;
   aiEndpoint: string;
   pastQuizzes?: Record<string, KpssPastQuiz>;
@@ -63,6 +65,8 @@ export function KpssQuizModal({
   quizResultScore,
   quizError,
   cumulative,
+  currentQuestionInCollection,
+  onToggleCollection,
   aiApiKey,
   aiEndpoint,
   pastQuizzes,
@@ -186,6 +190,8 @@ export function KpssQuizModal({
                   currentQuestionIndex={currentQuestionIndex}
                   selectedAnswers={selectedAnswers}
                   totalQuizLength={totalQuizLength}
+                  isInCollection={currentQuestionInCollection}
+                  onToggleCollection={onToggleCollection}
                   onStartQuiz={onStartQuiz}
                   onSelectAnswer={onSelectAnswer}
                   onPreviousQuestion={onPreviousQuestion}

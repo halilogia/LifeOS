@@ -7,6 +7,12 @@ import {
   getPastExamQuestions,
   KpssPastQuiz,
 } from "@/services/kpss/kpssQuizService.js";
+import {
+  getCollection,
+  toggleCollectionQuestion,
+  questionKey,
+  getWrongQuestions,
+} from "@/services/kpss/kpssQuestionBankService.js";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 import { logger } from "@/utils/logger.js";
 
@@ -44,6 +50,16 @@ export function useKpssQuiz({
   const [pastQuizzes, setPastQuizzes] = useState<Record<string, KpssPastQuiz>>(
     {},
   );
+  // 📥 Koleksiyon: kullanıcının elle kaydettiği sorular (id seti + key listesi)
+  const [collectionKeys, setCollectionKeys] = useState<Set<string>>(new Set());
+
+  // Mevcut sorunun koleksiyonda olup olmadığı (current question için)
+  const currentQuestionInCollection =
+    quizQuestions[currentQuestionIndex] !== undefined
+      ? collectionKeys.has(
+          questionKey(quizQuestions[currentQuestionIndex]),
+        )
+      : false;
   // Birikimli başarı: konuda çözülen toplam soru / doğru (min 100 soru + %80 şartı)
   const [cumulative, setCumulative] = useState<{
     totalQuestions: number;
@@ -195,12 +211,30 @@ export function useKpssQuiz({
     countLimit?: number,
     selectedChapter?: string,
   ) => {
-    const questions = await getPastExamQuestions(
-      year,
-      subject,
-      countLimit,
-      selectedChapter,
-    );
+    let questions: QuizQuestion[];
+
+    if (year === "yanlis") {
+      // ❌ Yanlışlarım — sınavlarda yanlış yapılan sorular
+      const wrongList = await getWrongQuestions();
+      questions = [...wrongList].sort(() => Math.random() - 0.5);
+      if (countLimit && countLimit > 0 && questions.length > countLimit) {
+        questions = questions.slice(0, countLimit);
+      }
+    } else if (year === "koleksiyon") {
+      // 📥 Koleksiyonum — kullanıcının kaydettiği sorular
+      const collection = await getCollection();
+      questions = [...collection].sort(() => Math.random() - 0.5);
+      if (countLimit && countLimit > 0 && questions.length > countLimit) {
+        questions = questions.slice(0, countLimit);
+      }
+    } else {
+      questions = await getPastExamQuestions(
+        year,
+        subject,
+        countLimit,
+        selectedChapter,
+      );
+    }
 
     if (questions.length === 0) {
       setQuizError(t.kpss_quiz_no_past);
@@ -229,7 +263,11 @@ export function useKpssQuiz({
         ? t.kpss_exam_mixed_years || "Karma Deneme"
         : year === "tarih_arsivi"
           ? `Tarih Soru Arşivi (${selectedChapter && selectedChapter !== "all" ? selectedChapter : "Tüm Üniteler"})`
-          : year;
+          : year === "yanlis"
+            ? (t.kpss_past_exams_wrong || "Yanlışlarım")
+            : year === "koleksiyon"
+              ? (t.kpss_koleksiyon_cap || "Koleksiyonum")
+              : year;
 
     setActiveQuizTopic(`${yearName} (${questions.length} Soru)`);
     setQuizLoading(false);
@@ -302,9 +340,20 @@ export function useKpssQuiz({
     setPastQuizzes(loaded);
   };
 
-  // Başlangıçta geçmiş testleri yükle — aynı konuya tekrar girilince sonuç/sorular görünsün
+  const loadCollection = async () => {
+    const list = await getCollection();
+    setCollectionKeys(new Set(list.map(questionKey)));
+  };
+
+  const handleToggleCollection = async (q: QuizQuestion) => {
+    const updated = await toggleCollectionQuestion(q);
+    setCollectionKeys(new Set(updated.map(questionKey)));
+  };
+
+  // Başlangıçta geçmiş testleri ve koleksiyonu yükle
   useEffect(() => {
     void loadPastQuizzes();
+    void loadCollection();
   }, []);
 
   return {
@@ -328,6 +377,8 @@ export function useKpssQuiz({
     setQuizError,
     pastQuizzes,
     cumulative,
+    currentQuestionInCollection,
+    handleToggleCollection,
     fetchQuizFromAI,
     handleFinishQuiz,
     handleSaveExternalResult,

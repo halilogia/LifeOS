@@ -501,6 +501,8 @@ export function KpssView({
         quizResultScore={quiz.quizResultScore}
         quizError={quiz.quizError}
         cumulative={quiz.cumulative}
+        currentQuestionInCollection={quiz.currentQuestionInCollection}
+        onToggleCollection={quiz.handleToggleCollection}
         aiApiKey={aiApiKey}
         aiEndpoint={aiEndpoint}
         pastQuizzes={quiz.pastQuizzes}
