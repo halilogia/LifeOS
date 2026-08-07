@@ -1,64 +1,19 @@
 import { useState, useEffect } from "preact/hooks";
-import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
-import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { GeneralSettingsTab } from "@/components/settings/GeneralSettingsTab.js";
 import { AiSettingsTab } from "@/components/settings/AiSettingsTab.js";
 import { SyncSettingsTab } from "@/components/settings/SyncSettingsTab.js";
 import { KpssSettingsTab } from "@/components/settings/KpssSettingsTab.js";
 import { DetoxSettingsTab } from "@/components/settings/DetoxSettingsTab.js";
+import { useSettingsStore } from "@/presentation/store/settingsStore.js";
+import { useUIStore } from "@/presentation/store/uiStore.js";
+import { useSyncStore } from "@/presentation/store/syncStore.js";
+import { useTodosStore } from "@/presentation/store/todosStore.js";
+import { kpssService } from "@/services/kpss/kpssService.js";
 
 export interface SettingsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  lang: Language;
-  onToggleLang: () => void;
-  freeGamesNotificationsEnabled: boolean;
-  onToggleFreeGamesNotifications: () => void;
-  calendarNotificationsEnabled: boolean;
-  onToggleCalendarNotifications: () => void;
-  pomoBlockEnabled: boolean;
-  onTogglePomoBlock: () => void;
-  universalInfoBoxEnabled: boolean;
-  onToggleUniversalInfoBox: () => void;
-  universalInfoBoxHotkey: string;
-  onUniversalInfoBoxHotkeyChange: (hotkey: string) => void;
-  whatsappBridgeEnabled: boolean;
-  onToggleWhatsappBridge: () => void;
-  telegramBridgeEnabled: boolean;
-  onToggleTelegramBridge: () => void;
-  autoGroupTabsEnabled?: boolean;
-  onToggleAutoGroupTabs?: () => void;
-  onExportBackup: () => void;
-  onImportBackup: (e: Event) => void;
-  onClearAllData: () => void;
-  aiApiKey: string;
-  aiModel: string;
-  aiEndpoint: string;
-  onUpdateAIConfig: (
-    provider: string,
-    key: string,
-    model: string,
-    endpoint?: string,
-  ) => void;
-  aiShowThinking: boolean;
-  onUpdateAIShowThinking: (val: boolean) => void;
-  googleUserEmail: string;
-  isSyncing: boolean;
-  onGoogleLogin: () => void;
-  onGoogleLogout: () => void;
-  syncSettings: GoogleSyncSettings;
-  onBackupToGoogleDrive: () => void;
-  onRestoreFromGoogleDrive: () => void;
-  kpssGoalType: "net" | "score";
-  kpssTargetNet: number;
-  kpssTargetScore: number;
-  onKpssGoalTypeChange: (type: "net" | "score") => void;
-  onKpssTargetNetChange: (val: number) => void;
-  onKpssTargetScoreChange: (val: number) => void;
-  onResetKpssData?: () => void;
-  detoxLimits: Record<string, number>;
-  onDetoxLimitsChange: (limits: Record<string, number>) => void;
   initialTab?: "general" | "kpss" | "detox" | "ai" | "sync";
   onNotify?: (message: string) => void;
 }
@@ -66,52 +21,114 @@ export interface SettingsDrawerProps {
 export function SettingsDrawer({
   isOpen,
   onClose,
-  lang,
-  onToggleLang,
-  freeGamesNotificationsEnabled,
-  onToggleFreeGamesNotifications,
-  calendarNotificationsEnabled,
-  onToggleCalendarNotifications,
-  pomoBlockEnabled,
-  onTogglePomoBlock,
-  universalInfoBoxEnabled,
-  onToggleUniversalInfoBox,
-  universalInfoBoxHotkey,
-  onUniversalInfoBoxHotkeyChange,
-  whatsappBridgeEnabled,
-  onToggleWhatsappBridge,
-  telegramBridgeEnabled,
-  onToggleTelegramBridge,
-  autoGroupTabsEnabled,
-  onToggleAutoGroupTabs,
-  onExportBackup,
-  onImportBackup,
-  onClearAllData,
-  aiApiKey,
-  aiModel,
-  aiEndpoint,
-  onUpdateAIConfig,
-  aiShowThinking,
-  onUpdateAIShowThinking,
-  googleUserEmail,
-  isSyncing,
-  onGoogleLogin,
-  onGoogleLogout,
-  syncSettings,
-  onBackupToGoogleDrive,
-  onRestoreFromGoogleDrive,
-  kpssGoalType,
-  kpssTargetNet,
-  kpssTargetScore,
-  onKpssGoalTypeChange,
-  onKpssTargetNetChange,
-  onKpssTargetScoreChange,
-  onResetKpssData,
-  detoxLimits,
-  onDetoxLimitsChange,
   initialTab,
   onNotify,
 }: SettingsDrawerProps) {
+  // Store selectors
+  const lang = useSettingsStore((s) => s.lang);
+  const onToggleLang = useSettingsStore((s) => s.handleToggleLang);
+  const freeGamesNotificationsEnabled = useSettingsStore(
+    (s) => s.freeGamesNotificationsEnabled,
+  );
+  const onToggleFreeGamesNotifications = useSettingsStore(
+    (s) => s.handleToggleFreeGamesNotifications,
+  );
+  const calendarNotificationsEnabled = useSettingsStore(
+    (s) => s.calendarNotificationsEnabled,
+  );
+  const onToggleCalendarNotifications = useSettingsStore(
+    (s) => s.handleToggleCalendarNotifications,
+  );
+  const pomoBlockEnabled = useSettingsStore((s) => s.pomoBlockEnabled);
+  const onTogglePomoBlock = useSettingsStore((s) => s.handleTogglePomoBlock);
+  const universalInfoBoxEnabled = useSettingsStore(
+    (s) => s.universalInfoBoxEnabled,
+  );
+  const onToggleUniversalInfoBox = useSettingsStore(
+    (s) => s.handleToggleUniversalInfoBox,
+  );
+  const universalInfoBoxHotkey = useSettingsStore(
+    (s) => s.universalInfoBoxHotkey,
+  );
+  const onUniversalInfoBoxHotkeyChange = useSettingsStore(
+    (s) => s.handleUniversalInfoBoxHotkeyChange,
+  );
+  const whatsappBridgeEnabled = useSettingsStore(
+    (s) => s.whatsappBridgeEnabled,
+  );
+  const onToggleWhatsappBridge = useSettingsStore(
+    (s) => s.handleToggleWhatsappBridge,
+  );
+  const telegramBridgeEnabled = useSettingsStore(
+    (s) => s.telegramBridgeEnabled,
+  );
+  const onToggleTelegramBridge = useSettingsStore(
+    (s) => s.handleToggleTelegramBridge,
+  );
+  const autoGroupTabsEnabled = useSettingsStore(
+    (s) => s.autoGroupTabsEnabled,
+  );
+  const onToggleAutoGroupTabs = useSettingsStore(
+    (s) => s.handleToggleAutoGroupTabs,
+  );
+  const aiApiKey = useSettingsStore((s) => s.aiApiKey);
+  const aiModel = useSettingsStore((s) => s.aiModel);
+  const aiEndpoint = useSettingsStore((s) => s.aiEndpoint);
+  const onUpdateAIConfig = useSettingsStore((s) => s.handleUpdateAIConfig);
+  const aiShowThinking = useSettingsStore((s) => s.aiShowThinking);
+  const onUpdateAIShowThinking = useSettingsStore(
+    (s) => s.handleUpdateAIShowThinking,
+  );
+  const kpssGoalType = useSettingsStore((s) => s.kpssGoalType);
+  const kpssTargetNet = useSettingsStore((s) => s.kpssTargetNet);
+  const kpssTargetScore = useSettingsStore((s) => s.kpssTargetScore);
+  const onKpssGoalTypeChange = useSettingsStore(
+    (s) => s.handleKpssGoalTypeChange,
+  );
+  const onKpssTargetNetChange = useSettingsStore(
+    (s) => s.handleKpssTargetNetChange,
+  );
+  const onKpssTargetScoreChange = useSettingsStore(
+    (s) => s.handleKpssTargetScoreChange,
+  );
+  const detoxLimits = useSettingsStore((s) => s.detoxLimits);
+  const onDetoxLimitsChange = useSettingsStore(
+    (s) => s.handleDetoxLimitsChange,
+  );
+
+  // UI store (sync-related + drawer state)
+  const googleUserEmail = useUIStore((s) => s.googleUserEmail);
+  const isSyncing = useUIStore((s) => s.isSyncing);
+  const syncSettings = useUIStore((s) => s.syncSettings);
+  const showAlert = useUIStore((s) => s.showAlert);
+  const showConfirm = useUIStore((s) => s.showConfirm);
+
+  const onGoogleLogin = useSyncStore((s) => s.handleGoogleLogin);
+  const onGoogleLogout = useSyncStore((s) => s.handleGoogleLogout);
+  const onBackupToGoogleDrive = useSyncStore((s) => s.handleBackupToGoogleDrive);
+  const onRestoreFromGoogleDrive = useSyncStore(
+    (s) => s.handleRestoreFromGoogleDrive,
+  );
+  const onExportBackup = useTodosStore((s) => s.handleExportBackup);
+  const onImportBackup = useTodosStore((s) => s.handleImportBackup);
+  const clearAllData = useSettingsStore((s) => s.handleClearAllData);
+
+  const handleClearAllData = () => {
+    showConfirm("Tüm veriler kalıcı olarak silinecek. Emin misiniz?", () => {
+      void clearAllData();
+    });
+  };
+
+  const handleResetKpssData = () => {
+    showConfirm(
+      "KPSS verileri sıfırlanacak. Bu işlem geri alınamaz. Emin misiniz?",
+      async () => {
+        await kpssService.resetAllKpssData();
+        showAlert(translations[lang].alert_kpss_reset_success);
+      },
+    );
+  };
+
   const t = translations[lang];
   const [settingsTab, setSettingsTab] = useState<
     "general" | "kpss" | "detox" | "ai" | "sync"
@@ -207,7 +224,7 @@ export function SettingsDrawer({
             onKpssGoalTypeChange={onKpssGoalTypeChange}
             onKpssTargetNetChange={onKpssTargetNetChange}
             onKpssTargetScoreChange={onKpssTargetScoreChange}
-            onResetKpssData={onResetKpssData}
+            onResetKpssData={handleResetKpssData}
           />
         )}
 
@@ -247,7 +264,7 @@ export function SettingsDrawer({
             onRestoreFromGoogleDrive={onRestoreFromGoogleDrive}
             onExportBackup={onExportBackup}
             onImportBackup={onImportBackup}
-            onClearAllData={onClearAllData}
+            onClearAllData={handleClearAllData}
           />
         )}
       </div>

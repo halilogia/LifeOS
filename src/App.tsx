@@ -1,24 +1,11 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/domain/value-objects/Language.js";
-import { useTodos } from "@/presentation/hooks/useTodos.js";
-import { useSync } from "@/presentation/hooks/useSync.js";
-import { useSettings } from "@/presentation/hooks/useSettings.js";
-import { useUI } from "@/presentation/hooks/useUI.js";
-import { useAppInit } from "@/presentation/hooks/useAppInit.js";
-import { useAppTodoInput } from "@/presentation/hooks/useAppTodoInput.js";
-import { useAppConfirmActions } from "@/presentation/hooks/useAppConfirmActions.js";
-import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
-import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
-import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
-import { createSyncPort } from "@/application/ports/createSyncPort.js";
-import { SyncToLocalMigration } from "@/infrastructure/persistence/migrations/SyncToLocalMigration.js";
-import type { ITodoSyncPort } from "@/application/ports/ITodoSyncPort.js";
-import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
-import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
-import type { ISettingsRepository } from "@/domain/repositories/ISettingsRepository.js";
-import type { AppInitDependencies } from "@/presentation/hooks/useAppInit.js";
-import { kpssService } from "@/services/kpss/kpssService.js";
+
+import { useSettingsStore } from "@/presentation/store/settingsStore.js";
+import { useUIStore } from "@/presentation/store/uiStore.js";
+import { useTodosStore } from "@/presentation/store/todosStore.js";
+import { useSyncStore } from "@/presentation/store/syncStore.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
 import { ViewRouter } from "@/components/ViewRouter.js";
@@ -28,193 +15,71 @@ import { HeroHeader } from "@/components/HeroHeader.js";
 import { FooterQuote } from "@/components/FooterQuote.js";
 import { AppTopHeader } from "@/components/AppTopHeader.js";
 import { KpssNotesDashboard } from "@/components/kpss/wiki/KpssNotesDashboard.js";
-import type { Todo } from "@/types/types.js";
-
-// Singleton instances â€” created once outside component to avoid re-instantiation
-const todoRepository = new ChromeStorageTodoRepository();
-const syncRepo: ISyncRepository = new ChromeStorageSyncRepository();
-const syncPort: ITodoSyncPort = createSyncPort();
-const settingsRepo: ISettingsRepository = new ChromeStorageSettingsRepository();
-const migration = new SyncToLocalMigration();
-const appInitDeps: AppInitDependencies = {
-  settingsRepo,
-  todoRepo: todoRepository,
-  syncRepo,
-  syncPort,
-  migration,
-};
 
 export function App() {
-  // â”€â”€â”€ Settings Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const {
-    lang,
-    setLangState,
-    sidebarOpen,
-    setSidebarOpenState,
-    freeGamesNotificationsEnabled,
-    calendarNotificationsEnabled,
-    pomoBlockEnabled,
-    universalInfoBoxEnabled,
-    universalInfoBoxHotkey,
-    autoGroupTabsEnabled,
-    aiProvider,
-    aiApiKey,
-    aiModel,
-    aiEndpoint,
-    aiShowThinking,
-    kpssGoalType,
-    kpssTargetNet,
-    kpssTargetScore,
-    detoxLimits,
-    loadSettings,
-    handleToggleLang,
-    handleSidebarToggle,
-    handleToggleFreeGamesNotifications,
-    handleToggleCalendarNotifications,
-    handleTogglePomoBlock,
-    handleToggleUniversalInfoBox,
-    handleUniversalInfoBoxHotkeyChange,
-    whatsappBridgeEnabled,
-    telegramBridgeEnabled,
-    handleToggleWhatsappBridge,
-    handleToggleTelegramBridge,
-    handleToggleAutoGroupTabs,
-    handleClearAllData,
-    handleUpdateAIConfig,
-    handleUpdateAIShowThinking,
-    handleKpssGoalTypeChange,
-    handleKpssTargetNetChange,
-    handleKpssTargetScoreChange,
-    handleDetoxLimitsChange,
-  } = useSettings();
+  // --- Settings (shared store) ---
+  const lang = useSettingsStore((s) => s.lang);
+  const sidebarOpen = useSettingsStore((s) => s.sidebarOpen);
+  const handleSidebarToggle = useSettingsStore((s) => s.handleSidebarToggle);
 
-  // â”€â”€â”€ UI Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const {
-    activeView,
-    setActiveView,
-    sidebarOrder,
-    setSidebarOrder,
-    activeTab,
-    setActiveTab,
-    settingsOpen,
-    setSettingsOpen,
-    settingsInitialTab,
-    clockText,
-    dateText,
-    quoteText,
-    confirmDialog,
-    setConfirmDialog,
-    alertDialog,
-    setAlertDialog,
-    googleUserEmail,
-    setGoogleUserEmail,
-    isSyncing,
-    setIsSyncing,
-    syncSettings,
-    setSyncSettings,
-    showAlert,
-    showConfirm,
-    handleTabChangeUI,
-    handleOpenSettings,
-    loadSidebarOrder,
-    handleViewChange,
-    refreshClock,
-    refreshQuote,
-  } = useUI();
+  // --- UI (shared store) ---
+  const activeView = useUIStore((s) => s.activeView);
+  const sidebarOrder = useUIStore((s) => s.sidebarOrder);
+  const setSidebarOrder = useUIStore((s) => s.setSidebarOrder);
+  const activeTab = useUIStore((s) => s.activeTab);
+  const settingsOpen = useUIStore((s) => s.settingsOpen);
+  const setSettingsOpen = useUIStore((s) => s.setSettingsOpen);
+  const settingsInitialTab = useUIStore((s) => s.settingsInitialTab);
+  const clockText = useUIStore((s) => s.clockText);
+  const dateText = useUIStore((s) => s.dateText);
+  const quoteText = useUIStore((s) => s.quoteText);
+  const confirmDialog = useUIStore((s) => s.confirmDialog);
+  const setConfirmDialog = useUIStore((s) => s.setConfirmDialog);
+  const alertDialog = useUIStore((s) => s.alertDialog);
+  const setAlertDialog = useUIStore((s) => s.setAlertDialog);
+  const showAlert = useUIStore((s) => s.showAlert);
+  const handleViewChange = useUIStore((s) => s.handleViewChange);
+  const handleTabChange = useUIStore((s) => s.handleTabChange);
+  const handleOpenSettings = useUIStore((s) => s.handleOpenSettings);
+  const refreshClock = useUIStore((s) => s.refreshClock);
+  const refreshQuote = useUIStore((s) => s.refreshQuote);
+  const setGoogleUserEmail = useUIStore((s) => s.setGoogleUserEmail);
+  const setSyncSettings = useUIStore((s) => s.setSyncSettings);
 
-  // â”€â”€â”€ Sync Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const {
-    handleManualSyncTasks,
-    handleGoogleLogin,
-    handleGoogleLogout,
-    handleExportBackup,
-    handleImportBackup,
-    handleBackupToGoogleDrive,
-    handleRestoreFromGoogleDrive,
-    triggerCloudBackup,
-  } = useSync({
-    showAlert,
-    errorLabel: "Sync error",
-    detailLabel: "Detail",
-  });
+  // --- Sync (shared store) ---
+  useSyncStore(); // ensure labels default
+  useSyncStore((s) => s.triggerCloudBackup); // keep referenced
 
-  // â”€â”€â”€ Todos Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const {
-    todos,
-    handleAddTodo,
-    handleToggleTodo,
-    handleDeleteTodo,
-    handleMoveTaskStatus,
-    handleMoveTaskDirection,
-    handleUpdateTodoUrgentImportant,
-    initTodos,
-  } = useTodos(
-    todoRepository,
-    syncPort,
-    syncRepo,
-    triggerCloudBackup,
-    showAlert,
-    getTranslation(lang as Language),
-  );
-
-  // â”€â”€â”€ App Init Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  useAppInit(appInitDeps, {
-    onSettingsLoaded: loadSettings,
-    onTodosLoaded: initTodos,
-    onSyncSettingsLoaded: (settings) => setSyncSettings(settings),
-    onGoogleUserEmail: (email) => setGoogleUserEmail(email),
-    onSidebarOrderLoaded: (order) => setSidebarOrder(order),
-    onQuoteRefreshed: (l: Language) => refreshQuote(l),
-    onClockStarted: () => refreshClock(lang as Language),
-  });
-
-  // Sync initTodos into the DI-backed useAppInit flow
+  // --- Init effect: load settings/ui/sidebar order + refresh clock/quote once ---
   useEffect(() => {
-    initTodos();
+    const s = useSettingsStore.getState();
+    const ui = useUIStore.getState();
+    const sync = useSyncStore.getState();
+    const todos = useTodosStore.getState();
+
+    void (async () => {
+      await s.loadSettings();
+      await sync.loadSyncSettings();
+      await ui.loadSidebarOrder();
+      setGoogleUserEmail(useUIStore.getState().googleUserEmail);
+      await todos.initTodos();
+      const langNow = useSettingsStore.getState().lang;
+      ui.refreshClock(langNow);
+      ui.refreshQuote(langNow);
+    })();
   }, []);
 
-  // Re-render clock/quote on lang change
+  // Keep clock/quote in sync when lang changes (e.g. toggled in drawer)
   useEffect(() => {
-    refreshClock(lang as Language);
-    refreshQuote(lang as Language);
+    refreshClock(lang);
+    refreshQuote(lang);
   }, [lang]);
 
-  // â”€â”€â”€ Todo Input Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const {
-    todoText,
-    setTodoText,
-    todoRepeat,
-    todoDueDate,
-    setTodoDueDate,
-    handleAddTodoClick,
-    handleKeyPress,
-    handleRepeatChange,
-    handleTabChange,
-  } = useAppTodoInput({
-    lang: lang as Language,
-    onAddTodo: handleAddTodo,
-    activeTab,
-    setActiveTab,
-    setActiveView,
-    handleTabChangeUI,
-  });
+  useEffect(() => {
+    setSyncSettings(useUIStore.getState().syncSettings);
+  }, []);
 
-  // â”€â”€â”€ Confirm Actions Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const { handleClearAllDataConfirm, handleResetKpssDataConfirm } =
-    useAppConfirmActions({ showConfirm });
-
-  // â”€â”€â”€ Continue to Chat callback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const handleContinueToChat = useCallback(
-    (symbol: string) => {
-      // Stock bilgisini sessionStorage'a yaz ki AI Chat okusun
-      sessionStorage.setItem("hermes_pending_stock", symbol);
-      handleViewChange("ai-chat");
-    },
-    [handleViewChange],
-  );
-
-  // â”€â”€â”€ JSX Template â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const t = getTranslation(lang as Language);
+  const t = getTranslation(lang);
 
   if (
     typeof window !== "undefined" &&
@@ -241,75 +106,14 @@ export function App() {
         onOrderChange={(newOrder) => setSidebarOrder(newOrder)}
       />
 
-      {/* Top Input Header */}
-      {activeView === "list" && (
-        <AppTopHeader
-          t={t}
-          lang={lang as Language}
-          todoText={todoText}
-          onTodoTextChange={setTodoText}
-          onKeyPress={handleKeyPress}
-          todoRepeat={todoRepeat}
-          onRepeatChange={handleRepeatChange}
-          todoDueDate={todoDueDate}
-          onDueDateChange={setTodoDueDate}
-          onAddTodoClick={handleAddTodoClick}
-        />
-      )}
+      {/* Top Input Header — view= list only */}
+      {activeView === "list" && <AppTopHeader lang={lang} t={t} />}
 
-      {/* Settings Drawer */}
+      {/* Settings Drawer — pulls everything from stores internally */}
       <SettingsDrawer
         isOpen={settingsOpen}
         onClose={() => setSettingsOpen(false)}
         initialTab={settingsInitialTab}
-        lang={lang as Language}
-        onToggleLang={handleToggleLang}
-        freeGamesNotificationsEnabled={freeGamesNotificationsEnabled}
-        onToggleFreeGamesNotifications={handleToggleFreeGamesNotifications}
-        calendarNotificationsEnabled={calendarNotificationsEnabled}
-        onToggleCalendarNotifications={handleToggleCalendarNotifications}
-        pomoBlockEnabled={pomoBlockEnabled}
-        onTogglePomoBlock={handleTogglePomoBlock}
-        universalInfoBoxEnabled={universalInfoBoxEnabled}
-        onToggleUniversalInfoBox={handleToggleUniversalInfoBox}
-        universalInfoBoxHotkey={universalInfoBoxHotkey}
-        onUniversalInfoBoxHotkeyChange={handleUniversalInfoBoxHotkeyChange}
-        whatsappBridgeEnabled={whatsappBridgeEnabled}
-        onToggleWhatsappBridge={handleToggleWhatsappBridge}
-        telegramBridgeEnabled={telegramBridgeEnabled}
-        onToggleTelegramBridge={handleToggleTelegramBridge}
-        autoGroupTabsEnabled={autoGroupTabsEnabled}
-        onToggleAutoGroupTabs={handleToggleAutoGroupTabs}
-        onExportBackup={handleExportBackup}
-        onImportBackup={handleImportBackup}
-        onClearAllData={() => handleClearAllDataConfirm(handleClearAllData)}
-        aiApiKey={aiApiKey}
-        aiModel={aiModel}
-        aiEndpoint={aiEndpoint}
-        onUpdateAIConfig={handleUpdateAIConfig}
-        aiShowThinking={aiShowThinking}
-        onUpdateAIShowThinking={handleUpdateAIShowThinking}
-        googleUserEmail={googleUserEmail}
-        isSyncing={isSyncing}
-        onGoogleLogin={handleGoogleLogin}
-        onGoogleLogout={handleGoogleLogout}
-        syncSettings={syncSettings}
-        onBackupToGoogleDrive={handleBackupToGoogleDrive}
-        onRestoreFromGoogleDrive={handleRestoreFromGoogleDrive}
-        kpssGoalType={kpssGoalType}
-        kpssTargetNet={kpssTargetNet}
-        kpssTargetScore={kpssTargetScore}
-        onKpssGoalTypeChange={handleKpssGoalTypeChange}
-        onKpssTargetNetChange={handleKpssTargetNetChange}
-        onKpssTargetScoreChange={handleKpssTargetScoreChange}
-        onResetKpssData={() =>
-          handleResetKpssDataConfirm(async () => {
-            await kpssService.resetAllKpssData();
-            showAlert(t.alert_kpss_reset_success);
-          })
-        }
-        detoxLimits={detoxLimits}
-        onDetoxLimitsChange={handleDetoxLimitsChange}
         onNotify={(message: string) => showAlert(message)}
       />
 
@@ -318,36 +122,10 @@ export function App() {
         {sidebarOrder.length > 0 && activeView === sidebarOrder[0] && (
           <HeroHeader clockText={clockText} dateText={dateText} />
         )}
-        <ViewRouter
-          activeView={activeView}
-          lang={lang as Language}
-          todos={todos}
-          activeTab={activeTab}
-          syncSettings={syncSettings}
-          isSyncing={isSyncing}
-          aiProvider={aiProvider}
-          aiApiKey={aiApiKey}
-          aiModel={aiModel}
-          aiEndpoint={aiEndpoint}
-          aiShowThinking={aiShowThinking}
-          kpssGoalType={kpssGoalType}
-          kpssTargetNet={kpssTargetNet}
-          kpssTargetScore={kpssTargetScore}
-          onTabChange={handleTabChange}
-          onToggleTodo={handleToggleTodo}
-          onDeleteTodo={handleDeleteTodo}
-          onMoveTaskStatus={handleMoveTaskStatus}
-          onMoveTaskDirection={handleMoveTaskDirection}
-          onUpdateTodoUrgentImportant={handleUpdateTodoUrgentImportant}
-          onAddTodo={handleAddTodo}
-          onManualSync={handleManualSyncTasks}
-          onShowConfirm={showConfirm}
-          onSettingsOpen={handleOpenSettings}
-          onContinueToChat={handleContinueToChat}
-        />
+        <ViewRouter />
       </main>
 
-      {/* Footer Quote â€” outside container, zero layout impact */}
+      {/* Footer Quote — outside container, zero layout impact */}
       {quoteText && activeView !== "ai-chat" && (
         <FooterQuote quoteText={quoteText} />
       )}

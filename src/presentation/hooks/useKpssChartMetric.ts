@@ -1,26 +1,14 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+/**
+ * useKpssChartMetric — facade over the Zustand singleton store.
+ * Signature unchanged; consumer components untouched.
+ */
+
+import {
+  useKpssChartMetricState,
+} from "@/presentation/store/kpssChartMetricStore.js";
 
 export function useKpssChartMetric() {
-  const [chartMetric, setChartMetric] = useState<
-    "all" | "questions" | "videos"
-  >("all");
-
-  useEffect(() => {
-    chrome.storage.local.get(["kpss_chart_metric_mode"], (res) => {
-      const mode = res?.kpss_chart_metric_mode;
-      if (mode === "all" || mode === "questions" || mode === "videos") {
-        setChartMetric(mode);
-      }
-    });
-  }, []);
-
-  const saveChartMetric = useCallback(
-    (mode: "all" | "questions" | "videos") => {
-      setChartMetric(mode);
-      chrome.storage.local.set({ kpss_chart_metric_mode: mode });
-    },
-    [],
-  );
-
-  return { chartMetric, saveChartMetric };
+  const chartMetric = useKpssChartMetricState((s) => s.chartMetric);
+  const setChartMetric = useKpssChartMetricState((s) => s.setChartMetric);
+  return { chartMetric, saveChartMetric: setChartMetric };
 }
