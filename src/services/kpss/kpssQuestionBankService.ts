@@ -8,16 +8,14 @@
  */
 
 import { IQuestionBankRepository } from "@/domain/repositories/IQuestionBankRepository.js";
+import { ChromeStorageQuestionBankRepository } from "@/infrastructure/persistence/repositories/ChromeStorageQuestionBankRepository.js";
 import type { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
-let repo: IQuestionBankRepository | null = null;
+const defaultRepo = new ChromeStorageQuestionBankRepository();
+let repo: IQuestionBankRepository = defaultRepo;
 
 function getRepo(): IQuestionBankRepository {
-  if (!repo) {
-    const { ChromeStorageQuestionBankRepository } = require("@/infrastructure/persistence/repositories/ChromeStorageQuestionBankRepository.js");
-    repo = new ChromeStorageQuestionBankRepository();
-  }
-  return repo!;
+  return repo;
 }
 
 /** Stable dedupe id from question text (first 120 chars normalized). */

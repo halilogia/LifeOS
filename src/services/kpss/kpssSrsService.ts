@@ -82,22 +82,17 @@ function extractJsonArray(text: string): Array<Record<string, unknown>> {
   return parsed as Array<Record<string, unknown>>;
 }
 
-/** Kart kutuphanesini local depodan okur. */
-async function readAiCards(): Promise<KpssFlashcard[]> {
-  const res = await new Promise<Record<string, unknown>>((resolve) => {
-    chrome.storage.local.get([AI_CARDS_KEY], (r) => resolve(r as Record<string, unknown>));
-  });
-  return (res[AI_CARDS_KEY] as KpssFlashcard[]) || [];
+/** Kart kutuphanesini repository uzerinden okur. */
+async function readAiCards(srsRepo: ISrsProgressRepository): Promise<KpssFlashcard[]> {
+  return srsRepo.getAiCards();
 }
 
-/** Kart kutuphanesini local depoya yazar. */
-async function writeAiCards(cards: KpssFlashcard[]): Promise<void> {
-  await new Promise<void>((resolve) => {
-    chrome.storage.local.set({ [AI_CARDS_KEY]: cards }, () => {
-      scheduleCloudBackup();
-      resolve();
-    });
-  });
+/** Kart kutuphanesini repository uzerinden yazar. */
+async function writeAiCards(
+  srsRepo: ISrsProgressRepository,
+  cards: KpssFlashcard[],
+): Promise<void> {
+  await srsRepo.saveAiCards(cards);
 }
 
 /**
@@ -173,9 +168,9 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
         category: String(item.category ?? subject),
       }));
 
-      const existing = await readAiCards();
+      const existing = await readAiCards(srsRepo);
       const merged = [...existing, ...cards];
-      await writeAiCards(merged);
+      await writeAiCards(srsRepo, merged);
       return cards;
     },
 
@@ -184,7 +179,7 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
      * yoksa / cagri basarisiz olursa yerlesik 5 fallback karta duser (SRS asla bos kalmaz).
      */
     async ensureInitialCards(subject: string = "Tarih"): Promise<void> {
-      const existing = await readAiCards();
+      const existing = await readAiCards(srsRepo);
       if (existing.length > 0) {
         return;
       }
@@ -195,7 +190,7 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
           "[kpssSrs] AI card generation failed, using default fallback cards:",
           e,
         );
-        await writeAiCards(DEFAULT_KPSS_HISTORY_CARDS);
+        await writeAiCards(srsRepo, DEFAULT_KPSS_HISTORY_CARDS);
       }
     },
 
@@ -205,10 +200,10 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       universe: KpssFlashcard[];
       chapters: string[];
     }> {
-      let cards = await readAiCards();
+      let cards = await readAiCards(srsRepo);
       if (cards.length === 0) {
         await this.ensureInitialCards("Tarih");
-        cards = await readAiCards();
+        cards = await readAiCards(srsRepo);
       }
 
       let activeUniverseCards: KpssFlashcard[];

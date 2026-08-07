@@ -33,10 +33,9 @@ const USER_DATA_WRITERS: string[] = [
   "infrastructure/persistence/repositories/ChromeStorageNoteRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageTodoRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageQuestionBankRepository.ts",
-  // Sidepanel
-  "sidepanel/useSidePanelChat.ts",
-  // Content
-  "content/quiz/quizPanel.ts",
+  // Sidepanel & Content Storage Helpers
+  "sidepanel/sidePanelStorage.ts",
+  "content/quiz/QuizStorage.ts",
 ];
 
 describe("cloud backup trigger coverage", () => {
