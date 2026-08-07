@@ -303,6 +303,7 @@ export function createKpssWikiService(wikiRepo: IWikiNoteRepository) {
 
     /** Save all KPSS wiki notes array. */
     saveKpssWikiNotes(notes: KpssWikiNote[]): Promise<void> {
+      scheduleCloudBackup();
       return wikiRepo.saveAll(notes);
     },
 
@@ -349,6 +350,7 @@ export function buildWikiTree(notes: KpssWikiNote[]): WikiTreeNode[] {
 /* ------------------------------------------------------------------ */
 
 import { ChromeStorageWikiNoteRepository } from "@/infrastructure/persistence/repositories/ChromeStorageWikiNoteRepository.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const _defaultWikiRepo = new ChromeStorageWikiNoteRepository();
 const _defaultWikiService = createKpssWikiService(_defaultWikiRepo);

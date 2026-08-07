@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "preact/hooks";
 import { prayerService } from "@/services/prayerService.js";
 import type { PrayerTimes } from "@/types/prayer.js";
 import { logger } from "@/utils/logger.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 /**
  * Prayer times state + business logic (AGENTS.md 6.3: presentation/hooks/).
@@ -82,6 +83,7 @@ export function usePrayer() {
       chrome.storage.local.set({ prayerCity: newCity, prayerCountry: "Turkey" });
       setIsFormOpen(false);
       loadPrayers(newCity);
+      scheduleCloudBackup();
     },
     [loadPrayers],
   );

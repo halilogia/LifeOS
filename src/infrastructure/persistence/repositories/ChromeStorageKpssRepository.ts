@@ -12,6 +12,7 @@ import {
   SYNC_KPSS_SRS,
   LOCAL_KPSS_PAST_QUIZZES,
 } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const KPSS_PROGRESS_KEY = SYNC_KPSS_PROGRESS;
 const KPSS_DAILY_STATS_KEY = SYNC_KPSS_DAILY_STATS;
@@ -27,7 +28,10 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
 
   async saveAllProgress(items: KpssProgress[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [KPSS_PROGRESS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [KPSS_PROGRESS_KEY]: items }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -41,7 +45,10 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
 
   async saveAllDailyStats(items: KpssDailyStats[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [KPSS_DAILY_STATS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [KPSS_DAILY_STATS_KEY]: items }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -56,7 +63,10 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
           "kpssTargetNet",
           "kpssTargetScore",
         ],
-        () => resolve(),
+        () => {
+          scheduleCloudBackup();
+          resolve();
+        },
       );
     });
     await new Promise<void>((resolve) => {
@@ -66,7 +76,10 @@ export class ChromeStorageKpssRepository implements IKpssRepository {
 
   async savePastQuizzes(quizzes: Record<string, unknown>): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [LOCAL_KPSS_PAST_QUIZZES]: quizzes }, resolve);
+      chrome.storage.local.set({ [LOCAL_KPSS_PAST_QUIZZES]: quizzes }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 

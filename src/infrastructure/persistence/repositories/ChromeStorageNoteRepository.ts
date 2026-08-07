@@ -9,6 +9,7 @@ import type {
   Note,
 } from "../../../domain/repositories/INoteRepository.js";
 import { SYNC_NOTES } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 export class ChromeStorageNoteRepository implements INoteRepository {
   async getAll(): Promise<Note[]> {
@@ -21,7 +22,10 @@ export class ChromeStorageNoteRepository implements INoteRepository {
 
   async saveAll(notes: Note[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [SYNC_NOTES]: notes }, resolve);
+      chrome.storage.local.set({ [SYNC_NOTES]: notes }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 }

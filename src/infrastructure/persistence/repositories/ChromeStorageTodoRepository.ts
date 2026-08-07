@@ -7,6 +7,7 @@
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { Todo } from "@/domain/entities/Todo.js";
 import { SYNC_TODOS } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 export class ChromeStorageTodoRepository implements ITodoRepository {
   async getAll(): Promise<Todo[]> {
@@ -19,7 +20,10 @@ export class ChromeStorageTodoRepository implements ITodoRepository {
 
   async saveAll(todos: Todo[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [SYNC_TODOS]: todos }, resolve);
+      chrome.storage.local.set({ [SYNC_TODOS]: todos }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 

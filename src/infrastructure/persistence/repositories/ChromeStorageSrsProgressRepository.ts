@@ -6,6 +6,7 @@
 
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
 import { SYNC_KPSS_SRS } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const SRS_KEY = SYNC_KPSS_SRS;
 
@@ -20,7 +21,10 @@ export class ChromeStorageSrsProgressRepository implements ISrsProgressRepositor
 
   async saveAll(items: Record<string, unknown>[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [SRS_KEY]: items }, resolve);
+      chrome.storage.local.set({ [SRS_KEY]: items }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 }

@@ -5,6 +5,7 @@
  */
 
 import { create } from "zustand";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const KEY = "kpss_chart_metric_mode";
 type KpssChartMetricMode = "all" | "questions" | "videos";
@@ -19,7 +20,7 @@ export const useKpssChartMetricState = create<KpssChartMetricState>()(
     chartMetric: "all",
     setChartMetric: (m) => {
       set({ chartMetric: m });
-      void chrome.storage.local.set({ [KEY]: m });
+      void chrome.storage.local.set({ [KEY]: m }, () => scheduleCloudBackup());
     },
   }),
 );

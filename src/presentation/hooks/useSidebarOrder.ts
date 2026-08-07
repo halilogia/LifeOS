@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "preact/hooks";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const DEFAULT_ORDER = [
   "list",
@@ -40,6 +41,7 @@ export function useSidebarOrder() {
 
   const saveOrder = useCallback((nextOrder: string[]) => {
     chrome.storage.local.set({ sidebarOrder: nextOrder });
+    scheduleCloudBackup();
   }, []);
 
   return { order, setOrder, saveOrder };

@@ -5,6 +5,7 @@ import {
   AlarmItem,
 } from "@/infrastructure/services/PomodoroManagerService.js";
 import type { Language } from "@/domain/value-objects/Language.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const POMO_MODE_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 
@@ -290,6 +291,7 @@ export function usePopup() {
       }
       setDetoxBlockedSites(updated);
       chrome.storage.local.set({ detox_blocked_sites: updated });
+      scheduleCloudBackup();
     },
     [detoxBlockedSites],
   );
@@ -310,6 +312,7 @@ export function usePopup() {
         setDetoxEndTime(end);
       },
     );
+    scheduleCloudBackup();
   }, [detoxBlockedSites, detoxDuration]);
 
   const handleDisableDetox = useCallback(() => {
@@ -324,6 +327,7 @@ export function usePopup() {
         setDetoxTimeLeft(0);
       },
     );
+    scheduleCloudBackup();
   }, []);
 
   return {

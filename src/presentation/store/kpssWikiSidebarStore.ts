@@ -5,6 +5,7 @@
  */
 
 import { create } from "zustand";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const STORAGE_KEY = "kpssWikiSidebarCollapsed";
 
@@ -20,7 +21,9 @@ export const useKpssWikiSidebarState = create<KpssWikiSidebarState>()((set) => (
   toggleSidebar: () => {
     set((s) => {
       const next = !s.sidebarCollapsed;
-      void chrome.storage.local.set({ [STORAGE_KEY]: next });
+      void chrome.storage.local.set({ [STORAGE_KEY]: next }, () =>
+        scheduleCloudBackup(),
+      );
       return { sidebarCollapsed: next };
     });
   },

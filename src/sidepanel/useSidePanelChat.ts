@@ -8,6 +8,7 @@ import {
 } from "@/services/aichat/index.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 import { ChatMessage } from "./ChatMessage.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 export interface UseSidePanelChatReturn {
   t: Record<string, string>;
@@ -198,6 +199,7 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     // Persist messages for unique Tab Group session key
     if (activeSessionKey && messages.length > 0) {
       chrome.storage.local.set({ [activeSessionKey]: messages });
+      scheduleCloudBackup();
     }
   }, [messages, agentStatus, activeSessionKey]);
 

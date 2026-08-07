@@ -10,6 +10,7 @@ import {
   SYNC_KPSS_WIKI_NOTES,
   SYNC_KPSS_AUTO_TITLE,
 } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const STORAGE_KEY = SYNC_KPSS_WIKI_NOTES;
 const AUTO_TITLE_SETTING_KEY = SYNC_KPSS_AUTO_TITLE;
@@ -25,7 +26,10 @@ export class ChromeStorageWikiNoteRepository implements IWikiNoteRepository {
 
   async saveAll(notes: KpssWikiNote[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [STORAGE_KEY]: notes }, resolve);
+      chrome.storage.local.set({ [STORAGE_KEY]: notes }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -39,7 +43,10 @@ export class ChromeStorageWikiNoteRepository implements IWikiNoteRepository {
 
   async saveAutoTitleSetting(enabled: boolean): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [AUTO_TITLE_SETTING_KEY]: enabled }, resolve);
+      chrome.storage.local.set({ [AUTO_TITLE_SETTING_KEY]: enabled }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 }
