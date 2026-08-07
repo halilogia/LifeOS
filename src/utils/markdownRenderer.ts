@@ -15,7 +15,7 @@ export function renderMarkdown(text: string): string {
 
   // Parse Markdown Images FIRST before link parser: ![alt](url)
   html = html.replace(
-    /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g,
+    /!\[([^\]]*)\]\(([^\s)]+)\)/g,
     (_, alt, src) => {
       const safeSrc = sanitizeUrl(src);
       return `<img src="${safeSrc}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
@@ -24,7 +24,7 @@ export function renderMarkdown(text: string): string {
 
   // Parse Markdown Links: [text](url)
   html = html.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    /\[([^\]]+)\]\(([^\s)]+)\)/g,
     (_, linkText, href) => {
       const safeHref = sanitizeUrl(href);
       return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
