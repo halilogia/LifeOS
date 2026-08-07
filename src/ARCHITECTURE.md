@@ -79,9 +79,9 @@ flowchart TB
 
     subgraph Content["content/ (Content script'ler)"]
         infobox["infobox/ (universalInfoBox)"]
-        detox["detox/ (detoxBlocker)"]
+        detox["detox/ (detoxBlocker, SiteMatcher, BlockerUI)"]
         whatsapp["whatsapp/ (whatsappBridge)"]
-        quiz["quiz/ (quizPanel — harici AI overlay)"]
+        quiz["quiz/ (quizPanel, QuizParser, QuizStorage, QuizRenderer — harici AI overlay)"]
     end
 
     subgraph Bg["background/ (Service worker)"]

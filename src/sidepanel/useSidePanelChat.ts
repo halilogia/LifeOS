@@ -8,7 +8,12 @@ import {
 } from "@/services/aichat/index.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 import { ChatMessage } from "./ChatMessage.js";
-import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { startSpeechRecognition } from "./sidePanelSpeech.js";
+import {
+  loadChatSessionMessages,
+  saveChatSessionMessages,
+  clearChatSessionMessages,
+} from "./sidePanelStorage.js";
 
 export interface UseSidePanelChatReturn {
   t: Record<string, string>;
@@ -51,47 +56,18 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
   const t = getTranslation(lang);
 
   const toggleVoiceInput = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert(t.speech_not_supported);
-      return;
-    }
-
     if (isListening) {
       setIsListening(false);
       return;
     }
-
-    try {
-      const recognition = new SpeechRecognition();
-      recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
-
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
-        const transcript = event.results[0][0].transcript;
-        setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript));
-        setIsListening(false);
-      };
-
-      recognition.onerror = () => {
-        setIsListening(false);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognition.start();
-    } catch {
-      setIsListening(false);
-    }
+    startSpeechRecognition({
+      lang,
+      onStart: () => setIsListening(true),
+      onResult: (transcript) =>
+        setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript)),
+      onErrorOrEnd: () => setIsListening(false),
+      notSupportedMsg: t.speech_not_supported,
+    });
   };
 
   const refreshPageContext = () => {
@@ -119,20 +95,14 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
               const domain = newCtx.domain || "default";
               const tabId = activeTab ? activeTab.id : 0;
 
-              // Unique key per Chrome Tab Group (or per domain tab)
               const sessionKey = groupId
                 ? `copilot_chat_group_${groupId}`
                 : `copilot_chat_domain_${domain}_${tabId}`;
 
               if (sessionKey !== activeSessionKey) {
                 setActiveSessionKey(sessionKey);
-                chrome.storage.local.get([sessionKey], (storeRes) => {
-                  const savedMsgs = storeRes[sessionKey];
-                  if (Array.isArray(savedMsgs)) {
-                    setMessages(savedMsgs);
-                  } else {
-                    setMessages([]);
-                  }
+                void loadChatSessionMessages(sessionKey).then((savedMsgs) => {
+                  setMessages(savedMsgs);
                 });
               }
             });
@@ -144,13 +114,11 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     }
   };
 
-  // Load language settings & initial page context
   useEffect(() => {
     chrome.storage.local.get(["lang", "autoGroupTabs"], (res) => {
       if (res.lang) {
         setLang(res.lang as Language);
       }
-      // Group tab ONCE when sidepanel is opened
       if (res.autoGroupTabs !== false) {
         chrome.runtime.sendMessage({ type: "group_active_tab" });
       }
@@ -158,7 +126,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
 
     refreshPageContext();
 
-    // Listen for tab activation and URL update changes to auto-sync context
     const tabActivatedListener = () => refreshPageContext();
     const tabUpdatedListener = (
       _tabId: number,
@@ -176,7 +143,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     chrome.tabs.onActivated.addListener(tabActivatedListener);
     chrome.tabs.onUpdated.addListener(tabUpdatedListener);
 
-    // Listen for automatic prompts from right-click context menus
     const copilotAutoPromptListener = (msg: {
       type?: string;
       prompt?: string;
@@ -196,18 +162,12 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    // Persist messages for unique Tab Group session key
-    if (activeSessionKey && messages.length > 0) {
-      chrome.storage.local.set({ [activeSessionKey]: messages });
-      scheduleCloudBackup();
-    }
+    saveChatSessionMessages(activeSessionKey, messages);
   }, [messages, agentStatus, activeSessionKey]);
 
   const handleNewChat = () => {
     setMessages([]);
-    if (activeSessionKey) {
-      chrome.storage.local.remove([activeSessionKey]);
-    }
+    clearChatSessionMessages(activeSessionKey);
   };
 
   const handleSendMessage = async (promptOverride?: string) => {
@@ -233,7 +193,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     setIsProcessing(true);
     setAgentStatus(t.agent_thinking);
 
-    // On-the-fly fetch active tab context if empty
     let activeCtx = pageContext;
     if (!activeCtx || !activeCtx.pageText || activeCtx.pageText.length === 0) {
       activeCtx = await new Promise((resolve) => {
@@ -251,7 +210,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       });
     }
 
-    // Fetch AI config settings via centralized single authoritative helper
     const aiConfig = await getAIConfigFromStorage();
     const apiKey = aiConfig.aiApiKey;
     const provider = aiConfig.aiProvider;
@@ -344,7 +302,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           data.candidates?.[0]?.content?.parts?.[0]?.text ||
           "No response received.";
       } else {
-        // 9Router, OpenRouter, Custom OpenAI-compatible endpoints
         const baseUrl = rawEndpoint.replace(/\/+$/, "");
         const targetEndpoint = baseUrl.endsWith("/chat/completions")
           ? baseUrl
@@ -395,7 +352,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           "No response received.";
       }
 
-      // Check for JSON action code block in response
       const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
       let finalContent = responseText;
 
@@ -403,7 +359,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         try {
           const actionPayload = JSON.parse(jsonMatch[1]);
 
-          // Handle Memory Update action directly
           if (
             !Array.isArray(actionPayload) &&
             actionPayload.action === "update_memory" &&
@@ -420,7 +375,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
               );
             }
           } else if (Array.isArray(actionPayload)) {
-            // Handle dynamic Agent tool actions (clicks, typing, scroll, extract)
             const count = actionPayload.length;
             const actionSummary = formatActionExecutionSummary(
               actionPayload,
@@ -474,7 +428,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           setAgentStatus(null);
         }
       } else {
-        // Fallback: If user prompt asked to add email/memory but no JSON was generated, parse email directly
         const emailMatch = textToSend.match(
           /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/,
         );
