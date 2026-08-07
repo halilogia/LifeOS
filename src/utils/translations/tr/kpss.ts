@@ -149,7 +149,7 @@ export const kpss = {
     '<strong>4. Günlük Soru Hedefi:</strong> Ayarlarda belirlediğiniz hedef nete ulaşabilmeniz için çözmeniz gereken toplam soru sayısı konu ağırlıklarına göre dağıtılır. Günlük soru hedefiniz: <br /><code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">(Kalan Hedef Soru / Kalan Gün Sayısı)</code> formülüyle dinamik olarak her gün güncellenir.',
   kpss_past_exams_title: "ÖSYM Çıkmış Sorular Sınav Salonu",
   kpss_past_exams_wrong: "❌ Yanlışlarım",
-  kpss_koleksiyon_cap: "📥 Koleksiyonum",
+  kpss_koleksiyon_cap: "💎 Koleksiyonum",
   kpss_koleksiyon_add: "Koleksiyona kaydet",
   kpss_koleksiyon_remove: "Koleksiyondan çıkar",
   kpss_past_exams_desc:

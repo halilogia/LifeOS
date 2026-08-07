@@ -6,6 +6,22 @@
  */
 
 const YEAR_FILES: Record<string, () => Promise<Record<string, unknown[]>>> = {
+  "2025": () =>
+    import("./exam2025.json").then(
+      (m) => (m as { default: Record<string, unknown[]> }).default,
+    ),
+  "2024": () =>
+    import("./exam2024.json").then(
+      (m) => (m as { default: Record<string, unknown[]> }).default,
+    ),
+  "2023": () =>
+    import("./exam2023.json").then(
+      (m) => (m as { default: Record<string, unknown[]> }).default,
+    ),
+  "2022": () =>
+    import("./exam2022.json").then(
+      (m) => (m as { default: Record<string, unknown[]> }).default,
+    ),
   "2021": () =>
     import("./exam2021.json").then(
       (m) => (m as { default: Record<string, unknown[]> }).default,

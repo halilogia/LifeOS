@@ -1,11 +1,11 @@
 import { useState, useEffect } from "preact/hooks";
 import { Todo } from "@/types/types.js";
-import { GoogleAuthApi } from "@/infrastructure/api/GoogleAuthApi.js";
-import { GoogleCalendarApi } from "@/infrastructure/api/GoogleCalendarApi.js";
-import { logger } from "@/utils/logger.js";
+import { SyncGoogleCalendarUseCase } from "@/application/use-cases/sync/SyncGoogleCalendarUseCase.js";
+import { createCalendarPort } from "@/application/ports/createCalendarPort.js";
+import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 
-const _authApi = new GoogleAuthApi();
-const _calendarApi = new GoogleCalendarApi();
+const syncRepo = new ChromeStorageSyncRepository();
+const calendarUC = new SyncGoogleCalendarUseCase(syncRepo, createCalendarPort());
 
 interface CalendarModalData {
   title: string;
@@ -47,33 +47,9 @@ export function useCalendar({ todos }: UseCalendarOptions) {
   useEffect(() => {
     let isMounted = true;
     const fetchCalendar = async () => {
-      const syncData = await new Promise<Record<string, unknown>>((resolve) =>
-        chrome.storage.local.get(["syncEnabled", "syncCalendarEnabled"], (res) =>
-          resolve(res),
-        ),
-      );
-      const syncEnabled = syncData.syncEnabled === true;
-      const calendarEnabled = syncData.syncCalendarEnabled === true;
-      if (syncEnabled && calendarEnabled) {
-        try {
-          const token = await _authApi.getAuthToken(false);
-          const startStr = new Date(year, month, 1, 0, 0, 0).toISOString();
-          const endStr = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-          const items = await _calendarApi.getCalendarEvents(
-            token,
-            startStr,
-            endStr,
-          );
-          if (isMounted) {
-            setCalendarEvents(items);
-          }
-        } catch (e) {
-          logger.error("[CalendarView] Google Calendar fetching error:", e);
-        } finally {
-          // calendar sync finished
-        }
-      } else {
-        setCalendarEvents([]);
+      const { events } = await calendarUC.execute(year, month);
+      if (isMounted) {
+        setCalendarEvents(events);
       }
     };
     fetchCalendar();

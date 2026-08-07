@@ -20,6 +20,7 @@ import {
   SYNC_STOCK_CASH,
 } from "@/infrastructure/storage/keys.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import type { IStockRepository } from "@/domain/repositories/IStockRepository.js";
 
 const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
 const RULES_KEY = SYNC_STOCK_RULES;
@@ -28,9 +29,7 @@ const WATCHLISTS_KEY = SYNC_STOCK_WATCHLISTS;
 const TRADE_HISTORY_KEY = SYNC_STOCK_TRADE_HISTORY;
 const CASH_KEY = SYNC_STOCK_CASH;
 
-const DEFAULT_WATCHLISTS: StockWatchlist[] = [];
-
-export class ChromeStorageStockRepository {
+export class ChromeStorageStockRepository implements IStockRepository {
   async getPortfolio(): Promise<StockPortfolioItem[]> {
     return new Promise((resolve) => {
       chrome.storage.local.get([PORTFOLIO_KEY], (res) => {

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { fetchStockPrices, fetchStockQuote } from "@/services/bistService.js";
 import type { StockQuote } from "@/types/bist.js";
+import type { IStockRepository } from "@/domain/repositories/IStockRepository.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
 import { evaluateStockRules } from "@/services/stock/stockRuleEngine.js";
 import type {
@@ -19,7 +20,7 @@ interface UseBistOptions {
   lang: Language;
 }
 
-const stockRepository = new ChromeStorageStockRepository();
+const stockRepository: IStockRepository = new ChromeStorageStockRepository();
 
 /**
  * BIST borsa dashboard state + business logic (AGENTS.md 6.3: presentation/hooks/).

@@ -250,7 +250,7 @@ export const pomodoroManager = {
       return alarms;
     }
     const newAlarm: AlarmItem = {
-      id: Math.random().toString(36).substring(2, 9),
+      id: crypto.randomUUID(),
       time,
       enabled: true,
     };

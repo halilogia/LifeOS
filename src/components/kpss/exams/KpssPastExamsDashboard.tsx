@@ -81,11 +81,15 @@ export function KpssPastExamsDashboard({
   onStartPastExam,
 }: KpssPastExamsDashboardProps) {
   const [selectedYear, setSelectedYear] = useState<string>("2019");
-  const [selectedSubject, setSelectedSubject] = useState<string>("cografya");
+  const [selectedSubject, setSelectedSubject] = useState<string>("tarih");
   const [selectedCountLimit, setSelectedCountLimit] = useState<number>(20);
   const [selectedChapter, setSelectedChapter] = useState<string>("all");
 
   const years = [
+    { id: "2025", label: "2025" },
+    { id: "2024", label: "2024" },
+    { id: "2023", label: "2023" },
+    { id: "2022", label: "2022" },
     { id: "2021", label: "2021" },
     { id: "2020", label: "2020" },
     { id: "2019", label: "2019" },
@@ -112,7 +116,7 @@ export function KpssPastExamsDashboard({
     },
     {
       id: "koleksiyon",
-      label: t.kpss_koleksiyon_cap || "📥 Koleksiyonum",
+      label: t.kpss_koleksiyon_cap || "💎 Koleksiyonum",
     },
     {
       id: "karma",
@@ -128,9 +132,7 @@ export function KpssPastExamsDashboard({
   useEffect(() => {
     const load = async () => {
       const counts: Record<string, number> = {};
-      for (const sub of ["cografya", "tarih", "matematik", "all"]) {
-        counts[sub] = await getExamSubjectCount(selectedYear, sub);
-      }
+      counts["tarih"] = await getExamSubjectCount(selectedYear, "tarih");
       setSubjectCounts(counts);
     };
     load();
@@ -139,29 +141,6 @@ export function KpssPastExamsDashboard({
   const getSubjectCount = (_year: string, subject: string) => {
     return subjectCounts[subject] ?? 0;
   };
-
-  const subjects = [
-    {
-      id: "cografya",
-      label: t.kpss_past_exams_geography,
-      count: getSubjectCount(selectedYear, "cografya"),
-    },
-    {
-      id: "tarih",
-      label: t.kpss_past_exams_history,
-      count: getSubjectCount(selectedYear, "tarih"),
-    },
-    {
-      id: "matematik",
-      label: t.kpss_past_exams_math,
-      count: getSubjectCount(selectedYear, "matematik"),
-    },
-    {
-      id: "all",
-      label: t.kpss_past_exams_all,
-      count: getSubjectCount(selectedYear, "all"),
-    },
-  ];
 
   const handleStart = () => {
     onStartPastExam(
@@ -222,7 +201,7 @@ export function KpssPastExamsDashboard({
             💡 Karma Sınav Modu Nedir?
           </strong>
           <p style={{ margin: "4px 0 0 0", opacity: 0.85 }}>
-            Tüm geçmiş KPSS yıllarından (2006-2021) ve seçtiğiniz derslerden
+            Tüm geçmiş KPSS yıllarından (2006-2025) ve seçtiğiniz derslerden
             rastgele karışık deneme testi oluşturur.
           </p>
         </div>
@@ -380,65 +359,7 @@ export function KpssPastExamsDashboard({
           </div>
         </div>
 
-        {/* Adım 2: Ders Seçin */}
-        <div>
-          <label
-            style={{
-              display: "block",
-              fontSize: "0.85rem",
-              fontWeight: 600,
-              marginBottom: "8px",
-              opacity: 0.9,
-            }}
-          >
-            {t.kpss_past_exams_step2}
-          </label>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            {subjects.map((sub) => (
-              <div
-                key={sub.id}
-                onClick={() => setSelectedSubject(sub.id)}
-                style={{
-                  padding: "12px 16px",
-                  borderRadius: "8px",
-                  background:
-                    selectedSubject === sub.id
-                      ? "rgba(139, 92, 246, 0.15)"
-                      : "rgba(255,255,255,0.02)",
-                  border:
-                    selectedSubject === sub.id
-                      ? "1px solid var(--accent-color)"
-                      : "1px solid rgba(255,255,255,0.06)",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                className="past-exam-option-card"
-              >
-                <span
-                  style={{ fontWeight: selectedSubject === sub.id ? 600 : 400 }}
-                >
-                  {sub.label}
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    padding: "2px 8px",
-                    borderRadius: "10px",
-                    background: "rgba(255,255,255,0.08)",
-                    opacity: 0.8,
-                  }}
-                >
-                  {sub.count} {t.kpss_quiz_questions}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Adım 3: Ünite Seçin */}
+        {/* Adım 2: Ünite Seçin (sadece arşiv yılları için) */}
         {(selectedYear === "tarih_arsivi" ||
           selectedYear === "tarih_arsivi54") && (
           <div>
@@ -451,7 +372,7 @@ export function KpssPastExamsDashboard({
                 opacity: 0.9,
               }}
             >
-              3. Ünite Seçin
+              2. Ünite Seçin
             </label>
             <div
               style={{

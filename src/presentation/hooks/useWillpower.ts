@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import { WillpowerStreak, Language } from "@/types/types.js";
-import { getTranslation } from "@/utils/i18n.js";
-import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { useEffect } from "preact/hooks";
+import { Language } from "@/types/types.js";
+import { useWillpowerState } from "@/presentation/store/willpowerStore.js";
 
 interface UseWillpowerOptions {
   lang: Language;
@@ -9,138 +8,28 @@ interface UseWillpowerOptions {
 }
 
 /**
- * Willpower sayaç + timer + geçmiş state mantığı (AGENTS.md 6.3: presentation/hooks/).
- * View sadece JSX render eder.
+ * Facade over useWillpowerState — all state + timer + storage lives in the store.
+ * configure() is called every render to keep fresh closures (lang, onShowConfirm).
  */
 export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
-  const t = getTranslation(lang);
+  const data = useWillpowerState((s) => s.data);
+  const note = useWillpowerState((s) => s.note);
+  const setNote = useWillpowerState((s) => s.setNote);
+  const days = useWillpowerState((s) => s.days);
+  const hours = useWillpowerState((s) => s.hours);
+  const minutes = useWillpowerState((s) => s.minutes);
+  const seconds = useWillpowerState((s) => s.seconds);
+  const handleReset = useWillpowerState((s) => s.handleReset);
+  const handleClearHistory = useWillpowerState((s) => s.handleClearHistory);
 
-  const [data, setData] = useState<WillpowerStreak | null>(null);
-  const [note, setNote] = useState("");
-
-  // Elapsed countdown states
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
-
-  const timerRef = useRef<number | null>(null);
-
-  const calculateTime = useCallback((startDateStr: string) => {
-    const start = new Date(startDateStr).getTime();
-    const now = new Date().getTime();
-    const diffMs = Math.max(0, now - start);
-
-    const diffSecs = Math.floor(diffMs / 1000);
-    setDays(Math.floor(diffSecs / 86400));
-    setHours(Math.floor((diffSecs % 86400) / 3600));
-    setMinutes(Math.floor((diffSecs % 3600) / 60));
-    setSeconds(diffSecs % 60);
-  }, []);
-
-  const loadData = useCallback(async () => {
-    const result = await new Promise<WillpowerStreak | undefined>((resolve) =>
-      chrome.storage.local.get(["willpowerStreak"], (res) =>
-        resolve(res.willpowerStreak as WillpowerStreak | undefined),
-      ),
-    );
-    let streakData = result;
-    if (!streakData) {
-      streakData = {
-        startDate: new Date().toISOString(),
-        bestStreakDays: 0,
-        history: [],
-      };
-      chrome.storage.local.set({ willpowerStreak: streakData });
-    }
-    setData(streakData);
-    calculateTime(streakData.startDate);
-
-    // Setup active countdown timer
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    timerRef.current = window.setInterval(() => {
-      calculateTime(streakData!.startDate);
-    }, 1000);
-  }, [calculateTime]);
+  // CRITICAL: configure on every render (fresh closures for lang/onShowConfirm).
+  useWillpowerState.getState().configure({ lang, onShowConfirm });
 
   useEffect(() => {
-    loadData();
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [loadData]);
+    void useWillpowerState.getState().loadData();
+  }, []);
 
-  const handleReset = () => {
-    if (!data) {
-      return;
-    }
-
-    const confirmMsg = t.willpower_reset_confirm;
-    onShowConfirm(confirmMsg, async () => {
-      // Calculate elapsed days
-      const start = new Date(data.startDate).getTime();
-      const now = new Date().getTime();
-      const diffMs = Math.max(0, now - start);
-      const diffSecs = Math.floor(diffMs / 1000);
-      const finalDays = Math.floor(diffSecs / 86400);
-
-      const nowStr = new Date().toISOString();
-
-      // Push new history item
-      const historyItem = {
-        startDate: data.startDate,
-        endDate: nowStr,
-        days: finalDays,
-        note: note.trim() || undefined,
-      };
-
-      const updatedData: WillpowerStreak = {
-        startDate: nowStr,
-        bestStreakDays: Math.max(data.bestStreakDays, finalDays),
-        history: [...data.history, historyItem],
-      };
-
-      await new Promise<void>((resolve) =>
-        chrome.storage.local.set({ willpowerStreak: updatedData }, resolve),
-      );
-      setNote("");
-      setData(updatedData);
-      calculateTime(nowStr);
-      scheduleCloudBackup();
-
-      // Restart timer
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      timerRef.current = window.setInterval(() => {
-        calculateTime(nowStr);
-      }, 1000);
-    });
-  };
-
-  const handleClearHistory = () => {
-    if (!data) {
-      return;
-    }
-    const confirmMsg = t.willpower_clear_history_confirm;
-    onShowConfirm(confirmMsg, async () => {
-      const updatedData: WillpowerStreak = {
-        ...data,
-        history: [],
-      };
-      await new Promise<void>((resolve) =>
-        chrome.storage.local.set({ willpowerStreak: updatedData }, resolve),
-      );
-      setData(updatedData);
-      scheduleCloudBackup();
-    });
-  };
-
-  // Determine Rank Metadata
+  // Rank metadata (pure derivation — same thresholds as before)
   let rankKey: string;
   if (days < 3) {
     rankKey = "initiate";

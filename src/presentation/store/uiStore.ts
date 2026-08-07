@@ -10,6 +10,7 @@ import type { Language } from "@/domain/value-objects/Language.js";
 import { translations } from "@/utils/i18n.js";
 import type { CustomQuote } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
@@ -48,6 +49,7 @@ interface UIState {
   // Actions
   setActiveView: (v: string) => void;
   setSidebarOrder: (o: string[]) => void;
+  persistSidebarOrder: (o: string[]) => void;
   setActiveTab: (t: "focus" | "routines") => void;
   setSettingsOpen: (o: boolean) => void;
   setSettingsInitialTab: (t: SettingsTab) => void;
@@ -90,6 +92,11 @@ export const useUIStore = create<UIState>()((set) => ({
   // --- Actions ---
   setActiveView: (v) => set({ activeView: v }),
   setSidebarOrder: (o) => set({ sidebarOrder: o }),
+  persistSidebarOrder: (o) => {
+    set({ sidebarOrder: o });
+    chrome.storage.local.set({ [SIDEBAR_ORDER_KEY]: o });
+    scheduleCloudBackup();
+  },
   setActiveTab: (t) => set({ activeTab: t }),
   setSettingsOpen: (o) => set({ settingsOpen: o }),
   setSettingsInitialTab: (t) => set({ settingsInitialTab: t }),
