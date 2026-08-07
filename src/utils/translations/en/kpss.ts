@@ -88,6 +88,7 @@ export const kpss = {
   kpss_wiki_search: "Search notes...",
   kpss_wiki_add_child: "Add Child Note",
   kpss_past_exams_history_q: "History Q Archive",
+  kpss_past_exams_history_54: "54-Year History Archive",
   kpss_past_exams_mixed: "Mixed Past Exam",
   kpss_past_exams_geography: "Geography",
   kpss_past_exams_history: "History",

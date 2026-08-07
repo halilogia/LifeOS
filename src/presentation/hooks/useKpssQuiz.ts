@@ -11,10 +11,11 @@ export function useKpssQuiz(options: KpssQuizCallbacks) {
   const s = useKpssQuizStore;
   const currentQuestionInCollection = useCurrentQuestionInCollection();
 
-  // Inject callbacks once (they hold currentSubject/t/aiConfig from the view)
-  useEffect(() => {
-    s.getState().configure(options);
-  }, []);
+  // Inject callbacks on every render. options (esp. aiConfig, prepared inline in the
+  // view) is a fresh object each render and it carries live currentSubject()/t — a
+  // stale closure here would show old-language errors and stale currentSubject().
+  // Module-level assignment is cheap; no effect/dep needed.
+  s.getState().configure(options);
 
   useEffect(() => {
     void s.getState().loadPastQuizzes();

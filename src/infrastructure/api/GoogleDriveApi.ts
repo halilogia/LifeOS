@@ -80,7 +80,7 @@ export class GoogleDriveApi implements IDriveBackupPort {
     token: string,
   ): Promise<Record<string, unknown> | null> {
     try {
-      const fileName = "zentodo_lifeos_backup.json";
+      const fileName = "lifeos_backup.json";
 
       // 1. Search for backup file
       const searchUrl = `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${fileName}'&fields=files(id)`;

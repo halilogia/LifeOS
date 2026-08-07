@@ -306,7 +306,7 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
     const yearName =
       year === "karma"
         ? c.t.kpss_exam_mixed_years || "Karma Deneme"
-        : year === "tarih_arsivi"
+        : year === "tarih_arsivi" || year === "tarih_arsivi54"
           ? `Tarih Soru Arşivi (${selectedChapter && selectedChapter !== "all" ? selectedChapter : "Tüm Üniteler"})`
           : year === "yanlis"
             ? (c.t.kpss_past_exams_wrong || "Yanlışlarım")

@@ -8,21 +8,18 @@
 import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
+import { stripTransientKeys } from "@/utils/cloudBackup.js";
 
 export class BackupToDriveUseCase {
   constructor(
     private syncRepo: ISyncRepository,
     private drivePort: IDriveBackupPort,
-    private todoRepo: ITodoRepository,
+    private todoRepo?: ITodoRepository,
   ) {}
 
   async execute(): Promise<void> {
-    const syncSettings = await this.syncRepo.getSyncSettings();
-    if (!syncSettings.enabled) {
-      return;
-    }
-
-    // Get auth token from chrome.identity via chrome.storage cached token
+    // Manual/auto backup always proceeds; syncSettings.enabled gates only
+    // the *automatic* trigger, not an explicit user action.
     const token = await this.getAuthToken();
 
     // Gather all backup data from chrome.storage.local directly
@@ -32,7 +29,9 @@ export class BackupToDriveUseCase {
       });
     });
 
-    await this.drivePort.backupToDrive(token, allData);
+    // Drop transient/cache keys (log ring buffer, 5-min caches) so the
+    // backup file carries only real user data.
+    await this.drivePort.backupToDrive(token, stripTransientKeys(allData));
   }
 
   private async getAuthToken(): Promise<string> {

@@ -88,6 +88,7 @@ export const kpss = {
   kpss_wiki_search: "Ders notlarında ara...",
   kpss_wiki_add_child: "Alt Not Ekle",
   kpss_past_exams_history_q: "Tarih Soru Arşivi",
+  kpss_past_exams_history_54: "54 Yıl Tarih Arşivi",
   kpss_past_exams_mixed: "Karma Sınav (Karışık)",
   kpss_past_exams_geography: "Coğrafya",
   kpss_past_exams_history: "Tarih",

@@ -10,19 +10,19 @@ import { create } from "zustand";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
+import { SYNC_TODOS } from "@/infrastructure/storage/keys.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
-import { GoogleDriveApi } from "@/infrastructure/api/GoogleDriveApi.js";
 import { AddTodoUseCase } from "@/application/use-cases/todo/AddTodoUseCase.js";
 import { ToggleTodoUseCase } from "@/application/use-cases/todo/ToggleTodoUseCase.js";
 import { DeleteTodoUseCase } from "@/application/use-cases/todo/DeleteTodoUseCase.js";
 import { MoveTaskUseCase } from "@/application/use-cases/todo/MoveTaskUseCase.js";
 import { UpdatePrioritiesUseCase } from "@/application/use-cases/todo/UpdatePrioritiesUseCase.js";
 import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRepeatingTodosUseCase.js";
-import { BackupToDriveUseCase } from "@/application/use-cases/sync/BackupToDriveUseCase.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useSettingsStore } from "@/presentation/store/settingsStore.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const todoRepo = new ChromeStorageTodoRepository();
 const syncRepo = new ChromeStorageSyncRepository();
@@ -34,18 +34,6 @@ const toggleUC = new ToggleTodoUseCase(todoRepo, syncRepo, syncPort);
 const deleteUC = new DeleteTodoUseCase(todoRepo, syncRepo, syncPort);
 const moveUC = new MoveTaskUseCase(todoRepo, syncRepo, syncPort);
 const updatePriorityUC = new UpdatePrioritiesUseCase(todoRepo);
-const backupUC = new BackupToDriveUseCase(syncRepo, new GoogleDriveApi(), todoRepo);
-
-async function triggerCloudBackup(): Promise<void> {
-  const settings = await syncRepo.getSyncSettings();
-  if (settings.enabled) {
-    try {
-      await backupUC.execute();
-    } catch {
-      /* cloud backup is best-effort on todo mutations */
-    }
-  }
-}
 
 interface TodoState {
   todos: Todo[];
@@ -75,55 +63,61 @@ export const useTodosStore = create<TodoState>()((set, get) => ({
   initTodos: async () => {
     const { todos } = await resetUC.execute();
     set({ todos: todos as Todo[] });
-    await triggerCloudBackup();
+    scheduleCloudBackup();
     return todos as Todo[];
   },
 
   handleAddTodo: async (text, repeat, dueDate) => {
     await addUC.execute({ text, repeat, dueDate });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleToggleTodo: async (index) => {
     await toggleUC.execute({ index });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleDeleteTodo: async (index) => {
     await deleteUC.execute({ index });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleMoveTaskStatus: async (index, newStatus) => {
     await moveUC.moveToStatus({ index, newStatus });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleMoveTaskDirection: async (index, direction) => {
     await moveUC.moveByDirection({ index, direction });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleUpdateTodoUrgentImportant: async (originalIndex, urgent, important) => {
     await updatePriorityUC.execute({ originalIndex, urgent, important });
     await get().refreshTodos();
-    await triggerCloudBackup();
+    scheduleCloudBackup();
   },
 
   handleExportBackup: async () => {
-    const dataList = await todoRepo.getAll();
-    const blob = new Blob([JSON.stringify(dataList, null, 2)], {
+    // Full snapshot of chrome.storage.local (todos, notes, KPSS progress,
+    // SRS, portfolio, settings…) — same scope as the Drive backup.
+    const allData = await new Promise<Record<string, unknown>>((resolve) => {
+      chrome.storage.local.get(null, (result) => {
+        resolve(result as Record<string, unknown>);
+      });
+    });
+    const blob = new Blob([JSON.stringify(allData, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `zentodo-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `lifeos-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   },
@@ -146,14 +140,30 @@ export const useTodosStore = create<TodoState>()((set, get) => ({
     try {
       const raw = await read;
       const parsed = JSON.parse(raw);
+
       if (Array.isArray(parsed)) {
+        // Legacy backup: plain todos array
         await todoRepo.saveAll(parsed);
         set({ todos: parsed as Todo[] });
-        if (showAlert && tLabel?.alert_restore_success) {
-          showAlert(tLabel.alert_restore_success);
+      } else if (parsed && typeof parsed === "object") {
+        // Full backup: raw chrome.storage.local snapshot
+        const data = parsed as Record<string, unknown>;
+        await new Promise<void>((resolve) => {
+          chrome.storage.local.set(data, () => resolve());
+        });
+        if (Array.isArray(data[SYNC_TODOS])) {
+          set({ todos: data[SYNC_TODOS] as Todo[] });
         }
-      } else if (showAlert && tLabel?.alert_restore_invalid) {
-        showAlert(tLabel.alert_restore_invalid);
+      } else {
+        if (showAlert && tLabel?.alert_restore_invalid) {
+          showAlert(tLabel.alert_restore_invalid);
+        }
+        return;
+      }
+
+      if (showAlert && tLabel?.alert_restore_success) {
+        // Full reload so every in-memory store picks up the restored snapshot
+        showAlert(tLabel.alert_restore_success, () => window.location.reload());
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);

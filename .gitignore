@@ -23,26 +23,21 @@ build/
 .env.local
 zentodo_private_key.pem
 
-# Logs & Agent Workspace Scratch
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-aichathistory/
+
+# Tooling
+.hermes/*
+!.hermes/plans/
+.agent/
+.commandcode/
+
+# Electron desktop runtime artifacts
+electron/desktop/*.log
+electron/desktop/web/
+
+# Old/archived content (not part of the extension)
 archives/
 brain/
-desktop/web/
-desktop/dist/
-desktop/node_modules/
-desktop/icon.png
-# Electron desktop (kaynak dosyalar takip edilir; build çıktıları hariç)
-electron/desktop/web/
-electron/desktop/dist/
-electron/desktop/node_modules/
-electron/desktop/icon.png
-electron/*.log
-electron/**/err*.log
-electron/**/out*.log
-scripts/
-.vscode/
-.Agent/
-.commandcode/

@@ -4,6 +4,7 @@ import { getTranslation } from "@/utils/i18n.js";
 import { NoteFilterType } from "@/components/notes/NotesFilterBar.js";
 import { NoteType } from "@/components/notes/NoteEditorModal.js";
 import { SYNC_DAY_SCORES } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 interface UseNotesOptions {
   lang: Language;
@@ -314,6 +315,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       2000,
     );
     loadData();
+    scheduleCloudBackup();
   };
 
   const handleDeleteNote = (e: MouseEvent, id: string) => {
@@ -330,6 +332,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
         chrome.storage.local.set({ notes: filtered }, r),
       );
       loadData();
+      scheduleCloudBackup();
     });
   };
 
@@ -355,6 +358,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     );
     setIsQuoteModalOpen(false);
     loadData();
+    scheduleCloudBackup();
   };
 
   const handleDeleteQuote = (index: number) => {
@@ -370,6 +374,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
         chrome.storage.local.set({ customQuotes: currentQuotes }, r),
       );
       loadData();
+      scheduleCloudBackup();
     });
   };
 
@@ -390,6 +395,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
       chrome.storage.local.set({ [SYNC_DAY_SCORES]: next }, r),
     );
     setDayScores(next);
+    scheduleCloudBackup();
   };
 
   return {

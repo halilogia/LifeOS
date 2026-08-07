@@ -67,6 +67,15 @@ const TARIH_CHAPTERS = [
   { id: "Atatürk Sonrası Gelişmeler", label: "18. Atatürk Sonrası Gelişmeler" },
 ];
 
+// 🗂️ 54 Yıl Arşivi — OCR'dan parse edilen bölüm listesi ("Bölüm 1..19")
+const TARIH54_CHAPTERS = [
+  { id: "all", label: "Tüm Bölümler (Karma)" },
+  ...Array.from({ length: 19 }, (_, i) => ({
+    id: `Bölüm ${i + 1}`,
+    label: `Bölüm ${i + 1}`,
+  })),
+];
+
 export function KpssPastExamsDashboard({
   t,
   onStartPastExam,
@@ -92,6 +101,10 @@ export function KpssPastExamsDashboard({
     {
       id: "tarih_arsivi",
       label: t.kpss_past_exams_history_q || "Tarih Soru Arşivi (ÖSYM PDF)",
+    },
+    {
+      id: "tarih_arsivi54",
+      label: t.kpss_past_exams_history_54 || "54 Yıl Tarih Arşivi",
     },
     {
       id: "yanlis",
@@ -155,7 +168,9 @@ export function KpssPastExamsDashboard({
       selectedYear,
       selectedSubject,
       selectedCountLimit,
-      selectedYear === "tarih_arsivi" ? selectedChapter : undefined,
+      selectedYear === "tarih_arsivi" || selectedYear === "tarih_arsivi54"
+        ? selectedChapter
+        : undefined,
     );
   };
 
@@ -424,7 +439,8 @@ export function KpssPastExamsDashboard({
         </div>
 
         {/* Adım 3: Ünite Seçin */}
-        {selectedYear === "tarih_arsivi" && (
+        {(selectedYear === "tarih_arsivi" ||
+          selectedYear === "tarih_arsivi54") && (
           <div>
             <label
               style={{
@@ -447,7 +463,11 @@ export function KpssPastExamsDashboard({
                 paddingRight: "4px",
               }}
             >
-              {TARIH_CHAPTERS.map((ch) => (
+              {(
+                selectedYear === "tarih_arsivi54"
+                  ? TARIH54_CHAPTERS
+                  : TARIH_CHAPTERS
+              ).map((ch) => (
                 <div
                   key={ch.id}
                   onClick={() => setSelectedChapter(ch.id)}
