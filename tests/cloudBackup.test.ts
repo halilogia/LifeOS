@@ -21,8 +21,7 @@ const USER_DATA_WRITERS: string[] = [
   "presentation/store/kpssChartMetricStore.ts",
   "presentation/store/kpssChartSettingsStore.ts",
   "presentation/store/kpssWikiSidebarStore.ts",
-  // Services
-  "services/kpss/kpssQuestionBankService.ts",
+  // Services (now delegate to repositories)
   "services/kpss/kpssSrsService.ts",
   "services/kpss/kpssWikiService.ts",
   // Infrastructure (Repositories - these are the ones calling scheduleCloudBackup)
@@ -33,6 +32,7 @@ const USER_DATA_WRITERS: string[] = [
   "infrastructure/persistence/repositories/ChromeStorageWikiNoteRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageNoteRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageTodoRepository.ts",
+  "infrastructure/persistence/repositories/ChromeStorageQuestionBankRepository.ts",
   // Sidepanel
   "sidepanel/useSidePanelChat.ts",
   // Content
