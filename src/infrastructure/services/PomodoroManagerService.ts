@@ -22,6 +22,8 @@ const POMO_KEY = "pomodoro_timer_state";
 const STOPWATCH_KEY = "stopwatch_state";
 const ALARMS_KEY = "pomodoro_alarms";
 
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+
 const DEFAULT_TIMES = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 
 const defaultPomoState: PomoState = {
@@ -67,6 +69,7 @@ export const pomodoroManager = {
   async saveState(state: PomoState): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.local.set({ [POMO_KEY]: state }, () => {
+        scheduleCloudBackup();
         resolve();
       });
     });
@@ -167,6 +170,7 @@ export const pomodoroManager = {
   async saveStopwatch(state: StopwatchState): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.local.set({ [STOPWATCH_KEY]: state }, () => {
+        scheduleCloudBackup();
         resolve();
       });
     });
@@ -233,6 +237,7 @@ export const pomodoroManager = {
   async saveAlarms(alarms: AlarmItem[]): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.local.set({ [ALARMS_KEY]: alarms }, () => {
+        scheduleCloudBackup();
         resolve();
       });
     });

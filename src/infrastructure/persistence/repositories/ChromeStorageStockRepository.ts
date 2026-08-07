@@ -19,6 +19,7 @@ import {
   SYNC_STOCK_TRADE_HISTORY,
   SYNC_STOCK_CASH,
 } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const PORTFOLIO_KEY = SYNC_STOCK_PORTFOLIO;
 const RULES_KEY = SYNC_STOCK_RULES;
@@ -41,7 +42,10 @@ export class ChromeStorageStockRepository {
 
   async savePortfolio(portfolio: StockPortfolioItem[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [PORTFOLIO_KEY]: portfolio }, resolve);
+      chrome.storage.local.set({ [PORTFOLIO_KEY]: portfolio }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -56,7 +60,10 @@ export class ChromeStorageStockRepository {
 
   async saveRules(rules: StockRule[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [RULES_KEY]: rules }, resolve);
+      chrome.storage.local.set({ [RULES_KEY]: rules }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -71,7 +78,10 @@ export class ChromeStorageStockRepository {
 
   async saveAlertLogs(logs: StockAlertLog[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [LOGS_KEY]: logs }, resolve);
+      chrome.storage.local.set({ [LOGS_KEY]: logs }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -93,7 +103,10 @@ export class ChromeStorageStockRepository {
 
   async saveTradeHistory(items: StockTradeHistory[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [TRADE_HISTORY_KEY]: items }, resolve);
+      chrome.storage.local.set({ [TRADE_HISTORY_KEY]: items }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -115,7 +128,10 @@ export class ChromeStorageStockRepository {
 
   async setCashBalance(balance: StockCashBalance): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [CASH_KEY]: balance }, resolve);
+      chrome.storage.local.set({ [CASH_KEY]: balance }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 
@@ -130,7 +146,10 @@ export class ChromeStorageStockRepository {
 
   async saveWatchlists(watchlists: StockWatchlist[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [WATCHLISTS_KEY]: watchlists }, resolve);
+      chrome.storage.local.set({ [WATCHLISTS_KEY]: watchlists }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 

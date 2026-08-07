@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import { WillpowerStreak, Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 interface UseWillpowerOptions {
   lang: Language;
@@ -109,6 +110,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
       setNote("");
       setData(updatedData);
       calculateTime(nowStr);
+      scheduleCloudBackup();
 
       // Restart timer
       if (timerRef.current) {
@@ -134,6 +136,7 @@ export function useWillpower({ lang, onShowConfirm }: UseWillpowerOptions) {
         chrome.storage.local.set({ willpowerStreak: updatedData }, resolve),
       );
       setData(updatedData);
+      scheduleCloudBackup();
     });
   };
 

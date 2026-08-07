@@ -23,6 +23,7 @@ import {
 import type { KpssFlashcard } from "@/services/kpss/kpssService.js";
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
 import { logger } from "@/utils/logger.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 /** localStorage key: AI-üretimli tarih flashcard kütüphanesi. */
 const AI_CARDS_KEY = "kpssAiSrsCards";
@@ -92,7 +93,10 @@ async function readAiCards(): Promise<KpssFlashcard[]> {
 /** Kart kutuphanesini local depoya yazar. */
 async function writeAiCards(cards: KpssFlashcard[]): Promise<void> {
   await new Promise<void>((resolve) => {
-    chrome.storage.local.set({ [AI_CARDS_KEY]: cards }, () => resolve());
+    chrome.storage.local.set({ [AI_CARDS_KEY]: cards }, () => {
+      scheduleCloudBackup();
+      resolve();
+    });
   });
 }
 

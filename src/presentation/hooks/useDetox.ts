@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "preact/hooks";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 export function useDetox() {
   const [enabled, setEnabled] = useState(false);
@@ -56,6 +57,7 @@ export function useDetox() {
 
   const saveBlockedSites = useCallback((sites: string[]) => {
     chrome.storage.local.set({ detox_blocked_sites: sites });
+    scheduleCloudBackup();
   }, []);
 
   const enableDetox = useCallback((sites: string[], duration: number) => {
@@ -69,6 +71,7 @@ export function useDetox() {
       setEnabled(true);
       setEndTime(calculatedEndTime);
     });
+    scheduleCloudBackup();
   }, []);
 
   const disableDetox = useCallback(() => {
@@ -80,6 +83,7 @@ export function useDetox() {
       setEnabled(false);
       setEndTime(0);
     });
+    scheduleCloudBackup();
   }, []);
 
   return {

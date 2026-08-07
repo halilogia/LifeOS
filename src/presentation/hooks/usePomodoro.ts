@@ -5,6 +5,7 @@ import {
   AlarmItem,
 } from "@/infrastructure/services/PomodoroManagerService.js";
 import { logger } from "@/utils/logger.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 interface UsePomodoroOptions {
   lang: Language;
@@ -240,6 +241,7 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
     const newTimes = { ...customTimes, [mode]: seconds };
     setCustomTimes(newTimes);
     chrome.storage.local.set({ pomoCustomTimes: newTimes });
+    scheduleCloudBackup();
 
     if (!pomoRunning && pomoMode === mode) {
       await pomodoroManager.resetTimer(mode, seconds);
@@ -331,6 +333,7 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
     setPomodoroHistory(nextHistory);
     setShowPlantModal(false);
     setFocusNote("");
+    scheduleCloudBackup();
   };
 
   return {

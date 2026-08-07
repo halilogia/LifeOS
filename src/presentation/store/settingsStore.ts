@@ -14,6 +14,7 @@ import { create } from "zustand";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
 import { UpdateSettingsUseCase } from "@/application/use-cases/settings/UpdateSettingsUseCase.js";
+import { scheduleCloudBackup, runCloudBackup } from "@/utils/cloudBackup.js";
 
 function syncGet<T>(keys: string[]): Promise<Record<string, T>> {
   return new Promise((resolve) => {
@@ -23,7 +24,12 @@ function syncGet<T>(keys: string[]): Promise<Record<string, T>> {
   });
 }
 function syncSet(data: Record<string, unknown>): Promise<void> {
-  return new Promise((resolve) => chrome.storage.local.set(data, resolve));
+  return new Promise((resolve) => {
+    chrome.storage.local.set(data, () => {
+      scheduleCloudBackup();
+      resolve();
+    });
+  });
 }
 
 const settingsRepo = new ChromeStorageSettingsRepository();
@@ -231,6 +237,9 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   handleClearAllData: async () => {
     await settingsUC.clearAllData(get().lang as Language);
+    // Drive'daki backup da temizlensin — yoksa restore eski veriyi geri getirir.
+    // enabled false olduğu için force=true gerekir.
+    await runCloudBackup(true);
   },
 
   handleUpdateAIConfig: async (provider, key, model, endpoint) => {

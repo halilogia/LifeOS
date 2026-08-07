@@ -6,6 +6,7 @@
 
 import type { IMemoryRepository } from "@/domain/repositories/IMemoryRepository.js";
 import { SYNC_AI_USER_MEMORY } from "@/infrastructure/storage/keys.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const MEMORY_KEY = SYNC_AI_USER_MEMORY;
 
@@ -20,7 +21,10 @@ export class ChromeStorageMemoryRepository implements IMemoryRepository {
 
   async setMemory(memory: string): Promise<void> {
     return new Promise<void>((resolve) => {
-      chrome.storage.local.set({ [MEMORY_KEY]: memory }, resolve);
+      chrome.storage.local.set({ [MEMORY_KEY]: memory }, () => {
+        scheduleCloudBackup();
+        resolve();
+      });
     });
   }
 }

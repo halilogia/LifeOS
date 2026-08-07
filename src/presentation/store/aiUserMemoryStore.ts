@@ -6,6 +6,7 @@
  */
 
 import { create } from "zustand";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const KEY = "aiUserMemory";
 const AREA = "sync"; // key historically read/written under sync namespace
@@ -28,7 +29,10 @@ export const useAiUserMemoryState = create<AiUserMemoryState>()((set) => ({
   setUserMemory: (m) => set({ userMemory: m }),
   saveMemory: (m, onSuccess) => {
     set({ userMemory: m });
-    void chrome.storage.local.set({ [KEY]: m }, () => onSuccess?.());
+    void chrome.storage.local.set({ [KEY]: m }, () => {
+      scheduleCloudBackup();
+      onSuccess?.();
+    });
   },
 }));
 

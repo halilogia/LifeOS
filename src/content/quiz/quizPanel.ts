@@ -9,6 +9,7 @@
  * Security: createElement + textContent only — NO innerHTML (AGENTS.md 4.4).
  */
 import { contentLog, contentError } from "@/content/contentLogger.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const AI_SITES: Array<{ host: string; name: string }> = [
   { host: "gemini.google.com", name: "Gemini" },
@@ -871,6 +872,7 @@ async function saveStats(correct: number, total: number): Promise<void> {
     };
 
     await chrome.storage.local.set({ [STORAGE_KEY]: stats });
+    scheduleCloudBackup();
     contentLog(`[QuizPanel] Stats saved: ${correct}/${total}`);
   } catch (err) {
     contentError("[QuizPanel] saveStats error:", err);

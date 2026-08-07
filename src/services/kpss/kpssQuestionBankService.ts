@@ -8,6 +8,7 @@
  */
 
 import type { QuizQuestion } from "@/services/kpss/kpssAiService.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const WRONG_KEY = "kpssWrongQuestions";
 const COLLECTION_KEY = "kpssCollection";
@@ -28,7 +29,10 @@ function readList(key: string): Promise<QuizQuestion[]> {
 
 function writeList(key: string, list: QuizQuestion[]): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: list }, () => resolve());
+    chrome.storage.local.set({ [key]: list }, () => {
+      scheduleCloudBackup();
+      resolve();
+    });
   });
 }
 

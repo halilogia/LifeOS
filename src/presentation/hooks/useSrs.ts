@@ -10,6 +10,7 @@ import {
 import { getAllWords } from "@/services/vocabularyService.js";
 import { Word } from "@/types/word.js";
 import { logger } from "@/utils/logger.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 /**
  * Kelimenin banka seviyesinden gerçek wordType'ı çözer.
@@ -130,6 +131,7 @@ export function useSrs() {
     await new Promise<void>((resolve) =>
       chrome.storage.local.set({ srsProgress: progress }, resolve),
     );
+    scheduleCloudBackup();
     setFadeState("slide-out");
     setTimeout(() => {
       setCurrentWordIndex((prev) => prev + 1);

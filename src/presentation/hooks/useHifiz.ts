@@ -4,6 +4,7 @@ import {
   YETERLIKLER_DATA,
 } from "@/domain/data/hifizData.js";
 import { HifizProgress, HifizItem } from "@/types/types.js";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 /**
  * Hifiz ezber + yeterlikler state & storage mantığı (AGENTS.md 6.3: presentation/hooks/).
@@ -136,6 +137,7 @@ export function useHifiz() {
       chrome.storage.local.set({ hifizProgress: progress }, r),
     );
     setHifizProgress(progress);
+    scheduleCloudBackup();
   };
 
   // Cycle individual page status within a surah
@@ -197,6 +199,7 @@ export function useHifiz() {
       chrome.storage.local.set({ hifizProgress: progress }, r),
     );
     setHifizProgress(progress);
+    scheduleCloudBackup();
   };
 
   // Yeterlik items checkbox toggle
@@ -213,6 +216,7 @@ export function useHifiz() {
       chrome.storage.local.set({ yeterlikler: next }, r),
     );
     setYeterlikler(next);
+    scheduleCloudBackup();
   };
 
   // Mushaf viewer operations

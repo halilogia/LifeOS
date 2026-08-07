@@ -5,6 +5,7 @@
  */
 
 import { create } from "zustand";
+import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 
 const KEY_TYPE = "kpssChartType";
 const KEY_DAYS = "kpssChartDays";
@@ -22,11 +23,15 @@ export const useKpssChartSettingsState = create<KpssChartSettingsState>()(
     chartDays: 7,
     setChartType: (t) => {
       set({ chartType: t });
-      void chrome.storage.local.set({ [KEY_TYPE]: t });
+      void chrome.storage.local.set({ [KEY_TYPE]: t }, () =>
+        scheduleCloudBackup(),
+      );
     },
     setChartDays: (d) => {
       set({ chartDays: d });
-      void chrome.storage.local.set({ [KEY_DAYS]: d });
+      void chrome.storage.local.set({ [KEY_DAYS]: d }, () =>
+        scheduleCloudBackup(),
+      );
     },
   }),
 );
