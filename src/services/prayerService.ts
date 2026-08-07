@@ -34,9 +34,12 @@ export function createPrayerService(cacheRepo: IPrayerCacheRepository) {
       country: string = "Turkey",
     ): Promise<PrayerTimes> {
       const today = new Date();
-      const todayStr = today.toISOString().split("T")[0];
       const year = today.getFullYear();
       const month = today.getMonth() + 1;
+      const yearStr = String(year);
+      const monthStr = String(month).padStart(2, "0");
+      const dayStr = String(today.getDate()).padStart(2, "0");
+      const todayStr = `${yearStr}-${monthStr}-${dayStr}`;
 
       // 1. In-memory cache
       if (

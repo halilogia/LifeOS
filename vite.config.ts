@@ -51,9 +51,9 @@ export default defineConfig({
               .replace(/(?:^|\n)\s*export\s+/g, "\n")
               .trim();
 
-            // Wrap in IIFE
+            // Inline code directly so top-level declarations remain accessible in entry scope
             entryChunk.code =
-              `(function(){${inlineCode}})();\n` + entryChunk.code;
+              `${inlineCode}\n` + entryChunk.code;
 
             // Remove any import line referencing this chunk from entry
             const escapedName = impName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -106,7 +106,6 @@ export default defineConfig({
           if (chunkInfo.name === "background") return "background.js";
           return "assets/[name]-[hash].js";
         },
-        inlineDynamicImports: false,
       },
     },
   },

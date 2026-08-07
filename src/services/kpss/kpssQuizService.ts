@@ -3,8 +3,6 @@ import {
   loadAllExamData,
   AVAILABLE_EXAM_YEARS,
 } from "@/services/kpss/data/kpssDataRegistry.js";
-import osymData from "@/services/kpss/data/osymHistoryQuestions.json";
-import osym54Data from "@/services/kpss/data/osymHistoryQuestions54.json";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
 // In-memory cache — loaded once, reused across calls
@@ -80,6 +78,7 @@ export async function getPastExamQuestions(
   let questions: QuizQuestion[] = [];
 
   if (year === "tarih_arsivi") {
+    const osymData = (await import("@/services/kpss/data/osymHistoryQuestions.json")).default;
     const rawHistory = (osymData as { history?: unknown[] }).history || [];
     type HistoryItem = {
       chapter?: string;
@@ -125,6 +124,7 @@ export async function getPastExamQuestions(
     questions = [...questions].sort(() => Math.random() - 0.5);
   } else if (year === "tarih_arsivi54") {
     // SON 54 YILIN TARİH SORULARI (OCR'dan parse edilen, 2026-08)
+    const osym54Data = (await import("@/services/kpss/data/osymHistoryQuestions54.json")).default;
     const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
     type History54Item = {
       chapter?: string;
@@ -252,6 +252,7 @@ export async function getExamSubjectCount(
   }
   if (year === "tarih_arsivi54") {
     // sadece 5 şıklı sorular (OCR şık kaybı olanlar quiz'de bozuk görünür)
+    const osym54Data = (await import("@/services/kpss/data/osymHistoryQuestions54.json")).default;
     const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
     const count = rawHistory.filter(
       (q) =>

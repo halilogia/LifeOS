@@ -75,9 +75,6 @@ export function App() {
     refreshQuote(lang);
   }, [lang]);
 
-  useEffect(() => {
-    setSyncSettings(useUIStore.getState().syncSettings);
-  }, []);
 
   const t = getTranslation(lang);
 

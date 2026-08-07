@@ -266,7 +266,7 @@ export function highlightElement(
   badge.style.display = "flex";
   badge.style.alignItems = "center";
   badge.style.gap = "4px";
-  badge.innerHTML = `🎯 Browser-Use Agent: ${actionLabel || "İşlem Yapılıyor"}`;
+  badge.textContent = `🎯 Browser-Use Agent: ${actionLabel || "İşlem Yapılıyor"}`;
 
   // Animated Glowing AI Cursor Dot (Claude / Browser-Use Cursor)
   const cursorDot = document.createElement("div");

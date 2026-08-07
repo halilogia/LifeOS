@@ -22,7 +22,6 @@ const USER_DATA_WRITERS: string[] = [
   "presentation/store/kpssChartSettingsStore.ts",
   "presentation/store/kpssWikiSidebarStore.ts",
   // Services (now delegate to repositories)
-  "services/kpss/kpssSrsService.ts",
   "services/kpss/kpssWikiService.ts",
   // Infrastructure (Repositories - these are the ones calling scheduleCloudBackup)
   "infrastructure/persistence/repositories/ChromeStorageStockRepository.ts",

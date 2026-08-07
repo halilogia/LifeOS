@@ -11,6 +11,7 @@
     "generate:tree": "node scripts/automated_project_tree.cjs",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest run",
+    "benchmark": "node scripts/benchmark.mjs",
     "desktop:build": "npm run build && cd electron/desktop && npm install && node build.js",
     "desktop:start": "cd electron/desktop && npm install && npm start"
   },
