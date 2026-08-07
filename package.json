@@ -10,6 +10,7 @@
     "count-lines": "node scripts/countLines.js",
     "generate:tree": "node scripts/automated_project_tree.cjs",
     "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest run",
     "desktop:build": "npm run build && cd electron/desktop && npm install && node build.js",
     "desktop:start": "cd electron/desktop && npm install && npm start"
   },
@@ -34,6 +35,7 @@
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.1.4",
+    "vitest": "^4.1.10",
     "xlsx": "^0.18.5"
   },
   "dependencies": {
