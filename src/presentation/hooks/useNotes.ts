@@ -1,10 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import { Note, CustomQuote, DayScores, Language } from "@/types/types.js";
-import { getTranslation } from "@/utils/i18n.js";
-import { NoteFilterType } from "@/components/notes/NotesFilterBar.js";
-import { NoteType } from "@/components/notes/NoteEditorModal.js";
-import { SYNC_DAY_SCORES } from "@/infrastructure/storage/keys.js";
-import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { useRef, useEffect } from "preact/hooks";
+import { Language } from "@/types/types.js";
+import { useNotesState } from "@/presentation/store/notesStore.js";
 
 interface UseNotesOptions {
   lang: Language;
@@ -12,202 +8,63 @@ interface UseNotesOptions {
 }
 
 /**
- * Notes + custom quotes state & storage mantığı (AGENTS.md 6.3: presentation/hooks/).
- * View sadece JSX render eder.
+ * Facade over useNotesState — all state + storage + auto-save lives in the store.
+ * configure() is called every render to keep fresh closures (lang, onShowConfirm).
+ * Click timer is kept in facade (UI timing concern).
  */
 export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
-  const t = getTranslation(lang);
+  const notes = useNotesState((s) => s.notes);
+  const quotes = useNotesState((s) => s.quotes);
+  const dayScores = useNotesState((s) => s.dayScores);
+  const filterType = useNotesState((s) => s.filterType);
+  const setFilterType = useNotesState((s) => s.setFilterType);
+  const isGraphModalOpen = useNotesState((s) => s.isGraphModalOpen);
+  const setIsGraphModalOpen = useNotesState((s) => s.setIsGraphModalOpen);
+  const isNoteModalOpen = useNotesState((s) => s.isNoteModalOpen);
+  const setIsNoteModalOpen = useNotesState((s) => s.setIsNoteModalOpen);
+  const noteType = useNotesState((s) => s.noteType);
+  const setNoteType = useNotesState((s) => s.setNoteType);
+  const noteTitle = useNotesState((s) => s.noteTitle);
+  const setNoteTitle = useNotesState((s) => s.setNoteTitle);
+  const noteContent = useNotesState((s) => s.noteContent);
+  const setNoteContent = useNotesState((s) => s.setNoteContent);
+  const noteCues = useNotesState((s) => s.noteCues);
+  const setNoteCues = useNotesState((s) => s.setNoteCues);
+  const noteSummary = useNotesState((s) => s.noteSummary);
+  const setNoteSummary = useNotesState((s) => s.setNoteSummary);
+  const noteSaveStatus = useNotesState((s) => s.noteSaveStatus);
+  const isQuoteModalOpen = useNotesState((s) => s.isQuoteModalOpen);
+  const setIsQuoteModalOpen = useNotesState((s) => s.setIsQuoteModalOpen);
+  const quoteContent = useNotesState((s) => s.quoteContent);
+  const setQuoteContent = useNotesState((s) => s.setQuoteContent);
+  const quoteAuthor = useNotesState((s) => s.quoteAuthor);
+  const setQuoteAuthor = useNotesState((s) => s.setQuoteAuthor);
+  const inlineEditingId = useNotesState((s) => s.inlineEditingId);
+  const setInlineEditingId = useNotesState((s) => s.setInlineEditingId);
+  const inlineTitle = useNotesState((s) => s.inlineTitle);
+  const setInlineTitle = useNotesState((s) => s.setInlineTitle);
+  const inlineContent = useNotesState((s) => s.inlineContent);
+  const setInlineContent = useNotesState((s) => s.setInlineContent);
+  const inlineCues = useNotesState((s) => s.inlineCues);
+  const setInlineCues = useNotesState((s) => s.setInlineCues);
+  const inlineSummary = useNotesState((s) => s.inlineSummary);
+  const setInlineSummary = useNotesState((s) => s.setInlineSummary);
+  const handleSaveInlineNote = useNotesState((s) => s.handleSaveInlineNote);
+  const handleOpenNoteModal = useNotesState((s) => s.handleOpenNoteModal);
+  const handleSaveNote = useNotesState((s) => s.handleSaveNote);
+  const handleDeleteNote = useNotesState((s) => s.handleDeleteNote);
+  const handleSaveQuote = useNotesState((s) => s.handleSaveQuote);
+  const handleDeleteQuote = useNotesState((s) => s.handleDeleteQuote);
+  const handleSetDayScore = useNotesState((s) => s.handleSetDayScore);
+  const startInlineEdit = useNotesState((s) => s.startInlineEdit);
 
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [quotes, setQuotes] = useState<CustomQuote[]>([]);
-  const [dayScores, setDayScores] = useState<DayScores>({});
-  const [filterType, setFilterType] = useState<NoteFilterType>("all");
-  const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
+  // CRITICAL: configure on every render (fresh closures for lang/onShowConfirm)
+  useNotesState.getState().configure({ lang, onShowConfirm });
 
-  // Note Modal States
-  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
-  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
-  const [noteTitle, setNoteTitle] = useState("");
-  const [noteContent, setNoteContent] = useState("");
-  const [noteType, setNoteType] = useState<NoteType>("note");
-  const [noteCues, setNoteCues] = useState("");
-  const [noteSummary, setNoteSummary] = useState("");
-  const [noteSaveStatus, setNoteSaveStatus] = useState(false);
-
-  // Quote Modal States
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const [quoteContent, setQuoteContent] = useState("");
-  const [quoteAuthor, setQuoteAuthor] = useState("");
-
-  // Inline Note Editor States
-  const [inlineEditingId, setInlineEditingId] = useState<string | null>(null);
-  const [inlineTitle, setInlineTitle] = useState("");
-  const [inlineContent, setInlineContent] = useState("");
-  const [inlineCues, setInlineCues] = useState("");
-  const [inlineSummary, setInlineSummary] = useState("");
-
+  // Click timer for double-click vs single-click distinction (UI concern)
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoSaveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-  // Otomatik kayıt sırasında en güncel değerleri oku
-  const noteModalOpenRef = useRef(false);
-  noteModalOpenRef.current = isNoteModalOpen;
-  const editingNoteIdRef = useRef<string | null>(null);
-  editingNoteIdRef.current = editingNoteId;
-  const noteFieldsRef = useRef({ title: "", content: "", cues: "", summary: "" });
-  noteFieldsRef.current = {
-    title: noteTitle,
-    content: noteContent,
-    cues: noteCues,
-    summary: noteSummary,
-  };
 
-  /** Otomatik kayıt — modal açıkken alanlar değişince debounce'la kaydet */
-  const autoSaveNote = useCallback(async () => {
-    if (!noteModalOpenRef.current) {
-      return;
-    }
-    const { title, content, cues, summary } = noteFieldsRef.current;
-    if (!title.trim() && !content.trim() && !cues.trim() && !summary.trim()) {
-      return;
-    }
-    const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get(["notes"], (res) =>
-        r((res.notes as Note[]) || []),
-      ),
-    );
-    const id = editingNoteIdRef.current;
-    if (id) {
-      const idx = currentNotes.findIndex((n) => n.id === id);
-      if (idx !== -1) {
-        currentNotes[idx].title = title;
-        currentNotes[idx].content = content;
-        currentNotes[idx].type = noteType;
-        currentNotes[idx].cues = cues;
-        currentNotes[idx].summary = summary;
-        currentNotes[idx].createdAt = new Date().toISOString();
-      }
-    } else {
-      // Yeni not — ilk otomatik kayıtta oluştur, editingNoteId'yi bağla
-      const newId = crypto.randomUUID();
-      currentNotes.push({
-        id: newId,
-        title,
-        content,
-        type: noteType,
-        cues,
-        summary,
-        createdAt: new Date().toISOString(),
-      });
-      setEditingNoteId(newId);
-      editingNoteIdRef.current = newId;
-    }
-    await new Promise<void>((r) =>
-      chrome.storage.local.set({ notes: currentNotes }, r),
-    );
-    setNotes(
-      currentNotes.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      ),
-    );
-    setNoteSaveStatus(true);
-    if (autoSaveStatusTimerRef.current) {
-      clearTimeout(autoSaveStatusTimerRef.current);
-    }
-    autoSaveStatusTimerRef.current = setTimeout(
-      () => setNoteSaveStatus(false),
-      2000,
-    );
-  }, [noteType]);
-
-  // Otomatik kayıt: modal açıkken alanlar değişince 1.2s debounce
-  useEffect(() => {
-    if (!isNoteModalOpen) {
-      return;
-    }
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
-    }
-    autoSaveTimerRef.current = setTimeout(() => {
-      void autoSaveNote();
-    }, 1200);
-    return () => {
-      if (autoSaveTimerRef.current) {
-        clearTimeout(autoSaveTimerRef.current);
-      }
-    };
-  }, [
-    isNoteModalOpen,
-    noteTitle,
-    noteContent,
-    noteCues,
-    noteSummary,
-    autoSaveNote,
-  ]);
-
-  // Sayfa gizlenirken / sekme değişirken anında kaydet (kayıp önleme)
-  useEffect(() => {
-    const flush = () => {
-      if (document.visibilityState === "hidden") {
-        void autoSaveNote();
-      }
-    };
-    document.addEventListener("visibilitychange", flush);
-    window.addEventListener("pagehide", flush);
-    return () => {
-      document.removeEventListener("visibilitychange", flush);
-      window.removeEventListener("pagehide", flush);
-    };
-  }, [autoSaveNote]);
-
-  const loadData = useCallback(async () => {
-    const loadedNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get(["notes"], (res) =>
-        r((res.notes as Note[]) || []),
-      ),
-    );
-    const loadedQuotes: CustomQuote[] = await new Promise((r) =>
-      chrome.storage.local.get(["customQuotes"], (res) =>
-        r((res.customQuotes as CustomQuote[]) || []),
-      ),
-    );
-    const loadedScores: DayScores = await new Promise((r) =>
-      chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
-        r((res[SYNC_DAY_SCORES] as DayScores) || {}),
-      ),
-    );
-    setNotes(
-      loadedNotes.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      ),
-    );
-    setQuotes(loadedQuotes);
-    setDayScores(loadedScores);
-  }, []);
-
-  useEffect(() => {
-    loadData();
-    return () => {
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-      }
-    };
-  }, [loadData]);
-
-  // Inline Operations
-  const startInlineEdit = (note: Note) => {
-    setInlineEditingId(note.id);
-    setInlineTitle(note.title);
-    setInlineContent(note.content);
-    setInlineCues(note.cues || "");
-    setInlineSummary(note.summary || "");
-  };
-
-  const handleCardClick = (note: Note) => {
+  const handleCardClick = (note: any) => {
     if (inlineEditingId === note.id) {
       return;
     }
@@ -223,180 +80,16 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
     }
   };
 
-  const handleSaveInlineNote = async (id: string) => {
-    const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get(["notes"], (res) =>
-        r((res.notes as Note[]) || []),
-      ),
-    );
-    const idx = currentNotes.findIndex((n) => n.id === id);
-    if (idx !== -1) {
-      currentNotes[idx].title = inlineTitle;
-      currentNotes[idx].content = inlineContent;
-      currentNotes[idx].cues = inlineCues;
-      currentNotes[idx].summary = inlineSummary;
-      currentNotes[idx].createdAt = new Date().toISOString();
-      await new Promise<void>((r) =>
-        chrome.storage.local.set({ notes: currentNotes }, r),
-      );
-      setInlineEditingId(null);
-      loadData();
-    }
-  };
-
-  // Notes Operations
-  const handleOpenNoteModal = (note?: Note) => {
-    if (note) {
-      setEditingNoteId(note.id);
-      setNoteTitle(note.title);
-      setNoteContent(note.content);
-      setNoteType(note.type || "note");
-      setNoteCues(note.cues || "");
-      setNoteSummary(note.summary || "");
-    } else {
-      setEditingNoteId(null);
-      setNoteTitle("");
-      setNoteContent("");
-      setNoteType("note");
-      setNoteCues("");
-      setNoteSummary("");
-    }
-    setIsNoteModalOpen(true);
-  };
-
-  const handleSaveNote = async () => {
-    if (
-      !noteTitle.trim() &&
-      !noteContent.trim() &&
-      !noteCues.trim() &&
-      !noteSummary.trim()
-    ) {
-      setIsNoteModalOpen(false);
-      return;
-    }
-
-    const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get(["notes"], (res) =>
-        r((res.notes as Note[]) || []),
-      ),
-    );
-    if (editingNoteId) {
-      const idx = currentNotes.findIndex((n) => n.id === editingNoteId);
-      if (idx !== -1) {
-        currentNotes[idx].title = noteTitle;
-        currentNotes[idx].content = noteContent;
-        currentNotes[idx].type = noteType;
-        currentNotes[idx].cues = noteCues;
-        currentNotes[idx].summary = noteSummary;
-        currentNotes[idx].createdAt = new Date().toISOString();
+  useEffect(() => {
+    const cleanup = useNotesState.getState().init();
+    void useNotesState.getState().loadData();
+    return () => {
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
       }
-    } else {
-      currentNotes.push({
-        id: crypto.randomUUID(),
-        title: noteTitle,
-        content: noteContent,
-        type: noteType,
-        cues: noteCues,
-        summary: noteSummary,
-        createdAt: new Date().toISOString(),
-      });
-    }
-
-    await new Promise<void>((r) =>
-      chrome.storage.local.set({ notes: currentNotes }, r),
-    );
-    setIsNoteModalOpen(false);
-    setNoteSaveStatus(true);
-    if (autoSaveStatusTimerRef.current) {
-      clearTimeout(autoSaveStatusTimerRef.current);
-    }
-    autoSaveStatusTimerRef.current = setTimeout(
-      () => setNoteSaveStatus(false),
-      2000,
-    );
-    loadData();
-    scheduleCloudBackup();
-  };
-
-  const handleDeleteNote = (e: MouseEvent, id: string) => {
-    e.stopPropagation();
-    const confirmMsg = t.delete_confirm_note;
-    onShowConfirm(confirmMsg, async () => {
-      const currentNotes: Note[] = await new Promise((r) =>
-        chrome.storage.local.get(["notes"], (res) =>
-          r((res.notes as Note[]) || []),
-        ),
-      );
-      const filtered = currentNotes.filter((n) => n.id !== id);
-      await new Promise<void>((r) =>
-        chrome.storage.local.set({ notes: filtered }, r),
-      );
-      loadData();
-      scheduleCloudBackup();
-    });
-  };
-
-  // Quotes Operations
-  const handleSaveQuote = async () => {
-    if (!quoteContent.trim()) {
-      setIsQuoteModalOpen(false);
-      return;
-    }
-
-    const currentQuotes: CustomQuote[] = await new Promise((r) =>
-      chrome.storage.local.get(["customQuotes"], (res) =>
-        r((res.customQuotes as CustomQuote[]) || []),
-      ),
-    );
-    currentQuotes.push({
-      text: quoteContent.trim(),
-      author: quoteAuthor.trim() || undefined,
-    });
-
-    await new Promise<void>((r) =>
-      chrome.storage.local.set({ customQuotes: currentQuotes }, r),
-    );
-    setIsQuoteModalOpen(false);
-    loadData();
-    scheduleCloudBackup();
-  };
-
-  const handleDeleteQuote = (index: number) => {
-    const confirmMsg = t.delete_confirm_quote;
-    onShowConfirm(confirmMsg, async () => {
-      const currentQuotes: CustomQuote[] = await new Promise((r) =>
-        chrome.storage.local.get(["customQuotes"], (res) =>
-          r((res.customQuotes as CustomQuote[]) || []),
-        ),
-      );
-      currentQuotes.splice(index, 1);
-      await new Promise<void>((r) =>
-        chrome.storage.local.set({ customQuotes: currentQuotes }, r),
-      );
-      loadData();
-      scheduleCloudBackup();
-    });
-  };
-
-  // Day Score (Mood Tracker) Operations
-  const handleSetDayScore = async (dateKey: string, score: number) => {
-    const currentScores: DayScores = await new Promise((r) =>
-      chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
-        r((res[SYNC_DAY_SCORES] as DayScores) || {}),
-      ),
-    );
-    const next: DayScores = { ...currentScores };
-    if (score <= 0) {
-      delete next[dateKey];
-    } else {
-      next[dateKey] = score;
-    }
-    await new Promise<void>((r) =>
-      chrome.storage.local.set({ [SYNC_DAY_SCORES]: next }, r),
-    );
-    setDayScores(next);
-    scheduleCloudBackup();
-  };
+      cleanup();
+    };
+  }, []);
 
   return {
     notes,

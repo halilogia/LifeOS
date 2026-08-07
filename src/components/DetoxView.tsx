@@ -4,6 +4,7 @@ import { translations } from "@/utils/i18n.js";
 import { DetoxUsageCard } from "@/components/detox/DetoxUsageCard.js";
 import { DetoxStatusCard } from "@/components/detox/DetoxStatusCard.js";
 import { useDetox } from "@/presentation/hooks/useDetox.js";
+import { useUIStore } from "@/presentation/store/uiStore.js";
 
 interface DetoxViewProps {
   lang: Language;
@@ -28,6 +29,7 @@ const DURATIONS = [
 
 export function DetoxView({ lang }: DetoxViewProps) {
   const t = translations[lang];
+  const showAlert = useUIStore((s) => s.showAlert);
 
   const {
     enabled,
@@ -123,7 +125,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
 
   const handleEnableDetox = async () => {
     if (blockedSites.length === 0) {
-      alert(t.detox_no_sites_alert || "Lütfen en az bir site seçin.");
+      showAlert(t.detox_no_sites_alert);
       return;
     }
     enableDetox(blockedSites, selectedDuration);

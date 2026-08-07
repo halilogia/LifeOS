@@ -78,6 +78,16 @@ describe("runCloudBackup", () => {
     expect(data.bistStockCache).toBeUndefined();
   });
 
+  it("backup snapshot'ı sidebarOrder içerir (sol panel sırası)", async () => {
+    await chrome.storage.local.set({
+      todos: [{ id: "1" }],
+      sidebarOrder: ["list", "notes", "bist"],
+    });
+    await runCloudBackup();
+    const [, data] = backupToDrive.mock.calls[0];
+    expect(data.sidebarOrder).toEqual(["list", "notes", "bist"]);
+  });
+
   it("eşzamanlı çağrılar tek backup'a birleşir (inFlight)", async () => {
     // İlk çağrıyı askıda bırak — ikinci çağrı aynı promise'i dönsün.
     let resolveFirst!: (v: unknown) => void;

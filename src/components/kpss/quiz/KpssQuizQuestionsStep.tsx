@@ -177,7 +177,7 @@ export function KpssQuizQuestionsStep({
             transition: "all 0.2s ease",
           }}
         >
-          {isInCollection ? "📥" : "📥"}
+          {isInCollection ? "💎" : "💎"}
         </button>
       </div>
 

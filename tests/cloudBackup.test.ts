@@ -13,19 +13,9 @@ import path from "node:path";
 
 const SRC = path.resolve(__dirname, "..", "src");
 
-/** Kullanıcı verisi yazan dosyalar — her biri scheduleCloudBackup import etmeli. */
+/** Kullanıcı verisi yazan ve scheduleCloudBackup TETİKLEYEN dosyalar — her biri import etmeli. */
 const USER_DATA_WRITERS: string[] = [
-  // Hooks
-  "presentation/hooks/useNotes.ts",
-  "presentation/hooks/useHifiz.ts",
-  "presentation/hooks/usePomodoro.ts",
-  "presentation/hooks/usePrayer.ts",
-  "presentation/hooks/useWillpower.ts",
-  "presentation/hooks/useSrs.ts",
-  "presentation/hooks/useSidebarOrder.ts",
-  "presentation/hooks/useDetox.ts",
-  "presentation/hooks/usePopup.ts",
-  // Stores
+  // Stores (direct mutations)
   "presentation/store/settingsStore.ts",
   "presentation/store/aiUserMemoryStore.ts",
   "presentation/store/kpssChartMetricStore.ts",
@@ -35,8 +25,7 @@ const USER_DATA_WRITERS: string[] = [
   "services/kpss/kpssQuestionBankService.ts",
   "services/kpss/kpssSrsService.ts",
   "services/kpss/kpssWikiService.ts",
-  // Infrastructure
-  "infrastructure/services/PomodoroManagerService.ts",
+  // Infrastructure (Repositories - these are the ones calling scheduleCloudBackup)
   "infrastructure/persistence/repositories/ChromeStorageStockRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageKpssRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageSrsProgressRepository.ts",
