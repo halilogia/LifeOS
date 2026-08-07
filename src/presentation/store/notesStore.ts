@@ -6,7 +6,9 @@
  */
 
 import { create } from "zustand";
-import type { Note, CustomQuote, DayScores, Language, NoteType, NoteFilterType } from "@/types/types.js";
+import type { Note, CustomQuote, DayScores, Language } from "@/types/types.js";
+import type { NoteType } from "@/components/notes/NoteEditorModal.js";
+import type { NoteFilterType } from "@/components/notes/NotesFilterBar.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { SYNC_DAY_SCORES } from "@/infrastructure/storage/keys.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
@@ -86,7 +88,7 @@ interface NotesState {
   handleSaveInlineNote: (id: string) => Promise<void>;
   handleOpenNoteModal: (note?: Note) => void;
   handleSaveNote: () => Promise<void>;
-  handleDeleteNote: (id: string) => Promise<void>;
+  handleDeleteNote: (e: MouseEvent, id: string) => Promise<void>;
   handleSaveQuote: () => Promise<void>;
   handleDeleteQuote: (index: number) => Promise<void>;
   handleSetDayScore: (dateKey: string, score: number) => Promise<void>;
@@ -242,12 +244,11 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   },
   
   handleCardClick: (note) => {
-    const { inlineEditingId, clickTimerRef } = get();
+    const { inlineEditingId } = get();
     if (inlineEditingId === note.id) {
       return;
     }
-    // We can't use useRef in store, so we handle click timer differently
-    // The facade will handle click timing
+    // Click timer handled in facade (UI concern)
     get().startInlineEdit(note);
   },
   
@@ -353,7 +354,8 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     scheduleCloudBackup();
   },
   
-  handleDeleteNote: async (id) => {
+  handleDeleteNote: async (e: MouseEvent, id: string) => {
+    e.stopPropagation();
     const c = cb;
     if (!c) return;
     const t = getTranslation(c.lang);
