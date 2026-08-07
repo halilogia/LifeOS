@@ -99,41 +99,48 @@ async function writeAiCards(
 const DEFAULT_KPSS_HISTORY_CARDS: KpssFlashcard[] = [
   {
     id: "kpss_default_1",
-    question: "Osmanlı Devleti'ni kuran Türkmen beyliği hangisiydi?",
-    answer: "Osmanlı Beyliği (Söğüt-Domaniç yöresinde kuruldu).",
-    hint: "Kayı boyu — Ertuğrul Gazi'nin oğlu.",
-    category: "Osmanlı Kuruluş Dönemi",
+    question:
+      "İlk Türk devletlerinde hükümdara yönetme yetkisinin Tanrı tarafından verildiğine inanılan anlayış ve veraset sistemindeki etkisi nedir?",
+    answer:
+      "Kut Anlayışı. Kan yoluyla babadan oğula geçtiği için hanedan üyelerinin tümünün tahtta hakkı kabul edilmiş ve sık sık taht kavgalarına yol açmıştır.",
+    hint: "Kut anlayışı → Ülke hanedanın ortak malıdır.",
+    category: "İslamiyet Öncesi Türk Tarihi",
   },
   {
     id: "kpss_default_2",
-    question: "İstanbul kaç yılında, kim tarafından fethedildi?",
+    question:
+      "Osmanlı Divan-ı Hümayun'unda fethedilen toprakların kaydını tutan (Tahrir Defterleri) ve belgelere padişahın tuğrasını çeken görevli kimdir?",
     answer:
-      "1453'te Fatih Sultan Mehmet tarafından; bu olayla Orta Çağ kapandı, Yeni Çağ başladı.",
-    hint: "'Fetih' + 'Çağ' eşleşmesi (1453/1492).",
-    category: "Yükselme Dönemi",
+      "Nişancı. Tapu kadastro işlerini yürütür ve resmî yazışmalara padişahın tuğrasını çekerdi.",
+    hint: "Tuğra + Tahrir Defterleri = Nişancı",
+    category: "Osmanlı Kültür ve Medeniyeti",
   },
   {
     id: "kpss_default_3",
-    question: "Kurtuluş Savaşı'nın dönüm noktası olan 1921 büyük zaferi hangisidir?",
-    answer: "Sakarya Meydan Savaşı (23 Ağustos–13 Eylül 1921).",
-    hint: "Mustafa Kemal'e 'Gazi' ünvanı burada verildi.",
-    category: "Millî Mücadele",
+    question:
+      "Kurtuluş Savaşı'nın gerekçesi, amacı ve yönteminin ilk kez ihtilalci bir dille beyan edildiği belge hangisidir?",
+    answer:
+      "Amasya Genelgesi (22 Haziran 1919). 'Vatanın bütünlüğü milletin bağımsızlığı tehlikededir' (Gerekçe), 'Milletin bağımsızlığını yine milletin azim ve kararı kurtaracaktır' (Amaç ve Yöntem).",
+    hint: "Amacı, gerekçesi ve yöntemi ilk kez açıklandı.",
+    category: "Millî Mücadele Hazırlık",
   },
   {
     id: "kpss_default_4",
     question:
-      "Cumhuriyet döneminin ilk resmî iktisat politikası hangisidir?",
-    answer: "1923 İzmir İktisat Kongresi kararları (millî ve katılımcı iktisat).",
-    hint: "Lozan sonrası; 'Türk iktisat politikaları' ilk kez burada belirlendi.",
-    category: "Cumhuriyet Dönemi",
+      "Kurtuluş Savaşı'nın askeri safhasını sona erdiren ve Doğu Trakya, İstanbul ile Boğazlar'ın savaş yapılmadan kurtarılmasını sağlayan anlaşma hangisidir?",
+    answer:
+      "Mudanya Ateşkes Antlaşması (11 Ekim 1922). TBMM adına İsmet Paşa katılmış, Doğu Trakya ve İstanbul diplomatik zaferle kurtarılmıştır.",
+    hint: "Savaşılmadan diplomatik yolla kurtarılan Doğu Trakya.",
+    category: "Kurtuluş Savaşı Cepheler",
   },
   {
     id: "kpss_default_5",
-    question: "Tanzimat Fermanı hangi dönemde ve ne amaçla ilan edildi?",
+    question:
+      "Türk Hukuk sistemini çağdaşlaştıran, din/mezhep farkı gözetmeksizin kadın-erkek eşitliğini ve resmi nikah zorunluluğunu getiren inkılap hangisidir?",
     answer:
-      "1839'da Sultan Abdülmecid döneminde; malik-mülk-can güvenliğini garanti eden ıslahat fermanı.",
-    hint: "1839; 'Gülhane Hatt-ı Hümâyûnu' adıyla da bilinir.",
-    category: "Osmanlı Islahat Dönemi",
+      "17 Şubat 1926 Türk Medeni Kanunu. İsviçre'den uyarlanmış; kadına mirasta ve şahitlikte eşitlik, boşanma ve velayet hakkı tanınmıştır (Siyasi hak içermez!).",
+    hint: "1926 Medeni Kanun — Kadına toplumsal ve ekonomik eşitlik getirdi.",
+    category: "Atatürk İnkılapları",
   },
 ];
 
