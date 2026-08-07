@@ -357,7 +357,7 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   handleDeleteNote: async (e: MouseEvent, id: string) => {
     e.stopPropagation();
     const c = cb;
-    if (!c) return;
+    if (!c) {return;}
     const t = getTranslation(c.lang);
     c.onShowConfirm(t.delete_confirm_note, async () => {
       const currentNotes: Note[] = await new Promise((r) =>
@@ -393,7 +393,7 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   
   handleDeleteQuote: async (index) => {
     const c = cb;
-    if (!c) return;
+    if (!c) {return;}
     const t = getTranslation(c.lang);
     c.onShowConfirm(t.delete_confirm_quote, async () => {
       const currentQuotes: CustomQuote[] = await new Promise((r) =>

@@ -4,8 +4,6 @@
  * Shared between service layer, components, and repositories.
  */
 
-import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
-
 export interface KpssWikiNote {
   id: string;
   title: string;

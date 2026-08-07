@@ -255,7 +255,7 @@ export const usePomodoroState = create<PomodoroState>()((set, get) => ({
     const alarmTimer = setInterval(() => {
       const { alarms } = get();
       const c = cb;
-      if (!c) return;
+      if (!c) {return;}
       const now = new Date();
       const currentHHMM = now.toTimeString().slice(0, 5);
       alarms.forEach(async (alarm) => {
@@ -360,7 +360,7 @@ export const usePomodoroState = create<PomodoroState>()((set, get) => ({
       selectedElement,
     } = get();
     const c = cb;
-    if (!c) return;
+    if (!c) {return;}
 
     let position = -1;
     const occupied = new Set(pomodoroHistory.map((h) => h.position));

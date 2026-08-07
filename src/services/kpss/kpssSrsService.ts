@@ -23,10 +23,6 @@ import {
 import type { KpssFlashcard } from "@/services/kpss/kpssService.js";
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
 import { logger } from "@/utils/logger.js";
-import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
-
-/** localStorage key: AI-üretimli tarih flashcard kütüphanesi. */
-const AI_CARDS_KEY = "kpssAiSrsCards";
 
 /**
  * AI'ya tarih konusundan `count` adet flashcard üretmesini söyleyen prompt.

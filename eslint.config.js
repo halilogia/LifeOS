@@ -82,57 +82,69 @@ export default ts.config(
     },
     rules: {
       // ============================================================
-      // KRİTİK (error) — runtime hatası, güvenlik, davranış bozukluğu
-      // Bunları kapatma; kod kırar veya güvenlik açığı bırakır.
+      // 1. KRİTİK & GÜVENLİK (error) — MV3 Uyumlu & Runtime Koruması
       // ============================================================
       // Strict equality: == yerine === (type coercion hatası önler)
       'eqeqeq': ['error', 'always'],
-      // Blok süslü parantez zorunlu (dangling else, yanlış kapsam)
+      // Blok süslü parantez zorunlu (dangling else önler)
       'curly': ['error', 'all'],
-      // var yasak (hoisting karışıklığı)
+      // var yasak (hoisting karışıklığı önler)
       'no-var': 'error',
-      // Değişmez değerler const olmalı (yanlışlıkla reassign önler)
+      // Değişmez değerler const olmalı
       'prefer-const': 'error',
       // Switch'te fallthrough yasak (case atlama hatası)
       'no-fallthrough': 'error',
-      // Blok içinde fonksiyon/değişken bildirimi yasak (hoisting)
+      // Blok içinde fonksiyon/değişken bildirimi yasak
       'no-inner-declarations': 'error',
-      // Object.prototype metotlarını doğrudan çağırma yasak (prototype pollution XSS)
+      // Object.prototype metotlarını doğrudan çağırma yasak (XSS / prototype pollution)
       'no-prototype-builtins': 'error',
-      // Sınırsız döngü koşulu yasak (sonsuz döngü riski)
+      // Sınırsız döngü koşulu yasak
       'no-constant-condition': 'error',
-      // Kullanılamaz erişim: continue/break/return sonrası kod
+      // Ulaşılamaz ölü kod yasak
       'no-unreachable': 'error',
-      // === Yeni kurallar (ihtiyaca göre ekle) ===
       // Gereksiz boolean dönüşüm yasak
       'no-extra-boolean-cast': 'error',
       // switch-case çift tanım yasak
       'no-dupe-else-if': 'error',
-      // Fonksiyon parametre sayısı limiti (bakım kokusu — kritik değil)
-      'max-params': ['warn', { 'max': 6 }],
+      // Manifest V3 Güvenlik: eval() ve implied eval yasak
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      // Async promise executor fonksiyonu yasak (hata yutma engeller)
+      'no-async-promise-executor': 'error',
 
       // ============================================================
-      // ORTA (warn) — kod kokusu, temizlik. Davranışı kırmaz.
+      // 2. TİP GÜVENLİĞİ & TYPESCRIPT (error)
       // ============================================================
-      // Türkçe literal: i18n zorunlu (UI kalitesi) — istemezsen sil
-      'local/no-turkish-literals': 'warn',
-      // Dosya boyutu: 1200 satır üstü uyar (bakım zorluğu)
-      'max-lines': ['warn', { 'max': 1200, 'skipBlankLines': true, 'skipComments': true }],
-      // any kullanımı: tip güvenliği zayıf
+      // Sıfır 'any' kuralı (AGENTS.md Rule 2.10)
       '@typescript-eslint/no-explicit-any': 'error',
-      // Kullanılmayan değişken/import: temizlik
-      '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
-      // console: content script'lerde gerekli — projene göre ayarla
-      'no-console': 'off',
-      // Noktalı virgül: stil tutarlılığı (prettier ile çakışmaz)
-      'semi': ['warn', 'always'],
-      // await kullanılmayan async: callback API kullanan projelerde
-      // yanlış pozitif üretir — warning seviyesi güvenli
+      // Kullanılmayan değişken/import uyarısı (_ ile başlayanlar hariç)
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { 'argsIgnorePattern': '^_', 'varsIgnorePattern': '^_' },
+      ],
+
+      // ============================================================
+      // 3. KOD KALİTESİ & BAKIMLIK (warn)
+      // ============================================================
+      // Türkçe literal: i18n sistemi zorunlu (UI kalitesi)
+      'local/no-turkish-literals': 'warn',
+      // Dosya boyutu uyarısı (>600 satır God File uyarısı — AGENTS.md Rule 6.1)
+      'max-lines': ['warn', { 'max': 600, 'skipBlankLines': true, 'skipComments': true }],
+      // Parametre sayısı uyarısı (>5 parametre)
+      'max-params': ['warn', { 'max': 5 }],
+      // await kullanılmayan async fonksiyon uyarısı
       'require-await': 'warn',
-      // Gereksiz return-await: zararsız ama gereksiz
+      // Gereksiz return await uyarısı
       'no-return-await': 'warn',
-      // Tırnak stili serbest (prettier yönetsin)
+      // Console log serbest (logger utility kullanılıyor)
+      'no-console': 'off',
+
+      // ============================================================
+      // 4. STİL & FORMATLAMA (off — Prettier yönetsin)
+      // ============================================================
       'quotes': 'off',
+      'semi': 'off',
+      'indent': 'off',
     },
   },
   {
