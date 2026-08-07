@@ -57,11 +57,11 @@ export function scheduleCloudBackup(): void {
 }
 
 /** Anında (manuel buton gibi) backup — debounce beklemez. */
-export async function runCloudBackup(force = false): Promise<void> {
+export function runCloudBackup(force = false): Promise<void> {
   if (inFlight) {
     return inFlight;
   }
-  inFlight = (async () => {
+  const task = (async () => {
     try {
       const settings = await syncRepo.getSyncSettings();
       if (!settings.enabled && !force) {
@@ -75,5 +75,6 @@ export async function runCloudBackup(force = false): Promise<void> {
       inFlight = null;
     }
   })();
+  inFlight = task;
   return inFlight;
 }
