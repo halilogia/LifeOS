@@ -183,11 +183,11 @@ export async function getPastExamQuestions(
       Object.keys(allData).forEach((y) => {
         const yearData = allData[y];
         if (yearData.tarih)
-          historyPool.push(...(yearData.tarih as unknown as QuizQuestion[]));
+          {historyPool.push(...(yearData.tarih as unknown as QuizQuestion[]));}
         if (yearData.cografya)
-          geoPool.push(...(yearData.cografya as unknown as QuizQuestion[]));
+          {geoPool.push(...(yearData.cografya as unknown as QuizQuestion[]));}
         if (yearData.matematik)
-          mathPool.push(...(yearData.matematik as unknown as QuizQuestion[]));
+          {mathPool.push(...(yearData.matematik as unknown as QuizQuestion[]));}
       });
 
       const totalTarget = countLimit || 20;
@@ -280,7 +280,7 @@ export async function getExamSubjectCount(
   }
 
   const yearData = await loadExamYearData(year);
-  if (!yearData) return 0;
+  if (!yearData) {return 0;}
 
   if (subject === "all") {
     return (

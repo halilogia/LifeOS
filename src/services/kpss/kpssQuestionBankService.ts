@@ -12,7 +12,7 @@ import { ChromeStorageQuestionBankRepository } from "@/infrastructure/persistenc
 import type { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
 const defaultRepo = new ChromeStorageQuestionBankRepository();
-let repo: IQuestionBankRepository = defaultRepo;
+const repo: IQuestionBankRepository = defaultRepo;
 
 function getRepo(): IQuestionBankRepository {
   return repo;

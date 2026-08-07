@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "preact/hooks";
-import { Language } from "@/types/types.js";
+import { Language, Note } from "@/types/types.js";
 import { useNotesState } from "@/presentation/store/notesStore.js";
 
 interface UseNotesOptions {
@@ -64,7 +64,7 @@ export function useNotes({ lang, onShowConfirm }: UseNotesOptions) {
   // Click timer for double-click vs single-click distinction (UI concern)
   const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleCardClick = (note: any) => {
+  const handleCardClick = (note: Note) => {
     if (inlineEditingId === note.id) {
       return;
     }
