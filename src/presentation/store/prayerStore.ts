@@ -104,10 +104,11 @@ export const usePrayerState = create<PrayerState>()((set, get) => ({
   },
 }));
 
-/** Load persisted city once at module init. */
+/** Load persisted city and fetch prayer times on module init. */
 void (async () => {
-  const result = await chrome.storage.local.get(PRAYER_CITY_KEY);
-  if (result[PRAYER_CITY_KEY]) {
-    usePrayerState.getState().setCity(result[PRAYER_CITY_KEY] as string);
+  try {
+    await usePrayerState.getState().loadPrayers();
+  } catch (e) {
+    logger.warn("[prayerStore] Auto loadPrayers failed:", e);
   }
 })();

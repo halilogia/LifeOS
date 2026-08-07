@@ -34,6 +34,7 @@
     "https://query2.finance.yahoo.com/*",
     "https://query1.finance.yahoo.com/*",
     "https://openrouter.ai/*",
+    "https://api.aladhan.com/*",
     "https://generativelanguage.googleapis.com/*",
     "https://translate.googleapis.com/*",
     "https://halkarz.com/*",
@@ -57,7 +58,8 @@
     ]
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "icons": {
     "16": "icons/icon-16.png",

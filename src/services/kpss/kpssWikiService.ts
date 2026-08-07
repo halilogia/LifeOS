@@ -6,6 +6,7 @@
  */
 
 import { renderMarkdown } from "@/utils/markdownRenderer.js";
+import { escapeHtml, escapeHtmlAttr, sanitizeUrl } from "@/utils/sanitize.js";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import type { IWikiNoteRepository } from "@/domain/repositories/IWikiNoteRepository.js";
@@ -160,13 +161,19 @@ export function renderCustomArticleMarkdown(
   // Sayfa sonunda Kaynaklar listesi
   if (footnotes.length > 0) {
     const list = footnotes
-      .map(
-        (url, i) =>
+      .map((rawUrl, i) => {
+        const fullUrl = /^https?:\/\//i.test(rawUrl)
+          ? rawUrl
+          : "https://" + rawUrl;
+        const safeHref = sanitizeUrl(fullUrl);
+        const safeDisplay = escapeHtml(rawUrl);
+        return (
           `<div style="display:flex;gap:8px;align-items:flex-start;font-size:0.78rem;color:var(--text-secondary);line-height:1.5;margin-top:3px;">` +
           `<span style="color:#60a5fa;font-weight:700;flex-shrink:0;">[${i + 1}]</span>` +
-          `<a href="${/^https?:\/\//i.test(url) ? url : "https://" + url}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;word-break:break-all;">${url}</a>` +
-          `</div>`,
-      )
+          `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;word-break:break-all;">${safeDisplay}</a>` +
+          `</div>`
+        );
+      })
       .join("");
     html +=
       `<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--card-border);">` +
@@ -264,10 +271,6 @@ export function getSubjectLabel(subj: string): string {
     matematik: "Matematik",
   };
   return labels[subj] || "Genel";
-}
-
-function escapeHtmlAttr(str: string): string {
-  return str.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 /* ------------------------------------------------------------------ */

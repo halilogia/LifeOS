@@ -27,7 +27,9 @@ import {
 
 const get = (keys: string[]) =>
   new Promise<Record<string, unknown>>((resolve) =>
-    chrome.storage.local.get(keys, resolve),
+    chrome.storage.local.get(keys, (res) =>
+      resolve(res as Record<string, unknown>),
+    ),
   );
 
 async function setSyncEnabled(enabled: boolean) {

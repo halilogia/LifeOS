@@ -8,17 +8,19 @@ import {
   getSubjectNets,
   getOverallNets,
   formatKpssCountdown,
-  calculateKpssCountdown,
+  calculateEstimatedCompletionTime,
+  type KpssProgress,
 } from "@/domain/services/KpssCalculatorService.js";
+import type { KpssTopic } from "@/domain/constants/kpssCurriculum.js";
 
 describe("KPSS Calculator Service", () => {
-  const dummyKpssData = {
-    turkce: [{ title: "Dil Bilgisi", questionsCount: 30 }],
-    tarih: [{ title: "Osmanlı Tarihi", questionsCount: 27 }],
+  const dummyKpssData: Record<string, KpssTopic[]> = {
+    turkce: [{ title: "Dil Bilgisi", questionsCount: 30, description: "Konu tanımı" }],
+    tarih: [{ title: "Osmanlı Tarihi", questionsCount: 27, description: "Konu tanımı" }],
   };
 
   it("calculates subject nets correctly", () => {
-    const progress = [
+    const progress: KpssProgress[] = [
       { subject: "turkce", topic: "Dil Bilgisi", score: 80, status: 2 },
     ];
     const res = getSubjectNets("turkce", dummyKpssData, progress);
@@ -27,7 +29,7 @@ describe("KPSS Calculator Service", () => {
   });
 
   it("calculates overall nets across multiple subjects", () => {
-    const progress = [
+    const progress: KpssProgress[] = [
       { subject: "turkce", topic: "Dil Bilgisi", score: 80, status: 2 },
       { subject: "tarih", topic: "Osmanlı Tarihi", score: 100, status: 2 },
     ];
@@ -36,10 +38,12 @@ describe("KPSS Calculator Service", () => {
     expect(overall.max).toBe(57); // 30 + 27 = 57
   });
 
-  it("formats countdown string correctly", () => {
-    const targetDate = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
-    const countdown = calculateKpssCountdown(targetDate);
-    const formatted = formatKpssCountdown(countdown, "{days} gün {hours} saat");
-    expect(formatted).toContain("gün");
+  it("formats completion countdown string correctly", () => {
+    const countdown = calculateEstimatedCompletionTime(5, Date.now());
+    expect(countdown).not.toBeNull();
+    if (countdown) {
+      const formatted = formatKpssCountdown(countdown, "{days} gün {hours} saat");
+      expect(formatted).toContain("gün");
+    }
   });
 });

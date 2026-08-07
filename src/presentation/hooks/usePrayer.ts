@@ -1,3 +1,4 @@
+import { useEffect } from "preact/hooks";
 import { usePrayerState } from "@/presentation/store/prayerStore.js";
 
 /**
@@ -14,6 +15,12 @@ export function usePrayer() {
   const setIsFormOpen = usePrayerState((s) => s.setIsFormOpen);
   const currentPrayerIdx = usePrayerState((s) => s.currentPrayerIdx);
   const handleSaveCity = usePrayerState((s) => s.handleSaveCity);
+
+  useEffect(() => {
+    if (!times && !loading && !error) {
+      void usePrayerState.getState().loadPrayers();
+    }
+  }, [times, loading, error]);
 
   return {
     loading,

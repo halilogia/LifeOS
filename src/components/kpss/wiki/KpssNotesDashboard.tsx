@@ -100,9 +100,28 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
       try {
         const imported = JSON.parse(res.data);
         if (Array.isArray(imported)) {
-          await saveKpssWikiNotes(imported);
-          setNotes(imported);
-          setSyncMsg("İçe aktarıldı: " + imported.length + " not");
+          const sanitizedNotes: KpssWikiNote[] = (
+            imported as Record<string, unknown>[]
+          )
+            .filter(
+              (n) =>
+                n &&
+                typeof n === "object" &&
+                typeof n.id === "string" &&
+                typeof n.title === "string",
+            )
+            .map((n) => ({
+              id: String(n.id),
+              title: String(n.title),
+              content: String(n.content || ""),
+              subject: (n.subject as KpssWikiNote["subject"]) || "genel",
+              updatedAt: String(n.updatedAt || new Date().toISOString()),
+              createdAt: String(n.createdAt || new Date().toISOString()),
+              parentId: n.parentId ? String(n.parentId) : null,
+            }));
+          await saveKpssWikiNotes(sanitizedNotes);
+          setNotes(sanitizedNotes);
+          setSyncMsg("İçe aktarıldı: " + sanitizedNotes.length + " not");
         }
       } catch {
         setSyncMsg("Geçersiz dosya formatı");

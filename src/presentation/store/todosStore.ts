@@ -10,7 +10,7 @@ import { create } from "zustand";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
-import { SYNC_TODOS } from "@/infrastructure/storage/keys.js";
+import { SYNC_TODOS, SYNC_ALL_KEYS, PRAYER_CALENDAR_PREFIX } from "@/infrastructure/storage/keys.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
 import { AddTodoUseCase } from "@/application/use-cases/todo/AddTodoUseCase.js";
@@ -146,13 +146,31 @@ export const useTodosStore = create<TodoState>()((set, get) => ({
         await todoRepo.saveAll(parsed);
         set({ todos: parsed as Todo[] });
       } else if (parsed && typeof parsed === "object") {
-        // Full backup: raw chrome.storage.local snapshot
+        // Full backup: raw chrome.storage snapshot with key validation
         const data = parsed as Record<string, unknown>;
+        const validKeys = new Set<string>([
+          ...SYNC_ALL_KEYS,
+          "bistStockCache",
+          "kapNewsCache",
+          "free_games_cache",
+          "epic_history_cache",
+          "fg_exclusions",
+          "lifeos_arcade_games_v1",
+          "pomoState",
+          "stopwatchState",
+          "kpss_past_quizzes",
+        ]);
+        const sanitizedData: Record<string, unknown> = {};
+        for (const key of Object.keys(data)) {
+          if (validKeys.has(key) || key.startsWith(PRAYER_CALENDAR_PREFIX)) {
+            sanitizedData[key] = data[key];
+          }
+        }
         await new Promise<void>((resolve) => {
-          chrome.storage.local.set(data, () => resolve());
+          chrome.storage.local.set(sanitizedData, () => resolve());
         });
-        if (Array.isArray(data[SYNC_TODOS])) {
-          set({ todos: data[SYNC_TODOS] as Todo[] });
+        if (Array.isArray(sanitizedData[SYNC_TODOS])) {
+          set({ todos: sanitizedData[SYNC_TODOS] as Todo[] });
         }
       } else {
         if (showAlert && tLabel?.alert_restore_invalid) {

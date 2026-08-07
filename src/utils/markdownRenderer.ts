@@ -4,22 +4,21 @@
  * Supports headings, bold/italic, code blocks, lists, links, and embedded images.
  */
 
+import { escapeHtml, sanitizeUrl } from "@/utils/sanitize.js";
+
 export function renderMarkdown(text: string): string {
   if (!text) {
     return "";
   }
   // Escape HTML first to prevent XSS injection (crucial safety audit compliance!)
-  let html = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  let html = escapeHtml(text);
 
   // Parse Markdown Images FIRST before link parser: ![alt](url)
-  // Re-allow http/https in image src after XSS escaping
   html = html.replace(
     /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g,
     (_, alt, src) => {
-      return `<img src="${src}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
+      const safeSrc = sanitizeUrl(src);
+      return `<img src="${safeSrc}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
     },
   );
 
@@ -27,7 +26,8 @@ export function renderMarkdown(text: string): string {
   html = html.replace(
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
     (_, linkText, href) => {
-      return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
+      const safeHref = sanitizeUrl(href);
+      return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
     },
   );
 
