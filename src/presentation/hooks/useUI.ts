@@ -1,201 +1,43 @@
 /**
- * useUI Hook
- * Presentation hook that wraps UI-related state (navigation, clock, quotes, dialogs).
- * Uses chrome.storage.local directly instead of legacy core/storage.
+ * useUI — facade over the Zustand singleton store.
+ * Signature unchanged; consumer components untouched.
  */
 
-import { useState, useCallback } from "preact/hooks";
-import type { Language } from "@/domain/value-objects/Language.js";
-import { translations } from "@/utils/i18n.js";
-import type { CustomQuote } from "@/types/types.js";
-import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
-
-const SIDEBAR_ORDER_KEY = "sidebarOrder";
+import { useUIStore } from "@/presentation/store/uiStore.js";
 
 export function useUI() {
-  // Navigation
-  const [activeView, setActiveView] = useState<string>("free-games");
-  const [sidebarOrder, setSidebarOrder] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<"focus" | "routines">("focus");
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsInitialTab, setSettingsInitialTab] = useState<
-    "general" | "kpss" | "detox" | "ai" | "sync"
-  >("general");
-
-  // Sync-related state (moved here from useSync for App.tsx destructuring)
-  const [googleUserEmail, setGoogleUserEmail] = useState<string>("");
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [syncSettings, setSyncSettings] = useState<GoogleSyncSettings>({
-    enabled: false,
-    tasksEnabled: false,
-    calendarEnabled: false,
-  });
-
-  // Time & Date
-  const [clockText, setClockText] = useState("00:00");
-  const [dateText, setDateText] = useState("");
-
-  // Quotes
-  const [quoteText, setQuoteText] = useState("");
-
-  // Confirm Dialog
-  const [confirmDialog, setConfirmDialog] = useState<{
-    isOpen: boolean;
-    message: string;
-    onConfirm: () => void;
-  }>({
-    isOpen: false,
-    message: "",
-    onConfirm: () => {},
-  });
-
-  // Alert Dialog
-  const [alertDialog, setAlertDialog] = useState<{
-    isOpen: boolean;
-    message: string;
-    onConfirm?: () => void;
-  }>({
-    isOpen: false,
-    message: "",
-  });
-
-  const showConfirm = useCallback((message: string, onConfirm: () => void) => {
-    setConfirmDialog({
-      isOpen: true,
-      message,
-      onConfirm: () => {
-        onConfirm();
-        setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
-      },
-    });
-  }, []);
-
-  const showAlert = useCallback((message: string, onConfirm?: () => void) => {
-    setAlertDialog({
-      isOpen: true,
-      message,
-      onConfirm,
-    });
-  }, []);
-
-  const refreshClock = useCallback((lang: Language) => {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    setClockText(`${hours}:${minutes}`);
-
-    const locale = lang === "tr" ? "tr-TR" : "en-US";
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    };
-    setDateText(now.toLocaleDateString(locale, options));
-  }, []);
-
-  const refreshQuote = useCallback(async (activeLang: Language) => {
-    const customQuotes: CustomQuote[] = await new Promise((resolve) => {
-      chrome.storage.local.get(["customQuotes"], (result) => {
-        resolve((result.customQuotes as CustomQuote[]) || []);
-      });
-    });
-    const defaultQuoteCount = 7;
-    const poolSize = defaultQuoteCount + customQuotes.length;
-    const randomIndex = Math.floor(Math.random() * poolSize);
-
-    if (randomIndex < defaultQuoteCount) {
-      const quoteKeys = [
-        "quote_1",
-        "quote_2",
-        "quote_3",
-        "quote_4",
-        "quote_5",
-        "quote_6",
-        "quote_7",
-      ];
-      const randomKey = quoteKeys[
-        randomIndex
-      ] as keyof (typeof translations)["tr"];
-      setQuoteText(translations[activeLang][randomKey]);
-    } else {
-      const custom = customQuotes[randomIndex - defaultQuoteCount];
-      setQuoteText(
-        custom.author
-          ? `"${custom.text}" — ${custom.author}`
-          : `"${custom.text}"`,
-      );
-    }
-  }, []);
-
-  const handleViewChange = useCallback((view: string) => {
-    setActiveView(view);
-  }, []);
-
-  const handleTabChange = useCallback((tabVal: "focus" | "routines") => {
-    setActiveTab(tabVal);
-  }, []);
-
-  const handleTabChangeUI = handleTabChange;
-
-  const handleOpenSettings = useCallback(
-    (tab: "general" | "kpss" | "detox" | "ai" | "sync" = "general") => {
-      setSettingsInitialTab(tab);
-      setSettingsOpen(true);
-    },
-    [],
-  );
-
-  const loadSidebarOrder = useCallback(async () => {
-    const savedOrder: string[] = await new Promise((resolve) => {
-      chrome.storage.local.get([SIDEBAR_ORDER_KEY], (result) => {
-        resolve((result[SIDEBAR_ORDER_KEY] as string[]) || []);
-      });
-    });
-    setSidebarOrder(savedOrder || []);
-    if (savedOrder && savedOrder.length > 0) {
-      setActiveView(savedOrder[0]);
-    } else {
-      setActiveView("free-games");
-    }
-  }, []);
-
+  const s = useUIStore;
   return {
-    // Navigation
-    activeView,
-    setActiveView,
-    sidebarOrder,
-    setSidebarOrder,
-    activeTab,
-    setActiveTab,
-    settingsOpen,
-    setSettingsOpen,
-    settingsInitialTab,
-    // Time & Date
-    clockText,
-    dateText,
-    // Quotes
-    quoteText,
-    // Dialogs
-    confirmDialog,
-    setConfirmDialog,
-    alertDialog,
-    setAlertDialog,
-    // Actions
-    showConfirm,
-    showAlert,
-    refreshClock,
-    refreshQuote,
-    handleViewChange,
-    handleTabChange,
-    handleTabChangeUI,
-    handleOpenSettings,
-    loadSidebarOrder,
-    // Sync state (for App.tsx destructuring)
-    googleUserEmail,
-    setGoogleUserEmail,
-    isSyncing,
-    setIsSyncing,
-    syncSettings,
-    setSyncSettings,
+    activeView: s((st) => st.activeView),
+    setActiveView: s((st) => st.setActiveView),
+    sidebarOrder: s((st) => st.sidebarOrder),
+    setSidebarOrder: s((st) => st.setSidebarOrder),
+    activeTab: s((st) => st.activeTab),
+    setActiveTab: s((st) => st.setActiveTab),
+    settingsOpen: s((st) => st.settingsOpen),
+    setSettingsOpen: s((st) => st.setSettingsOpen),
+    settingsInitialTab: s((st) => st.settingsInitialTab),
+    clockText: s((st) => st.clockText),
+    dateText: s((st) => st.dateText),
+    quoteText: s((st) => st.quoteText),
+    confirmDialog: s((st) => st.confirmDialog),
+    setConfirmDialog: s((st) => st.setConfirmDialog),
+    alertDialog: s((st) => st.alertDialog),
+    setAlertDialog: s((st) => st.setAlertDialog),
+    showConfirm: s((st) => st.showConfirm),
+    showAlert: s((st) => st.showAlert),
+    refreshClock: s((st) => st.refreshClock),
+    refreshQuote: s((st) => st.refreshQuote),
+    handleViewChange: s((st) => st.handleViewChange),
+    handleTabChange: s((st) => st.handleTabChange),
+    handleTabChangeUI: s((st) => st.handleTabChangeUI),
+    handleOpenSettings: s((st) => st.handleOpenSettings),
+    loadSidebarOrder: s((st) => st.loadSidebarOrder),
+    googleUserEmail: s((st) => st.googleUserEmail),
+    setGoogleUserEmail: s((st) => st.setGoogleUserEmail),
+    isSyncing: s((st) => st.isSyncing),
+    setIsSyncing: s((st) => st.setIsSyncing),
+    syncSettings: s((st) => st.syncSettings),
+    setSyncSettings: s((st) => st.setSyncSettings),
   };
 }

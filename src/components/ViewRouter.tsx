@@ -1,12 +1,8 @@
 /**
  * ViewRouter
- * Pure routing component — maps activeView string to the correct view component.
- * Extracted from App.tsx to reduce its monolith size.
+ * Routes activeView string to the correct view component.
+ * Reads data/actions directly from Zustand stores — App.tsx no longer passes props.
  */
-
-import type { Language } from "@/domain/value-objects/Language.js";
-import type { RepeatType } from "@/domain/value-objects/RepeatType.js";
-import type { Todo } from "@/domain/entities/Todo.js";
 
 import { ListView } from "@/components/ListView.js";
 import { EisenhowerView } from "@/components/EisenhowerView.js";
@@ -25,142 +21,140 @@ import { BistView } from "@/components/BistView.js";
 import { HalkaArzView } from "@/components/HalkaArzView.js";
 import { AIChatView } from "@/components/AIChatView.js";
 
-export interface ViewRouterProps {
-  activeView: string;
-  lang: Language;
-  todos: Todo[];
-  activeTab: "focus" | "routines";
-  syncSettings: { enabled: boolean; tasksEnabled: boolean };
-  isSyncing: boolean;
-  aiProvider: string;
-  aiApiKey: string;
-  aiModel: string;
-  aiEndpoint: string;
-  aiShowThinking: boolean;
-  kpssGoalType: "net" | "score";
-  kpssTargetNet: number;
-  kpssTargetScore: number;
-  onTabChange: (tabVal: "focus" | "routines") => void;
-  onToggleTodo: (index: number) => Promise<void>;
-  onDeleteTodo: (index: number) => Promise<void>;
-  onMoveTaskStatus: (index: number, status: Todo["status"]) => void;
-  onMoveTaskDirection: (index: number, direction: 1 | -1) => Promise<void>;
-  onUpdateTodoUrgentImportant: (
-    index: number,
-    urgent: boolean,
-    important: boolean,
-  ) => Promise<void>;
-  onAddTodo: (
-    text: string,
-    repeat: RepeatType,
-    dueDate?: string,
-  ) => Promise<void>;
-  onManualSync: () => Promise<void>;
-  onShowConfirm: (message: string, onConfirm: () => void) => void;
-  onSettingsOpen: (tab: "general" | "kpss" | "detox" | "ai" | "sync") => void;
-  onContinueToChat?: (symbol: string) => void;
-}
+import { useUIStore } from "@/presentation/store/uiStore.js";
+import { useSettingsStore } from "@/presentation/store/settingsStore.js";
+import { useTodosStore } from "@/presentation/store/todosStore.js";
+import { useSyncStore } from "@/presentation/store/syncStore.js";
 
-export function ViewRouter(props: ViewRouterProps) {
-  switch (props.activeView) {
+export function ViewRouter() {
+  const activeView = useUIStore((s) => s.activeView);
+  const activeTab = useUIStore((s) => s.activeTab);
+  const onTabChange = useUIStore((s) => s.handleTabChange);
+  const showConfirm = useUIStore((s) => s.showConfirm);
+  const handleOpenSettings = useUIStore((s) => s.handleOpenSettings);
+
+  const lang = useSettingsStore((s) => s.lang);
+  const aiProvider = useSettingsStore((s) => s.aiProvider);
+  const aiApiKey = useSettingsStore((s) => s.aiApiKey);
+  const aiModel = useSettingsStore((s) => s.aiModel);
+  const aiEndpoint = useSettingsStore((s) => s.aiEndpoint);
+  const aiShowThinking = useSettingsStore((s) => s.aiShowThinking);
+  const kpssGoalType = useSettingsStore((s) => s.kpssGoalType);
+  const kpssTargetNet = useSettingsStore((s) => s.kpssTargetNet);
+  const kpssTargetScore = useSettingsStore((s) => s.kpssTargetScore);
+
+  const todos = useTodosStore((s) => s.todos);
+  const onToggleTodo = useTodosStore((s) => s.handleToggleTodo);
+  const onDeleteTodo = useTodosStore((s) => s.handleDeleteTodo);
+  const onMoveTaskStatus = useTodosStore((s) => s.handleMoveTaskStatus);
+  const onMoveTaskDirection = useTodosStore((s) => s.handleMoveTaskDirection);
+  const onUpdateTodoUrgentImportant = useTodosStore(
+    (s) => s.handleUpdateTodoUrgentImportant,
+  );
+  const onAddTodo = useTodosStore((s) => s.handleAddTodo);
+
+  const onManualSync = useSyncStore((s) => s.handleManualSyncTasks);
+  const syncSettings = useUIStore((s) => s.syncSettings);
+  const isSyncing = useUIStore((s) => s.isSyncing);
+
+  const handleViewChange = useUIStore((s) => s.handleViewChange);
+
+  const handleContinueToChat = (symbol: string) => {
+    sessionStorage.setItem("hermes_pending_stock", symbol);
+    handleViewChange("ai-chat");
+  };
+
+  switch (activeView) {
     case "list":
       return (
         <ListView
-          todos={props.todos}
-          activeTab={props.activeTab}
-          lang={props.lang}
-          onTabChange={props.onTabChange}
-          onToggleTodo={props.onToggleTodo}
-          onDeleteTodo={props.onDeleteTodo}
-          googleSyncActive={
-            props.syncSettings.enabled && props.syncSettings.tasksEnabled
-          }
-          isSyncing={props.isSyncing}
-          onManualSync={props.onManualSync}
+          todos={todos}
+          activeTab={activeTab}
+          lang={lang}
+          onTabChange={onTabChange}
+          onToggleTodo={onToggleTodo}
+          onDeleteTodo={onDeleteTodo}
+          googleSyncActive={syncSettings.enabled && syncSettings.tasksEnabled}
+          isSyncing={isSyncing}
+          onManualSync={onManualSync}
         />
       );
     case "kanban":
     case "eisenhower":
       return (
         <EisenhowerView
-          todos={props.todos}
-          lang={props.lang}
+          todos={todos}
+          lang={lang}
           defaultTab="kanban"
           onUpdateTodoUrgentImportant={(originalIndex, urgent, important) => {
-            void props.onUpdateTodoUrgentImportant(
+            void onUpdateTodoUrgentImportant(
               originalIndex,
               urgent ?? false,
               important ?? false,
             );
           }}
-          onMoveTaskStatus={props.onMoveTaskStatus}
+          onMoveTaskStatus={onMoveTaskStatus}
           onMoveTaskDirection={(index, direction) => {
-            void props.onMoveTaskDirection(index, direction as 1 | -1);
+            void onMoveTaskDirection(index, direction as 1 | -1);
           }}
         />
       );
     case "notes":
-      return (
-        <NotesView lang={props.lang} onShowConfirm={props.onShowConfirm} />
-      );
+      return <NotesView lang={lang} onShowConfirm={showConfirm} />;
     case "pomodoro":
-      return <PomodoroView lang={props.lang} />;
+      return <PomodoroView lang={lang} />;
     case "willpower":
-      return (
-        <WillpowerView lang={props.lang} onShowConfirm={props.onShowConfirm} />
-      );
+      return <WillpowerView lang={lang} onShowConfirm={showConfirm} />;
     case "hifiz":
-      return <HifizView lang={props.lang} />;
+      return <HifizView lang={lang} />;
     case "srs":
-      return <SrsView lang={props.lang} />;
+      return <SrsView lang={lang} />;
     case "calendar":
-      return <CalendarView todos={props.todos} lang={props.lang} />;
+      return <CalendarView todos={todos} lang={lang} />;
     case "prayer":
-      return <PrayerView lang={props.lang} />;
+      return <PrayerView lang={lang} />;
     case "kpss":
       return (
         <KpssView
-          lang={props.lang}
-          onShowConfirm={props.onShowConfirm}
-          aiProvider={props.aiProvider}
-          aiApiKey={props.aiApiKey}
-          aiModel={props.aiModel}
-          aiEndpoint={props.aiEndpoint}
-          goalType={props.kpssGoalType}
-          targetNet={props.kpssTargetNet}
-          targetScore={props.kpssTargetScore}
+          lang={lang}
+          onShowConfirm={showConfirm}
+          aiProvider={aiProvider}
+          aiApiKey={aiApiKey}
+          aiModel={aiModel}
+          aiEndpoint={aiEndpoint}
+          goalType={kpssGoalType}
+          targetNet={kpssTargetNet}
+          targetScore={kpssTargetScore}
         />
       );
     case "arcade":
-      return <ArcadeView lang={props.lang} />;
+      return <ArcadeView lang={lang} />;
     case "free-games":
-      return <FreeGamesView lang={props.lang} />;
+      return <FreeGamesView lang={lang} />;
     case "detox":
-      return <DetoxView lang={props.lang} />;
+      return <DetoxView lang={lang} />;
     case "bist":
-      return (
-        <BistView lang={props.lang} onContinueToChat={props.onContinueToChat} />
-      );
+      return <BistView lang={lang} onContinueToChat={handleContinueToChat} />;
     case "halka-arz":
-      return <HalkaArzView lang={props.lang} />;
+      return <HalkaArzView lang={lang} />;
     case "ai-chat":
       return (
         <AIChatView
-          lang={props.lang}
-          todos={props.todos}
-          onAddTodo={props.onAddTodo}
-          onToggleTodo={props.onToggleTodo}
-          onDeleteTodo={props.onDeleteTodo}
-          onManualSync={props.onManualSync}
-          aiProvider={props.aiProvider}
-          aiApiKey={props.aiApiKey}
-          aiModel={props.aiModel}
-          aiEndpoint={props.aiEndpoint}
-          aiShowThinking={props.aiShowThinking}
-          onSettingsOpen={() => props.onSettingsOpen("ai")}
+          lang={lang}
+          todos={todos}
+          onAddTodo={onAddTodo}
+          onToggleTodo={onToggleTodo}
+          onDeleteTodo={onDeleteTodo}
+          onManualSync={onManualSync}
+          aiProvider={aiProvider}
+          aiApiKey={aiApiKey}
+          aiModel={aiModel}
+          aiEndpoint={aiEndpoint}
+          aiShowThinking={aiShowThinking}
+          onSettingsOpen={() => handleOpenSettings("ai")}
         />
       );
     default:
-      return <FreeGamesView lang={props.lang} />;
+      return <FreeGamesView lang={lang} />;
   }
 }

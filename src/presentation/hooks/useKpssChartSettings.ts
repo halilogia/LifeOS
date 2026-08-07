@@ -1,35 +1,16 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+/**
+ * useKpssChartSettings — facade over the Zustand singleton store.
+ * Signature unchanged; consumer components untouched.
+ */
+
+import {
+  useKpssChartSettingsState,
+} from "@/presentation/store/kpssChartSettingsStore.js";
 
 export function useKpssChartSettings() {
-  const [chartType, setChartType] = useState<"line" | "bar">("line");
-  const [chartDays, setChartDays] = useState<7 | 30>(7);
-
-  useEffect(() => {
-    void (async () => {
-      const cType: "line" | "bar" = await new Promise((r) =>
-        chrome.storage.local.get(["kpssChartType"], (res) =>
-          r((res.kpssChartType as "line" | "bar") || "line"),
-        ),
-      );
-      const cDays: 7 | 30 = await new Promise((r) =>
-        chrome.storage.local.get(["kpssChartDays"], (res) =>
-          r(res.kpssChartDays === 30 ? 30 : 7),
-        ),
-      );
-      setChartType(cType);
-      setChartDays(cDays);
-    })();
-  }, []);
-
-  const saveChartType = useCallback(async (type: "line" | "bar") => {
-    setChartType(type);
-    chrome.storage.local.set({ kpssChartType: type });
-  }, []);
-
-  const saveChartDays = useCallback(async (days: 7 | 30) => {
-    setChartDays(days);
-    chrome.storage.local.set({ kpssChartDays: days });
-  }, []);
-
-  return { chartType, chartDays, saveChartType, saveChartDays };
+  const chartType = useKpssChartSettingsState((s) => s.chartType);
+  const chartDays = useKpssChartSettingsState((s) => s.chartDays);
+  const setChartType = useKpssChartSettingsState((s) => s.setChartType);
+  const setChartDays = useKpssChartSettingsState((s) => s.setChartDays);
+  return { chartType, chartDays, saveChartType: setChartType, saveChartDays: setChartDays };
 }

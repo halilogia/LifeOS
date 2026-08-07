@@ -1,24 +1,16 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+/**
+ * useKpssWikiSidebar — facade over the Zustand singleton store.
+ * Signature unchanged; consumer components untouched.
+ */
+
+import {
+  useKpssWikiSidebarState,
+} from "@/presentation/store/kpssWikiSidebarStore.js";
 
 export function useKpssWikiSidebar() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-
-  useEffect(() => {
-    void (async () => {
-      const result = await chrome.storage.local.get("kpssWikiSidebarCollapsed");
-      if (result.kpssWikiSidebarCollapsed !== undefined) {
-        setSidebarCollapsed(Boolean(result.kpssWikiSidebarCollapsed));
-      }
-    })();
-  }, []);
-
-  const toggleSidebar = useCallback(() => {
-    setSidebarCollapsed((prev) => {
-      const next = !prev;
-      void chrome.storage.local.set({ kpssWikiSidebarCollapsed: next });
-      return next;
-    });
-  }, []);
-
+  const sidebarCollapsed = useKpssWikiSidebarState(
+    (s) => s.sidebarCollapsed,
+  );
+  const toggleSidebar = useKpssWikiSidebarState((s) => s.toggleSidebar);
   return { sidebarCollapsed, toggleSidebar };
 }
