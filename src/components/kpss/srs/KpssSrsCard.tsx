@@ -85,11 +85,10 @@ export function KpssSrsCard({
           {t.kpss_srs_all_done}
         </p>
         <button
-          className="settings-add-btn"
+          className="srs-toolbar-btn srs-toolbar-btn-ghost"
           onClick={onReloadQueue}
-          style={{ padding: "10px 24px" }}
         >
-          {t.kpss_srs_reload}
+          {t.kpss_srs_reload || "🔄 Reload"}
         </button>
       </div>
     );
@@ -122,7 +121,7 @@ export function KpssSrsCard({
           opacity: 0.6,
         }}
       >
-        <span>{card.category}</span>
+        <span />
         <span>
           {`${t.kpss_srs_card_label} ${srsIndex + 1} / ${srsQueue.length}`}
         </span>

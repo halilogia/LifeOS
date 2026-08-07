@@ -125,16 +125,13 @@ export function KpssView({
   const [flashcardsUniverse, setFlashcardsUniverse] = useState<KpssFlashcard[]>(
     [],
   );
-  const [srsChapter, setSrsChapter] = useState<string>("all");
-  const [srsChapters, setSrsChapters] = useState<string[]>([]);
 
-  const loadKpssSrsQueue = async (chapter: string = srsChapter) => {
+  const loadKpssSrsQueue = async (chapter: string = "all") => {
     setSrsLoading(true);
     try {
       const res = await kpssSrsService.loadSrsQueue(chapter);
       setSrsQueue(res.queue);
       setFlashcardsUniverse(res.universe);
-      setSrsChapters(res.chapters);
       setSrsIndex(0);
       setSrsLoading(false);
     } catch (e) {
@@ -146,11 +143,8 @@ export function KpssView({
   const handleGenerateAiCards = async () => {
     setSrsGenerating(true);
     try {
-      await kpssSrsService.generateAiCards(
-        srsChapter === "all" ? "Tarih" : srsChapter,
-        5,
-      );
-      await loadKpssSrsQueue(srsChapter);
+      await kpssSrsService.generateAiCards("Tarih", 5);
+      await loadKpssSrsQueue("all");
     } catch (e) {
       logger.error("Failed to generate AI cards:", e);
     } finally {
@@ -390,15 +384,9 @@ export function KpssView({
             srsFlipped={srsFlipped}
             srsFadeState={srsFadeState}
             flashcardsUniverse={flashcardsUniverse}
-            srsChapter={srsChapter}
-            srsChapters={srsChapters}
-            onChapterChange={(ch) => {
-              setSrsChapter(ch);
-              loadKpssSrsQueue(ch);
-            }}
             onFlipChange={(flipped) => setSrsFlipped(flipped)}
             onReviewQuality={handleKpssSrsReview}
-            onReloadQueue={() => loadKpssSrsQueue(srsChapter)}
+            onReloadQueue={() => loadKpssSrsQueue("all")}
             onGenerateCards={handleGenerateAiCards}
           />
         ) : activeTab === "map" ? (

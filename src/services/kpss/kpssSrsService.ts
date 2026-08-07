@@ -22,6 +22,7 @@ import {
 } from "@/domain/services/SrsService.js";
 import type { KpssFlashcard } from "@/services/kpss/kpssService.js";
 import type { ISrsProgressRepository } from "@/domain/repositories/ISrsProgressRepository.js";
+import { logger } from "@/utils/logger.js";
 
 /** localStorage key: AI-üretimli tarih flashcard kütüphanesi. */
 const AI_CARDS_KEY = "kpssAiSrsCards";
@@ -95,6 +96,52 @@ async function writeAiCards(cards: KpssFlashcard[]): Promise<void> {
   });
 }
 
+/**
+ * Fallback kartlari: AI yapilandirmasi yokken / AI cagrisi basarisiz olunca
+ * SRS'nin bos kalmamasi icin kullanilan yerlesik 5 tarih flashcard'i.
+ * Kronolojik olarak dogru KPSS Tarih konularindan secilmistir.
+ */
+const DEFAULT_KPSS_HISTORY_CARDS: KpssFlashcard[] = [
+  {
+    id: "kpss_default_1",
+    question: "Osmanlı Devleti'ni kuran Türkmen beyliği hangisiydi?",
+    answer: "Osmanlı Beyliği (Söğüt-Domaniç yöresinde kuruldu).",
+    hint: "Kayı boyu — Ertuğrul Gazi'nin oğlu.",
+    category: "Osmanlı Kuruluş Dönemi",
+  },
+  {
+    id: "kpss_default_2",
+    question: "İstanbul kaç yılında, kim tarafından fethedildi?",
+    answer:
+      "1453'te Fatih Sultan Mehmet tarafından; bu olayla Orta Çağ kapandı, Yeni Çağ başladı.",
+    hint: "'Fetih' + 'Çağ' eşleşmesi (1453/1492).",
+    category: "Yükselme Dönemi",
+  },
+  {
+    id: "kpss_default_3",
+    question: "Kurtuluş Savaşı'nın dönüm noktası olan 1921 büyük zaferi hangisidir?",
+    answer: "Sakarya Meydan Savaşı (23 Ağustos–13 Eylül 1921).",
+    hint: "Mustafa Kemal'e 'Gazi' ünvanı burada verildi.",
+    category: "Millî Mücadele",
+  },
+  {
+    id: "kpss_default_4",
+    question:
+      "Cumhuriyet döneminin ilk resmî iktisat politikası hangisidir?",
+    answer: "1923 İzmir İktisat Kongresi kararları (millî ve katılımcı iktisat).",
+    hint: "Lozan sonrası; 'Türk iktisat politikaları' ilk kez burada belirlendi.",
+    category: "Cumhuriyet Dönemi",
+  },
+  {
+    id: "kpss_default_5",
+    question: "Tanzimat Fermanı hangi dönemde ve ne amaçla ilan edildi?",
+    answer:
+      "1839'da Sultan Abdülmecid döneminde; malik-mülk-can güvenliğini garanti eden ıslahat fermanı.",
+    hint: "1839; 'Gülhane Hatt-ı Hümâyûnu' adıyla da bilinir.",
+    category: "Osmanlı Islahat Dönemi",
+  },
+];
+
 export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
   return {
     /**
@@ -128,15 +175,27 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       return cards;
     },
 
-    /** Tarih konusu için AI kartlarını non-select-local kutuphanesini olusturur (bos ise 5 kart). */
+    /**
+     * Kart kutuphanesi bos ise doldurur: once AI'dan uretir; AI yapilandirmasi
+     * yoksa / cagri basarisiz olursa yerlesik 5 fallback karta duser (SRS asla bos kalmaz).
+     */
     async ensureInitialCards(subject: string = "Tarih"): Promise<void> {
       const existing = await readAiCards();
-      if (existing.length === 0) {
+      if (existing.length > 0) {
+        return;
+      }
+      try {
         await this.generateAiCards(subject, 5);
+      } catch (e) {
+        logger.warn(
+          "[kpssSrs] AI card generation failed, using default fallback cards:",
+          e,
+        );
+        await writeAiCards(DEFAULT_KPSS_HISTORY_CARDS);
       }
     },
 
-    /** Local AI kartlarından SM-2 queue kurar. Bos ise otomatik 5 kart uretir. */
+    /** Local AI kartlarından SM-2 queue kurar. Bos ise fallback 5 kart (AI yoksa sabit). */
     async loadSrsQueue(chapter: string = "all"): Promise<{
       queue: WordReviewData[];
       universe: KpssFlashcard[];
@@ -144,7 +203,7 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
     }> {
       let cards = await readAiCards();
       if (cards.length === 0) {
-        await this.generateAiCards("Tarih", 5);
+        await this.ensureInitialCards("Tarih");
         cards = await readAiCards();
       }
 

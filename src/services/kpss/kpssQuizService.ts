@@ -4,6 +4,7 @@ import {
   AVAILABLE_EXAM_YEARS,
 } from "@/services/kpss/data/kpssDataRegistry.js";
 import osymData from "@/services/kpss/data/osymHistoryQuestions.json";
+import osym54Data from "@/services/kpss/data/osymHistoryQuestions54.json";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
 // In-memory cache — loaded once, reused across calls
@@ -122,6 +123,55 @@ export async function getPastExamQuestions(
 
     // Rastgele karıştır
     questions = [...questions].sort(() => Math.random() - 0.5);
+  } else if (year === "tarih_arsivi54") {
+    // SON 54 YILIN TARİH SORULARI (OCR'dan parse edilen, 2026-08)
+    const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
+    type History54Item = {
+      chapter?: string;
+      question?: string;
+      answer?: string;
+      options?: Record<string, string>;
+      explanation?: string;
+    };
+    const list = rawHistory as History54Item[];
+    list.forEach((q) => {
+      // sadece 5 şıklı soruları al (OCR şık kaybı olanlar quiz'de bozuk görünür)
+      if (!q.options || Object.keys(q.options).length !== 5) {
+        return;
+      }
+      let isMatch = false;
+      if (!selectedChapter || selectedChapter === "all") {
+        isMatch = true;
+      } else if (q.chapter) {
+        const normQ = q.chapter.toLowerCase().replace(/[^a-z0-9çğıöşü]/g, "");
+        const normSel = selectedChapter
+          .toLowerCase()
+          .replace(/[^a-z0-9çğıöşü]/g, "");
+        isMatch =
+          normQ === normSel ||
+          normQ.includes(normSel) ||
+          normSel.includes(normQ);
+      }
+
+      if (isMatch) {
+        const rawAns = (q.answer || "").trim();
+        const cleanAnsLetter = rawAns.charAt(0).toUpperCase();
+        const letters = ["A", "B", "C", "D", "E"];
+        const correctIdx = letters.indexOf(cleanAnsLetter);
+
+        questions.push({
+          question: q.question || "",
+          options: letters.map((l) => `${l}) ${q.options?.[l] || ""}`),
+          correctAnswer: correctIdx !== -1 ? correctIdx : 0,
+          solution: q.explanation
+            ? `${cleanAnsLetter}) ${q.options?.[cleanAnsLetter] || ""} — ${q.explanation}`
+            : `${cleanAnsLetter}) ${q.options?.[cleanAnsLetter] || ""}`,
+        });
+      }
+    });
+
+    // Rastgele karıştır
+    questions = [...questions].sort(() => Math.random() - 0.5);
   } else if (year === "karma") {
     if (subject === "all") {
       // 🎯 KPSS Lisans Gerçek Dağılım Oranı: %50 Tarih, %35 Coğrafya, %15 Matematik
@@ -199,6 +249,17 @@ export async function getExamSubjectCount(
 ): Promise<number> {
   if (year === "tarih_arsivi") {
     return subject === "tarih" || subject === "all" ? 915 : 0;
+  }
+  if (year === "tarih_arsivi54") {
+    // sadece 5 şıklı sorular (OCR şık kaybı olanlar quiz'de bozuk görünür)
+    const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
+    const count = rawHistory.filter(
+      (q) =>
+        (q as { options?: Record<string, string> }).options &&
+        Object.keys((q as { options: Record<string, string> }).options)
+          .length === 5,
+    ).length;
+    return subject === "tarih" || subject === "all" ? count : 0;
   }
   if (year === "karma") {
     const allData = await getAllData();

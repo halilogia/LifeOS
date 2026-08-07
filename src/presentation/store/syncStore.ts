@@ -15,8 +15,9 @@ import { SyncGoogleTasksUseCase } from "@/application/use-cases/sync/SyncGoogleT
 import { BackupToDriveUseCase } from "@/application/use-cases/sync/BackupToDriveUseCase.js";
 import { RestoreFromDriveUseCase } from "@/application/use-cases/sync/RestoreFromDriveUseCase.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
-import { logger } from "@/utils/logger.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
+import { logger } from "@/utils/logger.js";
+import { runCloudBackup } from "@/utils/cloudBackup.js";
 
 const syncRepo = new ChromeStorageSyncRepository();
 const todoRepo = new ChromeStorageTodoRepository();
@@ -170,14 +171,6 @@ export const useSyncStore = create<SyncState>()((set, get) => ({
   },
 
   triggerCloudBackup: async () => {
-    const settings = await syncRepo.getSyncSettings();
-    if (settings.enabled) {
-      try {
-        await backupUC.execute();
-        logger.log("Cloud auto-backup completed successfully.");
-      } catch (e) {
-        logger.error("Auto cloud backup failed:", e);
-      }
-    }
+    await runCloudBackup();
   },
 }));
