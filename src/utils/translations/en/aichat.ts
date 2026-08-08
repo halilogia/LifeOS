@@ -53,4 +53,6 @@ export const aichat = {
   ai_memory_placeholder: "# Write your personal memory notes here...",
   ai_memory_save_btn: "Save Personal Memory (memory.md)",
   ai_memory_saved_badge: "✓ Memory Saved!",
+  ai_memory_header_main: "# Personal Memory & User Context (memory.md)",
+  ai_memory_header_section: "## 💡 Learned Personal Facts by AI",
 };

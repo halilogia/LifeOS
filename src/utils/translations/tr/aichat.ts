@@ -54,4 +54,6 @@ export const aichat = {
   ai_memory_placeholder: "# Kişisel Hafıza notlarınızı buraya yazın...",
   ai_memory_save_btn: "Kişisel Hafızayı Kaydet (memory.md)",
   ai_memory_saved_badge: "✓ Hafıza Kaydedildi!",
+  ai_memory_header_main: "# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)",
+  ai_memory_header_section: "## 💡 AI Tarafından Öğrenilen Bilgiler",
 };

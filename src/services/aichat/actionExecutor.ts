@@ -56,6 +56,7 @@ export async function executeAIAction(
     await handleUpdateMemoryFromAI(
       String(aiResult.params.memory_fact),
       memoryRepo,
+      lang as Language,
     );
   }
 }
@@ -95,30 +96,22 @@ export async function handleAddNoteFromAI(
   await noteRepo.saveAll(currentNotes);
 }
 
+import { formatMemoryUpdate } from "@/domain/constants/memoryConstants.js";
+
 /** Append a new learned personal memory fact. */
 export async function handleUpdateMemoryFromAI(
   newFact: string,
   memoryRepo: IMemoryRepository,
+  lang: Language = "tr",
 ): Promise<void> {
   if (!newFact || !newFact.trim()) {
     return;
   }
 
   const currentMemory = await memoryRepo.getMemory();
-  const dateStr = new Date().toLocaleDateString("tr-TR");
+  const dateStr = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
   const cleanFact = `- [${dateStr}] ${newFact.trim()}`;
 
-  let updatedMemory = currentMemory;
-  if (!updatedMemory || !updatedMemory.trim()) {
-    updatedMemory = `# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
-  } else if (updatedMemory.includes("## 💡 AI Tarafından Öğrenilen Bilgiler")) {
-    updatedMemory = updatedMemory.replace(
-      "## 💡 AI Tarafından Öğrenilen Bilgiler",
-      `## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`,
-    );
-  } else {
-    updatedMemory = `${updatedMemory.trim()}\n\n## 💡 AI Tarafından Öğrenilen Bilgiler\n${cleanFact}`;
-  }
-
+  const updatedMemory = formatMemoryUpdate(currentMemory, cleanFact, lang);
   await memoryRepo.setMemory(updatedMemory);
 }

@@ -1,10 +1,11 @@
 /**
  * analyzeResponsibility.mjs
- * Static code analysis script to detect multi-responsibility code smells in src/.
- * Checks for:
- * 1. Embedded large static data + logic in same file.
- * 2. Embedded long prompt text strings (+300 chars) + logic.
- * 3. Layer mixing (e.g., UI component calling storage directly).
+ * Kod satır sayısına bakmaksızın mimari katman ihlali ve çoklu sorumluluk tespiti yapar.
+ * 
+ * Kriterler:
+ * 1. Katman İhlali: components/ içinde direkt chrome.storage / fetch kullanımı.
+ * 2. Statik Veri Şişkinliği: Servis/Hook dosyalarında gömülü büyük varsayılan veri dizileri (constants/data'ya ayrılmalı).
+ * 3. Servis İçi Ham Prompt Şablonu: Özel prompt dosyası olmayıp servis içinde ham 400+ karakterlik LLM prompt metni tutulması.
  */
 
 import fs from "fs";
@@ -33,28 +34,42 @@ function analyzeFile(filePath) {
   const relPath = path.relative(SRC_DIR, filePath).replace(/\\/g, "/");
   const issues = [];
 
-  // Check 1: Direct chrome.storage call in presentation components
-  if (relPath.startsWith("components/") && content.includes("chrome.storage.")) {
-    issues.push("UI Bileşeni içinde doğrudan `chrome.storage` erişimi (Katman ihlali)");
+  // Kriter 1: UI Katmanında Storage / Fetch İhlali (AGENTS.md 6.2)
+  if (relPath.startsWith("components/")) {
+    if (content.includes("chrome.storage.")) {
+      issues.push("🔴 Katman İhlali: UI bileşeninde doğrudan `chrome.storage` çağrısı var (hook/service'e taşınmalı).");
+    }
+    if (/\bfetch\s*\(/.test(content)) {
+      issues.push("🔴 Katman İhlali: UI bileşeninde doğrudan `fetch()` çağrısı var (service'e taşınmalı).");
+    }
   }
 
-  // Check 2: Embedded long template prompt (+300 chars raw multiline string) in service/logic
-  const hasLongTemplateString = /`[\s\S]{300,}`/g.test(content);
-  if (hasLongTemplateString && !relPath.includes("prompts/")) {
-    issues.push("Gömülü uzun prompt / metin şablonu (prompts/*.md'ye ayrılmalı)");
+  // Kriter 2: Servis veya Hook içinde Gömülü Büyük Statik Veri Dizisi
+  const isConstOrData = relPath.includes("constants/") || relPath.includes("data/") || relPath.includes("translations/");
+  if (!isConstOrData) {
+    const hasLargeDataArray = /const\s+DEFAULT_\w+\s*:[^=]+=\s*\[\s*\{/g.test(content);
+    if (hasLargeDataArray) {
+      issues.push("🟡 Çoklu Sorumluluk: Dosya içinde gömülü büyük statik/fallback veri dizisi var (domain/constants/'e ayrılmalı).");
+    }
   }
 
-  // Check 3: Large inline static array literals (+5 items array of objects) alongside export functions
-  const hasLargeInlineArray = /const\s+\w+\s*:\s*[^=]+=\s*\[\s*\{[\s\S]{200,}\}\s*\]/g.test(content);
-  if (hasLargeInlineArray && !relPath.includes("constants/") && !relPath.includes("data/")) {
-    issues.push("Gömülü büyük statik veri dizisi (domain/constants veya domain/data'ya ayrılmalı)");
+  // Kriter 3: Mantık Servisinde Ayrıştırılmamış Ham LLM Prompt Metni (Prompt dosyaları hariç)
+  const isPromptModule = relPath.includes("Prompts.ts") || relPath.includes("systemPrompt.ts") || relPath.includes("prompts/");
+  if (relPath.startsWith("services/") && !isPromptModule) {
+    const hasInlinePrompt = /return\s+`Sen\s+KPSS/g.test(content) || /`Sen\s+uzman/g.test(content);
+    if (hasInlinePrompt && relPath.endsWith(".ts")) {
+      issues.push("🟡 Çoklu Sorumluluk: Servis dosyasında gömülü ham LLM prompt metni var (prompts/*.md veya *Prompts.ts dosyasına ayrılmalı).");
+    }
   }
 
   return { relPath, issues };
 }
 
 function run() {
-  console.log("\n=== ÇOKLU SORUMLULUK VE KATMAN İHLALİ TARAMASI ===\n");
+  console.log("\n=======================================================");
+  console.log(" 🔍 MİMARİ VE ÇOKLU SORUMLULUK TARAMASI (SRP & SoC)");
+  console.log("=======================================================\n");
+
   const files = getFiles(SRC_DIR);
   let totalIssues = 0;
 
@@ -63,7 +78,7 @@ function run() {
     if (issues.length > 0) {
       console.log(`📌 src/${relPath}`);
       for (const issue of issues) {
-        console.log(`   └─ ⚠️  ${issue}`);
+        console.log(`   └─ ${issue}`);
         totalIssues++;
       }
       console.log("");
@@ -71,9 +86,9 @@ function run() {
   }
 
   if (totalIssues === 0) {
-    console.log("✅ Harika! Hiçbir çoklu sorumluluk veya katman ihlali tespit edilmedi.\n");
+    console.log("✨ MÜKEMMEL! Hiçbir katman ihlali veya sorumluluk karmaşası bulunamadı.\n");
   } else {
-    console.log(`Toplam ${totalIssues} mimari öneri tespit edildi.\n`);
+    console.log(`Toplam ${totalIssues} mimari öneri/ihlal tespit edildi.\n`);
   }
 }
 
