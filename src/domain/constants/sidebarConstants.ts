@@ -1,0 +1,18 @@
+export const DEFAULT_SIDEBAR_ORDER: string[] = [
+  "list",
+  "eisenhower",
+  "notes",
+  "pomodoro",
+  "willpower",
+  "hifiz",
+  "srs",
+  "calendar",
+  "prayer",
+  "kpss",
+  "free-games",
+  "arcade",
+  "detox",
+  "bist",
+  "halka-arz",
+  "ai-chat",
+];
