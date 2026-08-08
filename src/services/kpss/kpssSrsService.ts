@@ -11,6 +11,7 @@
  */
 /* eslint-disable local/no-turkish-literals */
 
+import srsCardMd from "./prompts/srs-card.md?raw";
 import { callAIConfigured, getAIConfigFromStorage } from "@/services/aichat/index.js";
 import {
   calculateSM2,
@@ -26,35 +27,12 @@ import { logger } from "@/utils/logger.js";
 
 /**
  * AI'ya tarih konusundan `count` adet flashcard üretmesini söyleyen prompt.
- * subject-tarih kuralı + JSON şema. Kod icine gömülü (repo convention,
- * .md dosyaları repoda ölü).
+ * srs-card.md şablonundan doldurulur.
  */
 function buildSrsPrompt(subject: string, count: number): string {
-  return `Sen KPSS Tarih sınavına hazırlanan bir öğrenci için tekrar kartları (flashcard) üreten uzman tarih öğretmenisin.
-
-### Tarih Doğruluk Kuralları:
-Kronolojik olarak tamamen doğru, bilimsel literatüre uygun olmalı. Padişah dönemleri, savaş isimleri, antlaşma maddeleri ve inkılap tarihi bağlamları kusursuz kurgulanmalı. Kronoloji kontrolü (olay-padişah-antlaşma-savaş eşleşmesi) üretim öncesi yapılmalı. Uydurma/kurgusal olaylar kesinlikle yasak.
-
-### Kart Özellikleri:
-- Her kartın ON YUZU: KPSS tarzı bir tarih sorusu veya eksik bilgi tamamlama (bilgi hatırlatıcı).
-- ARKA YUZU: Kısa, net, doğru cevap (1-2 cümle).
-- IPUCU: Cevabı hatırlatacak kısa anahtar kelime veya ipucu.
-- KATEGORI: Verilen konu adı.
-
-### Görev:
-"${subject}" konusu hakkında tam ${count} adet tarih flashcard'i oluştur.
-
-### Çıktı Formatı (BUNUN DIŞINA CIKMA):
-SADECE geçerli bir JSON dizisi dondur, baska hicbir metin, giriş veya kod blogu yazma:
-[
-  {
-    "question": "on yuz sorusu",
-    "answer": "kisa dogru cevap",
-    "hint": "ipucu",
-    "category": "${subject}"
-  }
-]
-Kesinlikle JSON formatı dışında hiçbir açıklama yazma.`;
+  return srsCardMd
+    .replaceAll("__SUBJECT__", subject)
+    .replaceAll("__COUNT__", String(count));
 }
 
 /** AI yanıtından JSON dizisi ayiklar (markdown fance / ekstra metin guvenli). */
@@ -91,58 +69,7 @@ async function writeAiCards(
   await srsRepo.saveAiCards(cards);
 }
 
-/**
- * Fallback kartlari: AI yapilandirmasi yokken / AI cagrisi basarisiz olunca
- * SRS'nin bos kalmamasi icin kullanilan yerlesik 5 tarih flashcard'i.
- * Kronolojik olarak dogru KPSS Tarih konularindan secilmistir.
- */
-const DEFAULT_KPSS_HISTORY_CARDS: KpssFlashcard[] = [
-  {
-    id: "kpss_default_1",
-    question:
-      "İlk Türk devletlerinde hükümdara yönetme yetkisinin Tanrı tarafından verildiğine inanılan anlayış ve veraset sistemindeki etkisi nedir?",
-    answer:
-      "Kut Anlayışı. Kan yoluyla babadan oğula geçtiği için hanedan üyelerinin tümünün tahtta hakkı kabul edilmiş ve sık sık taht kavgalarına yol açmıştır.",
-    hint: "Kut anlayışı → Ülke hanedanın ortak malıdır.",
-    category: "İslamiyet Öncesi Türk Tarihi",
-  },
-  {
-    id: "kpss_default_2",
-    question:
-      "Osmanlı Divan-ı Hümayun'unda fethedilen toprakların kaydını tutan (Tahrir Defterleri) ve belgelere padişahın tuğrasını çeken görevli kimdir?",
-    answer:
-      "Nişancı. Tapu kadastro işlerini yürütür ve resmî yazışmalara padişahın tuğrasını çekerdi.",
-    hint: "Tuğra + Tahrir Defterleri = Nişancı",
-    category: "Osmanlı Kültür ve Medeniyeti",
-  },
-  {
-    id: "kpss_default_3",
-    question:
-      "Kurtuluş Savaşı'nın gerekçesi, amacı ve yönteminin ilk kez ihtilalci bir dille beyan edildiği belge hangisidir?",
-    answer:
-      "Amasya Genelgesi (22 Haziran 1919). 'Vatanın bütünlüğü milletin bağımsızlığı tehlikededir' (Gerekçe), 'Milletin bağımsızlığını yine milletin azim ve kararı kurtaracaktır' (Amaç ve Yöntem).",
-    hint: "Amacı, gerekçesi ve yöntemi ilk kez açıklandı.",
-    category: "Millî Mücadele Hazırlık",
-  },
-  {
-    id: "kpss_default_4",
-    question:
-      "Kurtuluş Savaşı'nın askeri safhasını sona erdiren ve Doğu Trakya, İstanbul ile Boğazlar'ın savaş yapılmadan kurtarılmasını sağlayan anlaşma hangisidir?",
-    answer:
-      "Mudanya Ateşkes Antlaşması (11 Ekim 1922). TBMM adına İsmet Paşa katılmış, Doğu Trakya ve İstanbul diplomatik zaferle kurtarılmıştır.",
-    hint: "Savaşılmadan diplomatik yolla kurtarılan Doğu Trakya.",
-    category: "Kurtuluş Savaşı Cepheler",
-  },
-  {
-    id: "kpss_default_5",
-    question:
-      "Türk Hukuk sistemini çağdaşlaştıran, din/mezhep farkı gözetmeksizin kadın-erkek eşitliğini ve resmi nikah zorunluluğunu getiren inkılap hangisidir?",
-    answer:
-      "17 Şubat 1926 Türk Medeni Kanunu. İsviçre'den uyarlanmış; kadına mirasta ve şahitlikte eşitlik, boşanma ve velayet hakkı tanınmıştır (Siyasi hak içermez!).",
-    hint: "1926 Medeni Kanun — Kadına toplumsal ve ekonomik eşitlik getirdi.",
-    category: "Atatürk İnkılapları",
-  },
-];
+import { DEFAULT_KPSS_HISTORY_CARDS } from "@/domain/constants/kpssSrsDefaultCards.js";
 
 export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
   return {

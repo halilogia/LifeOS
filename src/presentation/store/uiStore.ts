@@ -11,6 +11,7 @@ import { translations } from "@/utils/i18n.js";
 import type { CustomQuote } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { DEFAULT_SIDEBAR_ORDER } from "@/domain/constants/sidebarConstants.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
@@ -194,12 +195,17 @@ export const useUIStore = create<UIState>()((set) => ({
   loadSidebarOrder: async () => {
     const savedOrder: string[] = await new Promise((resolve) => {
       chrome.storage.local.get([SIDEBAR_ORDER_KEY], (result) => {
-        resolve((result[SIDEBAR_ORDER_KEY] as string[]) || []);
+        const data = result[SIDEBAR_ORDER_KEY];
+        resolve(Array.isArray(data) ? data : []);
       });
     });
-    set({ sidebarOrder: savedOrder || [] });
-    if (savedOrder && savedOrder.length > 0) {
-      set({ activeView: savedOrder[0] });
+    const orderToUse =
+      savedOrder && savedOrder.length > 0
+        ? savedOrder
+        : DEFAULT_SIDEBAR_ORDER;
+    set({ sidebarOrder: orderToUse });
+    if (orderToUse && orderToUse.length > 0) {
+      set({ activeView: orderToUse[0] });
     } else {
       set({ activeView: "free-games" });
     }
