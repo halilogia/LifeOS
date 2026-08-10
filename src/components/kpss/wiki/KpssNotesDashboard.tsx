@@ -33,7 +33,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showGraphModal, setShowGraphModal] = useState<boolean>(false);
   const [showInfoboxHelp, setShowInfoboxHelp] = useState<boolean>(false);
-  const [syncMsg, setSyncMsg] = useState<string>("");
 
   const {
     notes,
@@ -84,53 +83,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
     return true;
   });
 
-  const handleExportNotes = async () => {
-    const notesJson = JSON.stringify(notes);
-    const res = await window.mindvaultSync!.exportToFile(notesJson);
-    if (res && res.ok) {
-      setSyncMsg("Dışa aktarıldı: " + res.filePath);
-    } else if (res && res.canceled) {
-      setSyncMsg("");
-    }
-  };
-
-  const handleImportNotes = async () => {
-    const res = await window.mindvaultSync!.importFromFile();
-    if (res && res.ok && res.data) {
-      try {
-        const imported = JSON.parse(res.data);
-        if (Array.isArray(imported)) {
-          const sanitizedNotes: KpssWikiNote[] = (
-            imported as Record<string, unknown>[]
-          )
-            .filter(
-              (n) =>
-                n &&
-                typeof n === "object" &&
-                typeof n.id === "string" &&
-                typeof n.title === "string",
-            )
-            .map((n) => ({
-              id: String(n.id),
-              title: String(n.title),
-              content: String(n.content || ""),
-              subject: (n.subject as KpssWikiNote["subject"]) || "genel",
-              updatedAt: String(n.updatedAt || new Date().toISOString()),
-              createdAt: String(n.createdAt || new Date().toISOString()),
-              parentId: n.parentId ? String(n.parentId) : null,
-            }));
-          await saveKpssWikiNotes(sanitizedNotes);
-          setNotes(sanitizedNotes);
-          setSyncMsg("İçe aktarıldı: " + sanitizedNotes.length + " not");
-        }
-      } catch {
-        setSyncMsg("Geçersiz dosya formatı");
-      }
-    } else if (res && res.canceled) {
-      setSyncMsg("");
-    }
-  };
-
   const handleFullscreen = () => {
     const el = notesRootRef.current;
     if (!el) {
@@ -160,7 +112,7 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
         boxSizing: "border-box",
       }}
     >
-      <KpssNotesHeader t={t} syncMsg={syncMsg} />
+      <KpssNotesHeader t={t} />
 
       {/* Main Grid Layout (Dynamic Collapsible Sidebar for Full Screen Mode) */}
       <div
@@ -215,8 +167,6 @@ export function KpssNotesDashboard({ lang, t }: KpssNotesDashboardProps) {
                 onModeChange={setViewMode}
                 onFullscreen={handleFullscreen}
                 onDownloadMarkdown={handleDownloadMarkdown}
-                onExport={handleExportNotes}
-                onImport={handleImportNotes}
                 onShowHelp={() => setShowInfoboxHelp(true)}
                 onShowGraph={() => setShowGraphModal(true)}
                 onDelete={handleDeleteArticle}

@@ -1,4 +1,3 @@
-import { logger } from "@/utils/logger.js";
 import type { RuntimeMessage } from "./runtimeMessageHandler.js";
 
 /**
@@ -57,75 +56,9 @@ export function handleMediaAndTabMessage(
     return true;
   }
 
-  if (message.type === "set_volume_boost" && message.tabId) {
-    const targetTabId = message.tabId;
-    const multiplier = Number(message.volumeLevel) || 1.0;
-
-    chrome.scripting
-      .executeScript({
-        target: { tabId: targetTabId },
-        world: "MAIN",
-        func: (boostMultiplier: number) => {
-          let audioCtx = window._lifeosAudioCtx;
-          let gainNode = window._lifeosGainNode;
-
-          if (!audioCtx) {
-            const AudioCtxClass =
-              window.AudioContext || window.webkitAudioContext;
-            if (!AudioCtxClass) {
-              return;
-            }
-            audioCtx = new AudioCtxClass();
-            gainNode = audioCtx.createGain();
-            gainNode.connect(audioCtx.destination);
-            window._lifeosAudioCtx = audioCtx;
-            window._lifeosGainNode = gainNode;
-          }
-
-          if (audioCtx.state === "suspended") {
-            audioCtx.resume().catch(() => {});
-          }
-
-          const connectedMap = window._lifeosConnectedMap || new WeakMap();
-          window._lifeosConnectedMap = connectedMap;
-
-          const mediaEls = Array.from(
-            document.querySelectorAll("video, audio"),
-          ) as HTMLMediaElement[];
-
-          mediaEls.forEach((el) => {
-            if (!connectedMap.has(el)) {
-              try {
-                const source = audioCtx.createMediaElementSource(el);
-                source.connect(gainNode!);
-                connectedMap.set(el, source);
-              } catch {
-                // element may already be connected — ignore
-              }
-            }
-          });
-
-          if (gainNode) {
-            try {
-              gainNode.gain.setValueAtTime(
-                boostMultiplier,
-                audioCtx.currentTime,
-              );
-            } catch {
-              // gain set can throw when context is closed — ignore
-            }
-          }
-        },
-        args: [multiplier],
-      })
-      .then(() => sendResponse({ success: true }))
-      .catch((err) => {
-        logger.warn("[Background VolumeBoost] executeScript failed:", err);
-        sendResponse({ success: false, error: String(err) });
-      });
-
-    return true;
-  }
-
+  // set_volume_boost is handled by the content script (ISOLATED world) via
+  // chrome.tabs.sendMessage — no MAIN-world executeScript here. A second
+  // AudioContext+createMediaElementSource on the same element throws
+  // InvalidStateError and silently breaks the boost.
   return false;
 }

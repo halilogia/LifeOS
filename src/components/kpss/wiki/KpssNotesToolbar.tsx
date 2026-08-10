@@ -1,7 +1,7 @@
 /**
  * KpssNotesToolbar.tsx
  * Presentational Toolbar for KPSS Not Stüdyosu.
- * Mode tabs (read/edit) + Fullscreen + Sync (Electron) + MD download + Help + Graph + Delete.
+ * Mode tabs (read/edit) + Fullscreen + MD download + Help + Graph + Delete.
  */
 import {
   IconFullscreen,
@@ -17,8 +17,6 @@ interface KpssNotesToolbarProps {
   onModeChange: (mode: "read" | "edit") => void;
   onFullscreen: () => void;
   onDownloadMarkdown: () => void;
-  onExport: () => void;
-  onImport: () => void;
   onShowHelp: () => void;
   onShowGraph: () => void;
   onDelete: () => void;
@@ -30,8 +28,6 @@ export function KpssNotesToolbar({
   onModeChange,
   onFullscreen,
   onDownloadMarkdown,
-  onExport,
-  onImport,
   onShowHelp,
   onShowGraph,
   onDelete,
@@ -116,47 +112,6 @@ export function KpssNotesToolbar({
         >
           <IconDownload size={14} strokeWidth={2.2} />
         </button>
-
-        {/* Masaüstü Senkronizasyonu (yalnızca Electron exe'de görünür) */}
-        {typeof window !== "undefined" &&
-          typeof window.mindvaultSync !== "undefined" && (
-            <>
-              <button
-                type="button"
-                onClick={onExport}
-                title="Notları JSON dosyasına yedekle (eklentiye aktarmak için)"
-                style={{
-                  background: "rgba(16, 185, 129, 0.15)",
-                  border: "1px solid rgba(16, 185, 129, 0.35)",
-                  color: "#34d399",
-                  borderRadius: "6px",
-                  padding: "4px 10px",
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                ⇩ Yedekle
-              </button>
-              <button
-                type="button"
-                onClick={onImport}
-                title="JSON dosyasından notları içe aktar"
-                style={{
-                  background: "rgba(245, 158, 11, 0.15)",
-                  border: "1px solid rgba(245, 158, 11, 0.35)",
-                  color: "#fbbf24",
-                  borderRadius: "6px",
-                  padding: "4px 10px",
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                ⇧ Yükle
-              </button>
-            </>
-          )}
 
         {/* Info Guide Button: KPSS not alma kılavuzu popup'ı */}
         <button

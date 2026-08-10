@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-todo",
+  "name": "life-os",
   "version": "1.0.0",
   "type": "module",
   "description": "ZenTodo is a high-end Chrome extension that replaces your New Tab page with a minimalist, focused, and aesthetically pleasing To-Do list environment.",
@@ -11,9 +11,7 @@
     "generate:tree": "node scripts/automated_project_tree.cjs",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest run",
-    "benchmark": "node scripts/benchmark.mjs",
-    "desktop:build": "npm run build && cd electron/desktop && npm install && node build.js",
-    "desktop:start": "cd electron/desktop && npm install && npm start"
+    "benchmark": "node scripts/benchmark.mjs"
   },
   "repository": {
     "type": "git",

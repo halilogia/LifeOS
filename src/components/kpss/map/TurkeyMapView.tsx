@@ -1,10 +1,12 @@
 /**
  * TurkeyMapView.tsx
- * Türkiye Fiziki Haritası — konu seçici (volkanik dağlar, ovalar, göller, akarsular, platolar).
- * Video oynatıcı mantığı: ileri/geri sarma, fullscreen, başlangıçta tüm pinler görünür.
+ * Türkiye Fiziki Haritası — İki Modlu Yönetici Bileşen:
+ * 1. 📖 Öğrenme & Oynatma Modu (Rehberli sunum, ileri/geri oynatıcı)
+ * 2. 🎯 İnteraktif Konum Bulma Oyunu Modu (Alt hedef çubuğu, tıklamalı harita sınavı)
+ *
  * Veri: src/domain/constants/TurkeyGeographyData.ts + TurkeyProvincePaths.ts
- * Parçalar: MapControls, MapTopicSidebar, MapCanvas, useMapPlayback (ortak mantık).
  */
+
 import { useEffect, useMemo, useState } from "preact/hooks";
 import {
   MAP_TOPICS,
@@ -17,31 +19,43 @@ import { MapTopicSidebar } from "./MapTopicSidebar.js";
 import { MapCanvas } from "./MapCanvas.js";
 import { useMapPlayback } from "./useMapPlayback.js";
 
+// İnteraktif Sınav Modu Parçaları & Hooks
+import { useMapQuiz } from "./useMapQuiz.js";
+import { MapQuizCanvas } from "./MapQuizCanvas.js";
+import { MapQuizTargetBar } from "./MapQuizTargetBar.js";
+import { MapQuizResultModal } from "./MapQuizResultModal.js";
+
 interface TurkeyMapViewProps {
   t: Record<string, string>;
 }
 
 const STEP_MS = 1500;
 
+type ViewMode = "study" | "quiz";
+
 const TOPIC_TITLE_KEYS: Record<TurkeyMapTopic, string> = {
+  kivrim: "kpss_map_title_kivrim",
+  kirik: "kpss_map_title_kirik",
   volcanic: "kpss_map_title_volcanic",
   plains: "kpss_map_title_plains",
   lakes: "kpss_map_title_lakes",
   rivers: "kpss_map_title_rivers",
   plateaus: "kpss_map_title_plateaus",
+  all: "kpss_map_title_all",
 };
 
 export function TurkeyMapView({ t }: TurkeyMapViewProps) {
-  const [selectedTopic, setSelectedTopic] =
-    useState<TurkeyMapTopic>("volcanic");
-  // Başlangıçta tüm pinler görünür (göz aşinalığı) — play basınca 0'dan başlar
+  const [viewMode, setViewMode] = useState<ViewMode>("study");
+  const [selectedTopic, setSelectedTopic] = useState<TurkeyMapTopic>("kivrim");
+
+  // 1. Öğrenme Modu (Playback) State & Controls
   const playback = useMapPlayback({
-    initialCount: VOLCANIC_MOUNTAINS.length,
+    initialCount: (TOPIC_PINS[selectedTopic] || VOLCANIC_MOUNTAINS).length,
     stepMs: STEP_MS,
   });
   const {
     revealedCount,
-    currentIndex,
+    currentIndex: studyCurrentIndex,
     playing,
     isFullscreen,
     view,
@@ -60,13 +74,20 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
     onWheel,
   } = playback;
 
-  const pins = TOPIC_PINS[selectedTopic];
+  // 2. İnteraktif Konum Bulma Oyunu (Quiz) State & Actions
+  const quiz = useMapQuiz(selectedTopic);
+  const {
+    state: quizState,
+    actions: quizActions,
+  } = quiz;
+
+  const currentPins = TOPIC_PINS[selectedTopic] || TOPIC_PINS.kivrim;
   const topicMeta =
     MAP_TOPICS.find((m) => m.id === selectedTopic) || MAP_TOPICS[0];
   const topicColor = topicMeta.color;
 
   // Seçili konu değişince toplam pin sayısını senkronla
-  const nextTotal = pins.length;
+  const nextTotal = currentPins.length;
   useEffect(() => {
     if (total !== nextTotal) {
       setTotal(nextTotal);
@@ -78,8 +99,8 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
       return;
     }
     setSelectedTopic(topic);
-    // Yeni konu da son haliyle (tüm pinler) açılır
-    handleUnitChange(TOPIC_PINS[topic].length);
+    handleUnitChange(TOPIC_PINS[topic]?.length || 0);
+    quizActions.setTopic(topic);
   };
 
   const title = useMemo(
@@ -102,34 +123,138 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
           ? {
               height: "100vh",
               boxSizing: "border-box",
-              padding: "24px",
+              padding: "20px",
               background: "linear-gradient(160deg, #0f172a 0%, #1e293b 100%)",
               overflow: "auto",
             }
           : {}),
       }}
     >
-      {/* Harita Başlığı + Kontroller */}
-      <MapControls
-        t={t}
-        title={title}
-        total={total}
-        revealedCount={revealedCount}
-        playing={playing}
-        isFullscreen={isFullscreen}
-        onStep={handleStep}
-        onReset={() => handleReset(total)}
-        onPlayToggle={handlePlay}
-        onToggleFullscreen={toggleFullscreen}
-      />
+      {/* Üst Mod Seçici (Öğrenme & Oynatma / İnteraktif Konum Bulma Oyunu) */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justify: "space-between",
+          gap: "12px",
+          background: "rgba(15, 23, 42, 0.65)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRadius: "14px",
+          padding: "8px 12px",
+          backdropFilter: "blur(8px)",
+        }}
+      >
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button
+            type="button"
+            onClick={() => setViewMode("study")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 16px",
+              borderRadius: "10px",
+              border:
+                viewMode === "study"
+                  ? "1px solid rgba(201, 154, 60, 0.5)"
+                  : "1px solid transparent",
+              background:
+                viewMode === "study"
+                  ? "linear-gradient(135deg, rgba(201, 154, 60, 0.25) 0%, rgba(161, 120, 38, 0.3) 100%)"
+                  : "transparent",
+              color: viewMode === "study" ? "#fff4e4" : "#94a3b8",
+              fontSize: "0.82rem",
+              fontWeight: 800,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            📖 {t.kpss_map_mode_study || "Öğrenme & Oynatma"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("quiz")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 16px",
+              borderRadius: "10px",
+              border:
+                viewMode === "quiz"
+                  ? "1px solid rgba(34, 197, 94, 0.6)"
+                  : "1px solid transparent",
+              background:
+                viewMode === "quiz"
+                  ? "linear-gradient(135deg, rgba(34, 197, 94, 0.25) 0%, rgba(22, 163, 74, 0.35) 100%)"
+                  : "transparent",
+              color: viewMode === "quiz" ? "#ffffff" : "#94a3b8",
+              fontSize: "0.82rem",
+              fontWeight: 800,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow:
+                viewMode === "quiz"
+                  ? "0 4px 14px rgba(34, 197, 94, 0.25)"
+                  : "none",
+            }}
+          >
+            🎯 {t.kpss_map_mode_quiz || "İnteraktif Konum Oyunu"}
+          </button>
+        </div>
 
-      {/* Konu Seçici + Harita */}
+        {/* Oyun Modunda Anlık Puan / Seri Göstergesi */}
+        {viewMode === "quiz" && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              fontSize: "0.8rem",
+              fontWeight: 700,
+              color: "#f4ead7",
+            }}
+          >
+            <div>
+              ⭐ {t.kpss_map_score || "Skor"}:{" "}
+              <span style={{ color: "#22c55e", fontWeight: 900 }}>
+                {quizState.score}
+              </span>{" "}
+              / {quizState.targets.length}
+            </div>
+            {quizState.streak > 1 && (
+              <div style={{ color: "#f97316", fontWeight: 900 }}>
+                🔥 {quizState.streak} Seri!
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Öğrenme Modunda: Harita Başlığı + Kontroller */}
+      {viewMode === "study" && (
+        <MapControls
+          t={t}
+          title={title}
+          total={total}
+          revealedCount={revealedCount}
+          playing={playing}
+          isFullscreen={isFullscreen}
+          onStep={handleStep}
+          onReset={() => handleReset(total)}
+          onPlayToggle={handlePlay}
+          onToggleFullscreen={toggleFullscreen}
+        />
+      )}
+
+      {/* Ana Gövde: Konu Seçici Sidebar + Harita Tuvali */}
       <div
         style={{
           display: "flex",
           gap: "12px",
           alignItems: "stretch",
           flex: isFullscreen ? 1 : undefined,
+          position: "relative",
         }}
       >
         {/* Sol Sidebar: Konu Listesi */}
@@ -139,25 +264,86 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
           onSelect={handleTopicChange}
         />
 
-        {/* Harita Gövdesi */}
-        <MapCanvas
-          t={t}
-          topicColor={topicColor}
-          legendKey={topicMeta.legendKey}
-          pins={pins}
-          revealedCount={revealedCount}
-          currentIndex={currentIndex}
-          isFullscreen={isFullscreen}
-          svgWrapRef={svgWrapRef}
-          view={view}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onWheel={onWheel}
-        />
+        {/* Görünüm 1: Öğrenme Haritası Tuvali */}
+        {viewMode === "study" && (
+          <MapCanvas
+            t={t}
+            topicColor={topicColor}
+            legendKey={topicMeta.legendKey}
+            pins={currentPins}
+            revealedCount={revealedCount}
+            currentIndex={studyCurrentIndex}
+            isFullscreen={isFullscreen}
+            svgWrapRef={svgWrapRef}
+            view={view}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onWheel={onWheel}
+          />
+        )}
+
+        {/* Görünüm 2: İnteraktif Konum Bulma Oyunu Tuvali + Alt Çubuk */}
+        {viewMode === "quiz" && (
+          <div
+            style={{
+              position: "relative",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              minWidth: 0,
+            }}
+          >
+            <MapQuizCanvas
+              t={t}
+              topicColor={topicColor}
+              allTopicPins={currentPins}
+              currentTarget={quizState.currentTarget}
+              solvedPinNames={quizState.solvedPinNames}
+              showHint={quizState.showHint}
+              wrongAttemptPin={quizState.wrongAttemptPin}
+              isFullscreen={isFullscreen}
+              svgWrapRef={svgWrapRef}
+              view={view}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onWheel={onWheel}
+              onGuessPin={quizActions.handleGuess}
+            />
+
+            {/* Alt Hedef Çubuğu ("Ilgaz Dağı" / PAS / İpucu) */}
+            <MapQuizTargetBar
+              t={t}
+              currentTarget={quizState.currentTarget}
+              currentIndex={quizState.currentIndex}
+              total={quizState.targets.length}
+              score={quizState.score}
+              streak={quizState.streak}
+              onSkip={quizActions.handleSkip}
+              onHint={quizActions.handleHint}
+              showHint={quizState.showHint}
+              lastFeedback={quizState.lastFeedback}
+            />
+          </div>
+        )}
       </div>
 
-      {/* @keyframes tanımı (global CSS'e eklenir) */}
+      {/* Sınav Tamamlandığında Sonuç Modalı */}
+      {viewMode === "quiz" && quizState.isCompleted && (
+        <MapQuizResultModal
+          t={t}
+          total={quizState.targets.length}
+          score={quizState.score}
+          wrongCount={quizState.wrongCount}
+          skippedCount={quizState.skippedCount}
+          bestStreak={quizState.bestStreak}
+          onRestart={quizActions.handleRestart}
+          onSwitchToStudy={() => setViewMode("study")}
+        />
+      )}
+
+      {/* @keyframes tanımları */}
       <style>{`
         @keyframes mapPulse {
           0% { opacity: 0.55; transform: scale(0.6); }
