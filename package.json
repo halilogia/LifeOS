@@ -24,8 +24,11 @@
     "@eslint/js": "^10.0.1",
     "@preact/preset-vite": "^2.10.5",
     "@types/chrome": "^0.1.40",
+    "@types/d3-geo": "^3.1.1",
+    "@types/geojson": "^7946.0.16",
     "@types/katex": "^0.16.8",
     "@types/node": "^26.1.1",
+    "@types/topojson-specification": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@typescript-eslint/parser": "^8.58.2",
     "eslint": "^10.2.0",
@@ -38,8 +41,10 @@
     "xlsx": "^0.18.5"
   },
   "dependencies": {
+    "d3-geo": "^3.1.1",
     "katex": "^0.18.0",
     "preact": "^10.29.7",
+    "topojson-client": "^3.1.0",
     "zod": "^4.3.6",
     "zustand": "^5.0.14"
   }

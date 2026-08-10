@@ -29,6 +29,7 @@ export interface HistoryUnit {
   id: string;
   navLabel: string;
   mode: HistoryMode;
+  mapScope?: "turkey" | "world";
   title: string;
   subtitle: string;
   showYear: boolean;

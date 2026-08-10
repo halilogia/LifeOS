@@ -12,6 +12,7 @@ import {
 import { MapControls } from "@/components/kpss/map/MapControls.js";
 import { HistoryTopicSidebar } from "@/components/kpss/map/HistoryTopicSidebar.js";
 import { HistoryMapCanvas } from "@/components/kpss/map/HistoryMapCanvas.js";
+import { WorldHistoryMapCanvas } from "@/components/kpss/map/WorldHistoryMapCanvas.js";
 import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
 import {
   TESKILAT_OUTLINE,
@@ -178,6 +179,21 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                 revealedCount={revealedCount}
               />
             </div>
+          ) : unit.mapScope === "world" ? (
+            <WorldHistoryMapCanvas
+              events={events}
+              revealedCount={revealedCount}
+              currentIndex={currentIndex}
+              unitColor={unit.color}
+              territoryColors={territoryColors}
+              view={view}
+              isFullscreen={isFullscreen}
+              svgWrapRef={svgWrapRef}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onWheel={onWheel}
+            />
           ) : (
             <HistoryMapCanvas
               events={events}
