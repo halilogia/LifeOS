@@ -30,8 +30,8 @@ export * from "./ekonomiKulturUnit.js";
 export * from "./beyliklerUnit.js";
 
 export const HISTORY_UNITS: HistoryUnit[] = [
-  SELCUKLU_UNIT,
   ILK_DONEM_BEYLIKLER_UNIT,
+  SELCUKLU_UNIT,
   BEYLIKLER_UNIT,
   OSMANLI_KURULUS_UNIT,
   OSMANLI_YUKSELME_UNIT,
