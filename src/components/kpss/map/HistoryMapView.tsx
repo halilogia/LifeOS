@@ -16,6 +16,9 @@ import { SchemaBuilder } from "@/components/kpss/map/SchemaBuilder.js";
 import {
   TESKILAT_OUTLINE,
   TESKILAT_TITLE,
+  OSMANLI_TESKILAT_OUTLINE,
+  OSMANLI_TESKILAT_TITLE,
+  countOutlineLines,
 } from "@/components/kpss/map/StateStructureOutline.js";
 import { useMapPlayback } from "@/components/kpss/map/useMapPlayback.js";
 
@@ -24,9 +27,6 @@ interface HistoryMapViewProps {
 }
 
 const STEP_MS = 2200;
-
-/** Devlet Teşkilatı şeması düğüm sayısı — veri ağacından türetilir */
-const TESKILAT_BOX_COUNT = 9;
 
 const ANIM_CSS = `
 @keyframes historyPulse {
@@ -43,9 +43,17 @@ const ANIM_CSS = `
 }
 `;
 
+function getDiagramOutline(unitId: string): { outline: string; title: string } {
+  if (unitId === "osmanli-teskilat") {
+    return { outline: OSMANLI_TESKILAT_OUTLINE, title: OSMANLI_TESKILAT_TITLE };
+  }
+  return { outline: TESKILAT_OUTLINE, title: TESKILAT_TITLE };
+}
+
 function getInitialRevealed(u: HistoryUnit): number {
   if (u.mode === "diagram") {
-    return TESKILAT_BOX_COUNT;
+    const { outline } = getDiagramOutline(u.id);
+    return countOutlineLines(outline);
   }
   return u.events?.length || 0;
 }
@@ -85,7 +93,9 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
     HISTORY_UNITS.find((u) => u.id === selectedUnitId) || HISTORY_UNITS[0];
   const isDiagram = unit.mode === "diagram";
   const events = isDiagram ? [] : unit.events || [];
-  const nextTotal = isDiagram ? TESKILAT_BOX_COUNT : events.length;
+  const diagramData = getDiagramOutline(unit.id);
+  const nextTotal = isDiagram ? countOutlineLines(diagramData.outline) : events.length;
+
   useEffect(() => {
     if (total !== nextTotal) {
       setTotal(nextTotal);
@@ -160,8 +170,8 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
               }}
             >
               <SchemaBuilder
-                outline={TESKILAT_OUTLINE}
-                title={TESKILAT_TITLE}
+                outline={diagramData.outline}
+                title={diagramData.title}
                 revealedCount={revealedCount}
               />
             </div>
