@@ -4,15 +4,12 @@
  * Mercator harita projeksiyonu hesaplama ve ISO ülke kodları ile eşleştirme servisi.
  */
 import * as d3 from "d3-geo";
-import * as topojson from "topojson-client";
-import type { Topology, GeometryCollection } from "topojson-specification";
-import type { FeatureCollection, Geometry } from "geojson";
+import {
+  PREPROJECTED_WORLD_FEATURES,
+  type CountryGeoFeature,
+} from "@/domain/constants/history/worldCountryFeaturesData.js";
 
-export interface CountryGeoFeature {
-  id: string; // ISO 3166-1 numeric code (e.g., "792", "040", "364")
-  d: string;
-  name: string;
-}
+export type { CountryGeoFeature };
 
 const ISO_MAP: Record<string, string[]> = {
   turkey: ["792"],
@@ -20,7 +17,7 @@ const ISO_MAP: Record<string, string[]> = {
   balkans: ["688", "100", "348", "642", "070", "191", "499", "807", "705"], // Sırbistan, Bulgaristan, Macaristan, Romanya, Bosna, Hırvatistan, Karadağ, M.Kuzey Makedonya, Slovenya
   austria: ["040"],
   podolia: ["804", "616"], // Ukrayna, Polonya
-  crimea: ["804", "643"], // Kırım / Ukrayna / Rusya
+  crimea: ["804"], // Kırım / Ukrayna (Rusya hariç)
   syria: ["760", "422"], // Suriye, Lübnan
   iraq: ["368"],
   iran: ["364"],
@@ -49,47 +46,13 @@ export function geoToSvgCoords(lon: number, lat: number): { x: number; y: number
   return { x: coords[0], y: coords[1] };
 }
 
-let cachedCountries: CountryGeoFeature[] | null = null;
-let fetchPromise: Promise<CountryGeoFeature[]> | null = null;
+/** Önceden projeksiyonu yapılmış 0-gecikmeli dünya ülkesi harita özelliklerini senkron getirir */
+export function getWorldFeaturesSync(): CountryGeoFeature[] {
+  return PREPROJECTED_WORLD_FEATURES;
+}
 
 export async function loadWorldCountryFeatures(): Promise<CountryGeoFeature[]> {
-  if (cachedCountries) {
-    return cachedCountries;
-  }
-  if (fetchPromise) {
-    return fetchPromise;
-  }
-
-  fetchPromise = fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
-    .then((res) => res.json())
-    .then((topoData: Topology<{ countries: GeometryCollection }>) => {
-      const geoCollection = topojson.feature(
-        topoData,
-        topoData.objects.countries
-      ) as FeatureCollection<Geometry, { name?: string }>;
-
-      const features: CountryGeoFeature[] = geoCollection.features
-        .map((feature) => {
-          const pathD = emenaPathGenerator(feature);
-          const rawId = String(feature.id || "");
-          const id = rawId.padStart(3, "0");
-          return {
-            id,
-            d: pathD || "",
-            name: feature.properties?.name || id,
-          };
-        })
-        .filter((f) => f.d.length > 0);
-
-      cachedCountries = features;
-      return features;
-    })
-    .catch((err) => {
-      console.warn("[WorldMapGeoService] TopoJSON yüklenirken hata:", err);
-      return [];
-    });
-
-  return fetchPromise;
+  return PREPROJECTED_WORLD_FEATURES;
 }
 
 /** Verilen bölge adı (örn: 'iran', 'austria', 'balkans') için ISO kodlarını döndürür */

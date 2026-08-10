@@ -3,22 +3,16 @@
  * D3.js + TopoJSON ile gerçek dünya ülke sınırlarını çizerek Osmanlı Yükselme, Duraklama, Gerileme
  * ve Dağılma dönemlerini gösteren dinamik küresel harita katmanı.
  */
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import type { Ref } from "preact";
+import { WORLD_VIEWBOX } from "@/domain/constants/history/WorldProvincePaths.js";
 import {
-  WORLD_VIEWBOX,
-  WORLD_COUNTRY_PATHS,
-} from "@/domain/constants/history/WorldProvincePaths.js";
-import {
-  loadWorldCountryFeatures,
+  getWorldFeaturesSync,
   getIsoCodesForRegion,
+  geoToSvgCoords,
   type CountryGeoFeature,
 } from "@/domain/constants/history/WorldMapGeoService.js";
-import {
-  type HistoryEvent,
-  HISTORY_PROVINCE_FILL,
-  HISTORY_PROVINCE_STROKE,
-} from "@/domain/constants/history/types.js";
+import type { HistoryEvent } from "@/domain/constants/history/types.js";
 
 interface WorldHistoryMapCanvasProps {
   events: HistoryEvent[];
@@ -31,7 +25,7 @@ interface WorldHistoryMapCanvasProps {
   svgWrapRef: Ref<HTMLDivElement>;
   onPointerDown: (e: PointerEvent) => void;
   onPointerMove: (e: PointerEvent) => void;
-  onPointerUp: () => void;
+  onPointerUp: (e: PointerEvent) => void;
   onWheel: (e: WheelEvent) => void;
 }
 
@@ -41,42 +35,38 @@ interface PinOffset {
   textY: number;
 }
 
+function getEventCoords(ev: HistoryEvent): { x: number; y: number } {
+  if (ev.lon !== undefined && ev.lat !== undefined) {
+    return geoToSvgCoords(ev.lon, ev.lat);
+  }
+  return { x: ev.x, y: ev.y };
+}
+
 function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
   const result = new Map<number, PinOffset>();
-  const visited = new Set<number>();
-  const clusters: number[][] = [];
+  const coordsList = events.map(getEventCoords);
 
   for (let i = 0; i < events.length; i++) {
-    if (visited.has(i)) continue;
-    const cluster = [i];
-    visited.add(i);
-
-    for (let j = i + 1; j < events.length; j++) {
-      if (visited.has(j)) continue;
-      const dist = Math.hypot(events[i].x - events[j].x, events[i].y - events[j].y);
+    // Çakışan/yakın olan diğer pin sayılarını tespit edelim
+    const neighbors: number[] = [];
+    for (let j = 0; j < events.length; j++) {
+      if (i === j) continue;
+      const dist = Math.hypot(coordsList[i].x - coordsList[j].x, coordsList[i].y - coordsList[j].y);
       if (dist < 80) {
-        cluster.push(j);
-        visited.add(j);
+        neighbors.push(j);
       }
     }
-    clusters.push(cluster);
-  }
 
-  clusters.forEach((indices) => {
-    if (indices.length === 1) {
-      result.set(indices[0], { dx: 0, dy: 0, textY: -22 });
-      return;
+    // Yakın komşu varsa yazıları yukarı/aşağı kısa mesafeli dağıt
+    if (neighbors.length > 0) {
+      const yOffsets = [-14, 15, -24, 26, -34];
+      const textY = yOffsets[i % yOffsets.length];
+      const dx = (i % 2 === 0 ? 1 : -1) * (i % 3) * 4;
+      result.set(i, { dx, dy: 0, textY });
+    } else {
+      result.set(i, { dx: 0, dy: 0, textY: -14 });
     }
-    const count = indices.length;
-    indices.forEach((idx, k) => {
-      const angle = (k / count) * Math.PI * 2 - Math.PI / 2;
-      const radius = 3;
-      const dx = Math.cos(angle) * radius;
-      const dy = Math.sin(angle) * radius;
-      const textY = k % 2 === 0 ? -22 : k % 3 === 1 ? -38 : 18;
-      result.set(idx, { dx, dy, textY });
-    });
-  });
+  }
 
   return result;
 }
@@ -95,15 +85,8 @@ export function WorldHistoryMapCanvas({
   onPointerUp,
   onWheel,
 }: WorldHistoryMapCanvasProps) {
-  const [geoFeatures, setGeoFeatures] = useState<CountryGeoFeature[]>([]);
-
-  useEffect(() => {
-    loadWorldCountryFeatures().then((features) => {
-      if (features && features.length > 0) {
-        setGeoFeatures(features);
-      }
-    });
-  }, []);
+  // Anında (0ms) senkron harita özellikleri yüklemesi
+  const [geoFeatures] = useState<CountryGeoFeature[]>(() => getWorldFeaturesSync());
 
   // Aktif boyalı ISO kod haritası oluşturma
   const activeIsoColors = new Map<string, string>();
@@ -111,6 +94,9 @@ export function WorldHistoryMapCanvas({
     const isoCodes = getIsoCodesForRegion(regionKey);
     isoCodes.forEach((code) => activeIsoColors.set(code, color));
   });
+
+  const pinOffsets = getPinOffsets(events);
+  const activeEvents = events.slice(0, revealedCount);
 
   return (
     <div
@@ -142,133 +128,102 @@ export function WorldHistoryMapCanvas({
           transition: "transform 0.08s ease-out",
         }}
       >
-        {/* Gerçek Dünya Ülke Sınırları (D3 TopoJSON) veya Statik Yedek Harita */}
+        {/* Gerçek Dünya Ülke Sınırları (0ms Anında Render) */}
         <g>
-          {geoFeatures.length > 0
-            ? geoFeatures.map((country) => {
-                const activeColor =
-                  activeIsoColors.get(country.id) ||
-                  territoryColors.get(country.name);
-                const fill = activeColor || "#c2b48d";
-                return (
-                  <path
-                    key={`geo-${country.id}`}
-                    d={country.d}
-                    fill={fill}
-                    stroke="#5c4d32"
-                    strokeWidth={0.6}
-                    style={{ transition: "fill 0.4s ease" }}
-                  >
-                    <title>{country.name}</title>
-                  </path>
-                );
-              })
-            : WORLD_COUNTRY_PATHS.map((country) => {
-                const activeColor = territoryColors.get(country.name);
-                const fill = activeColor || HISTORY_PROVINCE_FILL;
-                return (
-                  <path
-                    key={country.id}
-                    d={country.d}
-                    fill={fill}
-                    stroke={HISTORY_PROVINCE_STROKE}
-                    strokeWidth={1}
-                    style={{ transition: "fill 0.4s ease" }}
-                  >
-                    <title>{country.name}</title>
-                  </path>
-                );
-              })}
+          {geoFeatures.map((country) => {
+            const activeColor =
+              activeIsoColors.get(country.id) ||
+              territoryColors.get(country.name);
+            const fill = activeColor || "#c2b48d";
+            return (
+              <path
+                key={`geo-${country.id}`}
+                d={country.d}
+                fill={fill}
+                stroke="#5c4d32"
+                strokeWidth={0.6}
+                style={{ transition: "fill 0.4s ease" }}
+              >
+                <title>{country.name}</title>
+              </path>
+            );
+          })}
         </g>
 
-        {/* Pin katmanı */}
-        <WorldPinLayer
-          events={events}
-          revealedCount={revealedCount}
-          currentIndex={currentIndex}
-          unitColor={unitColor}
-        />
+        {/* Pinler ve Olay İşaretçileri */}
+        <g>
+          {activeEvents.map((ev, index) => {
+            const isCurrent = index === currentIndex;
+            const offset = pinOffsets.get(index) || { dx: 0, dy: 0, textY: -14 };
+            const baseCoords = getEventCoords(ev);
+            const pinX = baseCoords.x + offset.dx;
+            const pinY = baseCoords.y + offset.dy;
+            const pinColor = ev.color || unitColor;
+
+            // Yazı genişliğine göre kibar koyu rozet arka planı
+            const textLength = ev.title.length;
+            const rectWidth = textLength * 5.8 + 8;
+            const rectHeight = 15;
+
+            return (
+              <g
+                key={`event-pin-${ev.year || index}-${index}`}
+                transform={`translate(${pinX}, ${pinY})`}
+                style={{ cursor: "pointer" }}
+              >
+                {/* Vurgulu Olay Dairesi Halesi */}
+                {isCurrent && (
+                  <circle
+                    r={13}
+                    fill="none"
+                    stroke={pinColor}
+                    strokeWidth={1.5}
+                    style={{ animation: "historyPulse 1.6s infinite" }}
+                  />
+                )}
+
+                {/* Küçültülmüş Kibar Pin İkon Noktası */}
+                <circle
+                  r={isCurrent ? 6.5 : 4.5}
+                  fill={pinColor}
+                  stroke="#ffffff"
+                  strokeWidth={1.5}
+                  style={{ transition: "all 0.2s ease" }}
+                />
+
+                {/* Yazı Arka Plan Rozeti (Kısaltılmış Mesafeli Kibar Rozet) */}
+                <g transform={`translate(0, ${offset.textY - 7})`}>
+                  <rect
+                    x={-rectWidth / 2}
+                    y={-8.5}
+                    width={rectWidth}
+                    height={rectHeight}
+                    rx={4}
+                    ry={4}
+                    fill={isCurrent ? "#0f172a" : "rgba(15, 23, 42, 0.82)"}
+                    stroke={isCurrent ? pinColor : "rgba(255, 255, 255, 0.2)"}
+                    strokeWidth={isCurrent ? 1.2 : 0.6}
+                  />
+
+                  {/* Etiket Yazısı (Kibar Boyut) */}
+                  <text
+                    y={2.5}
+                    textAnchor="middle"
+                    fill={isCurrent ? "#fbbf24" : "#ffffff"}
+                    fontSize={isCurrent ? 10.5 : 9.5}
+                    fontWeight={isCurrent ? "700" : "500"}
+                    style={{
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {ev.title}
+                  </text>
+                </g>
+              </g>
+            );
+          })}
+        </g>
       </svg>
     </div>
-  );
-}
-
-function WorldPinLayer({
-  events,
-  revealedCount,
-  currentIndex,
-  unitColor,
-}: {
-  events: HistoryEvent[];
-  revealedCount: number;
-  currentIndex: number;
-  unitColor: string;
-}) {
-  const offsets = getPinOffsets(events);
-  return (
-    <>
-      {events.slice(0, revealedCount).map((ev, idx) => {
-        const isCurrent = idx === currentIndex;
-        const c = ev.color || unitColor;
-        const off = offsets.get(idx) || { dx: 0, dy: 0, textY: -22 };
-        return (
-          <g
-            key={`world-pin-${idx}`}
-            transform={`translate(${ev.x + off.dx} ${ev.y + off.dy})`}
-          >
-            <circle r={2.5} fill={c} />
-            <line
-              x1={0}
-              y1={0}
-              x2={0}
-              y2={-16}
-              stroke="#3a1408"
-              strokeWidth={1.5}
-            />
-            <path
-              d="M 0,-16 L 11,-12 L 0,-8 Z"
-              fill={isCurrent ? "#c99a3c" : c}
-              stroke="#3a1408"
-              strokeWidth={0.6}
-            />
-            <circle
-              r={isCurrent ? 4.5 : 3.5}
-              fill={isCurrent ? "#c99a3c" : c}
-              stroke="#3a1408"
-              strokeWidth={1.2}
-            />
-            {isCurrent && (
-              <circle
-                r={7}
-                fill="none"
-                stroke={c}
-                strokeWidth={1.6}
-                style={{
-                  animation: "historyPulse 1.4s ease-out infinite",
-                  transformOrigin: "center",
-                }}
-              />
-            )}
-            <text
-              y={ev.year ? -21 : off.textY}
-              textAnchor="middle"
-              style={{
-                fontFamily: "Georgia, serif",
-                fontSize: ev.year ? 10.5 : 10,
-                fill: "#2b1810",
-                fontWeight: 800,
-                pointerEvents: "none",
-                paintOrder: "stroke fill",
-                stroke: "#f2e6cc",
-                strokeWidth: 3,
-                strokeLinejoin: "round",
-              }}
-            >
-              {ev.year || ev.title}
-            </text>
-          </g>
-        );
-      })}
-    </>
   );
 }

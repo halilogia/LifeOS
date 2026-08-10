@@ -13,7 +13,7 @@ import { OSMANLI_GERILEME_UNIT } from "./osmanliGerilemeUnit.js";
 import { OSMANLI_DAGILMA_UNIT } from "./osmanliDagilmaUnit.js";
 import { KURTULUS_SAVASI_UNIT } from "./kurtulusSavasiUnit.js";
 import { OSMANLI_TESKILAT_UNIT, SELCUKLU_TESKILAT_UNIT } from "./osmanliTeskilatUnit.js";
-import { EKONOMI_UNIT, KULTUR_UNIT } from "./ekonomiKulturUnit.js";
+import { UNESCO_KULTUR_UNIT } from "./ekonomiKulturUnit.js";
 import { BEYLIKLER_UNIT } from "./beyliklerUnit.js";
 
 export * from "./types.js";
@@ -41,6 +41,5 @@ export const HISTORY_UNITS: HistoryUnit[] = [
   KURTULUS_SAVASI_UNIT,
   OSMANLI_TESKILAT_UNIT,
   SELCUKLU_TESKILAT_UNIT,
-  EKONOMI_UNIT,
-  KULTUR_UNIT,
+  UNESCO_KULTUR_UNIT,
 ];
