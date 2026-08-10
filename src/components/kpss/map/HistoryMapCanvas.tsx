@@ -127,35 +127,7 @@ export function HistoryMapCanvas({
         />
       </svg>
 
-      {/* Lejant */}
-      <div
-        style={{
-          position: "absolute",
-          right: 14,
-          top: 12,
-          background: "rgba(255,255,255,0.7)",
-          border: "1px solid rgba(0,0,0,0.08)",
-          borderRadius: 10,
-          padding: "6px 12px",
-          fontSize: "0.72rem",
-          color: "#5a5140",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}
-      >
-        <span
-          style={{
-            width: 9,
-            height: 9,
-            borderRadius: "50%",
-            background: unitColor,
-            border: "1.5px solid #3a1408",
-            display: "inline-block",
-          }}
-        />
-        Konum
-      </div>
+
     </div>
   );
 }

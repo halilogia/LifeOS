@@ -26,7 +26,7 @@ export interface MapPlayback {
   handleUnitChange: (nextCount: number) => void;
   handlePlay: () => void;
   handleStep: (dir: 1 | -1) => void;
-  handleReset: (resetToCount: number) => void;
+  handleReset: (resetToCount?: number) => void;
   toggleFullscreen: () => void;
   onPointerDown: (e: PointerEvent) => void;
   onPointerMove: (e: PointerEvent) => void;
@@ -123,7 +123,7 @@ export function useMapPlayback({
   );
 
   const handleReset = useCallback(
-    (resetToCount: number) => {
+    (resetToCount = 0) => {
       stopPlayback();
       setRevealedCount(resetToCount);
       setCurrentIndex(-1);

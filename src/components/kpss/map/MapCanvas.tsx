@@ -137,36 +137,6 @@ export function MapCanvas({
         })}
       </svg>
 
-      {/* Lejant */}
-      <div
-        style={{
-          position: "absolute",
-          right: 14,
-          top: 12,
-          background: "rgba(255,255,255,0.6)",
-          border: "1px solid rgba(0,0,0,0.08)",
-          borderRadius: "10px",
-          padding: "6px 12px",
-          fontSize: "0.72rem",
-          color: "#5a5140",
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-        }}
-      >
-        <span
-          style={{
-            width: 9,
-            height: 9,
-            borderRadius: "50%",
-            background: topicColor,
-            border: "1.5px solid #3a1408",
-            display: "inline-block",
-          }}
-        />
-        {t[legendKey] || t.kpss_map_legend || "Konum"}
-      </div>
-
       {/* Bilgi Kartı */}
       {currentIndex >= 0 && currentIndex < total && (
         <div

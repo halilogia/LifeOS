@@ -241,7 +241,7 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
           playing={playing}
           isFullscreen={isFullscreen}
           onStep={handleStep}
-          onReset={() => handleReset(total)}
+          onReset={() => handleReset(0)}
           onPlayToggle={handlePlay}
           onToggleFullscreen={toggleFullscreen}
         />

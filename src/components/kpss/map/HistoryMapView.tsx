@@ -108,6 +108,9 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
       (ev.territory || []).forEach((name) => {
         territoryColors.set(name, ev.color || unit.color);
       });
+      (ev.lostTerritory || []).forEach((name) => {
+        territoryColors.delete(name);
+      });
     });
   }
 
@@ -147,7 +150,7 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
         playing={playing}
         isFullscreen={isFullscreen}
         onStep={handleStep}
-        onReset={() => handleReset(getInitialRevealed(unit))}
+        onReset={() => handleReset(0)}
         onPlayToggle={handlePlay}
         onToggleFullscreen={toggleFullscreen}
       />
