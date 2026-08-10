@@ -18,6 +18,8 @@ export interface HistoryEvent {
   color?: string;
   x: number;
   y: number;
+  lon?: number;
+  lat?: number;
 }
 
 export interface HistoryLegendRow {
