@@ -201,14 +201,15 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                 position: "absolute",
                 left: 16,
                 bottom: 16,
-                maxWidth: 320,
-                background: "rgba(28,18,14,0.93)",
+                maxWidth: 380,
+                background: "rgba(24, 15, 11, 0.95)",
                 color: "#f4ead7",
-                borderRadius: 12,
-                padding: "14px 16px",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 14,
+                padding: "14px 18px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                border: "1px solid rgba(201,154,60,0.25)",
                 animation: "historyFadein 0.3s ease-out",
+                backdropFilter: "blur(8px)",
               }}
             >
               <div
@@ -217,10 +218,15 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   color: unit.color,
-                  marginBottom: 5,
+                  marginBottom: 6,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {currentIndex + 1} / {total}
+                <span>
+                  {currentIndex + 1} / {total}
+                </span>
                 {currentEv.year && (
                   <span
                     style={{ color: "#c99a3c", fontWeight: 700, marginLeft: 8 }}
@@ -233,13 +239,20 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 10,
-                    background: "rgba(201,154,60,0.18)",
-                    color: "#c99a3c",
-                    border: "1px solid rgba(201,154,60,0.4)",
-                    padding: "2px 8px",
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    background: currentEv.tag.includes("⭐")
+                      ? "rgba(201,154,60,0.22)"
+                      : "rgba(255,255,255,0.08)",
+                    color: currentEv.tag.includes("⭐")
+                      ? "#fbbf24"
+                      : "#cfc3aa",
+                    border: currentEv.tag.includes("⭐")
+                      ? "1px solid rgba(251,191,36,0.5)"
+                      : "1px solid rgba(255,255,255,0.15)",
+                    padding: "3px 10px",
                     borderRadius: 20,
-                    marginBottom: 6,
+                    marginBottom: 8,
                   }}
                 >
                   {currentEv.tag}
@@ -247,10 +260,11 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
               )}
               <h3
                 style={{
-                  margin: "0 0 3px",
+                  margin: "0 0 6px",
                   fontFamily: "Georgia, serif",
-                  fontSize: 17,
+                  fontSize: 18,
                   color: "#fff4e4",
+                  fontWeight: 700,
                 }}
               >
                 {currentEv.title}
@@ -258,9 +272,9 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
               <p
                 style={{
                   margin: 0,
-                  fontSize: 12.5,
-                  color: "#cfc3aa",
-                  lineHeight: 1.45,
+                  fontSize: 13,
+                  color: "#e2d5bd",
+                  lineHeight: 1.5,
                 }}
               >
                 {currentEv.desc}
@@ -269,12 +283,13 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                 <div
                   style={{
                     fontSize: 11.5,
-                    color: "#a99a82",
-                    marginTop: 6,
+                    color: "#fbbf24",
+                    marginTop: 8,
                     fontStyle: "italic",
+                    fontWeight: 600,
                   }}
                 >
-                  {currentEv.city}
+                  📍 {currentEv.city}
                 </div>
               )}
             </div>

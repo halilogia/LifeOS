@@ -26,31 +26,56 @@ interface HistoryMapCanvasProps {
   onWheel: (e: WheelEvent) => void;
 }
 
-function getPinOffsets(
-  events: HistoryEvent[],
-): Map<number, { dx: number; dy: number }> {
-  const buckets = new Map<string, number[]>();
-  events.forEach((ev, idx) => {
-    const key = `${Math.round(ev.x)}-${Math.round(ev.y)}`;
-    const arr = buckets.get(key) || [];
-    arr.push(idx);
-    buckets.set(key, arr);
-  });
-  const offsets = new Map<number, { dx: number; dy: number }>();
-  buckets.forEach((indices) => {
-    if (indices.length <= 1) {
+interface PinOffset {
+  dx: number;
+  dy: number;
+  textY: number;
+}
+
+function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
+  const result = new Map<number, PinOffset>();
+  const visited = new Set<number>();
+  const clusters: number[][] = [];
+
+  for (let i = 0; i < events.length; i++) {
+    if (visited.has(i)) {
+      continue;
+    }
+    const cluster = [i];
+    visited.add(i);
+
+    for (let j = i + 1; j < events.length; j++) {
+      if (visited.has(j)) {
+        continue;
+      }
+      const dist = Math.hypot(events[i].x - events[j].x, events[i].y - events[j].y);
+      if (dist < 80) {
+        cluster.push(j);
+        visited.add(j);
+      }
+    }
+    clusters.push(cluster);
+  }
+
+  clusters.forEach((indices) => {
+    if (indices.length === 1) {
+      result.set(indices[0], { dx: 0, dy: 0, textY: -22 });
       return;
     }
-    const radius = 14;
-    indices.forEach((idx, i) => {
-      const angle = (i / indices.length) * Math.PI * 2;
-      offsets.set(idx, {
-        dx: Math.cos(angle) * radius,
-        dy: Math.sin(angle) * radius,
-      });
+
+    const count = indices.length;
+    indices.forEach((idx, k) => {
+      const angle = (k / count) * Math.PI * 2 - Math.PI / 2;
+      const radius = count > 3 ? 4 : 2;
+      const dx = Math.cos(angle) * radius;
+      const dy = Math.sin(angle) * radius;
+      // Stagger text height so text labels don't collide
+      const textY = k % 2 === 0 ? -22 : k % 3 === 1 ? -38 : 18;
+      result.set(idx, { dx, dy, textY });
     });
   });
-  return offsets;
+
+  return result;
 }
 
 export function HistoryMapCanvas({
@@ -151,7 +176,7 @@ function PinLayer({
       {events.slice(0, revealedCount).map((ev, idx) => {
         const isCurrent = idx === currentIndex;
         const c = ev.color || unitColor;
-        const off = offsets.get(idx) || { dx: 0, dy: 0 };
+        const off = offsets.get(idx) || { dx: 0, dy: 0, textY: -22 };
         return (
           <g
             key={`pin-${idx}`}
@@ -191,14 +216,18 @@ function PinLayer({
               />
             )}
             <text
-              y={ev.year ? -21 : -22}
+              y={ev.year ? -21 : off.textY}
               textAnchor="middle"
               style={{
                 fontFamily: "Georgia, serif",
-                fontSize: ev.year ? 10 : 10.5,
-                fill: "#3a1408",
-                fontWeight: 700,
+                fontSize: ev.year ? 10 : 10,
+                fill: "#2b1810",
+                fontWeight: 800,
                 pointerEvents: "none",
+                paintOrder: "stroke fill",
+                stroke: "#f2e6cc",
+                strokeWidth: 3,
+                strokeLinejoin: "round",
               }}
             >
               {ev.year || ev.title}
