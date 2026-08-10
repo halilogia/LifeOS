@@ -1,15 +1,14 @@
 /**
  * KpssNotesHeader.tsx
  * Presentational Header for KPSS Not Stüdyosu.
- * Gradient title + optional sync status message.
+ * Gradient title.
  */
 
 interface KpssNotesHeaderProps {
   t: Record<string, string>;
-  syncMsg: string;
 }
 
-export function KpssNotesHeader({ t, syncMsg }: KpssNotesHeaderProps) {
+export function KpssNotesHeader({ t }: KpssNotesHeaderProps) {
   return (
     <div
       style={{
@@ -33,18 +32,6 @@ export function KpssNotesHeader({ t, syncMsg }: KpssNotesHeaderProps) {
       >
         {t.kpss_notes_title || "Ders Notları Stüdyosu"}
       </h2>
-      {syncMsg && (
-        <span
-          style={{
-            fontSize: "0.72rem",
-            color: "#34d399",
-            fontWeight: 600,
-            marginLeft: "auto",
-          }}
-        >
-          {syncMsg}
-        </span>
-      )}
     </div>
   );
 }

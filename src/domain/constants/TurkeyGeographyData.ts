@@ -16,7 +16,14 @@ export interface GeoPin {
 }
 
 export type TurkeyMapTopic =
-  "volcanic" | "plains" | "lakes" | "rivers" | "plateaus";
+  | "kivrim"
+  | "kirik"
+  | "volcanic"
+  | "plains"
+  | "lakes"
+  | "rivers"
+  | "plateaus"
+  | "all";
 
 export const MAP_VIEWBOX = "0 0 1000.0 421.9991241865445";
 
@@ -25,11 +32,45 @@ export const MAP_TOPICS: {
   color: string;
   legendKey: string;
 }[] = [
+  { id: "kivrim", color: "#16a34a", legendKey: "kpss_map_legend_kivrim" },
+  { id: "kirik", color: "#dc2626", legendKey: "kpss_map_legend_kirik" },
   { id: "volcanic", color: "#c8511f", legendKey: "kpss_map_legend_volcanic" },
   { id: "plains", color: "#4f8f5b", legendKey: "kpss_map_legend_plains" },
   { id: "lakes", color: "#2563eb", legendKey: "kpss_map_legend_lakes" },
   { id: "rivers", color: "#0ea5e9", legendKey: "kpss_map_legend_rivers" },
   { id: "plateaus", color: "#a16207", legendKey: "kpss_map_legend_plateaus" },
+  { id: "all", color: "#9333ea", legendKey: "kpss_map_legend_all" },
+];
+
+export const KIVRIM_MOUNTAINS: GeoPin[] = [
+  { name: "Yıldız (Istranca) Dağları", city: "Kırklareli", x: 96.5, y: 19.3 },
+  { name: "Bolu Dağı", city: "Bolu", x: 310.6, y: 90.2 },
+  { name: "Köroğlu Dağları", city: "Bolu", x: 321.0, y: 100.3 },
+  { name: "Ilgaz Dağı", city: "Kastamonu/Çankırı", x: 429.0, y: 68.5 },
+  { name: "Küre Dağları", city: "Kastamonu", x: 404.5, y: 26.0 },
+  { name: "Canik Dağları", city: "Samsun/Ordu", x: 582.5, y: 80.0 },
+  { name: "Giresun Dağları", city: "Giresun", x: 666.0, y: 100.3 },
+  { name: "Kaçkar Dağları", city: "Rize/Artvin", x: 809.1, y: 86.8 },
+  { name: "Mescit Dağları", city: "Erzurum", x: 806.9, y: 113.8 },
+  { name: "Yalnızçam Dağları", city: "Ardahan", x: 859.0, y: 66.5 },
+  { name: "Allahuekber Dağları", city: "Kars/Erzurum", x: 874.4, y: 103.7 },
+  { name: "Mercan (Munzur) Dağları", city: "Tunceli/Erzincan", x: 723.4, y: 174.5 },
+  { name: "Güneydoğu Toroslar", city: "Malatya/Hakkari", x: 697.3, y: 269.0 },
+  { name: "Sultan Dağları", city: "Afyon/Konya", x: 289.7, y: 255.5 },
+  { name: "Dedegöl Dağları", city: "Isparta", x: 285.0, y: 285.0 },
+  { name: "Geyik Dağları", city: "Antalya/Karaman", x: 340.5, y: 340.0 },
+  { name: "Tahtalı Dağları", city: "Adana/Sivas", x: 550.0, y: 250.0 },
+  { name: "Aladağlar", city: "Niğde/Adana", x: 493.7, y: 289.2 },
+];
+
+export const KIRIK_MOUNTAINS: GeoPin[] = [
+  { name: "Kaz Dağı", city: "Balıkesir/Çanakkale", x: 62.5, y: 161.0 },
+  { name: "Madra Dağı", city: "Balıkesir/İzmir", x: 70.3, y: 184.6 },
+  { name: "Yunt Dağı", city: "Manisa", x: 83.4, y: 215.0 },
+  { name: "Bozdağlar", city: "Manisa/İzmir", x: 127.8, y: 252.0 },
+  { name: "Aydın Dağları", city: "Aydın", x: 122.6, y: 282.5 },
+  { name: "Menteşe Dağları", city: "Muğla", x: 140.8, y: 329.8 },
+  { name: "Nur (Amanos) Dağları", city: "Hatay", x: 551.2, y: 383.8 },
 ];
 
 export const VOLCANIC_MOUNTAINS: GeoPin[] = [
@@ -105,12 +146,27 @@ export const TURKEY_PLATEAUS: GeoPin[] = [
   { name: "Yozgat Platosu", city: "Yozgat", x: 477.5, y: 154.3 },
   { name: "Şanlıurfa Platosu", city: "Şanlıurfa", x: 686.3, y: 336.5 },
   { name: "Haymana Platosu", city: "Ankara", x: 367.9, y: 181.3 },
+  { name: "Teke Platosu", city: "Muğla/Antalya", x: 216.5, y: 370.2 },
+  { name: "Çatalca-Kocaeli Platosu", city: "İstanbul/Kocaeli", x: 190.4, y: 69.8 },
+];
+
+export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
+  ...KIVRIM_MOUNTAINS,
+  ...KIRIK_MOUNTAINS,
+  ...VOLCANIC_MOUNTAINS,
+  ...TURKEY_PLAINS,
+  ...TURKEY_LAKES,
+  ...TURKEY_RIVERS,
+  ...TURKEY_PLATEAUS,
 ];
 
 export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
+  kivrim: KIVRIM_MOUNTAINS,
+  kirik: KIRIK_MOUNTAINS,
   volcanic: VOLCANIC_MOUNTAINS,
   plains: TURKEY_PLAINS,
   lakes: TURKEY_LAKES,
   rivers: TURKEY_RIVERS,
   plateaus: TURKEY_PLATEAUS,
+  all: ALL_GEOGRAPHY_PINS,
 };

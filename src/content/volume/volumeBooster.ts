@@ -39,16 +39,14 @@ function attachContentGainToElement(el: HTMLMediaElement): void {
     const source = ctx.createMediaElementSource(el);
     source.connect(contentGainNode);
     connectedMediaSet.add(el);
+    // Apply the current multiplier immediately after connecting, otherwise
+    // the element keeps playing at unity gain until the next setVolumeBoostLevel.
+    contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
   } catch {
-    // Ignore if already connected or restricted
-  }
-
-  try {
-    if (contentGainNode) {
-      contentGainNode.gain.setValueAtTime(currentMultiplier, ctx.currentTime);
-    }
-  } catch {
-    // gain set can throw when context is closed — ignore
+    // createMediaElementSource throws InvalidStateError if the element is
+    // already routed through another AudioContext (e.g. another booster).
+    // Mark it so we stop retrying on every setVolumeBoostLevel.
+    connectedMediaSet.add(el);
   }
 }
 
