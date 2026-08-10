@@ -333,22 +333,41 @@ export const kpssData: Record<string, KpssTopic[]> = {
     {
       title: "Osmanlı Devleti Siyaseti",
       description:
-        "Padişahlar dönemi fetihler, antlaşmalar ve devletin siyasi gelişimi.",
+        "Kuruluş, Yükselme, Duraklama ve Gerileme dönemlerinde padişahlar, fetihler, diplomatik antlaşmalar ve siyasi gelişmeler.",
       questionsCount: 3.0,
-      subtopics: ["Osmanlı Devleti'nde Yenileşme ve Demokratikleşme Hareketleri"],
+      subtopics: [
+        "Osmanlı Kuruluş Dönemi (1299-1453)",
+        "Osmanlı Yükselme / Klasik Çağ (1453-1579)",
+        "Osmanlı Duraklama & Arayış Yılları (1579-1699)",
+        "Osmanlı Gerileme & Islahatlar Dönemi (1700-1792)",
+        "Osmanlı Devleti'nde Yenileşme ve Demokratikleşme Hareketleri",
+      ],
     },
     {
       title: "Osmanlı Kültür ve Uygarlık",
       description:
-        "Devlet yönetimi, ordu, eğitim ve toplumsal yapı gibi Osmanlı kurumları.",
+        "Devlet yönetimi, Divan-ı Hümayun (Seyfiye, İlmiye, Kalemiye), Eyalet yapısı, Tımar sistemi, Ordu teşkilatı, Hukuk, Maliye ve Mimari.",
       questionsCount: 5.0,
+      subtopics: [
+        "Merkez Teşkilatı ve Divan-ı Hümayun (Seyfiye, İlmiye, Kalemiye)",
+        "Taşra Teşkilatı ve Eyalet Yönetimi",
+        "Toprak ve Tımar Sistemi",
+        "Ordu Teşkilatı (Kapıkulu ve Tımarlı Sipahiler)",
+        "Hukuk, Maliye, Eğitim ve Mimari Yapılar",
+      ],
     },
     {
       title: "20. Yüzyılda Osmanlı",
       description:
-        "Trablusgarp Savaşı, Balkan Savaşları ve I. Dünya Savaşı süreci.",
+        "I. ve II. Meşrutiyet, 31 Mart Vakası, Trablusgarp Savaşı, Balkan Savaşları, I. Dünya Savaşı ve Mondros Mütarekesi süreci.",
       questionsCount: 4.0,
-      subtopics: ["Birinci Dünya Savaşı ve Sonuçları"],
+      subtopics: [
+        "I. ve II. Meşrutiyet & 31 Mart Vakası (1908-1909)",
+        "Trablusgarp Savaşı ve Uşi Antlaşması (1911-1912)",
+        "Balkan Savaşları (1912-1913)",
+        "Birinci Dünya Savaşı ve Cepheler (1914-1918)",
+        "Mondros Mütarekesi ve Sevr Antlaşması",
+      ],
     },
     {
       title: "Kurtuluş Savaşı",
