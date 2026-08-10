@@ -13,6 +13,8 @@ export interface HistoryEvent {
   tag?: string;
   /** territory modunda bu olayın boyanacağı iller */
   territory?: string[];
+  /** territory modunda elden çıkan / kaybedilen iller */
+  lostTerritory?: string[];
   color?: string;
   x: number;
   y: number;

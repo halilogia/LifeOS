@@ -57,6 +57,13 @@ export const SELCUKLU_UNIT: HistoryUnit = {
         "Yozgat",
         "Çankırı",
       ],
+      lostTerritory: [
+        "Bursa",
+        "Kocaeli",
+        "Yalova",
+        "Bilecik",
+        "Sakarya",
+      ],
       color: "#1f5f7a",
       x: 355.7,
       y: 283.9,

@@ -8,7 +8,7 @@
  * Hem tarih haritası (Devlet Teşkilatı) hem not editöründe kullanılır.
  */
 import type { JSX } from "preact";
-import { useMemo, useState } from "preact/hooks";
+import { useMemo, useState, useRef } from "preact/hooks";
 
 /* ---------- Veri modeli ---------- */
 
@@ -196,6 +196,8 @@ const BOX_STYLE: JSX.CSSProperties = {
   zIndex: 1,
   wordBreak: "break-word",
   whiteSpace: "normal",
+  userSelect: "none",
+  WebkitUserSelect: "none",
 };
 
 const SCHEMA_ANIM_CSS = `
@@ -232,6 +234,33 @@ export function SchemaBuilder({
     outline ?? DEFAULT_OUTLINE,
   );
   const text = outline ?? internalText;
+
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ x: number; y: number; panX: number; panY: number }>({
+    x: 0,
+    y: 0,
+    panX: 0,
+    panY: 0,
+  });
+
+  const onPointerDown = (e: PointerEvent) => {
+    setIsDragging(true);
+    dragStartRef.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y };
+  };
+
+  const onPointerMove = (e: PointerEvent) => {
+    if (!isDragging) {
+      return;
+    }
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    setPan({ x: dragStartRef.current.panX + dx, y: dragStartRef.current.panY + dy });
+  };
+
+  const onPointerUp = () => {
+    setIsDragging(false);
+  };
 
   const { all, totalWidth, totalHeight } = useMemo(
     () => computeLayout(text),
@@ -293,8 +322,12 @@ export function SchemaBuilder({
         />
       )}
 
-      {/* Şema tuvali — genişliği her zaman tam; içerik taşarsa scroll */}
+      {/* Şema tuvali — genişliği her zaman tam; sürükle-bırak pan destekli */}
       <div
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
         style={{
           position: "relative",
           flex: 1,
@@ -302,11 +335,15 @@ export function SchemaBuilder({
           minWidth: 0,
           width: "100%",
           maxWidth: "100%",
-          overflow: "auto",
+          overflow: "hidden",
           background: "#f2e6cc",
           borderRadius: 12,
           padding: "30px 20px 50px 20px",
           boxSizing: "border-box",
+          cursor: isDragging ? "grabbing" : "grab",
+          touchAction: "none",
+          userSelect: "none",
+          WebkitUserSelect: "none",
         }}
       >
         {/* Başlık — boşsa gizli */}
@@ -325,19 +362,23 @@ export function SchemaBuilder({
               minWidth: 280,
               letterSpacing: 0.5,
               boxShadow: "0 2px 4px rgba(0,0,0,.2)",
+              userSelect: "none",
+              WebkitUserSelect: "none",
             }}
           >
             {title}
           </div>
         ) : null}
 
-        {/* Şema alanı — genişliği her zaman tam; şema darsa ortalanır, genişse scroll */}
+        {/* Şema alanı — fare ile sürükleyerek kaydırma destekli */}
         <div
           style={{
             position: "relative",
             margin: "0 auto",
             width: "100%",
             height: all.length === 0 ? 200 : Math.max(totalHeight, 1),
+            transform: `translate(${pan.x}px, ${pan.y}px)`,
+            transition: isDragging ? "none" : "transform 0.05s ease-out",
           }}
         >
           {/* Boş şema durumu */}

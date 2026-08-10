@@ -231,36 +231,7 @@ export function MapQuizCanvas({
         })}
       </svg>
 
-      {/* Üst Sağ: Bilgilendirme Rozeti */}
-      <div
-        style={{
-          position: "absolute",
-          right: 14,
-          top: 12,
-          background: "rgba(28, 22, 16, 0.88)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "10px",
-          padding: "6px 12px",
-          fontSize: "0.75rem",
-          color: "#f4ead7",
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          backdropFilter: "blur(6px)",
-        }}
-      >
-        <span
-          style={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            background: topicColor,
-            border: "1px solid #ffffff",
-            display: "inline-block",
-          }}
-        />
-        {t.kpss_map_quiz_instruction || "Haritadaki düğüme tıklayarak yeri bulun"}
-      </div>
+
 
       {/* Keyframe Stilleri */}
       <style>{`
