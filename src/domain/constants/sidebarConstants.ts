@@ -1,4 +1,6 @@
 export const DEFAULT_SIDEBAR_ORDER: string[] = [
+  "free-games", // pinned — otomatik sıralamada her zaman 1. sıra
+  "ai-chat", // pinned — otomatik sıralamada her zaman 2. sıra
   "list",
   "eisenhower",
   "notes",
@@ -10,10 +12,8 @@ export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "calendar",
   "prayer",
   "kpss",
-  "free-games",
   "arcade",
   "detox",
   "bist",
   "halka-arz",
-  "ai-chat",
 ];

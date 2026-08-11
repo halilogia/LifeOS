@@ -81,4 +81,13 @@ export const settings = {
   settings_shortcut_default: "Default: Ctrl + Shift + E",
   settings_shortcut_configure: "Configure Shortcut",
   settings_language: "Language",
+  settings_sidebar_auto_sort: "Auto-sort Sidebar by Usage",
+  settings_sidebar_auto_sort_desc:
+    "Rearrange sidebar items based on how often you use them (free-games and ai-chat stay pinned at top).",
+  settings_sidebar_drag_disabled_auto_sort:
+    "Auto-sort disabled — manual order is now active.",
+  settings_sidebar_reset_usage: "Reset Usage Statistics",
+  settings_sidebar_reset_usage_desc:
+    "Clears all view visit counts. Sidebar will return to default order.",
+  settings_sidebar_reset_done: "Usage statistics cleared.",
 };

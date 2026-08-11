@@ -33,6 +33,9 @@ export interface AppSettingsGroupProps {
   onToggleTelegramBridge: () => void;
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
+  sidebarAutoSortEnabled?: boolean;
+  onToggleSidebarAutoSort?: () => void;
+  onResetSidebarUsage?: () => void;
 }
 
 interface GroupCardProps {
@@ -69,6 +72,9 @@ export function AppSettingsGroup({
   onToggleTelegramBridge,
   autoGroupTabsEnabled = true,
   onToggleAutoGroupTabs,
+  sidebarAutoSortEnabled = true,
+  onToggleSidebarAutoSort,
+  onResetSidebarUsage,
 }: AppSettingsGroupProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -83,6 +89,37 @@ export function AppSettingsGroup({
             disabledText={lang.toUpperCase()}
             onClick={onToggleLang}
           />
+          {onToggleSidebarAutoSort && (
+            <AppToggleRow
+              label={t.settings_sidebar_auto_sort}
+              icon="bell"
+              enabled={sidebarAutoSortEnabled}
+              enabledText={t.enabled}
+              disabledText={t.disabled}
+              onClick={onToggleSidebarAutoSort}
+            />
+          )}
+          {onResetSidebarUsage && sidebarAutoSortEnabled && (
+            <button
+              className="settings-action-btn"
+              onClick={onResetSidebarUsage}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+              <span>{t.settings_sidebar_reset_usage}</span>
+            </button>
+          )}
           <AppShortcutRow t={t} />
         </>
       </GroupCard>

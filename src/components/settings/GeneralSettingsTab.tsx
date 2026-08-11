@@ -28,6 +28,9 @@ interface GeneralSettingsTabProps {
   onToggleTelegramBridge: () => void;
   autoGroupTabsEnabled?: boolean;
   onToggleAutoGroupTabs?: () => void;
+  sidebarAutoSortEnabled?: boolean;
+  onToggleSidebarAutoSort?: () => void;
+  onResetSidebarUsage?: () => void;
   onNotify?: (message: string) => void;
 }
 
@@ -51,6 +54,9 @@ export function GeneralSettingsTab({
   onToggleTelegramBridge,
   autoGroupTabsEnabled = true,
   onToggleAutoGroupTabs,
+  sidebarAutoSortEnabled = true,
+  onToggleSidebarAutoSort,
+  onResetSidebarUsage,
   onNotify,
 }: GeneralSettingsTabProps) {
   return (
@@ -75,6 +81,9 @@ export function GeneralSettingsTab({
         onToggleTelegramBridge={onToggleTelegramBridge}
         autoGroupTabsEnabled={autoGroupTabsEnabled}
         onToggleAutoGroupTabs={onToggleAutoGroupTabs}
+        sidebarAutoSortEnabled={sidebarAutoSortEnabled}
+        onToggleSidebarAutoSort={onToggleSidebarAutoSort}
+        onResetSidebarUsage={onResetSidebarUsage}
       />
 
       {/* Error Reporting Section */}

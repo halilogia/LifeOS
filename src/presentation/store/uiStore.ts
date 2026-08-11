@@ -13,6 +13,7 @@ import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.j
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 import { DEFAULT_SIDEBAR_ORDER } from "@/domain/constants/sidebarConstants.js";
 import { getDefaultQuotesForLang } from "@/domain/constants/quoteConstants.js";
+import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
@@ -36,6 +37,9 @@ interface UIState {
   activeTab: "focus" | "routines";
   settingsOpen: boolean;
   settingsInitialTab: SettingsTab;
+  // Sidebar auto-sort (kullanım sıklığına göre)
+  autoSortEnabled: boolean;
+  suppressAutoSort: boolean;
   // Sync status
   googleUserEmail: string;
   isSyncing: boolean;
@@ -69,6 +73,8 @@ interface UIState {
   handleTabChangeUI: (tabVal: "focus" | "routines") => void;
   handleOpenSettings: (tab?: SettingsTab) => void;
   loadSidebarOrder: () => Promise<void>;
+  setAutoSortEnabled: (enabled: boolean) => Promise<void>;
+  applySortedOrder: () => void;
 }
 
 export const useUIStore = create<UIState>()((set) => ({
@@ -78,6 +84,8 @@ export const useUIStore = create<UIState>()((set) => ({
   activeTab: "focus",
   settingsOpen: false,
   settingsInitialTab: "general",
+  autoSortEnabled: true,
+  suppressAutoSort: false,
   // Sync status
   googleUserEmail: "",
   isSyncing: false,
@@ -171,7 +179,16 @@ export const useUIStore = create<UIState>()((set) => ({
     });
   },
 
-  handleViewChange: (view) => set({ activeView: view }),
+  handleViewChange: (view) => {
+    set({ activeView: view });
+    // Kullanım istatistiği güncelle + auto-sort açıksa yeniden sırala
+    const usage = useSidebarUsageStore.getState();
+    usage.increment(view);
+    const ui = useUIStore.getState();
+    if (ui.autoSortEnabled && !ui.suppressAutoSort) {
+      ui.applySortedOrder();
+    }
+  },
 
   handleTabChange: (tabVal) => set({ activeTab: tabVal }),
 
@@ -179,6 +196,30 @@ export const useUIStore = create<UIState>()((set) => ({
 
   handleOpenSettings: (section = "general") =>
     set({ settingsInitialTab: section, settingsOpen: true }),
+
+  setAutoSortEnabled: async (enabled) => {
+    set({ autoSortEnabled: enabled });
+    // Açılınca anında yeniden sırala; kapanınca kullanıcının mevcut sırası korunur
+    if (enabled) {
+      const ui = useUIStore.getState();
+      ui.applySortedOrder();
+    }
+  },
+
+  applySortedOrder: () => {
+    const usage = useSidebarUsageStore.getState();
+    const sorted = usage.computeSortedOrder();
+    const current = useUIStore.getState().sidebarOrder;
+    // Sıra gerçekten değişti mi? Değişmediyse yazma (gereksiz re-render yok)
+    if (
+      sorted.length === current.length &&
+      sorted.every((v, i) => v === current[i])
+    ) {
+      return;
+    }
+    useUIStore.setState({ sidebarOrder: sorted });
+    chrome.storage.local.set({ [SIDEBAR_ORDER_KEY]: sorted });
+  },
 
   loadSidebarOrder: async () => {
     const savedOrder: string[] = await new Promise((resolve) => {
