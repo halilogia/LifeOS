@@ -136,8 +136,17 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 10,
+        gap: "12px",
         width: "100%",
+        ...(isFullscreen
+          ? {
+              height: "100vh",
+              boxSizing: "border-box",
+              padding: "20px",
+              background: "linear-gradient(160deg, #0f172a 0%, #1e293b 100%)",
+              overflow: "auto",
+            }
+          : {}),
       }}
     >
       <style>{ANIM_CSS}</style>
@@ -156,21 +165,40 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
         onToggleFullscreen={toggleFullscreen}
       />
 
-      <div style={{ display: "flex", gap: 10, alignItems: "stretch" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "12px",
+          alignItems: "stretch",
+          flex: isFullscreen ? 1 : undefined,
+          position: "relative",
+        }}
+      >
         <HistoryTopicSidebar
           units={HISTORY_UNITS}
           selectedUnitId={selectedUnitId}
           onSelect={handleUnitChangeById}
+          isFullscreen={isFullscreen}
         />
 
-        <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            position: "relative",
+            flex: 1,
+            minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {isDiagram ? (
             <div
               style={{
                 position: "relative",
                 flex: 1,
                 minWidth: 0,
-                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                height: isFullscreen ? "calc(100vh - 180px)" : undefined,
               }}
             >
               <SchemaBuilder
