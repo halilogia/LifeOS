@@ -6,6 +6,7 @@ export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "willpower",
   "hifiz",
   "srs",
+  "rss",
   "calendar",
   "prayer",
   "kpss",

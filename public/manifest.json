@@ -30,6 +30,7 @@
     "extension_pages": "script-src 'self'; object-src 'self'; frame-src 'self' blob: data:; img-src 'self' blob: data: https:;"
   },
   "host_permissions": [
+    "https://*/*",
     "https://www.gamerpower.com/*",
     "https://query2.finance.yahoo.com/*",
     "https://query1.finance.yahoo.com/*",

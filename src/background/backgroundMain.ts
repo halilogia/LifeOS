@@ -9,11 +9,13 @@ import { initAlarmNotificationHandler } from "./handlers/alarmNotificationHandle
 import { initContextMenuHandler } from "./handlers/contextMenuHandler.js";
 import { handleMediaAndTabMessage } from "./handlers/mediaAndTabHandler.js";
 import { handleRuntimeMessage } from "./handlers/runtimeMessageHandler.js";
+import { initRssSyncHandler } from "./handlers/rssSyncHandler.js";
 
 // Initialize Background Handlers & Listeners
 initScreentimeTracker();
 initAlarmNotificationHandler();
 initContextMenuHandler();
+initRssSyncHandler();
 
 // Unified Message Orchestrator
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

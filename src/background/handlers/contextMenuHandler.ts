@@ -3,6 +3,8 @@
  * Clean Architecture - Background Domain Handler for Right-Click Context Menus and Extension Commands.
  */
 
+import { registerFeed } from "@/services/rssService.js";
+
 function setupContextMenus(): void {
   if (!chrome.contextMenus) {
     return;
@@ -40,6 +42,13 @@ function setupContextMenus(): void {
       parentId: "lifeos_copilot_root",
       title: "💬 Seçili Metni Analiz Et / Çevir",
       contexts: ["selection"],
+    });
+
+    // RSS kaydet — herhangi bir sayfa/link üzerinde
+    chrome.contextMenus.create({
+      id: "lifeos_rss_save",
+      title: "📡 RSS Kaydet",
+      contexts: ["page", "link", "selection"],
     });
   });
 }
@@ -81,6 +90,23 @@ export function initContextMenuHandler(): void {
   });
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
+    // RSS Kaydet — link href'i öncelikli, yoksa sayfa URL'i
+    if (info.menuItemId === "lifeos_rss_save") {
+      const url = info.linkUrl || (tab && tab.url) || "";
+      if (url) {
+        void registerFeed(url).then((result) => {
+          const status = result.ok ? "✅ RSS feed kaydedildi" : `❌ ${result.error || "Kaydedilemedi"}`;
+          chrome.notifications.create({
+            type: "basic",
+            iconUrl: "icons/icon-128.png",
+            title: "Life OS — RSS",
+            message: status,
+          });
+        });
+      }
+      return;
+    }
+
     if (tab && tab.id) {
       chrome.sidePanel.open({ tabId: tab.id });
 

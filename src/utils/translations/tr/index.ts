@@ -13,6 +13,7 @@ import { ipo } from "./ipo.js";
 import { kpss } from "./kpss.js";
 import { notes } from "./notes.js";
 import { pomo } from "./pomo.js";
+import { rss } from "./rss.js";
 import { settings } from "./settings.js";
 import { srs } from "./srs.js";
 import { stock } from "./stock.js";
@@ -33,6 +34,7 @@ export const tr = {
   ...kpss,
   ...notes,
   ...pomo,
+  ...rss,
   ...settings,
   ...srs,
   ...stock,
