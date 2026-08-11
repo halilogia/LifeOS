@@ -22,13 +22,6 @@ export const core = {
   alert_restore_error: "An error occurred while reading the backup file.",
   alert_clear_confirm:
     "Are you sure you want to clear all data? This action cannot be undone.",
-  quote_1: '"The secret of getting ahead is getting started."',
-  quote_2: '"Well begun is half done."',
-  quote_3: '"Done is better than perfect."',
-  quote_4: '"Focus on being productive instead of busy."',
-  quote_5: '"The best way to predict the future is to create it."',
-  quote_6: '"Everything you want is on the other side of fear."',
-  quote_7: '"Don\'t count the days, make the days count."',
   cat_other: "Other",
   view_hifiz: "Candidate Religious Official Competencies",
   view_notes: "My Diary",

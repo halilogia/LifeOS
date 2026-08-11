@@ -42,7 +42,9 @@ export const emenaPathGenerator = d3.geoPath().projection(emenaProjection);
 /** Coğrafi Boylam (lon) ve Enlem (lat) değerini haritadaki SVG (x, y) piksel koordinatına dönüştürür */
 export function geoToSvgCoords(lon: number, lat: number): { x: number; y: number } {
   const coords = emenaProjection([lon, lat]);
-  if (!coords) return { x: 500, y: 250 };
+  if (!coords) {
+    return { x: 500, y: 250 };
+  }
   return { x: coords[0], y: coords[1] };
 }
 
