@@ -13,6 +13,7 @@ import { initVolumeBoosterListener } from "./volume/volumeBooster.js";
 import { initWhatsappBridge } from "./whatsapp/whatsappBridge.js";
 import { initTelegramBridge } from "./telegram/telegramBridge.js";
 import { initQuizPanel } from "./quiz/quizPanel.js";
+import { initRssFeedDiscovery } from "./rssFeedDiscovery.js";
 
 function safeInit(name: string, fn: () => void): void {
   try {
@@ -43,4 +44,5 @@ function safeInit(name: string, fn: () => void): void {
   );
 
   safeInit("QuizPanel", initQuizPanel);
+  safeInit("RssFeedDiscovery", initRssFeedDiscovery);
 })();

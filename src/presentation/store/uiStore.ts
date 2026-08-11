@@ -187,10 +187,29 @@ export const useUIStore = create<UIState>()((set) => ({
         resolve(Array.isArray(data) ? data : []);
       });
     });
-    const orderToUse =
-      savedOrder && savedOrder.length > 0
-        ? savedOrder
-        : DEFAULT_SIDEBAR_ORDER;
+    let orderToUse: string[];
+    if (savedOrder && savedOrder.length > 0) {
+      // Migration: yeni eklenen view key'leri (örn. "rss") saved order'da yoksa,
+      // DEFAULT_SIDEBAR_ORDER'daki pozisyonlarına ekle. Kullanıcının sırası korunur.
+      const known = new Set(savedOrder);
+      const missing = DEFAULT_SIDEBAR_ORDER.filter((k) => !known.has(k));
+      if (missing.length > 0) {
+        orderToUse = [...savedOrder];
+        for (const key of DEFAULT_SIDEBAR_ORDER) {
+          if (missing.includes(key)) {
+            // DEFAULT listesindeki index'e göre sıralı ekle (kullanıcı sırasını bozmadan)
+            const insertIdx = Math.min(orderToUse.length, DEFAULT_SIDEBAR_ORDER.indexOf(key));
+            orderToUse.splice(insertIdx, 0, key);
+          }
+        }
+        // Kaydet ki bir sonraki açılışta migration tekrar çalışmasın
+        chrome.storage.local.set({ [SIDEBAR_ORDER_KEY]: orderToUse });
+      } else {
+        orderToUse = savedOrder;
+      }
+    } else {
+      orderToUse = DEFAULT_SIDEBAR_ORDER;
+    }
     set({ sidebarOrder: orderToUse });
     if (orderToUse && orderToUse.length > 0) {
       set({ activeView: orderToUse[0] });

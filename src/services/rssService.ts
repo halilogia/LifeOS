@@ -26,15 +26,7 @@ export function hashString(input: string): string {
   return (h2 >>> 0).toString(16).padStart(8, "0") + (h1 >>> 0).toString(16).padStart(8, "0");
 }
 
-function extractText(node: Element | null): string {
-  if (!node) {
-    return "";
-  }
-  return (node.textContent || "").trim();
-}
-
-function parseDate(node: Element | null, fallback: number): number {
-  const raw = extractText(node);
+function parseDateText(raw: string, fallback: number): number {
   if (!raw) {
     return fallback;
   }
@@ -42,19 +34,15 @@ function parseDate(node: Element | null, fallback: number): number {
   return Number.isNaN(t) ? fallback : t;
 }
 
-function parseChannelTitle(doc: Document): string {
-  const title =
-    doc.querySelector("channel > title") ||
-    doc.querySelector("feed > title") ||
-    doc.querySelector("title");
-  return extractText(title) || "Bilinmeyen Feed";
+function parseChannelTitle(blocks: XmlBlock[]): string {
+  return (
+    extractBlockText(findFirst(blocks, "title")) || "Bilinmeyen Feed"
+  );
 }
 
-function parseSiteUrl(doc: Document, feedUrl: string): string {
-  const link =
-    doc.querySelector("channel > link") ||
-    doc.querySelector("feed > link");
-  const href = link?.getAttribute("href") || extractText(link);
+function parseSiteUrl(blocks: XmlBlock[], feedUrl: string): string {
+  const linkNode = findFirst(blocks, "link");
+  const href = linkNode?.attrs.href || extractBlockText(linkNode);
   if (href) {
     return href;
   }
@@ -65,7 +53,134 @@ function parseSiteUrl(doc: Document, feedUrl: string): string {
   }
 }
 
-/** Feed URL'sinden site favicon'u türet (google favicon servisi) */
+// DOMParser background service worker'da YOK. Bu yüzden hafif XML parser
+// yazıldı: tagsoup-style — `<channel>...</channel>` ve `<item>...</item>` bloklarını
+// regex ile yakalar, nested elementleri (description içindeki HTML) escape eder.
+// Not: Bu parser RSS 2.0 + Atom standart yapısını hedefler; malformed feed'ler
+// ya kısmi veri ya da hata döner.
+
+interface XmlBlock {
+  tag: string;
+  attrs: Record<string, string>;
+  content: string;
+  children: XmlBlock[];
+}
+
+const SELF_CLOSING_TAG_RE = /<\s*(\w+(?::\w+)?)\s*([^>]*?)\/\s*>/g;
+const OPENING_TAG_RE = /<\s*(\w+(?::\w+)?)([^>]*?)>/g;
+const CDATA_RE = /<!\[CDATA\[([\s\S]*?)\]\]>/g;
+const COMMENT_RE = /<!--[\s\S]*?-->/g;
+
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCharCode(parseInt(n, 16)))
+    .replace(/&amp;/g, "&");
+}
+
+function stripCdata(s: string): string {
+  return s.replace(CDATA_RE, "$1");
+}
+
+function stripComments(s: string): string {
+  return s.replace(COMMENT_RE, "");
+}
+
+function parseAttrs(raw: string): Record<string, string> {
+  const attrs: Record<string, string> = {};
+  const re = /(\w+(?::\w+)?)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(raw)) !== null) {
+    attrs[m[1]] = m[2] ?? m[3] ?? "";
+  }
+  return attrs;
+}
+
+function parseBlocks(xml: string): XmlBlock[] {
+  // Self-closing tags çıkar (boş içerik kabul et), bütünlüğü bozmasın.
+  const stripped = stripComments(stripCdata(xml));
+
+  // Ağaç kurmak için tüm açılış/kapanış taglerini gezip depth ile içerik böl.
+  const root: XmlBlock = { tag: "#root", attrs: {}, content: "", children: [] };
+  const stack: XmlBlock[] = [root];
+  const tagRe = /<\s*(\/?)\s*(\w+(?::\w+)?)([^>]*?)>/g;
+  let m: RegExpExecArray | null;
+  let lastIndex = 0;
+  while ((m = tagRe.exec(stripped)) !== null) {
+    const closeTag = m[1] === "/";
+    const tagName = m[2];
+    const attrsRaw = m[3];
+    const before = stripped.slice(lastIndex, m.index);
+    if (stack.length > 0) {
+      stack[stack.length - 1].content += before;
+    }
+    if (closeTag) {
+      if (stack.length > 1 && stack[stack.length - 1].tag === tagName) {
+        stack.pop();
+      }
+    } else {
+      const selfClosing = /\/\s*$/.test(attrsRaw);
+      const node: XmlBlock = {
+        tag: tagName,
+        attrs: parseAttrs(attrsRaw),
+        content: "",
+        children: [],
+      };
+      stack[stack.length - 1].children.push(node);
+      if (!selfClosing) {
+        stack.push(node);
+      }
+    }
+    lastIndex = m.index + m[0].length;
+  }
+  // Kalan içerik
+  if (stack.length > 0) {
+    stack[stack.length - 1].content += stripped.slice(lastIndex);
+  }
+  return root.children;
+}
+
+function findAll(blocks: XmlBlock[], tag: string): XmlBlock[] {
+  const out: XmlBlock[] = [];
+  const walk = (bs: XmlBlock[]): void => {
+    for (const b of bs) {
+      if (b.tag === tag) {
+        out.push(b);
+      }
+      walk(b.children);
+    }
+  };
+  walk(blocks);
+  return out;
+}
+
+function findFirst(blocks: XmlBlock[], tag: string): XmlBlock | null {
+  const all = findAll(blocks, tag);
+  return all.length > 0 ? all[0] : null;
+}
+
+/** Background service worker'da fetch → text → parseBlocks zinciri. */
+function parseXmlDocument(xml: string): XmlBlock[] {
+  return parseBlocks(xml);
+}
+
+function extractBlockText(node: XmlBlock | null): string {
+  if (!node) {
+    return "";
+  }
+  // text + CDATA çözümlenmiş içerik; HTML etiketlerini de düz metne çevir.
+  const raw = (node.content || "") + node.children.map((c) => c.content).join("");
+  return decodeEntities(raw)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** RSS feed URL'sinden site favicon'u türet (google favicon servisi) */
 export function getFaviconUrl(siteUrl: string): string {
   try {
     const origin = new URL(siteUrl).origin;
@@ -75,39 +190,40 @@ export function getFaviconUrl(siteUrl: string): string {
   }
 }
 
-function parseRssItems(doc: Document, feedId: string, feedUrl: string): RssItem[] {
+function parseRssItems(blocks: XmlBlock[], feedId: string, feedUrl: string): RssItem[] {
   const now = Date.now();
   // RSS 2.0: <item>, Atom: <entry>
-  const nodes = Array.from(doc.querySelectorAll("item, entry"));
+  const nodes = findAll(blocks, "item").concat(findAll(blocks, "entry"));
 
   return nodes
     .map((node): RssItem | null => {
       const title =
-        extractText(node.querySelector("title")) ||
-        extractText(node.querySelector("media\\:title")) ||
-        "(Başlıksız)";
+        extractBlockText(findFirst(node.children, "title")) || "(Başlıksız)";
 
+      const linkNode = findFirst(node.children, "link");
       const link =
-        node.querySelector("link")?.getAttribute("href") ||
-        extractText(node.querySelector("link")) ||
-        extractText(node.querySelector("guid")) ||
+        linkNode?.attrs.href ||
+        extractBlockText(linkNode) ||
+        extractBlockText(findFirst(node.children, "guid")) ||
         feedUrl;
 
       const guid =
-        extractText(node.querySelector("guid")) ||
-        extractText(node.querySelector("id")) ||
+        extractBlockText(findFirst(node.children, "guid")) ||
+        extractBlockText(findFirst(node.children, "id")) ||
         link;
 
-      const pubDate = parseDate(
-        node.querySelector("pubDate") || node.querySelector("published") || node.querySelector("updated"),
+      const pubDate = parseDateText(
+        extractBlockText(findFirst(node.children, "pubDate")) ||
+          extractBlockText(findFirst(node.children, "published")) ||
+          extractBlockText(findFirst(node.children, "updated")),
         now,
       );
 
-      // Description — sadece textContent (HTML stripped → XSS güvenli)
+      // Description — sadece düz metin (HTML etiketleri strip edilir → XSS güvenli)
       const description =
-        extractText(node.querySelector("description")) ||
-        extractText(node.querySelector("summary")) ||
-        extractText(node.querySelector("content")) ||
+        extractBlockText(findFirst(node.children, "description")) ||
+        extractBlockText(findFirst(node.children, "summary")) ||
+        extractBlockText(findFirst(node.children, "content")) ||
         "";
 
       return {
@@ -143,18 +259,18 @@ export async function syncFeed(feed: RssFeed): Promise<{ ok: boolean; error?: st
     }
 
     const xml = await res.text();
-    const doc = new DOMParser().parseFromString(xml, "text/xml");
-    if (doc.querySelector("parsererror")) {
+    const blocks = parseXmlDocument(xml);
+    if (blocks.length === 0) {
       throw new Error("Geçersiz XML");
     }
 
-    const items = parseRssItems(doc, feed.id, feed.url);
+    const items = parseRssItems(blocks, feed.id, feed.url);
     await rssRepository.addItems(items);
 
     const updatedFeed: RssFeed = {
       ...feed,
-      title: feed.title || parseChannelTitle(doc),
-      siteUrl: feed.siteUrl || parseSiteUrl(doc, feed.url),
+      title: feed.title || parseChannelTitle(blocks),
+      siteUrl: feed.siteUrl || parseSiteUrl(blocks, feed.url),
       lastFetchedAt: Date.now(),
       lastError: undefined,
     };
