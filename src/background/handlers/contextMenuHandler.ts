@@ -90,20 +90,42 @@ export function initContextMenuHandler(): void {
   });
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
-    // RSS Kaydet — link href'i öncelikli, yoksa sayfa URL'i
+    // RSS Kaydet — önce content script'ten sayfadaki <link rel="alternate"> feed URL'sini
+    // keşfetmeyi dene; yoksa link href'i ya da sayfa URL'i kullanılır.
     if (info.menuItemId === "lifeos_rss_save") {
-      const url = info.linkUrl || (tab && tab.url) || "";
-      if (url) {
-        void registerFeed(url).then((result) => {
-          const status = result.ok ? "✅ RSS feed kaydedildi" : `❌ ${result.error || "Kaydedilemedi"}`;
-          chrome.notifications.create({
-            type: "basic",
-            iconUrl: "icons/icon-128.png",
-            title: "Life OS — RSS",
-            message: status,
-          });
-        });
+      const fallbackUrl = info.linkUrl || (tab && tab.url) || "";
+      if (!fallbackUrl) {
+        return;
       }
+      void (async () => {
+        let feedUrl = fallbackUrl;
+        let discovered = false;
+        if (tab && tab.id !== undefined) {
+          try {
+            const found = await chrome.tabs.sendMessage(tab.id, {
+              type: "rss_discover_feed",
+            });
+            if (found && typeof found.url === "string" && found.url.startsWith("http")) {
+              feedUrl = found.url;
+              discovered = true;
+            }
+          } catch {
+            // Content script yüklü değil (örn. chrome:// sayfası) — fallback kullanılır
+          }
+        }
+        const result = await registerFeed(feedUrl);
+        const status = result.ok
+          ? discovered
+            ? "✅ RSS feed bulundu ve kaydedildi"
+            : "✅ RSS feed kaydedildi"
+          : `❌ ${result.error || "Kaydedilemedi"}`;
+        chrome.notifications.create({
+          type: "basic",
+          iconUrl: "icons/icon-128.png",
+          title: "Life OS — RSS",
+          message: status,
+        });
+      })();
       return;
     }
 
