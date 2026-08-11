@@ -36,6 +36,9 @@ const CalendarView = lazy(() =>
     default: m.CalendarView,
   })),
 );
+const RssView = lazy(() =>
+  import("@/components/RssView.js").then((m) => ({ default: m.RssView })),
+);
 const PrayerView = lazy(() =>
   import("@/components/PrayerView.js").then((m) => ({
     default: m.PrayerView,
@@ -176,6 +179,8 @@ export function ViewRouter() {
         return <SrsView lang={lang} />;
       case "calendar":
         return <CalendarView todos={todos} lang={lang} />;
+      case "rss":
+        return <RssView lang={lang} />;
       case "prayer":
         return <PrayerView lang={lang} />;
       case "kpss":

@@ -106,6 +106,8 @@ export function Sidebar({
         return t.sidebar_calendar;
       case "srs":
         return t.sidebar_srs;
+      case "rss":
+        return t.rss_sidebar || "RSS";
       case "hifiz":
         return t.sidebar_hifiz;
       case "prayer":
