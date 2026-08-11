@@ -1,0 +1,60 @@
+import type { GeoPin } from "./types.js";
+
+export const TURKEY_LIVESTOCK: GeoPin[] = [
+  {
+    name: "Büyükbaş Mera Hayvancılığı (Alpin Çayır)",
+    city: "Erzurum / Kars / Ardahan",
+    x: 850.0,
+    y: 90.0,
+    description: "Yaz yağışları ile yeşeren boylu alpin çayırlar nedeniyle mera büyükbaş hayvancılığı gelişmiştir.",
+    examTip: "Yaz yağışları -> Çayır örtüsü -> Büyükbaş mera hayvancılığı ve et/süt verimi ilişkisi KPSS klasiğidir.",
+  },
+  {
+    name: "Küçükbaş Koyun Hayvancılığı (Bozkır)",
+    city: "Konya / Van / Şanlıurfa",
+    x: 410.0,
+    y: 250.0,
+    description: "Düz arazi ve ilkbahar yağışlarıyla yeşeren otlu bozkır örtüsü küçükbaş koyun yetiştiriciliğine uygundur.",
+    examTip: "Türkiye'de toplam hayvan sayısı bakımından EN FAZLA yetiştirilen tür koyundur.",
+  },
+  {
+    name: "Kıl Keçisi Yetiştiriciliği (Çalı / Maki)",
+    city: "Antalya / Mersin (Teke-Taşeli)",
+    x: 240.0,
+    y: 330.0,
+    description: "Dağlık karstik engebeli arazide çalı ve maki filizleriyle beslenen kıl keçisi Akdeniz'de yaygındır.",
+    examTip: "Orman sürgünlerine zarar verdiği gerekçesiyle yetiştirilmesine devlet sınırlaması getirilmiştir.",
+  },
+  {
+    name: "Tiftik (Ankara) Keçisi Yetiştiriciliği",
+    city: "Ankara / Siirt",
+    x: 355.0,
+    y: 150.0,
+    description: "Dünyaca ünlü değerli tiftik yünü elde edilen özel keçi ırkıdır.",
+    examTip: "Ankara ve çevresinde koruma altında yetiştirilir.",
+  },
+  {
+    name: "Arıcılık Bölgeleri (Zengin Flora)",
+    city: "Muğla / Ordu / Hakkari / Erzurum",
+    x: 130.0,
+    y: 310.0,
+    description: "Engebeli, sanayiden uzak ve bitki çeşitliliği (flora) zengin dağlık yörelerimizde gelişmiştir.",
+    examTip: "Bitki örtüsü çeşitliliğine en doğrudan bağımlı hayvancılık faaliyetidir. Muğla çam balında 1.dir.",
+  },
+  {
+    name: "İpekböcekçiliği (Dut Ağacı)",
+    city: "Diyarbakır / Bursa / Antalya",
+    x: 750.0,
+    y: 240.0,
+    description: "Dut yaprağı ile beslenen ipek böceğinden doğal ipek kozası üretimidir.",
+    examTip: "Diyarbakır doğal koza üretiminde 1. sıraya yükselmiştir; suni ipek üretimi rekabeti zorlaştırmaktadır.",
+  },
+  {
+    name: "Besik ve Kümes Hayvancılığı (Pazar Yakınlığı)",
+    city: "Bolu / Balıkesir / Manisa",
+    x: 310.0,
+    y: 85.0,
+    description: "İklimden bağımsız, büyük şehirlerin (pazarın) et ve yumurta ihtiyacını karşılamak için kurulan modern tesislerdir.",
+    examTip: "İklim ve bitki örtüsünden ETKİLENMEYEN hayvancılık türüdür (Sadece pazar tüketimi etkilidir).",
+  },
+];

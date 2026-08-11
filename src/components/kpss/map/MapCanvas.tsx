@@ -144,39 +144,89 @@ export function MapCanvas({
             position: "absolute",
             left: 16,
             bottom: 16,
-            maxWidth: 280,
-            background: "rgba(30, 24, 16, 0.92)",
+            maxWidth: 320,
+            background: "rgba(15, 23, 42, 0.94)",
             color: "#f4ead7",
-            borderRadius: "12px",
+            borderRadius: "14px",
             padding: "12px 16px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            boxShadow: "0 8px 28px rgba(0,0,0,0.45)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
           }}
         >
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
               fontSize: "0.68rem",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: topicColor,
-              marginBottom: 3,
+              fontWeight: 800,
             }}
           >
-            {currentIndex + 1} / {total}
+            <span>{t[legendKey] || "Konum Bilgisi"}</span>
+            <span>
+              {currentIndex + 1} / {total}
+            </span>
           </div>
           <h4
             style={{
-              margin: "0 0 3px",
+              margin: 0,
               fontFamily: "Georgia, serif",
-              fontSize: "1rem",
+              fontSize: "0.98rem",
+              fontWeight: 700,
               color: "#fff4e4",
             }}
           >
             {pins[currentIndex].name}
           </h4>
-          <p style={{ margin: 0, fontSize: "0.78rem", color: "#cfc3aa" }}>
-            {pins[currentIndex].city}
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.76rem",
+              color: "#94a3b8",
+              fontWeight: 600,
+            }}
+          >
+            📍 {pins[currentIndex].city}
           </p>
+
+          {pins[currentIndex].description && (
+            <p
+              style={{
+                margin: "4px 0 0",
+                fontSize: "0.75rem",
+                color: "#e2e8f0",
+                lineHeight: 1.35,
+              }}
+            >
+              {pins[currentIndex].description}
+            </p>
+          )}
+
+          {pins[currentIndex].examTip && (
+            <div
+              style={{
+                marginTop: "4px",
+                padding: "6px 8px",
+                borderRadius: "8px",
+                background: "rgba(234, 179, 8, 0.12)",
+                border: "1px solid rgba(234, 179, 8, 0.3)",
+                color: "#fef08a",
+                fontSize: "0.72rem",
+                lineHeight: 1.3,
+                fontWeight: 600,
+              }}
+            >
+              💡 <span style={{ fontWeight: 800 }}>KPSS İpucu:</span>{" "}
+              {pins[currentIndex].examTip}
+            </div>
+          )}
         </div>
       )}
     </div>

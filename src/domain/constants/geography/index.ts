@@ -1,6 +1,6 @@
 /**
  * geography/index.ts
- * Coğrafya verilerinin merkezi dışa aktarım modülü.
+ * Türkiye fiziki, beşeri ve ekonomik coğrafya verilerinin merkezi dışa aktarım modülü.
  */
 
 import type { GeoPin, TurkeyMapTopic } from "./types.js";
@@ -11,6 +11,17 @@ import { TURKEY_PLAINS } from "./turkeyPlains.js";
 import { TURKEY_LAKES } from "./turkeyLakes.js";
 import { TURKEY_RIVERS } from "./turkeyRivers.js";
 import { TURKEY_PLATEAUS } from "./turkeyPlateaus.js";
+import { TURKEY_COASTS } from "./coasts.js";
+import { TURKEY_KARST } from "./karst.js";
+import { TURKEY_CLIMATE_RAIN } from "./climateRain.js";
+import { TURKEY_POPULATION, TURKEY_DWELLINGS } from "./population.js";
+import { TURKEY_DEVELOPMENT_PROJECTS } from "./developmentProjects.js";
+import { TURKEY_AGRICULTURE } from "./agriculture.js";
+import { TURKEY_LIVESTOCK } from "./livestock.js";
+import { TURKEY_MINES } from "./mines.js";
+import { TURKEY_ENERGY } from "./energy.js";
+import { TURKEY_TRANSPORT_BORDERS, TURKEY_INDUSTRY } from "./transportBorders.js";
+import { TURKEY_TOURISM_UNESCO } from "./tourismUnesco.js";
 
 export * from "./types.js";
 export * from "./kivrimMountains.js";
@@ -20,6 +31,17 @@ export * from "./turkeyPlains.js";
 export * from "./turkeyLakes.js";
 export * from "./turkeyRivers.js";
 export * from "./turkeyPlateaus.js";
+export * from "./coasts.js";
+export * from "./karst.js";
+export * from "./climateRain.js";
+export * from "./population.js";
+export * from "./developmentProjects.js";
+export * from "./agriculture.js";
+export * from "./livestock.js";
+export * from "./mines.js";
+export * from "./energy.js";
+export * from "./transportBorders.js";
+export * from "./tourismUnesco.js";
 
 export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
   ...KIVRIM_MOUNTAINS,
@@ -29,9 +51,23 @@ export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
   ...TURKEY_LAKES,
   ...TURKEY_RIVERS,
   ...TURKEY_PLATEAUS,
+  ...TURKEY_COASTS,
+  ...TURKEY_KARST,
+  ...TURKEY_CLIMATE_RAIN,
+  ...TURKEY_POPULATION,
+  ...TURKEY_DWELLINGS,
+  ...TURKEY_DEVELOPMENT_PROJECTS,
+  ...TURKEY_AGRICULTURE,
+  ...TURKEY_LIVESTOCK,
+  ...TURKEY_MINES,
+  ...TURKEY_ENERGY,
+  ...TURKEY_INDUSTRY,
+  ...TURKEY_TRANSPORT_BORDERS,
+  ...TURKEY_TOURISM_UNESCO,
 ];
 
 export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
+  // 1. Fiziki Coğrafya
   kivrim: KIVRIM_MOUNTAINS,
   kirik: KIRIK_MOUNTAINS,
   volcanic: VOLCANIC_MOUNTAINS,
@@ -39,5 +75,25 @@ export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   lakes: TURKEY_LAKES,
   rivers: TURKEY_RIVERS,
   plateaus: TURKEY_PLATEAUS,
+  coasts: TURKEY_COASTS,
+  karst: TURKEY_KARST,
+  climate_rain: TURKEY_CLIMATE_RAIN,
+
+  // 2. Beşeri Coğrafya
+  population: TURKEY_POPULATION,
+  dwellings: TURKEY_DWELLINGS,
+  development_projects: TURKEY_DEVELOPMENT_PROJECTS,
+
+  // 3. Ekonomik Coğrafya
+  agriculture: TURKEY_AGRICULTURE,
+  livestock: TURKEY_LIVESTOCK,
+  mines: TURKEY_MINES,
+  energy: TURKEY_ENERGY,
+  industry: TURKEY_INDUSTRY,
+  transport_borders: TURKEY_TRANSPORT_BORDERS,
+  tourism_unesco: TURKEY_TOURISM_UNESCO,
+
+  // 4. Genel
   all: ALL_GEOGRAPHY_PINS,
 };
+
