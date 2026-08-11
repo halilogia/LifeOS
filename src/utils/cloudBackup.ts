@@ -32,6 +32,20 @@ const DEBOUNCE_MS = 5_000;
 let timer: ReturnType<typeof setTimeout> | null = null;
 let inFlight: Promise<void> | null = null;
 
+/** Anahtar veri grupları — bu key'ler local'den sync'e taşınır. */
+const SYNC_PUSH_KEYS = new Set([
+  "sidebarOrder",
+  "sidebarUsage",
+  "sidebarLastUsed",
+  "settings",
+  "lang",
+  "freeGamesNotificationsEnabled",
+  "calendarNotificationsEnabled",
+  "pomoBlockEnabled",
+  "universalInfoBoxEnabled",
+  "detoxLimits",
+]);
+
 /** Snapshot'tan geçici key'leri ayıklar. */
 export function stripTransientKeys(
   data: Record<string, unknown>,
@@ -68,6 +82,7 @@ export function runCloudBackup(force = false): Promise<void> {
         return;
       }
       await backupUC.execute();
+      // Drive backup completed — inspector will refresh on next tab open.
       logger.log("Cloud auto-backup completed successfully.");
     } catch (e) {
       logger.error("Auto cloud backup failed:", e);
@@ -78,3 +93,7 @@ export function runCloudBackup(force = false): Promise<void> {
   inFlight = task;
   return inFlight;
 }
+
+
+
+

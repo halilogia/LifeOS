@@ -11,6 +11,8 @@ import { useSyncStore } from "@/presentation/store/syncStore.js";
 import { useTodosStore } from "@/presentation/store/todosStore.js";
 import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 import { kpssService } from "@/services/kpss/kpssService.js";
+import { getSyncDataSummary, getDriveBackupInfo } from "@/services/cloudDataInspector.js";
+import type { SyncKeySummary, DriveBackupInfo } from "@/services/cloudDataInspector.js";
 
 export interface SettingsDrawerProps {
   isOpen: boolean;
@@ -108,6 +110,20 @@ export function SettingsDrawer({
   const onKpssTargetScoreChange = useSettingsStore(
     (s) => s.handleKpssTargetScoreChange,
   );
+  // Cloud data inspector
+  const [syncKeysSummary, setSyncKeysSummary] = useState<SyncKeySummary[]>([]);
+  const [driveBackups, setDriveBackups] = useState<DriveBackupInfo[]>([]);
+  const refreshInspector = async () => {
+    const [syncSummary, driveInfo] = await Promise.all([
+      getSyncDataSummary(),
+      getDriveBackupInfo(),
+    ]);
+    setSyncKeysSummary(syncSummary);
+    setDriveBackups(driveInfo);
+  };
+  useEffect(() => {
+    void refreshInspector();
+  }, []);
   const detoxLimits = useSettingsStore((s) => s.detoxLimits);
   const onDetoxLimitsChange = useSettingsStore(
     (s) => s.handleDetoxLimitsChange,
@@ -273,8 +289,8 @@ export function SettingsDrawer({
         {/* TAB 5: GOOGLE CLOUD SYNC & BACKUP SETTINGS */}
         {settingsTab === "sync" && (
           <SyncSettingsTab
-            t={t}
             lang={lang}
+            t={t}
             googleUserEmail={googleUserEmail}
             isSyncing={isSyncing}
             syncSettings={syncSettings}
@@ -285,6 +301,8 @@ export function SettingsDrawer({
             onExportBackup={onExportBackup}
             onImportBackup={onImportBackup}
             onClearAllData={handleClearAllData}
+            syncKeysSummary={syncKeysSummary}
+            driveBackups={driveBackups}
           />
         )}
       </div>
