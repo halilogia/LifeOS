@@ -1,12 +1,14 @@
 /**
  * distractionCleaner.ts
  * Main Orchestrator for Social Media Distraction-Free & Anti-Doomscrolling Content Script Engine.
+ * SSM (Saner Social Media) araştırması sonrası: element silme yerine CONTAINER gizleme tekniği.
  * Clean Architecture - Content Script Orchestrator.
  */
 
 import {
   DEFAULT_DISTRACTION_SETTINGS,
   DistractionSettings,
+  QuoteItem,
 } from "./cleaners/detoxTypes.js";
 import {
   injectTwitterQuoteBanner,
@@ -15,6 +17,8 @@ import {
 import { cleanTwitterTimeline } from "./cleaners/twitterCleaner.js";
 
 export type { DistractionSettings };
+
+const WIDGET_ATTR = "data-lifeos-widget";
 
 let activeStyleEl: HTMLStyleElement | null = null;
 let currentSettings: DistractionSettings = DEFAULT_DISTRACTION_SETTINGS;
@@ -34,7 +38,7 @@ function getOrCreateStyleElement(): HTMLStyleElement {
 function generateCSSRules(settings: DistractionSettings, hostname: string): string {
   const rules: string[] = [];
 
-  // YouTube
+  // YouTube — SSM: #primary container'ı gizle (element değil)
   if (hostname.includes("youtube.com")) {
     if (settings.ytShortsBlock) {
       rules.push(`
@@ -54,6 +58,8 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
       (window.location.pathname === "/" || window.location.pathname === "/index.html")
     ) {
       rules.push(`
+        ytd-browse[page-subtype="home"] #primary,
+        ytd-browse[page-subtype='home'] #primary,
         ytd-rich-grid-renderer {
           display: none !important;
         }
@@ -68,7 +74,7 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
   }
 
-  // Instagram
+  // Instagram — SSM: main çocuklarını gizle (widget hariç)
   if (hostname.includes("instagram.com")) {
     if (settings.igReelsBlock) {
       rules.push(`
@@ -90,15 +96,15 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
     if (settings.igFeedBlock && window.location.pathname === "/") {
       rules.push(`
-        main[role='main'] article,
-        div[role='main'] section {
+        main[role='main'] > :not([${WIDGET_ATTR}]),
+        main[role=main] > :not([${WIDGET_ATTR}]) {
           display: none !important;
         }
       `);
     }
   }
 
-  // Facebook
+  // Facebook — SSM: feed container + yeni nesil hash class'ları
   if (hostname.includes("facebook.com")) {
     if (settings.fbReelsBlock) {
       rules.push(`
@@ -111,7 +117,9 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
     if (settings.fbFeedBlock && window.location.pathname === "/") {
       rules.push(`
-        div[role='feed'] {
+        div[role='feed'],
+        #ssrb_feed_start + div,
+        .x1hc1fzr.x1unhpq9.x6o7n8i {
           display: none !important;
         }
       `);
@@ -131,27 +139,20 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
   }
 
-  // Twitter / X
+  // Twitter / X — SSM: CONTAINER 0 boyut (element silme değil!)
   if (hostname.includes("x.com") || hostname.includes("twitter.com")) {
     if (settings.xFeedBlock) {
       rules.push(`
-        article[data-testid='tweet'],
-        div[data-testid='cellInnerSequence'],
-        div[data-testid='primaryColumn'] section[role='region'],
-        div[data-testid='primaryColumn'] div[aria-label*='Home Timeline' i],
-        div[data-testid='primaryColumn'] div[aria-label*='Timeline' i],
+        [data-testid="primaryColumn"] > div:last-child > div:nth-child(5),
+        [data-testid='primaryColumn'] > div:last-child > div:nth-child(5),
         main[role='main'] section[role='region'],
-        div[aria-label*='timeline' i],
-        div[aria-label*='zaman akışı' i],
-        div[aria-label*='akış' i],
-        div[data-testid='primaryColumn'] > div > div > div > section,
-        section[role='region']:has(article[data-testid='tweet']) {
-          display: none !important;
+        div[data-testid='primaryColumn'] section[role='region'] {
+          width: 0px !important;
+          height: 0px !important;
+          max-height: 0px !important;
+          overflow: hidden !important;
           visibility: hidden !important;
           opacity: 0 !important;
-          height: 0 !important;
-          max-height: 0 !important;
-          overflow: hidden !important;
           pointer-events: none !important;
         }
       `);
@@ -206,12 +207,14 @@ function handleURLCheck(): void {
 }
 
 export function initDistractionCleaner(): void {
+  let customQuotes: QuoteItem[] = [];
+
   const loadAndApplySettings = () => {
     try {
       if (!chrome.runtime?.id) {
         return;
       }
-      chrome.storage.local.get(["detox_distraction_settings"], (res) => {
+      chrome.storage.local.get(["detox_distraction_settings", "customQuotes"], (res) => {
         if (chrome.runtime.lastError || !chrome.runtime?.id) {
           return;
         }
@@ -221,9 +224,12 @@ export function initDistractionCleaner(): void {
             ...res.detox_distraction_settings,
           };
         }
+        if (Array.isArray(res.customQuotes)) {
+          customQuotes = res.customQuotes as QuoteItem[];
+        }
         applyCSSRules();
-        injectYouTubeQuoteBanner(currentSettings);
-        injectTwitterQuoteBanner(currentSettings);
+        injectYouTubeQuoteBanner(currentSettings, customQuotes);
+        injectTwitterQuoteBanner(currentSettings, customQuotes);
         handleURLCheck();
       });
     } catch {
@@ -232,7 +238,10 @@ export function initDistractionCleaner(): void {
   };
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === "local" && changes["detox_distraction_settings"]) {
+    if (
+      areaName === "local" &&
+      (changes["detox_distraction_settings"] || changes["customQuotes"])
+    ) {
       loadAndApplySettings();
     }
     if (areaName === "sync" && changes["detox_distraction_settings"]) {
@@ -241,6 +250,16 @@ export function initDistractionCleaner(): void {
   });
 
   loadAndApplySettings();
+
+  // SSM: SPA route change — popstate + polling (back/forward dahil)
+  let lastPath = window.location.pathname;
+  window.addEventListener("popstate", () => {
+    if (window.location.pathname !== lastPath) {
+      lastPath = window.location.pathname;
+      handleURLCheck();
+      applyCSSRules();
+    }
+  });
 
   // MutationObserver for real-time instant DOM cleaning on React render cycles
   const observer = new MutationObserver(() => {
@@ -252,15 +271,14 @@ export function initDistractionCleaner(): void {
   });
 
   // Periodic DOM check for SPA navigation & dynamically rendered YouTube/X Home Grids
-  let lastUrl = location.href;
   setInterval(() => {
-    if (location.href !== lastUrl) {
-      lastUrl = location.href;
+    if (window.location.pathname !== lastPath) {
+      lastPath = window.location.pathname;
       handleURLCheck();
       applyCSSRules();
     }
-    injectYouTubeQuoteBanner(currentSettings);
-    injectTwitterQuoteBanner(currentSettings);
+    injectYouTubeQuoteBanner(currentSettings, customQuotes);
+    injectTwitterQuoteBanner(currentSettings, customQuotes);
     cleanTwitterTimeline(currentSettings);
-  }, 300);
+  }, 100);
 }

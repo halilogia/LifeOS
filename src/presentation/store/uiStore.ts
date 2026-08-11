@@ -12,6 +12,7 @@ import type { CustomQuote } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
 import { DEFAULT_SIDEBAR_ORDER } from "@/domain/constants/sidebarConstants.js";
+import { getDefaultQuotesForLang } from "@/domain/constants/quoteConstants.js";
 
 const SIDEBAR_ORDER_KEY = "sidebarOrder";
 
@@ -155,32 +156,19 @@ export const useUIStore = create<UIState>()((set) => ({
         resolve((result.customQuotes as CustomQuote[]) || []);
       });
     });
-    const defaultQuoteCount = 7;
-    const poolSize = defaultQuoteCount + customQuotes.length;
-    const randomIndex = Math.floor(Math.random() * poolSize);
-
-    if (randomIndex < defaultQuoteCount) {
-      const quoteKeys = [
-        "quote_1",
-        "quote_2",
-        "quote_3",
-        "quote_4",
-        "quote_5",
-        "quote_6",
-        "quote_7",
-      ];
-      const randomKey = quoteKeys[
-        randomIndex
-      ] as keyof (typeof translations)["tr"];
-      set({ quoteText: translations[activeLang][randomKey] });
-    } else {
-      const custom = customQuotes[randomIndex - defaultQuoteCount];
-      set({
-        quoteText: custom.author
-          ? `"${custom.text}" — ${custom.author}`
-          : `"${custom.text}"`,
-      });
+    const defaults = getDefaultQuotesForLang(activeLang);
+    const pool = [...customQuotes, ...defaults];
+    if (pool.length === 0) {
+      set({ quoteText: "" });
+      return;
     }
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    const selected = pool[randomIndex];
+    set({
+      quoteText: selected.author
+        ? `"${selected.text}" — ${selected.author}`
+        : `"${selected.text}"`,
+    });
   },
 
   handleViewChange: (view) => set({ activeView: view }),

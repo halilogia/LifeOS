@@ -22,13 +22,6 @@ export const core = {
   alert_restore_error: "Yedek dosyası okunurken bir hata oluştu.",
   alert_clear_confirm:
     "Tüm verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-  quote_1: '"Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır."',
-  quote_2: '"Başlamak, başarmanın yarısıdır."',
-  quote_3: '"Yapılmış olması, mükemmel olmasından iyidir."',
-  quote_4: '"Meşgul olmaya değil, üretken olmaya odaklan."',
-  quote_5: '"Geleceği tahmin etmenin en iyi yolu onu yaratmaktır."',
-  quote_6: '"İstediğin her şey korkunun diğer tarafındadır."',
-  quote_7: '"Günleri sayma, günlere anlam kat."',
   cat_other: "Diğer",
   view_hifiz: "Aday Din Görevlisi Yeterlilikleri",
   view_notes: "Günlüğüm",
