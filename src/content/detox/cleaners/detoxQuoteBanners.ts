@@ -8,6 +8,7 @@
 
 import { DistractionSettings, QuoteItem } from "./detoxTypes.js";
 import { getDefaultQuotesForLang } from "@/domain/constants/quoteConstants.js";
+import { X_FEED_CONTAINER_SELECTOR } from "../distractionCleaner.js";
 
 export const WIDGET_ATTR = "data-lifeos-widget";
 
@@ -52,17 +53,14 @@ function createQuoteCard(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 24px;
-    margin: 40px auto;
-    max-width: 600px;
-    background: radial-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
-    border-radius: 20px;
+    width: 100%;
+    min-height: 60vh;
+    padding: 48px 32px;
+    box-sizing: border-box;
+    background: transparent;
     color: #f8fafc;
     font-family: Georgia, serif;
     text-align: center;
-    backdrop-filter: blur(12px);
     transition: all 0.3s ease;
   `;
 
@@ -114,6 +112,23 @@ export function injectYouTubeQuoteBanner(
     document.querySelector("ytd-browse[page-subtype='home']") ||
     document.querySelector("#primary");
 
+  // YT Abonelikler butonu — ana menü (guide) + kısayol çubuğundaki linkleri gizle
+  if (currentSettings.ytSubscriptionsBlock) {
+    const subLinks = document.querySelectorAll(
+      "a[href='/feed/subscriptions'], ytd-guide-entry-renderer a[href='/feed/subscriptions'], ytd-mini-guide-entry-renderer a[href='/feed/subscriptions'], a[title*='Subscriptions' i], a[title*='Abonelikler' i]",
+    );
+    subLinks.forEach((link) => {
+      const item = link.closest(
+        "ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer, ytd-guide-collapsible-section-entry-renderer",
+      );
+      if (item) {
+        (item as HTMLElement).style.setProperty("display", "none", "important");
+      } else {
+        (link as HTMLElement).style.setProperty("display", "none", "important");
+      }
+    });
+  }
+
   if (!primaryContainer) {
     return;
   }
@@ -146,18 +161,21 @@ export function injectTwitterQuoteBanner(
     return;
   }
 
-  const primaryColumn =
-    document.querySelector("div[data-testid='primaryColumn']") ||
-    document.querySelector("main[role='main']");
+  const feedContainer = document.querySelector(X_FEED_CONTAINER_SELECTOR);
+  if (!feedContainer) {
+    return;
+  }
 
-  if (!primaryColumn) {
+  // Feed container'ın ebeveyni = primaryColumn; widget'ı feed container'ın hemen sonrasına ekle.
+  // Böylece widget ana akış alanında, feed gizlenmiş olsa bile görünür ve sayfa kaydırılabilir.
+  const parent = feedContainer.parentElement;
+  if (!parent) {
     return;
   }
 
   const pool = getCombinedQuotes(customQuotes, detectLang());
   const randomQuote = pool[Math.floor(Math.random() * pool.length)];
 
-  // SSM tekniği: widget'ı primaryColumn'ın DIŞINA ekle
   const card = createQuoteCard("lifeos-x-quote-card", "#38bdf8", randomQuote);
-  primaryColumn.after(card);
+  parent.insertBefore(card, feedContainer.nextSibling);
 }

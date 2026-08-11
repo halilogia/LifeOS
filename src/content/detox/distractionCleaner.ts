@@ -15,10 +15,15 @@ import {
   injectYouTubeQuoteBanner,
 } from "./cleaners/detoxQuoteBanners.js";
 import { cleanTwitterTimeline } from "./cleaners/twitterCleaner.js";
+import { cleanFacebookReels } from "./cleaners/facebookCleaner.js";
 
 export type { DistractionSettings };
 
 const WIDGET_ATTR = "data-lifeos-widget";
+
+/** X / Twitter ana akış (Home Timeline) feed container — SSM birebir selector */
+export const X_FEED_CONTAINER_SELECTOR =
+  "[data-testid='primaryColumn'] > div:last-child > div:nth-child(5)";
 
 let activeStyleEl: HTMLStyleElement | null = null;
 let currentSettings: DistractionSettings = DEFAULT_DISTRACTION_SETTINGS;
@@ -72,6 +77,18 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
         }
       `);
     }
+    if (settings.ytSubscriptionsBlock) {
+      rules.push(`
+        ytd-guide-entry-renderer:has(a[href='/feed/subscriptions']),
+        ytd-mini-guide-entry-renderer:has(a[href='/feed/subscriptions']),
+        ytd-guide-collapsible-section-entry-renderer:has(a[href='/feed/subscriptions']),
+        a[href='/feed/subscriptions'],
+        a[title*='Subscriptions' i],
+        a[title*='Abonelikler' i] {
+          display: none !important;
+        }
+      `);
+    }
   }
 
   // Instagram — SSM: main çocuklarını gizle (widget hariç)
@@ -110,7 +127,17 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
       rules.push(`
         a[href*='/reels/'],
         div[data-pagelet*='Reels'],
-        div[aria-label*='Reels'] {
+        div[aria-label*='Reels'],
+        div[aria-label*='Reels' i],
+        div[role='tab']:has(a[href*='/reels/']),
+        div[role='tab']:has([aria-label*='Reels' i]),
+        a[role='tab'][aria-label*='Reels' i],
+        a[aria-label*='Reels' i],
+        span[dir='auto']:has(> span:has(> a[href*='/reels/'])),
+        div[role='navigation'] a[href*='/reels/'],
+        ul[role='tablist'] a[href*='/reels/'],
+        a[href*='/reel/'],
+        div[data-nosnippet]:has(a[href*='/reels/']) {
           display: none !important;
         }
       `);
@@ -143,8 +170,7 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
   if (hostname.includes("x.com") || hostname.includes("twitter.com")) {
     if (settings.xFeedBlock) {
       rules.push(`
-        [data-testid="primaryColumn"] > div:last-child > div:nth-child(5),
-        [data-testid='primaryColumn'] > div:last-child > div:nth-child(5),
+        ${X_FEED_CONTAINER_SELECTOR},
         main[role='main'] section[role='region'],
         div[data-testid='primaryColumn'] section[role='region'] {
           width: 0px !important;
@@ -264,6 +290,7 @@ export function initDistractionCleaner(): void {
   // MutationObserver for real-time instant DOM cleaning on React render cycles
   const observer = new MutationObserver(() => {
     cleanTwitterTimeline(currentSettings);
+    cleanFacebookReels(currentSettings);
   });
   observer.observe(document.body || document.documentElement, {
     childList: true,
@@ -280,5 +307,6 @@ export function initDistractionCleaner(): void {
     injectYouTubeQuoteBanner(currentSettings, customQuotes);
     injectTwitterQuoteBanner(currentSettings, customQuotes);
     cleanTwitterTimeline(currentSettings);
+    cleanFacebookReels(currentSettings);
   }, 100);
 }

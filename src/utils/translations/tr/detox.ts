@@ -44,6 +44,7 @@ export const detox = {
   detox_yt_shorts: "Shorts Butonunu & Raflarını Gizle",
   detox_yt_feed: "Ana Sayfa Akışını Gizle (İlham Kartı Göster)",
   detox_yt_comments: "Yorumlar Bölümünü Gizle",
+  detox_yt_subscriptions: "Abonelikler Butonunu Gizle",
   detox_ig_reels: "Reels Sekmesini & Akışını Gizle",
   detox_ig_explore: "Keşfet Sekmesini Gizle",
   detox_ig_feed: "Ana Sayfa Akışını Gizle",

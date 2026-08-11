@@ -139,6 +139,11 @@ export function DetoxDistractionCard({
             checked={distractionSettings.ytCommentsBlock}
             onChange={() => handleToggle("ytCommentsBlock")}
           />
+          <ToggleRow
+            label={t.detox_yt_subscriptions || "Abonelikler Butonunu Gizle"}
+            checked={distractionSettings.ytSubscriptionsBlock}
+            onChange={() => handleToggle("ytSubscriptionsBlock")}
+          />
         </DetoxPlatformSection>
 
         {/* Instagram Box */}

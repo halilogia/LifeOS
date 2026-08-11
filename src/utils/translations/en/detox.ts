@@ -44,6 +44,7 @@ export const detox = {
   detox_yt_shorts: "Hide Shorts Button & Shelves",
   detox_yt_feed: "Hide Home Feed (Show Quote Card)",
   detox_yt_comments: "Hide Comments Section",
+  detox_yt_subscriptions: "Hide Subscriptions Button",
   detox_ig_reels: "Hide Reels Tab & Feed",
   detox_ig_explore: "Hide Explore Tab",
   detox_ig_feed: "Hide Home Feed",
