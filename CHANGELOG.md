@@ -1,3 +1,20 @@
+## [4.2.0] - 2026-08-11
+### Eklendi & İyileştirildi
+- **RSS Takip & Okuyucu (`RssView.tsx`, `rssService.ts`, `rssSyncHandler.ts`, `ChromeStorageRssRepository.ts`)**:
+  - Sağ tık ile herhangi bir sayfadan RSS feed kaydetme ("📡 RSS Kaydet" menüsü).
+  - Yeni sidebar paneli: feed listesi + item listesi + okundu/okunmamış takibi + favicon + arka plan 30dk otomatik senkron.
+  - Feed metadata sync'te, item'lar local'de (max 50/feed).
+  - Chrome `host_permissions: https://*/*` (herhangi bir domain'den RSS çekebilmek için).
+- **Detox Feed Blocker SSM (Saner Social Media) Tekniği**:
+  - X / YouTube / Instagram / Facebook / TikTok için **container-gizleme** stratejisi (CSS width/height 0).
+  - Facebook Reels artık `facebookCleaner.ts` JS tarayıcı ile 4 katmanlı yakalama (href / aria / bölüm / text).
+  - YouTube Abonelikler butonu kaldırma toggle'ı (`ytSubscriptionsBlock`).
+- **X / YT Detox Widget Konumlandırma**: Quote widget ana scroll akışına yerleştirildi (`feedContainer.nextSibling`), pop-up blok stili kaldırıldı.
+- **AudioContext Autoplay Fix**: `volumeBooster.ts` ilk kullanıcı jestinde context oluşturacak şekilde defer edildi.
+- **Doğrulama**: `tsc --noEmit` ✓, `eslint` ✓, `build` ✓, `findDeadFiles` ✓ (0).
+
+---
+
 # Changelog (Değişiklik Günlüğü)
 
 Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalarını ve eklenen tüm özellikleri sürüm geçmişi olarak takip eder.

@@ -40,6 +40,28 @@ Unified indie game showcase, HTML5 arcade player, and Steam-style developer labo
 
 ---
 
+## ✅ Tamamlanan v4.2.0 (2026-08-11)
+
+### 1. 📡 RSS Takip & Okuyucu — TAMAMLANDI
+- [x] **Sağ tık "RSS Kaydet" menüsü**: Herhangi bir sayfadan tek tıkla feed kayıt.
+- [x] **RssView sidebar paneli**: Feed listesi (favicon + okunmamış rozeti) + item listesi.
+- [x] **30 dk otomatik senkron**: `chrome.alarms` ile arka planda tüm feed'ler çekilir.
+- [x] **RSS 2.0 + Atom desteği**: DOMParser ile XML ayrıştırma.
+- [x] **XSS güvenli render**: Tüm içerik `textContent` ile basılır.
+- [x] **Yönetim**: Manuel URL ekleme, yenileme, silme (onaylı).
+
+### 2. 🛡️ Detox Feed Blocker SSM Tekniği — TAMAMLANDI
+- [x] **Container-hide stratejisi**: X/IG/FB/YT/TikTok akışı CSS ile 0x0 yapılır (React geri getirse de mute).
+- [x] **facebookCleaner.ts**: 4 katmanlı JS tarayıcı (href/aria/text/pagelet) ile modern FB DOM'undaki Reels.
+- [x] **YouTube Abonelikler toggle**: `ytSubscriptionsBlock` ile sidebar kaldırma.
+- [x] **Detox quote widget**: `feedContainer.nextSibling` ile ana scroll akışına yerleşim.
+
+### 3. 🎵 AudioContext Autoplay Fix — TAMAMLANDI
+- [x] **Gesture-deferred context**: `volumeBooster.ts` ilk kullanıcı jestinde AudioContext oluşturur.
+- [x] **Unity boost skip**: 1.0 gain'de context hiç oluşturulmaz.
+
+---
+
 
 ## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
 

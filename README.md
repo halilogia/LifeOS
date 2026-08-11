@@ -52,13 +52,21 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Dahili HTML5 Mini Oyunlar**: Retro Neon Yılan (Snake), 2D Şövalye Runner ve Galaxy Defender 2D uzay savaşı oyunları.
   - **Yerel Geliştirici Oyun Entegrasyonu**: `In Progress` klasöründeki bağımsız projeler ve yerel dev sunucuları (`http://localhost:5173`) için canlı iframe oynatıcı ve kütüphane kaydedici.
 - **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
-
   - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
   - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.
-- **🚫 Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:
-  - **Derin Bloklama**: Twitter/X, Instagram, YouTube, TikTok ve Facebook platformlarını veya manuel girdiğiniz siteleri tamamen engeller. Hydration/SPA güncellemelerini `MutationObserver` ile izleyerek engelin aşılmasını önler.
+- **🛡️ Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:
+  - **Derin Bloklama (SSM Tekniği)**: Twitter/X, Instagram, YouTube, TikTok ve Facebook platformlarında **container-gizleme** stratejisi ile akışı, Reels/Shorts bölümlerini ve abonelik butonlarını seçici olarak gizler. SPA güncellemeleri `MutationObserver` + 100ms polling ile izlenir, React geri getirse bile yeniden gizlenir.
+  - **Facebook Reels Temizleyici (`facebookCleaner.ts`)**: 4 katmanlı JS tarayıcı (href, aria-label, pagelet, görünür text) ile modern FB DOM'undaki Reels butonlarını akıllı şekilde gizler.
+  - **YouTube Abonelikler Kaldırma (`ytSubscriptionsBlock`)**: Ayarlardan tek toggle ile Abonelikler/Subscriptions navigasyon butonunu tamamen gizler.
   - **Ekran Süresi Sayacı**: Günlük hangi sitede kaç dakika geçirdiğinizi arkaplanda (`background.js`) takip edip Detox panelinde grafiksel bar şeklinde listeler.
-- **🛡️ Güvenlik Hardening**:
+- **📡 RSS Takip & Okuyucu (`RssView.tsx`)**:
+  - **Sağ tık ile anında kayıt**: Herhangi bir sayfada sağ tık → "📡 RSS Kaydet" menüsü. Feed URL'i otomatik kaydedilir ve ilk çekme anında yapılır.
+  - **Sidebar paneli**: Feed listesi (favicon + okunmamış rozeti + hata göstergesi) + item listesi (başlık + tarih + açıklama önizleme). Tıkla → yeni sekmede aç + otomatik okundu işaretle.
+  - **Otomatik arka plan senkron**: `chrome.alarms` ile 30 dakikada bir tüm feed'ler çekilir, yeni item'lar otomatik eklenir.
+  - **RSS 2.0 + Atom desteği**: XML parser ile her iki format desteklenir, max 50 item/feed tutulur.
+  - **XSS güvenli**: Tüm feed içeriği `textContent` ile extract edilir — HTML injection riski sıfır.
+  - **Yönetim**: Manuel URL ekleme, tek-tık yenileme, feed silme (onay modalı ile).
+- **🔒 Güvenlik Hardening**:
   - **DOM XSS Koruması**: Detoks bloke ekranına basılan metinlerin DOM XSS oluşturmaması için güvenli `escapeHtml` filtreleri.
   - **Zod Şema Doğrulaması**: Veri yedeklerini geri yüklerken zararlı kod enjeksiyonunu engellemek amacıyla Zod kütüphanesi ile veri şeması kontrolü.
 - **🌐 Evrensel Dil Desteği & Temiz Mimari**:

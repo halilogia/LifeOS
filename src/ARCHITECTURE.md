@@ -55,6 +55,7 @@ flowchart TB
         gamesService
         errorReportService
         modelFetcher
+        rssService
     end
 
     subgraph App["application/use-cases/ (İş kuralları)"]
