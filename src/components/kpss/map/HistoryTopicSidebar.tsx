@@ -8,12 +8,14 @@ interface HistoryTopicSidebarProps {
   units: HistoryUnit[];
   selectedUnitId: string;
   onSelect: (id: string) => void;
+  isFullscreen?: boolean;
 }
 
 export function HistoryTopicSidebar({
   units,
   selectedUnitId,
   onSelect,
+  isFullscreen = false,
 }: HistoryTopicSidebarProps) {
   return (
     <div
@@ -23,6 +25,8 @@ export function HistoryTopicSidebar({
         gap: 6,
         minWidth: 170,
         maxWidth: 200,
+        maxHeight: isFullscreen ? "calc(100vh - 120px)" : 520,
+        overflowY: "auto",
         background: "rgba(15, 23, 42, 0.55)",
         border: "1px solid rgba(255, 255, 255, 0.08)",
         borderRadius: 14,

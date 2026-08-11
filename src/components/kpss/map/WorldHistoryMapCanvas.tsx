@@ -109,22 +109,30 @@ export function WorldHistoryMapCanvas({
       onWheel={onWheel}
       style={{
         position: "relative",
-        width: "100%",
-        height: isFullscreen ? "calc(100vh - 120px)" : "480px",
-        background: "radial-gradient(circle at 45% 40%, #1e3a5f 0%, #0b1a2e 100%)",
-        borderRadius: 16,
+        flex: 1,
+        minWidth: 0,
+        height: isFullscreen ? undefined : 480,
+        background:
+          "radial-gradient(circle at 45% 40%, #1e3a5f 0%, #0b1a2e 100%)",
+        borderRadius: "16px",
         overflow: "hidden",
         border: "1px solid rgba(255,255,255,0.12)",
+        boxShadow:
+          "inset 0 0 0 1px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.25)",
         cursor: "grab",
+        touchAction: "none",
         userSelect: "none",
         WebkitUserSelect: "none",
       }}
     >
       <svg
         viewBox={WORLD_VIEWBOX}
+        preserveAspectRatio="xMidYMid meet"
         style={{
           width: "100%",
           height: "100%",
+          display: "block",
+          maxHeight: isFullscreen ? "calc(100vh - 180px)" : undefined,
           transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`,
           transformOrigin: "center center",
           transition: "transform 0.08s ease-out",
