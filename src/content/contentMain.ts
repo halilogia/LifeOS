@@ -6,6 +6,7 @@
  */
 import { contentError } from "./contentLogger.js";
 import { initDetoxBlocker } from "./detox/detoxBlocker.js";
+import { initDistractionCleaner } from "./detox/distractionCleaner.js";
 import { initUniversalInfoBox } from "./infobox/universalInfoBox.js";
 import { initDomAgentEngine } from "./agent/domAgentEngine.js";
 import { initVolumeBoosterListener } from "./volume/volumeBooster.js";
@@ -23,6 +24,7 @@ function safeInit(name: string, fn: () => void): void {
 
 (function () {
   safeInit("DetoxBlocker", initDetoxBlocker);
+  safeInit("DistractionCleaner", initDistractionCleaner);
   safeInit("UniversalInfoBox", initUniversalInfoBox);
   safeInit("DomAgentEngine", initDomAgentEngine);
   safeInit("VolumeBooster", initVolumeBoosterListener);

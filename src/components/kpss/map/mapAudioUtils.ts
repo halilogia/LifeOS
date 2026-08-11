@@ -19,9 +19,13 @@ function getAudioContext(): AudioContext | null {
     }
   }
   if (audioCtx && audioCtx.state === "suspended") {
-    audioCtx.resume().catch(() => {
-      // Ignored if user hasn't interacted yet
-    });
+    const resumeOnGesture = () => {
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+    };
+    window.addEventListener("pointerdown", resumeOnGesture, { once: true });
+    window.addEventListener("keydown", resumeOnGesture, { once: true });
   }
   return audioCtx;
 }

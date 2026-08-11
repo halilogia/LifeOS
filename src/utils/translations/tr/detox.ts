@@ -38,4 +38,18 @@ export const detox = {
   detox_motiv_pomodoro: "$count Odaklanmış Pomodoro Tamamlayabilirdin",
   detox_motiv_vocabulary: "$count İngilizce Kelime Ezberleyebilirdin",
   detox_motiv_exercise: "$count km Yürüyüş / Spor Yapabilirdin",
+  detox_distraction_title: "Sosyal Medya Temizlik & Anti-Doomscrolling",
+  detox_distraction_desc:
+    "Shorts, Reels, sonsuz kaydırma akışlarını gizleyerek odaklanmanızı artırın.",
+  detox_yt_shorts: "Shorts Butonunu & Raflarını Gizle",
+  detox_yt_feed: "Ana Sayfa Akışını Gizle (İlham Kartı Göster)",
+  detox_yt_comments: "Yorumlar Bölümünü Gizle",
+  detox_ig_reels: "Reels Sekmesini & Akışını Gizle",
+  detox_ig_explore: "Keşfet Sekmesini Gizle",
+  detox_ig_feed: "Ana Sayfa Akışını Gizle",
+  detox_fb_reels: "Reels & Kısa Videoları Gizle",
+  detox_fb_feed: "Ana Sayfa Akışını Gizle",
+  detox_tt_feed: "Kaydırma (Feed) Engelleme",
+  detox_x_feed: "Ana Sayfa Akışını Gizle",
+  detox_x_explore: "Keşfet & Gündemdekileri Gizle",
 };

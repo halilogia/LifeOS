@@ -11,6 +11,35 @@ const ENABLED_KEY = "detox_enabled";
 const SITES_KEY = "detox_blocked_sites";
 const END_TIME_KEY = "detox_end_time";
 const STATS_KEY = "screen_time_stats";
+const DISTRACTION_KEY = "detox_distraction_settings";
+
+export interface DistractionSettings {
+  ytShortsBlock: boolean;
+  ytFeedBlock: boolean;
+  ytCommentsBlock: boolean;
+  igReelsBlock: boolean;
+  igExploreBlock: boolean;
+  igFeedBlock: boolean;
+  fbReelsBlock: boolean;
+  fbFeedBlock: boolean;
+  ttFeedBlock: boolean;
+  xFeedBlock: boolean;
+  xExploreBlock: boolean;
+}
+
+export const DEFAULT_DISTRACTION_SETTINGS: DistractionSettings = {
+  ytShortsBlock: true,
+  ytFeedBlock: true,
+  ytCommentsBlock: false,
+  igReelsBlock: true,
+  igExploreBlock: false,
+  igFeedBlock: false,
+  fbReelsBlock: true,
+  fbFeedBlock: false,
+  ttFeedBlock: true,
+  xFeedBlock: false,
+  xExploreBlock: false,
+};
 
 interface DetoxState {
   enabled: boolean;
@@ -20,14 +49,19 @@ interface DetoxState {
   endTime: number;
   setEndTime: (t: number) => void;
   screenTimeStats: Record<string, number>;
+  distractionSettings: DistractionSettings;
+  setDistractionSettings: (
+    settings: Partial<DistractionSettings> | ((prev: DistractionSettings) => DistractionSettings),
+  ) => void;
   loadConfig: () => Promise<void>;
   loadScreenTimeStats: () => Promise<void>;
   saveBlockedSites: (sites: string[]) => void;
+  saveDistractionSettings: (settings: DistractionSettings) => void;
   enableDetox: (sites: string[], duration: number) => void;
   disableDetox: () => void;
 }
 
-export const useDetoxState = create<DetoxState>()((set) => ({
+export const useDetoxState = create<DetoxState>()((set, get) => ({
   enabled: false,
   setEnabled: (v) => set({ enabled: v }),
   blockedSites: [],
@@ -39,21 +73,35 @@ export const useDetoxState = create<DetoxState>()((set) => ({
   endTime: 0,
   setEndTime: (t) => set({ endTime: t }),
   screenTimeStats: {},
+  distractionSettings: DEFAULT_DISTRACTION_SETTINGS,
+  setDistractionSettings: (updater) =>
+    set((s) => {
+      const updated =
+        typeof updater === "function"
+          ? updater(s.distractionSettings)
+          : { ...s.distractionSettings, ...updater };
+      get().saveDistractionSettings(updated);
+      return { distractionSettings: updated };
+    }),
 
   loadConfig: async () => {
     const res = await new Promise<{
       detox_enabled?: boolean;
       detox_blocked_sites?: string[];
       detox_end_time?: number;
+      detox_distraction_settings?: DistractionSettings;
     }>((resolve) =>
       chrome.storage.local.get(
-        [ENABLED_KEY, SITES_KEY, END_TIME_KEY],
+        [ENABLED_KEY, SITES_KEY, END_TIME_KEY, DISTRACTION_KEY],
         (r) => resolve(r),
       ),
     );
     const isEnabled = res.detox_enabled || false;
     const sites = res.detox_blocked_sites || [];
     const end = res.detox_end_time || 0;
+    const distraction = res.detox_distraction_settings
+      ? { ...DEFAULT_DISTRACTION_SETTINGS, ...res.detox_distraction_settings }
+      : DEFAULT_DISTRACTION_SETTINGS;
 
     if (isEnabled && end !== -1 && end <= Date.now()) {
       // Time expired, disable
@@ -61,9 +109,9 @@ export const useDetoxState = create<DetoxState>()((set) => ({
         [ENABLED_KEY]: false,
         [END_TIME_KEY]: 0,
       });
-      set({ enabled: false, blockedSites: sites, endTime: 0 });
+      set({ enabled: false, blockedSites: sites, endTime: 0, distractionSettings: distraction });
     } else {
-      set({ enabled: isEnabled, blockedSites: sites, endTime: end });
+      set({ enabled: isEnabled, blockedSites: sites, endTime: end, distractionSettings: distraction });
     }
   },
 
@@ -78,6 +126,12 @@ export const useDetoxState = create<DetoxState>()((set) => ({
 
   saveBlockedSites: (sites) => {
     chrome.storage.local.set({ [SITES_KEY]: sites });
+    scheduleCloudBackup();
+  },
+
+  saveDistractionSettings: (settings) => {
+    chrome.storage.local.set({ [DISTRACTION_KEY]: settings });
+    chrome.storage.sync.set({ [DISTRACTION_KEY]: settings });
     scheduleCloudBackup();
   },
 

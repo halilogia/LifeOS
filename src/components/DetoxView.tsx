@@ -3,6 +3,7 @@ import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { DetoxUsageCard } from "@/components/detox/DetoxUsageCard.js";
 import { DetoxStatusCard } from "@/components/detox/DetoxStatusCard.js";
+import { DetoxDistractionCard } from "@/components/detox/DetoxDistractionCard.js";
 import { useDetox } from "@/presentation/hooks/useDetox.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
 
@@ -39,6 +40,8 @@ export function DetoxView({ lang }: DetoxViewProps) {
     endTime,
     setEndTime,
     screenTimeStats,
+    distractionSettings,
+    setDistractionSettings,
     saveBlockedSites,
     enableDetox,
     disableDetox,
@@ -184,7 +187,7 @@ export function DetoxView({ lang }: DetoxViewProps) {
   );
   return (
     <div id="detox-view" className="view-content active">
-      <div className="detox-container">
+      <div className="detox-container" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <DetoxUsageCard
           lang={lang}
           totalScreenTimeSeconds={totalScreenTimeSeconds}
@@ -193,6 +196,13 @@ export function DetoxView({ lang }: DetoxViewProps) {
           showAllStats={showAllStats}
           formatDurationText={formatDurationText}
           onToggleShowAllStats={() => setShowAllStats(!showAllStats)}
+        />
+
+        <DetoxDistractionCard
+          lang={lang}
+          t={t}
+          distractionSettings={distractionSettings}
+          onUpdateDistractionSettings={setDistractionSettings}
         />
 
         <DetoxStatusCard
