@@ -166,20 +166,26 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
 
   // Twitter / X
   if (hostname.includes("x.com") || hostname.includes("twitter.com")) {
-    if (
-      settings.xFeedBlock &&
-      (window.location.pathname.startsWith("/home") ||
-        window.location.pathname === "/" ||
-        window.location.pathname.startsWith("/i/timeline"))
-    ) {
+    if (settings.xFeedBlock) {
       rules.push(`
+        article[data-testid='tweet'],
+        div[data-testid='cellInnerSequence'],
         div[data-testid='primaryColumn'] section[role='region'],
-        div[data-testid='primaryColumn'] div[data-testid='cellInnerSequence'],
+        div[data-testid='primaryColumn'] div[aria-label*='Home Timeline' i],
+        div[data-testid='primaryColumn'] div[aria-label*='Timeline' i],
+        main[role='main'] section[role='region'],
         div[aria-label*='timeline' i],
         div[aria-label*='zaman akışı' i],
         div[aria-label*='akış' i],
-        main[role='main'] section[role='region'] {
+        div[data-testid='primaryColumn'] > div > div > div > section,
+        section[role='region']:has(article[data-testid='tweet']) {
           display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          height: 0 !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+          pointer-events: none !important;
         }
       `);
     }
@@ -288,8 +294,7 @@ function injectTwitterQuoteBanner(): void {
   const hostname = window.location.hostname;
   if (
     (!hostname.includes("x.com") && !hostname.includes("twitter.com")) ||
-    !currentSettings.xFeedBlock ||
-    (!window.location.pathname.startsWith("/home") && window.location.pathname !== "/")
+    !currentSettings.xFeedBlock
   ) {
     const existing = document.getElementById("lifeos-x-quote-card");
     if (existing && existing.parentNode) {
@@ -355,6 +360,26 @@ function injectTwitterQuoteBanner(): void {
   `;
 
   primaryColumn.prepend(card);
+}
+
+function cleanTwitterTimeline(): void {
+  const hostname = window.location.hostname;
+  if (!hostname.includes("x.com") && !hostname.includes("twitter.com")) {
+    return;
+  }
+  if (!currentSettings.xFeedBlock) {
+    return;
+  }
+
+  // Universal DOM query for tweet articles across the entire document
+  const tweets = document.querySelectorAll(
+    "article[data-testid='tweet'], div[data-testid='cellInnerSequence']",
+  );
+  tweets.forEach((el) => {
+    if (el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
+  });
 }
 
 function cardEscapeHtml(str: string): string {
@@ -425,6 +450,15 @@ export function initDistractionCleaner(): void {
 
   loadAndApplySettings();
 
+  // MutationObserver for real-time instant DOM cleaning on React render cycles
+  const observer = new MutationObserver(() => {
+    cleanTwitterTimeline();
+  });
+  observer.observe(document.body || document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+
   // Periodic DOM check for SPA navigation & dynamically rendered YouTube/X Home Grids
   let lastUrl = location.href;
   setInterval(() => {
@@ -435,5 +469,6 @@ export function initDistractionCleaner(): void {
     }
     injectYouTubeQuoteBanner();
     injectTwitterQuoteBanner();
-  }, 1000);
+    cleanTwitterTimeline();
+  }, 300);
 }
