@@ -13,7 +13,10 @@ export function useDetox() {
   const endTime = useDetoxState((s) => s.endTime);
   const setEndTime = useDetoxState((s) => s.setEndTime);
   const screenTimeStats = useDetoxState((s) => s.screenTimeStats);
+  const distractionSettings = useDetoxState((s) => s.distractionSettings);
+  const setDistractionSettings = useDetoxState((s) => s.setDistractionSettings);
   const saveBlockedSites = useDetoxState((s) => s.saveBlockedSites);
+  const saveDistractionSettings = useDetoxState((s) => s.saveDistractionSettings);
   const enableDetox = useDetoxState((s) => s.enableDetox);
   const disableDetox = useDetoxState((s) => s.disableDetox);
 
@@ -34,7 +37,10 @@ export function useDetox() {
     endTime,
     setEndTime,
     screenTimeStats,
+    distractionSettings,
+    setDistractionSettings,
     saveBlockedSites,
+    saveDistractionSettings,
     enableDetox,
     disableDetox,
   };

@@ -21,7 +21,13 @@ function getOrCreateContentAudioContext(): AudioContext | null {
     contentGainNode.connect(contentAudioCtx.destination);
   }
   if (contentAudioCtx && contentAudioCtx.state === "suspended") {
-    contentAudioCtx.resume().catch(() => {});
+    const resumeOnGesture = () => {
+      if (contentAudioCtx && contentAudioCtx.state === "suspended") {
+        contentAudioCtx.resume().catch(() => {});
+      }
+    };
+    window.addEventListener("pointerdown", resumeOnGesture, { once: true });
+    window.addEventListener("keydown", resumeOnGesture, { once: true });
   }
   return contentAudioCtx;
 }

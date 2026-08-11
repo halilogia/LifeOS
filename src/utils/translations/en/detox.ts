@@ -38,4 +38,18 @@ export const detox = {
   detox_motiv_pomodoro: "Complete $count Focused Pomodoro Sessions",
   detox_motiv_vocabulary: "Memorize $count Vocabulary / Flashcards",
   detox_motiv_exercise: "Walk / Exercise $count km",
+  detox_distraction_title: "Social Media Distraction-Free & Anti-Doomscrolling",
+  detox_distraction_desc:
+    "Boost your focus by hiding Shorts, Reels, and endless feeds.",
+  detox_yt_shorts: "Hide Shorts Button & Shelves",
+  detox_yt_feed: "Hide Home Feed (Show Quote Card)",
+  detox_yt_comments: "Hide Comments Section",
+  detox_ig_reels: "Hide Reels Tab & Feed",
+  detox_ig_explore: "Hide Explore Tab",
+  detox_ig_feed: "Hide Home Feed",
+  detox_fb_reels: "Hide Reels & Short Videos",
+  detox_fb_feed: "Hide Home Feed",
+  detox_tt_feed: "Block Feed / Scrolling",
+  detox_x_feed: "Hide Home Timeline Feed",
+  detox_x_explore: "Hide Explore & Trending Sidebar",
 };
