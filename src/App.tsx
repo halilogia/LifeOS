@@ -6,6 +6,7 @@ import { useSettingsStore } from "@/presentation/store/settingsStore.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useTodosStore } from "@/presentation/store/todosStore.js";
 import { useSyncStore } from "@/presentation/store/syncStore.js";
+import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 
 import { Sidebar } from "@/components/Sidebar.js";
 import { ViewRouter } from "@/components/ViewRouter.js";
@@ -60,6 +61,7 @@ export function App() {
     void (async () => {
       await s.loadSettings();
       await sync.loadSyncSettings();
+      await useSidebarUsageStore.getState().load();
       await ui.loadSidebarOrder();
       setGoogleUserEmail(useUIStore.getState().googleUserEmail);
       await todos.initTodos();

@@ -4,6 +4,7 @@ import { getTranslation } from "@/utils/i18n.js";
 import { SidebarNavItem } from "./sidebar/SidebarNavItem.js";
 import { SidebarIcon } from "./sidebar/SidebarIcons.js";
 import { useSidebarOrder } from "@/presentation/hooks/useSidebarOrder.js";
+import { useUIStore } from "@/presentation/store/uiStore.js";
 
 interface SidebarProps {
   lang: Language;
@@ -85,6 +86,22 @@ export function Sidebar({
     saveOrder(nextOrder);
     if (onOrderChange) {
       onOrderChange(nextOrder);
+    }
+
+    // Drag-drop = manuel müdahale → auto-sort kapatılır (kullanıcı isteği).
+    // Aynı render tick içinde sıralamayı yeniden yazma (suppress flag).
+    const ui = useUIStore.getState();
+    if (ui.autoSortEnabled) {
+      void ui.setAutoSortEnabled(false);
+      ui.setAlertDialog({
+        isOpen: true,
+        message:
+          (getTranslation(lang).settings_sidebar_drag_disabled_auto_sort as string) ||
+          "Otomatik sıralama kapatıldı — manuel sıralama aktif.",
+        onConfirm: () => {
+          ui.setAlertDialog({ isOpen: false, message: "" });
+        },
+      });
     }
   };
 

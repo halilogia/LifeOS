@@ -9,6 +9,7 @@ import { useSettingsStore } from "@/presentation/store/settingsStore.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useSyncStore } from "@/presentation/store/syncStore.js";
 import { useTodosStore } from "@/presentation/store/todosStore.js";
+import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 import { kpssService } from "@/services/kpss/kpssService.js";
 
 export interface SettingsDrawerProps {
@@ -71,6 +72,22 @@ export function SettingsDrawer({
   const onToggleAutoGroupTabs = useSettingsStore(
     (s) => s.handleToggleAutoGroupTabs,
   );
+  // Sidebar auto-sort
+  const sidebarAutoSortEnabled = useUIStore((s) => s.autoSortEnabled);
+  const setAutoSortEnabled = useUIStore((s) => s.setAutoSortEnabled);
+  const onToggleSidebarAutoSort = () => {
+    void setAutoSortEnabled(!sidebarAutoSortEnabled);
+  };
+  const handleResetSidebarUsage = useSidebarUsageStore((s) => s.reset);
+  const onResetSidebarUsage = async () => {
+    await handleResetSidebarUsage();
+    // Reset sonrası sidebar'ı varsayılana döndür
+    const ui = useUIStore.getState();
+    ui.applySortedOrder();
+    if (onNotify) {
+      onNotify(t.settings_sidebar_reset_done || "Kullanım istatistikleri temizlendi.");
+    }
+  };
   const aiApiKey = useSettingsStore((s) => s.aiApiKey);
   const aiModel = useSettingsStore((s) => s.aiModel);
   const aiEndpoint = useSettingsStore((s) => s.aiEndpoint);
@@ -210,6 +227,9 @@ export function SettingsDrawer({
             onToggleTelegramBridge={onToggleTelegramBridge}
             autoGroupTabsEnabled={autoGroupTabsEnabled}
             onToggleAutoGroupTabs={onToggleAutoGroupTabs}
+            sidebarAutoSortEnabled={sidebarAutoSortEnabled}
+            onToggleSidebarAutoSort={onToggleSidebarAutoSort}
+            onResetSidebarUsage={onResetSidebarUsage}
             onNotify={onNotify}
           />
         )}

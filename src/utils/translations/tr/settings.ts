@@ -80,4 +80,13 @@ export const settings = {
   settings_shortcut_default: "Varsayılan: Ctrl + Shift + E",
   settings_shortcut_configure: "Kısayolu Değiştir",
   settings_language: "Dil",
+  settings_sidebar_auto_sort: "Sidebar'ı Kullanıma Göre Otomatik Sırala",
+  settings_sidebar_auto_sort_desc:
+    "Sidebar öğelerini kullanım sıklığına göre otomatik sırala (free-games ve ai-chat üstte sabit kalır).",
+  settings_sidebar_drag_disabled_auto_sort:
+    "Otomatik sıralama kapatıldı — manuel sıralama aktif.",
+  settings_sidebar_reset_usage: "Kullanım İstatistiklerini Sıfırla",
+  settings_sidebar_reset_usage_desc:
+    "Tüm view ziyaret sayaçlarını temizler. Sidebar varsayılan sıraya döner.",
+  settings_sidebar_reset_done: "Kullanım istatistikleri temizlendi.",
 };
