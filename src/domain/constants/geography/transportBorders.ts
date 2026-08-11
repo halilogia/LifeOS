@@ -1,0 +1,95 @@
+import type { GeoPin } from "./types.js";
+
+export const TURKEY_TRANSPORT_BORDERS: GeoPin[] = [
+  {
+    name: "Kapıkule Sınır Kapısı (Bulgaristan)",
+    city: "Edirne",
+    x: 80.0,
+    y: 20.0,
+    description: "Türkiye'nin Avrupa'ya açılan en işlek ve en büyük karayolu & demiryolu sınır kapısıdır.",
+    examTip: "Türkiye'nin dış ticaret hacmi en yüksek sınır kapısı Kapıkule'dir.",
+  },
+  {
+    name: "Sarp Sınır Kapısı (Gürcistan)",
+    city: "Artvin (Hopa)",
+    x: 830.0,
+    y: 50.0,
+    description: "Gürcistan ve Kafkaslar'a açılan kimlikle geçiş yapılabilen yoğun sınır kapımızdır.",
+    examTip: "Karadeniz Sahil Yolu'nun bitiş noktası ve Gürcistan'a açılan kapımızdır.",
+  },
+  {
+    name: "Habur Sınır Kapısı (Irak)",
+    city: "Şırnak (Silopi)",
+    x: 890.0,
+    y: 290.0,
+    description: "Ortadoğu ve Irak'a açılan en önemli karayolu transit sınır kapımızdır.",
+    examTip: "Güneydoğu Anadolu'nun dış ticaretindeki en kilit sınır kapısı Habur'dur.",
+  },
+  {
+    name: "Dilucu Sınır Kapısı (Nahlçivan - Azerbaycan)",
+    city: "Iğdır",
+    x: 960.0,
+    y: 110.0,
+    description: "Türkiye'nin Türk Dünyası ve Nahçıvan Özerk Cumhuriyeti ile tek doğrudan kara sınır kapısıdır.",
+    examTip: "Hasret Kapısı olarak da bilinen tek Nahçıvan bağlantımızdır.",
+  },
+  {
+    name: "İpsala Sınır Kapısı (Yunanistan)",
+    city: "Edirne",
+    x: 75.0,
+    y: 45.0,
+    description: "Meriç nehri üzerindeki Yunanistan'a açılan en büyük karayolu sınır kapısıdır.",
+    examTip: "Pazarkule ile birlikte Yunanistan sınır kapılarımızdandır.",
+  },
+  {
+    name: "Gürbulak Sınır Kapısı (İran)",
+    city: "Ağrı (Doğubayazıt)",
+    x: 930.0,
+    y: 140.0,
+    description: "İran ile en eski ve en büyük karayolu transit geçiş kapımızdır (Tarihi İpek Yolu).",
+    examTip: "Kapıköy (Van) ise İran ile demiryolu bağlantısı olan sınır kapımızdır.",
+  },
+  {
+    name: "Demiryolu Bağlantısı Olmayan İller (Doğu Karadeniz)",
+    city: "Trabzon / Rize / Artvin",
+    x: 750.0,
+    y: 65.0,
+    description: "Engebeli arazi yapısı nedeniyle Doğu Karadeniz illerinin (Trabzon, Rize, Giresun, Ordu) demiryolu bağlantısı YOKTUR.",
+    examTip: "KPSS Klasik Soru: Haritada verilen limanlardan hangisinin demiryolu bağlantısı yoktur? (Cevap: Trabzon/Giresun/Rize).",
+  },
+  {
+    name: "Demiryolu Bağlantısı Olmayan Antalya Yöresi",
+    city: "Antalya / Muğla",
+    x: 210.0,
+    y: 310.0,
+    description: "Toros Dağları engeli nedeniyle Antalya ve Muğla (Menteşe) yörelerimizin demiryolu ağı YOKTUR.",
+    examTip: "Turizm ve tarım merkezi olmasına rağmen Antalya limanının hinterland demiryolu yoktur.",
+  },
+];
+
+export const TURKEY_INDUSTRY: GeoPin[] = [
+  {
+    name: "Ereğli & Karabük Demir-Çelik Sanayi",
+    city: "Zonguldak / Karabük",
+    x: 330.0,
+    y: 55.0,
+    description: "Taşkömürüne (enerji kaynağına) yakınlık sebebiyle kurulan ağır demir-çelik sanayi tesisleridir.",
+    examTip: "Maden hammaddesi dışarıdan gelir (Divriği), Enerjiye (taşkömürü) yakınlık esastır.",
+  },
+  {
+    name: "İskenderun Demir-Çelik Sanayi",
+    city: "Hatay (İskenderun)",
+    x: 520.0,
+    y: 360.0,
+    description: "Türkiye'nin en büyük demir-çelik fabrikasıdır. Liman ve ulaşım (pazar) kolaylığı nedeniyle buraya kurulmuştur.",
+    examTip: "Hammadde veya enerji yakınlığı değil, LİMAN VE ULAŞIM kolaylığı esas faktördür.",
+  },
+  {
+    name: "İzmit Kırıkkale Batman İzmir Rafinerileri",
+    city: "Kocaeli (İPRAŞ) / Kırıkkale",
+    x: 210.0,
+    y: 75.0,
+    description: "Türkiye'deki petrol rafinerileridir. Batman hammaddeye; İzmit, İzmir, Kırıkkale ulaşım/pazara yakındır.",
+    examTip: "Hammaddeye yakın TEK rafinerimiz Batman Rafinerisi'dir.",
+  },
+];

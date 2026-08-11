@@ -50,7 +50,9 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
     // Çakışan/yakın olan diğer pin sayılarını tespit edelim
     const neighbors: number[] = [];
     for (let j = 0; j < events.length; j++) {
-      if (i === j) continue;
+      if (i === j) {
+        continue;
+      }
       const dist = Math.hypot(coordsList[i].x - coordsList[j].x, coordsList[i].y - coordsList[j].y);
       if (dist < 80) {
         neighbors.push(j);
