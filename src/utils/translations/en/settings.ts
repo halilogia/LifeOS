@@ -90,4 +90,12 @@ export const settings = {
   settings_sidebar_reset_usage_desc:
     "Clears all view visit counts. Sidebar will return to default order.",
   settings_sidebar_reset_done: "Usage statistics cleared.",
+  settings_cloud_inspector_title: "Cloud Data Inspector",
+  settings_cloud_inspector_empty: "No sync data found or sync is not enabled.",
+  settings_cloud_inspector_count: "{count} keys synced to cloud",
+  settings_cloud_push_to_sync: "Push Local Data to Sync",
+  settings_cloud_push_done: "Local data pushed to sync.",
+  settings_cloud_sync_section: "Chrome Sync (Settings)",
+  settings_cloud_drive_section: "Google Drive Backups",
+  settings_cloud_drive_empty: "No Drive backup yet.",
 };
