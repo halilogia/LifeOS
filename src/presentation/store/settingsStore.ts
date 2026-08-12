@@ -3,7 +3,6 @@
  * Zustand singleton — global app settings (language, sidebar, notifications, AI config,
  * KPSS goals, detox limits). Persists to chrome.storage.local via settings use cases or
  * direct syncSet where the hook previously used raw local storage.
- * Hook file stays as a facade; consumer components are untouched.
  *
  * NOTE: some settings (AI provider/config, KPSS goals, detox, autoGroupTabs) were
  * persisted directly under flat local keys (aiProvider, geminiApiKey, ...) by the old
@@ -15,6 +14,7 @@ import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageSettingsRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSettingsRepository.js";
 import { UpdateSettingsUseCase } from "@/application/use-cases/settings/UpdateSettingsUseCase.js";
 import { scheduleCloudBackup, runCloudBackup } from "@/utils/cloudBackup.js";
+import { useDetoxState } from "@/presentation/store/detoxStore.js";
 
 function syncGet<T>(keys: string[]): Promise<Record<string, T>> {
   return new Promise((resolve) => {
@@ -160,7 +160,8 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
       aiApiKey: ai.geminiApiKey || "",
       aiModel: ai.aiModel || "free",
       aiEndpoint: ai.aiEndpoint || "http://localhost:20128/v1",
-      aiShowThinking: (ai.aiShowThinking as unknown as boolean | undefined) !== false,
+      aiShowThinking:
+        (ai.aiShowThinking as unknown as boolean | undefined) !== false,
     });
 
     const kpss = await syncGet<unknown>([
@@ -179,7 +180,8 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
     const autoGroup = await syncGet<boolean>(["autoGroupTabs"]);
     set({
-      autoGroupTabsEnabled: (autoGroup.autoGroupTabs as boolean | undefined) !== false,
+      autoGroupTabsEnabled:
+        (autoGroup.autoGroupTabs as boolean | undefined) !== false,
     });
   },
 
@@ -213,10 +215,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   handleToggleUniversalInfoBox: async () => {
     const nextVal = !get().universalInfoBoxEnabled;
-    await settingsUC.setUniversalInfoBox(
-      nextVal,
-      get().universalInfoBoxHotkey,
-    );
+    await settingsUC.setUniversalInfoBox(nextVal, get().universalInfoBoxHotkey);
     set({ universalInfoBoxEnabled: nextVal });
   },
 
@@ -235,6 +234,12 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
     set({ telegramBridgeEnabled: nextVal });
   },
 
+  handleToggleAutoGroupTabs: async () => {
+    const nextVal = !get().autoGroupTabsEnabled;
+    set({ autoGroupTabsEnabled: nextVal });
+    await syncSet({ autoGroupTabs: nextVal });
+  },
+
   handleClearAllData: async () => {
     await settingsUC.clearAllData(get().lang as Language);
     // Drive'daki backup da temizlensin — yoksa restore eski veriyi geri getirir.
@@ -244,16 +249,21 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   handleUpdateAIConfig: async (provider, key, model, endpoint) => {
     const epVal = endpoint || "";
-    set({ aiProvider: provider, aiApiKey: key, aiModel: model, aiEndpoint: epVal });
-    const payload = {
+    set({
+      aiProvider: provider,
+      aiApiKey: key,
+      aiModel: model,
+      aiEndpoint: epVal,
+    });
+    // syncSet zaten chrome.storage.local'a yazar + cloudBackup tetikler.
+    // Ayrıca düz chrome.storage.local.set ÇİFT YAZMA olurdu — kaldırıldı.
+    await syncSet({
       aiProvider: provider,
       geminiApiKey: key,
       aiApiKey: key,
       aiModel: model,
       aiEndpoint: epVal,
-    };
-    await syncSet(payload);
-    void chrome.storage.local.set(payload);
+    });
   },
 
   handleUpdateAIShowThinking: async (val) => {
@@ -284,13 +294,8 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
 
   handleDetoxLimitsChange: async (limits) => {
     set({ detoxLimits: limits });
-    await syncSet({ detoxLimits: limits, detox_limits: limits });
-  },
-
-  handleToggleAutoGroupTabs: async () => {
-    const nextVal = !get().autoGroupTabsEnabled;
-    set({ autoGroupTabsEnabled: nextVal });
-    await syncSet({ autoGroupTabs: nextVal });
+    // detoxStore repository mirror both local + sync (cross-PC safe).
+    useDetoxState.getState().saveLimits(limits);
   },
 
   // --- Raw setters ---
@@ -301,8 +306,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
   setCalendarNotificationsEnabledState: (v) =>
     set({ calendarNotificationsEnabled: v }),
   setPomoBlockEnabledState: (v) => set({ pomoBlockEnabled: v }),
-  setUniversalInfoBoxEnabledState: (v) =>
-    set({ universalInfoBoxEnabled: v }),
+  setUniversalInfoBoxEnabledState: (v) => set({ universalInfoBoxEnabled: v }),
   setUniversalInfoBoxHotkeyState: (v) => set({ universalInfoBoxHotkey: v }),
   setWhatsappBridgeEnabledState: (v) => set({ whatsappBridgeEnabled: v }),
   setTelegramBridgeEnabledState: (v) => set({ telegramBridgeEnabled: v }),
