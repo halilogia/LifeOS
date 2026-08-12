@@ -75,7 +75,7 @@ export const OSMANLI_GERILEME_UNIT: HistoryUnit = {
       year: 1792,
       title: "Yaş Antlaşması",
       city: "Yaş (Romanya)",
-      desc: "Kırım'ın Rusya'ya ait olduğu resmen kabul edildi; Gerileme dönemi bitti, Dağılma dönemi başladı.",
+      desc: "Kırım'ın Rusya'ya ait olduğu kesinleşti. Gerileme dönemi resmen bitti, Dağılma dönemi başladı.",
       tag: "Dağılma Başlangıcı",
       territory: ["crimea"],
       x: 510.0,

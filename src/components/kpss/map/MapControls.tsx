@@ -10,6 +10,10 @@ interface MapControlsProps {
   onReset: () => void;
   onPlayToggle: () => void;
   onToggleFullscreen: () => void;
+  /** "study" | "quiz" — quiz modunda sadece skor + fullscreen butonu görünür */
+  viewMode?: "study" | "quiz";
+  /** Quiz skoru (sadece viewMode="quiz" iken kullanılır) */
+  quizScore?: number;
 }
 
 export function MapControls({
@@ -24,7 +28,11 @@ export function MapControls({
   onReset,
   onPlayToggle,
   onToggleFullscreen,
+  viewMode = "study",
+  quizScore = 0,
 }: MapControlsProps) {
+  const isQuiz = viewMode === "quiz";
+
   return (
     <div
       style={{
@@ -55,109 +63,60 @@ export function MapControls({
             `${total} ${t.kpss_map_subtitle || "konum — sırasıyla oynat"}`}
         </p>
       </div>
+
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <span
-          style={{
-            fontSize: "0.78rem",
-            color: "#94a3b8",
-            background: "rgba(255,255,255,0.06)",
-            padding: "6px 12px",
-            borderRadius: "20px",
-            fontWeight: 700,
-            fontVariantNumeric: "tabular-nums",
-          }}
-        >
-          {revealedCount} / {total}
-        </span>
+        {/* Study modu: ilerleme sayacı + playback kontrolleri */}
+        {!isQuiz && (
+          <>
+            <span
+              style={{
+                fontSize: "0.78rem",
+                color: "#94a3b8",
+                background: "rgba(255,255,255,0.06)",
+                padding: "6px 12px",
+                borderRadius: "20px",
+                fontWeight: 700,
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {revealedCount} / {total}
+            </span>
 
-        {/* İleri/Geri Sarma */}
-        <button
-          type="button"
-          onClick={() => onStep(-1)}
-          disabled={revealedCount <= 0}
-          title={t.kpss_map_prev || "Geri"}
-          style={{
-            background: "transparent",
-            border: "1px solid rgba(255,255,255,0.15)",
-            color: revealedCount <= 0 ? "#475569" : "#94a3b8",
-            borderRadius: "8px",
-            padding: "7px 12px",
-            fontSize: "0.9rem",
-            fontWeight: 700,
-            cursor: revealedCount <= 0 ? "not-allowed" : "pointer",
-            opacity: revealedCount <= 0 ? 0.5 : 1,
-          }}
-        >
-          ‹
-        </button>
-        <button
-          type="button"
-          onClick={() => onStep(1)}
-          disabled={revealedCount >= total}
-          title={t.kpss_map_next || "İleri"}
-          style={{
-            background: "transparent",
-            border: "1px solid rgba(255,255,255,0.15)",
-            color: revealedCount >= total ? "#475569" : "#94a3b8",
-            borderRadius: "8px",
-            padding: "7px 12px",
-            fontSize: "0.9rem",
-            fontWeight: 700,
-            cursor: revealedCount >= total ? "not-allowed" : "pointer",
-            opacity: revealedCount >= total ? 0.5 : 1,
-          }}
-        >
-          ›
-        </button>
+            <button type="button" onClick={() => onStep(-1)} disabled={revealedCount <= 0}
+              style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.15)", color: revealedCount <= 0 ? "#475569" : "#94a3b8", borderRadius:"8px", padding:"7px 12px", fontSize:"0.9rem", fontWeight:700, cursor: revealedCount <= 0 ? "not-allowed" : "pointer", opacity: revealedCount <= 0 ? 0.5 : 1 }}>
+              ‹
+            </button>
+            <button type="button" onClick={() => onStep(1)} disabled={revealedCount >= total}
+              style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.15)", color: revealedCount >= total ? "#475569" : "#94a3b8", borderRadius:"8px", padding:"7px 12px", fontSize:"0.9rem", fontWeight:700, cursor: revealedCount >= total ? "not-allowed" : "pointer", opacity: revealedCount >= total ? 0.5 : 1 }}>
+              ›
+            </button>
 
-        <button
-          type="button"
-          onClick={onReset}
-          style={{
-            background: "transparent",
-            border: "1px solid rgba(255,255,255,0.15)",
-            color: "#94a3b8",
-            borderRadius: "8px",
-            padding: "7px 14px",
-            fontSize: "0.78rem",
-            fontWeight: 700,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {t.kpss_map_reset || "Sıfırla"}
-        </button>
-        <button
-          type="button"
-          onClick={onPlayToggle}
-          style={{
-            background: playing
-              ? "rgba(220, 38, 38, 0.85)"
-              : "linear-gradient(135deg, #c8511f, #e6773f)",
-            border: "none",
-            color: "#fff8ef",
-            borderRadius: "8px",
-            padding: "7px 16px",
-            fontSize: "0.78rem",
-            fontWeight: 800,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {playing ? "⏸" : "▶"}{" "}
-          {playing ? t.kpss_map_stop || "Durdur" : t.kpss_map_play || "Oynat"}
-        </button>
+            <button type="button" onClick={onReset}
+              style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.15)", color:"#94a3b8", borderRadius:"8px", padding:"7px 14px", fontSize:"0.78rem", fontWeight:700, cursor:"pointer" }}>
+              {t.kpss_map_reset || "Sıfırla"}
+            </button>
+
+            <button type="button" onClick={onPlayToggle}
+              style={{ background: playing ? "rgba(220, 38, 38, 0.85)" : "linear-gradient(135deg, #c8511f, #e6773f)", border:"none", color:"#fff8ef", borderRadius:"8px", padding:"7px 16px", fontSize:"0.78rem", fontWeight:800, cursor:"pointer", display:"flex", alignItems:"center", gap:"6px" }}>
+              {playing ? "⏸" : "▶"} {playing ? t.kpss_map_stop || "Durdur" : t.kpss_map_play || "Oynat"}
+            </button>
+          </>
+        )}
+
+        {/* Quiz modu: Skor fullscreen'in solunda */}
+        {isQuiz && (
+          <span style={{ color: "#f4ead7", fontSize: "0.82rem", fontWeight: 700 }}>
+            {t.kpss_map_score || "Skor"}:{" "}
+            <span style={{ color: "#22c55e", fontWeight: 900 }}>{quizScore}</span>{" "}
+            / {total}
+          </span>
+        )}
+
+        {/* Fullscreen butonu — her iki modda da görünür */}
         <button
           type="button"
           onClick={onToggleFullscreen}
-          title={
-            isFullscreen
-              ? t.kpss_map_exit_fullscreen || "Tam Ekrandan Çık"
-              : t.kpss_map_fullscreen || "Tam Ekran"
-          }
+          title={isFullscreen ? t.kpss_map_exit_fullscreen || "Tam Ekrandan Çık" : t.kpss_map_fullscreen || "Tam Ekran"}
           style={{
             background: "transparent",
             border: "1px solid rgba(255,255,255,0.15)",
@@ -169,7 +128,7 @@ export function MapControls({
             cursor: "pointer",
           }}
         >
-          {isFullscreen ? "⤢" : "⤢"}
+          ⤢
         </button>
       </div>
     </div>

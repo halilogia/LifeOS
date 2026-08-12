@@ -199,10 +199,11 @@ export const useUIStore = create<UIState>()((set) => ({
 
   setAutoSortEnabled: async (enabled) => {
     set({ autoSortEnabled: enabled });
+    // Tek doğruluk kaynağı sidebarUsageStore (sidebarAutoSort key'ine persist eder)
+    await useSidebarUsageStore.getState().setAutoSort(enabled);
     // Açılınca anında yeniden sırala; kapanınca kullanıcının mevcut sırası korunur
     if (enabled) {
-      const ui = useUIStore.getState();
-      ui.applySortedOrder();
+      useUIStore.getState().applySortedOrder();
     }
   },
 
@@ -257,5 +258,10 @@ export const useUIStore = create<UIState>()((set) => ({
     } else {
       set({ activeView: "free-games" });
     }
+
+    // autoSortEnabled'i kalıcı kaynaktan (sidebarUsageStore) hidrasyonla yükle.
+    // Böylece refresh sonrası kullanıcının kapattığı auto-sort kapanık kalır.
+    const usage = useSidebarUsageStore.getState();
+    set({ autoSortEnabled: usage.autoSort });
   },
 }));

@@ -21,7 +21,14 @@ flowchart TB
             QuizIntroStep["KpssQuizIntroStep.tsx"]
             QuizQuestionsStep["KpssQuizQuestionsStep.tsx"]
             QuizResultStep["KpssQuizResultStep.tsx"]
-            QuizReviewModal["KpssQuizReviewModal.tsx (Pop-up Soru İnceleme)"]
+            QuizReviewModal["KpssQuizReviewModal.tsx"]
+        end
+        subgraph Bist["bist/ (BIST alt-hook'lar — God File Refactoring)"]
+            usePortfolio["usePortfolio.ts (portfolio CRUD + hesaplar)"]
+            useWatchlists["useWatchlists.ts (izleme listeleri)"]
+            useStockRules["useStockRules.ts (alarm kuralları)"]
+            useStockTrading["useStockTrading.ts (satış + nakit)"]
+            useBistQuotes["useBistQuotes.ts (canlı fiyat + polling)"]
         end
         useSettings
         useTodos
@@ -31,7 +38,7 @@ flowchart TB
         useKpssQuiz
         usePrayer
         usePomodoro
-        useBist
+        useBist["useBist.ts (kompozisyon tuvali → 5 alt-hook)"]
         useCalendar
         useFreeGames
         useEisenhower
@@ -58,6 +65,38 @@ flowchart TB
         rssService
     end
 
+    subgraph Utils["utils/ (Yardımcı araçlar)"]
+        subgraph Chart["kpssChart (KPSS grafik araçları)"]
+            kpssChartDrawer["kpssChartDrawer.ts (orkestratör)"]
+            kpssChartCalc["kpssChartCalculations.ts (net + hedef)"]
+            kpssChartBar["kpssChartRenderBar.ts (bar render)"]
+            kpssChartLine["kpssChartRenderLine.ts (line render)"]
+        end
+        i18n
+        logger
+    end
+
+    subgraph Store["presentation/store/ (Zustand)"]
+        subgraph Pomo["pomodoro/ (Slice Pattern)"]
+            timerSlice["timerSlice.ts (pomodoro timer)"]
+            stopwatchSlice["stopwatchSlice.ts"]
+            alarmSlice["alarmSlice.ts"]
+            zenSlice["zenSlice.ts (garden + history)"]
+            pomoNotify["pomodoroNotify.ts"]
+        end
+        pomodoroStore["pomodoroStore.ts (4-slice kompozisyon)"]
+    end
+
+    subgraph SPS["sidepanel/ (Web Copilot)"]
+        SidePanelApp["SidePanelApp.tsx (tuval)"]
+        useSidePanelChat["useSidePanelChat.ts (kompozisyon tuvali)"]
+        subgraph SPHooks["sidepanel alt-hook'lar (God File Refactoring)"]
+            useChatSession["useChatSession.ts (oturum yönetimi)"]
+            useVoiceInput["useVoiceInput.ts (ses tanıma)"]
+            useAgentBridge["useAgentBridge.ts (sayfa context + sekme)"]
+        end
+    end
+
     subgraph App["application/use-cases/ (İş kuralları)"]
         AddTodoUseCase
         ToggleTodoUseCase
@@ -68,7 +107,7 @@ flowchart TB
         entities["entities/ (Todo)"]
         services["services/ (KpssCalculator, SrsService)"]
         constants["constants/ (kpssCurriculum, kpssConstants)"]
-        repositories["repositories/ (Interfaces — ITodoRepository)"]
+        repositories["repositories/ (ITodoRepository, IUserSyncProfileRepository)"]
         value-objects["value-objects/ (Language, TodoStatus)"]
     end
 
@@ -81,8 +120,14 @@ flowchart TB
     subgraph Content["content/ (Content script'ler)"]
         infobox["infobox/ (universalInfoBox)"]
         detox["detox/ (detoxBlocker, SiteMatcher, BlockerUI)"]
+        subgraph Agent["agent/ (DOM Agent — God File Refactoring)"]
+            pageCtx["pageContextExtractor.ts (context tarama)"]
+            elemScan["elementScanner.ts (bounding box + overlay)"]
+            actionEx["actionExecutor.ts (click/type/scroll + init)"]
+            domBarrel["domAgentEngine.ts (barrel re-export)"]
+        end
         whatsapp["whatsapp/ (whatsappBridge)"]
-        quiz["quiz/ (quizPanel, QuizParser, QuizStorage, QuizRenderer — harici AI overlay)"]
+        quiz["quiz/ (quizPanel, QuizParser, QuizStorage, QuizRenderer)"]
     end
 
     subgraph Bg["background/ (Service worker)"]
@@ -98,7 +143,8 @@ flowchart TB
     Services --> Domain
     Domain -. "implements" .-> Infra
     Content --> Bg
-    Bg --> Services
+    SidePanelApp --> useSidePanelChat
+    useSidePanelChat --> SPHooks
 ```
 
 ---
@@ -107,33 +153,31 @@ flowchart TB
 
 | Klasör                                         | Sorumluluk                        | Ne konur                                                                                                                               | Asla konmaz                           |
 | ---------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `src/components/`                              | Saf UI görünümü (ViewRouter dinamik `lazy()` / `<Suspense>` ile 15 ikincil görünümü ihtiyaç anında yükler; `newtab.js` bundle boyutu 1MB'tan ~90KB'a düşürülmüştür) | View'lar + `<feature>/` alt bileşenleri                                                                                                                                | `chrome.storage`, `fetch`, iş mantığı |
-| `src/components/kpss/`                         | KPSS not stüdyosu UI'si           | wiki/, quiz/ bileşenleri; notlar chrome.storage'da tutulur, MD indirme var (Electron yok — MindVault Desktop ayrı proje) | —                                     |
+| `src/components/`                              | Saf UI görünümü                   | View'lar + `<feature>/` alt bileşenleri                                                                                                | `chrome.storage`, `fetch`, iş mantığı |
+| `src/components/kpss/`                         | KPSS not stüdyosu UI'si           | wiki/, quiz/ bileşenleri; notlar chrome.storage'da tutulur, MD indirme var                                                             | —                                     |
 | `src/components/<feature>/`                    | Feature'a özel UI parçaları       | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/...                                                                                | —                                     |
-| `src/presentation/hooks/`                      | State yönetimi, view-model        | useSettings, useTodos, usePopup, useUI                                                                                                 | DOM, fetch                            |
+| `src/components/rss/`                          | RSS görünüm alt bileşenleri       | RssFeedList.tsx, RssItemList.tsx                                                                                                       | State                                 |
+| `src/presentation/hooks/`                      | State yönetimi, view-model        | useSettings, useTodos, useBist + bist/ alt-hook'lar                                                                                    | DOM, fetch                            |
+| `src/presentation/hooks/bist/`                 | BIST alt-hook'ları (modüler)      | usePortfolio, useWatchlists, useStockRules, useStockTrading, useBistQuotes                                                              | JSX, direkt DOM                       |
 | `src/services/`                                | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpss/, stock/, errorReportService                                                        | JSX                                   |
 | `src/application/use-cases/`                   | Tek işlemli iş kuralları          | AddTodoUseCase, SyncGoogleTasksUseCase                                                                                                 | UI, storage detayı                    |
 | `src/application/ports/`                       | Dış dünya arayüz tanımları        | ITodoSyncPort, IDriveBackupPort                                                                                                        | —                                     |
 | `src/domain/entities/`                         | Çekirdek iş nesneleri             | Todo                                                                                                                                   | —                                     |
 | `src/domain/value-objects/`                    | Değer tipleri                     | Language, TodoStatus, RepeatType                                                                                                       | —                                     |
-| `src/domain/repositories/`                     | Depo arayüzleri (contract)        | ITodoRepository, IKpssRepository                                                                                                       | Implementasyon                        |
+| `src/domain/repositories/`                     | Depo arayüzleri (contract)        | ITodoRepository, IKpssRepository, IUserSyncProfileRepository                                                                           | Implementasyon                        |
 | `src/domain/services/`                         | Saf hesaplama servisleri          | KpssCalculatorService, SrsService, TaskService                                                                                         | chrome.*                              |
-| `src/domain/constants/`                        | Sabit veriler                     | sidebarConstants, kpssSrsDefaultCards, memoryConstants, kpssCurriculum, kpssConstants, kpssFlashcards, TurkeyGeographyData (geography/: coasts, karst, climateRain, population, developmentProjects, agriculture, livestock, mines, energy, transportBorders, tourismUnesco), TurkeyProvincePaths | —                                     |
-| `src/domain/data/`                             | Domain verisi                     | hifizData                                                                                                                              | —                                     |
-| `src/infrastructure/persistence/repositories/` | chrome.storage implementasyonları | ChromeStorage*Repository                                                                                                               | UI                                    |
-| `src/infrastructure/persistence/migrations/`   | Yerel→sync geçişi                 | LocalToSyncMigration                                                                                                                   | —                                     |
+| `src/domain/constants/`                        | Sabit veriler                     | kpssCurriculum, kpssConstants, TurkeyProvincePaths, history/ (kurtulusSavasiUnit — 21 adım)                                             | —                                     |
+| `src/infrastructure/persistence/repositories/` | chrome.storage implementasyonları | ChromeStorage*Repository (incl. ChromeStorageUserSyncProfileRepository)                                                                 | UI                                    |
 | `src/infrastructure/api/`                      | Google API client'ları            | GoogleTasksApi, GoogleDriveApi, GoogleAuthApi                                                                                          | —                                     |
-| `src/infrastructure/services/`                 | Altyapı servisleri                | PomodoroManagerService                                                                                                                 | —                                     |
+| `src/presentation/store/`                      | Zustand store'lar                 | pomodoroStore.ts (4-slice kompozisyon)                                                                                                 | JSX                                   |
+| `src/presentation/store/pomodoro/`             | Pomodoro slice'lar (Slice Pattern)| timerSlice, stopwatchSlice, alarmSlice, zenSlice, pomodoroNotify                                                                       | JSX, DOM                              |
 | `src/infrastructure/storage/`                  | Storage key sabitleri             | keys.ts                                                                                                                                | —                                     |
 | `src/background/`                              | Service worker                    | backgroundMain, handlers/                                                                                                              | DOM                                   |
-| `src/content/`                                 | Content script'ler                | infobox/, detox/, agent/, whatsapp/, telegram/, volume/, quiz/                                                                         | —                                     |
-| `src/utils/`                                   | Genel yardımcılar                 | i18n, logger, formatlayıcılar, sanitize (XSS önleme)                                                                                   | İş mantığı                            |
-| `src/utils/translations/`                      | UI metinleri (per-module)             | tr/ (index + 18 modül: core, kpss, stock, arcade, settings, notes, detox, ipo, willpower, aichat, hifiz, zen, agent, google, srs, pomo, free, uib) + en/ (aynı yapı) | —                                     |
+| `src/content/`                                 | Content script'ler                | infobox/, detox/, agent/ (pageContextExtractor, elementScanner, actionExecutor, domAgentEngine barrel), whatsapp/, quiz/                | —                                     |
+| `src/content/agent/`                           | DOM Agent (modüler)               | pageContextExtractor.ts (context), elementScanner.ts (overlay), actionExecutor.ts (click/type/scroll), domAgentEngine.ts (barrel)      | İş mantığı                            |
+| `src/utils/`                                   | Genel yardımcılar                 | i18n, logger, formatlayıcılar, sanitize, kpssChartDrawer + kpssChartCalculations + kpssChartRenderBar + kpssChartRenderLine              | İş mantığı                            |
 | `src/types/`                                   | Tip tanımları                     | types.ts, kpss.ts, stock.ts, bist.ts...                                                                                                | —                                     |
-| `src/services/kpss/prompts/`                  | AI soru ve kart üretme prompt şablonları | base-rules.md, srs-card.md, subject-tarih.md, subject-cografya.md, subject-matematik.md, subject-turkce.md, subject-vatandaslik.md | —                                     |
-| `src/services/kpss/data/`                       | KPSS sınav soru arşivi (lazy)    | exam20XX.json, osymHistoryQuestions.json, kpssDataRegistry.ts (dinamik import)                                                          | —                                     |
-| `src/offscreen/`                               | Offscreen doküman                 | offscreenAudio                                                                                                                         | —                                     |
-| `src/sidepanel/`                               | Side panel UI (Web Copilot)       | index, SidePanelApp (tuval ~90), useSidePanelChat (hook), SidePanelHeader/TabBar/Chips/Messages/InputBar (parçalar), ChatMessage (tip) | —                                     |
+| `src/sidepanel/`                               | Side panel UI (Web Copilot)       | SidePanelApp (tuval), useSidePanelChat (kompozisyon), useChatSession, useVoiceInput, useAgentBridge                                     | —                                     |
 | `src/css/`                                     | Stiller                           | popup.css + newtab/ feature CSS'leri                                                                                                   | —                                     |
 
 ---
@@ -150,34 +194,71 @@ Kullanıcı → ListView.tsx (UI)
         → chrome.storage.sync
 ```
 
-**Kural (AGENTS.md 6.2):** Veri akışı tek yönlüdür:
-`components/ → hooks/ → services/ → infrastructure/`
+**Sync profile örneği (prayerCity / willpowerStreak / detox):**
+
+```
+Kullanıcı → PrayerView.tsx (UI)
+  → usePrayer (store)
+    → IUserSyncProfileRepository (domain interface)
+      → ChromeStorageUserSyncProfileRepository (infrastructure)
+        → chrome.storage.sync
+```
+
+**BIST veri akışı (God File Refactoring):**
+
+```
+Kullanıcı → BistView.tsx (UI)
+  → useBist (tuval - 5 alt-hook)
+    → usePortfolio (portfolio CRUD + hesaplar)
+    → useWatchlists (izleme listeleri)
+    → useStockRules (alarm kuralları)
+    → useStockTrading (trade + nakit)
+    → useBistQuotes (canlı fiyat + polling)
+      → ChromeStorageStockRepository (infrastructure)
+        → chrome.storage.sync
+```
+
+**Pomodoro Slice Pattern örneği:**
+
+```
+Kullanıcı → PomodoroView.tsx (UI)
+  → usePomodoroState (Zustand store)
+    → timerSlice (pomodoro timer + mode)
+    → stopwatchSlice (kronometre)
+    → alarmSlice (alarm listesi)
+    → zenSlice (garden history + plant)
+      → PomodoroManagerService (infrastructure)
+        → chrome.storage.local
+```
+
+**Kural (AGENTS.md 6.2):** Veri akışı tek yönlüdür: `components/ → hooks/ → services/ → infrastructure/`
 Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 
 ---
 
 ## 4. Feature Haritası
 
-| View (component)      | Ana service                                                                | Storage    | Alt bileşenler                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| --------------------- | -------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ListView / KanbanView | todo repo (application/use-cases), TodoListItem, dateUtils                 | sync       | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| PomodoroView          | PomodoroManagerService, usePomodoro (hook)                                 | local      | pomodoro/ (11 — PomoTimerCard=tuval+PomodoroRing/PomodoroControls/PomodoroDurationEditor)                                                                                                                                                                                                                                                                                                                                                                                           |
-| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz (hook)            | sync+local | kpss/quiz/ (11 — KpssQuizResultStep=tuval+QuizResultHero/QuizReviewList/QuizResultActions) + kpss/wiki/ (10 — hiyerarşik parentId ağacı; KpssNotesDashboard=tuval + useKpssNotes hook + Header/Toolbar/HelpModal parçaları; KpssWikiSidebar=tuval+WikiSearchFilterBar/WikiNoteTree) + kpss/obsidian/ (2) + kpss/srs/ (1) + kpss/history/ (1 — HistoryMapView: kronolojik tarih olayları, pan/zoom, bayrak pinleri) + kpss/map/ (9 — TurkeyMapView=tuval + MapControls/MapCanvas/MapTopicSidebar + useMapQuiz + MapQuizCanvas + MapQuizTargetBar + MapQuizResultModal + mapAudioUtils) + kpss/ (19 — DailyStats=tuval+InputForm/ChartToolbar/SavedLogChips, AutoPlanner=tuval+PlannerHeader/TodayTopicsList/InfoModal, QuestionCanvas=tuval+kpssCanvasDrawers, NetEstimation=tuval+SubjectNetCard) |
-| HifizView             | hifizData (domain/data), useHifiz (hook)                                   | sync       | hifiz/ (4)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| SrsView               | kpssSrsService, SrsService, useSrs (hook)                                  | sync       | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| CalendarView          | todo repo, GoogleCalendarApi, useCalendar (hook)                           | sync       | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| PrayerView            | prayerService, usePrayer (hook)                                            | sync       | prayer/ (1) — PrayerCityForm                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Stock/BistView        | bistService, stockAiService, useBist (hook)                                | sync       | stock/ (30 — BistSearchBar=tuval+SearchResultCard/NoResultCard/searchIcons, PortfolioTable=tuval+PortfolioRow/portfolioIcons, CustomStockChart=tuval+stockChartDrawer/ChartHoverBar/ChartRangeSelector, StockWatchlistTable=tuval+WatchlistHeader/WatchlistRow, StockKapNewsModal=tuval+KapNewsListItem/kapNewsIcons) + stock/kesfet/ (4 — BistKesfetTab parçaları) + services/stock/ (3)                                                                                                                                                                                                                                                                                                                    |
-| FreeGamesView         | gamesService, useFreeGames (hook)                                          | local      | freegames/ (2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| NotesView             | zettelkastenEngine, useNotes (hook)                                        | sync       | notes/ (16 — NoteCard=tuval+NoteCardInlineEditor, NotesDayScorePanel (günlük pop-up'ında güne puan/mood tracker, dayScores), NoteEditorModal=tuval+Header/Body/WikiAutocomplete/BacklinksPanel, ZettelkastenGraphModal=tuval+GraphLegend/GraphSvgCanvas)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| AIChatView            | aiChatService (services/aichat/ — providers, systemPrompt, actionExecutor) | sync+local | components/aichat/ (10 — AiChatMessageItem=tuval+aiChatIcons/AiMessageSources/AiThinkingCard/AiMessageFooter, useAiChatMessages + localReplyBuilder) + services/aichat/ (4)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ArcadeView            | arcadeService (arcade/ — fileSystem, htmlRewriter, gameLauncher, types)    | local      | arcade/ (6 — ArcadeGameModal=tuval + ArcadeModalHeader/ArcadePlayTab/ArcadeDevTab)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| DetoxView             | detoxBlocker, distractionCleaner (content)                                 | sync+local | detox/ (5 — DetoxUsageCard, DetoxStatusCard, DetoxDistractionCard=tuval+DetoxPlatformSection, detoxBlocker, distractionCleaner) + content/detox/cleaners/ (4 — detoxTypes, detoxQuoteBanners, twitterCleaner, facebookCleaner — SSM container-hide tekniği, popstate+100ms polling, FB Reels JS tarayıcı) |
-| RssView               | rssService (fetch+parse), rssSyncHandler (30dk alarm)                        | sync+local | RssView.tsx (tuval — feed listesi + item listesi + okundu durumu) + services/rssService.ts + infrastructure/persistence/ChromeStorageRssRepository.ts + background/handlers/rssSyncHandler.ts (contextMenu "RSS Kaydet") |
-| WillpowerView         | useWillpower (hook)                                                        | sync       | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| EisenhowerView        | todo repo, useEisenhower (hook)                                            | sync       | eisenhower/ (2) + eisenhower.css                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| SettingsDrawer        | settings repos                                                             | sync       | settings/ (15 — KpssSettingsTab=tuval+TargetSettingsGroup/AutoTitleToggle/ResetSection, AppSettingsGroup=tuval+AppToggleRow/AppHotkeySelect/AppShortcutRow) + settings/ai/ (3 - AiSettingsTab parçaları)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| Sidebar               | useUI                                                                      | sync       | sidebar/ (2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| View (component)      | Ana service                                                    | Storage    | Alt bileşenler                                                                                     |
+| --------------------- | -------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| ListView / KanbanView | todo repo                                                      | sync       | —                                                                                                  |
+| PomodoroView          | PomodoroManagerService, usePomodoro                            | local      | pomodoro/ (11)                                                                                     |
+| KpssView              | kpssService, kpssQuizService, kpssAiService, useKpssQuiz       | sync+local | kpss/quiz/, kpss/wiki/, kpss/map/ (TurkeyMapView + HistoryMapView)                                 |
+| HifizView             | hifizData, useHifiz                                            | sync       | hifiz/ (4)                                                                                         |
+| SrsView               | kpssSrsService, SrsService, useSrs                             | sync       | —                                                                                                  |
+| CalendarView          | todo repo, GoogleCalendarApi, useCalendar                      | sync       | —                                                                                                  |
+| PrayerView            | prayerService, usePrayer                                       | sync+local | prayer/ (1)                                                                                        |
+| Stock/BistView        | bistService, stockAiService, useBist (tuval → 5 alt-hook)      | sync       | stock/ (30)                                                                                        |
+| FreeGamesView         | gamesService, useFreeGames                                     | local      | freegames/ (2)                                                                                     |
+| NotesView             | zettelkastenEngine, useNotes                                   | sync       | notes/ (16)                                                                                        |
+| AIChatView            | aiChatService                                                  | sync+local | aichat/ (10)                                                                                       |
+| ArcadeView            | arcadeService                                                  | local      | arcade/ (6)                                                                                        |
+| DetoxView             | detoxBlocker, distractionCleaner                               | sync+local | detox/ (5)                                                                                         |
+| RssView               | rssService                                                     | sync+local | RssView.tsx (tuval)                                                                                |
+| WillpowerView         | useWillpower                                                   | sync+local | —                                                                                                  |
+| EisenhowerView        | todo repo, useEisenhower                                       | sync       | eisenhower/ (2)                                                                                    |
+| SettingsDrawer        | settings repos                                                 | sync       | settings/ (15)                                                                                     |
+| Sidebar               | useUI                                                          | sync       | sidebar/ (2)                                                                                       |
+| SidePanel (Copilot)   | useSidePanelChat (tuval → 3 alt-hook)                          | sync       | sidepanel/ (ChatMessage, Header, TabBar, Chips, Messages, InputBar)                                |
 
 ---
 
@@ -186,6 +267,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 ```
 Sayfa (herhangi bir web sitesi)
   → content.js (contentMain)
+    → agent/ (pageContextExtractor → elementScanner → actionExecutor)
     → universalInfoBox / detoxBlocker / whatsappBridge...
       → chrome.runtime.sendMessage({type: "..."})
         → background.js (backgroundMain)
@@ -194,18 +276,16 @@ Sayfa (herhangi bir web sitesi)
               → sendResponse geri
 ```
 
-**Kritik kural:** `onMessage` listener asla `async` yapılmaz — callback + `return true` deseni kullanılır (kanal kapanmasın diye). Detay: `src/background/backgroundMain.ts`.
+**Kritik kural:** `onMessage` listener asla `async` yapılmaz — callback + `return true` deseni kullanılır.
 
 ---
 
 ## 6. Güncelleme Protokolü
 
 Bu harita **her değişiklikte** güncellenir:
-
 1. **Yeni dosya** eklendi → ilgili klasöre satır ekle
 2. **Dosya silindi** → haritadan kaldır
 3. **Sorumluluk değişti** → tabloyu düzelt
 4. **Yeni feature** eklendi → Feature Haritası'na satır ekle
-5. **Yeni klasör** → Klasör Sorumlulukları tablosuna ekle
 
 Doğrulama: `npm run build` + `npx tsc --noEmit` her değişiklikte çalıştırılır.

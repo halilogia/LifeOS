@@ -138,7 +138,11 @@ export function SettingsDrawer({
 
   const onGoogleLogin = useSyncStore((s) => s.handleGoogleLogin);
   const onGoogleLogout = useSyncStore((s) => s.handleGoogleLogout);
-  const onBackupToGoogleDrive = useSyncStore((s) => s.handleBackupToGoogleDrive);
+  const onBackupToGoogleDriveRaw = useSyncStore((s) => s.handleBackupToGoogleDrive);
+  const onBackupToGoogleDrive = async () => {
+    await onBackupToGoogleDriveRaw();
+    await refreshInspector();
+  };
   const onRestoreFromGoogleDrive = useSyncStore(
     (s) => s.handleRestoreFromGoogleDrive,
   );

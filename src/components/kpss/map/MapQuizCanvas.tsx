@@ -6,10 +6,7 @@
 
 import type { Ref } from "preact";
 import { useState } from "preact/hooks";
-import {
-  MAP_VIEWBOX,
-  GeoPin,
-} from "@/domain/constants/TurkeyGeographyData.js";
+import { MAP_VIEWBOX, GeoPin } from "@/domain/constants/TurkeyGeographyData.js";
 import { TURKEY_PROVINCE_PATHS } from "@/domain/constants/TurkeyProvincePaths.js";
 
 interface MapQuizCanvasProps {
@@ -111,7 +108,9 @@ export function MapQuizCanvas({
             <g
               key={`quiz-node-${idx}-${pin.name}`}
               transform={`translate(${pin.x} ${pin.y})`}
-              onClick={(e) => {
+              // Tıklama: pointerdown'da yakala — üstteki drag handler'ı
+              // setPointerCapture yaptığı için click event'i pin'e ulaşmıyordu.
+              onPointerDown={(e) => {
                 e.stopPropagation();
                 onGuessPin(pin);
               }}
@@ -119,18 +118,12 @@ export function MapQuizCanvas({
               onPointerOut={() => setHoveredPinName(null)}
               style={{ cursor: "pointer" }}
             >
-              {/* İpucu Yanıp Sönen Sarı Halka */}
+              {/* İpucu Yanıp Sönen Sarı Halka (SVG native animate) */}
               {isHinted && (
-                <circle
-                  r={18}
-                  fill="none"
-                  stroke="#eab308"
-                  strokeWidth={2.5}
-                  style={{
-                    animation: "mapQuizHintPulse 1s ease-out infinite",
-                    transformOrigin: "center",
-                  }}
-                />
+                <circle r={0} fill="none" stroke="#eab308" strokeWidth={2.5}>
+                  <animate attributeName="r" values="10;20" dur="1s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.9;0" dur="1s" repeatCount="indefinite" />
+                </circle>
               )}
 
               {/* Yanlış Tıklama Kırmızı Titreşim Halkası */}
@@ -162,7 +155,9 @@ export function MapQuizCanvas({
                 strokeWidth={isHovered ? 2 : 1.2}
                 style={{
                   transition: "all 0.15s ease",
-                  filter: isHovered ? "drop-shadow(0 0 6px rgba(0,0,0,0.4))" : undefined,
+                  filter: isHovered
+                    ? "drop-shadow(0 0 6px rgba(0,0,0,0.4))"
+                    : undefined,
                 }}
               />
 
@@ -231,15 +226,8 @@ export function MapQuizCanvas({
         })}
       </svg>
 
-
-
       {/* Keyframe Stilleri */}
       <style>{`
-        @keyframes mapQuizHintPulse {
-          0% { opacity: 0.9; transform: scale(0.7); }
-          50% { opacity: 1; transform: scale(1.4); }
-          100% { opacity: 0; transform: scale(2.0); }
-        }
         @keyframes mapQuizShake {
           0%, 100% { transform: translateX(0); }
           20%, 60% { transform: translateX(-4px); }

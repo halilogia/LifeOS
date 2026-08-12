@@ -39,7 +39,7 @@ function getEventCoords(ev: HistoryEvent): { x: number; y: number } {
   if (ev.lon !== undefined && ev.lat !== undefined) {
     return geoToSvgCoords(ev.lon, ev.lat);
   }
-  return { x: ev.x, y: ev.y };
+  return { x: ev.x ?? 0, y: ev.y ?? 0 };
 }
 
 function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {

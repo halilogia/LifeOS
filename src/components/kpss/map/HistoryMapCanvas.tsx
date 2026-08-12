@@ -32,6 +32,11 @@ interface PinOffset {
   textY: number;
 }
 
+/**
+ * Yakın koordinattaki event'leri kümeler ve her pin'e görsel ofset verir.
+ * Aynı şehirde birden fazla tarihsel olay varsa (örn. Ankara'da 3, Amasya'da 2)
+ * pinler üst üste binmesin diye çember üzerinde dağıtır.
+ */
 function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
   const result = new Map<number, PinOffset>();
   const visited = new Set<number>();
@@ -48,7 +53,10 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
       if (visited.has(j)) {
         continue;
       }
-      const dist = Math.hypot(events[i].x - events[j].x, events[i].y - events[j].y);
+      const dist = Math.hypot(
+        (events[i].x ?? 0) - (events[j].x ?? 0),
+        (events[i].y ?? 0) - (events[j].y ?? 0),
+      );
       if (dist < 80) {
         cluster.push(j);
         visited.add(j);
@@ -64,13 +72,14 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
     }
 
     const count = indices.length;
+    // Çember üzerinde daha geniş yayılma — üst üste binmeyi önler.
     indices.forEach((idx, k) => {
       const angle = (k / count) * Math.PI * 2 - Math.PI / 2;
-      const radius = count > 3 ? 4 : 2;
+      const radius = count > 3 ? 16 : count > 2 ? 12 : 8;
       const dx = Math.cos(angle) * radius;
       const dy = Math.sin(angle) * radius;
-      // Stagger text height so text labels don't collide
-      const textY = k % 2 === 0 ? -22 : k % 3 === 1 ? -38 : 18;
+      // Etiket yüksekliklerini kademelendir — yazılar çakışmasın.
+      const textY = k % 2 === 0 ? -22 : k % 3 === 1 ? -40 : 20;
       result.set(idx, { dx, dy, textY });
     });
   });
@@ -151,8 +160,6 @@ export function HistoryMapCanvas({
           unitColor={unitColor}
         />
       </svg>
-
-
     </div>
   );
 }
@@ -180,7 +187,7 @@ function PinLayer({
         return (
           <g
             key={`pin-${idx}`}
-            transform={`translate(${ev.x + off.dx} ${ev.y + off.dy})`}
+            transform={`translate(${(ev.x ?? 0) + off.dx} ${(ev.y ?? 0) + off.dy})`}
           >
             <circle r={2} fill={c} />
             <line
@@ -220,7 +227,7 @@ function PinLayer({
               textAnchor="middle"
               style={{
                 fontFamily: "Georgia, serif",
-                fontSize: ev.year ? 10 : 10,
+                fontSize: 10,
                 fill: "#2b1810",
                 fontWeight: 800,
                 pointerEvents: "none",

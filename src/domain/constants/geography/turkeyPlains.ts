@@ -1,16 +1,50 @@
 import type { GeoPin } from "./types.js";
 
 export const TURKEY_PLAINS: GeoPin[] = [
-  { name: "Çukurova", city: "Adana/Mersin", x: 503.6, y: 343.0 },
-  { name: "Konya Ovası", city: "Konya", x: 383.6, y: 289.0 },
-  { name: "Bafra Ovası", city: "Samsun", x: 535.0, y: 36.0 },
-  { name: "Çarşamba Ovası", city: "Samsun", x: 576.7, y: 60.0 },
-  { name: "Harran Ovası", city: "Şanlıurfa", x: 696.7, y: 353.0 },
-  { name: "Gediz Ovası", city: "İzmir/Manisa", x: 86.0, y: 228.5 },
-  { name: "Menemen Ovası", city: "İzmir", x: 73.0, y: 235.0 },
-  { name: "Ergene Ovası", city: "Edirne/Tekirdağ", x: 70.5, y: 60.0 },
-  { name: "Balıkesir Ovası", city: "Balıkesir", x: 117.4, y: 168.0 },
-  { name: "Amik Ovası", city: "Hatay", x: 555.8, y: 390.5 },
-  { name: "Muş Ovası", city: "Muş", x: 832.5, y: 215.0 },
-  { name: "Silifke Ovası", city: "Mersin", x: 430.6, y: 387.0 },
+  // Delta Ovaları — Akarsuların denize döküldüğü yerde biriktirdiği alüvyonlarla oluşur.
+  { name: "Bafra Ovası",        city: "Samsun",         x: 528.0, y: 48.0,  category: "Delta" },
+  { name: "Çarşamba Ovası",     city: "Samsun",         x: 568.0, y: 52.0,  category: "Delta" },
+  { name: "Dikili Ovası",       city: "İzmir/Balıkesir",x: 60.0,  y: 192.0, category: "Delta" },
+  { name: "Menemen Ovası",      city: "İzmir",          x: 78.0,  y: 212.0, category: "Delta" },
+  { name: "Selçuk-Efes Ovası",  city: "İzmir",          x: 96.0,  y: 255.0, category: "Delta" },
+  { name: "Balat Ovası",        city: "Muğla",          x: 114.0, y: 298.0, category: "Delta" },
+  { name: "Çukurova",           city: "Adana/Mersin",   x: 503.6, y: 345.0, category: "Delta" },
+  { name: "Silifke Ovası",      city: "Mersin",         x: 418.0, y: 362.0, category: "Delta" },
+
+  // Karstik Ovalar — Kireç taşının erimesiyle oluşan kapalı havzalardaki düzlüklerdir.
+  { name: "Elmalı Ovası",       city: "Antalya",        x: 228.0, y: 358.0, category: "Karstik Ova" },
+  { name: "Acıpayam Ovası",     city: "Denizli",        x: 196.0, y: 312.0, category: "Karstik Ova" },
+  { name: "Tefenni Ovası",      city: "Burdur",         x: 216.0, y: 306.0, category: "Karstik Ova" },
+  { name: "Burdur Ovası",       city: "Burdur",         x: 222.0, y: 294.0, category: "Karstik Ova" },
+  { name: "Kestel Ovası",       city: "Antalya",        x: 242.0, y: 342.0, category: "Karstik Ova" },
+  { name: "Korkuteli Ovası",    city: "Antalya",        x: 258.0, y: 348.0, category: "Karstik Ova" },
+
+  // Tektonik Ovalar — Yer kabuğu hareketleriyle çöken blokların oluşturduğu düzlüklerdir.
+  { name: "Adapazarı Ovası",    city: "Sakarya",        x: 238.0, y: 88.0,  category: "Tektonik Ova" },
+  { name: "Düzce Ovası",        city: "Düzce",          x: 308.0, y: 80.0,  category: "Tektonik Ova" },
+  { name: "Bolu Ovası",         city: "Bolu",           x: 338.0, y: 88.0,  category: "Tektonik Ova" },
+  { name: "Balıkesir Ovası",    city: "Balıkesir",      x: 114.0, y: 143.0, category: "Tektonik Ova" },
+  { name: "Erbaa Ovası",        city: "Tokat",          x: 596.0, y: 103.0, category: "Tektonik Ova" },
+  { name: "Niksar Ovası",       city: "Tokat",          x: 624.0, y: 109.0, category: "Tektonik Ova" },
+  { name: "Erzincan Ovası",     city: "Erzincan",       x: 704.0, y: 158.0, category: "Tektonik Ova" },
+  { name: "Tercan Ovası",       city: "Erzincan",       x: 732.0, y: 166.0, category: "Tektonik Ova" },
+  { name: "Pasinler Ovası",     city: "Erzurum",        x: 800.0, y: 138.0, category: "Tektonik Ova" },
+  { name: "Iğdır Ovası",        city: "Iğdır",          x: 963.0, y: 156.0, category: "Tektonik Ova" },
+  { name: "Bingöl Ovası",       city: "Bingöl",         x: 762.0, y: 218.0, category: "Tektonik Ova" },
+  { name: "Muş Ovası",          city: "Muş",            x: 828.0, y: 228.0, category: "Tektonik Ova" },
+  { name: "Malatya Ovası",      city: "Malatya",        x: 668.0, y: 248.0, category: "Tektonik Ova" },
+  { name: "Amik Ovası",         city: "Hatay",          x: 554.0, y: 388.0, category: "Tektonik Ova" },
+  { name: "Suruç Ovası",        city: "Şanlıurfa",      x: 678.0, y: 363.0, category: "Tektonik Ova" },
+  { name: "Ceylanpınar Ovası",  city: "Şanlıurfa",      x: 728.0, y: 373.0, category: "Tektonik Ova" },
+  { name: "Harran Ovası",       city: "Şanlıurfa",      x: 693.0, y: 383.0, category: "Tektonik Ova" },
+
+  // Lav Örtüsü Ovaları — Volkanik lavların geniş alanlara yayılıp katılaşmasıyla oluşur.
+  { name: "Çaldıran Ovası",     city: "Van",            x: 934.0, y: 218.0, category: "Lav Örtüsü" },
+  { name: "Muradiye Ovası",     city: "Van",            x: 910.0, y: 233.0, category: "Lav Örtüsü" },
+  { name: "Malazgirt Ovası",    city: "Muş",            x: 855.0, y: 213.0, category: "Lav Örtüsü" },
+
+  // Göl Tabanı Ovaları — Kuruyan veya çekilen göllerin tabanında kalan düzlüklerdir.
+  { name: "Akşehir Ovası",      city: "Konya",          x: 304.0, y: 258.0, category: "Göl Tabanı" },
+  { name: "Aksaray Ovası",      city: "Aksaray",        x: 428.0, y: 253.0, category: "Göl Tabanı" },
+  { name: "Konya (Ereğli) Ovası", city: "Konya",        x: 400.0, y: 308.0, category: "Göl Tabanı" },
 ];
