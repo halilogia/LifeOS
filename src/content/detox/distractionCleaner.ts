@@ -16,6 +16,7 @@ import {
 } from "./cleaners/detoxQuoteBanners.js";
 import { cleanTwitterTimeline } from "./cleaners/twitterCleaner.js";
 import { cleanFacebookReels } from "./cleaners/facebookCleaner.js";
+import { cleanTikTokFeed } from "./cleaners/tiktokCleaner.js";
 
 export type { DistractionSettings };
 
@@ -165,13 +166,28 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
   }
 
-  // TikTok
+  // TikTok — modern webapp selectors
   if (hostname.includes("tiktok.com")) {
     if (settings.ttFeedBlock) {
       rules.push(`
-        div[data-e2e='recommend-list'],
-        div[class*='DivItemContainer'],
-        div[class*='DivFeedContainer'] {
+        /* Ana feed + video kartları */
+        div[class*="DivHomeContainer"],
+        div[class*="DivFeedContainer"],
+        div[class*="DivItemContainer"],
+        div[class*="DivPlayerContainer"],
+        div[class*="DivVideoContainer"],
+        div[class*="DivCardContainer"],
+        div[class*="DivFeedItem"],
+        /* Sidebar + nav */
+        div[class*="DivSideBarContainer"],
+        div[class*="DivNavContainer"],
+        /* For You / Following tab içeriği */
+        div[class*="DivContentContainer"] {
+          display: none !important;
+        }
+
+        /* Yorumlar */
+        div[class*="DivCommentContainer"] {
           display: none !important;
         }
       `);
@@ -303,6 +319,7 @@ export function initDistractionCleaner(): void {
   const observer = new MutationObserver(() => {
     cleanTwitterTimeline(currentSettings);
     cleanFacebookReels(currentSettings);
+    cleanTikTokFeed(currentSettings);
   });
   observer.observe(document.body || document.documentElement, {
     childList: true,
@@ -320,5 +337,6 @@ export function initDistractionCleaner(): void {
     injectTwitterQuoteBanner(currentSettings, customQuotes);
     cleanTwitterTimeline(currentSettings);
     cleanFacebookReels(currentSettings);
+    cleanTikTokFeed(currentSettings);
   }, 100);
 }

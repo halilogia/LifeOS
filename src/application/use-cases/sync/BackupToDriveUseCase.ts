@@ -9,6 +9,7 @@ import type { ISyncRepository } from "@/domain/repositories/ISyncRepository.js";
 import type { IDriveBackupPort } from "@/application/ports/IDriveBackupPort.js";
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import { stripTransientKeys } from "@/utils/cloudBackup.js";
+import { logger } from "@/utils/logger.js";
 
 export class BackupToDriveUseCase {
   constructor(
@@ -36,11 +37,20 @@ export class BackupToDriveUseCase {
 
   private async getAuthToken(): Promise<string> {
     return new Promise((resolve, reject) => {
+      // Önce sessiz dene — cache'de geçerli token varsa al
       chrome.identity.getAuthToken({ interactive: false }, (token) => {
         if (chrome.runtime.lastError || !token) {
-          reject(
-            new Error(chrome.runtime.lastError?.message ?? "No auth token"),
-          );
+          // Sessiz başarısız → interaktif olarak kullanıcıya consent göster
+          logger.warn("[BackupToDrive] silent token failed, trying interactive...");
+          chrome.identity.getAuthToken({ interactive: true }, (token2) => {
+            if (chrome.runtime.lastError || !token2) {
+              reject(
+                new Error(chrome.runtime.lastError?.message ?? "No auth token"),
+              );
+            } else {
+              resolve(token2 as string);
+            }
+          });
         } else {
           resolve(token as string);
         }
