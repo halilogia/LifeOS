@@ -40,7 +40,6 @@ electron/desktop/web/
 
 # Old/archived content (not part of the extension)
 archives/
-brain/
 
 # Copyrighted ÖSYM KPSS exam data files (Public repo safety)
 src/services/kpss/data/*.json
