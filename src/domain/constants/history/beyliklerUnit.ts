@@ -200,15 +200,5 @@ export const BEYLIKLER_UNIT: HistoryUnit = {
       x: 480.0,
       y: 45.0,
     },
-    {
-      title: "Trabzon Rum İmparatorluğu",
-      city: "Trabzon & Rize",
-      desc: "4. Haçlı Seferi (1204) sonrası Komnenos hanedanı tarafından kuruldu. 1461'de Fatih Sultan Mehmet tarafından fethedilerek son verildi.",
-      tag: "Trabzon Rum İmparatorluğu (1461)",
-      territory: ["Trabzon", "Rize"],
-      color: "#0369a1",
-      x: 740.0,
-      y: 95.0,
-    },
   ],
 };

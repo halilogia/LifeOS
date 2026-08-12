@@ -1,20 +1,16 @@
-import { useState, useEffect, useCallback } from "preact/hooks";
+import { useState, useCallback } from "preact/hooks";
 import { Language } from "@/types/types.js";
-import { fetchStockPrices, fetchStockQuote } from "@/services/bistService.js";
 import type { StockQuote } from "@/types/bist.js";
 import type { IStockRepository } from "@/domain/repositories/IStockRepository.js";
 import { ChromeStorageStockRepository } from "@/infrastructure/persistence/repositories/ChromeStorageStockRepository.js";
-import { evaluateStockRules } from "@/services/stock/stockRuleEngine.js";
-import type {
-  StockPortfolioItem,
-  StockRule,
-  StockAlertLog,
-  StockWatchlist,
-  StockTradeHistory,
-  StockCashBalance,
-} from "@/types/stock.js";
 import type { BistTabId } from "@/components/stock/common/BistActionBar.js";
-import { logger } from "@/utils/logger.js";
+import type { StockPortfolioItem } from "@/types/stock.js";
+
+import { usePortfolio } from "@/presentation/hooks/bist/usePortfolio.js";
+import { useWatchlists } from "@/presentation/hooks/bist/useWatchlists.js";
+import { useStockRules } from "@/presentation/hooks/bist/useStockRules.js";
+import { useStockTrading } from "@/presentation/hooks/bist/useStockTrading.js";
+import { useBistQuotes } from "@/presentation/hooks/bist/useBistQuotes.js";
 
 interface UseBistOptions {
   lang: Language;
@@ -23,30 +19,15 @@ interface UseBistOptions {
 const stockRepository: IStockRepository = new ChromeStorageStockRepository();
 
 /**
- * BIST borsa dashboard state + business logic (AGENTS.md 6.3: presentation/hooks/).
- * View sadece JSX render eder; storage, fetch, kural motoru burada yaşar.
+ * BIST borsa dashboard — kompozisyon tuvali.
+ * 5 alt-hook'u çağırır (usePortfolio, useWatchlists, useStockRules,
+ * useStockTrading, useBistQuotes). Return yüzeyi korunur — BistView.tsx değişmez.
  */
 export function useBist({ lang }: UseBistOptions) {
   const [activeTab, setActiveTab] = useState<BistTabId>("portfolio");
 
-  // Portfolio & Watchlists & Rules states
-  const [portfolio, setPortfolio] = useState<StockPortfolioItem[]>([]);
-  const [watchlists, setWatchlists] = useState<StockWatchlist[]>([]);
-  const [activeWatchlistId, setActiveWatchlistId] = useState<string>("all");
-  const [rules, setRules] = useState<StockRule[]>([]);
-  const [alertLogs, setAlertLogs] = useState<StockAlertLog[]>([]);
-  const [tradeHistory, setTradeHistory] = useState<StockTradeHistory[]>([]);
-  const [cashBalance, setCashBalance] = useState<StockCashBalance>({
-    amount: 0,
-    updatedAt: new Date().toISOString(),
-  });
-  const [quotes, setQuotes] = useState<StockQuote[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  // Search states (Midas-style search bar inside Keşfet tab)
+  // Search + Modal state (tek başına duran UI state'ler — alt-hook'a girmez)
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [addModalPrefill, setAddModalPrefill] = useState<string>("");
   const [ruleModalSymbol, setRuleModalSymbol] = useState<string | null>(null);
@@ -56,283 +37,85 @@ export function useBist({ lang }: UseBistOptions) {
   const [selectedChartSymbol, setSelectedChartSymbol] = useState<string | null>(
     null,
   );
-  const [sellModal, setSellModal] = useState<{
-    id: string;
-    symbol: string;
-    currentLot: number;
-    currentPrice: number;
-  } | null>(null);
 
-  // Load Data
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [
-        savedPortfolio,
-        savedWatchlists,
-        savedRules,
-        savedLogs,
-        popularQuotes,
-      ] = await Promise.all([
-        stockRepository.getPortfolio(),
-        stockRepository.getWatchlists(),
-        stockRepository.getRules(),
-        stockRepository.getAlertLogs(),
-        fetchStockPrices(),
-      ]);
+  /* ---- Portföy alt-hook (hesaplamalar dahil) ---- */
+  const quotesProxy = useRefQuotes();
+  const {
+    portfolio,
+    setPortfolio,
+    saveStock: saveStockOnly,
+    deleteStock,
+    quoteMap,
+    totalPortfolioValue,
+    totalPortfolioCost,
+    dailyProfitLossTotal,
+    dailyProfitLossPercent,
+  } = usePortfolio(stockRepository, quotesProxy.quotes);
 
-      const savedTrades = await stockRepository.getTradeHistory();
-      const savedCash = await stockRepository.getCashBalance();
+  /* ---- İzleme listeleri alt-hook ---- */
+  const {
+    watchlists,
+    activeWatchlistId,
+    setActiveWatchlistId,
+    createWatchlist,
+    deleteWatchlist,
+    toggleSymbol: toggleSymbolInWatchlist,
+  } = useWatchlists(stockRepository);
 
-      setPortfolio(savedPortfolio);
-      setWatchlists(savedWatchlists);
-      setRules(savedRules);
-      setAlertLogs(savedLogs);
-      setTradeHistory(savedTrades);
-      setCashBalance(savedCash);
+  /* ---- Kural motoru alt-hook ---- */
+  const { rules, activeRulesCount, saveRule, deleteRule } =
+    useStockRules(stockRepository);
 
-      const customSymbols = savedPortfolio.map((p) => p.symbol);
-      let allQuotes = [...popularQuotes];
+  /* ---- Trade/nakit alt-hook ---- */
+  const {
+    tradeHistory,
+    cashBalance,
+    setCashBalance,
+    openSell,
+    confirmSell,
+    updateCash,
+    sellModal,
+    setSellModal,
+  } = useStockTrading(stockRepository, () => portfolio, setPortfolio);
 
-      if (customSymbols.length > 0) {
-        const extraQuotes = await Promise.all(
-          customSymbols.map((sym) => fetchStockQuote(sym)),
-        );
-        const map = new Map<string, StockQuote>();
-        for (const q of [...popularQuotes, ...extraQuotes]) {
-          map.set(q.symbol.toUpperCase(), q);
-        }
-        allQuotes = Array.from(map.values());
-      }
-
-      setQuotes(allQuotes);
-
-      if (savedPortfolio.length > 0 && savedRules.length > 0) {
-        const evalResult = evaluateStockRules(
-          allQuotes,
-          savedPortfolio,
-          savedRules,
-        );
-        if (evalResult.alerts.length > 0) {
-          const updatedLogs = [...evalResult.alerts, ...savedLogs];
-          setAlertLogs(updatedLogs);
-          await stockRepository.saveAlertLogs(updatedLogs);
-        }
-      }
-    } catch (err) {
-      logger.error("[BistView] loadData error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadData();
-    const interval = setInterval(loadData, 30000); // 30s live quote polling
-    return () => clearInterval(interval);
-  }, [loadData]);
-
-  // Watchlist Handlers
-  const handleCreateWatchlist = async (name: string) => {
-    const updated = await stockRepository.createWatchlist(name);
-    setWatchlists(updated);
-    if (updated.length > 0) {
-      setActiveWatchlistId(updated[updated.length - 1].id);
-    }
-  };
-
-  const handleDeleteWatchlist = async (id: string) => {
-    const updated = await stockRepository.deleteWatchlist(id);
-    setWatchlists(updated);
-    setActiveWatchlistId("all");
-  };
-
-  const handleToggleSymbolInWatchlist = async (
-    watchlistId: string,
-    symbol: string,
-  ) => {
-    const updated = await stockRepository.toggleSymbolInWatchlist(
-      watchlistId,
-      symbol,
-    );
-    setWatchlists(updated);
-  };
-
-  // Handlers
-  const handleSaveStock = async (itemData: Omit<StockPortfolioItem, "id">) => {
-    const fullItem: StockPortfolioItem = {
-      id: (itemData as StockPortfolioItem).id || `stock-${Date.now()}`,
-      ...itemData,
-    };
-    const existingIdx = portfolio.findIndex(
-      (p) => p.symbol.toUpperCase() === fullItem.symbol.toUpperCase(),
-    );
-    let updated: StockPortfolioItem[];
-    if (existingIdx >= 0) {
-      updated = [...portfolio];
-      updated[existingIdx] = fullItem;
-    } else {
-      updated = [...portfolio, fullItem];
-    }
-    setPortfolio(updated);
-    await stockRepository.savePortfolio(updated);
-    // Otomatik nakit: alış tutarını düş
-    const cashCost = fullItem.buyPrice * fullItem.lotCount;
-    if (cashCost > 0) {
-      const newCash = {
-        amount: cashBalance.amount - cashCost,
-        updatedAt: new Date().toISOString(),
-      };
-      setCashBalance(newCash);
-      await stockRepository.setCashBalance(newCash);
-    }
-    setShowAddModal(false);
-    loadData();
-  };
-
-  const handleDeleteStock = async (symbolOrId: string) => {
-    const updated = portfolio.filter(
-      (p) =>
-        p.id !== symbolOrId &&
-        p.symbol.toUpperCase() !== symbolOrId.toUpperCase(),
-    );
-    setPortfolio(updated);
-    await stockRepository.savePortfolio(updated);
-  };
-
-  const handleSaveRule = async (
-    ruleData: Omit<StockRule, "id" | "createdAt">,
-  ) => {
-    const fullRule: StockRule = {
-      id: (ruleData as StockRule).id || `rule-${Date.now()}`,
-      createdAt: (ruleData as StockRule).createdAt || new Date().toISOString(),
-      ...ruleData,
-    };
-    const existingIdx = rules.findIndex((r) => r.id === fullRule.id);
-    let updated: StockRule[];
-    if (existingIdx >= 0) {
-      updated = [...rules];
-      updated[existingIdx] = fullRule;
-    } else {
-      updated = [...rules, fullRule];
-    }
-    setRules(updated);
-    await stockRepository.saveRules(updated);
-    setRuleModalSymbol(null);
-  };
-
-  const handleClearAlertLogs = async () => {
-    setAlertLogs([]);
-    await stockRepository.saveAlertLogs([]);
-  };
-
-  const handleQuickAddStock = (symbol: string) => {
-    setAddModalPrefill(symbol);
-    setShowAddModal(true);
-  };
-
-  const handleSellStock = (
-    id: string,
-    symbol: string,
-    currentLot: number,
-    currentPrice: number,
-  ) => {
-    setSellModal({ id, symbol, currentLot, currentPrice });
-  };
-
-  const handleConfirmSell = async (lotToSell: number, sellPrice: number) => {
-    if (!sellModal) {
-      return;
-    }
-    const item = portfolio.find((p) => p.id === sellModal.id);
-    if (!item) {
-      return;
-    }
-
-    // Record the completed sale with realized P/L BEFORE updating the
-    // portfolio (item still has its original buyPrice / lotCount here).
-    const trade: StockTradeHistory = {
-      id: `trade-${Date.now()}`,
-      symbol: item.symbol,
-      displayName: item.displayName,
-      lotCount: lotToSell,
-      sellPrice,
-      buyPrice: item.buyPrice,
-      realizedProfit: (sellPrice - item.buyPrice) * lotToSell,
-      realizedProfitPercent:
-        item.buyPrice > 0
-          ? ((sellPrice - item.buyPrice) / item.buyPrice) * 100
-          : 0,
-      soldAt: new Date().toISOString(),
-    };
-
-    const remaining = item.lotCount - lotToSell;
-    let updated: StockPortfolioItem[];
-    if (remaining <= 0) {
-      updated = portfolio.filter((p) => p.id !== sellModal.id);
-    } else {
-      updated = portfolio.map((p) =>
-        p.id === sellModal.id ? { ...p, lotCount: remaining } : p,
-      );
-    }
-    setPortfolio(updated);
-    setTradeHistory((prev) => [trade, ...prev].slice(0, 100));
-    // Otomatik nakit: satış gelirini ekle
-    const sellIncome = sellPrice * lotToSell;
-    const newCash = {
-      amount: cashBalance.amount + sellIncome,
-      updatedAt: new Date().toISOString(),
-    };
-    setCashBalance(newCash);
-    await Promise.all([
-      stockRepository.savePortfolio(updated),
-      stockRepository.saveTradeHistory([trade, ...tradeHistory].slice(0, 100)),
-      stockRepository.setCashBalance(newCash),
-    ]);
-    setSellModal(null);
-  };
-
-  const handleDeleteRule = async (ruleId: string) => {
-    const updatedRules = rules.filter((r) => r.id !== ruleId);
-    setRules(updatedRules);
-    await stockRepository.saveRules(updatedRules);
-  };
-
-  // Derived data
-  const quoteMap = new Map<string, StockQuote>(
-    quotes.map((q) => [q.symbol.toUpperCase(), q]),
+  /* ---- Canlı fiyat + kural değerlendirme alt-hook ---- */
+  const { quotes, alertLogs, loading, loadData, clearAlerts } = useBistQuotes(
+    stockRepository,
+    () => portfolio,
+    () => rules,
   );
 
-  // Portfolio Total calculations
-  let totalPortfolioValue = 0;
-  let totalPortfolioCost = 0;
-  let dailyProfitLossTotal = 0;
+  // quotesProxy stores latest quotes so usePortfolio's totals are always fresh
+  quotesProxy.quotes = quotes;
 
-  for (const item of portfolio) {
-    const q = quoteMap.get(item.symbol.toUpperCase());
-    const price = q && q.price > 0 ? q.price : item.buyPrice;
-    const itemVal = price * item.lotCount;
-    const itemCost = item.buyPrice * item.lotCount;
-    totalPortfolioValue += itemVal;
-    totalPortfolioCost += itemCost;
-    if (q && q.price > 0) {
-      dailyProfitLossTotal += q.change * item.lotCount;
-    }
-  }
-
-  const dailyProfitLossPercent =
-    totalPortfolioCost > 0
-      ? (dailyProfitLossTotal / totalPortfolioCost) * 100
-      : 0;
-  const activeRulesCount = rules.filter((r) => r.isActive).length;
-
+  // Toplam servet: nakit + portföy değeri
   const totalWealth = cashBalance.amount + totalPortfolioValue;
 
-  const updateCashBalance = async (amount: number) => {
-    const newCash = { amount, updatedAt: new Date().toISOString() };
-    setCashBalance(newCash);
-    await stockRepository.setCashBalance(newCash);
-  };
+  /* ---- Sarıcılar (wrapper) — alt-hook'lar arası köprü ---- */
+
+  const handleSaveStock = useCallback(
+    async (itemData: Omit<StockPortfolioItem, "id">) => {
+      await saveStockOnly(itemData);
+      // Nakit düş: alış tutarı
+      const cashCost = (itemData.buyPrice ?? 0) * (itemData.lotCount ?? 0);
+      if (cashCost > 0) {
+        const newCash = {
+          amount: cashBalance.amount - cashCost,
+          updatedAt: new Date().toISOString(),
+        };
+        setCashBalance(newCash);
+        await stockRepository.setCashBalance(newCash);
+      }
+      setShowAddModal(false);
+      void loadData();
+    },
+    [saveStockOnly, cashBalance, setCashBalance, loadData],
+  );
+
+  const handleQuickAddStock = useCallback((symbol: string) => {
+    setAddModalPrefill(symbol);
+    setShowAddModal(true);
+  }, []);
 
   return {
     lang,
@@ -371,20 +154,26 @@ export function useBist({ lang }: UseBistOptions) {
     dailyProfitLossPercent,
     activeRulesCount,
     loadData,
-    handleCreateWatchlist,
-    handleDeleteWatchlist,
-    handleToggleSymbolInWatchlist,
+    handleCreateWatchlist: createWatchlist,
+    handleDeleteWatchlist: deleteWatchlist,
+    handleToggleSymbolInWatchlist: toggleSymbolInWatchlist,
     handleSaveStock,
-    handleDeleteStock,
-    handleSaveRule,
-    handleClearAlertLogs,
+    handleDeleteStock: deleteStock,
+    handleSaveRule: saveRule,
+    handleClearAlertLogs: clearAlerts,
     handleQuickAddStock,
-    handleSellStock,
-    handleConfirmSell,
-    handleDeleteRule,
+    handleSellStock: openSell,
+    handleConfirmSell: confirmSell,
+    handleDeleteRule: deleteRule,
     tradeHistory,
     cashBalance,
     totalWealth,
-    updateCashBalance,
+    updateCashBalance: updateCash,
   };
+}
+
+/** Ref sarıcı — quotes güncellemelerini portföy hesabına taşır. */
+function useRefQuotes() {
+  const ref = { quotes: [] as StockQuote[] };
+  return ref;
 }

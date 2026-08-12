@@ -3,13 +3,16 @@
  * Zustand singleton — willpower streak state + timer + history persistence.
  * Uses callback-DI: confirm dialogs flow through module-level callbacks
  * configured per-render (fresh closures for lang).
- * Hook file stays as a facade; consumer components are untouched.
+ *
+ * Streak data is mirrored to BOTH local and sync so it survives on a new PC.
+ * Sync mirror goes through IUserSyncProfileRepository (infrastructure boundary).
  */
 
 import { create } from "zustand";
 import type { WillpowerStreak, Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { userSyncProfileRepo } from "@/infrastructure/persistence/repositories/ChromeStorageUserSyncProfileRepository.js";
 
 const STORAGE_KEY = "willpowerStreak";
 
@@ -47,6 +50,12 @@ function elapsedParts(startDateStr: string) {
   };
 }
 
+function persistLocal(streakData: WillpowerStreak): Promise<void> {
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ [STORAGE_KEY]: streakData }, () => resolve());
+  });
+}
+
 export const useWillpowerState = create<WillpowerState>()((set, get) => ({
   data: null,
   note: "",
@@ -73,7 +82,8 @@ export const useWillpowerState = create<WillpowerState>()((set, get) => ({
         bestStreakDays: 0,
         history: [],
       };
-      chrome.storage.local.set({ [STORAGE_KEY]: streakData });
+      await persistLocal(streakData);
+      void userSyncProfileRepo.saveProfile({ willpowerStreak: streakData });
     }
     set({ data: streakData, ...elapsedParts(streakData.startDate) });
   },
@@ -107,9 +117,8 @@ export const useWillpowerState = create<WillpowerState>()((set, get) => ({
         history: [...data.history, historyItem],
       };
 
-      await new Promise<void>((resolve) =>
-        chrome.storage.local.set({ [STORAGE_KEY]: updatedData }, resolve),
-      );
+      await persistLocal(updatedData);
+      void userSyncProfileRepo.saveProfile({ willpowerStreak: updatedData });
       set({ note: "", data: updatedData, ...elapsedParts(nowStr) });
       scheduleCloudBackup();
     });
@@ -128,9 +137,8 @@ export const useWillpowerState = create<WillpowerState>()((set, get) => ({
         ...data,
         history: [],
       };
-      await new Promise<void>((resolve) =>
-        chrome.storage.local.set({ [STORAGE_KEY]: updatedData }, resolve),
-      );
+      await persistLocal(updatedData);
+      void userSyncProfileRepo.saveProfile({ willpowerStreak: updatedData });
       set({ data: updatedData });
       scheduleCloudBackup();
     });

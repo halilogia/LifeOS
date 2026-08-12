@@ -1,9 +1,11 @@
 /**
  * keys.ts
- * Centralized storage key definitions for chrome.storage.local and chrome.storage.local.
+ * Centralized storage key definitions for chrome.storage.local and chrome.storage.sync.
  * All persistence implementations MUST import keys from here, never hardcode strings.
  *
- * Convention: SYNC_ prefix = chrome.storage.local, LOCAL_ prefix = chrome.storage.local
+ * Convention: SYNC_ prefix = keys persisted via the settings/sync repository layer
+ * (historically chrome.storage.local for app data + mirrored to chrome.storage.sync
+ * for cross-device config). LOCAL_ prefix = chrome.storage.local-only caches/state.
  */
 
 // ============================================================

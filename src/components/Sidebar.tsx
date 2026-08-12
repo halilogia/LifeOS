@@ -39,26 +39,7 @@ export function Sidebar({
 
   const handlePinToggle = async (key: string) => {
     const usage = useSidebarUsageStore.getState();
-    const wasPinned = usage.pinnedViews.includes(key);
     await usage.togglePin(key);
-    // Pin durumu değişti → pinned öğeler en üste taşınır
-    const ui = useUIStore.getState();
-    if (ui.autoSortEnabled) {
-      ui.applySortedOrder();
-    } else {
-      const current = ui.sidebarOrder;
-      if (!wasPinned) {
-        // Yeni pin → öğeyi en üste taşı
-        const rest = current.filter((k) => k !== key);
-        ui.persistSidebarOrder([key, ...rest]);
-      } else {
-        // Pin kaldırıldı → pinned'ları üstte tut, gerisi aynı
-        const stillPinned = useSidebarUsageStore.getState().pinnedViews;
-        const pinnedInOrder = current.filter((k) => stillPinned.includes(k));
-        const rest = current.filter((k) => !stillPinned.includes(k));
-        ui.persistSidebarOrder([...pinnedInOrder, ...rest]);
-      }
-    }
   };
 
   const handleDragStart = (e: DragEvent, id: string) => {

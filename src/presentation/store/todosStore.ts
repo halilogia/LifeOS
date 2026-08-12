@@ -10,7 +10,11 @@ import { create } from "zustand";
 import type { Todo } from "@/domain/entities/Todo.js";
 import type { Language } from "@/domain/value-objects/Language.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
-import { SYNC_TODOS, SYNC_ALL_KEYS, PRAYER_CALENDAR_PREFIX } from "@/infrastructure/storage/keys.js";
+import {
+  SYNC_TODOS,
+  SYNC_ALL_KEYS,
+  PRAYER_CALENDAR_PREFIX,
+} from "@/infrastructure/storage/keys.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 import { createSyncPort } from "@/application/ports/createSyncPort.js";
 import { AddTodoUseCase } from "@/application/use-cases/todo/AddTodoUseCase.js";
@@ -22,7 +26,10 @@ import { ResetRepeatingTodosUseCase } from "@/application/use-cases/todo/ResetRe
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useSettingsStore } from "@/presentation/store/settingsStore.js";
 import { getTranslation } from "@/utils/i18n.js";
-import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import {
+  scheduleCloudBackup,
+  stripTransientKeys,
+} from "@/utils/cloudBackup.js";
 
 const todoRepo = new ChromeStorageTodoRepository();
 const syncRepo = new ChromeStorageSyncRepository();
@@ -40,12 +47,23 @@ interface TodoState {
   setTodos: (t: Todo[]) => void;
   refreshTodos: () => Promise<Todo[]>;
   initTodos: () => Promise<Todo[]>;
-  handleAddTodo: (text: string, repeat: Todo["repeat"], dueDate?: string) => Promise<void>;
+  handleAddTodo: (
+    text: string,
+    repeat: Todo["repeat"],
+    dueDate?: string,
+  ) => Promise<void>;
   handleToggleTodo: (index: number) => Promise<void>;
   handleDeleteTodo: (index: number) => Promise<void>;
-  handleMoveTaskStatus: (index: number, status: Todo["status"]) => Promise<void>;
+  handleMoveTaskStatus: (
+    index: number,
+    status: Todo["status"],
+  ) => Promise<void>;
   handleMoveTaskDirection: (index: number, direction: 1 | -1) => Promise<void>;
-  handleUpdateTodoUrgentImportant: (index: number, urgent: boolean, important: boolean) => Promise<void>;
+  handleUpdateTodoUrgentImportant: (
+    index: number,
+    urgent: boolean,
+    important: boolean,
+  ) => Promise<void>;
   handleExportBackup: () => Promise<void>;
   handleImportBackup: (e: Event) => Promise<void>;
 }
@@ -111,7 +129,9 @@ export const useTodosStore = create<TodoState>()((set, get) => ({
         resolve(result as Record<string, unknown>);
       });
     });
-    const blob = new Blob([JSON.stringify(allData, null, 2)], {
+    // Cache/log anahtarlarını yedekten ayıkla (Drive backup ile tutarlı).
+    const cleanData = stripTransientKeys(allData);
+    const blob = new Blob([JSON.stringify(cleanData, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
