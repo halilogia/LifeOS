@@ -52,7 +52,6 @@ const TOPIC_TITLE_KEYS: Record<TurkeyMapTopic, string> = {
   energy: "kpss_map_title_energy",
   industry: "kpss_map_title_industry",
   transport_borders: "kpss_map_title_transport_borders",
-  tourism_unesco: "kpss_map_title_tourism_unesco",
   all: "kpss_map_title_all",
 };
 
