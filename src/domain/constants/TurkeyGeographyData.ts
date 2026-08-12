@@ -4,3 +4,5 @@
  */
 
 export * from "./geography/index.js";
+export type { CategoryMeta } from "./geography/types.js";
+export { CATEGORY_LEGEND } from "./geography/types.js";

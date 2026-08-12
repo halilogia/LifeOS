@@ -11,6 +11,11 @@ export const kpss = {
   kpss_map_cat_general: "Genel / Karma",
 
   // Titles
+  kpss_map_title_mountains: "Türkiye'nin Dağları (Kıvrım · Kırık · Volkanik)",
+  kpss_map_title_passes: "Türkiye'nin Önemli Geçitleri",
+  kpss_map_title_gates: "Türkiye'nin Sınır Kapıları",
+  kpss_map_title_gulfs: "Türkiye'nin Körfezleri",
+  kpss_map_title_unesco: "UNESCO Dünya Mirası Listesi",
   kpss_map_title_kivrim: "Türkiye'nin Kıvrım Dağları",
   kpss_map_title_kirik: "Türkiye'nin Kırık Dağları (Horst-Graben)",
   kpss_map_title_volcanic: "Türkiye'nin Volkanik Dağları",
@@ -57,6 +62,7 @@ export const kpss = {
   kpss_map_topic_all: "Tüm Konular (Karma)",
 
   // Legends
+  kpss_map_legend_mountains: "Dağlar (Tüm Türler)",
   kpss_map_legend_kivrim: "Kıvrım Dağı",
   kpss_map_legend_kirik: "Kırık Dağ (Horst)",
   kpss_map_legend_volcanic: "Volkanik dağ / oluşum",
