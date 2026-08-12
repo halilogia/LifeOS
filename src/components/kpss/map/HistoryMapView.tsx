@@ -95,7 +95,9 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
   const isDiagram = unit.mode === "diagram";
   const events = isDiagram ? [] : unit.events || [];
   const diagramData = getDiagramOutline(unit.id);
-  const nextTotal = isDiagram ? countOutlineLines(diagramData.outline) : events.length;
+  const nextTotal = isDiagram
+    ? countOutlineLines(diagramData.outline)
+    : events.length;
 
   useEffect(() => {
     if (total !== nextTotal) {
@@ -288,9 +290,7 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                     background: currentEv.tag.includes("⭐")
                       ? "rgba(201,154,60,0.22)"
                       : "rgba(255,255,255,0.08)",
-                    color: currentEv.tag.includes("⭐")
-                      ? "#fbbf24"
-                      : "#cfc3aa",
+                    color: currentEv.tag.includes("⭐") ? "#fbbf24" : "#cfc3aa",
                     border: currentEv.tag.includes("⭐")
                       ? "1px solid rgba(251,191,36,0.5)"
                       : "1px solid rgba(255,255,255,0.15)",
@@ -333,7 +333,7 @@ export function HistoryMapView({ t: _t }: HistoryMapViewProps) {
                     fontWeight: 600,
                   }}
                 >
-                  📍 {currentEv.city}
+                  {currentEv.city}
                 </div>
               )}
             </div>
