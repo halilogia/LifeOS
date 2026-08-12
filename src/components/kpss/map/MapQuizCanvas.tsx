@@ -118,18 +118,12 @@ export function MapQuizCanvas({
               onPointerOut={() => setHoveredPinName(null)}
               style={{ cursor: "pointer" }}
             >
-              {/* İpucu Yanıp Sönen Sarı Halka */}
+              {/* İpucu Yanıp Sönen Sarı Halka (SVG native animate) */}
               {isHinted && (
-                <circle
-                  r={18}
-                  fill="none"
-                  stroke="#eab308"
-                  strokeWidth={2.5}
-                  style={{
-                    animation: "mapQuizHintPulse 1s ease-out infinite",
-                    transformOrigin: "center",
-                  }}
-                />
+                <circle r={0} fill="none" stroke="#eab308" strokeWidth={2.5}>
+                  <animate attributeName="r" values="10;20" dur="1s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.9;0" dur="1s" repeatCount="indefinite" />
+                </circle>
               )}
 
               {/* Yanlış Tıklama Kırmızı Titreşim Halkası */}
@@ -234,11 +228,6 @@ export function MapQuizCanvas({
 
       {/* Keyframe Stilleri */}
       <style>{`
-        @keyframes mapQuizHintPulse {
-          0% { opacity: 0.9; transform: scale(0.7); }
-          50% { opacity: 1; transform: scale(1.4); }
-          100% { opacity: 0; transform: scale(2.0); }
-        }
         @keyframes mapQuizShake {
           0%, 100% { transform: translateX(0); }
           20%, 60% { transform: translateX(-4px); }
