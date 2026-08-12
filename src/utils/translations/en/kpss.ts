@@ -11,6 +11,11 @@ export const kpss = {
   kpss_map_cat_general: "General / Mixed",
 
   // Titles
+  kpss_map_title_mountains: "Turkey's Mountains (Fold · Fault · Volcanic)",
+  kpss_map_title_passes: "Turkey's Important Passes",
+  kpss_map_title_gates: "Turkey's Border Gates",
+  kpss_map_title_gulfs: "Turkey's Gulfs",
+  kpss_map_title_unesco: "UNESCO World Heritage List",
   kpss_map_title_kivrim: "Turkey's Fold Mountains",
   kpss_map_title_kirik: "Turkey's Fault Mountains (Horst-Graben)",
   kpss_map_title_volcanic: "Turkey's Volcanic Mountains",
@@ -57,6 +62,7 @@ export const kpss = {
   kpss_map_topic_all: "All Topics (Mixed)",
 
   // Legends
+  kpss_map_legend_mountains: "Mountains (All Types)",
   kpss_map_legend_kivrim: "Fold Mountain",
   kpss_map_legend_kirik: "Fault Mountain",
   kpss_map_legend_volcanic: "Volcanic mountain / formation",

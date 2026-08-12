@@ -1,84 +1,25 @@
 import type { GeoPin } from "./types.js";
 
 export const TURKEY_COASTS: GeoPin[] = [
-  {
-    name: "İstanbul Boğazı (Ria Kıyı)",
-    city: "İstanbul",
-    x: 188.0,
-    y: 65.0,
-    description: "Eski bir akarsu vadisinin deniz suları altında kalmasıyla oluşan Ria tipi kıyıdır.",
-    examTip: "KPSS Soru Tipi: İstanbul ve Çanakkale Boğazları ile Haliç Ria tipi kıyıya en belirgin örnektir.",
-  },
-  {
-    name: "Çanakkale Boğazı (Ria Kıyı)",
-    city: "Çanakkale",
-    x: 110.0,
-    y: 95.0,
-    description: "Marmara'yı Ege'ye bağlayan eski akarsu vadisi çöküntüsü Ria kıyısıdır.",
-    examTip: "Çöküntü sonucu deniz basması (Transgresyon) örneğidir.",
-  },
-  {
-    name: "Kaş - Finike Kıyıları (Dalmaçya Kıyı)",
-    city: "Antalya",
-    x: 215.0,
-    y: 345.0,
-    description: "Kıyıya paralel uzanan dağların deniz suları altında kalmasıyla adacıklı Dalmaçya tipi kıyı oluşmuştur.",
-    examTip: "Türkiye'de Dalmaçya kıyı tipinin görüldüğü TEK yer Antalya Kaş-Finike kıyılarıdır.",
-  },
-  {
-    name: "Büyük & Küçükçekmece Kıyıları (Limanlı Kıyı)",
-    city: "İstanbul",
-    x: 172.0,
-    y: 68.0,
-    description: "Geniş tabanlı vadilerin önünün kıyı oku ile kapandığı limanlı kıyılardır.",
-    examTip: "Limanlı kıyılara Marmara'daki Büyük ve Küçük Çekmece gölleri çevresi örnektir.",
-  },
-  {
-    name: "Doğu Karadeniz Falezli Kıyılar (Boyuna Kıyı)",
-    city: "Rize/Trabzon",
-    x: 770.0,
-    y: 72.0,
-    description: "Dağların kıyıya paralel ve dik uzandığı falezli (yalıyar) ve engebesiz boyuna kıyılardır.",
-    examTip: "Boyuna kıyılarda kıyı ile iç kesim arası ulaşım zordur, geçitlerle sağlanır.",
-  },
-  {
-    name: "Antalya falez Kıyıları",
-    city: "Antalya",
-    x: 260.0,
-    y: 330.0,
-    description: "Karstik traverten platosunun denize dik indiği yüksek falezli kıyı alanıdır.",
-    examTip: "Falez oluşumunda dağların kıyıya yakınlığı ve yüksekliği etkilidir.",
-  },
-  {
-    name: "Silifke - Mersin Kalanklı Kıyıları",
-    city: "Mersin",
-    x: 430.0,
-    y: 340.0,
-    description: "Karstik kanyon vadilerin deniz tarafından basılmasıyla oluşan kalanklı kıyı tipidir.",
-    examTip: "Mersin Silifke çevresi kalanklı kıyı yapısıyla KPSS'de sorulabilir.",
-  },
-  {
-    name: "Saros Körfezi (Kendi Kendini Temizleyen)",
-    city: "Edirne/Çanakkale",
-    x: 105.0,
-    y: 75.0,
-    description: "Ege Denizinde iç akıntılar sayesinde kendi kendini temizleyen nadir körfezlerden biridir.",
-    examTip: "Saros Körfezi tecrit edilmiş yapısı ve kendi kendini temizleme özelliğiyle bilinir.",
-  },
-  {
-    name: "İzmit Körfezi",
-    city: "Kocaeli",
-    x: 215.0,
-    y: 80.0,
-    description: "Marmara Bölgesinin sanayi ve liman yoğunluğu en yüksek tektonik körfezidir.",
-    examTip: "Hinterlandı geniş, sanayi ve hinterland bağlantısı güçlü körfez örneğidir.",
-  },
-  {
-    name: "Gökova Körfezi",
-    city: "Muğla",
-    x: 120.0,
-    y: 305.0,
-    description: "Güney Ege'de kırıklı tektonik çöküntü sonucu oluşmuş girintili çıkıntılı enine kıyı körfezidir.",
-    examTip: "Ege kıyılarında enine kıyı tipi hakimdir; kıyıda girinti, çıkıntı ve koy sayısı çok fazladır.",
-  },
+  // Kalanklı Kıyılar
+  { name: "Mersin-Silifke Kıyıları", city: "Mersin", x: 420.0, y: 370.0, category: "Kalanklı" },
+
+  // Dalmaçya Kıyılar
+  { name: "Finike-Kaş Kıyıları", city: "Antalya", x: 260.0, y: 375.0, category: "Dalmaçya" },
+
+  // Enine Kıyılar
+  { name: "Ege Kıyıları", city: "Ege Bölgesi", x: 80.0, y: 220.0, category: "Enine" },
+
+  // Boyuna Kıyılar
+  { name: "Karadeniz Kıyıları", city: "Karadeniz", x: 500.0, y: 50.0, category: "Boyuna" },
+  { name: "Akdeniz Kıyıları", city: "Akdeniz", x: 350.0, y: 370.0, category: "Boyuna" },
+
+  // Ria Kıyılar
+  { name: "İstanbul Boğazı", city: "İstanbul", x: 180.0, y: 65.0, category: "Ria" },
+  { name: "Çanakkale Boğazı", city: "Çanakkale", x: 60.0, y: 125.0, category: "Ria" },
+  { name: "Güneybatı Ege (Menteşe)", city: "Muğla", x: 130.0, y: 320.0, category: "Ria" },
+  { name: "Sinop Hamsilos", city: "Sinop", x: 500.0, y: 35.0, category: "Ria" },
+
+  // Limanlı Kıyılar
+  { name: "Büyükçekmece", city: "İstanbul", x: 175.0, y: 70.0, category: "Limanlı" },
 ];

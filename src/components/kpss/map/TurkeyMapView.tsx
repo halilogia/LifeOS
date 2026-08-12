@@ -28,6 +28,11 @@ const STEP_MS = 1500;
 type ViewMode = "study" | "quiz";
 
 const TOPIC_TITLE_KEYS: Record<TurkeyMapTopic, string> = {
+  mountains: "kpss_map_title_mountains",
+  passes: "kpss_map_title_passes",
+  gates: "kpss_map_title_gates",
+  gulfs: "kpss_map_title_gulfs",
+  unesco: "kpss_map_title_unesco",
   kivrim: "kpss_map_title_kivrim",
   kirik: "kpss_map_title_kirik",
   volcanic: "kpss_map_title_volcanic",

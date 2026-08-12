@@ -2,6 +2,7 @@ import type { Ref } from "preact";
 import {
   MAP_VIEWBOX,
   type GeoPin,
+  CATEGORY_LEGEND,
 } from "@/domain/constants/TurkeyGeographyData.js";
 import { TURKEY_PROVINCE_PATHS } from "@/domain/constants/TurkeyProvincePaths.js";
 
@@ -37,6 +38,18 @@ export function MapCanvas({
   onWheel,
 }: MapCanvasProps) {
   const total = pins.length;
+  const currentPin = currentIndex >= 0 && currentIndex < total ? pins[currentIndex] : null;
+  const pinCatMeta = currentPin?.category ? CATEGORY_LEGEND[currentPin.category] : null;
+  const pinColor = pinCatMeta ? pinCatMeta.color : topicColor;
+
+  // Pin setindeki tüm benzersiz kategoriler (sıra koruyarak)
+  const allCatMetas = Array.from(
+    new Set(pins.map((p) => p.category).filter((c): c is string => Boolean(c)))
+  )
+    .map((cat) => CATEGORY_LEGEND[cat])
+    .filter(Boolean);
+  const hasCategoryLegend = allCatMetas.length > 0;
+
   return (
     <div
       ref={svgWrapRef}
@@ -87,10 +100,12 @@ export function MapCanvas({
           />
         ))}
 
-        {/* Konu Pinleri */}
+        {/* Konu Pinleri — kategori varsa kendi renginde, yoksa topicColor */}
         {pins.map((pin, idx) => {
           const revealed = idx < revealedCount;
           const isCurrent = idx === currentIndex;
+          const pinCat = pin.category ? CATEGORY_LEGEND[pin.category] : null;
+          const fillColor = pinCat ? pinCat.color : topicColor;
           return (
             <g
               key={`${legendKey}-${pin.name}`}
@@ -100,7 +115,7 @@ export function MapCanvas({
               {revealed && (
                 <circle
                   r={isCurrent ? 8 : 5}
-                  fill={isCurrent ? "#c99a3c" : topicColor}
+                  fill={isCurrent ? "#c99a3c" : fillColor}
                   stroke="#3a1408"
                   strokeWidth={1.1}
                 />
@@ -109,7 +124,7 @@ export function MapCanvas({
                 <circle
                   r={6}
                   fill="none"
-                  stroke={topicColor}
+                  stroke={fillColor}
                   strokeWidth={1.5}
                   style={{
                     animation: "mapPulse 1.4s ease-out infinite",
@@ -137,83 +152,155 @@ export function MapCanvas({
         })}
       </svg>
 
-      {/* Bilgi Kartı */}
+      {/* Sağ Üst Kategori Lejantı — tüm alt türler rengiyle */}
+      <div
+        style={{
+          position: "absolute",
+          right: 14,
+          top: 12,
+          background: "rgba(255,255,255,0.60)",
+          border: "1px solid rgba(0,0,0,0.08)",
+          borderRadius: "10px",
+          padding: "8px 12px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "5px",
+        }}
+      >
+        {hasCategoryLegend ? (
+          allCatMetas.map((meta) => (
+            <div
+              key={meta.name}
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <span
+                style={{
+                  width: 9,
+                  height: 9,
+                  borderRadius: "50%",
+                  background: meta.color,
+                  border: "1.5px solid #3a1408",
+                  display: "inline-block",
+                  flexShrink: 0,
+                }}
+              />
+              <span style={{ fontSize: "0.72rem", color: "#5a5140", fontWeight: 700 }}>
+                {meta.name}
+              </span>
+            </div>
+          ))
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span
+              style={{
+                width: 9,
+                height: 9,
+                borderRadius: "50%",
+                background: topicColor,
+                border: "1.5px solid #3a1408",
+                display: "inline-block",
+              }}
+            />
+            <span style={{ fontSize: "0.72rem", color: "#5a5140", fontWeight: 700 }}>
+              {t[legendKey] || "Konum"}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Bilgi Kartı (alt sol) */}
       {currentIndex >= 0 && currentIndex < total && (
         <div
           style={{
             position: "absolute",
             left: 16,
             bottom: 16,
-            maxWidth: 320,
-            background: "rgba(15, 23, 42, 0.94)",
+            maxWidth: 360,
+            background: "rgba(30, 24, 16, 0.92)",
             color: "#f4ead7",
             borderRadius: "14px",
-            padding: "12px 16px",
-            boxShadow: "0 8px 28px rgba(0,0,0,0.45)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            backdropFilter: "blur(10px)",
+            padding: "14px 18px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+            border: "1px solid rgba(255,255,255,0.08)",
             display: "flex",
             flexDirection: "column",
-            gap: "4px",
+            gap: "6px",
+            backdropFilter: "blur(4px)",
           }}
         >
+          {/* Sayaç */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
               fontSize: "0.68rem",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: topicColor,
+              color: pinColor,
               fontWeight: 800,
             }}
           >
-            <span>{t[legendKey] || "Konum Bilgisi"}</span>
-            <span>
-              {currentIndex + 1} / {total}
-            </span>
+            {currentIndex + 1} / {total}
           </div>
+
+          {/* Konum Adı */}
           <h4
             style={{
               margin: 0,
               fontFamily: "Georgia, serif",
-              fontSize: "0.98rem",
+              fontSize: "1.02rem",
               fontWeight: 700,
               color: "#fff4e4",
             }}
           >
             {pins[currentIndex].name}
           </h4>
-          <p
+
+          {/* İl bilgisi — SVG ikonlu */}
+          <div
             style={{
-              margin: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
               fontSize: "0.76rem",
-              color: "#94a3b8",
+              color: "#cfc3aa",
               fontWeight: 600,
             }}
           >
-            📍 {pins[currentIndex].city}
-          </p>
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {pins[currentIndex].city}
+          </div>
 
-          {pins[currentIndex].description && (
+          {/* Tür açıklaması: CATEGORY_LEGEND'dan gelen not */}
+          {pinCatMeta && (
             <p
               style={{
-                margin: "4px 0 0",
-                fontSize: "0.75rem",
-                color: "#e2e8f0",
-                lineHeight: 1.35,
+                margin: "2px 0 0",
+                fontSize: "0.73rem",
+                color: "#cbd5e1",
+                lineHeight: 1.4,
+                fontStyle: "italic",
               }}
             >
-              {pins[currentIndex].description}
+              {pinCatMeta.note}
             </p>
           )}
 
           {pins[currentIndex].examTip && (
             <div
               style={{
-                marginTop: "4px",
-                padding: "6px 8px",
+                marginTop: "2px",
+                padding: "6px 10px",
                 borderRadius: "8px",
                 background: "rgba(234, 179, 8, 0.12)",
                 border: "1px solid rgba(234, 179, 8, 0.3)",
@@ -221,10 +308,30 @@ export function MapCanvas({
                 fontSize: "0.72rem",
                 lineHeight: 1.3,
                 fontWeight: 600,
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "6px",
               }}
             >
-              💡 <span style={{ fontWeight: 800 }}>KPSS İpucu:</span>{" "}
-              {pins[currentIndex].examTip}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ flexShrink: 0, marginTop: "1px" }}
+              >
+                <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                <path d="M9 18h6" />
+                <path d="M10 22h4" />
+              </svg>
+              <span>
+                <span style={{ fontWeight: 800 }}>KPSS İpucu:</span>{" "}
+                {pins[currentIndex].examTip}
+              </span>
             </div>
           )}
         </div>

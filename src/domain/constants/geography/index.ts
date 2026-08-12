@@ -13,6 +13,10 @@ import { TURKEY_RIVERS } from "./turkeyRivers.js";
 import { TURKEY_PLATEAUS } from "./turkeyPlateaus.js";
 import { TURKEY_COASTS } from "./coasts.js";
 import { TURKEY_KARST } from "./karst.js";
+import { TURKEY_PASSES } from "./turkeyPasses.js";
+import { TURKEY_GATES } from "./turkeyGates.js";
+import { TURKEY_GULFS } from "./turkeyGulfs.js";
+import { TURKEY_UNESCO } from "./unesco.js";
 import { TURKEY_CLIMATE_RAIN } from "./climateRain.js";
 import { TURKEY_POPULATION, TURKEY_DWELLINGS } from "./population.js";
 import { TURKEY_DEVELOPMENT_PROJECTS } from "./developmentProjects.js";
@@ -31,6 +35,10 @@ export * from "./turkeyPlains.js";
 export * from "./turkeyLakes.js";
 export * from "./turkeyRivers.js";
 export * from "./turkeyPlateaus.js";
+export * from "./turkeyPasses.js";
+export * from "./turkeyGates.js";
+export * from "./turkeyGulfs.js";
+export * from "./unesco.js";
 export * from "./coasts.js";
 export * from "./karst.js";
 export * from "./climateRain.js";
@@ -53,6 +61,10 @@ export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
   ...TURKEY_PLATEAUS,
   ...TURKEY_COASTS,
   ...TURKEY_KARST,
+  ...TURKEY_PASSES,
+  ...TURKEY_GATES,
+  ...TURKEY_GULFS,
+  ...TURKEY_UNESCO,
   ...TURKEY_CLIMATE_RAIN,
   ...TURKEY_POPULATION,
   ...TURKEY_DWELLINGS,
@@ -68,6 +80,7 @@ export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
 
 export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   // 1. Fiziki Coğrafya
+  mountains: [...KIVRIM_MOUNTAINS, ...KIRIK_MOUNTAINS, ...VOLCANIC_MOUNTAINS],
   kivrim: KIVRIM_MOUNTAINS,
   kirik: KIRIK_MOUNTAINS,
   volcanic: VOLCANIC_MOUNTAINS,
@@ -77,6 +90,10 @@ export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   plateaus: TURKEY_PLATEAUS,
   coasts: TURKEY_COASTS,
   karst: TURKEY_KARST,
+  passes: TURKEY_PASSES,
+  gates: TURKEY_GATES,
+  gulfs: TURKEY_GULFS,
+  unesco: TURKEY_UNESCO,
   climate_rain: TURKEY_CLIMATE_RAIN,
 
   // 2. Beşeri Coğrafya
