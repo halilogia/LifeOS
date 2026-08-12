@@ -91,6 +91,37 @@
   color: var(--accent-color);
 }
 
+/* Pin ikonu — normalde gizli, hover'da görünür, pinned öğede kalıcı mor */
+.sidebar-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-btn:hover .sidebar-pin,
+.sidebar-btn.pinned .sidebar-pin {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-btn .sidebar-pin:hover {
+  color: var(--accent-color);
+  background: rgba(124, 58, 237, 0.15);
+}
+
+.sidebar-btn.pinned .sidebar-pin {
+  color: var(--accent-color);
+}
+
 #lang-text {
   font-weight: 700;
   font-size: 0.8rem;

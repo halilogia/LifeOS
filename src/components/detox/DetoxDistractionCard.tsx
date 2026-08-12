@@ -144,6 +144,11 @@ export function DetoxDistractionCard({
             checked={distractionSettings.ytSubscriptionsBlock}
             onChange={() => handleToggle("ytSubscriptionsBlock")}
           />
+          <ToggleRow
+            label={t.detox_yt_upnext || "Önerilen Videoları Gizle (Up Next)"}
+            checked={distractionSettings.ytUpNextBlock}
+            onChange={() => handleToggle("ytUpNextBlock")}
+          />
         </DetoxPlatformSection>
 
         {/* Instagram Box */}

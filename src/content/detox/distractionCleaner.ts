@@ -89,6 +89,18 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
         }
       `);
     }
+    if (settings.ytUpNextBlock) {
+      // Video izleme sayfası: sağ panel "Up Next" (önerilen videolar)
+      rules.push(`
+        #secondary #related,
+        #secondary .ytd-watch-next-secondary-results-renderer,
+        ytd-watch-next-secondary-results-renderer,
+        #related,
+        [id='secondary'] ytd-item-section-renderer {
+          display: none !important;
+        }
+      `);
+    }
   }
 
   // Instagram — SSM: main çocuklarını gizle (widget hariç)

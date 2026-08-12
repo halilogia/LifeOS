@@ -12,6 +12,7 @@ import { logger } from "@/utils/logger.js";
 const USAGE_KEY = "sidebarUsage";
 const AUTO_SORT_KEY = "sidebarAutoSort";
 const LAST_USED_KEY = "sidebarLastUsed";
+const PINNED_KEY = "sidebarPinned";
 const RECENT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 saat recency bonus penceresi
 
 interface LastUsedMap {
@@ -22,13 +23,15 @@ interface SidebarUsageState {
   usage: Record<string, number>;
   lastUsed: LastUsedMap;
   autoSort: boolean;
+  pinnedViews: string[];
   _saveTimer: ReturnType<typeof setTimeout> | null;
 
   load: () => Promise<void>;
   increment: (viewKey: string) => void;
   setAutoSort: (enabled: boolean) => Promise<void>;
+  togglePin: (viewKey: string) => Promise<void>;
   reset: () => Promise<void>;
-  /** İstatistiklere göre sıralı dizi döndürür — free-games + ai-chat sabit ilk 2'de. */
+  /** İstatistiklere göre sıralı dizi döndürür — pinned view'lar en üstte, kalanlar skora göre. */
   computeSortedOrder: () => string[];
 }
 
@@ -50,16 +53,19 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   usage: {},
   lastUsed: {},
   autoSort: true,
+  pinnedViews: [],
   _saveTimer: null,
 
   load: async () => {
     const usage = (await getStorageItem<Record<string, number>>(USAGE_KEY)) || {};
     const lastUsed = (await getStorageItem<LastUsedMap>(LAST_USED_KEY)) || {};
     const autoSortRaw = await getStorageItem<boolean>(AUTO_SORT_KEY);
+    const pinnedViews = (await getStorageItem<string[]>(PINNED_KEY)) || [];
     set({
       usage,
       lastUsed,
       autoSort: autoSortRaw === null ? true : autoSortRaw === true,
+      pinnedViews,
     });
   },
 
@@ -94,6 +100,16 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
     logger.info(`[SidebarUsage] autoSort=${enabled}`);
   },
 
+  togglePin: async (viewKey: string) => {
+    const { pinnedViews } = get();
+    const next = pinnedViews.includes(viewKey)
+      ? pinnedViews.filter((k) => k !== viewKey)
+      : [...pinnedViews, viewKey];
+    set({ pinnedViews: next });
+    await setStorageItem(PINNED_KEY, next);
+    logger.info(`[SidebarUsage] pin ${viewKey} => ${next.includes(viewKey) ? "pinned" : "unpinned"}`);
+  },
+
   reset: async () => {
     set({ usage: {}, lastUsed: {} });
     await Promise.all([
@@ -106,14 +122,13 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   /**
    * Skor = count + recencyBonus.
    * recencyBonus = son 24 saatte kullanıldıysa +5.
-   * Sabit ilk 2: free-games, ai-chat (kullanım istatistiği olsa bile).
+   * Pinned view'lar her zaman en üstte (kendi aralarında pin sırasına göre).
    * Kalanlar skora göre azalan.
    */
   computeSortedOrder: () => {
-    const { usage, lastUsed } = get();
+    const { usage, lastUsed, pinnedViews } = get();
     const now = Date.now();
-    const pinned = ["free-games", "ai-chat"];
-    const pinnedSet = new Set(pinned);
+    const pinnedSet = new Set(pinnedViews);
 
     // Mevcut tüm view'ları default'tan al + kullanıcının sırasına eklenmiş olanları usage'dan da ekle
     const allViews = new Set<string>(DEFAULT_SIDEBAR_ORDER);
@@ -126,6 +141,7 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
       return count + recent;
     };
 
+    const pinned = Array.from(allViews).filter((k) => pinnedSet.has(k));
     const rest = Array.from(allViews)
       .filter((k) => !pinnedSet.has(k))
       .map((k) => ({ k, s: score(k) }))
