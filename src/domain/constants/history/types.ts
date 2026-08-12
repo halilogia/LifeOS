@@ -16,8 +16,8 @@ export interface HistoryEvent {
   /** territory modunda elden çıkan / kaybedilen iller */
   lostTerritory?: string[];
   color?: string;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   lon?: number;
   lat?: number;
 }

@@ -12,7 +12,7 @@ import { OSMANLI_DURAKLAMA_UNIT } from "./osmanliDuraklamaUnit.js";
 import { OSMANLI_GERILEME_UNIT } from "./osmanliGerilemeUnit.js";
 import { OSMANLI_DAGILMA_UNIT } from "./osmanliDagilmaUnit.js";
 import { KURTULUS_SAVASI_UNIT } from "./kurtulusSavasiUnit.js";
-import { OSMANLI_TESKILAT_UNIT, SELCUKLU_TESKILAT_UNIT } from "./osmanliTeskilatUnit.js";
+import { OSMANLI_TESKILAT_UNIT } from "./osmanliTeskilatUnit.js";
 import { UNESCO_KULTUR_UNIT } from "./ekonomiKulturUnit.js";
 import { BEYLIKLER_UNIT } from "./beyliklerUnit.js";
 
@@ -40,6 +40,5 @@ export const HISTORY_UNITS: HistoryUnit[] = [
   OSMANLI_DAGILMA_UNIT,
   KURTULUS_SAVASI_UNIT,
   OSMANLI_TESKILAT_UNIT,
-  SELCUKLU_TESKILAT_UNIT,
   UNESCO_KULTUR_UNIT,
 ];

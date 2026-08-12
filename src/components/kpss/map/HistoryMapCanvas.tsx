@@ -54,8 +54,8 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
         continue;
       }
       const dist = Math.hypot(
-        events[i].x - events[j].x,
-        events[i].y - events[j].y,
+        (events[i].x ?? 0) - (events[j].x ?? 0),
+        (events[i].y ?? 0) - (events[j].y ?? 0),
       );
       if (dist < 80) {
         cluster.push(j);
@@ -187,7 +187,7 @@ function PinLayer({
         return (
           <g
             key={`pin-${idx}`}
-            transform={`translate(${ev.x + off.dx} ${ev.y + off.dy})`}
+            transform={`translate(${(ev.x ?? 0) + off.dx} ${(ev.y ?? 0) + off.dy})`}
           >
             <circle r={2} fill={c} />
             <line
