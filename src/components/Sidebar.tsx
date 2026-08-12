@@ -5,6 +5,7 @@ import { SidebarNavItem } from "./sidebar/SidebarNavItem.js";
 import { SidebarIcon } from "./sidebar/SidebarIcons.js";
 import { useSidebarOrder } from "@/presentation/hooks/useSidebarOrder.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
+import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 
 interface SidebarProps {
   lang: Language;
@@ -33,6 +34,32 @@ export function Sidebar({
   const { order, setOrder, saveOrder } = useSidebarOrder();
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
+  const pinnedViews = useSidebarUsageStore((s) => s.pinnedViews);
+  const togglePin = useSidebarUsageStore((s) => s.togglePin);
+
+  const handlePinToggle = async (key: string) => {
+    const usage = useSidebarUsageStore.getState();
+    const wasPinned = usage.pinnedViews.includes(key);
+    await usage.togglePin(key);
+    // Pin durumu değişti → pinned öğeler en üste taşınır
+    const ui = useUIStore.getState();
+    if (ui.autoSortEnabled) {
+      ui.applySortedOrder();
+    } else {
+      const current = ui.sidebarOrder;
+      if (!wasPinned) {
+        // Yeni pin → öğeyi en üste taşı
+        const rest = current.filter((k) => k !== key);
+        ui.persistSidebarOrder([key, ...rest]);
+      } else {
+        // Pin kaldırıldı → pinned'ları üstte tut, gerisi aynı
+        const stillPinned = useSidebarUsageStore.getState().pinnedViews;
+        const pinnedInOrder = current.filter((k) => stillPinned.includes(k));
+        const rest = current.filter((k) => !stillPinned.includes(k));
+        ui.persistSidebarOrder([...pinnedInOrder, ...rest]);
+      }
+    }
+  };
 
   const handleDragStart = (e: DragEvent, id: string) => {
     setDraggedItem(id);
@@ -182,6 +209,8 @@ export function Sidebar({
               active={activeView === key}
               isDragging={draggedItem === key}
               isDragOver={dragOverItem === key}
+              isPinned={pinnedViews.includes(key)}
+              onPinToggle={() => handlePinToggle(key)}
               onClick={() => onViewChange(key)}
               onDragStart={(e) => handleDragStart(e, key)}
               onDragEnd={handleDragEnd}

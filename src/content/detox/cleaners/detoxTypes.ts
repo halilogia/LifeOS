@@ -13,6 +13,7 @@ export interface DistractionSettings {
   ytFeedBlock: boolean;
   ytCommentsBlock: boolean;
   ytSubscriptionsBlock: boolean;
+  ytUpNextBlock: boolean;
   igReelsBlock: boolean;
   igExploreBlock: boolean;
   igFeedBlock: boolean;
@@ -28,6 +29,7 @@ export const DEFAULT_DISTRACTION_SETTINGS: DistractionSettings = {
   ytFeedBlock: true,
   ytCommentsBlock: false,
   ytSubscriptionsBlock: true,
+  ytUpNextBlock: true,
   igReelsBlock: true,
   igExploreBlock: false,
   igFeedBlock: false,

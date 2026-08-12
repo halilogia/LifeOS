@@ -1,6 +1,6 @@
 export const DEFAULT_SIDEBAR_ORDER: string[] = [
-  "free-games", // pinned — otomatik sıralamada her zaman 1. sıra
-  "ai-chat", // pinned — otomatik sıralamada her zaman 2. sıra
+  "free-games", // İlk açılışta varsayılan 1. sıra (pin değil — kullanıcı pinleyebilir)
+  "ai-chat", // İlk açılışta varsayılan 2. sıra
   "list",
   "eisenhower",
   "notes",
