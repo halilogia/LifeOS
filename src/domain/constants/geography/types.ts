@@ -29,7 +29,6 @@ export type TurkeyMapTopic =
   | "karst"
   | "passes"
   | "gates"
-  | "unesco"
   | "gulfs"
   | "climate_rain"
   // 2. Beşeri Coğrafya
@@ -43,7 +42,7 @@ export type TurkeyMapTopic =
   | "energy"
   | "industry"
   | "transport_borders"
-  | "tourism_unesco"
+  | "unesco"
   // 4. Genel
   | "all";
 
@@ -84,7 +83,6 @@ export const MAP_TOPICS: MapTopicMeta[] = [
   { id: "karst", category: "fiziki", color: "#d97706", legendKey: "kpss_map_legend_karst" },
   { id: "passes", category: "fiziki", color: "#be123c", legendKey: "kpss_map_legend_passes" },
   { id: "gates", category: "fiziki", color: "#4c1d95", legendKey: "kpss_map_legend_gates" },
-  { id: "unesco", category: "fiziki", color: "#7c3aed", legendKey: "kpss_map_legend_unesco" },
   { id: "gulfs", category: "fiziki", color: "#64748b", legendKey: "kpss_map_legend_gulfs" },
   { id: "climate_rain", category: "fiziki", color: "#059669", legendKey: "kpss_map_legend_climate_rain" },
 
@@ -100,7 +98,7 @@ export const MAP_TOPICS: MapTopicMeta[] = [
   { id: "energy", category: "ekonomik", color: "#f97316", legendKey: "kpss_map_legend_energy" },
   { id: "industry", category: "ekonomik", color: "#64748b", legendKey: "kpss_map_legend_industry" },
   { id: "transport_borders", category: "ekonomik", color: "#14b8a6", legendKey: "kpss_map_legend_transport_borders" },
-  { id: "tourism_unesco", category: "ekonomik", color: "#a855f7", legendKey: "kpss_map_legend_tourism_unesco" },
+  { id: "unesco", category: "ekonomik", color: "#a855f7", legendKey: "kpss_map_legend_unesco" },
 
   // Karma / Tüm Konular
   { id: "all", category: "general", color: "#9333ea", legendKey: "kpss_map_legend_all" },

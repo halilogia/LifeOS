@@ -25,7 +25,6 @@ import { TURKEY_LIVESTOCK } from "./livestock.js";
 import { TURKEY_MINES } from "./mines.js";
 import { TURKEY_ENERGY } from "./energy.js";
 import { TURKEY_TRANSPORT_BORDERS, TURKEY_INDUSTRY } from "./transportBorders.js";
-import { TURKEY_TOURISM_UNESCO } from "./tourismUnesco.js";
 
 export * from "./types.js";
 export * from "./kivrimMountains.js";
@@ -49,7 +48,6 @@ export * from "./livestock.js";
 export * from "./mines.js";
 export * from "./energy.js";
 export * from "./transportBorders.js";
-export * from "./tourismUnesco.js";
 
 export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
   ...KIVRIM_MOUNTAINS,
@@ -75,7 +73,6 @@ export const ALL_GEOGRAPHY_PINS: GeoPin[] = [
   ...TURKEY_ENERGY,
   ...TURKEY_INDUSTRY,
   ...TURKEY_TRANSPORT_BORDERS,
-  ...TURKEY_TOURISM_UNESCO,
 ];
 
 export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
@@ -93,7 +90,6 @@ export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   passes: TURKEY_PASSES,
   gates: TURKEY_GATES,
   gulfs: TURKEY_GULFS,
-  unesco: TURKEY_UNESCO,
   climate_rain: TURKEY_CLIMATE_RAIN,
 
   // 2. Beşeri Coğrafya
@@ -108,7 +104,7 @@ export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   energy: TURKEY_ENERGY,
   industry: TURKEY_INDUSTRY,
   transport_borders: TURKEY_TRANSPORT_BORDERS,
-  tourism_unesco: TURKEY_TOURISM_UNESCO,
+  unesco: TURKEY_UNESCO,
 
   // 4. Genel
   all: ALL_GEOGRAPHY_PINS,
