@@ -2,6 +2,10 @@
  * usePrayer store
  * Zustand singleton — prayer times state + fetch + city persistence.
  * Hook file stays as a facade; consumer components are untouched.
+ *
+ * City persistence is mirrored to BOTH local (cached calendar reads) and sync
+ * (so a freshly installed PC restores the last selected city). Sync mirror goes
+ * through IUserSyncProfileRepository (infrastructure boundary).
  */
 
 import { create } from "zustand";
@@ -9,6 +13,7 @@ import { prayerService } from "@/services/prayerService.js";
 import type { PrayerTimes } from "@/types/prayer.js";
 import { logger } from "@/utils/logger.js";
 import { scheduleCloudBackup } from "@/utils/cloudBackup.js";
+import { userSyncProfileRepo } from "@/infrastructure/persistence/repositories/ChromeStorageUserSyncProfileRepository.js";
 
 const PRAYER_CITY_KEY = "prayerCity";
 const PRAYER_COUNTRY_KEY = "prayerCountry";
@@ -97,6 +102,11 @@ export const usePrayerState = create<PrayerState>()((set, get) => ({
     chrome.storage.local.set({
       [PRAYER_CITY_KEY]: newCity,
       [PRAYER_COUNTRY_KEY]: "Turkey",
+    });
+    // Sync'e yaz — yeni PC'de şehir sıfırlanmasın (repo üzerinden).
+    void userSyncProfileRepo.saveProfile({
+      prayerCity: newCity,
+      prayerCountry: "Turkey",
     });
     set({ isFormOpen: false });
     await get().loadPrayers(newCity);

@@ -8,6 +8,7 @@
 import { create } from "zustand";
 import { DEFAULT_SIDEBAR_ORDER } from "@/domain/constants/sidebarConstants.js";
 import { logger } from "@/utils/logger.js";
+import { useUIStore } from "@/presentation/store/uiStore.js";
 
 const USAGE_KEY = "sidebarUsage";
 const AUTO_SORT_KEY = "sidebarAutoSort";
@@ -126,12 +127,13 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
    * Kalanlar skora göre azalan.
    */
   computeSortedOrder: () => {
-    const { usage, lastUsed, pinnedViews } = get();
+    const { usage, lastUsed } = get();
     const now = Date.now();
-    const pinnedSet = new Set(pinnedViews);
+    const currentOrder = useUIStore.getState().sidebarOrder.length > 0
+      ? useUIStore.getState().sidebarOrder
+      : DEFAULT_SIDEBAR_ORDER;
 
-    // Mevcut tüm view'ları default'tan al + kullanıcının sırasına eklenmiş olanları usage'dan da ekle
-    const allViews = new Set<string>(DEFAULT_SIDEBAR_ORDER);
+    const allViews = new Set<string>(currentOrder);
     Object.keys(usage).forEach((k) => allViews.add(k));
 
     const score = (k: string): number => {
@@ -141,19 +143,17 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
       return count + recent;
     };
 
-    const pinned = Array.from(allViews).filter((k) => pinnedSet.has(k));
-    const rest = Array.from(allViews)
-      .filter((k) => !pinnedSet.has(k))
+    return Array.from(allViews)
       .map((k) => ({ k, s: score(k) }))
       .sort((a, b) => {
         if (b.s !== a.s) {
           return b.s - a.s;
         }
-        // Tie-breaker: default sırası
-        return DEFAULT_SIDEBAR_ORDER.indexOf(a.k) - DEFAULT_SIDEBAR_ORDER.indexOf(b.k);
+        // Tie-breaker: mevcut sıralama
+        const idxA = currentOrder.indexOf(a.k);
+        const idxB = currentOrder.indexOf(b.k);
+        return (idxA !== -1 ? idxA : 999) - (idxB !== -1 ? idxB : 999);
       })
       .map((x) => x.k);
-
-    return [...pinned, ...rest];
   },
 }));

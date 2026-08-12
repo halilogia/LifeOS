@@ -78,39 +78,59 @@ export async function getSyncDataSummary(): Promise<SyncKeySummary[]> {
 
 export async function getDriveBackupInfo(): Promise<DriveBackupInfo[]> {
   try {
-    // Access token al
-    const token = await new Promise<string>((resolve, reject) => {
-      chrome.identity.getAuthToken({ interactive: false }, (result) => {
-        if (chrome.runtime.lastError || !result) {
-          reject(new Error(chrome.runtime.lastError?.message || "No token"));
-        } else {
-          resolve(result as string);
-        }
-      });
-    });
-
-    // Drive API: appDataFolder içindeki dosyaları listele
-    const response = await fetch(
-      "https://www.googleapis.com/drive/v3/files?q=name%20contains%20'lifeos_backup'%20and%20trashed%3Dfalse&fields=files(id%2Cname%2Csize%2CmodifiedTime)&orderBy=modifiedTime%20desc",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`Drive API ${response.status}`);
-    }
-
-    const data = await response.json();
-    const files = (data.files || []) as Array<{ id: string; name: string; size: string; modifiedTime: string }>;
-
-    return files.map((f) => ({
-      fileName: f.name,
-      size: Number(f.size || 0),
-      modifiedTime: f.modifiedTime,
-    }));
+    // Access token al (öncelikle sessiz)
+    const token = await getDriveToken(false);
+    return await queryDriveBackups(token);
   } catch (err) {
+    // 403 genellikle cache'lenmiş token'ın drive.appdata scope'unu taşımamasından gelir.
+    // İnteraktif yeniden giriş ile scope'ları tazele, tekrar dene.
+    const is403 =
+      err instanceof Error && err.message.includes("Drive API 403");
+    if (is403) {
+      logger.warn("[CloudDataInspector] Drive 403 — trying interactive token refresh");
+      try {
+        const refreshed = await getDriveToken(true);
+        return await queryDriveBackups(refreshed);
+      } catch (retryErr) {
+        logger.error("[CloudDataInspector] Drive retry failed:", retryErr);
+        return [];
+      }
+    }
     logger.error("[CloudDataInspector] Drive read failed:", err);
     return [];
   }
+}
+
+async function getDriveToken(interactive: boolean): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive }, (result) => {
+      if (chrome.runtime.lastError || !result) {
+        reject(new Error(chrome.runtime.lastError?.message || "No token"));
+      } else {
+        resolve(result as string);
+      }
+    });
+  });
+}
+
+async function queryDriveBackups(token: string): Promise<DriveBackupInfo[]> {
+  const response = await fetch(
+    "https://www.googleapis.com/drive/v3/files?q=name%20contains%20'lifeos_backup'%20and%20trashed%3Dfalse&fields=files(id%2Cname%2Csize%2CmodifiedTime)&orderBy=modifiedTime%20desc",
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Drive API ${response.status}`);
+  }
+
+  const data = await response.json();
+  const files = (data.files || []) as Array<{ id: string; name: string; size: string; modifiedTime: string }>;
+
+  return files.map((f) => ({
+    fileName: f.name,
+    size: Number(f.size || 0),
+    modifiedTime: f.modifiedTime,
+  }));
 }
