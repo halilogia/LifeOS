@@ -10,7 +10,7 @@ export const TURKEY_LAKES: GeoPin[] = [
   { name: "Eber Gölü", city: "Afyonkarahisar", x: 285.0, y: 255.0, category: "Tektonik" },
   { name: "Hazar Gölü", city: "Elazığ", x: 717.7, y: 242.0, category: "Tektonik" },
   { name: "İznik Gölü", city: "Bursa", x: 200.9, y: 112.0, category: "Tektonik" },
-  { name: "Nemrut Gölü", city: "Bitlis", x: 864.2, y: 231.8, category: "Tektonik" },
+  { name: "Nemrut Gölü", city: "Bitlis", x: 864.2, y: 231.8, category: "Krater" },
   { name: "Acıgöl", city: "Afyon/Denizli", x: 255.0, y: 265.0, category: "Tektonik" },
   { name: "Burdur Gölü", city: "Burdur", x: 237.4, y: 296.0, category: "Tektonik" },
 

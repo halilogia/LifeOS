@@ -131,6 +131,17 @@ export const SELCUKLU_UNIT: HistoryUnit = {
       y: 168,
     },
     {
+      year: 1240,
+      title: "Baba İshak (Babailer) İsyanı",
+      city: "Adıyaman/Maraş",
+      desc: "Devletin otoritesini sarsan dini ve sosyal içerikli büyük isyan; merkezi gücü zayıflattı.",
+      tag: "İç İsyan",
+      territory: [],
+      color: "#c99a3c",
+      x: 650.0,
+      y: 280.0,
+    },
+    {
       year: 1243,
       title: "Kösedağ Savaşı",
       city: "Kösedağ (Sivas civarı)",
