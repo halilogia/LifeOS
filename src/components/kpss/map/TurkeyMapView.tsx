@@ -89,10 +89,7 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
 
   // 2. İnteraktif Konum Bulma Oyunu (Quiz) State & Actions
   const quiz = useMapQuiz(selectedTopic);
-  const {
-    state: quizState,
-    actions: quizActions,
-  } = quiz;
+  const { state: quizState, actions: quizActions } = quiz;
 
   const currentPins = TOPIC_PINS[selectedTopic] || TOPIC_PINS.kivrim;
   const topicMeta =
@@ -148,7 +145,7 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
         style={{
           display: "flex",
           alignItems: "center",
-          justify: "space-between",
+          justifyContent: "space-between",
           gap: "12px",
           background: "rgba(15, 23, 42, 0.65)",
           border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -182,7 +179,7 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
               transition: "all 0.2s ease",
             }}
           >
-            📖 {t.kpss_map_mode_study || "Öğrenme & Oynatma"}
+            {t.kpss_map_mode_study || "Öğrenme & Oynatma"}
           </button>
           <button
             type="button"
@@ -212,36 +209,93 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
                   : "none",
             }}
           >
-            🎯 {t.kpss_map_mode_quiz || "İnteraktif Konum Oyunu"}
+            {t.kpss_map_mode_quiz || "İnteraktif Konum Oyunu"}
           </button>
         </div>
 
-        {/* Oyun Modunda Anlık Puan / Seri Göstergesi */}
-        {viewMode === "quiz" && (
-          <div
+        {/* Sağ: Skor / Seri + Tam Ekran Butonu (her iki modda) */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            color: "#f4ead7",
+          }}
+        >
+          {viewMode === "quiz" && (
+            <>
+              <div>
+                {t.kpss_map_score || "Skor"}:{" "}
+                <span style={{ color: "#22c55e", fontWeight: 900 }}>
+                  {quizState.score}
+                </span>{" "}
+                / {quizState.targets.length}
+              </div>
+              {quizState.streak > 1 && (
+                <div style={{ color: "#f97316", fontWeight: 900 }}>
+                  {quizState.streak} Seri!
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Tam Ekran — quiz modunda da erişilebilir */}
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            title={
+              isFullscreen
+                ? t.kpss_map_exit_fullscreen || "Tam Ekrandan Çık"
+                : t.kpss_map_fullscreen || "Tam Ekran"
+            }
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              fontSize: "0.8rem",
+              gap: "6px",
+              background: "transparent",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "#94a3b8",
+              borderRadius: "8px",
+              padding: "7px 12px",
+              fontSize: "0.9rem",
               fontWeight: 700,
-              color: "#f4ead7",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
             }}
           >
-            <div>
-              ⭐ {t.kpss_map_score || "Skor"}:{" "}
-              <span style={{ color: "#22c55e", fontWeight: 900 }}>
-                {quizState.score}
-              </span>{" "}
-              / {quizState.targets.length}
-            </div>
-            {quizState.streak > 1 && (
-              <div style={{ color: "#f97316", fontWeight: 900 }}>
-                🔥 {quizState.streak} Seri!
-              </div>
-            )}
-          </div>
-        )}
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {isFullscreen ? (
+                <>
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                  <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                  <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                  <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                </>
+              ) : (
+                <>
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                </>
+              )}
+            </svg>
+            {isFullscreen
+              ? t.kpss_map_exit_fullscreen_short || "Çık"
+              : t.kpss_map_fullscreen_short || "Tam Ekran"}
+          </button>
+        </div>
       </div>
 
       {/* Öğrenme Modunda: Harita Başlığı + Kontroller */}

@@ -6,10 +6,7 @@
 
 import type { Ref } from "preact";
 import { useState } from "preact/hooks";
-import {
-  MAP_VIEWBOX,
-  GeoPin,
-} from "@/domain/constants/TurkeyGeographyData.js";
+import { MAP_VIEWBOX, GeoPin } from "@/domain/constants/TurkeyGeographyData.js";
 import { TURKEY_PROVINCE_PATHS } from "@/domain/constants/TurkeyProvincePaths.js";
 
 interface MapQuizCanvasProps {
@@ -111,7 +108,9 @@ export function MapQuizCanvas({
             <g
               key={`quiz-node-${idx}-${pin.name}`}
               transform={`translate(${pin.x} ${pin.y})`}
-              onClick={(e) => {
+              // Tıklama: pointerdown'da yakala — üstteki drag handler'ı
+              // setPointerCapture yaptığı için click event'i pin'e ulaşmıyordu.
+              onPointerDown={(e) => {
                 e.stopPropagation();
                 onGuessPin(pin);
               }}
@@ -162,7 +161,9 @@ export function MapQuizCanvas({
                 strokeWidth={isHovered ? 2 : 1.2}
                 style={{
                   transition: "all 0.15s ease",
-                  filter: isHovered ? "drop-shadow(0 0 6px rgba(0,0,0,0.4))" : undefined,
+                  filter: isHovered
+                    ? "drop-shadow(0 0 6px rgba(0,0,0,0.4))"
+                    : undefined,
                 }}
               />
 
@@ -230,8 +231,6 @@ export function MapQuizCanvas({
           );
         })}
       </svg>
-
-
 
       {/* Keyframe Stilleri */}
       <style>{`
