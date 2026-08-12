@@ -20,7 +20,11 @@ export interface DriveBackupInfo {
   modifiedTime: string;
 }
 
-function summarizeValue(value: unknown): { type: SyncKeySummary["type"]; size: number; preview: string } {
+function summarizeValue(value: unknown): {
+  type: SyncKeySummary["type"];
+  size: number;
+  preview: string;
+} {
   let type: SyncKeySummary["type"] = "unknown";
   let size = 0;
   let preview = "";
@@ -58,7 +62,9 @@ function summarizeValue(value: unknown): { type: SyncKeySummary["type"]; size: n
 export async function getSyncDataSummary(): Promise<SyncKeySummary[]> {
   try {
     const items = await new Promise<Record<string, unknown>>((resolve) => {
-      chrome.storage.sync.get(null, (res) => resolve(res as Record<string, unknown>));
+      chrome.storage.sync.get(null, (res) =>
+        resolve(res as Record<string, unknown>),
+      );
     });
 
     const summaries: SyncKeySummary[] = [];
@@ -78,16 +84,15 @@ export async function getSyncDataSummary(): Promise<SyncKeySummary[]> {
 
 export async function getDriveBackupInfo(): Promise<DriveBackupInfo[]> {
   try {
-    // Access token al (öncelikle sessiz)
     const token = await getDriveToken(false);
     return await queryDriveBackups(token);
   } catch (err) {
-    // 403 genellikle cache'lenmiş token'ın drive.appdata scope'unu taşımamasından gelir.
-    // İnteraktif yeniden giriş ile scope'ları tazele, tekrar dene.
     const is403 =
       err instanceof Error && err.message.includes("Drive API 403");
     if (is403) {
-      logger.warn("[CloudDataInspector] Drive 403 — trying interactive token refresh");
+      logger.warn(
+        "[CloudDataInspector] Drive 403 — trying interactive token refresh",
+      );
       try {
         const refreshed = await getDriveToken(true);
         return await queryDriveBackups(refreshed);
@@ -113,9 +118,11 @@ async function getDriveToken(interactive: boolean): Promise<string> {
   });
 }
 
-async function queryDriveBackups(token: string): Promise<DriveBackupInfo[]> {
+async function queryDriveBackups(
+  token: string,
+): Promise<DriveBackupInfo[]> {
   const response = await fetch(
-    "https://www.googleapis.com/drive/v3/files?q=name%20contains%20'lifeos_backup'%20and%20trashed%3Dfalse&fields=files(id%2Cname%2Csize%2CmodifiedTime)&orderBy=modifiedTime%20desc",
+    "https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%20contains%20'lifeos_backup'%20and%20trashed%3Dfalse&fields=files(id%2Cname%2Csize%2CmodifiedTime)&orderBy=modifiedTime%20desc",
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -126,7 +133,12 @@ async function queryDriveBackups(token: string): Promise<DriveBackupInfo[]> {
   }
 
   const data = await response.json();
-  const files = (data.files || []) as Array<{ id: string; name: string; size: string; modifiedTime: string }>;
+  const files = (data.files || []) as Array<{
+    id: string;
+    name: string;
+    size: string;
+    modifiedTime: string;
+  }>;
 
   return files.map((f) => ({
     fileName: f.name,
