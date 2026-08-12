@@ -5,7 +5,7 @@ export const SELCUKLU_UNIT: HistoryUnit = {
   navLabel: "Anadolu Selçuklu Devleti",
   mode: "territory",
   title: "Anadolu Selçuklu Devleti: Kuruluştan Yıkılışa",
-  subtitle: "10 kilit olay · 1071-1308 · sırasıyla oynat",
+  subtitle: "11 kilit olay · 1071-1308 · sırasıyla oynat",
   showYear: true,
   color: "#1f5f7a",
   legend: [{ c: "#1f5f7a", l: "Anadolu Selçuklu toprağı" }],

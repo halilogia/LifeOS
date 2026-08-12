@@ -5,7 +5,7 @@ export const OSMANLI_KURULUS_UNIT: HistoryUnit = {
   navLabel: "Osmanlı Kuruluş (1299-1453)",
   mode: "territory",
   title: "Osmanlı Devleti Kuruluş Dönemi",
-  subtitle: "13 kilit gelişme · Söğüt'ten İstanbul'un Fethine (1299-1453)",
+  subtitle: "14 kilit gelişme · Söğüt'ten İstanbul'un Fethine (1299-1453)",
   showYear: true,
   color: "#b91c1c",
   legend: [{ c: "#b91c1c", l: "Osmanlı Kuruluş Toprakları" }],

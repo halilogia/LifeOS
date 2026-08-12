@@ -21,27 +21,34 @@ files.forEach(file => {
   const topicName = file.replace('Unit.ts', '').toUpperCase();
   
   mdContent += `## ${topicName}\n\n`;
-  
-  // Regex to extract history events/concepts by title
-  const itemRegex = /title:\s*"([^"]+)"/g;
+
+  // Extract subtitle line from source
+  const subtitleMatch = content.match(/subtitle:\s*"([^"]+)"/);
+  if (subtitleMatch) {
+    mdContent += `- ${subtitleMatch[1]}\n`;
+  }
+
+  // Extract events with year + title
+  const eventRegex = /{\s*\n?\s*year:\s*(\d+),\s*\n?\s*title:\s*"([^"]+)"/g;
   let match;
+  const events = [];
   
-  const categories = {};
-  
-  while ((match = itemRegex.exec(content)) !== null) {
-    // Ignore internal nav titles, only get event titles
-    if (match[1].includes('Anadolu') || match[1].includes('Osmanlı')) continue; 
-    
-    if (!categories[topicName]) categories[topicName] = [];
-    categories[topicName].push(match[1]);
+  while ((match = eventRegex.exec(content)) !== null) {
+    const year = parseInt(match[1], 10);
+    const title = match[2];
+    // Skip unit-level umbrella titles
+    if (title.includes('Devleti') && (title.includes('Dönemi') || title.includes('Kuruluş') || title.includes('Kültür'))) continue;
+    events.push({ year, title });
   }
   
-  if (categories[topicName]) {
-      categories[topicName].forEach(title => {
-          mdContent += `- ${title}\n`;
-      });
-      mdContent += '\n';
-  }
+  // Sort by year
+  events.sort((a, b) => a.year - b.year);
+  
+  events.forEach(ev => {
+    mdContent += `- **${ev.year}** — ${ev.title}\n`;
+  });
+  
+  mdContent += '\n';
 });
 
 fs.writeFileSync(outputFile, mdContent);

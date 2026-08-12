@@ -5,7 +5,7 @@ export const OSMANLI_TESKILAT_UNIT: HistoryUnit = {
   navLabel: "Osmanlı Devlet Teşkilatı",
   mode: "diagram",
   title: "Osmanlı Devlet Teşkilatı ve Kültür Medeniyet",
-  subtitle: "9 kilit kurum · hiyerarşiyi sırasıyla keşfet",
+  subtitle: "11 kilit kurum · hiyerarşiyi sırasıyla keşfet",
   showYear: false,
   color: "#c99a3c",
   legend: [
@@ -20,9 +20,11 @@ export const OSMANLI_TESKILAT_UNIT: HistoryUnit = {
     { year: 1320, title: "Sadrazam (Vezir-i Azam)", desc: "Padişahın mutlak vekili, mühür sahibi.", tag: "Seyfiye", color: "#1f5f7a" },
     { year: 1330, title: "Vezirler", desc: "Divan üyeleri, bakanlar kurulu.", tag: "Seyfiye", color: "#1f5f7a" },
     { year: 1340, title: "Kazasker", desc: "Adalet ve eğitim işlerine bakan yüksek yargıç.", tag: "İlmiye", color: "#7c3aed" },
+    { year: 1345, title: "Şeyhülislam (Müftü)", desc: "Din işlerinin başı, fetva verme yetkisine sahip en yüksek ilmiye mensubu.", tag: "İlmiye", color: "#7c3aed" },
     { year: 1350, title: "Defterdar", desc: "Maliye işlerinden sorumlu, bütçeyi yöneten.", tag: "Kalemiye", color: "#2f8f5b" },
     { year: 1360, title: "Nişancı", desc: "Arazi kayıtları ve tuğra çekmeden sorumlu.", tag: "Kalemiye", color: "#2f8f5b" },
-    { year: 1370, title: "Kaptan-ı Derya / Yeniçeri Ağası", desc: "Donanma ve askeriyenin divandaki temsilcileri.", tag: "Seyfiye", color: "#1f5f7a" },
+    { year: 1365, title: "Reisülküttab", desc: "Kalemiye sınıfının başı; 17. yy sonrası Dışişleri Bakanı işlevi görmüştür.", tag: "Kalemiye", color: "#2f8f5b" },
+    { year: 1370, title: "Kaptan-ı Derya / Yeniçeri Ağası", desc: "Donanma ve askeriyenin divandaki temsilcileri (vezir rütbeli ise).", tag: "Seyfiye", color: "#1f5f7a" },
     { year: 1380, title: "Taşra Teşkilatı", desc: "Eyalet > Sancak > Kazâ > Köy hiyerarşisi.", tag: "Taşra", color: "#c99a3c" },
   ],
 };
