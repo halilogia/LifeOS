@@ -1,9 +1,8 @@
 /**
  * RssView.tsx
- * RSS Reader panel — feed list + items + read/unread + management.
- * Canvas component: state + data loading here, presentational parts inline.
+ * RSS Reader panel — kompozisyon tuvali.
+ * State + data loading burada; feed listesi + item listesi alt bileşenlerde.
  * Security: item content rendered via textContent only — no innerHTML (XSS-safe).
- * Clean Architecture - Presentation View.
  */
 
 import { useCallback, useEffect, useState } from "preact/hooks";
@@ -11,7 +10,9 @@ import type { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { RssFeed, RssItem } from "@/domain/repositories/IRssRepository.js";
 import { rssRepository } from "@/infrastructure/persistence/ChromeStorageRssRepository.js";
-import { getFaviconUrl, registerFeed } from "@/services/rssService.js";
+import { getFaviconUrl } from "@/services/rssService.js";
+import { RssFeedList } from "@/components/rss/RssFeedList.js";
+import { RssItemList } from "@/components/rss/RssItemList.js";
 
 interface RssViewProps {
   lang: Language;
@@ -89,21 +90,20 @@ export function RssView({ lang }: RssViewProps) {
     void loadAll();
   }, [loadAll]);
 
-  const selectFeed = useCallback(
-    async (feedId: string) => {
-      setState((prev) => ({ ...prev, selectedFeedId: feedId }));
-      const items = await rssRepository.getItems(feedId);
-      setState((prev) => ({ ...prev, selectedFeedId: feedId, items }));
-    },
-    [],
-  );
+  const selectFeed = useCallback(async (feedId: string) => {
+    setState((prev) => ({ ...prev, selectedFeedId: feedId }));
+    const items = await rssRepository.getItems(feedId);
+    setState((prev) => ({ ...prev, selectedFeedId: feedId, items }));
+  }, []);
 
   const handleAddFeed = useCallback(async () => {
     if (!addUrl.trim()) {
       return;
     }
     setNotify("");
-    const result = await sendRssMessage("rss_register_feed", { url: addUrl.trim() });
+    const result = await sendRssMessage("rss_register_feed", {
+      url: addUrl.trim(),
+    });
     if (result.ok) {
       setAddUrl("");
       setNotify(t.rss_saved || "Feed kaydedildi");
@@ -159,12 +159,8 @@ export function RssView({ lang }: RssViewProps) {
     (sum, n) => sum + n,
     0,
   );
+  const selectedFeed = state.feeds.find((f) => f.id === state.selectedFeedId);
 
-  const selectedFeed = state.feeds.find(
-    (f) => f.id === state.selectedFeedId,
-  );
-
-  // --- Styles ---
   const cardStyle: Record<string, string> = {
     background: "rgba(15, 23, 42, 0.65)",
     border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -178,7 +174,14 @@ export function RssView({ lang }: RssViewProps) {
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       {/* Header */}
       <div style={cardStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            flexWrap: "wrap",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -193,28 +196,57 @@ export function RssView({ lang }: RssViewProps) {
               flexShrink: 0,
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M4 11a9 9 0 0 1 9 9" />
               <path d="M4 4a16 16 0 0 1 16 16" />
               <circle cx="5" cy="19" r="1" />
             </svg>
           </div>
           <div style={{ flex: 1 }}>
-            <h3 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, color: "#f8fafc" }}>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "1.05rem",
+                fontWeight: 800,
+                color: "#f8fafc",
+              }}
+            >
               {t.rss_title || "RSS Takip"}
             </h3>
-            <p style={{ margin: "2px 0 0", fontSize: "0.78rem", color: "#94a3b8" }}>
-              {t.rss_desc || "Sevdiğiniz sitelerin RSS beslemelerini takip edin."}
+            <p
+              style={{
+                margin: "2px 0 0",
+                fontSize: "0.78rem",
+                color: "#94a3b8",
+              }}
+            >
+              {t.rss_desc ||
+                "Sevdiğiniz sitelerin RSS beslemelerini takip edin."}
               {totalUnread > 0 && (
                 <span style={{ color: "#fb923c", fontWeight: 700 }}>
-                  {" "}· {totalUnread}{" "}
-                  {(t.rss_unread || "{count} okunmamış").replace("{count}", String(totalUnread))}
+                  {" "}
+                  · {totalUnread}{" "}
+                  {(t.rss_unread || "{count} okunmamış").replace(
+                    "{count}",
+                    String(totalUnread),
+                  )}
                 </span>
               )}
             </p>
           </div>
           <button
-            onClick={() => void handleSyncAll()}
+            onClick={() => {
+              void handleSyncAll();
+            }}
             disabled={syncing}
             style={{
               display: "inline-flex",
@@ -230,11 +262,22 @@ export function RssView({ lang }: RssViewProps) {
               cursor: "pointer",
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <polyline points="23 4 23 10 17 10" />
               <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
             </svg>
-            {syncing ? (t.rss_loading || "Yükleniyor...") : (t.rss_refresh || "Yenile")}
+            {syncing
+              ? t.rss_loading || "Yükleniyor..."
+              : t.rss_refresh || "Yenile"}
           </button>
         </div>
 
@@ -261,7 +304,9 @@ export function RssView({ lang }: RssViewProps) {
             }}
           />
           <button
-            onClick={() => void handleAddFeed()}
+            onClick={() => {
+              void handleAddFeed();
+            }}
             style={{
               padding: "10px 18px",
               borderRadius: "10px",
@@ -278,12 +323,17 @@ export function RssView({ lang }: RssViewProps) {
         </div>
 
         {notify && (
-          <p style={{ margin: "10px 0 0", fontSize: "0.8rem", color: "#fb923c" }}>
+          <p
+            style={{ margin: "10px 0 0", fontSize: "0.8rem", color: "#fb923c" }}
+          >
             {notify}
           </p>
         )}
-        <p style={{ margin: "10px 0 0", fontSize: "0.72rem", color: "#64748b" }}>
-          {t.rss_auto_sync || "Otomatik senkronizasyon 30 dakikada bir çalışır."}
+        <p
+          style={{ margin: "10px 0 0", fontSize: "0.72rem", color: "#64748b" }}
+        >
+          {t.rss_auto_sync ||
+            "Otomatik senkronizasyon 30 dakikada bir çalışır."}
         </p>
       </div>
 
@@ -295,179 +345,53 @@ export function RssView({ lang }: RssViewProps) {
           </p>
         </div>
       ) : state.feeds.length === 0 ? (
-        <div style={{ ...cardStyle, textAlign: "center", padding: "48px 20px" }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style={{ margin: "0 auto 16px", display: "block" }}>
+        <div
+          style={{ ...cardStyle, textAlign: "center", padding: "48px 20px" }}
+        >
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#64748b"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style={{ margin: "0 auto 16px", display: "block" }}
+          >
             <path d="M4 11a9 9 0 0 1 9 9" />
             <path d="M4 4a16 16 0 0 1 16 16" />
             <circle cx="5" cy="19" r="1" />
           </svg>
           <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.9rem" }}>
-            {t.rss_empty || "Henüz feed yok. Sağ tık ile RSS kaydedin veya URL ekleyin."}
+            {t.rss_empty ||
+              "Henüz feed yok. Sağ tık ile RSS kaydedin veya URL ekleyin."}
           </p>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 320px) 1fr", gap: "16px" }}>
-          {/* Feed list */}
-          <div style={{ ...cardStyle, padding: "12px", maxHeight: "60vh", overflowY: "auto" }}>
-            {state.feeds.map((feed) => (
-              <button
-                key={feed.id}
-                onClick={() => void selectFeed(feed.id)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  width: "100%",
-                  padding: "10px 12px",
-                  marginBottom: "6px",
-                  borderRadius: "10px",
-                  border: "1px solid",
-                  borderColor:
-                    state.selectedFeedId === feed.id
-                      ? "rgba(249, 115, 22, 0.4)"
-                      : "transparent",
-                  background:
-                    state.selectedFeedId === feed.id
-                      ? "rgba(249, 115, 22, 0.1)"
-                      : "transparent",
-                  color: "#e2e8f0",
-                  fontSize: "0.83rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  textAlign: "left",
-                }}
-              >
-                <img
-                  src={getFaviconUrl(feed.siteUrl)}
-                  alt=""
-                  width={20}
-                  height={20}
-                  style={{ borderRadius: "4px", flexShrink: 0 }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
-                <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {feed.title}
-                </span>
-                {feed.lastError && (
-                  <span title={feed.lastError} style={{ color: "#f87171", fontSize: "0.7rem", flexShrink: 0 }}>
-                    !
-                  </span>
-                )}
-                {state.unreadByFeed[feed.id] > 0 && (
-                  <span
-                    style={{
-                      background: "rgba(249, 115, 22, 0.9)",
-                      color: "#fff",
-                      borderRadius: "10px",
-                      padding: "1px 8px",
-                      fontSize: "0.7rem",
-                      fontWeight: 800,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {state.unreadByFeed[feed.id]}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Items list */}
-          <div style={{ ...cardStyle, padding: "12px", maxHeight: "60vh", overflowY: "auto" }}>
-            {selectedFeed && (
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "6px 10px 12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "8px" }}>
-                <img
-                  src={getFaviconUrl(selectedFeed.siteUrl)}
-                  alt=""
-                  width={22}
-                  height={22}
-                  style={{ borderRadius: "4px" }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
-                <span style={{ flex: 1, color: "#f8fafc", fontWeight: 700, fontSize: "0.9rem" }}>
-                  {selectedFeed.title}
-                </span>
-                {selectedFeed.lastError && (
-                  <span style={{ color: "#f87171", fontSize: "0.75rem" }}>
-                    {(t.rss_feed_error || "Son çekme hatası: {error}").replace("{error}", selectedFeed.lastError)}
-                  </span>
-                )}
-                <button
-                  onClick={() => void handleRemoveFeed(selectedFeed.id)}
-                  style={{
-                    padding: "6px 10px",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(248, 113, 113, 0.3)",
-                    background: "rgba(248, 113, 113, 0.1)",
-                    color: "#f87171",
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                  }}
-                >
-                  {t.rss_delete || "Sil"}
-                </button>
-              </div>
-            )}
-
-            {state.items.length === 0 ? (
-              <p style={{ margin: "24px 0", color: "#94a3b8", fontSize: "0.85rem", textAlign: "center" }}>
-                {t.rss_no_items || "Bu feed'de henüz öğe yok."}
-              </p>
-            ) : (
-              state.items.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => void handleOpenItem(item)}
-                  style={{
-                    padding: "12px 10px",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                    borderLeft: item.read ? "3px solid transparent" : "3px solid #fb923c",
-                    background: item.read ? "transparent" : "rgba(249, 115, 22, 0.06)",
-                    marginBottom: "4px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-                    <span
-                      style={{
-                        flex: 1,
-                        color: item.read ? "#94a3b8" : "#f8fafc",
-                        fontWeight: item.read ? 500 : 700,
-                        fontSize: "0.88rem",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      {item.title}
-                    </span>
-                    <span style={{ color: "#64748b", fontSize: "0.7rem", flexShrink: 0, whiteSpace: "nowrap" }}>
-                      {formatDate(item.pubDate)}
-                    </span>
-                  </div>
-                  {item.description && (
-                    <p
-                      style={{
-                        margin: "4px 0 0",
-                        color: "#64748b",
-                        fontSize: "0.78rem",
-                        lineHeight: 1.4,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(240px, 320px) 1fr",
+            gap: "16px",
+          }}
+        >
+          <RssFeedList
+            feeds={state.feeds}
+            selectedFeedId={state.selectedFeedId}
+            unreadByFeed={state.unreadByFeed}
+            faviconUrl={getFaviconUrl}
+            onSelect={selectFeed}
+          />
+          <RssItemList
+            selectedFeed={selectedFeed}
+            items={state.items}
+            t={t}
+            faviconUrl={getFaviconUrl}
+            formatDate={formatDate}
+            onRemoveFeed={handleRemoveFeed}
+            onOpenItem={handleOpenItem}
+          />
         </div>
       )}
     </div>

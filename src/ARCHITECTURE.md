@@ -65,6 +65,28 @@ flowchart TB
         rssService
     end
 
+    subgraph Utils["utils/ (Yardımcı araçlar)"]
+        subgraph Chart["kpssChart (KPSS grafik araçları)"]
+            kpssChartDrawer["kpssChartDrawer.ts (orkestratör)"]
+            kpssChartCalc["kpssChartCalculations.ts (net + hedef)"]
+            kpssChartBar["kpssChartRenderBar.ts (bar render)"]
+            kpssChartLine["kpssChartRenderLine.ts (line render)"]
+        end
+        i18n
+        logger
+    end
+
+    subgraph Store["presentation/store/ (Zustand)"]
+        subgraph Pomo["pomodoro/ (Slice Pattern)"]
+            timerSlice["timerSlice.ts (pomodoro timer)"]
+            stopwatchSlice["stopwatchSlice.ts"]
+            alarmSlice["alarmSlice.ts"]
+            zenSlice["zenSlice.ts (garden + history)"]
+            pomoNotify["pomodoroNotify.ts"]
+        end
+        pomodoroStore["pomodoroStore.ts (4-slice kompozisyon)"]
+    end
+
     subgraph SPS["sidepanel/ (Web Copilot)"]
         SidePanelApp["SidePanelApp.tsx (tuval)"]
         useSidePanelChat["useSidePanelChat.ts (kompozisyon tuvali)"]
@@ -134,6 +156,7 @@ flowchart TB
 | `src/components/`                              | Saf UI görünümü                   | View'lar + `<feature>/` alt bileşenleri                                                                                                | `chrome.storage`, `fetch`, iş mantığı |
 | `src/components/kpss/`                         | KPSS not stüdyosu UI'si           | wiki/, quiz/ bileşenleri; notlar chrome.storage'da tutulur, MD indirme var                                                             | —                                     |
 | `src/components/<feature>/`                    | Feature'a özel UI parçaları       | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/...                                                                                | —                                     |
+| `src/components/rss/`                          | RSS görünüm alt bileşenleri       | RssFeedList.tsx, RssItemList.tsx                                                                                                       | State                                 |
 | `src/presentation/hooks/`                      | State yönetimi, view-model        | useSettings, useTodos, useBist + bist/ alt-hook'lar                                                                                    | DOM, fetch                            |
 | `src/presentation/hooks/bist/`                 | BIST alt-hook'ları (modüler)      | usePortfolio, useWatchlists, useStockRules, useStockTrading, useBistQuotes                                                              | JSX, direkt DOM                       |
 | `src/services/`                                | Dış dünya iletişimi               | Network fetch, chrome.storage, AI servisleri, kpss/, stock/, errorReportService                                                        | JSX                                   |
@@ -146,11 +169,13 @@ flowchart TB
 | `src/domain/constants/`                        | Sabit veriler                     | kpssCurriculum, kpssConstants, TurkeyProvincePaths, history/ (kurtulusSavasiUnit — 21 adım)                                             | —                                     |
 | `src/infrastructure/persistence/repositories/` | chrome.storage implementasyonları | ChromeStorage*Repository (incl. ChromeStorageUserSyncProfileRepository)                                                                 | UI                                    |
 | `src/infrastructure/api/`                      | Google API client'ları            | GoogleTasksApi, GoogleDriveApi, GoogleAuthApi                                                                                          | —                                     |
+| `src/presentation/store/`                      | Zustand store'lar                 | pomodoroStore.ts (4-slice kompozisyon)                                                                                                 | JSX                                   |
+| `src/presentation/store/pomodoro/`             | Pomodoro slice'lar (Slice Pattern)| timerSlice, stopwatchSlice, alarmSlice, zenSlice, pomodoroNotify                                                                       | JSX, DOM                              |
 | `src/infrastructure/storage/`                  | Storage key sabitleri             | keys.ts                                                                                                                                | —                                     |
 | `src/background/`                              | Service worker                    | backgroundMain, handlers/                                                                                                              | DOM                                   |
 | `src/content/`                                 | Content script'ler                | infobox/, detox/, agent/ (pageContextExtractor, elementScanner, actionExecutor, domAgentEngine barrel), whatsapp/, quiz/                | —                                     |
 | `src/content/agent/`                           | DOM Agent (modüler)               | pageContextExtractor.ts (context), elementScanner.ts (overlay), actionExecutor.ts (click/type/scroll), domAgentEngine.ts (barrel)      | İş mantığı                            |
-| `src/utils/`                                   | Genel yardımcılar                 | i18n, logger, formatlayıcılar, sanitize                                                                                                 | İş mantığı                            |
+| `src/utils/`                                   | Genel yardımcılar                 | i18n, logger, formatlayıcılar, sanitize, kpssChartDrawer + kpssChartCalculations + kpssChartRenderBar + kpssChartRenderLine              | İş mantığı                            |
 | `src/types/`                                   | Tip tanımları                     | types.ts, kpss.ts, stock.ts, bist.ts...                                                                                                | —                                     |
 | `src/sidepanel/`                               | Side panel UI (Web Copilot)       | SidePanelApp (tuval), useSidePanelChat (kompozisyon), useChatSession, useVoiceInput, useAgentBridge                                     | —                                     |
 | `src/css/`                                     | Stiller                           | popup.css + newtab/ feature CSS'leri                                                                                                   | —                                     |
@@ -191,6 +216,19 @@ Kullanıcı → BistView.tsx (UI)
     → useBistQuotes (canlı fiyat + polling)
       → ChromeStorageStockRepository (infrastructure)
         → chrome.storage.sync
+```
+
+**Pomodoro Slice Pattern örneği:**
+
+```
+Kullanıcı → PomodoroView.tsx (UI)
+  → usePomodoroState (Zustand store)
+    → timerSlice (pomodoro timer + mode)
+    → stopwatchSlice (kronometre)
+    → alarmSlice (alarm listesi)
+    → zenSlice (garden history + plant)
+      → PomodoroManagerService (infrastructure)
+        → chrome.storage.local
 ```
 
 **Kural (AGENTS.md 6.2):** Veri akışı tek yönlüdür: `components/ → hooks/ → services/ → infrastructure/`
