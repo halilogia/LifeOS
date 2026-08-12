@@ -81,7 +81,7 @@ export function MapQuizTargetBar({
           width: "100%",
           display: "flex",
           alignItems: "center",
-          justify: "space-between",
+          justifyContent: "space-between",
           gap: "10px",
           padding: "10px 16px",
           borderRadius: "16px",
