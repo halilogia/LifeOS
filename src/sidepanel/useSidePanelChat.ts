@@ -1,3 +1,10 @@
+/**
+ * useSidePanelChat.ts
+ * Side Panel Chat — kompozisyon tuvali.
+ * 3 alt-hook: useChatSession, useVoiceInput, useAgentBridge.
+ * Return yüzeyi korunur — SidePanelApp.tsx değişmez.
+ */
+
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
@@ -8,12 +15,9 @@ import {
 } from "@/services/aichat/index.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 import { ChatMessage } from "./ChatMessage.js";
-import { startSpeechRecognition } from "./sidePanelSpeech.js";
-import {
-  loadChatSessionMessages,
-  saveChatSessionMessages,
-  clearChatSessionMessages,
-} from "./sidePanelStorage.js";
+import { useChatSession } from "./useChatSession.js";
+import { useVoiceInput } from "./useVoiceInput.js";
+import { useAgentBridge } from "./useAgentBridge.js";
 
 export interface UseSidePanelChatReturn {
   t: Record<string, string>;
@@ -44,105 +48,43 @@ export interface UseSidePanelChatReturn {
 
 export function useSidePanelChat(): UseSidePanelChatReturn {
   const [lang, setLang] = useState<Language>("tr");
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [agentStatus, setAgentStatus] = useState<string | null>(null);
-  const [pageContext, setPageContext] = useState<PageContext | null>(null);
-  const [isListening, setIsListening] = useState(false);
-  const [activeSessionKey, setActiveSessionKey] = useState<string>("");
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const t = getTranslation(lang);
 
-  const toggleVoiceInput = () => {
-    if (isListening) {
-      setIsListening(false);
-      return;
-    }
-    startSpeechRecognition({
-      lang,
-      onStart: () => setIsListening(true),
-      onResult: (transcript) =>
-        setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript)),
-      onErrorOrEnd: () => setIsListening(false),
-      notSupportedMsg: t.speech_not_supported,
-    });
-  };
+  // inputText ref: useVoiceInput needs getter, not setter callback pattern
+  const inputTextRef = useRef(inputText);
+  inputTextRef.current = inputText;
 
-  const refreshPageContext = () => {
-    setAgentStatus(t.page_scanning);
-    try {
-      chrome.runtime.sendMessage(
-        { type: "get_active_tab_context" },
-        (response) => {
-          setAgentStatus(null);
-          if (chrome.runtime.lastError || !response) {
-            return;
-          }
-          if (response.context) {
-            const newCtx: PageContext = response.context;
-            setPageContext(newCtx);
+  /* ---- Oturum yönetimi alt-hook ---- */
+  const {
+    messages,
+    setMessages,
+    messagesEndRef,
+    newChat: handleNewChat,
+    loadSession,
+  } = useChatSession();
 
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-              const activeTab = tabs[0];
-              const groupId =
-                activeTab &&
-                activeTab.groupId !== undefined &&
-                activeTab.groupId !== -1
-                  ? activeTab.groupId
-                  : null;
-              const domain = newCtx.domain || "default";
-              const tabId = activeTab ? activeTab.id : 0;
+  /* ---- Ses tanıma alt-hook ---- */
+  const { isListening, toggleVoiceInput } = useVoiceInput(
+    lang,
+    t,
+    setInputText,
+    () => inputTextRef.current,
+  );
 
-              const sessionKey = groupId
-                ? `copilot_chat_group_${groupId}`
-                : `copilot_chat_domain_${domain}_${tabId}`;
+  /* ---- Agent köprüsü alt-hook (sayfa context + sekme dinleyicileri) ---- */
+  const {
+    agentStatus,
+    setAgentStatus,
+    pageContext,
+    setPageContext,
+    refreshPageContext,
+  } = useAgentBridge(t, loadSession, setLang);
 
-              if (sessionKey !== activeSessionKey) {
-                setActiveSessionKey(sessionKey);
-                void loadChatSessionMessages(sessionKey).then((savedMsgs) => {
-                  setMessages(savedMsgs);
-                });
-              }
-            });
-          }
-        },
-      );
-    } catch {
-      setAgentStatus(null);
-    }
-  };
-
+  /* ---- Auto-prompt listener ---- */
   useEffect(() => {
-    chrome.storage.local.get(["lang", "autoGroupTabs"], (res) => {
-      if (res.lang) {
-        setLang(res.lang as Language);
-      }
-      if (res.autoGroupTabs !== false) {
-        chrome.runtime.sendMessage({ type: "group_active_tab" });
-      }
-    });
-
-    refreshPageContext();
-
-    const tabActivatedListener = () => refreshPageContext();
-    const tabUpdatedListener = (
-      _tabId: number,
-      changeInfo: { status?: string; title?: string; url?: string },
-    ) => {
-      if (
-        changeInfo.status === "complete" ||
-        changeInfo.title ||
-        changeInfo.url
-      ) {
-        refreshPageContext();
-      }
-    };
-
-    chrome.tabs.onActivated.addListener(tabActivatedListener);
-    chrome.tabs.onUpdated.addListener(tabUpdatedListener);
-
     const copilotAutoPromptListener = (msg: {
       type?: string;
       prompt?: string;
@@ -152,24 +94,12 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       }
     };
     chrome.runtime.onMessage.addListener(copilotAutoPromptListener);
-
     return () => {
-      chrome.tabs.onActivated.removeListener(tabActivatedListener);
-      chrome.tabs.onUpdated.removeListener(tabUpdatedListener);
       chrome.runtime.onMessage.removeListener(copilotAutoPromptListener);
     };
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    saveChatSessionMessages(activeSessionKey, messages);
-  }, [messages, agentStatus, activeSessionKey]);
-
-  const handleNewChat = () => {
-    setMessages([]);
-    clearChatSessionMessages(activeSessionKey);
-  };
-
+  /* ---- Ana AI çağrı akışı ---- */
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
     if (!textToSend || isProcessing) {
@@ -354,6 +284,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
       const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
       let finalContent = responseText;
+      const assistantMsgId = (Date.now() + 1).toString();
 
       if (jsonMatch && jsonMatch[1]) {
         try {
@@ -413,10 +344,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                   setMessages((prev) =>
                     prev.map((msg) =>
                       msg.id === assistantMsgId
-                        ? {
-                            ...msg,
-                            content: cleanPromptResponse,
-                          }
+                        ? { ...msg, content: cleanPromptResponse }
                         : msg,
                     ),
                   );
@@ -441,7 +369,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         setAgentStatus(null);
       }
 
-      const assistantMsgId = (Date.now() + 1).toString();
       const assistantMsg: ChatMessage = {
         id: assistantMsgId,
         role: "assistant",
