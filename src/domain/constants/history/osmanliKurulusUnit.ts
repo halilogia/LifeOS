@@ -137,6 +137,17 @@ export const OSMANLI_KURULUS_UNIT: HistoryUnit = {
       y: 181.3,
     },
     {
+      year: 1444,
+      title: "Varna Savaşı",
+      city: "Varna (Bulgaristan)",
+      desc: "II. Murad'ın tahtı II. Mehmed'e bırakması üzerine Haçlıların saldırdığı ve Osmanlı'nın kazandığı kritik zafer.",
+      tag: "Zafer",
+      territory: [],
+      color: "#b91c1c",
+      x: 35.0,
+      y: 15.0,
+    },
+    {
       year: 1448,
       title: "II. Kosova Savaşı",
       city: "Kosova",

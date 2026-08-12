@@ -122,6 +122,7 @@ export const CATEGORY_LEGEND: Record<string, CategoryMeta> = {
 
   // Göller
   "Tektonik":         { name: "Tektonik",         color: "#ec4899", note: "Yer kabuğu hareketleriyle oluşan çanaklarda birikir." },
+  "Krater":           { name: "Krater (Kaldera)", color: "#7c3aed", note: "Volkanik patlama sonucu oluşan çukurlarda birikir." },
   "Karstik Tektonik": { name: "Karstik Tektonik", color: "#06b6d4", note: "Tektonik çukurların karstik erime ile genişlemesiyle oluşur." },
   "Heyelan Set":      { name: "Heyelan Set",      color: "#f97316", note: "Vadinin heyelanla tıkanması sonucu oluşur." },
   "Alüvyal Set":      { name: "Alüvyal Set",      color: "#22c55e", note: "Akarsuyun getirdiği alüvyonların vadi önünü tıkamasıyla oluşur." },
