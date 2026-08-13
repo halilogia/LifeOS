@@ -197,6 +197,7 @@ export const kpss = {
   kpss_quiz_previous: "Previous",
   kpss_quiz_finish: "Finish Quiz",
   kpss_quiz_completed: "Quiz Completed!",
+  kpss_quiz_time_left: "Time Left",
   kpss_quiz_review: "Review Questions:",
   kpss_quiz_solution_label: "Solution: ",
   kpss_quiz_retake: "Re-take Test",

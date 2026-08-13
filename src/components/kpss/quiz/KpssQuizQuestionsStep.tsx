@@ -7,6 +7,8 @@ import { useEffect, useState } from "preact/hooks";
 import { KpssQuestionCanvas } from "@/components/kpss/topics/KpssQuestionCanvas.js";
 import { KpssQuestionMap } from "@/components/kpss/exams/KpssQuestionMap.js";
 import { MathRenderer } from "@/components/kpss/quiz/MathRenderer.js";
+import { KpssQuestionStem } from "@/components/kpss/quiz/KpssQuestionStem.js";
+import { KpssQuizTimer } from "@/components/kpss/quiz/KpssQuizTimer.js";
 
 export interface QuizQuestion {
   question: string;
@@ -82,12 +84,6 @@ export function KpssQuizQuestionsStep({
     return () => window.clearInterval(timer);
   }, [remainingSec, quizLoading, quizError, quizQuestions.length]);
 
-  const fmt = (sec: number) => {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
-
   if (quizLoading) {
     return (
       <div className="ha-loading" style={{ minHeight: "200px" }}>
@@ -130,6 +126,7 @@ export function KpssQuizQuestionsStep({
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           fontSize: "0.85rem",
           opacity: 0.6,
           marginBottom: "8px",
@@ -139,15 +136,11 @@ export function KpssQuizQuestionsStep({
           {`${t.kpss_quiz_questions} ${currentQuestionIndex + 1} / ${totalQuizLength}`}
         </span>
         {/* Zamanlayıcı — süre bitince otomatik sonuç */}
-        <span
-          style={{
-            fontWeight: 700,
-            fontVariantNumeric: "tabular-nums",
-            color: remainingSec <= 60 ? "#f87171" : "inherit",
-          }}
-        >
-          ⏱ {fmt(remainingSec)}
-        </span>
+        <KpssQuizTimer
+          t={t}
+          remainingSec={remainingSec}
+          totalSec={totalQuizLength * 60}
+        />
       </div>
 
       {currentQ.chart && <KpssQuestionCanvas chart={currentQ.chart} />}
@@ -155,7 +148,7 @@ export function KpssQuizQuestionsStep({
 
       <div className="kpss-quiz-question-container">
         <div className="kpss-quiz-question-text">
-          <MathRenderer text={currentQ.question} />
+          <KpssQuestionStem text={currentQ.question} />
         </div>
         <button
           className={`koleksiyon-btn ${isInCollection ? "saved" : ""}`}
