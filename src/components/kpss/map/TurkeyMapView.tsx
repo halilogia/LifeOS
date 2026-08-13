@@ -172,7 +172,6 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
             type="button"
             onClick={() => {
               setViewMode("quiz");
-              if (isFullscreen) toggleFullscreen();
             }}
             style={{
               padding: "8px 16px",
