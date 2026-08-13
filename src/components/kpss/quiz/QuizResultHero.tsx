@@ -15,6 +15,7 @@ interface QuizResultHeroProps {
   correctCount: number;
   totalQuestions: number;
   cumulative: { totalQuestions: number; totalCorrect: number };
+  targetQuestions: number;
 }
 
 export function QuizResultHero({
@@ -23,6 +24,7 @@ export function QuizResultHero({
   correctCount,
   totalQuestions,
   cumulative,
+  targetQuestions,
 }: QuizResultHeroProps) {
   // Birikimli (Konu Genel) İstatistikleri
   const cumTotal = cumulative?.totalQuestions ?? 0;
@@ -35,9 +37,12 @@ export function QuizResultHero({
         : 0;
 
   // Baraj Hesapları
-  const questionTargetPct = Math.min(100, Math.round((cumTotal / 100) * 100));
+  const questionTargetPct = Math.min(
+    100,
+    Math.round((cumTotal / targetQuestions) * 100),
+  );
   const successTargetPct = Math.min(100, cumPercent);
-  const isCompleted = cumTotal >= 100 && cumPercent >= 80;
+  const isCompleted = cumTotal >= targetQuestions && cumPercent >= 80;
 
   return (
     <div
@@ -121,7 +126,7 @@ export function QuizResultHero({
         >
           <span>🎯 Soru Sayısı Hedefi</span>
           <span style={{ color: "var(--accent-color)" }}>
-            {cumTotal} / 100 Soru
+            {cumTotal} / {targetQuestions} Soru
           </span>
         </div>
         <div
