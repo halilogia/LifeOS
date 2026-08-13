@@ -89,22 +89,22 @@ export function formatKpssCountdown(
 }
 
 /**
- * Hesaplar bir konunun "başarılı/tamamlandı" sayılması için çözülmesi gereken
- * soru hedefini. Soru sıklığı (questionsCount) yüksek konularda hedef büyür,
- * az çıkan konularda küçülür.
+ * Hedef = taban + sıklık × oran (saf ölçek).
+ * Soru sıklığı arttıkça hedef orantılı artar: her +1 sıklık = +SCALE_HEDEF.
  *
- * Saf lineer ölçek — her soru sıklığı değerine ayrı hedef düşer.
- * Slope 34: en küçük sıklık farkı (0.03) × 34 ≈ 1.02 olduğu için yuvarlama
- * çakışmaz; tüm konuların hedefi birbirinden farklı ve sıralı kalır.
- * Alt sınır yok (düşük sıklık = düşük hedef), yalnızca Paragraf gibi aşırı
- * yüksek değerler 250 tavanıyla sınırlanır.
- *
- * @param questionsCount konunun sınavdaki ortalama soru sıklığı (kpssCurriculum)
+ *  - Taban MIN_TARGET (30): düşük sıklıklı konu için anlamsız 1/5/10 olmaz.
+ *  - Tavan MAX_TARGET (150): sıklık ≥ (150-30)/8 = 15 olduğu için Paragraf
+ *    gibi en yüksek değer 150 ile sınırlı kalır.
+ *  - Hedef sıklıkla DOĞRU ORANTI — rank-based eşit sıçramalara gerek yok.
  */
+const MIN_TARGET = 30;
+const MAX_TARGET = 150;
+const SCALE_STEP = (MAX_TARGET - MIN_TARGET) / 15; // ≈ 8: sıklık 0→30, 15→150
+
 export function getTopicQuestionTarget(questionsCount: number): number {
-  if (!questionsCount || questionsCount <= 0) return 5;
-  const computed = Math.round(questionsCount * 34);
-  return Math.min(250, computed);
+  if (!questionsCount || questionsCount <= 0) return MIN_TARGET;
+  const computed = MIN_TARGET + questionsCount * SCALE_STEP;
+  return Math.min(MAX_TARGET, Math.round(computed));
 }
 
 /**

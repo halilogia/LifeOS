@@ -197,6 +197,7 @@ export const kpss = {
   kpss_quiz_previous: "Önceki",
   kpss_quiz_finish: "Sınavı Bitir",
   kpss_quiz_completed: "Sınav Tamamlandı!",
+  kpss_quiz_time_left: "Kalan Süre",
   kpss_quiz_review: "Soruları İncele:",
   kpss_quiz_solution_label: "Çözüm: ",
   kpss_quiz_retake: "Seviyeni Tekrar Çöz",
