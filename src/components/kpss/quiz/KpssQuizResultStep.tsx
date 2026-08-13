@@ -9,6 +9,8 @@ import { QuizResultActions } from "./QuizResultActions.js";
 import { KpssQuizReviewModal } from "./KpssQuizReviewModal.js";
 
 import { KpssPastQuizSession } from "@/services/kpss/kpssQuizService.js";
+import { getTopicQuestionTarget } from "@/domain/services/KpssCalculatorService.js";
+import { kpssData } from "@/domain/constants/kpssCurriculum.js";
 
 interface KpssQuizResultStepProps {
   lang: string;
@@ -81,17 +83,17 @@ export function KpssQuizResultStep({
   ).length;
   const totalQuestions = quizQuestions.length;
 
-  // Birikimli başarı: konu tamamlanması için min 100 soru + %80 şartı
+  // Birikimli başarı: konu tamamlanması için dinamik soru hedefi + %80 şartı
   const cumTotal = cumulative?.totalQuestions ?? 0;
   const cumCorrect = cumulative?.totalCorrect ?? 0;
   const cumPercent =
-    cumTotal >= 100
-      ? Math.round((cumCorrect / cumTotal) * 100)
-      : cumTotal > 0
-        ? Math.round((cumCorrect / cumTotal) * 100)
-        : 0;
-  const cumPassed = cumTotal >= 100 && cumPercent >= 80;
-  const barPct = Math.min(100, Math.round((cumTotal / 100) * 100));
+    cumTotal > 0 ? Math.round((cumCorrect / cumTotal) * 100) : 0;
+  const topicTarget = getTopicQuestionTarget(
+    (kpssData[currentSubject] || []).find((t) => t.title === activeQuizTopic)
+      ?.questionsCount ?? 1,
+  );
+  const cumPassed = cumTotal >= topicTarget && cumPercent >= 80;
+  const barPct = Math.min(100, Math.round((cumTotal / topicTarget) * 100));
 
   return (
     <div style={{ padding: "4px" }}>
@@ -102,6 +104,7 @@ export function KpssQuizResultStep({
         correctCount={correctCount}
         totalQuestions={totalQuestions}
         cumulative={cumulative}
+        targetQuestions={topicTarget}
       />
 
       {/* ─── Actions ─── */}

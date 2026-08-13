@@ -89,6 +89,25 @@ export function formatKpssCountdown(
 }
 
 /**
+ * Hesaplar bir konunun "başarılı/tamamlandı" sayılması için çözülmesi gereken
+ * soru hedefini. Soru sıklığı (questionsCount) yüksek konularda hedef büyür,
+ * az çıkan konularda küçülür.
+ *
+ * Saf lineer ölçek — her soru sıklığı değerine ayrı hedef düşer.
+ * Slope 34: en küçük sıklık farkı (0.03) × 34 ≈ 1.02 olduğu için yuvarlama
+ * çakışmaz; tüm konuların hedefi birbirinden farklı ve sıralı kalır.
+ * Alt sınır yok (düşük sıklık = düşük hedef), yalnızca Paragraf gibi aşırı
+ * yüksek değerler 250 tavanıyla sınırlanır.
+ *
+ * @param questionsCount konunun sınavdaki ortalama soru sıklığı (kpssCurriculum)
+ */
+export function getTopicQuestionTarget(questionsCount: number): number {
+  if (!questionsCount || questionsCount <= 0) return 5;
+  const computed = Math.round(questionsCount * 34);
+  return Math.min(250, computed);
+}
+
+/**
  * Calculates subject net scores.
  * Pure function — no external dependencies.
  */

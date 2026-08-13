@@ -41,6 +41,7 @@ import { TurkeyMapView } from "@/components/kpss/map/TurkeyMapView.js";
 import { HistoryMapView } from "@/components/kpss/map/HistoryMapView.js";
 import { logger } from "@/utils/logger.js";
 import { useKpssChartSettings } from "@/presentation/hooks/useKpssChartSettings.js";
+import { useKpssSortSettings } from "@/presentation/hooks/useKpssSortSettings.js";
 
 interface KpssViewProps {
   lang: Language;
@@ -104,10 +105,8 @@ export function KpssView({
     "geography",
   );
 
-  // Sorting state for topic lists
-  const [sortBy, setSortBy] = useState<"default" | "questions" | "status">(
-    "default",
-  );
+  // Sorting state for topic lists — persisted via store (remembers last choice)
+  const { sortBy, setSortBy } = useKpssSortSettings();
 
   // KPSS Hedef ve Grafik Sistemleri
   const { chartType, chartDays, saveChartType, saveChartDays } =

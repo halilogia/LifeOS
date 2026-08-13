@@ -50,6 +50,7 @@ flowchart TB
         useKpssWikiSidebar
         useKpssChartMetric
         useKpssChartSettings
+        useKpssSortSettings
         useDetox
         useTabVolume
         useAiUserMemory

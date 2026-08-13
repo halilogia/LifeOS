@@ -10,6 +10,13 @@
 import type { KpssProgress, KpssDailyStats } from "@/types/types.js";
 import type { IKpssRepository } from "@/domain/repositories/IKpssRepository.js";
 import { kpssData, type KpssTopic } from "@/domain/constants/kpssCurriculum.js";
+import { getTopicQuestionTarget } from "@/domain/services/KpssCalculatorService.js";
+
+/** Konu başına dinamik soru hedefini kpssData içindeki soru sıklığından türetir. */
+function resolveTopicTarget(subject: string, topic: string): number {
+  const topicDef = (kpssData[subject] || []).find((t) => t.title === topic);
+  return getTopicQuestionTarget(topicDef?.questionsCount ?? 1);
+}
 
 /** AI üretimli KPSS SRS flashcard şablonu (eski sabit kart kaynağı kaldırıldı). */
 export interface KpssFlashcard {
@@ -63,12 +70,13 @@ export function createKpssService(kpssRepo: IKpssRepository) {
           changed = true;
         }
 
-        // Tamamlandı (status 2) olan kayıtların 100 soru + %80 başarı kuralına uyum kontrolü
+        // Tamamlandı (status 2) olan kayıtların dinamik soru hedefi + %80 başarı kuralına uyum kontrolü
         if (p.status === 2) {
           const tq = p.totalQuestions ?? 0;
           const tc = p.totalCorrect ?? 0;
+          const target = resolveTopicTarget(p.subject, p.topic);
           const cumPercent = tq > 0 ? Math.round((tc / tq) * 100) : 0;
-          if (tq < 100 || cumPercent < 80) {
+          if (tq < target || cumPercent < 80) {
             p.status = 1;
             changed = true;
           }
@@ -144,11 +152,12 @@ export function createKpssService(kpssRepo: IKpssRepository) {
         record.totalCorrect = newTotalC;
         record.score = score;
 
-        // Yeni durum: min 100 soru + %80 birikimli başarı
+        // Yeni durum: konu başına dinamik soru hedefi + %80 birikimli başarı
+        const target = resolveTopicTarget(subject, topic);
         const cumPercent =
-          newTotalQ >= 100 ? Math.round((newTotalC / newTotalQ) * 100) : 0;
+          newTotalQ >= target ? Math.round((newTotalC / newTotalQ) * 100) : 0;
         record.status =
-          newTotalQ >= 100 && cumPercent >= 80
+          newTotalQ >= target && cumPercent >= 80
             ? 2
             : cumPercent >= 40
               ? 1
