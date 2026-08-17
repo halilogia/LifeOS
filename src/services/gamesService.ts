@@ -120,6 +120,20 @@ export function createGamesService(cacheRepo: IGamesCacheRepository) {
     saveExclusionSettings(settings: ExclusionSettings): Promise<void> {
       return cacheRepo.saveExclusionSettings(settings);
     },
+
+    /**
+     * Loads the list of claimed (alındı) giveaway ids.
+     */
+    loadClaimedGames(): Promise<number[]> {
+      return cacheRepo.loadClaimedGames();
+    },
+
+    /**
+     * Saves the list of claimed (alındı) giveaway ids.
+     */
+    saveClaimedGames(ids: number[]): Promise<void> {
+      return cacheRepo.saveClaimedGames(ids);
+    },
   };
 }
 

@@ -37,6 +37,10 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyEmpty, setHistoryEmpty] = useState(false);
 
+  // Claimed games (id listesi — storage'da kalıcı)
+  const [claimedIds, setClaimedIds] = useState<number[]>([]);
+  const [hideClaimed, setHideClaimed] = useState(false);
+
   // Loading/Error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,6 +53,8 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
       setExclusions(activeExclusions);
       const list = await gamesService.fetchLiveGiveaways();
       setAllGiveaways(list);
+      const claimed = await gamesService.loadClaimedGames();
+      setClaimedIds(claimed);
       setLoading(false);
     } catch (e) {
       logger.error("[FreeGamesView] loadSettingsAndGiveaways:", e);
@@ -69,6 +75,23 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
     setExclusions(updated);
     await gamesService.saveExclusionSettings(updated);
   };
+
+  /** Claim butonuna tıklandı → oyunu otomatik "alındı" işaretle (geri al: tekrar tıkla). */
+  const handleClaimToggle = useCallback(
+    async (gameId: number) => {
+      const isClaimed = claimedIds.includes(gameId);
+      const next = isClaimed
+        ? claimedIds.filter((id) => id !== gameId)
+        : [...claimedIds, gameId];
+      setClaimedIds(next);
+      try {
+        await gamesService.saveClaimedGames(next);
+      } catch (e) {
+        logger.error("[FreeGamesView] handleClaimToggle:", e);
+      }
+    },
+    [claimedIds],
+  );
 
   const handleHistorySearch = async () => {
     if (!searchQuery.trim()) {
@@ -203,13 +226,16 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
     }
   };
 
-  // Filter live giveaways based on platform, type, and source exclusion settings
+  // Filter live giveaways based on platform, type, source exclusion, and claimed state
   const filteredGiveaways = allGiveaways.filter((item) => {
     const site = getGiveawaySite(item.platforms, item.title);
     if (!exclusions[site]) {
       return false;
     }
     if (item.type.toLowerCase() !== type.toLowerCase()) {
+      return false;
+    }
+    if (hideClaimed && claimedIds.includes(item.id)) {
       return false;
     }
     const platformsLower = item.platforms.toLowerCase();
@@ -241,6 +267,10 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
     loading,
     error,
     filteredGiveaways,
+    claimedIds,
+    hideClaimed,
+    setHideClaimed,
+    handleClaimToggle,
     loadSettingsAndGiveaways,
     handleExclusionChange,
     handleHistorySearch,

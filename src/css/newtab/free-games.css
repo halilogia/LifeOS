@@ -403,6 +403,85 @@
   box-shadow: 0 4px 12px var(--accent-glow);
 }
 
+/* ── Claimed (Alındı) state ─────────────────────────── */
+.game-card.claimed .game-card-image {
+  filter: grayscale(0.5) brightness(0.72);
+}
+
+.game-card.claimed .game-title {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.game-claimed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(
+    135deg,
+    rgba(46, 213, 115, 0.25),
+    rgba(46, 213, 115, 0.12)
+  );
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.45);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+
+.game-claim-btn.claimed {
+  background: rgba(46, 213, 115, 0.16);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.45);
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.game-claim-btn.claimed:hover {
+  background: rgba(46, 213, 115, 0.28);
+  color: #5ce68f;
+  border-color: rgba(46, 213, 115, 0.7);
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.25);
+}
+
+.fg-claimed-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin: -6px 0 14px;
+}
+
+.fg-hide-claimed-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.fg-hide-claimed-chip:hover {
+  border-color: var(--accent-color);
+  background: rgba(var(--accent-color-rgb), 0.06);
+}
+
+.fg-hide-claimed-chip input {
+  accent-color: var(--accent-color);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
 /* Spinner & States */
 .free-games-loading {
   display: flex;

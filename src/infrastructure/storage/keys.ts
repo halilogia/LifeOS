@@ -132,6 +132,7 @@ export const LOCAL_KAP_NEWS_CACHE = "kapNewsCache";
 export const LOCAL_FREE_GAMES_CACHE = "free_games_cache";
 export const LOCAL_EPIC_HISTORY_CACHE = "epic_history_cache";
 export const LOCAL_FG_EXCLUSIONS = "fg_exclusions";
+export const LOCAL_FG_CLAIMED = "fg_claimed_games";
 export const LOCAL_CITY_PULSE_EVENTS = "city_pulse_events_cache";
 export const LOCAL_CITY_PULSE_TAXONOMIES = "city_pulse_taxonomies_cache";
 export const LOCAL_CITY_PULSE_FAVORITES = "city_pulse_favorites";

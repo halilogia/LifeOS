@@ -23,4 +23,7 @@ export const free = {
   free_games_loading: "Ücretsiz web oyunları yükleniyor...",
   free_games_error: "Oyunlar yüklenemedi. Bağlantını kontrol et.",
   free_games_empty: "Ücretsiz oyun bulunamadı.",
+  fg_claimed: "Alındı",
+  fg_mark_claimed: "Alındı işaretle",
+  fg_hide_claimed: "Alınanları gizle",
 };

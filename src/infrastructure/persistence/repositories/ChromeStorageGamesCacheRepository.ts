@@ -17,6 +17,7 @@ import {
   LOCAL_FREE_GAMES_CACHE,
   LOCAL_EPIC_HISTORY_CACHE,
   LOCAL_FG_EXCLUSIONS,
+  LOCAL_FG_CLAIMED,
 } from "@/infrastructure/storage/keys.js";
 
 const LIVE_CACHE_KEY = LOCAL_FREE_GAMES_CACHE;
@@ -74,6 +75,21 @@ export class ChromeStorageGamesCacheRepository implements IGamesCacheRepository 
   saveExclusionSettings(settings: ExclusionSettings): Promise<void> {
     return new Promise((resolve) => {
       chrome.storage.local.set({ [LOCAL_FG_EXCLUSIONS]: settings }, resolve);
+    });
+  }
+
+  loadClaimedGames(): Promise<number[]> {
+    return new Promise((resolve) => {
+      chrome.storage.local.get([LOCAL_FG_CLAIMED], (res) => {
+        const stored = res[LOCAL_FG_CLAIMED] as number[] | undefined;
+        resolve(Array.isArray(stored) ? stored : []);
+      });
+    });
+  }
+
+  saveClaimedGames(ids: number[]): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ [LOCAL_FG_CLAIMED]: ids }, resolve);
     });
   }
 }
