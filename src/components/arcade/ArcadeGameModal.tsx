@@ -7,6 +7,7 @@ import { logger } from "@/utils/logger.js";
 import { ArcadeModalHeader } from "./ArcadeModalHeader.js";
 import { ArcadePlayTab } from "./ArcadePlayTab.js";
 import { ArcadeDevTab } from "./ArcadeDevTab.js";
+import { ConfirmModal } from "@/components/ConfirmModal.js";
 
 interface ArcadeGameModalProps {
   game: GameEntry;
@@ -48,6 +49,7 @@ export function ArcadeGameModal({
     game.todoList ?? STARTER_TODO,
   );
   const toastTimerRef = useRef<number | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const t = translations[lang];
   const tr = t as Record<string, string>;
@@ -207,9 +209,12 @@ export function ArcadeGameModal({
   };
 
   const handleDelete = () => {
-    if (window.confirm(tr.arcade_delete_confirm)) {
-      onDeleteGame(game.id);
-    }
+    onDeleteGame(game.id);
+    setConfirmDelete(false);
+  };
+
+  const handleRequestDelete = () => {
+    setConfirmDelete(true);
   };
 
   const handleCopyCmd = async () => {
@@ -271,10 +276,18 @@ export function ArcadeGameModal({
               onToggleTodo={handleToggleTodo}
               onDeleteTodo={handleDeleteTodo}
               onSave={handleSaveDevNotes}
-              onDeleteGame={handleDelete}
+              onDeleteGame={handleRequestDelete}
             />
           )}
         </div>
+
+        <ConfirmModal
+          isOpen={confirmDelete}
+          message={tr.arcade_delete_confirm}
+          lang={lang}
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmDelete(false)}
+        />
 
         {toast && (
           <div className={`arcade-toast ${toast.kind}`}>{toast.text}</div>

@@ -5,6 +5,7 @@ import {
   downloadLogsMd,
 } from "@/services/errorReportService.js";
 import type { LogEntry } from "@/utils/logger.js";
+import { logger } from "@/utils/logger.js";
 import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface ErrorReportSettingsTabProps {
@@ -37,7 +38,7 @@ export function ErrorReportSettingsTab({
       setDownloading(true);
       await downloadLogsMd();
     } catch (err) {
-      console.error("[ErrorReport] Download failed:", err);
+      logger.error("[ErrorReportSettingsTab] Download failed:", err);
       onNotify(String(err));
     } finally {
       setDownloading(false);
@@ -51,7 +52,7 @@ export function ErrorReportSettingsTab({
       setLogCount(0);
       onNotify(t.settings_error_reporting_cleared);
     } catch (err) {
-      console.error("[ErrorReport] Clear failed:", err);
+      logger.error("[ErrorReportSettingsTab] Clear failed:", err);
       onNotify(String(err));
     } finally {
       setClearing(false);
