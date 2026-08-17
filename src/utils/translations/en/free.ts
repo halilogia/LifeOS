@@ -23,4 +23,7 @@ export const free = {
   free_games_loading: "Loading free web games...",
   free_games_error: "Failed to load games. Check your connection.",
   free_games_empty: "No free games found.",
+  fg_claimed: "Claimed",
+  fg_mark_claimed: "Mark as claimed",
+  fg_hide_claimed: "Hide claimed",
 };

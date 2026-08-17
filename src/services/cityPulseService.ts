@@ -38,24 +38,95 @@ interface WpTerm {
   count: number;
 }
 
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  nbsp: " ",
+  ndash: "-",
+  mdash: "-",
+  hellip: "...",
+  rsquo: "\u2019",
+  lsquo: "\u2018",
+  rdquo: "\u201d",
+  ldquo: "\u201c",
+  uuml: "\u00fc",
+  Uuml: "\u00dc",
+  auml: "\u00e4",
+  Auml: "\u00c4",
+  ouml: "\u00f6",
+  Ouml: "\u00d6",
+  iuml: "\u00ef",
+  Iuml: "\u00cf",
+  uml: "\u00a8",
+  ccedil: "\u00e7",
+  Ccedil: "\u00c7",
+  ugrave: "\u00f9",
+  eacute: "\u00e9",
+  Eacute: "\u00c9",
+  agrave: "\u00e0",
+  egrave: "\u00e8",
+  igrave: "\u00ec",
+  ograve: "\u00f2",
+  szlig: "\u00df",
+  deg: "\u00b0",
+  plusmn: "\u00b1",
+  times: "\u00d7",
+  divide: "\u00f7",
+  copy: "\u00a9",
+  reg: "\u00ae",
+  trade: "\u2122",
+  laquo: "\u00ab",
+  raquo: "\u00bb",
+  middot: "\u00b7",
+  bull: "\u2022",
+  euro: "\u20ac",
+  pound: "\u00a3",
+  yen: "\u00a5",
+  larr: "\u2190",
+  rarr: "\u2192",
+  uarr: "\u2191",
+  darr: "\u2193",
+  rsaquo: "\u203a",
+  lsaquo: "\u2039",
+  frac12: "\u00bd",
+  frac14: "\u00bc",
+  frac34: "\u00be",
+};
+
+/** Decodes &name; and &#NNN;/&#xHH; entities in a plain string (DOM-free). */
+export function decodeEntities(input: string): string {
+  if (!input) {
+    return "";
+  }
+  return String(input)
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex: string) =>
+      String.fromCodePoint(parseInt(hex, 16)),
+    )
+    .replace(/&#(\d+);/g, (_, dec: string) =>
+      String.fromCodePoint(parseInt(dec, 10)),
+    )
+    .replace(/&([a-zA-Z][a-zA-Z0-9]*);/g, (match, name: string) => {
+      const mapped = NAMED_ENTITIES[name];
+      return mapped !== undefined ? mapped : match;
+    });
+}
+
 /** Strips HTML tags from API-rendered content/excerpt into plain text. */
 export function stripHtml(html: string): string {
   if (!html) {
     return "";
   }
-  return String(html)
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&#8217;|&rsquo;/g, "'")
-    .replace(/&#8211;|&ndash;/g, "-")
-    .replace(/&#8212;|&mdash;/g, "-")
-    .replace(/&hellip;/g, "...")
-    .replace(/\s+/g, " ")
-    .trim();
+  return decodeEntities(
+    String(html)
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim(),
+  );
 }
 
 export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {

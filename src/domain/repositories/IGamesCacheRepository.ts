@@ -19,4 +19,6 @@ export interface IGamesCacheRepository {
   setHistoryCache(data: HistoricalEpicGame[]): Promise<void>;
   loadExclusionSettings(): Promise<ExclusionSettings>;
   saveExclusionSettings(settings: ExclusionSettings): Promise<void>;
+  loadClaimedGames(): Promise<number[]>;
+  saveClaimedGames(ids: number[]): Promise<void>;
 }
