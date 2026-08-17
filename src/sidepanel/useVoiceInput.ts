@@ -29,7 +29,6 @@ export function useVoiceInput(
         setInputText(current ? `${current} ${transcript}` : transcript);
       },
       onErrorOrEnd: () => setIsListening(false),
-      notSupportedMsg: t.speech_not_supported,
     });
   };
 

@@ -10,19 +10,16 @@ export function startSpeechRecognition({
   onStart,
   onResult,
   onErrorOrEnd,
-  notSupportedMsg,
 }: {
   lang: Language;
   onStart: () => void;
   onResult: (transcript: string) => void;
   onErrorOrEnd: () => void;
-  notSupportedMsg: string;
 }): void {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
-    alert(notSupportedMsg);
     onErrorOrEnd();
     return;
   }

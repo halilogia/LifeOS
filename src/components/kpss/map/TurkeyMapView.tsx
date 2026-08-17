@@ -99,7 +99,9 @@ export function TurkeyMapView({ t }: TurkeyMapViewProps) {
   }, [total, currentPins.length, setTotal]);
 
   const handleTopicChange = (topic: TurkeyMapTopic) => {
-    if (topic === selectedTopic) return;
+    if (topic === selectedTopic) {
+      return;
+    }
     setSelectedTopic(topic);
     handleUnitChange(TOPIC_PINS[topic]?.length || 0);
     quizActions.setTopic(topic);

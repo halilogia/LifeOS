@@ -27,7 +27,7 @@ function summarizeValue(value: unknown): {
 } {
   let type: SyncKeySummary["type"] = "unknown";
   let size = 0;
-  let preview = "";
+  let preview: string;
 
   try {
     const json = JSON.stringify(value);
@@ -52,7 +52,7 @@ function summarizeValue(value: unknown): {
       preview = value ? "true" : "false";
     }
   } catch {
-    size = 0;
+    // JSON.stringify failure → keep size=0, preview set below
     preview = "[okunamadı]";
   }
 

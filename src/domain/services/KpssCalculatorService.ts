@@ -102,7 +102,9 @@ const MAX_TARGET = 150;
 const SCALE_STEP = (MAX_TARGET - MIN_TARGET) / 15; // ≈ 8: sıklık 0→30, 15→150
 
 export function getTopicQuestionTarget(questionsCount: number): number {
-  if (!questionsCount || questionsCount <= 0) return MIN_TARGET;
+  if (!questionsCount || questionsCount <= 0) {
+    return MIN_TARGET;
+  }
   const computed = MIN_TARGET + questionsCount * SCALE_STEP;
   return Math.min(MAX_TARGET, Math.round(computed));
 }
