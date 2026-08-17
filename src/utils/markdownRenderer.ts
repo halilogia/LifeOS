@@ -14,22 +14,16 @@ export function renderMarkdown(text: string): string {
   let html = escapeHtml(text);
 
   // Parse Markdown Images FIRST before link parser: ![alt](url)
-  html = html.replace(
-    /!\[([^\]]*)\]\(([^\s)]+)\)/g,
-    (_, alt, src) => {
-      const safeSrc = sanitizeUrl(src);
-      return `<img src="${safeSrc}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
-    },
-  );
+  html = html.replace(/!\[([^\]]*)\]\(([^\s)]+)\)/g, (_, alt, src) => {
+    const safeSrc = sanitizeUrl(src);
+    return `<img src="${safeSrc}" alt="${alt}" style="max-width: 100%; border-radius: 8px; margin: 12px 0; display: block; border: 1px solid rgba(255,255,255,0.12);" />`;
+  });
 
   // Parse Markdown Links: [text](url)
-  html = html.replace(
-    /\[([^\]]+)\]\(([^\s)]+)\)/g,
-    (_, linkText, href) => {
-      const safeHref = sanitizeUrl(href);
-      return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
-    },
-  );
+  html = html.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, (_, linkText, href) => {
+    const safeHref = sanitizeUrl(href);
+    return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">${linkText}</a>`;
+  });
 
   // Parse Code blocks: ```javascript ... ```
   html = html.replace(/```([\s\S]+?)```/g, (_, code) => {

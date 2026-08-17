@@ -28,7 +28,8 @@ const NEGATION_CUES = [
   "aşağıdakilerden hangisi değildir",
 ];
 
-const ROMAN_RE = /^\s*(M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))[.)]\s+/;
+const ROMAN_RE =
+  /^\s*(M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))[.)]\s+/;
 
 function splitRomanItems(body: string): string[] {
   // Madde başlarını (I., II., ...) yakala; metni parçalara böl.

@@ -8,7 +8,8 @@ export function formatMemoryUpdate(
 ): string {
   const t = getTranslation(lang);
   const mainHeader =
-    t.ai_memory_header_main || "# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)";
+    t.ai_memory_header_main ||
+    "# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)";
   const sectionHeader =
     t.ai_memory_header_section || "## 💡 AI Tarafından Öğrenilen Bilgiler";
 

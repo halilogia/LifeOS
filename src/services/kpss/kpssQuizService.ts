@@ -78,7 +78,9 @@ export async function getPastExamQuestions(
   let questions: QuizQuestion[] = [];
 
   if (year === "tarih_arsivi") {
-    const osymData = (await import("@/services/kpss/data/osymHistoryQuestions.json")).default;
+    const osymData = (
+      await import("@/services/kpss/data/osymHistoryQuestions.json")
+    ).default;
     const rawHistory = (osymData as { history?: unknown[] }).history || [];
     type HistoryItem = {
       chapter?: string;
@@ -124,7 +126,9 @@ export async function getPastExamQuestions(
     questions = [...questions].sort(() => Math.random() - 0.5);
   } else if (year === "tarih_arsivi54") {
     // SON 54 YILIN TARİH SORULARI (OCR'dan parse edilen, 2026-08)
-    const osym54Data = (await import("@/services/kpss/data/osymHistoryQuestions54.json")).default;
+    const osym54Data = (
+      await import("@/services/kpss/data/osymHistoryQuestions54.json")
+    ).default;
     const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
     type History54Item = {
       chapter?: string;
@@ -182,12 +186,15 @@ export async function getPastExamQuestions(
       const allData = await getAllData();
       Object.keys(allData).forEach((y) => {
         const yearData = allData[y];
-        if (yearData.tarih)
-          {historyPool.push(...(yearData.tarih as unknown as QuizQuestion[]));}
-        if (yearData.cografya)
-          {geoPool.push(...(yearData.cografya as unknown as QuizQuestion[]));}
-        if (yearData.matematik)
-          {mathPool.push(...(yearData.matematik as unknown as QuizQuestion[]));}
+        if (yearData.tarih) {
+          historyPool.push(...(yearData.tarih as unknown as QuizQuestion[]));
+        }
+        if (yearData.cografya) {
+          geoPool.push(...(yearData.cografya as unknown as QuizQuestion[]));
+        }
+        if (yearData.matematik) {
+          mathPool.push(...(yearData.matematik as unknown as QuizQuestion[]));
+        }
       });
 
       const totalTarget = countLimit || 20;
@@ -252,7 +259,9 @@ export async function getExamSubjectCount(
   }
   if (year === "tarih_arsivi54") {
     // sadece 5 şıklı sorular (OCR şık kaybı olanlar quiz'de bozuk görünür)
-    const osym54Data = (await import("@/services/kpss/data/osymHistoryQuestions54.json")).default;
+    const osym54Data = (
+      await import("@/services/kpss/data/osymHistoryQuestions54.json")
+    ).default;
     const rawHistory = (osym54Data as { history?: unknown[] }).history || [];
     const count = rawHistory.filter(
       (q) =>
@@ -281,7 +290,9 @@ export async function getExamSubjectCount(
   }
 
   const yearData = await loadExamYearData(year);
-  if (!yearData) {return 0;}
+  if (!yearData) {
+    return 0;
+  }
 
   if (subject === "all") {
     return (

@@ -19,7 +19,9 @@ function hideElement(el: Element): void {
   htmlEl.style.setProperty("overflow", "hidden", "important");
 }
 
-export function cleanTwitterTimeline(currentSettings: DistractionSettings): void {
+export function cleanTwitterTimeline(
+  currentSettings: DistractionSettings,
+): void {
   const hostname = window.location.hostname;
   if (!hostname.includes("x.com") && !hostname.includes("twitter.com")) {
     return;

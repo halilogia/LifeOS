@@ -94,7 +94,8 @@ export function injectYouTubeQuoteBanner(
   if (
     !hostname.includes("youtube.com") ||
     !currentSettings.ytFeedBlock ||
-    (window.location.pathname !== "/" && window.location.pathname !== "/index.html")
+    (window.location.pathname !== "/" &&
+      window.location.pathname !== "/index.html")
   ) {
     const existing = document.getElementById("lifeos-yt-quote-card");
     if (existing && existing.parentNode) {

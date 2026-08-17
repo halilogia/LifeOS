@@ -6,7 +6,11 @@
  */
 
 import { getPageContext } from "./pageContextExtractor.js";
-import { highlightElement, findTargetElement, showScanningSweep } from "./elementScanner.js";
+import {
+  highlightElement,
+  findTargetElement,
+  showScanningSweep,
+} from "./elementScanner.js";
 
 export interface AgentActionPayload {
   actionType: "click" | "type" | "scroll" | "extract" | "highlight";

@@ -16,7 +16,9 @@ export function useDetox() {
   const distractionSettings = useDetoxState((s) => s.distractionSettings);
   const setDistractionSettings = useDetoxState((s) => s.setDistractionSettings);
   const saveBlockedSites = useDetoxState((s) => s.saveBlockedSites);
-  const saveDistractionSettings = useDetoxState((s) => s.saveDistractionSettings);
+  const saveDistractionSettings = useDetoxState(
+    (s) => s.saveDistractionSettings,
+  );
   const enableDetox = useDetoxState((s) => s.enableDetox);
   const disableDetox = useDetoxState((s) => s.disableDetox);
 

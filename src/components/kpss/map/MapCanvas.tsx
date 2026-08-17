@@ -38,13 +38,16 @@ export function MapCanvas({
   onWheel,
 }: MapCanvasProps) {
   const total = pins.length;
-  const currentPin = currentIndex >= 0 && currentIndex < total ? pins[currentIndex] : null;
-  const pinCatMeta = currentPin?.category ? CATEGORY_LEGEND[currentPin.category] : null;
+  const currentPin =
+    currentIndex >= 0 && currentIndex < total ? pins[currentIndex] : null;
+  const pinCatMeta = currentPin?.category
+    ? CATEGORY_LEGEND[currentPin.category]
+    : null;
   const pinColor = pinCatMeta ? pinCatMeta.color : topicColor;
 
   // Pin setindeki tüm benzersiz kategoriler (sıra koruyarak)
   const allCatMetas = Array.from(
-    new Set(pins.map((p) => p.category).filter((c): c is string => Boolean(c)))
+    new Set(pins.map((p) => p.category).filter((c): c is string => Boolean(c))),
   )
     .map((cat) => CATEGORY_LEGEND[cat])
     .filter(Boolean);
@@ -184,7 +187,13 @@ export function MapCanvas({
                   flexShrink: 0,
                 }}
               />
-              <span style={{ fontSize: "0.72rem", color: "#5a5140", fontWeight: 700 }}>
+              <span
+                style={{
+                  fontSize: "0.72rem",
+                  color: "#5a5140",
+                  fontWeight: 700,
+                }}
+              >
                 {meta.name}
               </span>
             </div>
@@ -201,7 +210,9 @@ export function MapCanvas({
                 display: "inline-block",
               }}
             />
-            <span style={{ fontSize: "0.72rem", color: "#5a5140", fontWeight: 700 }}>
+            <span
+              style={{ fontSize: "0.72rem", color: "#5a5140", fontWeight: 700 }}
+            >
               {t[legendKey] || "Konum"}
             </span>
           </div>

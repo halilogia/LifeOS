@@ -187,7 +187,10 @@ export function DetoxView({ lang }: DetoxViewProps) {
   );
   return (
     <div id="detox-view" className="view-content active">
-      <div className="detox-container" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div
+        className="detox-container"
+        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+      >
         <DetoxUsageCard
           lang={lang}
           totalScreenTimeSeconds={totalScreenTimeSeconds}

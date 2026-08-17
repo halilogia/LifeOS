@@ -55,7 +55,9 @@ export function KpssSrsTab({
           }}
         >
           <div className="ha-spinner" style={{ width: 18, height: 18 }} />
-          <span>{t.kpss_srs_generating || "AI is generating history cards..."}</span>
+          <span>
+            {t.kpss_srs_generating || "AI is generating history cards..."}
+          </span>
         </div>
       )}
 
@@ -80,8 +82,8 @@ export function KpssSrsTab({
           disabled={srsGenerating}
         >
           {srsGenerating
-            ? (t.kpss_srs_generating || "✨ Generating AI cards...")
-            : (t.kpss_srs_generate || "✨ Generate AI Cards")}
+            ? t.kpss_srs_generating || "✨ Generating AI cards..."
+            : t.kpss_srs_generate || "✨ Generate AI Cards"}
         </button>
 
         <button

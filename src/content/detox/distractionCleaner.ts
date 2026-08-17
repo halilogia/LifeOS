@@ -41,7 +41,10 @@ function getOrCreateStyleElement(): HTMLStyleElement {
   return activeStyleEl;
 }
 
-function generateCSSRules(settings: DistractionSettings, hostname: string): string {
+function generateCSSRules(
+  settings: DistractionSettings,
+  hostname: string,
+): string {
   const rules: string[] = [];
 
   // YouTube — SSM: #primary container'ı gizle (element değil)
@@ -61,7 +64,8 @@ function generateCSSRules(settings: DistractionSettings, hostname: string): stri
     }
     if (
       settings.ytFeedBlock &&
-      (window.location.pathname === "/" || window.location.pathname === "/index.html")
+      (window.location.pathname === "/" ||
+        window.location.pathname === "/index.html")
     ) {
       rules.push(`
         ytd-browse[page-subtype="home"] #primary,
@@ -268,24 +272,27 @@ export function initDistractionCleaner(): void {
       if (!chrome.runtime?.id) {
         return;
       }
-      chrome.storage.local.get(["detox_distraction_settings", "customQuotes"], (res) => {
-        if (chrome.runtime.lastError || !chrome.runtime?.id) {
-          return;
-        }
-        if (res.detox_distraction_settings) {
-          currentSettings = {
-            ...DEFAULT_DISTRACTION_SETTINGS,
-            ...res.detox_distraction_settings,
-          };
-        }
-        if (Array.isArray(res.customQuotes)) {
-          customQuotes = res.customQuotes as QuoteItem[];
-        }
-        applyCSSRules();
-        injectYouTubeQuoteBanner(currentSettings, customQuotes);
-        injectTwitterQuoteBanner(currentSettings, customQuotes);
-        handleURLCheck();
-      });
+      chrome.storage.local.get(
+        ["detox_distraction_settings", "customQuotes"],
+        (res) => {
+          if (chrome.runtime.lastError || !chrome.runtime?.id) {
+            return;
+          }
+          if (res.detox_distraction_settings) {
+            currentSettings = {
+              ...DEFAULT_DISTRACTION_SETTINGS,
+              ...res.detox_distraction_settings,
+            };
+          }
+          if (Array.isArray(res.customQuotes)) {
+            customQuotes = res.customQuotes as QuoteItem[];
+          }
+          applyCSSRules();
+          injectYouTubeQuoteBanner(currentSettings, customQuotes);
+          injectTwitterQuoteBanner(currentSettings, customQuotes);
+          handleURLCheck();
+        },
+      );
     } catch {
       // Extension context invalidated
     }

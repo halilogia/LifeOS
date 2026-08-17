@@ -23,7 +23,10 @@ export function hashString(input: string): string {
   h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
   h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  return (h2 >>> 0).toString(16).padStart(8, "0") + (h1 >>> 0).toString(16).padStart(8, "0");
+  return (
+    (h2 >>> 0).toString(16).padStart(8, "0") +
+    (h1 >>> 0).toString(16).padStart(8, "0")
+  );
 }
 
 function parseDateText(raw: string, fallback: number): number {
@@ -35,9 +38,7 @@ function parseDateText(raw: string, fallback: number): number {
 }
 
 function parseChannelTitle(blocks: XmlBlock[]): string {
-  return (
-    extractBlockText(findFirst(blocks, "title")) || "Bilinmeyen Feed"
-  );
+  return extractBlockText(findFirst(blocks, "title")) || "Bilinmeyen Feed";
 }
 
 function parseSiteUrl(blocks: XmlBlock[], feedUrl: string): string {
@@ -78,7 +79,9 @@ function decodeEntities(s: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&apos;/g, "'")
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCharCode(parseInt(n, 16)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) =>
+      String.fromCharCode(parseInt(n, 16)),
+    )
     .replace(/&amp;/g, "&");
 }
 
@@ -173,7 +176,8 @@ function extractBlockText(node: XmlBlock | null): string {
     return "";
   }
   // text + CDATA çözümlenmiş içerik; HTML etiketlerini de düz metne çevir.
-  const raw = (node.content || "") + node.children.map((c) => c.content).join("");
+  const raw =
+    (node.content || "") + node.children.map((c) => c.content).join("");
   return decodeEntities(raw)
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
@@ -190,7 +194,11 @@ export function getFaviconUrl(siteUrl: string): string {
   }
 }
 
-function parseRssItems(blocks: XmlBlock[], feedId: string, feedUrl: string): RssItem[] {
+function parseRssItems(
+  blocks: XmlBlock[],
+  feedId: string,
+  feedUrl: string,
+): RssItem[] {
   const now = Date.now();
   // RSS 2.0: <item>, Atom: <entry>
   const nodes = findAll(blocks, "item").concat(findAll(blocks, "entry"));
@@ -242,7 +250,9 @@ function parseRssItems(blocks: XmlBlock[], feedId: string, feedUrl: string): Rss
 }
 
 /** Feed çek + parse et + kaydet. Başarısızsa lastError işaretle. */
-export async function syncFeed(feed: RssFeed): Promise<{ ok: boolean; error?: string }> {
+export async function syncFeed(
+  feed: RssFeed,
+): Promise<{ ok: boolean; error?: string }> {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
@@ -250,7 +260,10 @@ export async function syncFeed(feed: RssFeed): Promise<{ ok: boolean; error?: st
     const res = await fetch(feed.url, {
       signal: controller.signal,
       credentials: "omit",
-      headers: { Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml, */*" },
+      headers: {
+        Accept:
+          "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+      },
     });
     clearTimeout(timeout);
 
@@ -276,16 +289,22 @@ export async function syncFeed(feed: RssFeed): Promise<{ ok: boolean; error?: st
     };
 
     const feeds = await rssRepository.getFeeds();
-    await rssRepository.saveFeeds(feeds.map((f) => (f.id === feed.id ? updatedFeed : f)));
+    await rssRepository.saveFeeds(
+      feeds.map((f) => (f.id === feed.id ? updatedFeed : f)),
+    );
 
-    logger.info(`[RssService] "${feed.title}" senkronize edildi (${items.length} item)`);
+    logger.info(
+      `[RssService] "${feed.title}" senkronize edildi (${items.length} item)`,
+    );
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Bilinmeyen hata";
     const feeds = await rssRepository.getFeeds();
     await rssRepository.saveFeeds(
       feeds.map((f) =>
-        f.id === feed.id ? { ...f, lastError: message, lastFetchedAt: Date.now() } : f,
+        f.id === feed.id
+          ? { ...f, lastError: message, lastFetchedAt: Date.now() }
+          : f,
       ),
     );
     logger.error(`[RssService] "${feed.title}" çekilemedi: ${message}`);
@@ -302,7 +321,10 @@ export async function syncAllFeeds(): Promise<void> {
 }
 
 /** URL'den feed kaydet (sağ tık veya manuel ekleme) */
-export async function registerFeed(url: string, fallbackTitle?: string): Promise<{ ok: boolean; error?: string }> {
+export async function registerFeed(
+  url: string,
+  fallbackTitle?: string,
+): Promise<{ ok: boolean; error?: string }> {
   let feedUrl = url.trim();
   if (!feedUrl) {
     return { ok: false, error: "URL boş" };
@@ -336,5 +358,8 @@ export async function registerFeed(url: string, fallbackTitle?: string): Promise
   const result = await syncFeed(newFeed);
   return result.ok
     ? { ok: true }
-    : { ok: true, error: `Kaydedildi ama ilk çekme başarısız: ${result.error}` };
+    : {
+        ok: true,
+        error: `Kaydedildi ama ilk çekme başarısız: ${result.error}`,
+      };
 }

@@ -97,7 +97,9 @@ export function KpssTopicDetailModal({
                       background: "var(--accent-color)",
                     }}
                   />
-                  <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
+                  <span
+                    style={{ fontWeight: 600, color: "var(--text-primary)" }}
+                  >
                     {sub}
                   </span>
                 </div>
@@ -128,9 +130,7 @@ export function KpssTopicDetailModal({
               >
                 {Math.round(topic.questionsCount)}
               </span>
-              <span>
-                {t.kpss_topic_avg_questions}
-              </span>
+              <span>{t.kpss_topic_avg_questions}</span>
             </div>
           )}
         </div>

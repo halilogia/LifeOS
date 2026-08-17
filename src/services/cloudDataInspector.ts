@@ -87,8 +87,7 @@ export async function getDriveBackupInfo(): Promise<DriveBackupInfo[]> {
     const token = await getDriveToken(false);
     return await queryDriveBackups(token);
   } catch (err) {
-    const is403 =
-      err instanceof Error && err.message.includes("Drive API 403");
+    const is403 = err instanceof Error && err.message.includes("Drive API 403");
     if (is403) {
       logger.warn(
         "[CloudDataInspector] Drive 403 — trying interactive token refresh",
@@ -118,9 +117,7 @@ async function getDriveToken(interactive: boolean): Promise<string> {
   });
 }
 
-async function queryDriveBackups(
-  token: string,
-): Promise<DriveBackupInfo[]> {
+async function queryDriveBackups(token: string): Promise<DriveBackupInfo[]> {
   const response = await fetch(
     "https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%20contains%20'lifeos_backup'%20and%20trashed%3Dfalse&fields=files(id%2Cname%2Csize%2CmodifiedTime)&orderBy=modifiedTime%20desc",
     {

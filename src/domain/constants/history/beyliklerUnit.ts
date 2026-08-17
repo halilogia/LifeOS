@@ -5,7 +5,8 @@ export const BEYLIKLER_UNIT: HistoryUnit = {
   navLabel: "II. Dönem Anadolu Beylikleri",
   mode: "territory",
   title: "1308 Sonrası: II. Dönem Anadolu Beylikleri",
-  subtitle: "20 kilit beylik & devlet · Kösedağ Savaşı (1243) sonrası Anadolu siyasi haritası",
+  subtitle:
+    "20 kilit beylik & devlet · Kösedağ Savaşı (1243) sonrası Anadolu siyasi haritası",
   showYear: false,
   color: "#8c2a1f",
   legend: null,

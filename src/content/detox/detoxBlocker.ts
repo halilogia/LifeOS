@@ -50,7 +50,11 @@ export function initDetoxBlocker(): void {
                 return;
               }
 
-              const evalRes = evaluateSiteLimits(currentHost, settings, localRes);
+              const evalRes = evaluateSiteLimits(
+                currentHost,
+                settings,
+                localRes,
+              );
 
               if (
                 evalRes.isDetoxActive ||

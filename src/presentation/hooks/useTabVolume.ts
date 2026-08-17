@@ -3,9 +3,7 @@
  * Signature unchanged; consumer components untouched.
  */
 
-import {
-  useTabVolumeState,
-} from "@/presentation/store/tabVolumeStore.js";
+import { useTabVolumeState } from "@/presentation/store/tabVolumeStore.js";
 
 export function useTabVolume() {
   const volumeLevel = useTabVolumeState((s) => s.volumeLevel);

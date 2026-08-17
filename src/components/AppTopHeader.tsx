@@ -63,9 +63,7 @@ export function AppTopHeader({ t, lang }: AppTopHeaderProps) {
             type="text"
             id="todo-input"
             value={todoText}
-            onInput={(e) =>
-              setTodoText((e.target as HTMLInputElement).value)
-            }
+            onInput={(e) => setTodoText((e.target as HTMLInputElement).value)}
             onKeyPress={handleKeyPress}
             placeholder={t.todo_placeholder}
             autocomplete="off"
@@ -88,7 +86,11 @@ export function AppTopHeader({ t, lang }: AppTopHeaderProps) {
             <option value="weekly">{t.repeat_weekly}</option>
             <option value="monthly">{t.repeat_monthly}</option>
           </select>
-          <button id="add-btn" onClick={() => void handleAddTodoClick()} aria-label="Add Task">
+          <button
+            id="add-btn"
+            onClick={() => void handleAddTodoClick()}
+            aria-label="Add Task"
+          >
             <svg
               width="20"
               height="20"

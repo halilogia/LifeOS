@@ -90,7 +90,8 @@ export const settings = {
     "Tüm view ziyaret sayaçlarını temizler. Sidebar varsayılan sıraya döner.",
   settings_sidebar_reset_done: "Kullanım istatistikleri temizlendi.",
   settings_cloud_inspector_title: "Bulut Verisi Görüntüleyici",
-  settings_cloud_inspector_empty: "Bulut senkronizasyonu etkin değil veya veri yok.",
+  settings_cloud_inspector_empty:
+    "Bulut senkronizasyonu etkin değil veya veri yok.",
   settings_cloud_inspector_count: "{count} anahtar buluta kaydedildi",
   settings_cloud_push_to_sync: "Yerel Veriyi Sync'e Gönder",
   settings_cloud_push_done: "Yerel veri sync'e gönderildi.",

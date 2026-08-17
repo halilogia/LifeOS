@@ -70,6 +70,22 @@ export function SidebarIcon({ itemKey }: { itemKey: string }) {
           <path d="M6 12h4M8 10v4M15 11v.01M18 13v.01" />
         </svg>
       );
+    case "city-pulse":
+      return (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="2 14 8 14 11 8 14 16 17 12 22 12" />
+        </svg>
+      );
     case "ai-chat":
       return (
         <svg

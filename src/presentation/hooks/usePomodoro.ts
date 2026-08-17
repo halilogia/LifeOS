@@ -34,7 +34,9 @@ export function usePomodoro({ lang, t }: UsePomodoroOptions) {
   const alarmInput = usePomodoroState((s) => s.alarmInput);
   const setAlarmInput = usePomodoroState((s) => s.setAlarmInput);
   const handlePomoModeChange = usePomodoroState((s) => s.handlePomoModeChange);
-  const handleCustomTimeChange = usePomodoroState((s) => s.handleCustomTimeChange);
+  const handleCustomTimeChange = usePomodoroState(
+    (s) => s.handleCustomTimeChange,
+  );
   const handlePomoStart = usePomodoroState((s) => s.handlePomoStart);
   const handlePomoPause = usePomodoroState((s) => s.handlePomoPause);
   const handlePomoReset = usePomodoroState((s) => s.handlePomoReset);

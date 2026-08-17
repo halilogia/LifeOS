@@ -24,12 +24,9 @@ export function useSidebarOrder() {
     }
   }, [order, setOrder]);
 
-  const saveOrder = useCallback(
-    (nextOrder: string[]) => {
-      useUIStore.getState().persistSidebarOrder(nextOrder);
-    },
-    [],
-  );
+  const saveOrder = useCallback((nextOrder: string[]) => {
+    useUIStore.getState().persistSidebarOrder(nextOrder);
+  }, []);
 
   return { order, setOrder, saveOrder };
 }

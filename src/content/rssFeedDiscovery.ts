@@ -40,7 +40,10 @@ function findFeedLink(): string | null {
     if (!href) {
       continue;
     }
-    if (/\.(rss|xml|atom)(\?|#|$)/i.test(href) || /(\/feed|\/rss|\/atom)(\/|$|\?)/i.test(href)) {
+    if (
+      /\.(rss|xml|atom)(\?|#|$)/i.test(href) ||
+      /(\/feed|\/rss|\/atom)(\/|$|\?)/i.test(href)
+    ) {
       try {
         return new URL(href, document.baseURI).toString();
       } catch {

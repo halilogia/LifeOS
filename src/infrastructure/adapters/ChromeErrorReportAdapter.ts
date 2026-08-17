@@ -3,7 +3,10 @@
  * Infrastructure adapter implementing IErrorReportPort using chrome.* APIs.
  */
 
-import { IErrorReportPort, LogEntry } from "@/application/ports/IErrorReportPort.js";
+import {
+  IErrorReportPort,
+  LogEntry,
+} from "@/application/ports/IErrorReportPort.js";
 
 const STORAGE_KEY = "logger_entries";
 

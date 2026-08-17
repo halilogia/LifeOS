@@ -256,8 +256,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
     },
     {
       title: "İşlem",
-      description:
-        "Özel tanımlı işlemler ve işlem tablosu ile soru çözümleri.",
+      description: "Özel tanımlı işlemler ve işlem tablosu ile soru çözümleri.",
       questionsCount: 0.29,
     },
     {
@@ -399,10 +398,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
       description:
         "İç politika gelişmeleri ve yurtta sulh cihanda sulh temelli dış politika.",
       questionsCount: 2.0,
-      subtopics: [
-        "Çok Partili Yaşama Geçiş Denemeleri",
-        "Dış Politika",
-      ],
+      subtopics: ["Çok Partili Yaşama Geçiş Denemeleri", "Dış Politika"],
     },
     {
       title: "Atatürk İlke ve İnkılapları",
@@ -470,8 +466,7 @@ export const kpssData: Record<string, KpssTopic[]> = {
     },
     {
       title: "Ulaşım",
-      description:
-        "Türkiye'nin kara, deniz, hava ve demiryolu ulaşım ağları.",
+      description: "Türkiye'nin kara, deniz, hava ve demiryolu ulaşım ağları.",
       questionsCount: 0.83,
     },
     {

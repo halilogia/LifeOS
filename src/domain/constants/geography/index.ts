@@ -24,7 +24,10 @@ import { TURKEY_AGRICULTURE } from "./agriculture.js";
 import { TURKEY_LIVESTOCK } from "./livestock.js";
 import { TURKEY_MINES } from "./mines.js";
 import { TURKEY_ENERGY } from "./energy.js";
-import { TURKEY_TRANSPORT_BORDERS, TURKEY_INDUSTRY } from "./transportBorders.js";
+import {
+  TURKEY_TRANSPORT_BORDERS,
+  TURKEY_INDUSTRY,
+} from "./transportBorders.js";
 
 export * from "./types.js";
 export * from "./kivrimMountains.js";
@@ -109,4 +112,3 @@ export const TOPIC_PINS: Record<TurkeyMapTopic, GeoPin[]> = {
   // 4. Genel
   all: ALL_GEOGRAPHY_PINS,
 };
-

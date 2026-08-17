@@ -141,7 +141,15 @@ export function useMapQuiz(initialTopic: TurkeyMapTopic = "kivrim") {
         });
       }
     },
-    [isCompleted, currentTarget, score, streak, bestStreak, currentIndex, targets.length],
+    [
+      isCompleted,
+      currentTarget,
+      score,
+      streak,
+      bestStreak,
+      currentIndex,
+      targets.length,
+    ],
   );
 
   const handleSkip = useCallback(() => {

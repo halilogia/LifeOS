@@ -11,8 +11,14 @@ import { useSyncStore } from "@/presentation/store/syncStore.js";
 import { useTodosStore } from "@/presentation/store/todosStore.js";
 import { useSidebarUsageStore } from "@/presentation/store/sidebarUsageStore.js";
 import { kpssService } from "@/services/kpss/kpssService.js";
-import { getSyncDataSummary, getDriveBackupInfo } from "@/services/cloudDataInspector.js";
-import type { SyncKeySummary, DriveBackupInfo } from "@/services/cloudDataInspector.js";
+import {
+  getSyncDataSummary,
+  getDriveBackupInfo,
+} from "@/services/cloudDataInspector.js";
+import type {
+  SyncKeySummary,
+  DriveBackupInfo,
+} from "@/services/cloudDataInspector.js";
 
 export interface SettingsDrawerProps {
   isOpen: boolean;
@@ -68,9 +74,7 @@ export function SettingsDrawer({
   const onToggleTelegramBridge = useSettingsStore(
     (s) => s.handleToggleTelegramBridge,
   );
-  const autoGroupTabsEnabled = useSettingsStore(
-    (s) => s.autoGroupTabsEnabled,
-  );
+  const autoGroupTabsEnabled = useSettingsStore((s) => s.autoGroupTabsEnabled);
   const onToggleAutoGroupTabs = useSettingsStore(
     (s) => s.handleToggleAutoGroupTabs,
   );
@@ -87,7 +91,9 @@ export function SettingsDrawer({
     const ui = useUIStore.getState();
     ui.applySortedOrder();
     if (onNotify) {
-      onNotify(t.settings_sidebar_reset_done || "Kullanım istatistikleri temizlendi.");
+      onNotify(
+        t.settings_sidebar_reset_done || "Kullanım istatistikleri temizlendi.",
+      );
     }
   };
   const aiApiKey = useSettingsStore((s) => s.aiApiKey);
@@ -138,7 +144,9 @@ export function SettingsDrawer({
 
   const onGoogleLogin = useSyncStore((s) => s.handleGoogleLogin);
   const onGoogleLogout = useSyncStore((s) => s.handleGoogleLogout);
-  const onBackupToGoogleDriveRaw = useSyncStore((s) => s.handleBackupToGoogleDrive);
+  const onBackupToGoogleDriveRaw = useSyncStore(
+    (s) => s.handleBackupToGoogleDrive,
+  );
   const onBackupToGoogleDrive = async () => {
     await onBackupToGoogleDriveRaw();
     await refreshInspector();

@@ -105,7 +105,11 @@ export function initContextMenuHandler(): void {
             const found = await chrome.tabs.sendMessage(tab.id, {
               type: "rss_discover_feed",
             });
-            if (found && typeof found.url === "string" && found.url.startsWith("http")) {
+            if (
+              found &&
+              typeof found.url === "string" &&
+              found.url.startsWith("http")
+            ) {
               feedUrl = found.url;
               discovered = true;
             }

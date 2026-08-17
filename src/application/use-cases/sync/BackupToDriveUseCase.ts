@@ -41,7 +41,9 @@ export class BackupToDriveUseCase {
       chrome.identity.getAuthToken({ interactive: false }, (token) => {
         if (chrome.runtime.lastError || !token) {
           // Sessiz başarısız → interaktif olarak kullanıcıya consent göster
-          logger.warn("[BackupToDrive] silent token failed, trying interactive...");
+          logger.warn(
+            "[BackupToDrive] silent token failed, trying interactive...",
+          );
           chrome.identity.getAuthToken({ interactive: true }, (token2) => {
             if (chrome.runtime.lastError || !token2) {
               reject(

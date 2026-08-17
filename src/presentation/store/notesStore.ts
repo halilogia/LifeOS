@@ -28,13 +28,13 @@ interface NotesState {
   notes: Note[];
   quotes: CustomQuote[];
   dayScores: DayScores;
-  
+
   // UI state
   filterType: NoteFilterType;
   setFilterType: (f: NoteFilterType) => void;
   isGraphModalOpen: boolean;
   setIsGraphModalOpen: (v: boolean) => void;
-  
+
   // Note Modal
   isNoteModalOpen: boolean;
   setIsNoteModalOpen: (v: boolean) => void;
@@ -52,7 +52,7 @@ interface NotesState {
   setNoteSummary: (s: string) => void;
   noteSaveStatus: boolean;
   setNoteSaveStatus: (v: boolean) => void;
-  
+
   // Quote Modal
   isQuoteModalOpen: boolean;
   setIsQuoteModalOpen: (v: boolean) => void;
@@ -60,7 +60,7 @@ interface NotesState {
   setQuoteContent: (c: string) => void;
   quoteAuthor: string;
   setQuoteAuthor: (a: string) => void;
-  
+
   // Inline Editor
   inlineEditingId: string | null;
   setInlineEditingId: (id: string | null) => void;
@@ -72,16 +72,21 @@ interface NotesState {
   setInlineCues: (c: string) => void;
   inlineSummary: string;
   setInlineSummary: (s: string) => void;
-  
+
   // Refs for auto-save (stored in state to persist across renders)
   _noteModalOpenRef: boolean;
   _editingNoteIdRef: string | null;
-  _noteFieldsRef: { title: string; content: string; cues: string; summary: string };
-  
+  _noteFieldsRef: {
+    title: string;
+    content: string;
+    cues: string;
+    summary: string;
+  };
+
   configure: (c: NotesCallbacks) => void;
   init: () => () => void;
   loadData: () => Promise<void>;
-  
+
   // Actions
   startInlineEdit: (note: Note) => void;
   handleCardClick: (note: Note) => void;
@@ -100,13 +105,13 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   notes: [],
   quotes: [],
   dayScores: {},
-  
+
   // UI
   filterType: "all",
   setFilterType: (f) => set({ filterType: f }),
   isGraphModalOpen: false,
   setIsGraphModalOpen: (v) => set({ isGraphModalOpen: v }),
-  
+
   // Note Modal
   isNoteModalOpen: false,
   setIsNoteModalOpen: (v) => set({ isNoteModalOpen: v }),
@@ -124,7 +129,7 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   setNoteSummary: (s) => set({ noteSummary: s }),
   noteSaveStatus: false,
   setNoteSaveStatus: (v) => set({ noteSaveStatus: v }),
-  
+
   // Quote Modal
   isQuoteModalOpen: false,
   setIsQuoteModalOpen: (v) => set({ isQuoteModalOpen: v }),
@@ -132,7 +137,7 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   setQuoteContent: (c) => set({ quoteContent: c }),
   quoteAuthor: "",
   setQuoteAuthor: (a) => set({ quoteAuthor: a }),
-  
+
   // Inline Editor
   inlineEditingId: null,
   setInlineEditingId: (id) => set({ inlineEditingId: id }),
@@ -144,16 +149,16 @@ export const useNotesState = create<NotesState>()((set, get) => ({
   setInlineCues: (c) => set({ inlineCues: c }),
   inlineSummary: "",
   setInlineSummary: (s) => set({ inlineSummary: s }),
-  
+
   // Refs
   _noteModalOpenRef: false,
   _editingNoteIdRef: null,
   _noteFieldsRef: { title: "", content: "", cues: "", summary: "" },
-  
+
   configure: (c) => {
     cb = c;
   },
-  
+
   init: () => {
     const flush = () => {
       if (document.visibilityState === "hidden") {
@@ -162,30 +167,46 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     };
     document.addEventListener("visibilitychange", flush);
     window.addEventListener("pagehide", flush);
-    
+
     return () => {
       document.removeEventListener("visibilitychange", flush);
       window.removeEventListener("pagehide", flush);
     };
   },
-  
+
   loadData: async () => {
     const [loadedNotes, loadedQuotes, loadedScores] = await Promise.all([
-      new Promise<Note[]>((r) => chrome.storage.local.get([NOTES_KEY], (res) => r((res[NOTES_KEY] as Note[]) || []))),
-      new Promise<CustomQuote[]>((r) => chrome.storage.local.get([QUOTES_KEY], (res) => r((res[QUOTES_KEY] as CustomQuote[]) || []))),
-      new Promise<DayScores>((r) => chrome.storage.local.get([SYNC_DAY_SCORES], (res) => r((res[SYNC_DAY_SCORES] as DayScores) || {}))),
+      new Promise<Note[]>((r) =>
+        chrome.storage.local.get([NOTES_KEY], (res) =>
+          r((res[NOTES_KEY] as Note[]) || []),
+        ),
+      ),
+      new Promise<CustomQuote[]>((r) =>
+        chrome.storage.local.get([QUOTES_KEY], (res) =>
+          r((res[QUOTES_KEY] as CustomQuote[]) || []),
+        ),
+      ),
+      new Promise<DayScores>((r) =>
+        chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
+          r((res[SYNC_DAY_SCORES] as DayScores) || {}),
+        ),
+      ),
     ]);
-    
+
     set({
-      notes: loadedNotes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      notes: loadedNotes.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
       quotes: loadedQuotes,
       dayScores: loadedScores,
     });
   },
-  
+
   // Auto-save
   autoSaveNote: async () => {
-    const { _noteModalOpenRef, _editingNoteIdRef, _noteFieldsRef, noteType } = get();
+    const { _noteModalOpenRef, _editingNoteIdRef, _noteFieldsRef, noteType } =
+      get();
     if (!_noteModalOpenRef) {
       return;
     }
@@ -193,11 +214,13 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     if (!title.trim() && !content.trim() && !cues.trim() && !summary.trim()) {
       return;
     }
-    
+
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get([NOTES_KEY], (res) => r((res[NOTES_KEY] as Note[]) || [])),
+      chrome.storage.local.get([NOTES_KEY], (res) =>
+        r((res[NOTES_KEY] as Note[]) || []),
+      ),
     );
-    
+
     const id = _editingNoteIdRef;
     if (id) {
       const idx = currentNotes.findIndex((n) => n.id === id);
@@ -222,16 +245,21 @@ export const useNotesState = create<NotesState>()((set, get) => ({
       });
       set({ editingNoteId: newId, _editingNoteIdRef: newId });
     }
-    
-    await new Promise<void>((r) => chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r));
-    
+
+    await new Promise<void>((r) =>
+      chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r),
+    );
+
     set({
-      notes: currentNotes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      notes: currentNotes.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
       noteSaveStatus: true,
     });
     setTimeout(() => set({ noteSaveStatus: false }), 2000);
   },
-  
+
   // Actions
   startInlineEdit: (note) => {
     set({
@@ -242,7 +270,7 @@ export const useNotesState = create<NotesState>()((set, get) => ({
       inlineSummary: note.summary || "",
     });
   },
-  
+
   handleCardClick: (note) => {
     const { inlineEditingId } = get();
     if (inlineEditingId === note.id) {
@@ -251,11 +279,13 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     // Click timer handled in facade (UI concern)
     get().startInlineEdit(note);
   },
-  
+
   handleSaveInlineNote: async (id) => {
     const { inlineTitle, inlineContent, inlineCues, inlineSummary } = get();
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get([NOTES_KEY], (res) => r((res[NOTES_KEY] as Note[]) || [])),
+      chrome.storage.local.get([NOTES_KEY], (res) =>
+        r((res[NOTES_KEY] as Note[]) || []),
+      ),
     );
     const idx = currentNotes.findIndex((n) => n.id === id);
     if (idx !== -1) {
@@ -264,12 +294,14 @@ export const useNotesState = create<NotesState>()((set, get) => ({
       currentNotes[idx].cues = inlineCues;
       currentNotes[idx].summary = inlineSummary;
       currentNotes[idx].createdAt = new Date().toISOString();
-      await new Promise<void>((r) => chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r));
+      await new Promise<void>((r) =>
+        chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r),
+      );
       set({ inlineEditingId: null });
       get().loadData();
     }
   },
-  
+
   handleOpenNoteModal: (note?: Note) => {
     if (note) {
       set({
@@ -301,9 +333,16 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     }
     set({ isNoteModalOpen: true, _noteModalOpenRef: true });
   },
-  
+
   handleSaveNote: async () => {
-    const { noteTitle, noteContent, noteCues, noteSummary, editingNoteId, noteType } = get();
+    const {
+      noteTitle,
+      noteContent,
+      noteCues,
+      noteSummary,
+      editingNoteId,
+      noteType,
+    } = get();
     if (
       !noteTitle.trim() &&
       !noteContent.trim() &&
@@ -313,11 +352,13 @@ export const useNotesState = create<NotesState>()((set, get) => ({
       set({ isNoteModalOpen: false, _noteModalOpenRef: false });
       return;
     }
-    
+
     const currentNotes: Note[] = await new Promise((r) =>
-      chrome.storage.local.get([NOTES_KEY], (res) => r((res[NOTES_KEY] as Note[]) || [])),
+      chrome.storage.local.get([NOTES_KEY], (res) =>
+        r((res[NOTES_KEY] as Note[]) || []),
+      ),
     );
-    
+
     if (editingNoteId) {
       const idx = currentNotes.findIndex((n) => n.id === editingNoteId);
       if (idx !== -1) {
@@ -339,8 +380,10 @@ export const useNotesState = create<NotesState>()((set, get) => ({
         createdAt: new Date().toISOString(),
       });
     }
-    
-    await new Promise<void>((r) => chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r));
+
+    await new Promise<void>((r) =>
+      chrome.storage.local.set({ [NOTES_KEY]: currentNotes }, r),
+    );
     set({
       isNoteModalOpen: false,
       _noteModalOpenRef: false,
@@ -353,62 +396,80 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     get().loadData();
     scheduleCloudBackup();
   },
-  
+
   handleDeleteNote: async (e: MouseEvent, id: string) => {
     e.stopPropagation();
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const t = getTranslation(c.lang);
     c.onShowConfirm(t.delete_confirm_note, async () => {
       const currentNotes: Note[] = await new Promise((r) =>
-        chrome.storage.local.get([NOTES_KEY], (res) => r((res[NOTES_KEY] as Note[]) || [])),
+        chrome.storage.local.get([NOTES_KEY], (res) =>
+          r((res[NOTES_KEY] as Note[]) || []),
+        ),
       );
       const filtered = currentNotes.filter((n) => n.id !== id);
-      await new Promise<void>((r) => chrome.storage.local.set({ [NOTES_KEY]: filtered }, r));
+      await new Promise<void>((r) =>
+        chrome.storage.local.set({ [NOTES_KEY]: filtered }, r),
+      );
       get().loadData();
       scheduleCloudBackup();
     });
   },
-  
+
   handleSaveQuote: async () => {
     const { quoteContent, quoteAuthor } = get();
     if (!quoteContent.trim()) {
       set({ isQuoteModalOpen: false });
       return;
     }
-    
+
     const currentQuotes: CustomQuote[] = await new Promise((r) =>
-      chrome.storage.local.get([QUOTES_KEY], (res) => r((res[QUOTES_KEY] as CustomQuote[]) || [])),
+      chrome.storage.local.get([QUOTES_KEY], (res) =>
+        r((res[QUOTES_KEY] as CustomQuote[]) || []),
+      ),
     );
     currentQuotes.push({
       text: quoteContent.trim(),
       author: quoteAuthor.trim() || undefined,
     });
-    
-    await new Promise<void>((r) => chrome.storage.local.set({ [QUOTES_KEY]: currentQuotes }, r));
+
+    await new Promise<void>((r) =>
+      chrome.storage.local.set({ [QUOTES_KEY]: currentQuotes }, r),
+    );
     set({ isQuoteModalOpen: false, quoteContent: "", quoteAuthor: "" });
     get().loadData();
     scheduleCloudBackup();
   },
-  
+
   handleDeleteQuote: async (index) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const t = getTranslation(c.lang);
     c.onShowConfirm(t.delete_confirm_quote, async () => {
       const currentQuotes: CustomQuote[] = await new Promise((r) =>
-        chrome.storage.local.get([QUOTES_KEY], (res) => r((res[QUOTES_KEY] as CustomQuote[]) || [])),
+        chrome.storage.local.get([QUOTES_KEY], (res) =>
+          r((res[QUOTES_KEY] as CustomQuote[]) || []),
+        ),
       );
       currentQuotes.splice(index, 1);
-      await new Promise<void>((r) => chrome.storage.local.set({ [QUOTES_KEY]: currentQuotes }, r));
+      await new Promise<void>((r) =>
+        chrome.storage.local.set({ [QUOTES_KEY]: currentQuotes }, r),
+      );
       get().loadData();
       scheduleCloudBackup();
     });
   },
-  
+
   handleSetDayScore: async (dateKey, score) => {
     const currentScores: DayScores = await new Promise((r) =>
-      chrome.storage.local.get([SYNC_DAY_SCORES], (res) => r((res[SYNC_DAY_SCORES] as DayScores) || {})),
+      chrome.storage.local.get([SYNC_DAY_SCORES], (res) =>
+        r((res[SYNC_DAY_SCORES] as DayScores) || {}),
+      ),
     );
     const next: DayScores = { ...currentScores };
     if (score <= 0) {
@@ -416,7 +477,9 @@ export const useNotesState = create<NotesState>()((set, get) => ({
     } else {
       next[dateKey] = score;
     }
-    await new Promise<void>((r) => chrome.storage.local.set({ [SYNC_DAY_SCORES]: next }, r));
+    await new Promise<void>((r) =>
+      chrome.storage.local.set({ [SYNC_DAY_SCORES]: next }, r),
+    );
     set({ dayScores: next });
     scheduleCloudBackup();
   },

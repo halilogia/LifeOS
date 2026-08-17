@@ -7,11 +7,7 @@ import { useState } from "preact/hooks";
 import type { JSX } from "preact";
 import { MAP_VIEWBOX } from "@/domain/constants/TurkeyGeographyData.js";
 import { TURKEY_PROVINCE_PATHS } from "@/domain/constants/TurkeyProvincePaths.js";
-import {
-  parseHaritaBlock,
-  pinKindColor,
-  PIN_KINDS,
-} from "./mapPinUtils.js";
+import { parseHaritaBlock, pinKindColor, PIN_KINDS } from "./mapPinUtils.js";
 
 interface HaritaBlockProps {
   content: string;

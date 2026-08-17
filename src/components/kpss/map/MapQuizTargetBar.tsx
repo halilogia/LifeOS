@@ -66,7 +66,8 @@ export function MapQuizTargetBar({
                 ? "linear-gradient(135deg, #15803d 0%, #16a34a 100%)"
                 : "linear-gradient(135deg, #b91c1c 0%, #dc2626 100%)",
             boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
-            animation: "mapFeedbackPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+            animation:
+              "mapFeedbackPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             backdropFilter: "blur(8px)",
           }}
         >
@@ -114,7 +115,9 @@ export function MapQuizTargetBar({
             cursor: showHint ? "default" : "pointer",
             transition: "all 0.15s ease",
           }}
-          title={t.kpss_map_hint_tooltip || "Haritada konumu sarı renk ile parlat"}
+          title={
+            t.kpss_map_hint_tooltip || "Haritada konumu sarı renk ile parlat"
+          }
         >
           <svg
             width="14"
@@ -154,7 +157,8 @@ export function MapQuizTargetBar({
               marginBottom: "2px",
             }}
           >
-            {t.kpss_map_find_target || "Haritada Konumunu Seçin"} ({currentIndex + 1} / {total})
+            {t.kpss_map_find_target || "Haritada Konumunu Seçin"} (
+            {currentIndex + 1} / {total})
           </div>
           <div
             style={{

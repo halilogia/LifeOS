@@ -135,7 +135,7 @@ export function getSubjectNets(
       }
     }
   });
- return { net: Math.round(totalNet), max: Math.round(totalQuestions) };
+  return { net: Math.round(totalNet), max: Math.round(totalQuestions) };
 }
 
 /**

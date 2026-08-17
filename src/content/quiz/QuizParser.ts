@@ -32,16 +32,14 @@ const QUESTION_WITH_SORU_RE =
   /^Soru\s+(\d{1,2})\s*[.):\-–]?\s*(?:\([^)]*\)\s*)?(.*)$/i;
 
 /** Question start — bare numbered form: "1. Soru:", "1)", "1- Soru metni". */
-const QUESTION_BARE_RE =
-  /^(\d{1,2})\s*[.):\-–]\s*(?:Soru\s*)?[:.]*\s*(.*)$/i;
+const QUESTION_BARE_RE = /^(\d{1,2})\s*[.):\-–]\s*(?:Soru\s*)?[:.]*\s*(.*)$/i;
 
 /**
  * Correct answer marker — "Doğru Cevap: A", "Cevap: A", "✓ A",
  * "✓ Doğru Cevap: A", "**✓ Doğru Cevap: A**" (after normalizeLine).
  * Group 1 = the letter.
  */
-const ANSWER_RE =
-  /(?:doğru\s*cevap|cevap|✓|✔)\s*[:：\-–—]?\s*([A-Ea-e])\b/i;
+const ANSWER_RE = /(?:doğru\s*cevap|cevap|✓|✔)\s*[:：\-–—]?\s*([A-Ea-e])\b/i;
 
 /** "Açıklama: ..." line — attaches explanation to the current question. */
 const EXPLANATION_RE = /^açıklama\s*[:：]?\s*(.*)$/i;
@@ -220,9 +218,7 @@ export function parseQuestions(rawText: string): QuizQuestion[] {
 
       // Fallback: multi-line question stems
       current.question =
-        current.question.length > 0
-          ? `${current.question}\n${line}`
-          : line;
+        current.question.length > 0 ? `${current.question}\n${line}` : line;
     }
   }
 

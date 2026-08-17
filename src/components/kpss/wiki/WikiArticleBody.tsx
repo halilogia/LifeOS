@@ -119,11 +119,7 @@ export function WikiArticleBody({
       <div
         key={idx}
         dangerouslySetInnerHTML={{
-          __html: renderCustomArticleMarkdown(
-            part.value,
-            allNotes,
-            note.title,
-          ),
+          __html: renderCustomArticleMarkdown(part.value, allNotes, note.title),
         }}
       />
     );

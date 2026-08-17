@@ -13,7 +13,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     x: 60.0,
     y: 50.0,
     category: "Tarihi Eserler",
-    description: "Mimar Sinan'ın ustalık eserim dediği, UNESCO Dünya Kültür Mirası listesindedir.",
+    description:
+      "Mimar Sinan'ın ustalık eserim dediği, UNESCO Dünya Kültür Mirası listesindedir.",
   },
   {
     name: "Mahmut Bey Camii",
@@ -115,8 +116,10 @@ export const TURKEY_UNESCO: GeoPin[] = [
     x: 330.0,
     y: 150.0,
     category: "Tarihi Alanlar",
-    description: "Frigya Krallığı'nın başkenti ve Kral Midas'ın tümülüsünün bulunduğu antik kenttir.",
-    examTip: "Türkiye'nin UNESCO Dünya Miras Listesi'ne eklenen en son kültür miraslarındandır (2023).",
+    description:
+      "Frigya Krallığı'nın başkenti ve Kral Midas'ın tümülüsünün bulunduğu antik kenttir.",
+    examTip:
+      "Türkiye'nin UNESCO Dünya Miras Listesi'ne eklenen en son kültür miraslarındandır (2023).",
   },
   {
     name: "Bergama",
@@ -133,7 +136,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Tarihi Alanlar",
     description:
       "Artemis Tapınağı, Celcus Kütüphanesi ve antik tiyatrosuyla dünyanın en görkemli antik liman kentidir.",
-    examTip: "UNESCO mirasıdır. Menderes'in alüvyon dolguları nedeniyle liman özelliğini yitirmiştir.",
+    examTip:
+      "UNESCO mirasıdır. Menderes'in alüvyon dolguları nedeniyle liman özelliğini yitirmiştir.",
   },
   {
     name: "Aphrodisias",
@@ -157,7 +161,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Tarihi Alanlar",
     description:
       "İnsanlığın ilk yerleşik hayata geçtiği, sokaksız bitişik evlerden oluşan Neolitik kenttir.",
-    examTip: "İlk ev mimarisi ve toplu köy yaşamının dünyadaki en önemli kanıtıdır (UNESCO).",
+    examTip:
+      "İlk ev mimarisi ve toplu köy yaşamının dünyadaki en önemli kanıtıdır (UNESCO).",
   },
   {
     name: "Göbeklitepe Arkeolojik Alanı (2018)",
@@ -167,7 +172,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Tarihi Alanlar",
     description:
       "Tarihin sıfır noktası kabul edilen, dünyanın bilinen en eski tapınak kompleksidir (UNESCO).",
-    examTip: "İnsanlık tarihinin ilk inanç ve tapınak merkezidir; UNESCO Dünya Kültür Mirası listesindedir.",
+    examTip:
+      "İnsanlık tarihinin ilk inanç ve tapınak merkezidir; UNESCO Dünya Kültür Mirası listesindedir.",
   },
   {
     name: "Nemrut Dağı Heykelleri (1987)",
@@ -177,7 +183,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Tarihi Alanlar",
     description:
       "Kommagene Krallığı'na ait dev tanrı heykelleri ve tümülüsün yer aldığı kutsal alandır.",
-    examTip: "Güneşin doğuşu ve batışının izlendiği UNESCO kültür mirası dağımızdır.",
+    examTip:
+      "Güneşin doğuşu ve batışının izlendiği UNESCO kültür mirası dağımızdır.",
   },
   {
     name: "Arslantepe",
@@ -194,7 +201,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Tarihi Alanlar",
     description:
       "Binbir Kiliseli Şehir olarak bilinen İpek Yolu üzerindeki surlarla çevrili antik kenttir.",
-    examTip: "Türkiye-Ermenistan sınırında Arpaçay kenarında yer alan UNESCO mirasımızdır.",
+    examTip:
+      "Türkiye-Ermenistan sınırında Arpaçay kenarında yer alan UNESCO mirasımızdır.",
   },
 
   // ── Karma Miras ──
@@ -206,7 +214,8 @@ export const TURKEY_UNESCO: GeoPin[] = [
     category: "Karma Miras",
     description:
       "Volkanik tüf kayaların erozyonuyla oluşan peribacaları ve yeraltı şehirleri karma mirasıdır.",
-    examTip: "Türkiye'nin UNESCO'daki ilk karma (Kültürel ve Doğal) miras alanıdır.",
+    examTip:
+      "Türkiye'nin UNESCO'daki ilk karma (Kültürel ve Doğal) miras alanıdır.",
   },
   {
     name: "Hierapolis-Pamukkale",
@@ -223,7 +232,9 @@ export const TURKEY_UNESCO: GeoPin[] = [
     x: 740.0,
     y: 80.0,
     category: "Tarihi Alanlar",
-    description: "Karadağ yamaçlarındaki dik kayalıklara oyulmuş tarihi Rum Ortodoks manastırıdır.",
-    examTip: "Doğu Karadeniz'in en çok ziyaret edilen kültür ve inanç turizmi merkezidir.",
+    description:
+      "Karadağ yamaçlarındaki dik kayalıklara oyulmuş tarihi Rum Ortodoks manastırıdır.",
+    examTip:
+      "Doğu Karadeniz'in en çok ziyaret edilen kültür ve inanç turizmi merkezidir.",
   },
 ];

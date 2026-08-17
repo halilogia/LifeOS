@@ -6,71 +6,89 @@ export const TURKEY_ENERGY: GeoPin[] = [
     city: "Zonguldak",
     x: 345.0,
     y: 40.0,
-    description: "Türkiye'nin doğrudan yerli taşkömürü ile çalışan TEK termik santralidir.",
-    examTip: "Çatalağzı Santrali'nin Zonguldak'ta kurulma sebebi HAMMADDEYE YAKINLIK'tır.",
+    description:
+      "Türkiye'nin doğrudan yerli taşkömürü ile çalışan TEK termik santralidir.",
+    examTip:
+      "Çatalağzı Santrali'nin Zonguldak'ta kurulma sebebi HAMMADDEYE YAKINLIK'tır.",
   },
   {
     name: "Afşin - Elbistan Linyit Santrali",
     city: "Kahramanmaraş",
     x: 590.0,
     y: 260.0,
-    description: "Türkiye'nin en büyük linyit rezervine ve elektrik üretim kapasitesine sahip termik santralidir.",
-    examTip: "Soma, Yatağan, Seyitömer, Tavşanlı diğer büyük linyit santrallerimizdir (3. jeolojik zaman kanıtı).",
+    description:
+      "Türkiye'nin en büyük linyit rezervine ve elektrik üretim kapasitesine sahip termik santralidir.",
+    examTip:
+      "Soma, Yatağan, Seyitömer, Tavşanlı diğer büyük linyit santrallerimizdir (3. jeolojik zaman kanıtı).",
   },
   {
     name: "Hamtitabat Doğalgaz Santrali",
     city: "Kırklareli",
     x: 105.0,
     y: 35.0,
-    description: "Yerli doğalgaz rezervimiz ile çalışan en eski doğalgaz kombine çevrim santralidir.",
-    examTip: "Ovaakça (Bursa) ve Ambarlı (İstanbul) doğalgaz santralleri ithal gazla çalışır (Pazara yakınlık).",
+    description:
+      "Yerli doğalgaz rezervimiz ile çalışan en eski doğalgaz kombine çevrim santralidir.",
+    examTip:
+      "Ovaakça (Bursa) ve Ambarlı (İstanbul) doğalgaz santralleri ithal gazla çalışır (Pazara yakınlık).",
   },
   {
     name: "Atatürk Hidroelektrik Barajı",
     city: "Şanlıurfa / Adıyaman",
     x: 670.0,
     y: 290.0,
-    description: "Fırat Nehri üzerinde kurulu Türkiye ve Avrupa'nın en büyük hidroelektrik santralidir.",
-    examTip: "GAP'ın amiral gemisidir. Keban ve Karakaya diğer dev Fırat barajlarımızdır.",
+    description:
+      "Fırat Nehri üzerinde kurulu Türkiye ve Avrupa'nın en büyük hidroelektrik santralidir.",
+    examTip:
+      "GAP'ın amiral gemisidir. Keban ve Karakaya diğer dev Fırat barajlarımızdır.",
   },
   {
     name: "Deriner Barajı (Çoruh Nehri)",
     city: "Artvin",
     x: 820.0,
     y: 60.0,
-    description: "Çoruh Nehri üzerinde kurulu Türkiye'nin en yüksek gövdeli 2. çift eğrilikli beton kemer barajıdır.",
-    examTip: "Çoruh nehri akış hızı ve hidroelektrik potansiyeli en yüksek akarsularımızdandır.",
+    description:
+      "Çoruh Nehri üzerinde kurulu Türkiye'nin en yüksek gövdeli 2. çift eğrilikli beton kemer barajıdır.",
+    examTip:
+      "Çoruh nehri akış hızı ve hidroelektrik potansiyeli en yüksek akarsularımızdandır.",
   },
   {
     name: "Denizli Sarayköy Jeotermal Santrali",
     city: "Denizli",
     x: 180.0,
     y: 270.0,
-    description: "Yeraltı sıcak su buharından (jeotermal) elektrik üreten ilk santralimizdir.",
-    examTip: "Aydın Germencik ve Denizli Sarayköy fay hatları üzerindeki jeotermal merkezlerdir.",
+    description:
+      "Yeraltı sıcak su buharından (jeotermal) elektrik üreten ilk santralimizdir.",
+    examTip:
+      "Aydın Germencik ve Denizli Sarayköy fay hatları üzerindeki jeotermal merkezlerdir.",
   },
   {
     name: "Alaçatı Rüzgar Enerji Santrali (RES)",
     city: "İzmir (Çeşme)",
     x: 95.0,
     y: 215.0,
-    description: "Türkiye'nin rüzgar gücünden elektrik üreten ilk rüzgar tarlası santralidir.",
-    examTip: "Ege ve Marmara (Çanakkale, Balıkesir) rüzgar potansiyeli en yüksek bölgelerdir.",
+    description:
+      "Türkiye'nin rüzgar gücünden elektrik üreten ilk rüzgar tarlası santralidir.",
+    examTip:
+      "Ege ve Marmara (Çanakkale, Balıkesir) rüzgar potansiyeli en yüksek bölgelerdir.",
   },
   {
     name: "Karapınar Güneş Enerji Santrali (GES)",
     city: "Konya",
     x: 410.0,
     y: 270.0,
-    description: "Türkiye ve Avrupa'nın tek bir alana kurulu en büyük güneş enerjisi tarlasıdır (GES).",
-    examTip: "Güneşlenme süresi en fazla olan Güneydoğu ve İç Anadolu güneş santraline en uygundur.",
+    description:
+      "Türkiye ve Avrupa'nın tek bir alana kurulu en büyük güneş enerjisi tarlasıdır (GES).",
+    examTip:
+      "Güneşlenme süresi en fazla olan Güneydoğu ve İç Anadolu güneş santraline en uygundur.",
   },
   {
     name: "Akkuyu Nükleer Güç Santrali (NGS)",
     city: "Mersin (Gülnar)",
     x: 390.0,
     y: 360.0,
-    description: "Türkiye'nin inşaatı devam eden ve ilk üniteleri devreye giren ilk nükleer santralidir.",
-    examTip: "Deprem riskinin en düşük olduğu Akdeniz kıyısında (Mersin) deniz suyu soğutması nedeniyle seçilmiştir.",
+    description:
+      "Türkiye'nin inşaatı devam eden ve ilk üniteleri devreye giren ilk nükleer santralidir.",
+    examTip:
+      "Deprem riskinin en düşük olduğu Akdeniz kıyısında (Mersin) deniz suyu soğutması nedeniyle seçilmiştir.",
   },
 ];

@@ -104,7 +104,8 @@ export function Sidebar({
       ui.setAlertDialog({
         isOpen: true,
         message:
-          (getTranslation(lang).settings_sidebar_drag_disabled_auto_sort as string) ||
+          (getTranslation(lang)
+            .settings_sidebar_drag_disabled_auto_sort as string) ||
           "Otomatik sıralama kapatıldı — manuel sıralama aktif.",
         onConfirm: () => {
           ui.setAlertDialog({ isOpen: false, message: "" });
@@ -145,6 +146,8 @@ export function Sidebar({
         return t.sidebar_arcade;
       case "free-games":
         return t.sidebar_free_games;
+      case "city-pulse":
+        return t.sidebar_city_pulse;
       case "bist":
         return t.sidebar_bist;
       case "halka-arz":

@@ -5,6 +5,7 @@ import { agent } from "./agent.js";
 import { aichat } from "./aichat.js";
 import { arcade } from "./arcade.js";
 import { core } from "./core.js";
+import { city } from "./city.js";
 import { detox } from "./detox.js";
 import { free } from "./free.js";
 import { google } from "./google.js";
@@ -26,6 +27,7 @@ export const en = {
   ...aichat,
   ...arcade,
   ...core,
+  ...city,
   ...detox,
   ...free,
   ...google,

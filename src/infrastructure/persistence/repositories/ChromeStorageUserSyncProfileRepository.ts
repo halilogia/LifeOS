@@ -20,9 +20,7 @@ const DETOX_SITES_KEY = "detox_blocked_sites";
 const DETOX_END_KEY = "detox_end_time";
 const DETOX_DISTRACTION_KEY = "detox_distraction_settings";
 
-export class ChromeStorageUserSyncProfileRepository
-  implements IUserSyncProfileRepository
-{
+export class ChromeStorageUserSyncProfileRepository implements IUserSyncProfileRepository {
   async getProfile(): Promise<UserSyncProfile> {
     return new Promise((resolve) => {
       chrome.storage.sync.get(

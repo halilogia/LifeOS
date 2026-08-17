@@ -19,14 +19,20 @@ const READ_STATE_KEY = "rss_read_state";
 /** Feed başına tutulacak maksimum item sayısı (son N) */
 export const MAX_ITEMS_PER_FEED = 50;
 
-function storageGet(area: "sync" | "local", keys: string[]): Promise<Record<string, unknown>> {
+function storageGet(
+  area: "sync" | "local",
+  keys: string[],
+): Promise<Record<string, unknown>> {
   return new Promise((resolve) => {
     const api = area === "sync" ? chrome.storage.sync : chrome.storage.local;
     api.get(keys, (res) => resolve(res as Record<string, unknown>));
   });
 }
 
-function storageSet(area: "sync" | "local", data: Record<string, unknown>): Promise<void> {
+function storageSet(
+  area: "sync" | "local",
+  data: Record<string, unknown>,
+): Promise<void> {
   return new Promise((resolve) => {
     const api = area === "sync" ? chrome.storage.sync : chrome.storage.local;
     api.set(data, () => resolve());
@@ -58,7 +64,9 @@ export class ChromeStorageRssRepository implements IRssRepository {
 
     // İlişkili item'ları da temizle (local)
     const res = await storageGet("local", [ITEMS_KEY]);
-    const items = Array.isArray(res[ITEMS_KEY]) ? (res[ITEMS_KEY] as RssItem[]) : [];
+    const items = Array.isArray(res[ITEMS_KEY])
+      ? (res[ITEMS_KEY] as RssItem[])
+      : [];
     await storageSet("local", {
       [ITEMS_KEY]: items.filter((it) => it.feedId !== feedId),
     });
@@ -66,7 +74,9 @@ export class ChromeStorageRssRepository implements IRssRepository {
 
   async getItems(feedId: string): Promise<RssItem[]> {
     const res = await storageGet("local", [ITEMS_KEY]);
-    const items = Array.isArray(res[ITEMS_KEY]) ? (res[ITEMS_KEY] as RssItem[]) : [];
+    const items = Array.isArray(res[ITEMS_KEY])
+      ? (res[ITEMS_KEY] as RssItem[])
+      : [];
     return items
       .filter((it) => it.feedId === feedId)
       .sort((a, b) => b.pubDate - a.pubDate)
@@ -75,7 +85,9 @@ export class ChromeStorageRssRepository implements IRssRepository {
 
   async saveItems(feedId: string, items: RssItem[]): Promise<void> {
     const res = await storageGet("local", [ITEMS_KEY]);
-    const existing = Array.isArray(res[ITEMS_KEY]) ? (res[ITEMS_KEY] as RssItem[]) : [];
+    const existing = Array.isArray(res[ITEMS_KEY])
+      ? (res[ITEMS_KEY] as RssItem[])
+      : [];
     const other = existing.filter((it) => it.feedId !== feedId);
     const merged = [...other, ...items]
       .sort((a, b) => b.pubDate - a.pubDate)
@@ -85,7 +97,9 @@ export class ChromeStorageRssRepository implements IRssRepository {
 
   async addItems(items: RssItem[]): Promise<void> {
     const res = await storageGet("local", [ITEMS_KEY]);
-    const existing = Array.isArray(res[ITEMS_KEY]) ? (res[ITEMS_KEY] as RssItem[]) : [];
+    const existing = Array.isArray(res[ITEMS_KEY])
+      ? (res[ITEMS_KEY] as RssItem[])
+      : [];
     const knownIds = new Set(existing.map((it) => it.id));
     const fresh = items.filter((it) => !knownIds.has(it.id));
     if (fresh.length === 0) {
@@ -99,7 +113,9 @@ export class ChromeStorageRssRepository implements IRssRepository {
 
   async markItemRead(itemId: string): Promise<void> {
     const res = await storageGet("local", [ITEMS_KEY]);
-    const items = Array.isArray(res[ITEMS_KEY]) ? (res[ITEMS_KEY] as RssItem[]) : [];
+    const items = Array.isArray(res[ITEMS_KEY])
+      ? (res[ITEMS_KEY] as RssItem[])
+      : [];
     const updated = items.map((it) =>
       it.id === itemId ? { ...it, read: true } : it,
     );

@@ -52,6 +52,11 @@ const FreeGamesView = lazy(() =>
     default: m.FreeGamesView,
   })),
 );
+const CityPulseView = lazy(() =>
+  import("@/components/CityPulseView.js").then((m) => ({
+    default: m.CityPulseView,
+  })),
+);
 const ArcadeView = lazy(() =>
   import("@/components/ArcadeView.js").then((m) => ({
     default: m.ArcadeView,
@@ -201,6 +206,8 @@ export function ViewRouter() {
         return <ArcadeView lang={lang} />;
       case "free-games":
         return <FreeGamesView lang={lang} />;
+      case "city-pulse":
+        return <CityPulseView lang={lang} />;
       case "detox":
         return <DetoxView lang={lang} />;
       case "bist":
