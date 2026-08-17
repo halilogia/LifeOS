@@ -38,8 +38,7 @@ export function KpssStatsInputForm({
   const correct = parseInt(statsCorrectInput, 10) || 0;
   const wrong = parseInt(statsWrongInput, 10) || 0;
   const total = correct + wrong;
-  const scorePercent =
-    total > 0 ? Math.round((correct / total) * 100) : 0;
+  const scorePercent = total > 0 ? Math.round((correct / total) * 100) : 0;
 
   // Konu listesi — seçilen derse göre filtre
   const topicOptions = (kpssData[subjectInput] || []).map((tp) => tp.title);
@@ -67,8 +66,7 @@ export function KpssStatsInputForm({
   // Skor çarkı
   const radius = 44;
   const circumference = 2 * Math.PI * radius;
-  const dashOffset =
-    circumference - (scorePercent / 100) * circumference;
+  const dashOffset = circumference - (scorePercent / 100) * circumference;
 
   const handleSubjectChange = (val: string) => {
     onSubjectInputChange(val);
@@ -133,7 +131,9 @@ export function KpssStatsInputForm({
                     cy="50"
                     r={radius}
                     fill="none"
-                    stroke={scorePercent > 0 ? scoreColor : "rgba(255,255,255,0.06)"}
+                    stroke={
+                      scorePercent > 0 ? scoreColor : "rgba(255,255,255,0.06)"
+                    }
                     stroke-width="8"
                     stroke-linecap="round"
                     stroke-dasharray={circumference}
@@ -151,7 +151,9 @@ export function KpssStatsInputForm({
                     text-anchor="middle"
                     font-size="18"
                     font-weight="800"
-                    fill={scorePercent > 0 ? scoreColor : "rgba(255,255,255,0.3)"}
+                    fill={
+                      scorePercent > 0 ? scoreColor : "rgba(255,255,255,0.3)"
+                    }
                     font-family="inherit"
                   >
                     {scorePercent > 0 ? `%${scorePercent}` : "—"}
@@ -172,7 +174,10 @@ export function KpssStatsInputForm({
 
               <div className="kpss-ext-result__fields">
                 <div className="kpss-ext-result__field">
-                  <label className="kpss-ext-result__label" style={{ color: "#10b981" }}>
+                  <label
+                    className="kpss-ext-result__label"
+                    style={{ color: "#10b981" }}
+                  >
                     {t.kpss_stats_correct}
                   </label>
                   <div className="kpss-ext-result__input-wrap">

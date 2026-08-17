@@ -53,7 +53,10 @@ function getPinOffsets(events: HistoryEvent[]): Map<number, PinOffset> {
       if (i === j) {
         continue;
       }
-      const dist = Math.hypot(coordsList[i].x - coordsList[j].x, coordsList[i].y - coordsList[j].y);
+      const dist = Math.hypot(
+        coordsList[i].x - coordsList[j].x,
+        coordsList[i].y - coordsList[j].y,
+      );
       if (dist < 80) {
         neighbors.push(j);
       }
@@ -88,7 +91,9 @@ export function WorldHistoryMapCanvas({
   onWheel,
 }: WorldHistoryMapCanvasProps) {
   // Anında (0ms) senkron harita özellikleri yüklemesi
-  const [geoFeatures] = useState<CountryGeoFeature[]>(() => getWorldFeaturesSync());
+  const [geoFeatures] = useState<CountryGeoFeature[]>(() =>
+    getWorldFeaturesSync(),
+  );
 
   // Aktif boyalı ISO kod haritası oluşturma
   const activeIsoColors = new Map<string, string>();
@@ -164,7 +169,11 @@ export function WorldHistoryMapCanvas({
         <g>
           {activeEvents.map((ev, index) => {
             const isCurrent = index === currentIndex;
-            const offset = pinOffsets.get(index) || { dx: 0, dy: 0, textY: -14 };
+            const offset = pinOffsets.get(index) || {
+              dx: 0,
+              dy: 0,
+              textY: -14,
+            };
             const baseCoords = getEventCoords(ev);
             const pinX = baseCoords.x + offset.dx;
             const pinY = baseCoords.y + offset.dy;

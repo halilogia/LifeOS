@@ -1,13 +1,18 @@
 import type { DistractionSettings } from "@/presentation/store/detoxStore.js";
 import type { Language } from "@/types/types.js";
-import { DetoxPlatformSection, ToggleRow } from "@/components/detox/DetoxPlatformSection.js";
+import {
+  DetoxPlatformSection,
+  ToggleRow,
+} from "@/components/detox/DetoxPlatformSection.js";
 
 interface DetoxDistractionCardProps {
   lang: Language;
   t: Record<string, string>;
   distractionSettings: DistractionSettings;
   onUpdateDistractionSettings: (
-    updater: Partial<DistractionSettings> | ((prev: DistractionSettings) => DistractionSettings),
+    updater:
+      | Partial<DistractionSettings>
+      | ((prev: DistractionSettings) => DistractionSettings),
   ) => void;
 }
 
@@ -81,7 +86,8 @@ export function DetoxDistractionCard({
               color: "#f8fafc",
             }}
           >
-            {t.detox_distraction_title || "Sosyal Medya Temizlik & Anti-Doomscrolling"}
+            {t.detox_distraction_title ||
+              "Sosyal Medya Temizlik & Anti-Doomscrolling"}
           </h3>
           <p
             style={{
@@ -130,7 +136,9 @@ export function DetoxDistractionCard({
             onChange={() => handleToggle("ytShortsBlock")}
           />
           <ToggleRow
-            label={t.detox_yt_feed || "Ana Sayfa Akışını Gizle (İlham Kartı Göster)"}
+            label={
+              t.detox_yt_feed || "Ana Sayfa Akışını Gizle (İlham Kartı Göster)"
+            }
             checked={distractionSettings.ytFeedBlock}
             onChange={() => handleToggle("ytFeedBlock")}
           />

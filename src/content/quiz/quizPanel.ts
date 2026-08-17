@@ -9,11 +9,7 @@
  */
 
 import { contentLog } from "@/content/contentLogger.js";
-import {
-  AI_SITES,
-  collectPageText,
-  parseQuestions,
-} from "./QuizParser.js";
+import { AI_SITES, collectPageText, parseQuestions } from "./QuizParser.js";
 import {
   isPanelOpen,
   setQuizState,

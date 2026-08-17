@@ -64,7 +64,9 @@ interface DetoxState {
   screenTimeStats: Record<string, number>;
   distractionSettings: DistractionSettings;
   setDistractionSettings: (
-    settings: Partial<DistractionSettings> | ((prev: DistractionSettings) => DistractionSettings),
+    settings:
+      | Partial<DistractionSettings>
+      | ((prev: DistractionSettings) => DistractionSettings),
   ) => void;
   loadConfig: () => Promise<void>;
   loadScreenTimeStats: () => Promise<void>;
@@ -81,8 +83,7 @@ export const useDetoxState = create<DetoxState>()((set, get) => ({
   blockedSites: [],
   setBlockedSites: (sites) =>
     set((s) => ({
-      blockedSites:
-        typeof sites === "function" ? sites(s.blockedSites) : sites,
+      blockedSites: typeof sites === "function" ? sites(s.blockedSites) : sites,
     })),
   endTime: 0,
   setEndTime: (t) => set({ endTime: t }),
@@ -108,13 +109,23 @@ export const useDetoxState = create<DetoxState>()((set, get) => ({
       detox_limits?: Record<string, number>;
     }>((resolve) =>
       chrome.storage.local.get(
-        [ENABLED_KEY, SITES_KEY, END_TIME_KEY, DISTRACTION_KEY, LIMITS_KEY, LIMITS_LEGACY_KEY],
+        [
+          ENABLED_KEY,
+          SITES_KEY,
+          END_TIME_KEY,
+          DISTRACTION_KEY,
+          LIMITS_KEY,
+          LIMITS_LEGACY_KEY,
+        ],
         (r) => resolve(r),
       ),
     );
 
     const synced = await userSyncProfileRepo.getProfile();
-    if (res.detox_enabled === undefined && res.detox_blocked_sites === undefined) {
+    if (
+      res.detox_enabled === undefined &&
+      res.detox_blocked_sites === undefined
+    ) {
       // Mirror sync -> local so content-script blocker (reads local) sees it.
       const mirror: Record<string, unknown> = {};
       if (synced.detoxEnabled !== undefined) {
@@ -160,21 +171,35 @@ export const useDetoxState = create<DetoxState>()((set, get) => ({
 
     if (isEnabled && end !== -1 && end <= Date.now()) {
       chrome.storage.local.set({ [ENABLED_KEY]: false, [END_TIME_KEY]: 0 });
-      set({ enabled: false, blockedSites: sites, endTime: 0, distractionSettings: distraction });
+      set({
+        enabled: false,
+        blockedSites: sites,
+        endTime: 0,
+        distractionSettings: distraction,
+      });
     } else {
-      set({ enabled: isEnabled, blockedSites: sites, endTime: end, distractionSettings: distraction });
+      set({
+        enabled: isEnabled,
+        blockedSites: sites,
+        endTime: end,
+        distractionSettings: distraction,
+      });
     }
     if (Object.keys(limits).length > 0) {
-      chrome.storage.local.set({ [LIMITS_KEY]: limits, [LIMITS_LEGACY_KEY]: limits });
+      chrome.storage.local.set({
+        [LIMITS_KEY]: limits,
+        [LIMITS_LEGACY_KEY]: limits,
+      });
     }
   },
 
   loadScreenTimeStats: async () => {
     const todayStr = new Date().toLocaleDateString("sv");
-    const res = await new Promise<{ screen_time_stats?: Record<string, unknown> }>(
-      (resolve) => chrome.storage.local.get([STATS_KEY], (r) => resolve(r)),
-    );
-    const stats = (res.screen_time_stats?.[todayStr] as Record<string, number>) || {};
+    const res = await new Promise<{
+      screen_time_stats?: Record<string, unknown>;
+    }>((resolve) => chrome.storage.local.get([STATS_KEY], (r) => resolve(r)));
+    const stats =
+      (res.screen_time_stats?.[todayStr] as Record<string, number>) || {};
     set({ screenTimeStats: stats });
   },
 
@@ -186,12 +211,17 @@ export const useDetoxState = create<DetoxState>()((set, get) => ({
 
   saveDistractionSettings: (settings) => {
     chrome.storage.local.set({ [DISTRACTION_KEY]: settings });
-    void userSyncProfileRepo.saveProfile({ detoxDistractionSettings: settings });
+    void userSyncProfileRepo.saveProfile({
+      detoxDistractionSettings: settings,
+    });
     scheduleCloudBackup();
   },
 
   saveLimits: (limits) => {
-    chrome.storage.local.set({ [LIMITS_KEY]: limits, [LIMITS_LEGACY_KEY]: limits });
+    chrome.storage.local.set({
+      [LIMITS_KEY]: limits,
+      [LIMITS_LEGACY_KEY]: limits,
+    });
     void userSyncProfileRepo.saveProfile({ detoxLimits: limits });
     scheduleCloudBackup();
   },
@@ -222,7 +252,10 @@ export const useDetoxState = create<DetoxState>()((set, get) => ({
     chrome.storage.local.set(settings, () => {
       set({ enabled: false, endTime: 0 });
     });
-    void userSyncProfileRepo.saveProfile({ detoxEnabled: false, detoxEndTime: 0 });
+    void userSyncProfileRepo.saveProfile({
+      detoxEnabled: false,
+      detoxEndTime: 0,
+    });
     scheduleCloudBackup();
   },
 }));

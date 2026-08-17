@@ -154,9 +154,7 @@ export function KpssQuizQuestionsStep({
           className={`koleksiyon-btn ${isInCollection ? "saved" : ""}`}
           onClick={() => onToggleCollection(currentQ)}
           title={
-            isInCollection
-              ? t.kpss_koleksiyon_remove
-              : t.kpss_koleksiyon_add
+            isInCollection ? t.kpss_koleksiyon_remove : t.kpss_koleksiyon_add
           }
           style={{
             position: "absolute",

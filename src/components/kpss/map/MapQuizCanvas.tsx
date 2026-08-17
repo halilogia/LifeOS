@@ -121,8 +121,18 @@ export function MapQuizCanvas({
               {/* İpucu Yanıp Sönen Sarı Halka (SVG native animate) */}
               {isHinted && (
                 <circle r={0} fill="none" stroke="#eab308" strokeWidth={2.5}>
-                  <animate attributeName="r" values="10;20" dur="1s" repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.9;0" dur="1s" repeatCount="indefinite" />
+                  <animate
+                    attributeName="r"
+                    values="10;20"
+                    dur="1s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0.9;0"
+                    dur="1s"
+                    repeatCount="indefinite"
+                  />
                 </circle>
               )}
 

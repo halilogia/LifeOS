@@ -1,5 +1,6 @@
 export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "free-games", // İlk açılışta varsayılan 1. sıra (pin değil — kullanıcı pinleyebilir)
+  "city-pulse", // Ücretsiz İstanbul etkinlikleri
   "ai-chat", // İlk açılışta varsayılan 2. sıra
   "list",
   "eisenhower",

@@ -15,26 +15,28 @@ interface KpssWikiSidebarState {
   toggleSidebar: () => void;
 }
 
-export const useKpssWikiSidebarState = create<KpssWikiSidebarState>()((set) => ({
-  sidebarCollapsed: true,
-  setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),
-  toggleSidebar: () => {
-    set((s) => {
-      const next = !s.sidebarCollapsed;
-      void chrome.storage.local.set({ [STORAGE_KEY]: next }, () =>
-        scheduleCloudBackup(),
-      );
-      return { sidebarCollapsed: next };
-    });
-  },
-}));
+export const useKpssWikiSidebarState = create<KpssWikiSidebarState>()(
+  (set) => ({
+    sidebarCollapsed: true,
+    setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),
+    toggleSidebar: () => {
+      set((s) => {
+        const next = !s.sidebarCollapsed;
+        void chrome.storage.local.set({ [STORAGE_KEY]: next }, () =>
+          scheduleCloudBackup(),
+        );
+        return { sidebarCollapsed: next };
+      });
+    },
+  }),
+);
 
 /** Load persisted value once at module init. Idempotent + races with React mount harmless. */
 void (async () => {
   const result = await chrome.storage.local.get(STORAGE_KEY);
   if (result[STORAGE_KEY] !== undefined) {
-    useKpssWikiSidebarState.getState().setSidebarCollapsed(
-      Boolean(result[STORAGE_KEY]),
-    );
+    useKpssWikiSidebarState
+      .getState()
+      .setSidebarCollapsed(Boolean(result[STORAGE_KEY]));
   }
 })();

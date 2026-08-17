@@ -3,9 +3,7 @@
  * Signature unchanged; consumer components untouched.
  */
 
-import {
-  useAiUserMemoryState,
-} from "@/presentation/store/aiUserMemoryStore.js";
+import { useAiUserMemoryState } from "@/presentation/store/aiUserMemoryStore.js";
 
 export function useAiUserMemory() {
   const userMemory = useAiUserMemoryState((s) => s.userMemory);

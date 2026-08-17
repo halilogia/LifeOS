@@ -4,12 +4,7 @@
  */
 
 export type MapPinKind =
-  | "flag"
-  | "mountain"
-  | "volcano"
-  | "lake"
-  | "city"
-  | "star";
+  "flag" | "mountain" | "volcano" | "lake" | "city" | "star";
 
 export const PIN_KINDS: { id: MapPinKind; label: string; icon: string }[] = [
   { id: "flag", label: "Bayrak", icon: "🚩" },

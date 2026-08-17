@@ -118,7 +118,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   fetchQuizFromAI: async (subjectKey, topicName, count) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const state = get();
     set({
       quizLoading: true,
@@ -189,7 +191,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   handleFinishQuiz: async () => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const state = get();
     try {
       const {
@@ -221,7 +225,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   handleSaveExternalResult: async (correct, total) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const state = get();
     try {
       const {
@@ -252,7 +258,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   handleStartQuiz: (topic, subject) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     if (subject && subject !== c.currentSubject()) {
       c.onSubjectChange?.(subject);
     }
@@ -270,7 +278,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   handleStartPastExam: async (year, subject, countLimit, selectedChapter) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     let questions: QuizQuestion[];
 
     if (year === "yanlis") {
@@ -309,9 +319,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
         : year === "tarih_arsivi" || year === "tarih_arsivi54"
           ? `Tarih Soru Arşivi (${selectedChapter && selectedChapter !== "all" ? selectedChapter : "Tüm Üniteler"})`
           : year === "yanlis"
-            ? (c.t.kpss_past_exams_wrong || "Yanlışlarım")
+            ? c.t.kpss_past_exams_wrong || "Yanlışlarım"
             : year === "koleksiyon"
-              ? (c.t.kpss_koleksiyon_cap || "Koleksiyonum")
+              ? c.t.kpss_koleksiyon_cap || "Koleksiyonum"
               : year;
 
     set({
@@ -328,7 +338,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   handleReviewPastQuiz: async (topic, subject) => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const targetSubject = subject || c.currentSubject();
     if (subject && subject !== c.currentSubject()) {
       c.onSubjectChange?.(subject);
@@ -398,7 +410,9 @@ export const useKpssQuizStore = create<KpssQuizState>()((set, get) => ({
 
   loadPastQuizzes: async () => {
     const c = cb;
-    if (!c) {return;}
+    if (!c) {
+      return;
+    }
     const loaded = await c.onLoadPastQuizzes();
     set({ pastQuizzes: loaded });
   },

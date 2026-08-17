@@ -384,10 +384,9 @@ export function KpssPastExamsDashboard({
                 paddingRight: "4px",
               }}
             >
-              {(
-                selectedYear === "tarih_arsivi54"
-                  ? TARIH54_CHAPTERS
-                  : TARIH_CHAPTERS
+              {(selectedYear === "tarih_arsivi54"
+                ? TARIH54_CHAPTERS
+                : TARIH_CHAPTERS
               ).map((ch) => (
                 <div
                   key={ch.id}

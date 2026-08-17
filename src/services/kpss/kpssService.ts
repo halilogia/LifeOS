@@ -226,7 +226,14 @@ export function createKpssService(kpssRepo: IKpssRepository) {
       if (topic && questions > 0 && correctCount !== undefined) {
         const score =
           questions > 0 ? Math.round((correctCount / questions) * 100) : 0;
-        await this.updateTopicStatus(subject, topic, 1, score, correctCount, questions);
+        await this.updateTopicStatus(
+          subject,
+          topic,
+          1,
+          score,
+          correctCount,
+          questions,
+        );
       }
     },
 

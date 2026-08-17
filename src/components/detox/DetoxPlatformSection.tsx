@@ -64,7 +64,9 @@ export function ToggleRow({
         gap: "12px",
         padding: "8px 10px",
         borderRadius: "10px",
-        background: checked ? "rgba(59, 130, 246, 0.1)" : "rgba(15, 23, 42, 0.3)",
+        background: checked
+          ? "rgba(59, 130, 246, 0.1)"
+          : "rgba(15, 23, 42, 0.3)",
         border: checked
           ? "1px solid rgba(59, 130, 246, 0.25)"
           : "1px solid rgba(255, 255, 255, 0.04)",

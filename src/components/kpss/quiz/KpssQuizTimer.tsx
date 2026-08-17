@@ -16,7 +16,11 @@ function formatTime(sec: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function KpssQuizTimer({ t, remainingSec, totalSec }: KpssQuizTimerProps) {
+export function KpssQuizTimer({
+  t,
+  remainingSec,
+  totalSec,
+}: KpssQuizTimerProps) {
   const safeTotal = totalSec > 0 ? totalSec : 1;
   const ratio = Math.max(0, Math.min(1, remainingSec / safeTotal));
   const isLow = remainingSec <= 60;
@@ -42,12 +46,17 @@ export function KpssQuizTimer({ t, remainingSec, totalSec }: KpssQuizTimerProps)
         border: "1px solid var(--card-border)",
         backdropFilter: "blur(8px)",
         transition: "border-color 0.3s ease",
-        borderColor: isLow
-          ? "rgba(248, 113, 113, 0.45)"
-          : "var(--card-border)",
+        borderColor: isLow ? "rgba(248, 113, 113, 0.45)" : "var(--card-border)",
       }}
     >
-      <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
+      <div
+        style={{
+          position: "relative",
+          width: size,
+          height: size,
+          flexShrink: 0,
+        }}
+      >
         <svg
           width={size}
           height={size}
@@ -72,7 +81,9 @@ export function KpssQuizTimer({ t, remainingSec, totalSec }: KpssQuizTimerProps)
             stroke-linecap="round"
             stroke-dasharray={circumference}
             stroke-dashoffset={dashOffset}
-            style={{ transition: "stroke-dashoffset 0.95s linear, stroke 0.3s ease" }}
+            style={{
+              transition: "stroke-dashoffset 0.95s linear, stroke 0.3s ease",
+            }}
           />
         </svg>
         <div

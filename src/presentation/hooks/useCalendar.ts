@@ -5,7 +5,10 @@ import { createCalendarPort } from "@/application/ports/createCalendarPort.js";
 import { ChromeStorageSyncRepository } from "@/infrastructure/persistence/repositories/ChromeStorageSyncRepository.js";
 
 const syncRepo = new ChromeStorageSyncRepository();
-const calendarUC = new SyncGoogleCalendarUseCase(syncRepo, createCalendarPort());
+const calendarUC = new SyncGoogleCalendarUseCase(
+  syncRepo,
+  createCalendarPort(),
+);
 
 interface CalendarModalData {
   title: string;

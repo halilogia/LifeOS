@@ -5,7 +5,10 @@
 
 import { Language } from "@/types/types.js";
 import type { GoogleSyncSettings } from "@/domain/repositories/ISyncRepository.js";
-import type { SyncKeySummary, DriveBackupInfo } from "@/services/cloudDataInspector.js";
+import type {
+  SyncKeySummary,
+  DriveBackupInfo,
+} from "@/services/cloudDataInspector.js";
 import { SettingsSection } from "@/components/settings/SettingsSection.js";
 
 interface SyncSettingsTabProps {
@@ -246,7 +249,9 @@ export function SyncSettingsTab({
 
       {/* Cloud Data Inspector */}
       <div className="settings-group">
-        <SettingsSection title={t.settings_cloud_inspector_title || "Cloud Data Inspector"} />
+        <SettingsSection
+          title={t.settings_cloud_inspector_title || "Cloud Data Inspector"}
+        />
         <div className="settings-actions">
           {/* Sync Section */}
           <div style={{ marginBottom: "16px" }}>
@@ -282,8 +287,18 @@ export function SyncSettingsTab({
               </p>
             ) : (
               <>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.75rem", marginBottom: "6px" }}>
-                  {syncKeysSummary.length} key • {(syncKeysSummary.reduce((s, k) => s + k.size, 0) / 1024).toFixed(1)} KB
+                <p
+                  style={{
+                    color: "var(--text-secondary)",
+                    fontSize: "0.75rem",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {syncKeysSummary.length} key •{" "}
+                  {(
+                    syncKeysSummary.reduce((s, k) => s + k.size, 0) / 1024
+                  ).toFixed(1)}{" "}
+                  KB
                 </p>
                 <div
                   style={{
@@ -377,8 +392,18 @@ export function SyncSettingsTab({
               </p>
             ) : (
               <>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.75rem", marginBottom: "6px" }}>
-                  {driveBackups.length} yedek • {(driveBackups.reduce((s, b) => s + b.size, 0) / 1024).toFixed(1)} KB
+                <p
+                  style={{
+                    color: "var(--text-secondary)",
+                    fontSize: "0.75rem",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {driveBackups.length} yedek •{" "}
+                  {(
+                    driveBackups.reduce((s, b) => s + b.size, 0) / 1024
+                  ).toFixed(1)}{" "}
+                  KB
                 </p>
                 <div
                   style={{
@@ -427,7 +452,9 @@ export function SyncSettingsTab({
                           fontSize: "0.65rem",
                         }}
                       >
-                        {new Date(backup.modifiedTime).toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US")}
+                        {new Date(backup.modifiedTime).toLocaleDateString(
+                          lang === "tr" ? "tr-TR" : "en-US",
+                        )}
                       </span>
                     </div>
                   ))}

@@ -109,7 +109,9 @@ export async function handleUpdateMemoryFromAI(
   }
 
   const currentMemory = await memoryRepo.getMemory();
-  const dateStr = new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : "en-US");
+  const dateStr = new Date().toLocaleDateString(
+    lang === "tr" ? "tr-TR" : "en-US",
+  );
   const cleanFact = `- [${dateStr}] ${newFact.trim()}`;
 
   const updatedMemory = formatMemoryUpdate(currentMemory, cleanFact, lang);

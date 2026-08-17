@@ -15,7 +15,8 @@ export const kpss = {
   kpss_map_title_passes: "Türkiye'nin Önemli Geçitleri",
   kpss_map_title_gates: "Türkiye'nin Sınır Kapıları",
   kpss_map_title_gulfs: "Türkiye'nin Körfezleri",
-  kpss_map_title_unesco: "UNESCO Dünya Mirasları (Tarihi Eserler · Alanlar · Karma)",
+  kpss_map_title_unesco:
+    "UNESCO Dünya Mirasları (Tarihi Eserler · Alanlar · Karma)",
   kpss_map_title_kivrim: "Türkiye'nin Kıvrım Dağları",
   kpss_map_title_kirik: "Türkiye'nin Kırık Dağları (Horst-Graben)",
   kpss_map_title_volcanic: "Türkiye'nin Volkanik Dağları",
@@ -97,9 +98,11 @@ export const kpss = {
   kpss_map_hint_tooltip: "Haritada hedef konumu sarı halkayla parlatır",
   kpss_map_pass: "PAS",
   kpss_map_score: "Skor",
-  kpss_map_quiz_instruction: "Haritadaki nokta düğümlerine tıklayarak konumu bulun",
+  kpss_map_quiz_instruction:
+    "Haritadaki nokta düğümlerine tıklayarak konumu bulun",
   kpss_map_quiz_completed_title: "Harita Sınavı Tamamlandı!",
-  kpss_map_quiz_completed_desc: "Seçili kategorideki tüm konumları başarıyla sınadınız.",
+  kpss_map_quiz_completed_desc:
+    "Seçili kategorideki tüm konumları başarıyla sınadınız.",
   kpss_map_stat_correct: "Doğru Konum",
   kpss_map_stat_accuracy: "Başarı Oranı",
   kpss_map_stat_wrong: "Yanlış Deneme",

@@ -4,7 +4,10 @@
  * Chrome API'leri infrastructure adapter'da gizli — servis sadece port kullanır.
  */
 
-import { IErrorReportPort, LogEntry } from "@/application/ports/IErrorReportPort.js";
+import {
+  IErrorReportPort,
+  LogEntry,
+} from "@/application/ports/IErrorReportPort.js";
 import { ChromeErrorReportAdapter } from "@/infrastructure/adapters/ChromeErrorReportAdapter.js";
 
 const defaultPort = new ChromeErrorReportAdapter();

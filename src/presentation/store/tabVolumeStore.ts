@@ -60,6 +60,8 @@ void (async () => {
     const res = await chrome.storage.local.get([storageKey]);
     const level =
       res[storageKey] !== undefined ? (res[storageKey] as number) : 100;
-    useTabVolumeState.getState().setVolume(level, tId, tab.title || "Aktif Sekme");
+    useTabVolumeState
+      .getState()
+      .setVolume(level, tId, tab.title || "Aktif Sekme");
   }
 })();

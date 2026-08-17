@@ -19,7 +19,11 @@ import {
 } from "./mapPinUtils.js";
 import { HaritaBlock } from "./HaritaBlockView.js";
 
-export { parseHaritaBlock, serializeHaritaBlock, pinKindColor } from "./mapPinUtils.js";
+export {
+  parseHaritaBlock,
+  serializeHaritaBlock,
+  pinKindColor,
+} from "./mapPinUtils.js";
 export type { MapPin, MapPinKind } from "./mapPinUtils.js";
 export { HaritaBlock };
 

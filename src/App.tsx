@@ -77,7 +77,6 @@ export function App() {
     refreshQuote(lang);
   }, [lang]);
 
-
   const t = getTranslation(lang);
 
   if (

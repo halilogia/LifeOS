@@ -15,7 +15,8 @@ export const kpss = {
   kpss_map_title_passes: "Turkey's Important Passes",
   kpss_map_title_gates: "Turkey's Border Gates",
   kpss_map_title_gulfs: "Turkey's Gulfs",
-  kpss_map_title_unesco: "UNESCO World Heritage Sites (Historical · Areas · Mixed)",
+  kpss_map_title_unesco:
+    "UNESCO World Heritage Sites (Historical · Areas · Mixed)",
   kpss_map_title_kivrim: "Turkey's Fold Mountains",
   kpss_map_title_kirik: "Turkey's Fault Mountains (Horst-Graben)",
   kpss_map_title_volcanic: "Turkey's Volcanic Mountains",
@@ -34,7 +35,8 @@ export const kpss = {
   kpss_map_title_mines: "Mineral Deposits & Processing Plants",
   kpss_map_title_energy: "Power Plants & Energy Resources",
   kpss_map_title_industry: "Industrial Zones & Facilities",
-  kpss_map_title_transport_borders: "Transport Network, Railways & Border Gates",
+  kpss_map_title_transport_borders:
+    "Transport Network, Railways & Border Gates",
   kpss_map_title_all: "All KPSS Geography Map (Mixed)",
 
   // Topics
@@ -94,12 +96,15 @@ export const kpss = {
   kpss_map_mode_quiz: "Interactive Location Game",
   kpss_map_find_target: "Select Location on Map",
   kpss_map_hint: "Hint",
-  kpss_map_hint_tooltip: "Highlights the target location on the map with a yellow glow",
+  kpss_map_hint_tooltip:
+    "Highlights the target location on the map with a yellow glow",
   kpss_map_pass: "SKIP",
   kpss_map_score: "Score",
-  kpss_map_quiz_instruction: "Click on the node dots on the map to find the location",
+  kpss_map_quiz_instruction:
+    "Click on the node dots on the map to find the location",
   kpss_map_quiz_completed_title: "Map Quiz Completed!",
-  kpss_map_quiz_completed_desc: "You have tested all locations in the selected category.",
+  kpss_map_quiz_completed_desc:
+    "You have tested all locations in the selected category.",
   kpss_map_stat_correct: "Correct Locations",
   kpss_map_stat_accuracy: "Accuracy Rate",
   kpss_map_stat_wrong: "Wrong Attempts",
@@ -120,7 +125,8 @@ export const kpss = {
   kpss_history_title_osmanli_duraklama: "Ottoman Stagnation Period (1579-1699)",
   kpss_history_title_osmanli_gerileme: "Ottoman Decline Period (1700-1792)",
   kpss_history_title_osmanli_dagilma: "Ottoman Dissolution Period (1792-1922)",
-  kpss_history_title_kurtulus_savasi: "Republic of Turkey & War of Independence",
+  kpss_history_title_kurtulus_savasi:
+    "Republic of Turkey & War of Independence",
   kpss_history_title_osmanli_teskilat: "Ottoman State Organization",
   kpss_history_title_hacli: "Crusades",
   kpss_history_legend_selcuklu: "Historical event / place",

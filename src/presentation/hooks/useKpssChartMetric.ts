@@ -3,9 +3,7 @@
  * Signature unchanged; consumer components untouched.
  */
 
-import {
-  useKpssChartMetricState,
-} from "@/presentation/store/kpssChartMetricStore.js";
+import { useKpssChartMetricState } from "@/presentation/store/kpssChartMetricStore.js";
 
 export function useKpssChartMetric() {
   const chartMetric = useKpssChartMetricState((s) => s.chartMetric);

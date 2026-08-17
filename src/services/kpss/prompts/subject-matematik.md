@@ -1,4 +1,5 @@
 Matematik/Geometri soruları için:
+
 1. Tüm matematiksel ifadeler, formüller ve semboller LaTeX formatında yazılmalıdır. Uygulama KaTeX ile render eder, şu sözdizimi kullanılır:
    - Satır içi (inline) matematik: `$...$` (örn: `$x^2 + 2x - 3 = 0$`, `$\frac{1}{2}$`)
    - Blok/denklem (display) matematik: `$$...$$` (örn: `$$\frac{a}{b} = \frac{c}{d}$$`)

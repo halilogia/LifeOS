@@ -237,7 +237,12 @@ export function SchemaBuilder({
 
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef<{ x: number; y: number; panX: number; panY: number }>({
+  const dragStartRef = useRef<{
+    x: number;
+    y: number;
+    panX: number;
+    panY: number;
+  }>({
     x: 0,
     y: 0,
     panX: 0,
@@ -246,7 +251,12 @@ export function SchemaBuilder({
 
   const onPointerDown = (e: PointerEvent) => {
     setIsDragging(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y };
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: pan.x,
+      panY: pan.y,
+    };
   };
 
   const onPointerMove = (e: PointerEvent) => {
@@ -255,7 +265,10 @@ export function SchemaBuilder({
     }
     const dx = e.clientX - dragStartRef.current.x;
     const dy = e.clientY - dragStartRef.current.y;
-    setPan({ x: dragStartRef.current.panX + dx, y: dragStartRef.current.panY + dy });
+    setPan({
+      x: dragStartRef.current.panX + dx,
+      y: dragStartRef.current.panY + dy,
+    });
   };
 
   const onPointerUp = () => {

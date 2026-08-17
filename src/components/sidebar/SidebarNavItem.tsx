@@ -59,7 +59,10 @@ export function SidebarNavItem({
     >
       <SidebarIcon itemKey={itemKey} />
       <span>{label}</span>
-      <span className={`sidebar-pin ${isPinned ? "visible pinned-icon" : ""}`} onClick={handlePinClick}>
+      <span
+        className={`sidebar-pin ${isPinned ? "visible pinned-icon" : ""}`}
+        onClick={handlePinClick}
+      >
         <svg
           width="14"
           height="14"

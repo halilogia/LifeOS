@@ -6,31 +6,38 @@ export const TURKEY_AGRICULTURE: GeoPin[] = [
     city: "Rize/Trabzon/Artvin",
     x: 770.0,
     y: 70.0,
-    description: "Asitli yıkanmış toprak ve her mevsim nem isteyen çay üretiminin %100'ü Doğu Karadeniz'dedir.",
-    examTip: "Türkiye'de ekim alanı devlet kontrolünde olan ve en dar coğrafi yayılışa sahip üründür.",
+    description:
+      "Asitli yıkanmış toprak ve her mevsim nem isteyen çay üretiminin %100'ü Doğu Karadeniz'dedir.",
+    examTip:
+      "Türkiye'de ekim alanı devlet kontrolünde olan ve en dar coğrafi yayılışa sahip üründür.",
   },
   {
     name: "Fındık Üretim Alanı (Karadeniz & Marmara)",
     city: "Ordu/Giresun/Sakarya",
     x: 640.0,
     y: 75.0,
-    description: "Dünya üretim ve ihracat birincisi olduğumuz fındık, Karadeniz iklim kuşağında yetişir.",
-    examTip: "Ordu ve Giresun başı çeker; Marmara'da Düzce ve Sakarya'da da yoğun üretilir.",
+    description:
+      "Dünya üretim ve ihracat birincisi olduğumuz fındık, Karadeniz iklim kuşağında yetişir.",
+    examTip:
+      "Ordu ve Giresun başı çeker; Marmara'da Düzce ve Sakarya'da da yoğun üretilir.",
   },
   {
     name: "Pamuk Üretim Alanı (GAP & Çukurova & Ege)",
     city: "Şanlıurfa/Aydın",
     x: 710.0,
     y: 305.0,
-    description: "Yaz sıcaklığı ve sulama isteyen pamuk üretiminde Şanlıurfa (GAP) Türkiye 1.sidir.",
-    examTip: "GAP sulaması sonrası Şanlıurfa pamuk üretiminde Ege ve Çukurova'yı geride bırakmıştır.",
+    description:
+      "Yaz sıcaklığı ve sulama isteyen pamuk üretiminde Şanlıurfa (GAP) Türkiye 1.sidir.",
+    examTip:
+      "GAP sulaması sonrası Şanlıurfa pamuk üretiminde Ege ve Çukurova'yı geride bırakmıştır.",
   },
   {
     name: "Tütün Üretim Alanı (Devlet Kontrollü)",
     city: "Manisa/Adıyaman/Samsun",
     x: 155.0,
     y: 210.0,
-    description: "Kaliteyi korumak amacıyla ekim alanları devlet sınırı ve iznine tabi endüstri bitkisidir.",
+    description:
+      "Kaliteyi korumak amacıyla ekim alanları devlet sınırı ve iznine tabi endüstri bitkisidir.",
     examTip: "Manisa ve Adıyaman en önemli tütün merkezleridir.",
   },
   {
@@ -38,15 +45,18 @@ export const TURKEY_AGRICULTURE: GeoPin[] = [
     city: "Aydın/Balıkesir/İzmir",
     x: 125.0,
     y: 220.0,
-    description: "Kış ılıklığı isteyen maki ürünümüz Ege ve Marmara kıyılarında yoğunlaşmıştır.",
-    examTip: "Ege yağlık zeytinde, Güney Marmara (Gemlik) sofralık zeytinde liderdir.",
+    description:
+      "Kış ılıklığı isteyen maki ürünümüz Ege ve Marmara kıyılarında yoğunlaşmıştır.",
+    examTip:
+      "Ege yağlık zeytinde, Güney Marmara (Gemlik) sofralık zeytinde liderdir.",
   },
   {
     name: "İncir Üretim Alanı (Dünya 1.si)",
     city: "Aydın/İzmir",
     x: 135.0,
     y: 245.0,
-    description: "Dünya yaş ve kuru incir üretiminde 1. sırada yer aldığımız kış ılıklığı isteyen üründür.",
+    description:
+      "Dünya yaş ve kuru incir üretiminde 1. sırada yer aldığımız kış ılıklığı isteyen üründür.",
     examTip: "Büyük Menderes ve Küçük Menderes havzaları üretim merkezidir.",
   },
   {
@@ -54,15 +64,18 @@ export const TURKEY_AGRICULTURE: GeoPin[] = [
     city: "Konya/Eskişehir",
     x: 390.0,
     y: 240.0,
-    description: "Tarladan toplandıktan hemen sonra işlenmesi gerektiği için fabrikalar ekim alanının yanına kurulur.",
-    examTip: "Kıyı bölgelerinde getirisi yüksek ürünler tercih edildiğinden şeker pancarı İÇ BÖLGELERDE yoğunlaşmıştır.",
+    description:
+      "Tarladan toplandıktan hemen sonra işlenmesi gerektiği için fabrikalar ekim alanının yanına kurulur.",
+    examTip:
+      "Kıyı bölgelerinde getirisi yüksek ürünler tercih edildiğinden şeker pancarı İÇ BÖLGELERDE yoğunlaşmıştır.",
   },
   {
     name: "Haşhaş Üretim Alanı (Uyuşturucu Kontrolü)",
     city: "Afyonkarahisar/Denizli",
     x: 235.0,
     y: 230.0,
-    description: "Uyuşturucu hammaddesi içerdiği için BM kararları ve devlet izniyle SADECE belirli illerde üretilir.",
+    description:
+      "Uyuşturucu hammaddesi içerdiği için BM kararları ve devlet izniyle SADECE belirli illerde üretilir.",
     examTip: "Afyonkarahisar merkezli kısıtlı ekim alanına sahiptir.",
   },
   {
@@ -70,7 +83,8 @@ export const TURKEY_AGRICULTURE: GeoPin[] = [
     city: "Tekirdağ/Edirne",
     x: 110.0,
     y: 50.0,
-    description: "Türkiye sıvı yağ ihtiyacının büyük kısmını karşılayan ayçiçeğinde Trakya 1. sıradadır.",
+    description:
+      "Türkiye sıvı yağ ihtiyacının büyük kısmını karşılayan ayçiçeğinde Trakya 1. sıradadır.",
     examTip: "Ergene ve Güney Marmara en yoğun üretim bölgesidir.",
   },
 ];

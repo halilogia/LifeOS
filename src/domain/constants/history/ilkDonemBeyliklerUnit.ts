@@ -5,7 +5,8 @@ export const ILK_DONEM_BEYLIKLER_UNIT: HistoryUnit = {
   navLabel: "I. Dönem Anadolu Beylikleri",
   mode: "territory",
   title: "I. Dönem Anadolu Beylikleri (1071 - 12. Yüzyıl)",
-  subtitle: "10 kilit beylik · Malazgirt sonrası kurulan tüm I. dönem Türk beylikleri",
+  subtitle:
+    "10 kilit beylik · Malazgirt sonrası kurulan tüm I. dönem Türk beylikleri",
   showYear: false,
   color: "#991b1b",
   legend: null,

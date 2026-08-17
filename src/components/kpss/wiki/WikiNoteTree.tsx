@@ -71,8 +71,7 @@ export function WikiNoteTree({
   const handleDrop = (newParentId: string | null, e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const childId =
-      e.dataTransfer?.getData("text/plain") || dragIdRef.current;
+    const childId = e.dataTransfer?.getData("text/plain") || dragIdRef.current;
     setDragId(null);
     dragIdRef.current = null;
     setDropTargetId(null);
@@ -123,11 +122,7 @@ export function WikiNoteTree({
                 ? "rgba(37, 99, 235, 0.2)"
                 : "rgba(255, 255, 255, 0.02)",
             border: `1px solid ${
-              isDropTarget
-                ? "#10b981"
-                : isSelected
-                  ? "#3b82f6"
-                  : "transparent"
+              isDropTarget ? "#10b981" : isSelected ? "#3b82f6" : "transparent"
             }`,
             borderRadius: "8px",
             cursor: "pointer",
@@ -247,9 +242,7 @@ export function WikiNoteTree({
             onDragLeave={(e) => {
               // Çocuklara geçerken tetiklenmesin — sadece gerçek ayrılışta temizle
               if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                setDropTargetId((prev) =>
-                  prev === "__root__" ? null : prev,
-                );
+                setDropTargetId((prev) => (prev === "__root__" ? null : prev));
               }
             }}
             onDrop={(e) => handleDrop(null, e)}

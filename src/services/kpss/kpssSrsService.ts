@@ -12,7 +12,10 @@
 /* eslint-disable local/no-turkish-literals */
 
 import srsCardMd from "./prompts/srs-card.md?raw";
-import { callAIConfigured, getAIConfigFromStorage } from "@/services/aichat/index.js";
+import {
+  callAIConfigured,
+  getAIConfigFromStorage,
+} from "@/services/aichat/index.js";
 import {
   calculateSM2,
   prepareSRSQueue,
@@ -57,7 +60,9 @@ function extractJsonArray(text: string): Array<Record<string, unknown>> {
 }
 
 /** Kart kutuphanesini repository uzerinden okur. */
-async function readAiCards(srsRepo: ISrsProgressRepository): Promise<KpssFlashcard[]> {
+async function readAiCards(
+  srsRepo: ISrsProgressRepository,
+): Promise<KpssFlashcard[]> {
   return srsRepo.getAiCards();
 }
 
@@ -77,7 +82,10 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
      * AI'dan `count` tarih flashcard'i uretir ve local kutuphanesine ekler.
      * Yeni kartlar mevcutlara append edilir (oncekileri korur).
      */
-    async generateAiCards(subject: string, count: number = 5): Promise<KpssFlashcard[]> {
+    async generateAiCards(
+      subject: string,
+      count: number = 5,
+    ): Promise<KpssFlashcard[]> {
       const config = await getAIConfigFromStorage();
       const prompt = buildSrsPrompt(subject, count);
       const aiResp = await callAIConfigured({
@@ -163,7 +171,8 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
       );
 
       const srsUniverse: SRSWordWithInfo[] = activeUniverseCards.map((w) => {
-        const p = progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
+        const p =
+          progressMap.get(w.id) || createInitialSRSWord(w.id, "vocabulary");
         return { ...p, level: w.category, listType: "kpss", freq: 0 };
       });
 
@@ -188,7 +197,10 @@ export function createKpssSrsService(srsRepo: ISrsProgressRepository) {
     },
 
     /** SM-2 ile tekrar kalitesi isler ve persist eder. */
-    async saveSrsReview(reviewData: WordReviewData, quality: ReviewQuality): Promise<void> {
+    async saveSrsReview(
+      reviewData: WordReviewData,
+      quality: ReviewQuality,
+    ): Promise<void> {
       const outcome = calculateSM2(reviewData, quality, new Date());
       const progress = await srsRepo.getAll();
       const idx = progress.findIndex((p) => p.wordId === outcome.wordId);

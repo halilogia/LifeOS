@@ -61,9 +61,7 @@ export function evaluateSiteLimits(
   const limitDomain =
     Object.keys(detoxLimits).find((domain) => {
       const cleanDomain = domain.replace("www.", "");
-      return (
-        cleanHost.includes(cleanDomain) || cleanDomain.includes(cleanHost)
-      );
+      return cleanHost.includes(cleanDomain) || cleanDomain.includes(cleanHost);
     }) || "";
   const activeLimitMinutes = limitDomain ? detoxLimits[limitDomain] : 0;
 

@@ -58,7 +58,8 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   _saveTimer: null,
 
   load: async () => {
-    const usage = (await getStorageItem<Record<string, number>>(USAGE_KEY)) || {};
+    const usage =
+      (await getStorageItem<Record<string, number>>(USAGE_KEY)) || {};
     const lastUsed = (await getStorageItem<LastUsedMap>(LAST_USED_KEY)) || {};
     const autoSortRaw = await getStorageItem<boolean>(AUTO_SORT_KEY);
     const pinnedViews = (await getStorageItem<string[]>(PINNED_KEY)) || [];
@@ -76,7 +77,10 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
       return; // settings view istatistik tutmaz
     }
     const now = Date.now();
-    const usage = { ...state.usage, [viewKey]: (state.usage[viewKey] || 0) + 1 };
+    const usage = {
+      ...state.usage,
+      [viewKey]: (state.usage[viewKey] || 0) + 1,
+    };
     const lastUsed = { ...state.lastUsed, [viewKey]: now };
     set({ usage, lastUsed });
 
@@ -108,7 +112,9 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
       : [...pinnedViews, viewKey];
     set({ pinnedViews: next });
     await setStorageItem(PINNED_KEY, next);
-    logger.info(`[SidebarUsage] pin ${viewKey} => ${next.includes(viewKey) ? "pinned" : "unpinned"}`);
+    logger.info(
+      `[SidebarUsage] pin ${viewKey} => ${next.includes(viewKey) ? "pinned" : "unpinned"}`,
+    );
   },
 
   reset: async () => {
@@ -129,9 +135,10 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   computeSortedOrder: () => {
     const { usage, lastUsed } = get();
     const now = Date.now();
-    const currentOrder = useUIStore.getState().sidebarOrder.length > 0
-      ? useUIStore.getState().sidebarOrder
-      : DEFAULT_SIDEBAR_ORDER;
+    const currentOrder =
+      useUIStore.getState().sidebarOrder.length > 0
+        ? useUIStore.getState().sidebarOrder
+        : DEFAULT_SIDEBAR_ORDER;
 
     const allViews = new Set<string>(currentOrder);
     Object.keys(usage).forEach((k) => allViews.add(k));

@@ -1,5 +1,9 @@
 import { useEffect } from "preact/hooks";
-import { useHifizState, computeHifizStats, computeYeterliklerStats } from "@/presentation/store/hifizStore.js";
+import {
+  useHifizState,
+  computeHifizStats,
+  computeYeterliklerStats,
+} from "@/presentation/store/hifizStore.js";
 import { INITIAL_HIFIZ_ITEMS } from "@/domain/data/hifizData.js";
 
 /**
@@ -33,8 +37,7 @@ export function useHifiz() {
   // Derived stats
   const { memorizedCount, inProgressCount, totalCount, overallPercent } =
     computeHifizStats(hifizProgress);
-  const { percent: yeterliklerPercent } =
-    computeYeterliklerStats(yeterlikler);
+  const { percent: yeterliklerPercent } = computeYeterliklerStats(yeterlikler);
 
   // Filter surahs/duas
   const filteredItems = INITIAL_HIFIZ_ITEMS.filter((item) => {

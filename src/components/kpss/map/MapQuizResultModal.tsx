@@ -115,10 +115,14 @@ export function MapQuizResultModal({
               border: "1px solid rgba(22, 163, 74, 0.3)",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "#86efac", fontWeight: 700 }}>
+            <div
+              style={{ fontSize: "0.72rem", color: "#86efac", fontWeight: 700 }}
+            >
               {t.kpss_map_stat_correct || "Doğru"}
             </div>
-            <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "#ffffff" }}>
+            <div
+              style={{ fontSize: "1.3rem", fontWeight: 900, color: "#ffffff" }}
+            >
               {score} / {total}
             </div>
           </div>
@@ -132,10 +136,14 @@ export function MapQuizResultModal({
               border: "1px solid rgba(234, 179, 8, 0.3)",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "#fef08a", fontWeight: 700 }}>
+            <div
+              style={{ fontSize: "0.72rem", color: "#fef08a", fontWeight: 700 }}
+            >
               {t.kpss_map_stat_accuracy || "Başarı Oranı"}
             </div>
-            <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "#ffffff" }}>
+            <div
+              style={{ fontSize: "1.3rem", fontWeight: 900, color: "#ffffff" }}
+            >
               %{accuracy}
             </div>
           </div>
@@ -149,10 +157,14 @@ export function MapQuizResultModal({
               border: "1px solid rgba(220, 38, 38, 0.3)",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "#fca5a5", fontWeight: 700 }}>
+            <div
+              style={{ fontSize: "0.72rem", color: "#fca5a5", fontWeight: 700 }}
+            >
               {t.kpss_map_stat_wrong || "Yanlış Deneme"}
             </div>
-            <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#ffffff" }}>
+            <div
+              style={{ fontSize: "1.2rem", fontWeight: 800, color: "#ffffff" }}
+            >
               {wrongCount}
             </div>
           </div>
@@ -166,17 +178,28 @@ export function MapQuizResultModal({
               border: "1px solid rgba(249, 115, 22, 0.3)",
             }}
           >
-            <div style={{ fontSize: "0.72rem", color: "#ffedd5", fontWeight: 700 }}>
+            <div
+              style={{ fontSize: "0.72rem", color: "#ffedd5", fontWeight: 700 }}
+            >
               {t.kpss_map_stat_streak || "En İyi Seri"}
             </div>
-            <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#ffffff" }}>
+            <div
+              style={{ fontSize: "1.2rem", fontWeight: 800, color: "#ffffff" }}
+            >
               🔥 {bestStreak}
             </div>
           </div>
         </div>
 
         {/* Aksiyon Butonları */}
-        <div style={{ display: "flex", gap: "10px", width: "100%", marginTop: "6px" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            width: "100%",
+            marginTop: "6px",
+          }}
+        >
           <button
             type="button"
             onClick={onRestart}

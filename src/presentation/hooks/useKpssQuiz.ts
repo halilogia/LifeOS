@@ -4,7 +4,10 @@
  */
 
 import { useEffect } from "preact/hooks";
-import { useKpssQuizStore, useCurrentQuestionInCollection } from "@/presentation/store/kpssQuizStore.js";
+import {
+  useKpssQuizStore,
+  useCurrentQuestionInCollection,
+} from "@/presentation/store/kpssQuizStore.js";
 import type { KpssQuizCallbacks } from "@/presentation/store/kpssQuizStore.js";
 
 export function useKpssQuiz(options: KpssQuizCallbacks) {

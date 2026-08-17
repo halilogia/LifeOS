@@ -237,7 +237,8 @@ export function computeHifizStats(hifizProgress: HifizProgress[]) {
     memorizedCount,
     inProgressCount,
     totalCount: INITIAL_HIFIZ_ITEMS.length,
-    overallPercent: totalPages > 0 ? Math.round((memorizedPages / totalPages) * 100) : 0,
+    overallPercent:
+      totalPages > 0 ? Math.round((memorizedPages / totalPages) * 100) : 0,
   };
 }
 

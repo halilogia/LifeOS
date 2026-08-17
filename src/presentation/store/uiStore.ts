@@ -62,8 +62,12 @@ interface UIState {
   setGoogleUserEmail: (e: string) => void;
   setIsSyncing: (v: boolean) => void;
   setSyncSettings: (s: GoogleSyncSettings) => void;
-  setConfirmDialog: (d: ConfirmDialogState | ((prev: ConfirmDialogState) => ConfirmDialogState)) => void;
-  setAlertDialog: (d: AlertDialogState | ((prev: AlertDialogState) => AlertDialogState)) => void;
+  setConfirmDialog: (
+    d: ConfirmDialogState | ((prev: ConfirmDialogState) => ConfirmDialogState),
+  ) => void;
+  setAlertDialog: (
+    d: AlertDialogState | ((prev: AlertDialogState) => AlertDialogState),
+  ) => void;
   showConfirm: (message: string, onConfirm: () => void) => void;
   showAlert: (message: string, onConfirm?: () => void) => void;
   refreshClock: (lang: Language) => void;
@@ -115,8 +119,7 @@ export const useUIStore = create<UIState>()((set) => ({
   setSyncSettings: (s) => set({ syncSettings: s }),
   setConfirmDialog: (d) =>
     set((prev) => ({
-      confirmDialog:
-        typeof d === "function" ? d(prev.confirmDialog) : d,
+      confirmDialog: typeof d === "function" ? d(prev.confirmDialog) : d,
     })),
   setAlertDialog: (d) =>
     set((prev) => ({
@@ -240,7 +243,10 @@ export const useUIStore = create<UIState>()((set) => ({
         for (const key of DEFAULT_SIDEBAR_ORDER) {
           if (missing.includes(key)) {
             // DEFAULT listesindeki index'e göre sıralı ekle (kullanıcı sırasını bozmadan)
-            const insertIdx = Math.min(orderToUse.length, DEFAULT_SIDEBAR_ORDER.indexOf(key));
+            const insertIdx = Math.min(
+              orderToUse.length,
+              DEFAULT_SIDEBAR_ORDER.indexOf(key),
+            );
             orderToUse.splice(insertIdx, 0, key);
           }
         }
