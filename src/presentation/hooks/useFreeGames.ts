@@ -39,7 +39,6 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
 
   // Claimed games (id listesi — storage'da kalıcı)
   const [claimedIds, setClaimedIds] = useState<number[]>([]);
-  const [hideClaimed, setHideClaimed] = useState(false);
 
   // Loading/Error states
   const [loading, setLoading] = useState(true);
@@ -235,9 +234,6 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
     if (item.type.toLowerCase() !== type.toLowerCase()) {
       return false;
     }
-    if (hideClaimed && claimedIds.includes(item.id)) {
-      return false;
-    }
     const platformsLower = item.platforms.toLowerCase();
     if (platform === "steam") {
       return platformsLower.includes("steam");
@@ -268,8 +264,6 @@ export function useFreeGames({ lang }: UseFreeGamesOptions) {
     error,
     filteredGiveaways,
     claimedIds,
-    hideClaimed,
-    setHideClaimed,
     handleClaimToggle,
     loadSettingsAndGiveaways,
     handleExclusionChange,
