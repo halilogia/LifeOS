@@ -36,8 +36,6 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
     error,
     filteredGiveaways,
     claimedIds,
-    hideClaimed,
-    setHideClaimed,
     handleClaimToggle,
     loadSettingsAndGiveaways,
     handleExclusionChange,
@@ -77,20 +75,6 @@ export function FreeGamesView({ lang }: FreeGamesViewProps) {
               onTypeChange={setType}
               onExclusionChange={handleExclusionChange}
             />
-
-            {/* Hide claimed toggle chip */}
-            <div className="fg-claimed-controls">
-              <label className="fg-hide-claimed-chip">
-                <input
-                  type="checkbox"
-                  checked={hideClaimed}
-                  onChange={(e) =>
-                    setHideClaimed((e.target as HTMLInputElement).checked)
-                  }
-                />
-                <span>{t.fg_hide_claimed}</span>
-              </label>
-            </div>
 
             {loading && (
               <div id="free-games-loading" className="free-games-loading">

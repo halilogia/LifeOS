@@ -25,5 +25,4 @@ export const free = {
   free_games_empty: "Ücretsiz oyun bulunamadı.",
   fg_claimed: "Alındı",
   fg_mark_claimed: "Alındı işaretle",
-  fg_hide_claimed: "Alınanları gizle",
 };

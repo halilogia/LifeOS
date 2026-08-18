@@ -250,7 +250,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | CalendarView          | todo repo, GoogleCalendarApi, useCalendar                 | sync       | —                                                                   |
 | PrayerView            | prayerService, usePrayer                                  | sync+local | prayer/ (1)                                                         |
 | Stock/BistView        | bistService, stockAiService, useBist (tuval → 5 alt-hook) | sync       | stock/ (30)                                                         |
-| FreeGamesView         | gamesService, useFreeGames                                | local      | freegames/ (2)                                                      |
+| FreeGamesView         | gamesService, useFreeGames                                | local      | freegames/ (2) + GameCard.tsx                                        |
 | CityPulseView         | cityPulseService, useCityPulse                            | local      | citypulse/ (2)                                                      |
 | NotesView             | zettelkastenEngine, useNotes                              | sync       | notes/ (16)                                                         |
 | AIChatView            | aiChatService                                             | sync+local | aichat/ (10)                                                        |
