@@ -1,15 +1,20 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import type { Todo } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
 import type { MessageItemData } from "./AiChatMessageItem.js";
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type { ChatAttachment, ChatSession, ChatSessionMessage } from "@/services/aichat/types.js";
 import { processUploadedFile } from "@/services/aichat/fileAttachmentService.js";
+import {
+  getChatSessionRepository,
+  generateSessionTitle,
+  exportSessionAsMarkdown,
+  downloadTextFile,
+} from "@/services/aichat/chatSessionService.js";
 import { parseLocalCommand } from "@/utils/aiCommandParser.js";
 import {
   callAIConfigured,
-  handleAddNoteFromAI,
-  handleUpdateMemoryFromAI,
+  executeAIAction,
 } from "@/services/aichat/index.js";
 import { fetchStockQuote } from "@/services/bistService.js";
 import { logger } from "@/utils/logger.js";
@@ -34,15 +39,39 @@ export interface UseAiChatMessagesReturn {
   isBotTyping: boolean;
   enableWebSearch: boolean;
   attachments: ChatAttachment[];
+  sessions: ChatSession[];
+  currentSessionId: string;
+  isHistoryOpen: boolean;
+  deleteConfirmSessionId: string | null;
   openThinkingIndexes: Record<number, boolean>;
+  setIsHistoryOpen: (open: boolean) => void;
+  setDeleteConfirmSessionId: (id: string | null) => void;
   handleSendMessage: (textToSend?: string) => Promise<void>;
   handleAddFiles: (files: FileList | File[]) => Promise<void>;
   handleRemoveAttachment: (id: string) => void;
   handleToggleThinking: (idx: number) => void;
+  handleNewChat: () => void;
+  handleSwitchSession: (session: ChatSession) => void;
+  handleRequestDeleteSession: (sessionId: string) => void;
+  handleConfirmDeleteSession: () => void;
+  handleRenameSession: (sessionId: string, newTitle: string) => void;
+  handleExportCurrentChat: () => void;
   setOpenThinkingIndexes: (
     fn: (prev: Record<number, boolean>) => Record<number, boolean>,
   ) => void;
   setEnableWebSearch: (fn: (prev: boolean) => boolean) => void;
+}
+
+function createNewNewtabSession(): ChatSession {
+  const now = Date.now();
+  return {
+    id: `newtab_${now}_${Math.random().toString(36).slice(2, 7)}`,
+    scope: "newtab",
+    title: "Yeni Sohbet",
+    createdAt: now,
+    updatedAt: now,
+    messages: [],
+  };
 }
 
 function addBotMsg(
@@ -74,13 +103,94 @@ export function useAiChatMessages({
   aiEndpoint,
 }: UseAiChatMessagesParams): UseAiChatMessagesReturn {
   const t = getTranslation(lang);
-  const [messages, setMessages] = useState<MessageItemData[]>([]);
+  const repo = getChatSessionRepository();
+
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [currentSession, setCurrentSession] = useState<ChatSession>(() =>
+    createNewNewtabSession(),
+  );
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [deleteConfirmSessionId, setDeleteConfirmSessionId] = useState<string | null>(null);
+
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [enableWebSearch, setEnableWebSearch] = useState(true);
   const [attachments, setAttachments] = useState<ChatAttachment[]>([]);
   const [openThinkingIndexes, setOpenThinkingIndexes] = useState<
     Record<number, boolean>
   >({});
+
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Load all newtab sessions
+  const refreshSessions = useCallback(async () => {
+    const all = await repo.getAllSessions("newtab");
+    setSessions(all);
+  }, [repo]);
+
+  useEffect(() => {
+    refreshSessions();
+  }, [refreshSessions]);
+
+  // Convert ChatSession.messages <-> MessageItemData[]
+  const messages: MessageItemData[] = currentSession.messages.map((m) => ({
+    sender: m.role === "user" ? "user" : "bot",
+    text: m.content,
+    time: m.timestamp,
+    attachments: m.attachments,
+    thinking: m.thinking,
+    searchQuery: m.searchQuery,
+    sources: m.sources,
+  }));
+
+  const setMessages = (
+    updater: MessageItemData[] | ((prev: MessageItemData[]) => MessageItemData[]),
+  ) => {
+    setCurrentSession((prev) => {
+      const prevUiMsgs: MessageItemData[] = prev.messages.map((m) => ({
+        sender: m.role === "user" ? "user" : "bot",
+        text: m.content,
+        time: m.timestamp,
+        attachments: m.attachments,
+        thinking: m.thinking,
+        searchQuery: m.searchQuery,
+        sources: m.sources,
+      }));
+
+      const nextUiMsgs =
+        typeof updater === "function" ? updater(prevUiMsgs) : updater;
+
+      let title = prev.title;
+      // Auto-title on first user message
+      if (
+        (title === "Yeni Sohbet" || !title) &&
+        nextUiMsgs.length > 0 &&
+        nextUiMsgs[0].sender === "user"
+      ) {
+        title = generateSessionTitle(nextUiMsgs[0].text);
+      }
+
+      const nextSessionMsgs: ChatSessionMessage[] = nextUiMsgs.map((m, idx) => ({
+        id: `msg_${idx}_${Date.now()}`,
+        role: m.sender === "user" ? "user" : "assistant",
+        content: m.text,
+        timestamp: m.time,
+        attachments: m.attachments,
+        thinking: m.thinking,
+        searchQuery: m.searchQuery,
+        sources: m.sources,
+      }));
+
+      const updated: ChatSession = {
+        ...prev,
+        title,
+        updatedAt: Date.now(),
+        messages: nextSessionMsgs,
+      };
+
+      repo.saveSession(updated).then(() => refreshSessions());
+      return updated;
+    });
+  };
 
   const handleAddFiles = async (files: FileList | File[]) => {
     const fileList = Array.from(files);
@@ -100,8 +210,67 @@ export function useAiChatMessages({
     setAttachments((prev) => prev.filter((a) => a.id !== id));
   };
 
+  // Safe New Chat
+  const handleNewChat = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsBotTyping(false);
+    const fresh = createNewNewtabSession();
+    setCurrentSession(fresh);
+  };
+
+  // Safe Switch Session
+  const handleSwitchSession = (session: ChatSession) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsBotTyping(false);
+    setCurrentSession(session);
+  };
+
+  // Delete Session
+  const handleRequestDeleteSession = (sessionId: string) => {
+    setDeleteConfirmSessionId(sessionId);
+  };
+
+  const handleConfirmDeleteSession = async () => {
+    if (deleteConfirmSessionId) {
+      await repo.deleteSession(deleteConfirmSessionId);
+      if (currentSession.id === deleteConfirmSessionId) {
+        handleNewChat();
+      }
+      setDeleteConfirmSessionId(null);
+      await refreshSessions();
+    }
+  };
+
+  // Rename Session
+  const handleRenameSession = async (sessionId: string, newTitle: string) => {
+    await repo.renameSession(sessionId, newTitle);
+    if (currentSession.id === sessionId) {
+      setCurrentSession((prev) => ({ ...prev, title: newTitle }));
+    }
+    await refreshSessions();
+  };
+
+  // Export Chat
+  const handleExportCurrentChat = () => {
+    if (!currentSession) {
+      return;
+    }
+    const md = exportSessionAsMarkdown(currentSession);
+    const safeTitle = currentSession.title.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 30);
+    downloadTextFile(`lifeos_chat_${safeTitle}_${Date.now()}.md`, md);
+  };
+
   // Initialize welcome message (and check for pending stock from BIST analysis)
   useEffect(() => {
+    if (currentSession.messages.length > 0) {
+      return;
+    }
     const pendingStock = sessionStorage.getItem("hermes_pending_stock");
     const initialMessages: MessageItemData[] = [];
 
@@ -140,7 +309,6 @@ export function useAiChatMessages({
 
   // ─── Handle Send Message ────────────────────────────────────────────────
   const handleSendMessage = async (textToSend?: string) => {
-    // State'ten en güncel input'u al
     const query = (textToSend || "").trim();
     if (!query && attachments.length === 0) {
       return;
@@ -164,6 +332,8 @@ export function useAiChatMessages({
       },
     ]);
     setIsBotTyping(true);
+
+    abortControllerRef.current = new AbortController();
 
     try {
       const isLocalOrCustom =
@@ -204,6 +374,7 @@ export function useAiChatMessages({
             enableWebSearch: true,
             attachments: currentAttachments,
             conversationHistory,
+            signal: abortControllerRef.current.signal,
           });
 
           setIsBotTyping(false);
@@ -238,41 +409,15 @@ export function useAiChatMessages({
           enableWebSearch,
           attachments: currentAttachments,
           conversationHistory,
+          signal: abortControllerRef.current.signal,
         });
         setIsBotTyping(false);
 
-        if (aiResponse.action === "create_task" && aiResponse.params?.text) {
-          const taskText = aiResponse.params.text as string;
-          const repeat = (aiResponse.params.repeat as Todo["repeat"]) || "none";
-          const dueDate = aiResponse.params.dueDate as string | undefined;
-          await onAddTodo(taskText, repeat, dueDate);
-          await onManualSync();
-        } else if (
-          aiResponse.action === "add_note" &&
-          aiResponse.params?.note_content
-        ) {
-          const type =
-            (aiResponse.params.note_type as "note" | "diary" | "cornell") ||
-            "note";
-          const content = aiResponse.params.note_content as string;
-          const title =
-            aiResponse.params.note_title !== undefined
-              ? String(aiResponse.params.note_title)
-              : "";
-          const cues =
-            aiResponse.params.note_cues !== undefined
-              ? String(aiResponse.params.note_cues)
-              : "";
-          const summary =
-            aiResponse.params.note_summary !== undefined
-              ? String(aiResponse.params.note_summary)
-              : "";
-          await handleAddNoteFromAI(type, content, lang, title, cues, summary);
-        } else if (
-          aiResponse.action === "update_memory" &&
-          aiResponse.params?.memory_fact
-        ) {
-          await handleUpdateMemoryFromAI(String(aiResponse.params.memory_fact));
+        if (aiResponse.action) {
+          await executeAIAction(aiResponse, lang);
+          if (aiResponse.action === "create_task") {
+            await onManualSync();
+          }
         }
 
         addBotMsg(setMessages, lang, {
@@ -284,21 +429,20 @@ export function useAiChatMessages({
         return;
       }
 
-      // ── Offline mode ─────────────────────────────────────────────────────
-      setIsBotTyping(false);
+      // ── Local Fallback Mode ───────────────────────────────────────────────
       const replyText = await buildLocalReply(query, {
         t,
         lang,
         onAddTodo,
         onManualSync,
       });
-      if (replyText) {
-        addBotMsg(setMessages, lang, { text: replyText });
-      } else {
-        addBotMsg(setMessages, lang, { text: t.aichat_parse_failed });
+      setIsBotTyping(false);
+      addBotMsg(setMessages, lang, { text: replyText });
+    } catch (e: unknown) {
+      if ((e as Error)?.name === "AbortError") {
+        logger.info("Newtab AI Chat request aborted safely.");
+        return;
       }
-    } catch (e) {
-      // ── Catch → fallback ─────────────────────────────────────────────────
       setIsBotTyping(false);
       const replyText = await buildLocalReply(
         query,
@@ -318,6 +462,8 @@ export function useAiChatMessages({
           text: t.aichat_connection_error.replace("{error_msg}", errorMsg),
         });
       }
+    } finally {
+      abortControllerRef.current = null;
     }
   };
 
@@ -334,11 +480,23 @@ export function useAiChatMessages({
     isBotTyping,
     enableWebSearch,
     attachments,
+    sessions,
+    currentSessionId: currentSession.id,
+    isHistoryOpen,
+    deleteConfirmSessionId,
     openThinkingIndexes,
+    setIsHistoryOpen,
+    setDeleteConfirmSessionId,
     handleSendMessage,
     handleAddFiles,
     handleRemoveAttachment,
     handleToggleThinking,
+    handleNewChat,
+    handleSwitchSession,
+    handleRequestDeleteSession,
+    handleConfirmDeleteSession,
+    handleRenameSession,
+    handleExportCurrentChat,
     setOpenThinkingIndexes,
     setEnableWebSearch,
   };

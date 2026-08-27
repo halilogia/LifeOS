@@ -1,10 +1,15 @@
 /**
  * AiChatInputToolbar.tsx
- * Google AI Modu Canlı Arama çipi, ek dosya/görsel ataşı, önizleme çipleri ve mesaj yazma/gönderme çubuğu.
+ * Google AI Modu Canlı Arama çipi, ek dosya/görsel ataşı, önizleme çipleri,
+ * "/", "@" komut öneri menüsü ve mesaj yazma/gönderme çubuğu.
  */
 import { useRef, useState } from "preact/hooks";
 import type { ChatAttachment } from "@/services/aichat/types.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
+import {
+  CommandSuggestionMenu,
+  type SuggestionItem,
+} from "@/sidepanel/CommandSuggestionMenu.js";
 
 interface AiChatInputToolbarProps {
   inputVal: string;
@@ -22,6 +27,8 @@ interface AiChatInputToolbarProps {
   onToggleWebSearch: () => void;
   onAddFiles?: (files: FileList | File[]) => void;
   onRemoveAttachment?: (id: string) => void;
+  onNewChat?: () => void;
+  onExport?: () => void;
 }
 
 function IconSend() {
@@ -77,8 +84,11 @@ export function AiChatInputToolbar({
   onToggleWebSearch,
   onAddFiles,
   onRemoveAttachment,
+  onNewChat,
+  onExport,
 }: AiChatInputToolbarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFileChange = (e: Event) => {
@@ -114,6 +124,21 @@ export function AiChatInputToolbar({
     }
   };
 
+  const handleSelectSuggestion = (item: SuggestionItem) => {
+    if (item.key === "clear" && onNewChat) {
+      onInputChange("");
+      onNewChat();
+      return;
+    }
+    if (item.key === "export" && onExport) {
+      onInputChange("");
+      onExport();
+      return;
+    }
+    onInputChange(item.insertText);
+    inputRef.current?.focus();
+  };
+
   return (
     <div
       className={`chat-input-panel ${isDragOver ? "drag-over" : ""}`}
@@ -121,6 +146,13 @@ export function AiChatInputToolbar({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {/* Command & Tool Autocomplete Menu */}
+      <CommandSuggestionMenu
+        inputText={inputVal}
+        onSelect={handleSelectSuggestion}
+        onClose={() => {}}
+      />
+
       {/* Hidden File Input */}
       <input
         type="file"
@@ -150,6 +182,7 @@ export function AiChatInputToolbar({
                       <polyline points="14 2 14 8 20 8" />
                       <line x1="16" y1="13" x2="8" y2="13" />
                       <line x1="16" y1="17" x2="8" y2="17" />
+                      <polyline points="10 9 9 9 8 9" />
                     </svg>
                   ) : (
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -255,6 +288,7 @@ export function AiChatInputToolbar({
         </button>
 
         <input
+          ref={inputRef}
           type="text"
           className="chat-prompt-input"
           value={inputVal}

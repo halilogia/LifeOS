@@ -42,6 +42,7 @@ export function createAiChatService(deps: AiChatDependencies) {
     enableWebSearch = true,
     attachments,
     conversationHistory = [],
+    signal,
   }: AICallParams): Promise<AIResponseData> {
     // Build message list from conversation history
     const historyMessages: Array<{
@@ -69,6 +70,7 @@ export function createAiChatService(deps: AiChatDependencies) {
         aiEndpoint,
         aiModel,
         attachments,
+        signal,
       );
     } else if (aiProvider === "openrouter" || aiProvider === "9router") {
       responseData = await callOpenRouter(
@@ -79,6 +81,7 @@ export function createAiChatService(deps: AiChatDependencies) {
         aiModel,
         aiApiKey,
         attachments,
+        signal,
       );
     } else {
       responseData = await callGemini(
@@ -90,6 +93,7 @@ export function createAiChatService(deps: AiChatDependencies) {
         aiApiKey,
         enableWebSearch,
         attachments,
+        signal,
       );
     }
 

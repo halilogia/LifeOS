@@ -18,6 +18,7 @@ export async function callOllama(
   aiEndpoint: string,
   aiModel: string,
   attachments?: ChatAttachment[],
+  signal?: AbortSignal,
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -45,6 +46,7 @@ export async function callOllama(
       ],
       stream: false,
     }),
+    signal,
   });
   if (!res.ok) {
     let errBody = "";
@@ -74,6 +76,7 @@ export async function callOpenRouter(
   aiModel: string,
   aiApiKey: string,
   attachments?: ChatAttachment[],
+  signal?: AbortSignal,
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -129,6 +132,7 @@ export async function callOpenRouter(
       ],
       stream: false,
     }),
+    signal,
   });
   if (!res.ok) {
     let errBody = "";
@@ -164,6 +168,7 @@ export async function callGemini(
   aiApiKey: string,
   enableWebSearch: boolean,
   attachments?: ChatAttachment[],
+  signal?: AbortSignal,
 ): Promise<AIResponseData> {
   const modelName = aiModel || "gemini-1.5-flash";
   const baseUrl =
@@ -214,6 +219,7 @@ export async function callGemini(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(reqPayload),
+    signal,
   });
   if (!res.ok) {
     let errBody = "";

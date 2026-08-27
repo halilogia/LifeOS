@@ -55,4 +55,14 @@ export const aichat = {
   ai_memory_saved_badge: "✓ Memory Saved!",
   ai_memory_header_main: "# Personal Memory & User Context (memory.md)",
   ai_memory_header_section: "## 💡 Learned Personal Facts by AI",
+  chat_history_title: "Chat History",
+  chat_history_empty: "No chat history yet.",
+  chat_history_new_chat: "+ New Chat",
+  chat_history_delete_confirm:
+    "Are you sure you want to delete this chat? This action cannot be undone.",
+  chat_export_tooltip: "Export Chat as Markdown (.md)",
+  chat_rename_tooltip: "Rename Chat Title",
+  chat_delete_tooltip: "Delete Chat",
+  chat_active_badge: "Active",
+  chat_messages_count: "messages",
 };

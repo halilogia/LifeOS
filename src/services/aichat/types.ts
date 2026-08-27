@@ -15,6 +15,29 @@ export interface ChatAttachment {
   previewUrl?: string; // Thumbnail preview URL (for images)
 }
 
+export interface ChatSessionMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  attachments?: ChatAttachment[];
+  thinking?: string;
+  searchQuery?: string;
+  sources?: WebSearchSource[];
+}
+
+export interface ChatSession {
+  id: string;
+  scope: "sidepanel" | "newtab";
+  tabId?: number;
+  domain?: string;
+  url?: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  messages: ChatSessionMessage[];
+}
+
 export interface AICallParams {
   userPrompt: string;
   aiProvider: string;
@@ -24,6 +47,7 @@ export interface AICallParams {
   enableWebSearch?: boolean;
   attachments?: ChatAttachment[];
   conversationHistory?: Array<{ role: "user" | "assistant"; content: string }>;
+  signal?: AbortSignal;
 }
 
 export interface AIResponseData {

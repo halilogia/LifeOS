@@ -2,7 +2,6 @@
  * AIChatView.tsx
  * AI Chat view — pure UI orchestrator.
  * State & business logic lives in useAiChatMessages hook.
- * Target: ~150 satır (was 483)
  */
 import { useRef, useEffect, useState } from "preact/hooks";
 import type { Todo } from "@/types/types.js";
@@ -12,6 +11,8 @@ import { getTranslation } from "@/utils/i18n.js";
 import { AiChatHeaderBar } from "./aichat/AiChatHeaderBar.js";
 import { AiChatMessageItem } from "./aichat/AiChatMessageItem.js";
 import { AiChatInputToolbar } from "./aichat/AiChatInputToolbar.js";
+import { AiChatHistoryDrawer } from "./aichat/AiChatHistoryDrawer.js";
+import { ConfirmModal } from "./ConfirmModal.js";
 import { useAiChatMessages } from "./aichat/useAiChatMessages.js";
 
 interface AIChatViewProps {
@@ -56,12 +57,23 @@ export function AIChatView({
     isBotTyping,
     enableWebSearch,
     attachments,
+    sessions,
+    currentSessionId,
+    isHistoryOpen,
+    deleteConfirmSessionId,
     openThinkingIndexes,
+    setIsHistoryOpen,
+    setDeleteConfirmSessionId,
     handleSendMessage,
     handleAddFiles,
     handleRemoveAttachment,
     handleToggleThinking,
-    setOpenThinkingIndexes,
+    handleNewChat,
+    handleSwitchSession,
+    handleRequestDeleteSession,
+    handleConfirmDeleteSession,
+    handleRenameSession,
+    handleExportCurrentChat,
     setEnableWebSearch,
   } = useAiChatMessages({
     lang,
@@ -91,16 +103,39 @@ export function AIChatView({
 
   return (
     <div id="ai-chat-view" className="view-content active">
+      {/* Slide-in History Drawer */}
+      <AiChatHistoryDrawer
+        isOpen={isHistoryOpen}
+        sessions={sessions}
+        currentSessionId={currentSessionId}
+        t={t}
+        onClose={() => setIsHistoryOpen(false)}
+        onSelectSession={handleSwitchSession}
+        onNewChat={handleNewChat}
+        onDeleteSession={handleRequestDeleteSession}
+        onRenameSession={handleRenameSession}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={Boolean(deleteConfirmSessionId)}
+        message={t.chat_history_delete_confirm || "Bu sohbeti silmek istediğinizden emin misiniz?"}
+        lang={lang}
+        onConfirm={handleConfirmDeleteSession}
+        onCancel={() => setDeleteConfirmSessionId(null)}
+      />
+
       <div className="ai-chat-container">
         <AiChatHeaderBar
           title={t.ai_chat_title}
           aiApiKey={aiApiKey}
           noKeyWarning={t.ai_chat_no_key_warning}
-          keySavedText={t.ai_chat_key_saved}
-          keyTitleText={t.ai_chat_key_title}
           settingsTitle={t.settings_title}
           offlineModeLabel={t.aichat_offline_mode}
           onSettingsOpen={onSettingsOpen}
+          onNewChat={handleNewChat}
+          onOpenHistory={() => setIsHistoryOpen(true)}
+          onExport={handleExportCurrentChat}
         />
 
         <div className="chat-messages-area">
@@ -176,6 +211,8 @@ export function AIChatView({
           onToggleWebSearch={() => setEnableWebSearch((prev) => !prev)}
           onAddFiles={handleAddFiles}
           onRemoveAttachment={handleRemoveAttachment}
+          onNewChat={handleNewChat}
+          onExport={handleExportCurrentChat}
         />
       </div>
     </div>

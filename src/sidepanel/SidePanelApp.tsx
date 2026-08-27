@@ -3,7 +3,7 @@
  * Life OS Web Copilot — Side Panel UI orchestrator (tuval).
  * State & business logic lives in useSidePanelChat hook.
  * Presentational pieces: SidePanelHeader, SidePanelTabBar, SidePanelChips,
- * SidePanelMessages, SidePanelInputBar.
+ * SidePanelMessages, SidePanelInputBar, SidePanelHistoryDrawer, ConfirmModal.
  */
 import { useSidePanelChat } from "./useSidePanelChat.js";
 import { SidePanelHeader } from "./SidePanelHeader.js";
@@ -11,6 +11,8 @@ import { SidePanelTabBar } from "./SidePanelTabBar.js";
 import { SidePanelChips } from "./SidePanelChips.js";
 import { SidePanelMessages } from "./SidePanelMessages.js";
 import { SidePanelInputBar } from "./SidePanelInputBar.js";
+import { SidePanelHistoryDrawer } from "./SidePanelHistoryDrawer.js";
+import { ConfirmModal } from "@/components/ConfirmModal.js";
 
 export function SidePanelApp() {
   const {
@@ -25,8 +27,14 @@ export function SidePanelApp() {
     isYoutube,
     attachments,
     enableWebSearch,
+    sessions,
+    currentSessionId,
+    isHistoryOpen,
+    deleteConfirmSessionId,
     messagesEndRef,
     setInputText,
+    setIsHistoryOpen,
+    setDeleteConfirmSessionId,
     toggleVoiceInput,
     refreshPageContext,
     handleNewChat,
@@ -34,13 +42,45 @@ export function SidePanelApp() {
     handleAddFiles,
     handleRemoveAttachment,
     handleToggleWebSearch,
+    handleSwitchSession,
+    handleRequestDeleteSession,
+    handleConfirmDeleteSession,
+    handleRenameSession,
+    handleExportCurrentChat,
     handleChipClick,
   } = useSidePanelChat();
 
   return (
     <div className="sidepanel-container">
+      {/* Slide-in Chat History Drawer */}
+      <SidePanelHistoryDrawer
+        isOpen={isHistoryOpen}
+        sessions={sessions}
+        currentSessionId={currentSessionId}
+        t={t}
+        onClose={() => setIsHistoryOpen(false)}
+        onSelectSession={handleSwitchSession}
+        onNewChat={handleNewChat}
+        onDeleteSession={handleRequestDeleteSession}
+        onRenameSession={handleRenameSession}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={Boolean(deleteConfirmSessionId)}
+        message={t.chat_history_delete_confirm || "Bu sohbeti silmek istediğinizden emin misiniz?"}
+        lang={lang}
+        onConfirm={handleConfirmDeleteSession}
+        onCancel={() => setDeleteConfirmSessionId(null)}
+      />
+
       {/* Header Bar */}
-      <SidePanelHeader t={t} onNewChat={handleNewChat} />
+      <SidePanelHeader
+        t={t}
+        onNewChat={handleNewChat}
+        onOpenHistory={() => setIsHistoryOpen(true)}
+        onExport={handleExportCurrentChat}
+      />
 
       {/* Active Tab Status Bar */}
       <SidePanelTabBar
@@ -86,6 +126,8 @@ export function SidePanelApp() {
         onAddFiles={handleAddFiles}
         onRemoveAttachment={handleRemoveAttachment}
         onToggleWebSearch={handleToggleWebSearch}
+        onNewChat={handleNewChat}
+        onExport={handleExportCurrentChat}
       />
     </div>
   );

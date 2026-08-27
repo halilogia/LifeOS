@@ -56,4 +56,14 @@ export const aichat = {
   ai_memory_saved_badge: "✓ Hafıza Kaydedildi!",
   ai_memory_header_main: "# Kişisel Hafıza & Kullanıcı Bağlamı (memory.md)",
   ai_memory_header_section: "## 💡 AI Tarafından Öğrenilen Bilgiler",
+  chat_history_title: "Sohbet Geçmişi",
+  chat_history_empty: "Henüz kayıtlı bir sohbet geçmişi yok.",
+  chat_history_new_chat: "+ Yeni Sohbet",
+  chat_history_delete_confirm:
+    "Bu sohbeti silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  chat_export_tooltip: "Sohbeti Markdown (.md) Olarak İndir",
+  chat_rename_tooltip: "Sohbet Başlığını Düzenle",
+  chat_delete_tooltip: "Sohbeti Sil",
+  chat_active_badge: "Aktif",
+  chat_messages_count: "mesaj",
 };

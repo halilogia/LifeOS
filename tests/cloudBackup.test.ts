@@ -32,8 +32,8 @@ const USER_DATA_WRITERS: string[] = [
   "infrastructure/persistence/repositories/ChromeStorageNoteRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageTodoRepository.ts",
   "infrastructure/persistence/repositories/ChromeStorageQuestionBankRepository.ts",
-  // Sidepanel & Content Storage Helpers
-  "sidepanel/sidePanelStorage.ts",
+  // Chat Sessions & Content Storage Helpers
+  "infrastructure/persistence/repositories/ChromeStorageChatSessionRepository.ts",
   "content/quiz/QuizStorage.ts",
 ];
 

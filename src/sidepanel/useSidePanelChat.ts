@@ -6,12 +6,16 @@ import {
   getAIConfigFromStorage,
   handleUpdateMemoryFromAI,
 } from "@/services/aichat/index.js";
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type { ChatAttachment, ChatSession } from "@/services/aichat/types.js";
 import {
   processUploadedFile,
   extractDocumentContext,
   formatFileSize,
 } from "@/services/aichat/fileAttachmentService.js";
+import {
+  exportSessionAsMarkdown,
+  downloadTextFile,
+} from "@/services/aichat/chatSessionService.js";
 import {
   detectNeedsWebSearch,
   executeWebSearch,
@@ -35,8 +39,14 @@ export interface UseSidePanelChatReturn {
   isYoutube: boolean;
   attachments: ChatAttachment[];
   enableWebSearch: boolean;
+  sessions: ChatSession[];
+  currentSessionId: string;
+  isHistoryOpen: boolean;
+  deleteConfirmSessionId: string | null;
   messagesEndRef: { current: HTMLDivElement | null };
   setInputText: (v: string) => void;
+  setIsHistoryOpen: (open: boolean) => void;
+  setDeleteConfirmSessionId: (id: string | null) => void;
   toggleVoiceInput: () => void;
   refreshPageContext: () => void;
   handleNewChat: () => void;
@@ -44,6 +54,11 @@ export interface UseSidePanelChatReturn {
   handleAddFiles: (files: FileList | File[]) => Promise<void>;
   handleRemoveAttachment: (id: string) => void;
   handleToggleWebSearch: () => void;
+  handleSwitchSession: (session: ChatSession) => void;
+  handleRequestDeleteSession: (sessionId: string) => void;
+  handleConfirmDeleteSession: () => void;
+  handleRenameSession: (sessionId: string, newTitle: string) => void;
+  handleExportCurrentChat: () => void;
   handleChipClick: (
     type:
       | "summarize"
@@ -61,6 +76,9 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
   const [isProcessing, setIsProcessing] = useState(false);
   const [attachments, setAttachments] = useState<ChatAttachment[]>([]);
   const [enableWebSearch, setEnableWebSearch] = useState<boolean>(true);
+  const [deleteConfirmSessionId, setDeleteConfirmSessionId] = useState<string | null>(null);
+
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const t = getTranslation(lang);
 
@@ -71,9 +89,17 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
   /* ---- Oturum yönetimi alt-hook ---- */
   const {
     messages,
+    currentSession,
+    currentSessionId,
+    sessions,
+    isHistoryOpen,
+    setIsHistoryOpen,
     setMessages,
     messagesEndRef,
-    newChat: handleNewChat,
+    newChat,
+    switchSession,
+    deleteSession,
+    renameSession,
     loadSession,
   } = useChatSession();
 
@@ -109,6 +135,46 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       chrome.runtime.onMessage.removeListener(copilotAutoPromptListener);
     };
   }, []);
+
+  const handleNewChatSafe = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsProcessing(false);
+    setAgentStatus(null);
+    newChat();
+  };
+
+  const handleSwitchSessionSafe = (session: ChatSession) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsProcessing(false);
+    setAgentStatus(null);
+    switchSession(session);
+  };
+
+  const handleRequestDeleteSession = (sessionId: string) => {
+    setDeleteConfirmSessionId(sessionId);
+  };
+
+  const handleConfirmDeleteSession = async () => {
+    if (deleteConfirmSessionId) {
+      await deleteSession(deleteConfirmSessionId);
+      setDeleteConfirmSessionId(null);
+    }
+  };
+
+  const handleExportCurrentChat = () => {
+    if (!currentSession) {
+      return;
+    }
+    const md = exportSessionAsMarkdown(currentSession);
+    const safeTitle = currentSession.title.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 30);
+    downloadTextFile(`lifeos_chat_${safeTitle}_${Date.now()}.md`, md);
+  };
 
   /* ---- Dosya & Arama Yönetimi ---- */
   const handleAddFiles = async (files: FileList | File[]) => {
@@ -309,6 +375,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(reqBody),
+          signal: abortControllerRef.current?.signal,
         });
 
         if (!resp.ok) {
@@ -357,6 +424,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
               { role: "user", content: userContent },
             ],
           }),
+          signal: abortControllerRef.current?.signal,
         });
 
         if (!resp.ok) {
@@ -400,14 +468,9 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           ) {
             await handleUpdateMemoryFromAI(actionPayload.memory_fact);
             finalContent = responseText
-              .replace(/```json[\s\S]*?```/gi, "")
+              .replace(/```json[\s\S]*?```/, "")
               .trim();
-            if (!finalContent) {
-              finalContent = t.memory_saved.replace(
-                "{fact}",
-                actionPayload.memory_fact,
-              );
-            }
+            finalContent += `\n\n_🧠 Hafıza Güncellendi: "${actionPayload.memory_fact}"_`;
           } else if (Array.isArray(actionPayload)) {
             const count = actionPayload.length;
             const actionSummary = formatActionExecutionSummary(
@@ -540,15 +603,26 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     isYoutube,
     attachments,
     enableWebSearch,
+    sessions,
+    currentSessionId,
+    isHistoryOpen,
+    deleteConfirmSessionId,
     messagesEndRef,
     setInputText,
+    setIsHistoryOpen,
+    setDeleteConfirmSessionId,
     toggleVoiceInput,
     refreshPageContext,
-    handleNewChat,
+    handleNewChat: handleNewChatSafe,
     handleSendMessage,
     handleAddFiles,
     handleRemoveAttachment,
     handleToggleWebSearch,
+    handleSwitchSession: handleSwitchSessionSafe,
+    handleRequestDeleteSession,
+    handleConfirmDeleteSession,
+    handleRenameSession: renameSession,
+    handleExportCurrentChat,
     handleChipClick,
   };
 }

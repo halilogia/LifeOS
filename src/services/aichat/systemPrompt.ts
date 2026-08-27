@@ -1,4 +1,4 @@
-import systemPromptTemplate from "./prompts/system-prompt.md?raw";
+import { SYSTEM_PROMPT_TEMPLATE } from "./systemPromptTemplate.js";
 import {
   executeWebSearch,
   detectNeedsWebSearch,
@@ -54,7 +54,7 @@ export async function buildSystemPrompt(
     memoryContextPrompt = `\n\n--- 🧠 KİŞİSEL KULLANICI HAFIZASI & KİŞİSEL BAĞLAM (memory.md) ---\n${userMemory.trim()}\n\nÖNEMLİ: Tüm yanıtlarında yukarıdaki kişisel kullanıcı hafızasını ve tercihlerini her zaman göz önünde bulundur.`;
   }
 
-  const systemPrompt = systemPromptTemplate
+  const systemPrompt = SYSTEM_PROMPT_TEMPLATE
     .replaceAll("__CURRENT_YEAR__", String(new Date().getFullYear()))
     .replaceAll("__TODAY_DATE__", todayStr)
     .replaceAll("__MEMORY_CONTEXT__", memoryContextPrompt)

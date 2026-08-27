@@ -1,6 +1,10 @@
 import { useRef, useState } from "preact/hooks";
 import type { ChatAttachment } from "@/services/aichat/types.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
+import {
+  CommandSuggestionMenu,
+  type SuggestionItem,
+} from "./CommandSuggestionMenu.js";
 
 interface SidePanelInputBarProps {
   t: Record<string, string>;
@@ -10,11 +14,13 @@ interface SidePanelInputBarProps {
   attachments?: ChatAttachment[];
   enableWebSearch?: boolean;
   onInputChange: (v: string) => void;
-  onSend: () => void;
+  onSend: (override?: string) => void;
   onToggleVoice: () => void;
   onAddFiles?: (files: FileList | File[]) => void;
   onRemoveAttachment?: (id: string) => void;
   onToggleWebSearch?: () => void;
+  onNewChat?: () => void;
+  onExport?: () => void;
 }
 
 export function SidePanelInputBar({
@@ -30,8 +36,11 @@ export function SidePanelInputBar({
   onAddFiles,
   onRemoveAttachment,
   onToggleWebSearch,
+  onNewChat,
+  onExport,
 }: SidePanelInputBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleFileChange = (e: Event) => {
@@ -67,6 +76,21 @@ export function SidePanelInputBar({
     }
   };
 
+  const handleSelectSuggestion = (item: SuggestionItem) => {
+    if (item.key === "clear" && onNewChat) {
+      onInputChange("");
+      onNewChat();
+      return;
+    }
+    if (item.key === "export" && onExport) {
+      onInputChange("");
+      onExport();
+      return;
+    }
+    onInputChange(item.insertText);
+    inputRef.current?.focus();
+  };
+
   return (
     <div
       className={`sidepanel-input-container ${isDragOver ? "drag-over" : ""}`}
@@ -74,6 +98,13 @@ export function SidePanelInputBar({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
+      {/* Autocomplete suggestions menu for "/" and "@" */}
+      <CommandSuggestionMenu
+        inputText={inputText}
+        onSelect={handleSelectSuggestion}
+        onClose={() => {}}
+      />
+
       {/* Hidden File Input */}
       <input
         type="file"
@@ -215,6 +246,7 @@ export function SidePanelInputBar({
 
         {/* Input Text Box */}
         <input
+          ref={inputRef}
           type="text"
           className="sidepanel-input"
           value={inputText}
@@ -235,7 +267,7 @@ export function SidePanelInputBar({
         <button
           type="button"
           className="sidepanel-send-btn"
-          onClick={onSend}
+          onClick={() => onSend()}
           disabled={isProcessing || (!inputText.trim() && attachments.length === 0)}
           title="Gönder (Enter)"
         >
