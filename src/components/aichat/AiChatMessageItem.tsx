@@ -21,6 +21,7 @@ export interface MessageItemData {
   sources?: WebSearchSource[];
   attachments?: ChatAttachment[];
   clarification?: ClarificationRequest;
+  isStreaming?: boolean;
 }
 
 interface AiChatMessageItemProps {

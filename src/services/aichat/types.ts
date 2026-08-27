@@ -71,6 +71,7 @@ export interface AICallParams {
   enableWebSearch?: boolean;
   attachments?: ChatAttachment[];
   conversationHistory?: Array<{ role: "user" | "assistant"; content: string }>;
+  onChunk?: (accumulatedText: string, delta: string) => void;
   signal?: AbortSignal;
 }
 

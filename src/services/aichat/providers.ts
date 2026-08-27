@@ -10,7 +10,118 @@ interface HistoryMessage {
   content: string;
 }
 
-/** Calls Ollama API and returns parsed response. */
+/**
+ * Universal SSE / NDJSON stream reader that progressively streams text tokens
+ * to onChunk callback and returns the full accumulated response string.
+ */
+async function readSSEStream(
+  res: Response,
+  onChunk?: (accumulatedText: string, delta: string) => void,
+  extractDelta?: (json: Record<string, unknown>) => string,
+): Promise<string> {
+  if (!res.body) {
+    const text = await res.text();
+    return text;
+  }
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let accumulated = "";
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith(":")) continue;
+      if (trimmed === "data: [DONE]") continue;
+
+      let jsonStr = trimmed;
+      if (trimmed.startsWith("data:")) {
+        jsonStr = trimmed.slice(5).trim();
+      }
+
+      try {
+        const parsed = JSON.parse(jsonStr) as Record<string, unknown>;
+        let delta = "";
+        if (extractDelta) {
+          delta = extractDelta(parsed);
+        } else {
+          const choices = parsed.choices as Array<{
+            delta?: { content?: string };
+            text?: string;
+          }>;
+          const candidates = parsed.candidates as Array<{
+            content?: { parts?: Array<{ text?: string }> };
+          }>;
+          const message = parsed.message as { content?: string };
+
+          delta =
+            choices?.[0]?.delta?.content ||
+            choices?.[0]?.text ||
+            candidates?.[0]?.content?.parts?.[0]?.text ||
+            message?.content ||
+            (typeof parsed.response === "string" ? parsed.response : "") ||
+            "";
+        }
+
+        if (delta) {
+          accumulated += delta;
+          onChunk?.(accumulated, delta);
+        }
+      } catch {
+        // Ignore partial/unparseable chunk lines
+      }
+    }
+  }
+
+  if (buffer.trim()) {
+    const trimmed = buffer.trim();
+    const jsonStr = trimmed.startsWith("data:")
+      ? trimmed.slice(5).trim()
+      : trimmed;
+    try {
+      const parsed = JSON.parse(jsonStr) as Record<string, unknown>;
+      let delta = "";
+      if (extractDelta) {
+        delta = extractDelta(parsed);
+      } else {
+        const choices = parsed.choices as Array<{
+          delta?: { content?: string };
+          text?: string;
+        }>;
+        const candidates = parsed.candidates as Array<{
+          content?: { parts?: Array<{ text?: string }> };
+        }>;
+        const message = parsed.message as { content?: string };
+
+        delta =
+          choices?.[0]?.delta?.content ||
+          choices?.[0]?.text ||
+          candidates?.[0]?.content?.parts?.[0]?.text ||
+          message?.content ||
+          (typeof parsed.response === "string" ? parsed.response : "") ||
+          "";
+      }
+
+      if (delta) {
+        accumulated += delta;
+        onChunk?.(accumulated, delta);
+      }
+    } catch {
+      // Ignore
+    }
+  }
+
+  return accumulated;
+}
+
+/** Calls Ollama API and streams tokens progressively. */
 export async function callOllama(
   systemPrompt: string,
   historyMessages: HistoryMessage[],
@@ -19,6 +130,7 @@ export async function callOllama(
   aiModel: string,
   attachments?: ChatAttachment[],
   signal?: AbortSignal,
+  onChunk?: (accumulatedText: string, delta: string) => void,
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -44,10 +156,11 @@ export async function callOllama(
         ...historyMessages,
         { role: "user", content: finalPrompt },
       ],
-      stream: false,
+      stream: true,
     }),
     signal,
   });
+
   if (!res.ok) {
     let errBody = "";
     try {
@@ -59,15 +172,15 @@ export async function callOllama(
       `Ollama returned status ${res.status}: ${errBody || res.statusText}`,
     );
   }
-  const data = await res.json();
-  const textResponse = data?.choices?.[0]?.message?.content;
-  if (!textResponse) {
+
+  const textResponse = await readSSEStream(res, onChunk);
+  if (!textResponse.trim()) {
     throw new Error("Empty response from Ollama");
   }
   return parseAIResponse(textResponse);
 }
 
-/** Calls OpenRouter / 9Router API and returns parsed response. */
+/** Calls OpenRouter / 9Router API and streams tokens progressively. */
 export async function callOpenRouter(
   systemPrompt: string,
   historyMessages: HistoryMessage[],
@@ -77,6 +190,7 @@ export async function callOpenRouter(
   aiApiKey: string,
   attachments?: ChatAttachment[],
   signal?: AbortSignal,
+  onChunk?: (accumulatedText: string, delta: string) => void,
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -130,10 +244,11 @@ export async function callOpenRouter(
         ...historyMessages,
         { role: "user", content: userContent },
       ],
-      stream: false,
+      stream: true,
     }),
     signal,
   });
+
   if (!res.ok) {
     let errBody = "";
     try {
@@ -150,15 +265,15 @@ export async function callOpenRouter(
       `OpenRouter / 9Router Hata Döndü (${res.status}): ${errBody || res.statusText}`,
     );
   }
-  const data = await res.json();
-  const textResponse = data?.choices?.[0]?.message?.content;
-  if (!textResponse) {
+
+  const textResponse = await readSSEStream(res, onChunk);
+  if (!textResponse.trim()) {
     throw new Error("Empty response from OpenRouter");
   }
   return parseAIResponse(textResponse);
 }
 
-/** Calls Google Gemini API and returns parsed response. */
+/** Calls Google Gemini API with SSE streaming support. */
 export async function callGemini(
   systemPrompt: string,
   historyMessages: HistoryMessage[],
@@ -169,13 +284,16 @@ export async function callGemini(
   enableWebSearch: boolean,
   attachments?: ChatAttachment[],
   signal?: AbortSignal,
+  onChunk?: (accumulatedText: string, delta: string) => void,
 ): Promise<AIResponseData> {
   const modelName = aiModel || "gemini-1.5-flash";
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
       ? aiEndpoint.trim().replace(/\/$/, "")
       : "https://generativelanguage.googleapis.com/v1beta";
-  const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
+
+  // Use streamGenerateContent with alt=sse
+  const url = `${baseUrl}/models/${modelName}:streamGenerateContent?alt=sse&key=${aiApiKey}`;
 
   const userParts: Array<Record<string, unknown>> = [{ text: userPrompt }];
 
@@ -221,6 +339,7 @@ export async function callGemini(
     body: JSON.stringify(reqPayload),
     signal,
   });
+
   if (!res.ok) {
     let errBody = "";
     try {
@@ -232,9 +351,9 @@ export async function callGemini(
       `Gemini API returned status ${res.status}: ${errBody || res.statusText}`,
     );
   }
-  const data = await res.json();
-  const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!textResponse) {
+
+  const textResponse = await readSSEStream(res, onChunk);
+  if (!textResponse.trim()) {
     throw new Error("Empty response from Gemini");
   }
   return parseAIResponse(textResponse);

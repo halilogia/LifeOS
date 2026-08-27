@@ -129,18 +129,37 @@ export function useChatSession() {
   };
 
   /** Called when tab context or domain changes to switch/load tab session */
-  const loadSession = async (sessionKey: string) => {
+  const loadSession = async (
+    sessionKey: string,
+    tabInfo?: { tabId?: number; domain?: string; url?: string; title?: string },
+  ) => {
     setActiveSessionKey(sessionKey);
     // Refresh sessions list
     const all = await repo.getAllSessions("sidepanel");
     setSessions(all);
 
-    // Look for existing session associated with this sessionKey or domain
+    // Look for existing session associated with this sessionKey, tabId, or url
     const match = all.find(
-      (s) => s.id === sessionKey || (s.url && sessionKey.includes(s.url)),
+      (s) =>
+        s.id === sessionKey ||
+        (tabInfo?.tabId && s.tabId === tabInfo.tabId) ||
+        (tabInfo?.url && s.url === tabInfo.url) ||
+        (s.url && sessionKey.includes(s.url)),
     );
+
     if (match) {
       setCurrentSession(match);
+    } else {
+      const fresh = createNewSessionObj(
+        tabInfo?.domain,
+        tabInfo?.url,
+        tabInfo?.tabId,
+      );
+      fresh.id = sessionKey;
+      if (tabInfo?.title) {
+        fresh.title = tabInfo.title.slice(0, 35);
+      }
+      setCurrentSession(fresh);
     }
   };
 

@@ -450,6 +450,35 @@ export function useAiChatMessages({
             attachments: currentAttachments,
             conversationHistory,
             signal: abortControllerRef.current.signal,
+            onChunk: (accumulated) => {
+              setIsBotTyping(false);
+              const cleanText = accumulated
+                .replace(/<think>[\s\S]*?<\/think>/gi, "")
+                .replace(/```json[\s\S]*?```/gi, "")
+                .trimStart();
+
+              setMessages((prev) => {
+                const lastMsg = prev[prev.length - 1];
+                if (lastMsg && lastMsg.sender === "bot" && lastMsg.isStreaming) {
+                  return [
+                    ...prev.slice(0, -1),
+                    { ...lastMsg, text: cleanText },
+                  ];
+                }
+                return [
+                  ...prev,
+                  {
+                    sender: "bot",
+                    text: cleanText,
+                    time: new Date().toLocaleTimeString(
+                      lang === "tr" ? "tr-TR" : "en-US",
+                      { hour: "2-digit", minute: "2-digit" },
+                    ),
+                    isStreaming: true,
+                  },
+                ];
+              });
+            },
           });
 
           if (aiResponse.clarification && !aiResponse.clarification.resolved) {
@@ -457,6 +486,7 @@ export function useAiChatMessages({
           }
 
           setIsBotTyping(false);
+          setMessages((prev) => prev.filter((m) => !m.isStreaming));
           addBotMsg(setMessages, lang, {
             text: aiResponse.reply,
             thinking: aiResponse.thinking,
@@ -490,6 +520,35 @@ export function useAiChatMessages({
           attachments: currentAttachments,
           conversationHistory,
           signal: abortControllerRef.current.signal,
+          onChunk: (accumulated) => {
+            setIsBotTyping(false);
+            const cleanText = accumulated
+              .replace(/<think>[\s\S]*?<\/think>/gi, "")
+              .replace(/```json[\s\S]*?```/gi, "")
+              .trimStart();
+
+            setMessages((prev) => {
+              const lastMsg = prev[prev.length - 1];
+              if (lastMsg && lastMsg.sender === "bot" && lastMsg.isStreaming) {
+                return [
+                  ...prev.slice(0, -1),
+                  { ...lastMsg, text: cleanText },
+                ];
+              }
+              return [
+                ...prev,
+                {
+                  sender: "bot",
+                  text: cleanText,
+                  time: new Date().toLocaleTimeString(
+                    lang === "tr" ? "tr-TR" : "en-US",
+                    { hour: "2-digit", minute: "2-digit" },
+                  ),
+                  isStreaming: true,
+                },
+              ];
+            });
+          },
         });
 
         if (aiResponse.action) {
@@ -504,6 +563,7 @@ export function useAiChatMessages({
         }
 
         setIsBotTyping(false);
+        setMessages((prev) => prev.filter((m) => !m.isStreaming));
         addBotMsg(setMessages, lang, {
           text: aiResponse.reply,
           thinking: aiResponse.thinking,

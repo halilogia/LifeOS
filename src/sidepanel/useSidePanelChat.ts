@@ -5,6 +5,7 @@ import { PageContext } from "@/content/agent/domAgentEngine.js";
 import {
   getAIConfigFromStorage,
   handleUpdateMemoryFromAI,
+  callAIConfigured,
 } from "@/services/aichat/index.js";
 import type {
   ChatAttachment,
@@ -395,100 +396,60 @@ If the user asks to save, add, or remember a fact/email/detail about them (e.g. 
 
 Answer the user clearly, professionally, and concisely in ${t.answer_language}. Do not use low-quality emojis in output formatting.`;
 
+    const assistantMsgId = (Date.now() + 1).toString();
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: assistantMsgId,
+        role: "assistant",
+        content: "",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
+
     try {
-      let responseText = "";
+      const conversationHistory = messages
+        .filter((m) => m.role === "user" || m.role === "assistant")
+        .map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
 
-      if (provider === "gemini") {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-        
-        const userParts: Array<Record<string, unknown>> = [
-          { text: systemPrompt },
-          { text: `User request: ${textToSend || "Ekli dosyayı incele."}` },
-        ];
+      const aiResponse = await callAIConfigured({
+        userPrompt: `${systemPrompt}\n\nUser request: ${textToSend || "Ekli belgeleri incele."}`,
+        aiProvider: provider,
+        aiApiKey: apiKey,
+        aiModel: model,
+        aiEndpoint: rawEndpoint,
+        enableWebSearch,
+        attachments: currentAttachments,
+        conversationHistory,
+        signal: abortControllerRef.current?.signal,
+        onChunk: (accumulated) => {
+          setAgentStatus(null);
+          const cleanStreamingText = accumulated
+            .replace(/<think>[\s\S]*?<\/think>/gi, "")
+            .replace(/```json[\s\S]*?```/gi, "")
+            .trimStart();
 
-        if (currentAttachments.length > 0) {
-          for (const att of currentAttachments) {
-            if (att.dataUrl && (att.type === "image" || att.type === "pdf")) {
-              const base64Data = att.dataUrl.includes(",")
-                ? att.dataUrl.split(",")[1]
-                : att.dataUrl;
-              userParts.push({
-                inlineData: {
-                  mimeType: att.mimeType,
-                  data: base64Data,
-                },
-              });
-            } else if (att.textContent) {
-              userParts.push({
-                text: `\n[Eklenen Belge: "${att.name}" (${formatFileSize(att.size)})]\n${att.textContent}\n`,
-              });
-            }
-          }
-        }
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMsgId
+                ? { ...msg, content: cleanStreamingText }
+                : msg,
+            ),
+          );
+        },
+      });
 
-        const reqBody = {
-          contents: [{ role: "user", parts: userParts }],
-        };
-
-        const resp = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(reqBody),
-          signal: abortControllerRef.current?.signal,
-        });
-
-        if (!resp.ok) {
-          throw new Error(`Gemini API returned status ${resp.status}`);
-        }
-
-        const data = await resp.json();
-        responseText =
-          data.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "No response text received from Gemini.";
-      } else {
-        const endpoint =
-          rawEndpoint && rawEndpoint.trim()
-            ? rawEndpoint.trim().replace(/\/+$/, "")
-            : "https://api.openai.com/v1";
-
-        const resp = await fetch(`${endpoint}/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-          },
-          body: JSON.stringify({
-            model: model || "gpt-4o-mini",
-            messages: [
-              { role: "system", content: systemPrompt },
-              {
-                role: "user",
-                content:
-                  textToSend ||
-                  (currentAttachments.length > 0
-                    ? "Ekli belgeleri analiz et."
-                    : ""),
-              },
-            ],
-          }),
-          signal: abortControllerRef.current?.signal,
-        });
-
-        if (!resp.ok) {
-          throw new Error(`API returned status ${resp.status}`);
-        }
-
-        const data = await resp.json();
-        responseText =
-          data.choices?.[0]?.message?.content ||
-          data.choices?.[0]?.text ||
-          "No response received.";
-      }
-
+      const responseText = aiResponse.reply || "";
       const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
       let finalContent = responseText;
-      let clarificationObj: ClarificationRequest | undefined = undefined;
-      const assistantMsgId = (Date.now() + 1).toString();
+      let clarificationObj: ClarificationRequest | undefined =
+        aiResponse.clarification;
 
       if (jsonMatch && jsonMatch[1]) {
         try {
@@ -601,30 +562,30 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         pendingClarification = clarificationObj;
       }
 
-      const assistantMsg: ChatMessage = {
-        id: assistantMsgId,
-        role: "assistant",
-        content: finalContent,
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        clarification: clarificationObj,
-      };
-
-      setMessages((prev) => [...prev, assistantMsg]);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMsgId
+            ? {
+                ...msg,
+                content: finalContent,
+                thinking: aiResponse.thinking,
+                clarification: clarificationObj,
+                sources: aiResponse.sources,
+                searchQuery: aiResponse.searchQuery,
+              }
+            : msg,
+        ),
+      );
     } catch (err: unknown) {
       setAgentStatus(null);
-      const errorMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: `⚠️ ${t.failed_response}\nError: ${err instanceof Error ? err.message : "Unknown error"}`,
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      setMessages((prev) => [...prev, errorMsg]);
+      const errorContent = `⚠️ ${t.failed_response}\nError: ${err instanceof Error ? err.message : "Unknown error"}`;
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMsgId
+            ? { ...msg, content: errorContent }
+            : msg,
+        ),
+      );
     } finally {
       setIsProcessing(false);
       isProcessingRef.current = false;

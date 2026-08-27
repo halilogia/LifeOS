@@ -10,7 +10,10 @@ import { PageContext } from "@/content/agent/domAgentEngine.js";
 
 export function useAgentBridge(
   t: Record<string, string>,
-  onSessionKeyChanged: (sessionKey: string) => void,
+  onSessionKeyChanged: (
+    sessionKey: string,
+    tabInfo?: { tabId?: number; domain?: string; url?: string; title?: string },
+  ) => void,
   setLang: (lang: Language) => void,
 ) {
   const [agentStatus, setAgentStatus] = useState<string | null>(null);
@@ -48,7 +51,12 @@ export function useAgentBridge(
 
               if (sessionKey !== activeSessionKey) {
                 setActiveSessionKey(sessionKey);
-                onSessionKeyChanged(sessionKey);
+                onSessionKeyChanged(sessionKey, {
+                  tabId,
+                  domain,
+                  url: newCtx.url,
+                  title: newCtx.title,
+                });
               }
             });
           }
