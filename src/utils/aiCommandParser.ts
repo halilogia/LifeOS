@@ -1,4 +1,5 @@
 import { logger } from "@/utils/logger.js";
+import type { ClarificationRequest } from "@/services/aichat/types.js";
 
 /**
  * aiCommandParser.ts
@@ -463,13 +464,14 @@ export function cleanAndParseJSON(text: string): unknown {
 }
 
 /**
- * Extracts think reasoning blocks and parses AI payload.
+ * Extracts think reasoning blocks and parses AI payload including clarifications.
  */
 export function parseAIResponse(rawText: string): {
   reply: string;
   action: string;
   params: Record<string, unknown> | null;
   thinking: string;
+  clarification?: ClarificationRequest;
 } {
   let thinking = "";
 
@@ -484,12 +486,49 @@ export function parseAIResponse(rawText: string): {
       reply?: string;
       action?: string;
       params?: Record<string, unknown> | null;
+      question?: string;
+      options?: Array<string | { label: string; value: string; description?: string }>;
+      allowFreeText?: boolean;
+      context?: string;
     };
+
+    const action = parsed.action || "none";
+    let clarification: ClarificationRequest | undefined = undefined;
+
+    if (action === "clarification") {
+      const q =
+        (parsed.params?.question as string) ||
+        parsed.question ||
+        parsed.reply ||
+        "Lütfen seçiminizi yapın:";
+      const opts = (parsed.params?.options || parsed.options || []) as Array<
+        string | { label: string; value: string; description?: string }
+      >;
+      const allowFreeText =
+        parsed.params?.allowFreeText !== undefined
+          ? Boolean(parsed.params.allowFreeText)
+          : parsed.allowFreeText !== undefined
+            ? Boolean(parsed.allowFreeText)
+            : true;
+      const context =
+        (parsed.params?.context as string) || parsed.context || undefined;
+
+      clarification = {
+        id: `clarify_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        question: q,
+        options: opts,
+        allowFreeText,
+        context,
+        resolved: false,
+      };
+    }
+
     return {
-      reply: parsed.reply || "",
-      action: parsed.action || "none",
+      reply: parsed.reply || (clarification ? clarification.question : ""),
+      action,
       params: parsed.params || null,
       thinking,
+      clarification,
     };
   } catch {
     const reply = rawText.replace(/<think>[\s\S]*?<\/think>/g, "").trim();

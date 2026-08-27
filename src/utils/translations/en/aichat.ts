@@ -65,4 +65,9 @@ export const aichat = {
   chat_delete_tooltip: "Delete Chat",
   chat_active_badge: "Active",
   chat_messages_count: "messages",
+  clarification_title: "Clarification Needed",
+  clarification_input_placeholder: "or type a custom answer...",
+  clarification_send_btn: "Send",
+  clarification_cancel_btn: "Cancel Task",
+  clarification_resolved_label: "Choice Specified",
 };

@@ -56,6 +56,8 @@ export interface UseAiChatMessagesReturn {
   handleConfirmDeleteSession: () => void;
   handleRenameSession: (sessionId: string, newTitle: string) => void;
   handleExportCurrentChat: () => void;
+  handleResolveClarification: (idx: number, answer: string) => void;
+  handleCancelClarification: (idx: number) => void;
   setOpenThinkingIndexes: (
     fn: (prev: Record<number, boolean>) => Record<number, boolean>,
   ) => void;
@@ -140,6 +142,7 @@ export function useAiChatMessages({
     thinking: m.thinking,
     searchQuery: m.searchQuery,
     sources: m.sources,
+    clarification: m.clarification,
   }));
 
   const setMessages = (
@@ -154,6 +157,7 @@ export function useAiChatMessages({
         thinking: m.thinking,
         searchQuery: m.searchQuery,
         sources: m.sources,
+        clarification: m.clarification,
       }));
 
       const nextUiMsgs =
@@ -178,6 +182,7 @@ export function useAiChatMessages({
         thinking: m.thinking,
         searchQuery: m.searchQuery,
         sources: m.sources,
+        clarification: m.clarification,
       }));
 
       const updated: ChatSession = {
@@ -425,6 +430,7 @@ export function useAiChatMessages({
           thinking: aiResponse.thinking,
           searchQuery: aiResponse.searchQuery,
           sources: aiResponse.sources,
+          clarification: aiResponse.clarification,
         });
         return;
       }
@@ -475,6 +481,42 @@ export function useAiChatMessages({
     }));
   };
 
+  // ─── Clarification Handlers ──────────────────────────────────────────────
+  const handleResolveClarification = (idx: number, answer: string) => {
+    setMessages((prev) =>
+      prev.map((msg, i) =>
+        i === idx && msg.clarification
+          ? {
+              ...msg,
+              clarification: {
+                ...msg.clarification,
+                resolved: true,
+                selectedAnswer: answer,
+              },
+            }
+          : msg,
+      ),
+    );
+    handleSendMessage(answer);
+  };
+
+  const handleCancelClarification = (idx: number) => {
+    setMessages((prev) =>
+      prev.map((msg, i) =>
+        i === idx && msg.clarification
+          ? {
+              ...msg,
+              clarification: {
+                ...msg.clarification,
+                resolved: true,
+                selectedAnswer: "İptal Edildi",
+              },
+            }
+          : msg,
+      ),
+    );
+  };
+
   return {
     messages,
     isBotTyping,
@@ -497,6 +539,8 @@ export function useAiChatMessages({
     handleConfirmDeleteSession,
     handleRenameSession,
     handleExportCurrentChat,
+    handleResolveClarification,
+    handleCancelClarification,
     setOpenThinkingIndexes,
     setEnableWebSearch,
   };

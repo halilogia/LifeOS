@@ -1,14 +1,16 @@
 /**
  * AiChatMessageItem.tsx
- * AI sohbet mesaj balonu, katlanabilir düşünme süreci, ekli görsel/dosya rozetleri ve Google AI Modu Canlı Arama kaynak adımları bileşeni.
+ * AI sohbet mesaj balonu, katlanabilir düşünme süreci, ekli görsel/dosya rozetleri,
+ * interaktif Clarification / Soru sorma kartı ve Google AI Modu Canlı Arama kaynak adımları bileşeni.
  */
 import { useState } from "preact/hooks";
 import type { WebSearchSource } from "@/services/webSearchAgent.js";
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type { ChatAttachment, ClarificationRequest } from "@/services/aichat/types.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 import { AiMessageSources } from "./AiMessageSources.js";
 import { AiThinkingCard } from "./AiThinkingCard.js";
 import { AiMessageFooter } from "./AiMessageFooter.js";
+import { ClarificationCard } from "./ClarificationCard.js";
 
 export interface MessageItemData {
   sender: "user" | "bot";
@@ -18,6 +20,7 @@ export interface MessageItemData {
   searchQuery?: string;
   sources?: WebSearchSource[];
   attachments?: ChatAttachment[];
+  clarification?: ClarificationRequest;
 }
 
 interface AiChatMessageItemProps {
@@ -27,6 +30,8 @@ interface AiChatMessageItemProps {
   isThinkingOpen: boolean;
   t: Record<string, string>;
   onToggleThinking: (idx: number) => void;
+  onResolveClarification?: (idx: number, answer: string) => void;
+  onCancelClarification?: (idx: number) => void;
 }
 
 export function AiChatMessageItem({
@@ -36,6 +41,8 @@ export function AiChatMessageItem({
   isThinkingOpen,
   t,
   onToggleThinking,
+  onResolveClarification,
+  onCancelClarification,
 }: AiChatMessageItemProps) {
   const isUser = message.sender === "user";
   const [copied, setCopied] = useState(false);
@@ -143,7 +150,18 @@ export function AiChatMessageItem({
         )}
 
         {/* Main Response Text */}
-        <p className="msg-text">{message.text}</p>
+        {message.text && <p className="msg-text">{message.text}</p>}
+
+        {/* Interactive Clarification / Ask User Card */}
+        {!isUser && message.clarification && (
+          <ClarificationCard
+            clarification={message.clarification}
+            t={t}
+            onSelectOption={(opt) => onResolveClarification?.(index, opt)}
+            onSubmitCustomAnswer={(ans) => onResolveClarification?.(index, ans)}
+            onCancel={() => onCancelClarification?.(index)}
+          />
+        )}
 
         {/* Bottom Time & Actions Bar */}
         {!isUser && (

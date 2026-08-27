@@ -66,4 +66,9 @@ export const aichat = {
   chat_delete_tooltip: "Sohbeti Sil",
   chat_active_badge: "Aktif",
   chat_messages_count: "mesaj",
+  clarification_title: "Açıklama / Tercih Gerekiyor",
+  clarification_input_placeholder: "veya özel bir yanıt yazın...",
+  clarification_send_btn: "Gönder",
+  clarification_cancel_btn: "Görevi İptal Et",
+  clarification_resolved_label: "Tercih Belirtildi",
 };

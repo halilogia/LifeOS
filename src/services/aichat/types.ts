@@ -15,6 +15,22 @@ export interface ChatAttachment {
   previewUrl?: string; // Thumbnail preview URL (for images)
 }
 
+export interface ClarificationOption {
+  label: string;
+  value: string;
+  description?: string;
+}
+
+export interface ClarificationRequest {
+  id: string;
+  question: string;
+  options?: Array<string | ClarificationOption>;
+  allowFreeText?: boolean;
+  context?: string;
+  resolved?: boolean;
+  selectedAnswer?: string;
+}
+
 export interface ChatSessionMessage {
   id: string;
   role: "user" | "assistant";
@@ -24,6 +40,7 @@ export interface ChatSessionMessage {
   thinking?: string;
   searchQuery?: string;
   sources?: WebSearchSource[];
+  clarification?: ClarificationRequest;
 }
 
 export interface ChatSession {
@@ -57,6 +74,7 @@ export interface AIResponseData {
   thinking?: string;
   searchQuery?: string;
   sources?: WebSearchSource[];
+  clarification?: ClarificationRequest;
 }
 
 export interface AiChatDependencies {

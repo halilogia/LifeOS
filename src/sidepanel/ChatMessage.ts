@@ -1,4 +1,7 @@
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type {
+  ChatAttachment,
+  ClarificationRequest,
+} from "@/services/aichat/types.js";
 
 export interface ChatMessage {
   id: string;
@@ -6,4 +9,5 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
   attachments?: ChatAttachment[];
+  clarification?: ClarificationRequest;
 }

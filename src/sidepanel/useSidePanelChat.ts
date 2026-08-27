@@ -6,7 +6,12 @@ import {
   getAIConfigFromStorage,
   handleUpdateMemoryFromAI,
 } from "@/services/aichat/index.js";
-import type { ChatAttachment, ChatSession } from "@/services/aichat/types.js";
+import type {
+  ChatAttachment,
+  ChatSession,
+  ClarificationRequest,
+  ClarificationOption,
+} from "@/services/aichat/types.js";
 import {
   processUploadedFile,
   extractDocumentContext,
@@ -59,6 +64,8 @@ export interface UseSidePanelChatReturn {
   handleConfirmDeleteSession: () => void;
   handleRenameSession: (sessionId: string, newTitle: string) => void;
   handleExportCurrentChat: () => void;
+  handleResolveClarification: (messageId: string, answer: string) => void;
+  handleCancelClarification: (messageId: string) => void;
   handleChipClick: (
     type:
       | "summarize"
@@ -455,6 +462,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
       const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
       let finalContent = responseText;
+      let clarificationObj: ClarificationRequest | undefined = undefined;
       const assistantMsgId = (Date.now() + 1).toString();
 
       if (jsonMatch && jsonMatch[1]) {
@@ -462,6 +470,35 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           const actionPayload = JSON.parse(jsonMatch[1]);
 
           if (
+            !Array.isArray(actionPayload) &&
+            actionPayload.action === "clarification"
+          ) {
+            const q = String(
+              actionPayload.params?.question ||
+                actionPayload.question ||
+                "Lütfen seçiminizi yapın:",
+            );
+            const opts = (actionPayload.params?.options ||
+              actionPayload.options ||
+              []) as Array<string | ClarificationOption>;
+            const allowFreeText =
+              actionPayload.params?.allowFreeText !== undefined
+                ? Boolean(actionPayload.params.allowFreeText)
+                : true;
+            clarificationObj = {
+              id: `clarify_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+              question: q,
+              options: opts,
+              allowFreeText,
+              context:
+                typeof actionPayload.params?.context === "string"
+                  ? actionPayload.params.context
+                  : undefined,
+              resolved: false,
+            };
+            finalContent =
+              responseText.replace(/```json[\s\S]*?```/, "").trim() || q;
+          } else if (
             !Array.isArray(actionPayload) &&
             actionPayload.action === "update_memory" &&
             actionPayload.memory_fact
@@ -519,7 +556,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             );
           }
         } catch {
-          setAgentStatus(null);
+          /* Fallback: format plain message if JSON fails */
         }
       } else {
         const emailMatch = textToSend.match(
@@ -591,6 +628,41 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     handleSendMessage(prompt);
   };
 
+  const handleResolveClarification = (messageId: string, answer: string) => {
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === messageId && msg.clarification
+          ? {
+              ...msg,
+              clarification: {
+                ...msg.clarification,
+                resolved: true,
+                selectedAnswer: answer,
+              },
+            }
+          : msg,
+      ),
+    );
+    handleSendMessage(answer);
+  };
+
+  const handleCancelClarification = (messageId: string) => {
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === messageId && msg.clarification
+          ? {
+              ...msg,
+              clarification: {
+                ...msg.clarification,
+                resolved: true,
+                selectedAnswer: "İptal Edildi",
+              },
+            }
+          : msg,
+      ),
+    );
+  };
+
   return {
     t,
     lang,
@@ -623,6 +695,8 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     handleConfirmDeleteSession,
     handleRenameSession: renameSession,
     handleExportCurrentChat,
+    handleResolveClarification,
+    handleCancelClarification,
     handleChipClick,
   };
 }

@@ -2,6 +2,7 @@ import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { ChatMessage } from "./ChatMessage.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
+import { ClarificationCard } from "@/components/aichat/ClarificationCard.js";
 
 interface SidePanelMessagesProps {
   t: Record<string, string>;
@@ -10,6 +11,8 @@ interface SidePanelMessagesProps {
   agentStatus: string | null;
   messagesEndRef: { current: HTMLDivElement | null };
   onChipClick: (type: "summarize" | "key_takeaways") => void;
+  onResolveClarification?: (messageId: string, answer: string) => void;
+  onCancelClarification?: (messageId: string) => void;
 }
 
 function SidePanelCopyBtn({
@@ -83,6 +86,8 @@ export function SidePanelMessages({
   agentStatus,
   messagesEndRef,
   onChipClick,
+  onResolveClarification,
+  onCancelClarification,
 }: SidePanelMessagesProps) {
   const [lightboxImg, setLightboxImg] = useState<{ src: string; alt: string } | null>(null);
 
@@ -101,47 +106,32 @@ export function SidePanelMessages({
 
       {messages.length === 0 ? (
         <div className="sidepanel-empty-state">
-          <div className="ai-orb-container">
-            <div className="ai-orb-ring-outer"></div>
-            <div className="ai-orb-ring-inner"></div>
-            <div className="ai-orb-core">
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2"
-              >
-                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-              </svg>
-            </div>
-          </div>
-          <div className="sidepanel-empty-title">
-            <span>{t.agent_ready}</span>
-          </div>
-          <p className="sidepanel-empty-desc">{t.agent_analyze_desc}</p>
-
-          <div className="sidepanel-starter-grid">
-            <button
-              className="starter-card"
-              onClick={() => onChipClick("summarize")}
+          <div className="sidepanel-empty-icon">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#8b5cf6"
+              strokeWidth="1.5"
             >
-              <div className="starter-icon purple">✨</div>
-              <div className="starter-text">
-                <strong>{t.starter_summarize}</strong>
-                <span>{t.starter_summarize_desc}</span>
-              </div>
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+          </div>
+          <h4>{t.copilot_welcome_title}</h4>
+          <p>{t.copilot_welcome_desc}</p>
+          <div className="sidepanel-empty-suggestions">
+            <button
+              onClick={() => onChipClick("summarize")}
+              className="sidepanel-suggestion-btn"
+            >
+              {t.chip_summarize}
             </button>
             <button
-              className="starter-card"
               onClick={() => onChipClick("key_takeaways")}
+              className="sidepanel-suggestion-btn"
             >
-              <div className="starter-icon green">💡</div>
-              <div className="starter-text">
-                <strong>{t.starter_takeaways}</strong>
-                <span>{t.starter_takeaways_desc}</span>
-              </div>
+              {t.chip_takeaways}
             </button>
           </div>
         </div>
@@ -190,7 +180,19 @@ export function SidePanelMessages({
               </div>
             )}
 
-            <div style={{ whiteSpace: "pre-wrap" }}>{msg.content}</div>
+            {msg.content && <div style={{ whiteSpace: "pre-wrap" }}>{msg.content}</div>}
+
+            {/* Clarification / Ask User Card */}
+            {msg.role === "assistant" && msg.clarification && (
+              <ClarificationCard
+                clarification={msg.clarification}
+                t={t}
+                onSelectOption={(val) => onResolveClarification?.(msg.id, val)}
+                onSubmitCustomAnswer={(ans) => onResolveClarification?.(msg.id, ans)}
+                onCancel={() => onCancelClarification?.(msg.id)}
+              />
+            )}
+
             <div
               style={{
                 display: "flex",
@@ -203,7 +205,7 @@ export function SidePanelMessages({
               <span style={{ fontSize: "0.62rem", opacity: 0.6 }}>
                 {msg.timestamp}
               </span>
-              {msg.role === "assistant" && (
+              {msg.role === "assistant" && msg.content && (
                 <SidePanelCopyBtn text={msg.content} t={t} />
               )}
             </div>

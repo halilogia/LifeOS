@@ -74,6 +74,8 @@ export function AIChatView({
     handleConfirmDeleteSession,
     handleRenameSession,
     handleExportCurrentChat,
+    handleResolveClarification,
+    handleCancelClarification,
     setEnableWebSearch,
   } = useAiChatMessages({
     lang,
@@ -148,6 +150,8 @@ export function AIChatView({
               isThinkingOpen={openThinkingIndexes[idx] !== false}
               t={t}
               onToggleThinking={handleToggleThinking}
+              onResolveClarification={handleResolveClarification}
+              onCancelClarification={handleCancelClarification}
             />
           ))}
           {isBotTyping && (

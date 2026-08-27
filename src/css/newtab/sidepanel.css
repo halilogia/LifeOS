@@ -1041,3 +1041,164 @@
   font-size: 0.75rem;
   cursor: pointer;
 }
+
+/* Clarification / Ask User Card in SidePanel */
+.sidepanel-messages .clarification-card {
+  margin-top: 8px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(30, 27, 75, 0.6));
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.sidepanel-messages .clarification-card.resolved {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+  padding: 8px 10px;
+}
+
+.sidepanel-messages .clarification-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #c084fc;
+}
+
+.sidepanel-messages .clarification-header.resolved {
+  color: #34d399;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.sidepanel-messages .clarification-icon-badge {
+  background: rgba(139, 92, 246, 0.25);
+  color: #c084fc;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidepanel-messages .clarification-header h4 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sidepanel-messages .clarification-question {
+  font-size: 0.82rem;
+  color: #f1f5f9;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.sidepanel-messages .clarification-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sidepanel-messages .clarification-btn {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  border-radius: 6px;
+  padding: 5px 10px;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.sidepanel-messages .clarification-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border-color: #a78bfa;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.sidepanel-messages .clarification-btn-desc {
+  font-size: 0.62rem;
+  color: #94a3b8;
+  font-weight: normal;
+}
+
+.sidepanel-messages .clarification-input-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.sidepanel-messages .clarification-text-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  outline: none;
+}
+
+.sidepanel-messages .clarification-text-input:focus {
+  border-color: #8b5cf6;
+}
+
+.sidepanel-messages .clarification-send-btn {
+  background: #8b5cf6;
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sidepanel-messages .clarification-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidepanel-messages .clarification-cancel-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.68rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.sidepanel-messages .clarification-cancel-btn:hover {
+  color: #ef4444;
+}
+
+.sidepanel-messages .clarification-resolved-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.72rem;
+}
+
+.sidepanel-messages .clarification-resolved-q {
+  color: #94a3b8;
+}
+
+.sidepanel-messages .clarification-resolved-ans {
+  color: #34d399;
+  font-weight: 600;
+}
+

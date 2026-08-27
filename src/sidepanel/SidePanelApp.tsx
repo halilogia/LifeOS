@@ -47,6 +47,8 @@ export function SidePanelApp() {
     handleConfirmDeleteSession,
     handleRenameSession,
     handleExportCurrentChat,
+    handleResolveClarification,
+    handleCancelClarification,
     handleChipClick,
   } = useSidePanelChat();
 
@@ -110,6 +112,8 @@ export function SidePanelApp() {
         agentStatus={agentStatus}
         messagesEndRef={messagesEndRef}
         onChipClick={handleChipClick}
+        onResolveClarification={handleResolveClarification}
+        onCancelClarification={handleCancelClarification}
       />
 
       {/* Input Container */}
