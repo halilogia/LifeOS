@@ -17,5 +17,4 @@ export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "arcade",
   "detox",
   "bist",
-  "halka-arz",
 ];

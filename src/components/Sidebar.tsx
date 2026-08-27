@@ -152,8 +152,6 @@ export function Sidebar({
         return t.sidebar_city_pulse;
       case "bist":
         return t.sidebar_bist;
-      case "halka-arz":
-        return t.sidebar_bist_short;
       default:
         return key;
     }
