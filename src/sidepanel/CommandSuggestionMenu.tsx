@@ -14,6 +14,22 @@ export interface SuggestionItem {
 
 export const SLASH_COMMANDS: SuggestionItem[] = [
   {
+    key: "form",
+    prefix: "/",
+    label: "/form",
+    description: "Aktif sayfadaki formu hafızamdaki bilgilerle (memory.md) doldur",
+    icon: "📋",
+    insertText: "Aktif sayfadaki formu hafızamdaki (memory.md) bilgilerimle doldur.",
+  },
+  {
+    key: "post",
+    prefix: "/",
+    label: "/post",
+    description: "LinkedIn veya X/Twitter için gönderi oluştur ve editöre yazdır",
+    icon: "✍️",
+    insertText: "Aktif sayfada paylaşılmak üzere profesyonel bir gönderi oluştur ve sayfadaki editöre yazdır.",
+  },
+  {
     key: "web",
     prefix: "/",
     label: "/web",
@@ -72,6 +88,14 @@ export const SLASH_COMMANDS: SuggestionItem[] = [
 ];
 
 export const TOOL_MENTIONS: SuggestionItem[] = [
+  {
+    key: "browser",
+    prefix: "@",
+    label: "@browser",
+    description: "Tarayıcı otomasyonu: sayfa butonlarına tıkla, form veya post editörünü doldur",
+    icon: "🤖",
+    insertText: "@browser ",
+  },
   {
     key: "page",
     prefix: "@",
