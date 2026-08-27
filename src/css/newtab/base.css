@@ -68,6 +68,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-width: thin;
 }
 
 /* Custom Scrollbar */

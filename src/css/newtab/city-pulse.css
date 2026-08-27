@@ -50,10 +50,25 @@
 
 .event-hubs-chips-scroll {
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.event-hubs-chips-scroll::-webkit-scrollbar,
+.city-pulse-type-chips::-webkit-scrollbar {
+  height: 4px;
+}
+
+.event-hubs-chips-scroll::-webkit-scrollbar-track,
+.city-pulse-type-chips::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.event-hubs-chips-scroll::-webkit-scrollbar-thumb,
+.city-pulse-type-chips::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.25);
+  border-radius: 4px;
 }
 
 .event-hub-chip {
@@ -308,9 +323,9 @@
 /* Quick Event Type Chips Bar */
 .city-pulse-type-chips {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 2px;
+  align-items: center;
 }
 
 .type-chip-btn {
