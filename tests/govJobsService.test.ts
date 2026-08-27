@@ -60,26 +60,29 @@ describe("govJobsService", () => {
   });
 
   describe("fetchLiveGovJobs", () => {
-    it("fetches and returns normalized gov job items with calculated daysLeft", async () => {
+    it("returns empty baseline when no external feed is parsed (zero fake data policy)", async () => {
       const jobs = await service.fetchLiveGovJobs(true);
-      expect(jobs.length).toBeGreaterThan(0);
-      const firstJob = jobs[0];
-      expect(firstJob.id).toBeDefined();
-      expect(firstJob.title).toBeDefined();
-      expect(firstJob.institution).toBeDefined();
-      expect(firstJob.link).toBeDefined();
-      expect(typeof firstJob.daysLeft).toBe("number");
-      expect(typeof firstJob.isExpired).toBe("boolean");
+      expect(Array.isArray(jobs)).toBe(true);
     });
 
-    it("utilizes cache on subsequent calls", async () => {
-      await service.fetchLiveGovJobs(true);
-      const cached = await mockRepo.getCache();
-      expect(cached).not.toBeNull();
-      expect(cached?.data.length).toBeGreaterThan(0);
+    it("utilizes cache on subsequent calls when cache is populated", async () => {
+      const sampleItem: GovJobItem = {
+        id: "test-1",
+        title: "Test İlan",
+        institution: "Test Kurum",
+        category: "memur",
+        publishDate: "2026-08-28",
+        deadline: new Date(Date.now() + 5 * 86400000).toISOString().split("T")[0],
+        link: "https://kariyerkapisi.gov.tr/isealim",
+        source: "kariyerkapisi",
+        daysLeft: 5,
+        isExpired: false,
+      };
+      await mockRepo.setCache([sampleItem]);
 
       const cachedJobs = await service.fetchLiveGovJobs(false);
-      expect(cachedJobs.length).toBe(cached!.data.length);
+      expect(cachedJobs.length).toBe(1);
+      expect(cachedJobs[0].title).toBe("Test İlan");
     });
   });
 

@@ -87,30 +87,34 @@ export function GovJobsView() {
                 height="48"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.3)"
+                stroke="var(--accent-color, #8b5cf6)"
                 strokeWidth="1.5"
               >
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
             </div>
-            <h3>Aradığınız Kriterlere Uygun Kamu İlanı Bulunamadı</h3>
+            <h3>Doğrulanmış Resmi Kamu Portalları</h3>
             <p>
-              Filtreleri temizleyebilir veya arama teriminizi değiştirerek tekrar arayabilirsiniz.
+              Kamu işe alım ilanları (Kariyer Kapısı / CBİKO, Resmi Gazete, ilan.gov.tr, İŞKUR) e-Devlet kimlik doğrulama duvarı arkasında yer aldığından, sahte ve güncel olmayan haberlerin önüne geçmek amacıyla tüm başvurularınızı yukarıdaki doğrulanmış resmi devlet portallarından doğrudan gerçekleştirebilirsiniz.
             </p>
-            {(category !== "all" || statusFilter !== "all" || searchQuery) && (
-              <button
-                type="button"
-                className="gov-reset-filters-btn"
-                onClick={() => {
-                  setCategory("all");
-                  setStatusFilter("all");
-                  setSearchQuery("");
-                }}
+            <div className="gov-verified-actions">
+              <a
+                href="https://kariyerkapisi.gov.tr/isealim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gov-official-btn primary"
               >
-                Filtreleri Sıfırla
-              </button>
-            )}
+                Kariyer Kapısı'nda İlanları Gör
+              </a>
+              <a
+                href="https://www.turkiye.gov.tr/cumhurbaskanligi-kamu-ise-alim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gov-official-btn secondary"
+              >
+                e-Devlet Kamu İşe Alım
+              </a>
+            </div>
           </div>
         ) : (
           <div className="gov-jobs-grid">

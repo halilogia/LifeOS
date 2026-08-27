@@ -636,3 +636,46 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+.gov-verified-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gov-official-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.gov-official-btn.primary {
+  background: var(--accent-color, #8b5cf6);
+  color: #ffffff;
+  box-shadow: 0 4px 14px var(--accent-glow, rgba(139, 92, 246, 0.35));
+}
+
+.gov-official-btn.primary:hover {
+  background: var(--accent-hover, #7c3aed);
+  transform: translateY(-1px);
+}
+
+.gov-official-btn.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  color: var(--text-primary, #ffffff);
+}
+
+.gov-official-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
