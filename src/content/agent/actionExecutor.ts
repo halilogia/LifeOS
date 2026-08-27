@@ -1,8 +1,9 @@
 /**
  * actionExecutor.ts
- * Tarayıcı eylem yürütücü — click, type, scroll, extract, highlight.
- * Claude/Browser-Use overlay'leri ile form otomasyonu.
- * Parça: domAgentEngine barrel re-export eder.
+ * Browser Action Executor — click, type, scroll, extract, highlight.
+ * Supports standard HTML forms, contenteditable rich text editors (LinkedIn, X/Twitter, Notion, Quill, ProseMirror),
+ * and sequential asynchronous modal automation.
+ * Claude / Browser-Use inspired visual overlays.
  */
 
 import { getPageContext } from "./pageContextExtractor.js";
@@ -27,14 +28,109 @@ export interface ExtractedPageData {
 }
 
 /**
+ * Polls the DOM until the target element appears (e.g. waiting for a modal dialog to open).
+ */
+async function waitForElement(
+  selector?: string,
+  targetText?: string,
+  maxWaitMs = 2500,
+): Promise<HTMLElement | null> {
+  const start = Date.now();
+  while (Date.now() - start < maxWaitMs) {
+    const el = findTargetElement(selector, targetText);
+    if (el) {
+      return el;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  return findTargetElement(selector, targetText);
+}
+
+/**
+ * Safely inserts text into either standard HTML input/textarea or rich contenteditable / role="textbox" elements
+ * (LinkedIn Post creator, Twitter tweet composer, Facebook post, Quill, Lexical, Draft.js).
+ */
+function fillTextIntoElement(targetEl: HTMLElement, textValue: string): void {
+  targetEl.focus();
+
+  const isContentEditable =
+    targetEl.isContentEditable ||
+    targetEl.getAttribute("contenteditable") === "true" ||
+    targetEl.getAttribute("role") === "textbox" ||
+    targetEl.classList.contains("ql-editor") ||
+    targetEl.classList.contains("ProseMirror") ||
+    targetEl.classList.contains("notion-page-content") ||
+    targetEl.tagName === "DIV" ||
+    targetEl.tagName === "P";
+
+  if (isContentEditable) {
+    // Select all text in contenteditable if any
+    try {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(targetEl);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    } catch {
+      // Ignore selection errors
+    }
+
+    // Try document.execCommand insertText (most reliable for React/Lexical/Draft.js editors)
+    let commandSuccess = false;
+    try {
+      commandSuccess = document.execCommand("insertText", false, textValue);
+    } catch {
+      commandSuccess = false;
+    }
+
+    // Fallback if execCommand didn't insert
+    if (!commandSuccess || !targetEl.innerText.includes(textValue)) {
+      targetEl.innerText = textValue;
+    }
+
+    // Dispatch synthetic InputEvents to notify state managers
+    targetEl.dispatchEvent(
+      new InputEvent("beforeinput", {
+        bubbles: true,
+        inputType: "insertText",
+        data: textValue,
+      }),
+    );
+    targetEl.dispatchEvent(
+      new InputEvent("input", {
+        bubbles: true,
+        inputType: "insertText",
+        data: textValue,
+      }),
+    );
+    targetEl.dispatchEvent(new Event("change", { bubbles: true }));
+  } else {
+    // Standard HTML input / textarea element
+    const inputEl = targetEl as HTMLInputElement | HTMLTextAreaElement;
+    inputEl.value = textValue;
+
+    inputEl.dispatchEvent(new Event("focus", { bubbles: true }));
+    inputEl.dispatchEvent(
+      new InputEvent("input", {
+        bubbles: true,
+        inputType: "insertText",
+        data: textValue,
+      }),
+    );
+    inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+    inputEl.dispatchEvent(new Event("blur", { bubbles: true }));
+  }
+}
+
+/**
  * Executes requested browser action or form autofill on active DOM
  * with Claude / Browser-Use overlays.
  */
-export function executeAgentAction(payload: AgentActionPayload): {
+export async function executeAgentAction(payload: AgentActionPayload): Promise<{
   success: boolean;
   message: string;
   extractedData?: ExtractedPageData;
-} {
+}> {
   const { actionType, selector, targetText, textValue, direction } = payload;
 
   if (actionType === "scroll") {
@@ -58,7 +154,8 @@ export function executeAgentAction(payload: AgentActionPayload): {
     };
   }
 
-  const targetEl = findTargetElement(selector, targetText);
+  // Wait for target element (handles modals opening dynamically)
+  const targetEl = await waitForElement(selector, targetText, 2500);
 
   if (!targetEl) {
     return {
@@ -72,6 +169,7 @@ export function executeAgentAction(payload: AgentActionPayload): {
     (targetEl as HTMLInputElement).placeholder ||
     targetEl.innerText ||
     "Element";
+
   highlightElement(
     targetEl,
     `${actionType.toUpperCase()}: ${labelText.slice(0, 25)}`,
@@ -79,7 +177,16 @@ export function executeAgentAction(payload: AgentActionPayload): {
 
   if (actionType === "click" || actionType === "highlight") {
     if (actionType === "click") {
+      targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      // Dispatch full mouse & pointer sequence for modern frameworks (React / Vue)
+      targetEl.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true }),
+      );
+      targetEl.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      targetEl.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
       targetEl.click();
+
       return {
         success: true,
         message: `Clicked element: ${selector || targetText}`,
@@ -92,17 +199,7 @@ export function executeAgentAction(payload: AgentActionPayload): {
   }
 
   if (actionType === "type") {
-    const inputEl = targetEl as HTMLInputElement | HTMLTextAreaElement;
-
-    // Focus & Fill input with event dispatches for dynamic forms (Google Forms, React, Vue)
-    inputEl.focus();
-    inputEl.value = textValue || "";
-
-    // Dispatch synthetic events so form state updates immediately
-    inputEl.dispatchEvent(new Event("focus", { bubbles: true }));
-    inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-    inputEl.dispatchEvent(new Event("change", { bubbles: true }));
-    inputEl.dispatchEvent(new Event("blur", { bubbles: true }));
+    fillTextIntoElement(targetEl, textValue || "");
 
     return {
       success: true,
@@ -129,21 +226,33 @@ export function initDomAgentEngine(): void {
 
     if (message.type === "agent_execute_action") {
       if (Array.isArray(message.payload)) {
-        const results = (message.payload as AgentActionPayload[]).map(
-          (action) => executeAgentAction(action),
-        );
-        sendResponse({
-          success: true,
-          message: `Executed ${results.length} form actions`,
-          results,
-        });
+        (async () => {
+          const results: Array<{
+            success: boolean;
+            message: string;
+            extractedData?: ExtractedPageData;
+          }> = [];
+          for (const action of message.payload as AgentActionPayload[]) {
+            const res = await executeAgentAction(action);
+            results.push(res);
+            // Delay between multi-step actions to allow DOM/modals to settle
+            await new Promise((resolve) => setTimeout(resolve, 400));
+          }
+          sendResponse({
+            success: true,
+            message: `Executed ${results.length} actions`,
+            results,
+          });
+        })();
+        return true;
       } else {
-        const result = executeAgentAction(
-          message.payload as AgentActionPayload,
+        executeAgentAction(message.payload as AgentActionPayload).then(
+          (result) => {
+            sendResponse(result);
+          },
         );
-        sendResponse(result);
+        return true;
       }
-      return true;
     }
   });
 }

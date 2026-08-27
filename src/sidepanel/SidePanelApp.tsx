@@ -105,6 +105,7 @@ export function SidePanelApp() {
             "Aktif sayfadaki formu benim memory.md kişisel bağlamımdaki verilerle (ad, soyad, e-posta, meslek vs.) doldur.",
           )
         }
+        onCustomPrompt={(prompt) => handleSendMessage(prompt)}
       />
 
       {/* Messages Feed */}

@@ -14,6 +14,7 @@ interface SidePanelChipsProps {
   isYoutube: boolean;
   onChipClick: (type: ChipType) => void;
   onAutofill: () => void;
+  onCustomPrompt?: (prompt: string) => void;
 }
 
 /**
@@ -102,6 +103,7 @@ export function SidePanelChips({
   isYoutube,
   onChipClick,
   onAutofill,
+  onCustomPrompt,
 }: SidePanelChipsProps) {
   return (
     <div className="sidepanel-chips">
@@ -152,6 +154,67 @@ export function SidePanelChips({
             <span>{t.video_quiz}</span>
           </button>
         </>
+      )}
+
+      {pageContext?.domain?.includes("linkedin.com") && (
+        <button
+          className="sidepanel-chip"
+          style={{
+            background: "linear-gradient(135deg, rgba(10, 102, 194, 0.35), rgba(0, 65, 130, 0.35))",
+            color: "#60a5fa",
+            borderColor: "#0a66c2",
+            fontWeight: 600,
+          }}
+          onClick={() =>
+            onCustomPrompt?.(
+              "LinkedIn için sayfadaki veya ekli belgedeki bilgileri kullanarak profesyonel, etkili ve dikkat çekici bir gönderi (post) hazırla, ardından 'Gönderi başlat' alanına tıkla ve editöre yazdır.",
+            )
+          }
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+            <rect x="2" y="9" width="4" height="12" />
+            <circle cx="4" cy="4" r="2" />
+          </svg>
+          <span>LinkedIn Postu Hazırla</span>
+        </button>
+      )}
+
+      {(pageContext?.domain?.includes("x.com") ||
+        pageContext?.domain?.includes("twitter.com")) && (
+        <button
+          className="sidepanel-chip"
+          style={{
+            background: "rgba(255, 255, 255, 0.1)",
+            color: "#ffffff",
+            borderColor: "rgba(255, 255, 255, 0.2)",
+            fontWeight: 600,
+          }}
+          onClick={() =>
+            onCustomPrompt?.(
+              "Bu sayfa veya konu hakkında dikkat çekici bir Tweet hazırla ve tweet metin alanına yazdır.",
+            )
+          }
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+          </svg>
+          <span>Tweet Hazırla</span>
+        </button>
       )}
 
       {isPersonalFormPage(pageContext) && (

@@ -371,28 +371,67 @@ ${currentInteractiveElements}
 ${docContext ? `\n\nEkli Belgeler ve Dosyalar:\n${docContext}` : ""}
 ${webSearchSnippet ? `\n\n${webSearchSnippet}` : ""}
 
-INSTRUCTIONS FOR FORM FILLING, REGISTRATION & WEB ACTIONS:
-If the user asks to fill a form, register, or sign up on a website/forum (e.g. "Formu doldur", "Kayıt ol", "Üye ol", "Bu siteye kayıt ol", "Sign up"), match input field labels/placeholders (Username, Email, Full Name, Bio, Occupation) on the active page against the user's personal memory (memory.md).
-Return a JSON array of actions in markdown code block at the end:
-\`\`\`json
-[
-  {
-    "actionType": "type",
-    "selector": "input[name='username']",
-    "targetText": "Kullanıcı Adı",
-    "textValue": "HalilEmre"
-  }
-]
-\`\`\`
+INSTRUCTIONS FOR SOCIAL MEDIA POSTING, FORM FILLING & BROWSER AUTOMATION:
+1. Social Media Posts & Sharing (LinkedIn, X / Twitter, Facebook, Instagram, Reddit):
+   If the user asks to create, share, or draft a post (e.g. "LinkedIn'de post oluştur", "Gönderi paylaş", "Post yaz", "Tweet at", "Paylaş", "Create a post"):
+   - Draft a high quality, engaging post matching the user's tone, attachments, and profile.
+   - ALWAYS PROVIDE an executable JSON array of browser actions at the very end in a \`\`\`json code block so the browser extension can automatically click the post trigger and type into the live editor!
 
-INSTRUCTIONS FOR SAVING / UPDATING PERSONAL MEMORY (memory.md):
-If the user asks to save, add, or remember a fact/email/detail about them (e.g. "hafızana mail adresimi ekle", "e-postamı kaydet", "beni hatırla", "hafızayı güncelle"), format a JSON code block in your response:
-\`\`\`json
-{
-  "action": "update_memory",
-  "memory_fact": "E-posta: halilemrekuyupinar@proton.me"
-}
-\`\`\`
+   LinkedIn Example:
+   \`\`\`json
+   [
+     {
+       "actionType": "click",
+       "targetText": "Gönderi başlat",
+       "selector": "button.share-box-feed-entry__trigger, button[aria-label*='gönderi'], button[aria-label*='post'], div.share-box-feed-entry button"
+     },
+     {
+       "actionType": "type",
+       "selector": "div[contenteditable='true'], div[role='textbox'], .ql-editor, .share-creation-state__text-editor",
+       "targetText": "Ne hakkında konuşmak istiyorsunuz?",
+       "textValue": "<GENERATED_POST_TEXT>"
+     }
+   ]
+   \`\`\`
+
+   Twitter / X Example:
+   \`\`\`json
+   [
+     {
+       "actionType": "click",
+       "targetText": "Gönder",
+       "selector": "a[data-testid='SideNav_NewTweet_Button'], div[aria-label*='Tweet']"
+     },
+     {
+       "actionType": "type",
+       "selector": "div[data-testid='tweetTextarea_0'], div[role='textbox'], div[contenteditable='true']",
+       "textValue": "<GENERATED_TWEET_TEXT>"
+     }
+   ]
+   \`\`\`
+
+2. Form Filling & Registration:
+   If the user asks to fill a form, register, or sign up on a website/forum (e.g. "Formu doldur", "Kayıt ol", "Üye ol", "Sign up"), match input field labels/placeholders against the user's personal memory (memory.md).
+   Return a JSON array of actions at the end:
+   \`\`\`json
+   [
+     {
+       "actionType": "type",
+       "selector": "input[name='username']",
+       "targetText": "Kullanıcı Adı",
+       "textValue": "HalilEmre"
+     }
+   ]
+   \`\`\`
+
+3. Memory Updating (memory.md):
+   If the user asks to save, add, or remember a fact/email/detail about them (e.g. "hafızana mail adresimi ekle", "e-postamı kaydet", "beni hatırla"), format a JSON code block in your response:
+   \`\`\`json
+   {
+     "action": "update_memory",
+     "memory_fact": "E-posta: halilemrekuyupinar@proton.me"
+   }
+   \`\`\`
 
 Answer the user clearly, professionally, and concisely in ${t.answer_language}. Do not use low-quality emojis in output formatting.`;
 
