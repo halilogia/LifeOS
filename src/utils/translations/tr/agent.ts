@@ -50,8 +50,9 @@ export const agent = {
   speech_not_supported: "Tarayıcınız sesli komutu desteklemiyor.",
   starter_summarize: "Sayfayı Özetle",
   starter_summarize_desc: "3 ana maddede özetle",
-  starter_takeaways: "Ana Fikirler",
-  starter_takeaways_desc: "Kilit çıkarımlar & aksiyonlar",
+  copilot_welcome_title: "Life OS Web Copilot",
+  copilot_welcome_desc:
+    "Aktif web sayfasını analiz edebilir, sorular sorabilir veya hızlı aksiyonları kullanabilirsiniz.",
   summarize_video: "Videoyu Özetle",
   video_quiz: "5 Soruluk Test",
   voice_command_tooltip: "Sesli Komut Ver",

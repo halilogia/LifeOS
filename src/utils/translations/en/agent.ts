@@ -48,8 +48,9 @@ export const agent = {
   speech_not_supported: "Speech recognition is not supported in this browser.",
   starter_summarize: "Summarize Page",
   starter_summarize_desc: "Get 3 key bullet points",
-  starter_takeaways: "Key Takeaways",
-  starter_takeaways_desc: "Key insights & action items",
+  copilot_welcome_title: "Life OS Web Copilot",
+  copilot_welcome_desc:
+    "Analyze the active web page, ask questions, or use quick action triggers.",
   summarize_video: "Summarize Video",
   video_quiz: "5-Q Video Quiz",
   voice_command_tooltip: "Voice Command",

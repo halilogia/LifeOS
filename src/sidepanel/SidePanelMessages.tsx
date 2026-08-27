@@ -108,12 +108,14 @@ export function SidePanelMessages({
         <div className="sidepanel-empty-state">
           <div className="sidepanel-empty-icon">
             <svg
-              width="32"
-              height="32"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#8b5cf6"
-              strokeWidth="1.5"
+              stroke="#a855f7"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
@@ -122,16 +124,41 @@ export function SidePanelMessages({
           <p>{t.copilot_welcome_desc}</p>
           <div className="sidepanel-empty-suggestions">
             <button
+              type="button"
               onClick={() => onChipClick("summarize")}
               className="sidepanel-suggestion-btn"
             >
-              {t.chip_summarize}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span>{t.chip_summarize}</span>
             </button>
             <button
+              type="button"
               onClick={() => onChipClick("key_takeaways")}
               className="sidepanel-suggestion-btn"
             >
-              {t.chip_takeaways}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+              <span>{t.chip_takeaways}</span>
             </button>
           </div>
         </div>
