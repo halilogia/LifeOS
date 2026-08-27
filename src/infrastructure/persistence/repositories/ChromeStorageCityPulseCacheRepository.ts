@@ -22,34 +22,67 @@ const EVENTS_KEY = LOCAL_CITY_PULSE_EVENTS;
 const TAXONOMIES_KEY = LOCAL_CITY_PULSE_TAXONOMIES;
 const FAVORITES_KEY = LOCAL_CITY_PULSE_FAVORITES;
 
-export class ChromeStorageCityPulseCacheRepository implements ICityPulseCacheRepository {
+export class ChromeStorageCityPulseCacheRepository
+  implements ICityPulseCacheRepository
+{
   getEventsCache(): Promise<CachedCityEvents | null> {
     return new Promise((resolve) => {
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          const raw = localStorage.getItem(EVENTS_KEY);
+          resolve(raw ? (JSON.parse(raw) as CachedCityEvents) : null);
+        } catch {
+          resolve(null);
+        }
+        return;
+      }
       chrome.storage.local.get([EVENTS_KEY], (res) => {
         resolve((res[EVENTS_KEY] as CachedCityEvents) || null);
       });
     });
   }
 
-  setEventsCache(data: CityEvent[]): Promise<void> {
+  saveEventsCache(data: CityEvent[]): Promise<void> {
     return new Promise((resolve) => {
       const cacheVal: CachedCityEvents = {
         timestamp: Date.now(),
         data,
       };
-      chrome.storage.local.set({ [EVENTS_KEY]: cacheVal }, resolve);
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          localStorage.setItem(EVENTS_KEY, JSON.stringify(cacheVal));
+        } catch {
+          // ignore
+        }
+        resolve();
+        return;
+      }
+      chrome.storage.local.set({ [EVENTS_KEY]: cacheVal }, () => resolve());
     });
+  }
+
+  setEventsCache(data: CityEvent[]): Promise<void> {
+    return this.saveEventsCache(data);
   }
 
   getTaxonomiesCache(): Promise<CachedCityTaxonomies | null> {
     return new Promise((resolve) => {
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          const raw = localStorage.getItem(TAXONOMIES_KEY);
+          resolve(raw ? (JSON.parse(raw) as CachedCityTaxonomies) : null);
+        } catch {
+          resolve(null);
+        }
+        return;
+      }
       chrome.storage.local.get([TAXONOMIES_KEY], (res) => {
         resolve((res[TAXONOMIES_KEY] as CachedCityTaxonomies) || null);
       });
     });
   }
 
-  setTaxonomiesCache(
+  saveTaxonomiesCache(
     categories: CityEventCategory[],
     types: CityEventType[],
   ): Promise<void> {
@@ -59,12 +92,37 @@ export class ChromeStorageCityPulseCacheRepository implements ICityPulseCacheRep
         categories,
         types,
       };
-      chrome.storage.local.set({ [TAXONOMIES_KEY]: cacheVal }, resolve);
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          localStorage.setItem(TAXONOMIES_KEY, JSON.stringify(cacheVal));
+        } catch {
+          // ignore
+        }
+        resolve();
+        return;
+      }
+      chrome.storage.local.set({ [TAXONOMIES_KEY]: cacheVal }, () => resolve());
     });
+  }
+
+  setTaxonomiesCache(
+    categories: CityEventCategory[],
+    types: CityEventType[],
+  ): Promise<void> {
+    return this.saveTaxonomiesCache(categories, types);
   }
 
   loadFavorites(): Promise<number[]> {
     return new Promise((resolve) => {
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          const raw = localStorage.getItem(FAVORITES_KEY);
+          resolve(raw ? (JSON.parse(raw) as number[]) : []);
+        } catch {
+          resolve([]);
+        }
+        return;
+      }
       chrome.storage.local.get([FAVORITES_KEY], (res) => {
         const stored = res[FAVORITES_KEY] as number[] | undefined;
         resolve(Array.isArray(stored) ? stored : []);
@@ -72,9 +130,22 @@ export class ChromeStorageCityPulseCacheRepository implements ICityPulseCacheRep
     });
   }
 
+  getFavorites(): Promise<number[]> {
+    return this.loadFavorites();
+  }
+
   saveFavorites(favorites: number[]): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.set({ [FAVORITES_KEY]: favorites }, resolve);
+      if (typeof chrome === "undefined" || !chrome.storage?.local) {
+        try {
+          localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        } catch {
+          // ignore
+        }
+        resolve();
+        return;
+      }
+      chrome.storage.local.set({ [FAVORITES_KEY]: favorites }, () => resolve());
     });
   }
 }

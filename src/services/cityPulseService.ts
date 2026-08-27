@@ -407,11 +407,19 @@ export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {
     },
 
     async loadFavorites(): Promise<number[]> {
-      return cacheRepo.getFavorites();
+      if (typeof cacheRepo.loadFavorites === "function") {
+        return cacheRepo.loadFavorites();
+      }
+      if (typeof cacheRepo.getFavorites === "function") {
+        return cacheRepo.getFavorites();
+      }
+      return [];
     },
 
     async saveFavorites(favorites: number[]): Promise<void> {
-      await cacheRepo.saveFavorites(favorites);
+      if (typeof cacheRepo.saveFavorites === "function") {
+        await cacheRepo.saveFavorites(favorites);
+      }
     },
   };
 }

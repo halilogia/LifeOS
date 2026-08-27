@@ -14,12 +14,18 @@ import type {
 
 export interface ICityPulseCacheRepository {
   getEventsCache(): Promise<CachedCityEvents | null>;
-  setEventsCache(data: CityEvent[]): Promise<void>;
+  saveEventsCache(data: CityEvent[]): Promise<void>;
+  setEventsCache?(data: CityEvent[]): Promise<void>;
   getTaxonomiesCache(): Promise<CachedCityTaxonomies | null>;
-  setTaxonomiesCache(
+  saveTaxonomiesCache(
+    categories: CityEventCategory[],
+    types: CityEventType[],
+  ): Promise<void>;
+  setTaxonomiesCache?(
     categories: CityEventCategory[],
     types: CityEventType[],
   ): Promise<void>;
   loadFavorites(): Promise<number[]>;
+  getFavorites?(): Promise<number[]>;
   saveFavorites(favorites: number[]): Promise<void>;
 }
