@@ -103,21 +103,20 @@ export function createGovJobsService(cacheRepo?: IGovJobsCacheRepository) {
         try {
           const cached = await repo.getCache();
           if (cached && Date.now() - cached.timestamp < JOBS_CACHE_EXPIRY) {
-            // Recalculate daysLeft dynamically on cache hit
-            return cached.data.map((job) => {
-              const daysLeft = calculateDaysLeft(job.deadline);
-              const link =
-                job.link.includes("isealimkariyerkapisi.cbiko.gov.tr") ||
-                job.link.includes("kariyer-kapisi-kamu-ise-alim")
-                  ? "https://kariyerkapisi.gov.tr/isealim"
-                  : job.link;
-              return {
-                ...job,
-                link,
-                daysLeft,
-                isExpired: daysLeft < 0,
-              };
-            });
+            // Purge old mock data from previous version if present in storage
+            const hasMockData = cached.data.some((j) => j.id.startsWith("job-"));
+            if (hasMockData) {
+              await repo.clearCache();
+            } else {
+              return cached.data.map((job) => {
+                const daysLeft = calculateDaysLeft(job.deadline);
+                return {
+                  ...job,
+                  daysLeft,
+                  isExpired: daysLeft < 0,
+                };
+              });
+            }
           }
         } catch (e) {
           logger.warn("govJobsService: Failed to read cache, fetching fresh:", e);
