@@ -11,7 +11,12 @@
   - **Alışkanlık Zinciri Isı Haritası (`RoutineHeatmap.tsx`)**: GitHub tarzı son 12 haftalık (84 gün) 7 satırlı katkı ızgarası, günlük tamamlanan rutin yoğunluğuna göre 0-4 seviye parlama renkleri ve hover tooltip bilgisi.
   - **Günlük Seri Sayacı & İlerleme Çubuğu**: Ardışık gün serisi (streak), en uzun rekor seri rozeti (Best Streak), bugünkü rutin tamamlama oranı ve katlanabilir ısı haritası çekmecesi.
   - **Domain Hesaplama Servisi (`routineStreakCalculator.ts`)**: Rutinlerin geçmiş `completedDates` ve `lastCompletedDate` verilerinden streak, tamamlama oranı ve haftalık ısı haritası matrisini hesaplayan saf iş mantığı servisi.
-- **Doğrulama**: `vitest run` 93/93 test ✓, `npm run build` (Vite + TS) ✓.
+- **Şehir Etkinlikleri & Kültür Portalları Görsel Geliştirmesi (`CityPulseView.tsx`, `EventHubsBar.tsx`, `CityEventCard.tsx`, `CityPulseFilterBar.tsx`, `cityPulseService.ts`)**:
+  - **Event Hubs Hızlı Erişim Portalları (`EventHubsBar.tsx`)**: İBB Kültür Sanat, Biletix, Passo, Bubilet, Biletinial, Bizİzmir Kültür, AKM & CSO Ada, Müzeler & Galeriler, Meetup Tech ve Zorlu PSM gibi 10 popüler kültür/bilet merkezine tek tıkla doğrudan erişim çipleri.
+  - **Görsel Afişli Etkinlik Kartları (`CityEventCard.tsx`)**: WordPress REST API `_embed` ve `content.rendered` görsel ayıklama motoru ile zengin poster önizlemeleri, mekan/tür rozetleri ve tematik fallback SVG arka planları.
+  - **Google Takvim Entegrasyonu**: Her etkinlik kartına tek tıkla tarih, saat, mekan ve detay linki içeren önceden doldurulmuş Google Takvim etkinliği oluşturma butonu (`generateGoogleCalendarUrl`).
+  - **Gelişmiş Filtreleme & Hızlı Tür Sekmeleri (`CityPulseFilterBar.tsx`)**: Tiyatro, Konser, Sergi, Sinema, Atölye gibi türler için anlık sayaçlı yatay kategori çipleri, arama kutusu ve yenileme butonu.
+- **Doğrulama**: `vitest run` 99/99 test ✓, `npm run build` (Vite + TS) ✓.
 
 ---
 

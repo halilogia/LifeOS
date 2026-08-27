@@ -4,6 +4,7 @@ import type {
   CityEvent,
   CityEventCategory,
   CityEventType,
+  EventHubShortcut,
 } from "@/types/cityPulse.js";
 import { Language } from "@/types/types.js";
 import { logger } from "@/utils/logger.js";
@@ -12,15 +13,13 @@ interface UseCityPulseOptions {
   lang: Language;
 }
 
-// İBB kültürel etkinlikleri çoğunlukla ücretsizdir; API'de ücret alanı yok.
-// Bu nedenle pozitif anahtar ("ücretsiz") şart koşmak yerine yalnızca
-// açık "ücretli" işaretleri içeren etkinlikler elenir.
+// Positive indicators and negative flags
 const FREE_NEGATIVE =
   /(ücretli|ücret karşılığı|biletli|bilet satış|bilet satın|ticket required|ticketed|admission fee|paid)/i;
 
 /**
  * City Pulse state + fetch + filter logic (AGENTS.md 6.3: presentation/hooks/).
- * View sadece JSX render eder.
+ * View only renders composed JSX layout.
  */
 export function useCityPulse({ lang }: UseCityPulseOptions) {
   const [tab, setTab] = useState<"all" | "favorites">("all");
@@ -32,10 +31,15 @@ export function useCityPulse({ lang }: UseCityPulseOptions) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeType, setActiveType] = useState("all");
-  const [freeOnly, setFreeOnly] = useState(true);
+  const [freeOnly, setFreeOnly] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const hubs: EventHubShortcut[] = useMemo(
+    () => cityPulseService.getEventHubs(),
+    [],
+  );
 
   const loadData = useCallback(async (forceFresh = false) => {
     setLoading(true);
@@ -142,7 +146,7 @@ export function useCityPulse({ lang }: UseCityPulseOptions) {
         const locale = lang === "tr" ? "tr-TR" : "en-US";
         return date.toLocaleDateString(locale, {
           year: "numeric",
-          month: "long",
+          month: "short",
           day: "numeric",
         });
       } catch {
@@ -159,6 +163,7 @@ export function useCityPulse({ lang }: UseCityPulseOptions) {
     categories,
     types,
     favorites,
+    hubs,
     searchQuery,
     setSearchQuery,
     activeCategory,

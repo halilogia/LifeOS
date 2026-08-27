@@ -4,7 +4,7 @@ export const city = {
     "İstanbul'daki ücretsiz ve güncel kültür-sanat etkinlikleri",
   cp_tab_all: "Tüm Etkinlikler",
   cp_tab_favorites: "Favorilerim",
-  cp_search_placeholder: "Etkinlik ara...",
+  cp_search_placeholder: "Etkinlik adı, sanatçı veya mekan ara...",
   cp_filter_category: "Konum / Mekân",
   cp_filter_type: "Tür",
   cp_filter_all: "Tümü",
@@ -21,4 +21,9 @@ export const city = {
   cp_attribution: "Veri kaynağı: Kültür İstanbul (İBB Kültür A.Ş.)",
   cp_events_count: "etkinlik",
   cp_updated: "Güncellendi",
+  cp_hubs_title: "Popüler Etkinlik & Kültür Portalları",
+  cp_hubs_subtitle: "Konser, tiyatro, sergi, meetup ve bilet merkezleri",
+  cp_add_to_calendar: "Google Takvim'e Ekle",
+  cp_calendar_short: "Takvime Ekle",
+  cp_refresh_btn: "Yenile",
 };

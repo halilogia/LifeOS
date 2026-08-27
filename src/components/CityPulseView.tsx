@@ -1,13 +1,14 @@
 /**
  * CityPulseView.tsx
- * Şehir Etkinlikleri (İstanbul free & cultural events) Dashboard.
- * Layout Assembly Pattern: tuval (hook state) + parçalar (filter bar, event cards).
+ * Şehir Etkinlikleri (Culture, Arts & City Events) Dashboard.
+ * Layout Assembly Pattern: tuval (hook state) + parçalar (EventHubsBar, FilterBar, EventCard).
  */
 
 import { Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { useCityPulse } from "@/presentation/hooks/useCityPulse.js";
 
+import { EventHubsBar } from "@/components/citypulse/EventHubsBar.js";
 import { CityPulseFilterBar } from "@/components/citypulse/CityPulseFilterBar.js";
 import { CityEventCard } from "@/components/citypulse/CityEventCard.js";
 
@@ -23,6 +24,7 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
     categories,
     types,
     favorites,
+    hubs,
     searchQuery,
     setSearchQuery,
     activeCategory,
@@ -44,24 +46,32 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
   return (
     <div id="city-pulse-view" className="view-content active">
       <div className="city-pulse-container">
+        {/* Top Hubs Bar: Quick Portals to Culture & Ticketing Sites */}
+        <EventHubsBar hubs={hubs} t={t} />
+
+        {/* Tab & View Mode Selection */}
         <div className="city-pulse-tabs">
           <button
             className={`cp-tab-btn ${tab === "all" ? "active" : ""}`}
             onClick={() => setTab("all")}
           >
-            {t.cp_tab_all}
+            {t.cp_tab_all || "Tüm Etkinlikler"}
+            {filteredEvents.length > 0 && tab === "all" && (
+              <span className="cp-tab-badge">{filteredEvents.length}</span>
+            )}
           </button>
           <button
             className={`cp-tab-btn ${tab === "favorites" ? "active" : ""}`}
             onClick={() => setTab("favorites")}
           >
-            {t.cp_tab_favorites}
+            {t.cp_tab_favorites || "Favorilerim"}
             {favorites.length > 0 && (
               <span className="cp-tab-badge">{favorites.length}</span>
             )}
           </button>
         </div>
 
+        {/* Filters Bar: Search, Category Chips & Venue Select */}
         <CityPulseFilterBar
           t={t}
           categories={categories}
@@ -74,27 +84,32 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
           onCategoryChange={setActiveCategory}
           onTypeChange={setActiveType}
           onFreeOnlyChange={setFreeOnly}
+          onRefresh={() => void loadData(true)}
+          isLoading={loading}
         />
 
+        {/* Loading Spinner State */}
         {loading && (
           <div id="city-pulse-loading" className="city-pulse-loading">
             <div className="spinner"></div>
-            <p>{t.cp_loading}</p>
+            <p>{t.cp_loading || "Şehir etkinlikleri yükleniyor..."}</p>
           </div>
         )}
 
+        {/* Error Retry State */}
         {error && (
           <div id="city-pulse-error" className="city-pulse-error">
-            <p>{t.cp_error}</p>
+            <p>{t.cp_error || "Etkinlikler yüklenirken bir hata oluştu."}</p>
             <button
               id="city-pulse-retry-btn"
               onClick={() => void loadData(true)}
             >
-              {t.cp_retry}
+              {t.cp_retry || "Tekrar Dene"}
             </button>
           </div>
         )}
 
+        {/* Visual Event Grid */}
         {!loading && !error && (
           <div id="city-pulse-grid" className="city-pulse-grid">
             {filteredEvents.length === 0 ? (
@@ -105,9 +120,9 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   style={{
                     color: "var(--text-secondary)",
                     opacity: 0.5,
@@ -123,7 +138,7 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {tab === "favorites" ? t.cp_empty_favorites : t.cp_empty}
+                  {tab === "favorites" ? (t.cp_empty_favorites || "Henüz favori etkinlik eklemediniz.") : (t.cp_empty || "Aradığınız kriterlere uygun etkinlik bulunamadı.")}
                 </p>
               </div>
             ) : (
@@ -145,7 +160,7 @@ export function CityPulseView({ lang }: CityPulseViewProps) {
 
         {!loading && !error && filteredEvents.length > 0 && (
           <footer className="city-pulse-attribution">
-            <p>{t.cp_attribution}</p>
+            <p>{t.cp_attribution || "Etkinlik verileri İBB Kültür Sanat Açık Veri servisi tarafından sağlanmaktadır."}</p>
           </footer>
         )}
       </div>

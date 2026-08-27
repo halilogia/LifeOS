@@ -1,9 +1,9 @@
 export const city = {
   city_pulse_title: "City Events",
-  city_pulse_subtitle: "Free & upcoming cultural events across Istanbul",
+  city_pulse_subtitle: "Free and cultural events in Istanbul",
   cp_tab_all: "All Events",
   cp_tab_favorites: "My Favorites",
-  cp_search_placeholder: "Search events...",
+  cp_search_placeholder: "Search events, artists or venues...",
   cp_filter_category: "Venue / Location",
   cp_filter_type: "Type",
   cp_filter_all: "All",
@@ -20,4 +20,9 @@ export const city = {
   cp_attribution: "Data source: Kültür İstanbul (İBB Kültür A.Ş.)",
   cp_events_count: "events",
   cp_updated: "Updated",
+  cp_hubs_title: "Popular Event & Culture Hubs",
+  cp_hubs_subtitle: "Concerts, theater, exhibitions, meetups and tickets",
+  cp_add_to_calendar: "Add to Google Calendar",
+  cp_calendar_short: "Add to Calendar",
+  cp_refresh_btn: "Refresh",
 };

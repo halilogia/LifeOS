@@ -276,6 +276,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   **citypulse/**
     - **CityEventCard.tsx** → CityEventCard.tsx
     - **CityPulseFilterBar.tsx** → CityPulseFilterBar.tsx
+    - **EventHubsBar.tsx** → EventHubsBar.tsx
   - **CityPulseView.tsx** → CityPulseView.tsx
   - **ConfirmModal.tsx** → Confirm
   - **DatePicker.tsx** → Date Picker
@@ -540,7 +541,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **index.ts** → index
     - **types.ts** → types
   - **bistService.ts** → bistService.ts
-  - **cityPulseService.ts** → cityPulseService
+  - **cityPulseService.ts** → cityPulseService.ts
   - **cloudDataInspector.ts** → cloudDataInspector.ts
   - **errorReportService.ts** → errorReportService.ts
   - **gameAssetsService.ts** → gameAssetsService

@@ -1,35 +1,136 @@
 /**
- * cityPulseService
- * Service layer for the City Pulse (İstanbul free events) module.
- * Fetches live events + taxonomies from the kultur.istanbul WordPress REST API
- * and caches results via ICityPulseCacheRepository. No chrome.* calls here.
+ * cityPulseService.ts
+ * Service layer for the City Pulse (Şehir Etkinlikleri) module.
+ * Fetches live events + taxonomies from kultur.istanbul WordPress REST API,
+ * extracts featured media posters, formats Google Calendar links,
+ * provides Event Hub shortcuts, and caches results via ICityPulseCacheRepository.
  */
 
 import type {
   CityEvent,
   CityEventCategory,
   CityEventType,
+  EventHubShortcut,
 } from "@/types/cityPulse.js";
 import type { ICityPulseCacheRepository } from "@/domain/repositories/ICityPulseCacheRepository.js";
+import { logger } from "@/utils/logger.js";
 
-const EVENTS_CACHE_EXPIRY = 15 * 60 * 1000; // 15 minutes
+const EVENTS_CACHE_EXPIRY = 20 * 60 * 1000; // 20 minutes
 const TAXONOMIES_CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
 
 const EVENTS_URL =
-  "https://kultur.istanbul/wp-json/wp/v2/event_listing?per_page=50&_fields=id,date,link,title,content,excerpt,event_listing_category,event_listing_type";
+  "https://kultur.istanbul/wp-json/wp/v2/event_listing?per_page=50&_embed";
 const CATEGORIES_URL =
   "https://kultur.istanbul/wp-json/wp/v2/event_listing_category?per_page=100&_fields=id,name,count";
 const TYPES_URL =
   "https://kultur.istanbul/wp-json/wp/v2/event_listing_type?per_page=100&_fields=id,name,count";
+
+export const CITY_EVENT_HUBS: EventHubShortcut[] = [
+  {
+    id: "ibb-kultur",
+    name: "İBB Kültür Sanat",
+    url: "https://kultur.istanbul/etkinlikler/",
+    category: "culture",
+    description: "İstanbul genelinde konser, tiyatro, sergi ve ücretsiz kültür etkinlikleri",
+    badge: "Ücretsiz / İBB",
+  },
+  {
+    id: "biletix",
+    name: "Biletix",
+    url: "https://www.biletix.com/",
+    category: "tickets",
+    description: "Konser, tiyatro, festival, spor ve sahne sanatları biletleme",
+    badge: "Türkiye Geneli",
+  },
+  {
+    id: "passo",
+    name: "Passo",
+    url: "https://www.passo.com.tr/tr/etkinlikler",
+    category: "tickets",
+    description: "Konser, tiyatro, müzikal ve spor karşılaşmaları biletleri",
+    badge: "Popüler",
+  },
+  {
+    id: "bubilet",
+    name: "Bubilet",
+    url: "https://www.bubilet.com.tr/",
+    category: "tickets",
+    description: "İndirimli tiyatro, stand-up ve konser biletleri",
+    badge: "Fırsatlar",
+  },
+  {
+    id: "biletinial",
+    name: "Biletinial",
+    url: "https://biletinial.com/",
+    category: "tickets",
+    description: "Devlet Tiyatroları, Opera, Bale, Sinema ve Konser biletleri",
+    badge: "Resmi / DT",
+  },
+  {
+    id: "bizizmir",
+    name: "Bizİzmir Kültür",
+    url: "https://www.bizizmir.com/tr/Etkinlikler",
+    category: "culture",
+    description: "İzmir Büyükşehir Belediyesi kültür ve sanat etkinlik takvimi",
+    badge: "İzmir",
+  },
+  {
+    id: "akm-cso",
+    name: "AKM & CSO Ada",
+    url: "https://akmistanbul.gov.tr/",
+    category: "culture",
+    description: "Atatürk Kültür Merkezi ve Cumhurbaşkanlığı Senfoni Orkestrası programları",
+    badge: "Bakanlık",
+  },
+  {
+    id: "muze-galeri",
+    name: "Müzeler & Galeriler",
+    url: "https://www.istanbulmodern.org/tr/etkinlikler",
+    category: "museum",
+    description: "İstanbul Modern, Pera Müzesi ve Sakıp Sabancı güncel sergileri",
+    badge: "Sergiler",
+  },
+  {
+    id: "meetup-tech",
+    name: "Meetup Tech Istanbul",
+    url: "https://www.meetup.com/find/?location=tr--istanbul&source=EVENTS&categoryId=546",
+    category: "tech",
+    description: "Yazılım, Yapay Zeka, Tasarım ve Girişimcilik topluluk buluşmaları",
+    badge: "Meetup & Dev",
+  },
+  {
+    id: "zorlu-psm",
+    name: "Zorlu PSM",
+    url: "https://www.zorlupsm.com/etkinlikler",
+    category: "tickets",
+    description: "Dünya standartlarında müzikaller, caz ve uluslararası konserler",
+    badge: "PSM",
+  },
+];
+
+interface WpFeaturedMediaItem {
+  source_url?: string;
+  media_details?: {
+    sizes?: {
+      medium?: { source_url?: string };
+      large?: { source_url?: string };
+      thumbnail?: { source_url?: string };
+    };
+  };
+}
 
 interface WpEvent {
   id: number;
   date: string;
   link: string;
   title?: { rendered?: string };
+  content?: { rendered?: string };
   excerpt?: { rendered?: string };
   event_listing_category?: number[];
   event_listing_type?: number[];
+  _embedded?: {
+    "wp:featuredmedia"?: WpFeaturedMediaItem[];
+  };
 }
 
 interface WpTerm {
@@ -125,12 +226,65 @@ export function stripHtml(html: string): string {
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<[^>]+>/g, " ")
       .replace(/\s+/g, " ")
+      .replace(/\s+([.,;:!?])/g, "$1")
       .trim(),
   );
 }
 
+/** Extracts the first image src from HTML string */
+export function extractFirstImageSrc(html: string): string | undefined {
+  if (!html) return undefined;
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match ? match[1] : undefined;
+}
+
+/** Generates a pre-filled Google Calendar event URL */
+export function generateGoogleCalendarUrl(
+  title: string,
+  dateStr: string,
+  detailsUrl: string,
+  location?: string,
+): string {
+  try {
+    const titleEncoded = encodeURIComponent(title);
+    const detailsEncoded = encodeURIComponent(`Etkinlik Detayları: ${detailsUrl}`);
+    const locationEncoded = location ? encodeURIComponent(location) : "";
+
+    let startIso = "";
+    let endIso = "";
+
+    const d = new Date(dateStr);
+    if (!isNaN(d.getTime())) {
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const y = d.getUTCFullYear();
+      const m = pad(d.getUTCMonth() + 1);
+      const day = pad(d.getUTCDate());
+      const h = pad(d.getUTCHours() || 19); // Default 19:00 if midnight
+      const min = pad(d.getUTCMinutes());
+      startIso = `${y}${m}${day}T${h}${min}00Z`;
+
+      const endD = new Date(d.getTime() + 2 * 60 * 60 * 1000); // +2 hours default
+      const endY = endD.getUTCFullYear();
+      const endM = pad(endD.getUTCMonth() + 1);
+      const endDay = pad(endD.getUTCDate());
+      const endH = pad(endD.getUTCHours() || 21);
+      const endMin = pad(endD.getUTCMinutes());
+      endIso = `${endY}${endM}${endDay}T${endH}${endMin}00Z`;
+    }
+
+    const datesParam = startIso && endIso ? `&dates=${startIso}/${endIso}` : "";
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titleEncoded}&details=${detailsEncoded}${locationEncoded ? `&location=${locationEncoded}` : ""}${datesParam}`;
+  } catch {
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}`;
+  }
+}
+
 export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {
   return {
+    getEventHubs(): EventHubShortcut[] {
+      return CITY_EVENT_HUBS;
+    },
+
     /**
      * Fetches live events from kultur.istanbul, utilizing local cache.
      */
@@ -143,38 +297,53 @@ export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {
       }
 
       try {
-        const response = await fetch(EVENTS_URL, {
+        const res = await fetch(EVENTS_URL, {
           headers: { Accept: "application/json" },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        const data = (await res.json()) as WpEvent[];
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid response format: expected array of events");
         }
 
-        const data = (await response.json()) as WpEvent[];
-        const list: CityEvent[] = Array.isArray(data)
-          ? data.map((item) => ({
-              id: item.id,
-              title: item.title?.rendered || "",
-              link: item.link || "",
-              date: item.date || "",
-              excerpt: stripHtml(item.excerpt?.rendered || ""),
-              categoryIds: Array.isArray(item.event_listing_category)
-                ? item.event_listing_category
-                : [],
-              typeIds: Array.isArray(item.event_listing_type)
-                ? item.event_listing_type
-                : [],
-            }))
-          : [];
-        await cacheRepo.setEventsCache(list);
-        return list;
+        const events: CityEvent[] = data.map((item) => {
+          // Extract image from featuredmedia or content
+          let imageUrl: string | undefined = undefined;
+          const media = item._embedded?.["wp:featuredmedia"]?.[0];
+          if (media) {
+            imageUrl =
+              media.media_details?.sizes?.large?.source_url ||
+              media.media_details?.sizes?.medium?.source_url ||
+              media.source_url;
+          }
+          if (!imageUrl && item.content?.rendered) {
+            imageUrl = extractFirstImageSrc(item.content.rendered);
+          }
+
+          return {
+            id: item.id,
+            title: decodeEntities(item.title?.rendered ?? ""),
+            link: item.link,
+            date: item.date,
+            excerpt: stripHtml(item.excerpt?.rendered ?? item.content?.rendered ?? ""),
+            categoryIds: item.event_listing_category ?? [],
+            typeIds: item.event_listing_type ?? [],
+            imageUrl,
+            priceType: "free",
+            source: "İBB Kültür Sanat",
+          };
+        });
+
+        await cacheRepo.saveEventsCache(events);
+        return events;
       } catch (error) {
         logger.error("cityPulseService: Failed to fetch events:", error);
+        // Fall back to expired cache if available
         const cached = await cacheRepo.getEventsCache();
         if (cached && cached.data.length > 0) {
-          logger.log(
-            "cityPulseService: Using expired events cache as fallback",
-          );
+          logger.warn("cityPulseService: Using expired events cache as fallback");
           return cached.data;
         }
         throw error;
@@ -182,7 +351,7 @@ export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {
     },
 
     /**
-     * Fetches event taxonomies (locations/categories and types), utilizing cache.
+     * Fetches categories and event types (taxonomies), utilizing local cache.
      */
     async fetchTaxonomies(): Promise<{
       categories: CityEventCategory[];
@@ -198,52 +367,58 @@ export function createCityPulseService(cacheRepo: ICityPulseCacheRepository) {
           fetch(CATEGORIES_URL, { headers: { Accept: "application/json" } }),
           fetch(TYPES_URL, { headers: { Accept: "application/json" } }),
         ]);
+
         if (!catRes.ok || !typeRes.ok) {
-          throw new Error(
-            `HTTP error! categories: ${catRes.status}, types: ${typeRes.status}`,
-          );
+          throw new Error("Failed to fetch categories or types");
         }
 
-        const catData = (await catRes.json()) as WpTerm[];
-        const typeData = (await typeRes.json()) as WpTerm[];
-        const categories: CityEventCategory[] = Array.isArray(catData)
-          ? catData.map((t) => ({ id: t.id, name: t.name, count: t.count }))
-          : [];
-        const types: CityEventType[] = Array.isArray(typeData)
-          ? typeData.map((t) => ({ id: t.id, name: t.name, count: t.count }))
-          : [];
+        const [catData, typeData] = (await Promise.all([
+          catRes.json(),
+          typeRes.json(),
+        ])) as [WpTerm[], WpTerm[]];
 
-        await cacheRepo.setTaxonomiesCache(categories, types);
+        const categories: CityEventCategory[] = (
+          Array.isArray(catData) ? catData : []
+        ).map((c) => ({
+          id: c.id,
+          name: decodeEntities(c.name),
+          count: c.count,
+        }));
+
+        const types: CityEventType[] = (
+          Array.isArray(typeData) ? typeData : []
+        ).map((t) => ({
+          id: t.id,
+          name: decodeEntities(t.name),
+          count: t.count,
+        }));
+
+        await cacheRepo.saveTaxonomiesCache(categories, types);
         return { categories, types };
       } catch (error) {
         logger.error("cityPulseService: Failed to fetch taxonomies:", error);
+        const cached = await cacheRepo.getTaxonomiesCache();
         if (cached) {
-          logger.log(
-            "cityPulseService: Using expired taxonomies cache as fallback",
-          );
+          logger.warn("cityPulseService: Using expired taxonomies cache as fallback");
           return { categories: cached.categories, types: cached.types };
         }
-        throw error;
+        return { categories: [], types: [] };
       }
     },
 
-    loadFavorites(): Promise<number[]> {
-      return cacheRepo.loadFavorites();
+    async loadFavorites(): Promise<number[]> {
+      return cacheRepo.getFavorites();
     },
 
-    saveFavorites(favorites: number[]): Promise<void> {
-      return cacheRepo.saveFavorites(favorites);
+    async saveFavorites(favorites: number[]): Promise<void> {
+      await cacheRepo.saveFavorites(favorites);
     },
   };
 }
 
 export type CityPulseService = ReturnType<typeof createCityPulseService>;
 
-/**
- * Singleton instance with the default storage-backed repository.
- * Components that need testability can import `createCityPulseService` instead.
- */
 import { ChromeStorageCityPulseCacheRepository } from "@/infrastructure/persistence/repositories/ChromeStorageCityPulseCacheRepository.js";
-import { logger } from "@/utils/logger.js";
+
 const _defaultCacheRepo = new ChromeStorageCityPulseCacheRepository();
 export const cityPulseService = createCityPulseService(_defaultCacheRepo);
