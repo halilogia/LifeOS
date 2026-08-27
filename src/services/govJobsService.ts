@@ -24,7 +24,7 @@ export const GOV_JOB_HUBS: GovJobHubShortcut[] = [
   {
     id: "kariyer-kapisi",
     name: "Kariyer Kapısı (CBİKO)",
-    url: "https://isealimkariyerkapisi.cbiko.gov.tr/",
+    url: "https://kariyerkapisi.gov.tr/isealim",
     description: "T.C. Cumhurbaşkanlığı İnsan Kaynakları Ofisi resmi merkezi kamu işe alım ve başvuru platformu",
     badge: "Merkezi / e-Devlet",
     category: "portal",
@@ -32,7 +32,7 @@ export const GOV_JOB_HUBS: GovJobHubShortcut[] = [
   {
     id: "edevlet-ise-alim",
     name: "e-Devlet Kamu İşe Alım",
-    url: "https://www.turkiye.gov.tr/kariyer-kapisi-kamu-ise-alim",
+    url: "https://www.turkiye.gov.tr/cumhurbaskanligi-kamu-ise-alim",
     description: "e-Devlet kapısı üzerinden doğrudan kamu personel alım başvuruları ve sonuç takibi",
     badge: "e-Devlet",
     category: "portal",
@@ -83,7 +83,7 @@ export const CURATED_GOV_JOBS: GovJobItem[] = [
     category: "sozlesmeli",
     publishDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     deadline: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    link: "https://isealimkariyerkapisi.cbiko.gov.tr/",
+    link: "https://kariyerkapisi.gov.tr/isealim",
     source: "kariyerkapisi",
     kpssScoreType: "KPSS P3 / P93 / P94",
     positionCount: 36000,
@@ -99,7 +99,7 @@ export const CURATED_GOV_JOBS: GovJobItem[] = [
     category: "memur",
     publishDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     deadline: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    link: "https://isealimkariyerkapisi.cbiko.gov.tr/",
+    link: "https://kariyerkapisi.gov.tr/isealim",
     source: "kariyerkapisi",
     kpssScoreType: "KPSS En Az 70 Puan",
     positionCount: 10500,
@@ -131,7 +131,7 @@ export const CURATED_GOV_JOBS: GovJobItem[] = [
     category: "kpss",
     publishDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    link: "https://isealimkariyerkapisi.cbiko.gov.tr/",
+    link: "https://kariyerkapisi.gov.tr/isealim",
     source: "kariyerkapisi",
     kpssScoreType: "KPSS P3 En Az 75 Puan",
     positionCount: 50,
@@ -179,7 +179,7 @@ export const CURATED_GOV_JOBS: GovJobItem[] = [
     category: "kpss",
     publishDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    link: "https://isealimkariyerkapisi.cbiko.gov.tr/",
+    link: "https://kariyerkapisi.gov.tr/isealim",
     source: "kariyerkapisi",
     kpssScoreType: "KPSS P3 En Az 70 Puan",
     positionCount: 1500,
@@ -235,8 +235,14 @@ export function createGovJobsService(cacheRepo?: IGovJobsCacheRepository) {
             // Recalculate daysLeft dynamically on cache hit
             return cached.data.map((job) => {
               const daysLeft = calculateDaysLeft(job.deadline);
+              const link =
+                job.link.includes("isealimkariyerkapisi.cbiko.gov.tr") ||
+                job.link.includes("kariyer-kapisi-kamu-ise-alim")
+                  ? "https://kariyerkapisi.gov.tr/isealim"
+                  : job.link;
               return {
                 ...job,
+                link,
                 daysLeft,
                 isExpired: daysLeft < 0,
               };
@@ -252,11 +258,17 @@ export function createGovJobsService(cacheRepo?: IGovJobsCacheRepository) {
         const liveFeedJobs = await fetchFromOfficialFeeds();
         const mergedList = liveFeedJobs.length > 0 ? liveFeedJobs : CURATED_GOV_JOBS;
 
-        // Recalculate daysLeft
+        // Recalculate daysLeft & sanitize links
         const processed = mergedList.map((job) => {
           const daysLeft = calculateDaysLeft(job.deadline);
+          const link =
+            job.link.includes("isealimkariyerkapisi.cbiko.gov.tr") ||
+            job.link.includes("kariyer-kapisi-kamu-ise-alim")
+              ? "https://kariyerkapisi.gov.tr/isealim"
+              : job.link;
           return {
             ...job,
+            link,
             daysLeft,
             isExpired: daysLeft < 0,
           };
@@ -268,8 +280,14 @@ export function createGovJobsService(cacheRepo?: IGovJobsCacheRepository) {
         logger.error("govJobsService: Failed to fetch live feeds, using fallback:", error);
         return CURATED_GOV_JOBS.map((job) => {
           const daysLeft = calculateDaysLeft(job.deadline);
+          const link =
+            job.link.includes("isealimkariyerkapisi.cbiko.gov.tr") ||
+            job.link.includes("kariyer-kapisi-kamu-ise-alim")
+              ? "https://kariyerkapisi.gov.tr/isealim"
+              : job.link;
           return {
             ...job,
+            link,
             daysLeft,
             isExpired: daysLeft < 0,
           };
