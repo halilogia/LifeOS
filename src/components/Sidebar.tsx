@@ -150,6 +150,8 @@ export function Sidebar({
         return t.sidebar_game_assets || "Ücretsiz Assetler";
       case "city-pulse":
         return t.sidebar_city_pulse;
+      case "gov-jobs":
+        return t.sidebar_gov_jobs || "Kamu İşe Alım";
       case "bist":
         return t.sidebar_bist;
       default:

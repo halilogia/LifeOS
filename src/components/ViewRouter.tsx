@@ -62,6 +62,11 @@ const CityPulseView = lazy(() =>
     default: m.CityPulseView,
   })),
 );
+const GovJobsView = lazy(() =>
+  import("@/components/GovJobsView.js").then((m) => ({
+    default: m.GovJobsView,
+  })),
+);
 const ArcadeView = lazy(() =>
   import("@/components/ArcadeView.js").then((m) => ({
     default: m.ArcadeView,
@@ -215,6 +220,8 @@ export function ViewRouter() {
         return <GameAssetsView lang={lang} />;
       case "city-pulse":
         return <CityPulseView lang={lang} />;
+      case "gov-jobs":
+        return <GovJobsView />;
       case "detox":
         return <DetoxView lang={lang} />;
       case "bist":

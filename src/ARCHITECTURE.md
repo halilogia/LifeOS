@@ -260,7 +260,9 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | PrayerView            | prayerService, usePrayer                                  | sync+local | prayer/ (1)                                                         |
 | Stock/BistView        | bistService, stockAiService, useBist (tuval → 5 alt-hook) | sync       | stock/ (30)                                                         |
 | FreeGamesView         | gamesService, useFreeGames                                | local      | freegames/ (2) + GameCard.tsx                                        |
+| GameAssetsView        | gameAssetsService, useGameAssets                          | local      | gameassets/ (2)                                                     |
 | CityPulseView         | cityPulseService, useCityPulse                            | local      | citypulse/ (2)                                                      |
+| GovJobsView           | govJobsService, useGovJobs                                | local      | govjobs/ (4: Header, FilterBar, JobCard, HubsBar)                   |
 | NotesView             | zettelkastenEngine, useNotes                              | sync       | notes/ (16)                                                         |
 | AIChatView            | aiChatService                                             | sync+local | aichat/ (10)                                                        |
 | ArcadeView            | arcadeService                                             | local      | arcade/ (6)                                                         |

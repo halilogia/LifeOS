@@ -2,6 +2,7 @@ export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "free-games", // İlk açılışta varsayılan 1. sıra (pin değil — kullanıcı pinleyebilir)
   "game-assets", // Ücretsiz Oyun Assetleri (2D, 3D, Audio, UI, CC0)
   "city-pulse", // Ücretsiz İstanbul etkinlikleri
+  "gov-jobs", // Kamu İşe Alım & Kariyer Kapısı
   "ai-chat", // İlk açılışta varsayılan 2. sıra
   "list",
   "eisenhower",
