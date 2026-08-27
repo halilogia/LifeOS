@@ -49,6 +49,9 @@ export function SidePanelApp() {
     handleExportCurrentChat,
     handleResolveClarification,
     handleCancelClarification,
+    messageQueue,
+    handleRemoveQueuedMessage,
+    handleClearQueue,
     handleChipClick,
   } = useSidePanelChat();
 
@@ -116,7 +119,7 @@ export function SidePanelApp() {
         onCancelClarification={handleCancelClarification}
       />
 
-      {/* Input Container */}
+      {/* Input Container with Queued Messages */}
       <SidePanelInputBar
         t={t}
         inputText={inputText}
@@ -124,6 +127,7 @@ export function SidePanelApp() {
         isListening={isListening}
         attachments={attachments}
         enableWebSearch={enableWebSearch}
+        queue={messageQueue}
         onInputChange={setInputText}
         onSend={() => handleSendMessage()}
         onToggleVoice={toggleVoiceInput}
@@ -132,6 +136,8 @@ export function SidePanelApp() {
         onToggleWebSearch={handleToggleWebSearch}
         onNewChat={handleNewChat}
         onExport={handleExportCurrentChat}
+        onRemoveQueuedMessage={handleRemoveQueuedMessage}
+        onClearQueue={handleClearQueue}
       />
     </div>
   );

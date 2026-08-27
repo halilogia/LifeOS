@@ -1,15 +1,16 @@
 /**
  * AiChatInputToolbar.tsx
  * Google AI Modu Canlı Arama çipi, ek dosya/görsel ataşı, önizleme çipleri,
- * "/", "@" komut öneri menüsü ve mesaj yazma/gönderme çubuğu.
+ * "/", "@" komut öneri menüsü, mesaj kuyruğu çubuğu ve mesaj yazma/gönderme çubuğu.
  */
 import { useRef, useState } from "preact/hooks";
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type { ChatAttachment, QueuedMessage } from "@/services/aichat/types.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 import {
   CommandSuggestionMenu,
   type SuggestionItem,
 } from "@/sidepanel/CommandSuggestionMenu.js";
+import { QueuedMessagesBar } from "./QueuedMessagesBar.js";
 
 interface AiChatInputToolbarProps {
   inputVal: string;
@@ -22,6 +23,9 @@ interface AiChatInputToolbarProps {
   webSearchTitle: string;
   webSearchLabel: string;
   attachments?: ChatAttachment[];
+  isBotTyping?: boolean;
+  queue?: QueuedMessage[];
+  t?: Record<string, string>;
   onInputChange: (val: string) => void;
   onSendMessage: (text?: string) => void;
   onToggleWebSearch: () => void;
@@ -29,6 +33,8 @@ interface AiChatInputToolbarProps {
   onRemoveAttachment?: (id: string) => void;
   onNewChat?: () => void;
   onExport?: () => void;
+  onRemoveQueuedMessage?: (id: string) => void;
+  onClearQueue?: () => void;
 }
 
 function IconSend() {
@@ -45,6 +51,28 @@ function IconSend() {
     >
       <line x1="22" y1="2" x2="11" y2="13" />
       <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  );
+}
+
+function IconQueue() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="8" y1="6" x2="21" y2="6" />
+      <line x1="8" y1="12" x2="21" y2="12" />
+      <line x1="8" y1="18" x2="21" y2="18" />
+      <line x1="3" y1="6" x2="3.01" y2="6" />
+      <line x1="3" y1="12" x2="3.01" y2="12" />
+      <line x1="3" y1="18" x2="3.01" y2="18" />
     </svg>
   );
 }
@@ -79,6 +107,9 @@ export function AiChatInputToolbar({
   webSearchTitle,
   webSearchLabel,
   attachments = [],
+  isBotTyping = false,
+  queue = [],
+  t = {},
   onInputChange,
   onSendMessage,
   onToggleWebSearch,
@@ -86,6 +117,8 @@ export function AiChatInputToolbar({
   onRemoveAttachment,
   onNewChat,
   onExport,
+  onRemoveQueuedMessage = () => {},
+  onClearQueue = () => {},
 }: AiChatInputToolbarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -126,46 +159,55 @@ export function AiChatInputToolbar({
 
   const handleSelectSuggestion = (item: SuggestionItem) => {
     if (item.key === "clear" && onNewChat) {
-      onInputChange("");
       onNewChat();
+      onInputChange("");
       return;
     }
     if (item.key === "export" && onExport) {
-      onInputChange("");
       onExport();
+      onInputChange("");
       return;
     }
-    onInputChange(item.insertText);
-    inputRef.current?.focus();
+    if (item.insertText) {
+      onInputChange(item.insertText);
+    }
   };
 
   return (
     <div
-      className={`chat-input-panel ${isDragOver ? "drag-over" : ""}`}
+      className={`chat-input-area ${isDragOver ? "drag-over" : ""}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Command & Tool Autocomplete Menu */}
+      {/* Hidden File Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,application/pdf,text/*,.json,.csv,.js,.ts,.tsx,.py,.html,.css,.md"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+
+      {/* Queued Messages Bar if queue is not empty */}
+      <QueuedMessagesBar
+        queue={queue}
+        t={t}
+        onRemoveMessage={onRemoveQueuedMessage}
+        onClearQueue={onClearQueue}
+      />
+
+      {/* Slash / Mention Commands Menu */}
       <CommandSuggestionMenu
         inputText={inputVal}
         onSelect={handleSelectSuggestion}
         onClose={() => {}}
       />
 
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ display: "none" }}
-        multiple
-        accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.ts,.py,.html,.css"
-      />
-
-      {/* Attachment Previews Bar */}
+      {/* Uploaded File Attachments Preview Row */}
       {attachments.length > 0 && (
-        <div className="aichat-attachment-previews">
+        <div className="aichat-attachments-preview">
           {attachments.map((att) => (
             <div key={att.id} className="aichat-att-chip">
               {att.type === "image" && att.previewUrl ? (
@@ -175,24 +217,11 @@ export function AiChatInputToolbar({
                   className="aichat-att-thumb"
                 />
               ) : (
-                <div className={`aichat-att-icon-badge ${att.type}`}>
-                  {att.type === "pdf" ? (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10 9 9 9 8 9" />
-                    </svg>
-                  ) : (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                      <polyline points="13 2 13 9 20 9" />
-                    </svg>
-                  )}
-                </div>
+                <span className="aichat-att-icon">
+                  {att.type === "pdf" ? "📄" : "📝"}
+                </span>
               )}
-              <div className="aichat-att-meta">
+              <div className="aichat-att-info">
                 <span className="aichat-att-name" title={att.name}>
                   {att.name}
                 </span>
@@ -290,21 +319,30 @@ export function AiChatInputToolbar({
         <input
           ref={inputRef}
           type="text"
-          className="chat-prompt-input"
+          className={`chat-prompt-input ${isBotTyping ? "queued-input" : ""}`}
           value={inputVal}
           onInput={(e) => onInputChange((e.target as HTMLInputElement).value)}
           onPaste={handlePaste}
           onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
-          placeholder={placeholder}
+          placeholder={
+            isBotTyping
+              ? t.queue_input_placeholder || "AI çalışıyor... Mesaj yazıp kuyruğa ekleyebilirsiniz"
+              : placeholder
+          }
         />
         <button
           type="button"
-          className="send-message-btn"
+          className={`send-message-btn ${isBotTyping ? "queue-btn" : ""}`}
           onClick={() => onSendMessage()}
           disabled={!inputVal.trim() && attachments.length === 0}
+          title={
+            isBotTyping
+              ? t.queue_send_tooltip || "Kuyruğa Ekle (Enter)"
+              : sendLabel
+          }
         >
-          <span>{sendLabel}</span>
-          <IconSend />
+          <span>{isBotTyping ? (t.queue_send_btn || "Kuyruğa Ekle") : sendLabel}</span>
+          {isBotTyping ? <IconQueue /> : <IconSend />}
         </button>
       </div>
     </div>

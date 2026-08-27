@@ -11,6 +11,7 @@ import type {
   ChatSession,
   ClarificationRequest,
   ClarificationOption,
+  QueuedMessage,
 } from "@/services/aichat/types.js";
 import {
   processUploadedFile,
@@ -66,6 +67,9 @@ export interface UseSidePanelChatReturn {
   handleExportCurrentChat: () => void;
   handleResolveClarification: (messageId: string, answer: string) => void;
   handleCancelClarification: (messageId: string) => void;
+  messageQueue: QueuedMessage[];
+  handleRemoveQueuedMessage: (id: string) => void;
+  handleClearQueue: () => void;
   handleChipClick: (
     type:
       | "summarize"
@@ -84,6 +88,11 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
   const [attachments, setAttachments] = useState<ChatAttachment[]>([]);
   const [enableWebSearch, setEnableWebSearch] = useState<boolean>(true);
   const [deleteConfirmSessionId, setDeleteConfirmSessionId] = useState<string | null>(null);
+  const [messageQueue, setMessageQueue] = useState<QueuedMessage[]>([]);
+  const messageQueueRef = useRef<QueuedMessage[]>([]);
+  messageQueueRef.current = messageQueue;
+  const isProcessingRef = useRef<boolean>(false);
+  isProcessingRef.current = isProcessing;
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -206,21 +215,74 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     setEnableWebSearch((prev) => !prev);
   };
 
-  /* ---- Ana AI çağrı akışı ---- */
+  const handleRemoveQueuedMessage = (id: string) => {
+    setMessageQueue((prev) => prev.filter((q) => q.id !== id));
+  };
+
+  const handleClearQueue = () => {
+    setMessageQueue([]);
+  };
+
+  const processNextInQueue = () => {
+    if (messageQueueRef.current.length === 0) {
+      return;
+    }
+    const nextItem = messageQueueRef.current[0];
+    setMessageQueue((prev) => prev.slice(1));
+    setTimeout(() => {
+      executeChatMessage(nextItem.text, nextItem.attachments || []);
+    }, 60);
+  };
+
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
-    if ((!textToSend && attachments.length === 0) || isProcessing) {
+    const currentAttachments = [...attachments];
+
+    if (!textToSend && currentAttachments.length === 0) {
       return;
     }
 
-    const currentAttachments = [...attachments];
+    if (!promptOverride) {
+      setInputText("");
+    }
     setAttachments([]);
+
+    if (isProcessingRef.current) {
+      const qItem: QueuedMessage = {
+        id: `queue_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        text:
+          textToSend ||
+          (currentAttachments.length > 0 ? "Ekli dosyayı analiz et." : ""),
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        attachments:
+          currentAttachments.length > 0 ? currentAttachments : undefined,
+      };
+      setMessageQueue((prev) => [...prev, qItem]);
+      return;
+    }
+
+    await executeChatMessage(textToSend, currentAttachments);
+  };
+
+  const executeChatMessage = async (
+    textToSend: string,
+    currentAttachments: ChatAttachment[] = [],
+  ) => {
+    setIsProcessing(true);
+    isProcessingRef.current = true;
+    let pendingClarification: ClarificationRequest | undefined = undefined;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: textToSend || (currentAttachments.length > 0 ? "Ekli dosyayı analiz et." : ""),
-      attachments: currentAttachments.length > 0 ? currentAttachments : undefined,
+      content:
+        textToSend ||
+        (currentAttachments.length > 0 ? "Ekli dosyayı analiz et." : ""),
+      attachments:
+        currentAttachments.length > 0 ? currentAttachments : undefined,
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -228,10 +290,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    if (!promptOverride) {
-      setInputText("");
-    }
-    setIsProcessing(true);
     setAgentStatus(t.agent_thinking);
 
     let activeCtx = pageContext;
@@ -265,7 +323,6 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       ),
     );
 
-    // Canlı Web Arama Entegrasyonu
     let webSearchSnippet = "";
     if (enableWebSearch && textToSend && detectNeedsWebSearch(textToSend)) {
       setAgentStatus("Web aranıyor...");
@@ -370,12 +427,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         }
 
         const reqBody = {
-          contents: [
-            {
-              role: "user",
-              parts: userParts,
-            },
-          ],
+          contents: [{ role: "user", parts: userParts }],
         };
 
         const resp = await fetch(url, {
@@ -386,49 +438,37 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         });
 
         if (!resp.ok) {
-          throw new Error(`API returned status ${resp.status}`);
+          throw new Error(`Gemini API returned status ${resp.status}`);
         }
 
         const data = await resp.json();
         responseText =
           data.candidates?.[0]?.content?.parts?.[0]?.text ||
-          "No response received.";
+          "No response text received from Gemini.";
       } else {
-        const baseUrl = rawEndpoint.replace(/\/+$/, "");
-        const targetEndpoint = baseUrl.endsWith("/chat/completions")
-          ? baseUrl
-          : `${baseUrl}/chat/completions`;
+        const endpoint =
+          rawEndpoint && rawEndpoint.trim()
+            ? rawEndpoint.trim().replace(/\/+$/, "")
+            : "https://api.openai.com/v1";
 
-        const reqHeaders: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-        if (apiKey) {
-          reqHeaders["Authorization"] = `Bearer ${apiKey}`;
-        }
-
-        const imageAttachments = currentAttachments.filter(
-          (a) => a.type === "image" && a.dataUrl,
-        );
-
-        let userContent: unknown = textToSend || "Ekli dosyaları analiz et.";
-        if (imageAttachments.length > 0) {
-          userContent = [
-            { type: "text", text: textToSend || "Görseli analiz et." },
-            ...imageAttachments.map((img) => ({
-              type: "image_url",
-              image_url: { url: img.dataUrl },
-            })),
-          ];
-        }
-
-        const resp = await fetch(targetEndpoint, {
+        const resp = await fetch(`${endpoint}/chat/completions`, {
           method: "POST",
-          headers: reqHeaders,
+          headers: {
+            "Content-Type": "application/json",
+            ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+          },
           body: JSON.stringify({
-            model: model,
+            model: model || "gpt-4o-mini",
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: userContent },
+              {
+                role: "user",
+                content:
+                  textToSend ||
+                  (currentAttachments.length > 0
+                    ? "Ekli belgeleri analiz et."
+                    : ""),
+              },
             ],
           }),
           signal: abortControllerRef.current?.signal,
@@ -438,25 +478,10 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           throw new Error(`API returned status ${resp.status}`);
         }
 
-        const rawBody = await resp.text();
-        let data: Record<string, unknown> = {};
-        try {
-          data = JSON.parse(rawBody);
-        } catch {
-          const jsonBlockMatch = rawBody.match(/\{[\s\S]*\}/);
-          if (jsonBlockMatch) {
-            try {
-              data = JSON.parse(jsonBlockMatch[0]);
-            } catch {
-              data = {};
-            }
-          }
-        }
-
+        const data = await resp.json();
         responseText =
           data.choices?.[0]?.message?.content ||
           data.choices?.[0]?.text ||
-          (typeof data === "string" ? data : rawBody.slice(0, 2000)) ||
           "No response received.";
       }
 
@@ -556,7 +581,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             );
           }
         } catch {
-          /* Fallback: format plain message if JSON fails */
+          /* Fallback */
         }
       } else {
         const emailMatch = textToSend.match(
@@ -572,6 +597,10 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         setAgentStatus(null);
       }
 
+      if (clarificationObj && !clarificationObj.resolved) {
+        pendingClarification = clarificationObj;
+      }
+
       const assistantMsg: ChatMessage = {
         id: assistantMsgId,
         role: "assistant",
@@ -580,6 +609,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           hour: "2-digit",
           minute: "2-digit",
         }),
+        clarification: clarificationObj,
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
@@ -597,6 +627,10 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setIsProcessing(false);
+      isProcessingRef.current = false;
+      if (!pendingClarification) {
+        processNextInQueue();
+      }
     }
   };
 
@@ -697,6 +731,9 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     handleExportCurrentChat,
     handleResolveClarification,
     handleCancelClarification,
+    messageQueue,
+    handleRemoveQueuedMessage,
+    handleClearQueue,
     handleChipClick,
   };
 }

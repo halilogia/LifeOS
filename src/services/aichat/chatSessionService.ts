@@ -1,12 +1,13 @@
 /**
  * chatSessionService.ts
  * Business logic service for chat sessions management, titling,
- * markdown/JSON export, and persistence.
+ * human-readable markdown/JSON export, and persistence.
  */
 
 import type { IChatSessionRepository } from "@/domain/repositories/IChatSessionRepository.js";
 import { ChromeStorageChatSessionRepository } from "@/infrastructure/persistence/repositories/ChromeStorageChatSessionRepository.js";
-import type { ChatSession } from "./types.js";
+import type { ChatSession, ChatSessionMessage } from "./types.js";
+import { formatFileSize } from "./fileAttachmentService.js";
 
 let repoInstance: IChatSessionRepository | null = null;
 
@@ -50,41 +51,109 @@ export function generateSessionTitle(
 }
 
 /**
- * Exports a chat session as formatted Markdown text.
+ * Cleans raw assistant response text from raw JSON codeblocks,
+ * converting them into clean human-readable action summaries.
+ */
+function cleanAssistantContentForExport(rawContent: string): string {
+  let text = rawContent || "";
+
+  // Extract json codeblocks if any
+  const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+  let actionSummary = "";
+
+  if (jsonMatch && jsonMatch[1]) {
+    try {
+      const parsed = JSON.parse(jsonMatch[1]);
+      if (parsed.action === "create_task" && parsed.params?.text) {
+        actionSummary = `\n\n⚡ **Gerçekleştirilen Eylem:** Görev Takvime Eklendi → *"${parsed.params.text}"* ${parsed.params.dueDate ? `(${parsed.params.dueDate})` : ""}`;
+      } else if (parsed.action === "add_note" && (parsed.params?.note_content || parsed.params?.note_title)) {
+        actionSummary = `\n\n⚡ **Gerçekleştirilen Eylem:** Not / Günlük Eklendi → *"${parsed.params.note_title || "Yeni Not"}"*`;
+      } else if (parsed.action === "update_memory" && parsed.params?.memory_fact) {
+        actionSummary = `\n\n🧠 **Hafıza Güncellendi:** *"${parsed.params.memory_fact}"*`;
+      }
+    } catch {
+      /* ignore json parse failure in cleaner */
+    }
+  }
+
+  // Remove raw JSON code blocks and redundant memory banners
+  text = text
+    .replace(/```json[\s\S]*?```/gi, "")
+    .replace(/Aşağıda\s*\*+memory\.md\*+[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+    .replace(/⚠️\s*\*+Formda zorunlu olan alanlar[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "")
+    .trim();
+
+  if (actionSummary) {
+    text += actionSummary;
+  }
+
+  return text;
+}
+
+/**
+ * Exports a chat session as clean, elegant, human-readable Markdown text.
  */
 export function exportSessionAsMarkdown(session: ChatSession): string {
-  const createdDate = new Date(session.createdAt).toLocaleString("tr-TR");
+  const createdDate = new Date(session.createdAt).toLocaleString("tr-TR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const scopeLabel =
+    session.scope === "sidepanel"
+      ? "Side Panel Web Copilot"
+      : "Newtab AI Asistanı";
+
   const lines: string[] = [
-    `# ${session.title}`,
+    `# 💬 ${session.title}`,
     ``,
-    `- **Oluşturulma Tarihi:** ${createdDate}`,
-    `- **Kapsam:** ${session.scope === "sidepanel" ? "Side Panel Web Copilot" : "Newtab AI Asistan"}`,
+    `> 📅 **Tarih:** ${createdDate} | 🧭 **Kapsam:** ${scopeLabel} | ✉️ **Toplam Mesaj:** ${session.messages.length}`,
   ];
 
   if (session.url) {
-    lines.push(`- **Sayfa URL:** ${session.url}`);
-  }
-  if (session.domain) {
-    lines.push(`- **Alan Adı:** ${session.domain}`);
+    lines.push(`> 🌐 **Sayfa / URL:** [${session.domain || session.url}](${session.url})`);
   }
 
   lines.push(``, `---`, ``);
 
   for (const msg of session.messages) {
-    const roleLabel = msg.role === "user" ? "👤 Kullanıcı" : "🤖 Life OS AI";
-    lines.push(`### ${roleLabel} (${msg.timestamp || ""})`);
-    lines.push(``);
+    const isUser = msg.role === "user";
+    const header = isUser
+      ? `## 👤 Kullanıcı ${msg.timestamp ? `(${msg.timestamp})` : ""}`
+      : `## 🤖 Life OS Asistanı ${msg.timestamp ? `(${msg.timestamp})` : ""}`;
 
+    lines.push(header, ``);
+
+    // Attached files
     if (msg.attachments && msg.attachments.length > 0) {
-      lines.push(`*Ekli Dosyalar:*`);
+      lines.push(`📎 **Ekli Dosyalar:**`);
       for (const att of msg.attachments) {
-        lines.push(`- 📎 **${att.name}** (${att.type}, ${(att.size / 1024).toFixed(1)} KB)`);
+        lines.push(
+          `- \`${att.name}\` (${att.type.toUpperCase()}, ${formatFileSize(att.size)})`,
+        );
       }
       lines.push(``);
     }
 
-    if (msg.thinking) {
-      lines.push(`> 💭 **Düşünce Süreci:**`);
+    // Google AI Mode Search sources
+    if (!isUser && msg.sources && msg.sources.length > 0) {
+      lines.push(
+        `🌐 **İncelenen Web Kaynakları (${msg.sources.length})${msg.searchQuery ? ` - Sorgu: "${msg.searchQuery}"` : ""}:**`,
+      );
+      msg.sources.forEach((src, sIdx) => {
+        lines.push(`${sIdx + 1}. [${src.title}](${src.url})`);
+      });
+      lines.push(``);
+    }
+
+    // Thinking process (collapsible details)
+    if (!isUser && msg.thinking) {
+      lines.push(`<details>`);
+      lines.push(`<summary>💭 Düşünme Süreci</summary>`);
+      lines.push(``);
       lines.push(
         msg.thinking
           .split("\n")
@@ -92,11 +161,35 @@ export function exportSessionAsMarkdown(session: ChatSession): string {
           .join("\n"),
       );
       lines.push(``);
+      lines.push(`</details>`);
+      lines.push(``);
     }
 
-    lines.push(msg.content);
-    lines.push(``);
+    // Main Content
+    const cleanContent = isUser
+      ? msg.content
+      : cleanAssistantContentForExport(msg.content);
+
+    if (cleanContent) {
+      lines.push(cleanContent);
+      lines.push(``);
+    }
+
+    // Clarification details
+    if (!isUser && msg.clarification) {
+      lines.push(`❓ **Açıklama / Tercih:** ${msg.clarification.question}`);
+      if (msg.clarification.resolved && msg.clarification.selectedAnswer) {
+        lines.push(`👉 **Kullanıcı Yanıtı:** ${msg.clarification.selectedAnswer}`);
+      } else {
+        lines.push(`⏳ **Durum:** Beklemede / Yanıtlanmadı`);
+      }
+      lines.push(``);
+    }
+
+    lines.push(`---`, ``);
   }
+
+  lines.push(`*Life OS AI Asistanı tarafından dışa aktarıldı.*`);
 
   return lines.join("\n");
 }

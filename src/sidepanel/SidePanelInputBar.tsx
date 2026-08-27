@@ -1,10 +1,11 @@
 import { useRef, useState } from "preact/hooks";
-import type { ChatAttachment } from "@/services/aichat/types.js";
+import type { ChatAttachment, QueuedMessage } from "@/services/aichat/types.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 import {
   CommandSuggestionMenu,
   type SuggestionItem,
 } from "./CommandSuggestionMenu.js";
+import { QueuedMessagesBar } from "@/components/aichat/QueuedMessagesBar.js";
 
 interface SidePanelInputBarProps {
   t: Record<string, string>;
@@ -13,6 +14,7 @@ interface SidePanelInputBarProps {
   isListening: boolean;
   attachments?: ChatAttachment[];
   enableWebSearch?: boolean;
+  queue?: QueuedMessage[];
   onInputChange: (v: string) => void;
   onSend: (override?: string) => void;
   onToggleVoice: () => void;
@@ -21,6 +23,8 @@ interface SidePanelInputBarProps {
   onToggleWebSearch?: () => void;
   onNewChat?: () => void;
   onExport?: () => void;
+  onRemoveQueuedMessage?: (id: string) => void;
+  onClearQueue?: () => void;
 }
 
 export function SidePanelInputBar({
@@ -30,6 +34,7 @@ export function SidePanelInputBar({
   isListening,
   attachments = [],
   enableWebSearch = true,
+  queue = [],
   onInputChange,
   onSend,
   onToggleVoice,
@@ -38,6 +43,8 @@ export function SidePanelInputBar({
   onToggleWebSearch,
   onNewChat,
   onExport,
+  onRemoveQueuedMessage = () => {},
+  onClearQueue = () => {},
 }: SidePanelInputBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -78,17 +85,18 @@ export function SidePanelInputBar({
 
   const handleSelectSuggestion = (item: SuggestionItem) => {
     if (item.key === "clear" && onNewChat) {
-      onInputChange("");
       onNewChat();
+      onInputChange("");
       return;
     }
     if (item.key === "export" && onExport) {
-      onInputChange("");
       onExport();
+      onInputChange("");
       return;
     }
-    onInputChange(item.insertText);
-    inputRef.current?.focus();
+    if (item.insertText) {
+      onInputChange(item.insertText);
+    }
   };
 
   return (
@@ -98,26 +106,70 @@ export function SidePanelInputBar({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Autocomplete suggestions menu for "/" and "@" */}
+      {/* Hidden File Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,application/pdf,text/*,.json,.csv,.js,.ts,.tsx,.py,.html,.css,.md"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+
+      {/* Queued Messages Bar if queue is not empty */}
+      <QueuedMessagesBar
+        queue={queue}
+        t={t}
+        onRemoveMessage={onRemoveQueuedMessage}
+        onClearQueue={onClearQueue}
+      />
+
+      {/* Slash / Mention Commands Menu */}
       <CommandSuggestionMenu
         inputText={inputText}
         onSelect={handleSelectSuggestion}
         onClose={() => {}}
       />
 
-      {/* Hidden File Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ display: "none" }}
-        multiple
-        accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.ts,.py,.html,.css"
-      />
+      {/* Web Search & Capabilities Toolbar */}
+      <div className="sidepanel-input-toolbar">
+        {onToggleWebSearch && (
+          <button
+            type="button"
+            className={`sidepanel-tool-pill ${enableWebSearch ? "active" : ""}`}
+            onClick={onToggleWebSearch}
+            title={
+              enableWebSearch
+                ? "Google Canlı Arama: AÇIK"
+                : "Google Canlı Arama: KAPALI"
+            }
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span>{enableWebSearch ? "Canlı Arama: Açık" : "Canlı Arama"}</span>
+          </button>
+        )}
 
-      {/* Attachment Previews Bar */}
+        {attachments.length > 0 && (
+          <span className="sidepanel-att-count-badge">
+            📎 {attachments.length} ek
+          </span>
+        )}
+      </div>
+
+      {/* Uploaded File Attachments Preview Row */}
       {attachments.length > 0 && (
-        <div className="sidepanel-attachment-previews">
+        <div className="sidepanel-attachments-preview">
           {attachments.map((att) => (
             <div key={att.id} className="sidepanel-att-chip">
               {att.type === "image" && att.previewUrl ? (
@@ -127,38 +179,21 @@ export function SidePanelInputBar({
                   className="sidepanel-att-thumb"
                 />
               ) : (
-                <div className={`sidepanel-att-icon-badge ${att.type}`}>
-                  {att.type === "pdf" ? (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10 9 9 9 8 9" />
-                    </svg>
-                  ) : (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                      <polyline points="13 2 13 9 20 9" />
-                    </svg>
-                  )}
-                </div>
+                <span className="sidepanel-att-icon">
+                  {att.type === "pdf" ? "📄" : "📝"}
+                </span>
               )}
-              <div className="sidepanel-att-meta">
-                <span className="sidepanel-att-name" title={att.name}>
-                  {att.name}
-                </span>
-                <span className="sidepanel-att-size">
-                  {formatFileSize(att.size)}
-                </span>
-              </div>
+              <span className="sidepanel-att-name" title={att.name}>
+                {att.name} ({formatFileSize(att.size)})
+              </span>
               {onRemoveAttachment && (
                 <button
+                  type="button"
                   className="sidepanel-att-remove"
                   onClick={() => onRemoveAttachment(att.id)}
-                  title="Kaldır"
+                  title="Eki kaldır"
                 >
-                  &times;
+                  ✕
                 </button>
               )}
             </div>
@@ -166,44 +201,14 @@ export function SidePanelInputBar({
         </div>
       )}
 
-      {/* Main Input Row */}
+      {/* Input Action Controls */}
       <div className="sidepanel-input-row">
-        {/* Web Search Quick Toggle */}
-        {onToggleWebSearch && (
-          <button
-            type="button"
-            className={`sidepanel-web-search-toggle ${enableWebSearch ? "active" : ""}`}
-            onClick={onToggleWebSearch}
-            title={
-              enableWebSearch
-                ? "Canlı İnternet Araması: AÇIK"
-                : "Canlı İnternet Araması: KAPALI"
-            }
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-          </button>
-        )}
-
         {/* Paperclip Attachment Button */}
         <button
           type="button"
           className="sidepanel-attach-btn"
           onClick={() => fileInputRef.current?.click()}
           title="Dosya veya Resim Ekle (PDF, TXT, PNG, JPG, Kod)"
-          disabled={isProcessing}
         >
           <svg
             width="16"
@@ -248,7 +253,7 @@ export function SidePanelInputBar({
         <input
           ref={inputRef}
           type="text"
-          className="sidepanel-input"
+          className={`sidepanel-input ${isProcessing ? "queued-input" : ""}`}
           value={inputText}
           onInput={(e) => onInputChange((e.target as HTMLInputElement).value)}
           onPaste={handlePaste}
@@ -258,30 +263,57 @@ export function SidePanelInputBar({
             }
           }}
           placeholder={
-            isListening ? t.listening_placeholder : t.question_placeholder
+            isListening
+              ? t.listening_placeholder
+              : isProcessing
+                ? t.queue_input_placeholder || "AI çalışıyor... Mesaj yazıp kuyruğa ekleyebilirsiniz"
+                : t.question_placeholder
           }
-          disabled={isProcessing}
         />
 
-        {/* Send Button */}
+        {/* Send / Queue Button */}
         <button
           type="button"
-          className="sidepanel-send-btn"
+          className={`sidepanel-send-btn ${isProcessing ? "queue-btn" : ""}`}
           onClick={() => onSend()}
-          disabled={isProcessing || (!inputText.trim() && attachments.length === 0)}
-          title="Gönder (Enter)"
+          disabled={!inputText.trim() && attachments.length === 0}
+          title={
+            isProcessing
+              ? t.queue_send_tooltip || "Kuyruğa Ekle (Enter)"
+              : "Gönder (Enter)"
+          }
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
+          {isProcessing ? (
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+          ) : (
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          )}
         </button>
       </div>
     </div>

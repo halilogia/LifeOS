@@ -76,6 +76,9 @@ export function AIChatView({
     handleExportCurrentChat,
     handleResolveClarification,
     handleCancelClarification,
+    messageQueue,
+    handleRemoveQueuedMessage,
+    handleClearQueue,
     setEnableWebSearch,
   } = useAiChatMessages({
     lang,
@@ -210,6 +213,9 @@ export function AIChatView({
             enableWebSearch ? t.aichat_web_search_on : t.aichat_web_search_off
           }
           attachments={attachments}
+          isBotTyping={isBotTyping}
+          queue={messageQueue}
+          t={t}
           onInputChange={setInputVal}
           onSendMessage={onSend}
           onToggleWebSearch={() => setEnableWebSearch((prev) => !prev)}
@@ -217,6 +223,8 @@ export function AIChatView({
           onRemoveAttachment={handleRemoveAttachment}
           onNewChat={handleNewChat}
           onExport={handleExportCurrentChat}
+          onRemoveQueuedMessage={handleRemoveQueuedMessage}
+          onClearQueue={handleClearQueue}
         />
       </div>
     </div>

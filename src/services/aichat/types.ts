@@ -31,6 +31,13 @@ export interface ClarificationRequest {
   selectedAnswer?: string;
 }
 
+export interface QueuedMessage {
+  id: string;
+  text: string;
+  timestamp: string;
+  attachments?: ChatAttachment[];
+}
+
 export interface ChatSessionMessage {
   id: string;
   role: "user" | "assistant";

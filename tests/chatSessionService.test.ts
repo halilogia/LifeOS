@@ -61,12 +61,12 @@ describe("chatSessionService Unit Tests", () => {
 
     it("should export session correctly as Markdown", () => {
       const md = exportSessionAsMarkdown(mockSession);
-      expect(md).toContain("# BIST Analizi Sohbeti");
-      expect(md).toContain("### 👤 Kullanıcı (14:30)");
+      expect(md).toContain("# 💬 BIST Analizi Sohbeti");
+      expect(md).toContain("## 👤 Kullanıcı (14:30)");
       expect(md).toContain("THYAO hissesi nasıl?");
-      expect(md).toContain("📎 **rapor.pdf** (pdf, 2.0 KB)");
-      expect(md).toContain("### 🤖 Life OS AI (14:31)");
-      expect(md).toContain("> 💭 **Düşünce Süreci:**");
+      expect(md).toContain("`rapor.pdf` (PDF, 2.0 KB)");
+      expect(md).toContain("## 🤖 Life OS Asistanı (14:31)");
+      expect(md).toContain("💭 Düşünme Süreci");
       expect(md).toContain("THYAO teknik olarak 300 TL üzerinde güçlü seyrediyor.");
     });
 

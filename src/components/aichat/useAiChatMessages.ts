@@ -3,7 +3,13 @@ import type { Todo } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
 import type { MessageItemData } from "./AiChatMessageItem.js";
-import type { ChatAttachment, ChatSession, ChatSessionMessage } from "@/services/aichat/types.js";
+import type {
+  ChatAttachment,
+  ChatSession,
+  ChatSessionMessage,
+  ClarificationRequest,
+  QueuedMessage,
+} from "@/services/aichat/types.js";
 import { processUploadedFile } from "@/services/aichat/fileAttachmentService.js";
 import {
   getChatSessionRepository,
@@ -44,6 +50,9 @@ export interface UseAiChatMessagesReturn {
   isHistoryOpen: boolean;
   deleteConfirmSessionId: string | null;
   openThinkingIndexes: Record<number, boolean>;
+  messageQueue: QueuedMessage[];
+  handleRemoveQueuedMessage: (id: string) => void;
+  handleClearQueue: () => void;
   setIsHistoryOpen: (open: boolean) => void;
   setDeleteConfirmSessionId: (id: string | null) => void;
   handleSendMessage: (textToSend?: string) => Promise<void>;
@@ -312,15 +321,72 @@ export function useAiChatMessages({
     setMessages(initialMessages);
   }, []);
 
+  const [messageQueue, setMessageQueue] = useState<QueuedMessage[]>([]);
+  const messageQueueRef = useRef<QueuedMessage[]>([]);
+  messageQueueRef.current = messageQueue;
+  const isBotTypingRef = useRef<boolean>(false);
+  isBotTypingRef.current = isBotTyping;
+
+  const handleRemoveQueuedMessage = (id: string) => {
+    setMessageQueue((prev) => prev.filter((q) => q.id !== id));
+  };
+
+  const handleClearQueue = () => {
+    setMessageQueue([]);
+  };
+
+  const processNextInQueue = () => {
+    if (messageQueueRef.current.length === 0) {
+      return;
+    }
+    const nextItem = messageQueueRef.current[0];
+    setMessageQueue((prev) => prev.slice(1));
+    setTimeout(() => {
+      executeChatMessage(nextItem.text, nextItem.attachments || []);
+    }, 60);
+  };
+
   // ─── Handle Send Message ────────────────────────────────────────────────
   const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || "").trim();
-    if (!query && attachments.length === 0) {
+    const currentAttachments = [...attachments];
+
+    if (!query && currentAttachments.length === 0) {
       return;
     }
 
-    const currentAttachments = [...attachments];
     setAttachments([]);
+
+    // If bot is already processing, queue the message
+    if (isBotTypingRef.current) {
+      const qItem: QueuedMessage = {
+        id: `queue_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        text:
+          query ||
+          (currentAttachments.length > 0
+            ? "Ekli dosyaları analiz et."
+            : ""),
+        timestamp: new Date().toLocaleTimeString(
+          lang === "tr" ? "tr-TR" : "en-US",
+          { hour: "2-digit", minute: "2-digit" },
+        ),
+        attachments:
+          currentAttachments.length > 0 ? currentAttachments : undefined,
+      };
+      setMessageQueue((prev) => [...prev, qItem]);
+      return;
+    }
+
+    await executeChatMessage(query, currentAttachments);
+  };
+
+  const executeChatMessage = async (
+    query: string,
+    currentAttachments: ChatAttachment[] = [],
+  ) => {
+    setIsBotTyping(true);
+    isBotTypingRef.current = true;
+    let pendingClarification: ClarificationRequest | undefined = undefined;
 
     const time = new Date().toLocaleTimeString(
       lang === "tr" ? "tr-TR" : "en-US",
@@ -331,12 +397,16 @@ export function useAiChatMessages({
       ...prev,
       {
         sender: "user",
-        text: query || (currentAttachments.length > 0 ? "Ekli dosyaları analiz et." : ""),
+        text:
+          query ||
+          (currentAttachments.length > 0
+            ? "Ekli dosyaları analiz et."
+            : ""),
         time,
-        attachments: currentAttachments.length > 0 ? currentAttachments : undefined,
+        attachments:
+          currentAttachments.length > 0 ? currentAttachments : undefined,
       },
     ]);
-    setIsBotTyping(true);
 
     abortControllerRef.current = new AbortController();
 
@@ -382,12 +452,17 @@ export function useAiChatMessages({
             signal: abortControllerRef.current.signal,
           });
 
+          if (aiResponse.clarification && !aiResponse.clarification.resolved) {
+            pendingClarification = aiResponse.clarification;
+          }
+
           setIsBotTyping(false);
           addBotMsg(setMessages, lang, {
             text: aiResponse.reply,
             thinking: aiResponse.thinking,
             searchQuery: aiResponse.searchQuery,
             sources: aiResponse.sources,
+            clarification: aiResponse.clarification,
           });
           return;
         } catch {
@@ -416,7 +491,6 @@ export function useAiChatMessages({
           conversationHistory,
           signal: abortControllerRef.current.signal,
         });
-        setIsBotTyping(false);
 
         if (aiResponse.action) {
           await executeAIAction(aiResponse, lang);
@@ -425,6 +499,11 @@ export function useAiChatMessages({
           }
         }
 
+        if (aiResponse.clarification && !aiResponse.clarification.resolved) {
+          pendingClarification = aiResponse.clarification;
+        }
+
+        setIsBotTyping(false);
         addBotMsg(setMessages, lang, {
           text: aiResponse.reply,
           thinking: aiResponse.thinking,
@@ -469,7 +548,12 @@ export function useAiChatMessages({
         });
       }
     } finally {
+      setIsBotTyping(false);
+      isBotTypingRef.current = false;
       abortControllerRef.current = null;
+      if (!pendingClarification) {
+        processNextInQueue();
+      }
     }
   };
 
@@ -527,6 +611,9 @@ export function useAiChatMessages({
     isHistoryOpen,
     deleteConfirmSessionId,
     openThinkingIndexes,
+    messageQueue,
+    handleRemoveQueuedMessage,
+    handleClearQueue,
     setIsHistoryOpen,
     setDeleteConfirmSessionId,
     handleSendMessage,

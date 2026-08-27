@@ -71,4 +71,10 @@ export const aichat = {
   clarification_send_btn: "Gönder",
   clarification_cancel_btn: "Görevi İptal Et",
   clarification_resolved_label: "Tercih Belirtildi",
+  queue_title: "Sırada Bekleyen Mesajlar",
+  queue_clear_all: "Tümünü Temizle",
+  queue_remove_item: "Kuyruktan Kaldır",
+  queue_input_placeholder: "AI çalışıyor... Mesaj yazıp kuyruğa ekleyebilirsiniz",
+  queue_send_tooltip: "Kuyruğa Ekle (Enter)",
+  queue_send_btn: "Kuyruğa Ekle",
 };

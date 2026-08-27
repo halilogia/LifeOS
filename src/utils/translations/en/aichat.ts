@@ -70,4 +70,10 @@ export const aichat = {
   clarification_send_btn: "Send",
   clarification_cancel_btn: "Cancel Task",
   clarification_resolved_label: "Choice Specified",
+  queue_title: "Queued Messages",
+  queue_clear_all: "Clear All",
+  queue_remove_item: "Remove from Queue",
+  queue_input_placeholder: "AI is working... Type to queue another message",
+  queue_send_tooltip: "Add to Queue (Enter)",
+  queue_send_btn: "Add to Queue",
 };

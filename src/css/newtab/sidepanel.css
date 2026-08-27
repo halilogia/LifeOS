@@ -1202,3 +1202,153 @@
   font-weight: 600;
 }
 
+/* ─── Queued Messages Bar & Queue Button in Sidepanel ─── */
+.sidepanel-input-container .queued-messages-bar {
+  margin-bottom: 6px;
+  background: rgba(30, 27, 75, 0.55);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 8px;
+  padding: 6px 10px;
+  backdrop-filter: blur(10px);
+}
+
+.sidepanel-input-container .queued-bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sidepanel-input-container .queued-bar-title-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #c084fc;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.sidepanel-input-container .queued-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 6px #a855f7;
+  animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+.sidepanel-input-container .queued-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sidepanel-input-container .queued-clear-all-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.68rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.sidepanel-input-container .queued-clear-all-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.sidepanel-input-container .queued-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.sidepanel-input-container .queued-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  max-height: 90px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.sidepanel-input-container .queued-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  color: #e2e8f0;
+}
+
+.sidepanel-input-container .queued-item-idx {
+  color: #8b5cf6;
+  font-weight: 700;
+  font-size: 0.68rem;
+}
+
+.sidepanel-input-container .queued-item-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.sidepanel-input-container .queued-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidepanel-input-container .queued-item-att-badge {
+  background: rgba(139, 92, 246, 0.2);
+  color: #c084fc;
+  font-size: 0.6rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.sidepanel-input-container .queued-item-time {
+  font-size: 0.62rem;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.sidepanel-input-container .queued-item-remove-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 1px 3px;
+  font-size: 0.7rem;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.sidepanel-input-container .queued-item-remove-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.sidepanel-send-btn.queue-btn {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+}
+
+.sidepanel-input.queued-input {
+  border-color: rgba(236, 72, 153, 0.4);
+}
+
+
