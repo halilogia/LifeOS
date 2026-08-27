@@ -6,7 +6,12 @@
   - **Kategori & Kaynak Filtreleme (`GameAssetsFilterBar.tsx`)**: 2D Sprite, 3D Model, Ses & Müzik, UI & İkonlar, Kaplama/Doku ve DLC/Loot kategorileri ve kaynak filtreleri (Itch, Kenney, OpenGameArt, GamerPower) ile canlı arama kutusu.
   - **Varlık Kartı & Kalıcı Durum (`GameAssetCard.tsx`)**: Lisans rozetleri (CC0, Free, Open Source), görsel önizleme, kategori etiketleri, doğrudan indirme linki ve Chrome Storage'da saklanan "Kaydedildi/İndirildi" (`claimedIds`) takibi.
   - **Tasarım & i18n (`game-assets.css`, TR/EN)**: Glassmorphic koyu tema tasarımı, responsive kart ızgarası ve Türkçe/İngilizce dil desteği.
-- **Doğrulama**: `vitest run` 89/89 test ✓, `npm run build` (Vite + TS) ✓.
+- **Alışkanlık Zinciri & Duolingo Tarzı Alev Takibi (`RoutineStreakCard.tsx`, `FlameIcon.tsx`, `RoutineHeatmap.tsx`, `routineStreakCalculator.ts`)**:
+  - **Duolingo Tarzı Alev & Mikro Animasyonlar (`FlameIcon.tsx`)**: Çok katmanlı degrade SVG alev (iç akkor çekirdek, orta turuncu gövde, dış kızıl alev), aktif streak'te canlı nabız ve alev alma/parlama mikro animasyonları (`flameFlicker`, `flameBodyDance`, `flameGlowPulse`, `sparkFloat`).
+  - **Alışkanlık Zinciri Isı Haritası (`RoutineHeatmap.tsx`)**: GitHub tarzı son 12 haftalık (84 gün) 7 satırlı katkı ızgarası, günlük tamamlanan rutin yoğunluğuna göre 0-4 seviye parlama renkleri ve hover tooltip bilgisi.
+  - **Günlük Seri Sayacı & İlerleme Çubuğu**: Ardışık gün serisi (streak), en uzun rekor seri rozeti (Best Streak), bugünkü rutin tamamlama oranı ve katlanabilir ısı haritası çekmecesi.
+  - **Domain Hesaplama Servisi (`routineStreakCalculator.ts`)**: Rutinlerin geçmiş `completedDates` ve `lastCompletedDate` verilerinden streak, tamamlama oranı ve haftalık ısı haritası matrisini hesaplayan saf iş mantığı servisi.
+- **Doğrulama**: `vitest run` 93/93 test ✓, `npm run build` (Vite + TS) ✓.
 
 ---
 

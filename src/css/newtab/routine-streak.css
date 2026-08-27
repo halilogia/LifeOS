@@ -1,0 +1,376 @@
+/* ── Routine Streak & Heatmap Styling ────────────────────────── */
+
+.routine-streak-card {
+  background: var(--card-bg-subtle, rgba(255, 255, 255, 0.025));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 16px);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(var(--glass-blur, 10px));
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.routine-streak-card.ignited {
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.08);
+}
+
+.routine-streak-card.supercharged {
+  border-color: rgba(251, 146, 60, 0.5);
+  box-shadow: 0 6px 24px rgba(251, 146, 60, 0.16), 0 0 12px rgba(234, 179, 8, 0.1);
+}
+
+/* Header Row */
+.routine-streak-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.streak-left-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Duolingo Flame Animation */
+.duo-flame-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.flame-glow-halo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 110, 0, 0.5) 0%, rgba(255, 75, 75, 0) 70%);
+  filter: blur(8px);
+  z-index: 0;
+  animation: flameGlowPulse 2.5s ease-in-out infinite;
+}
+
+.duo-flame-svg {
+  position: relative;
+  z-index: 1;
+}
+
+.duo-flame-wrapper.ignited .flame-layer-outer {
+  animation: flameFlicker 3s ease-in-out infinite;
+  transform-origin: 18px 30px;
+}
+
+.duo-flame-wrapper.ignited .flame-layer-body {
+  animation: flameBodyDance 2s ease-in-out infinite alternate;
+  transform-origin: 18px 28px;
+}
+
+.duo-flame-wrapper.ignited .flame-layer-core {
+  animation: flameCoreGlow 1.5s ease-in-out infinite alternate;
+}
+
+.duo-flame-wrapper.supercharged .flame-sparkle {
+  animation: sparkFloat 2s ease-in-out infinite;
+}
+
+.spark-1 { animation-delay: 0s; }
+.spark-2 { animation-delay: 0.7s; }
+.spark-3 { animation-delay: 1.3s; }
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.04, 0.97) rotate(-1.5deg);
+  }
+  50% {
+    transform: scale(0.98, 1.03) rotate(1.2deg);
+  }
+  75% {
+    transform: scale(1.03, 0.98) rotate(-0.8deg);
+  }
+}
+
+@keyframes flameBodyDance {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    transform: scale(1.06, 1.04) translateY(-1px);
+  }
+}
+
+@keyframes flameCoreGlow {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes flameGlowPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes sparkFloat {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.2);
+  }
+}
+
+/* Streak Text */
+.streak-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.streak-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.streak-count-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.best-streak-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.streak-sub-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #94a3b8);
+  margin: 0;
+}
+
+/* Right Progress & Toggle */
+.streak-right-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.today-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 110px;
+}
+
+.today-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.today-progress-fraction {
+  color: var(--text-primary, #f8fafc);
+  font-weight: 700;
+}
+
+.today-progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.today-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316, #eab308);
+  border-radius: 4px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.today-progress-bar-fill.full {
+  background: linear-gradient(90deg, #10b981, #22c55e);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.heatmap-toggle-btn {
+  background: var(--card-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  color: var(--text-secondary, #94a3b8);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.heatmap-toggle-btn:hover {
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--card-border-hover, rgba(255, 255, 255, 0.2));
+  background: var(--card-bg-hover, rgba(255, 255, 255, 0.08));
+}
+
+/* Heatmap Grid */
+.routine-heatmap-drawer {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+}
+
+.routine-heatmap-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routine-heatmap-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.heatmap-day-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 1px;
+}
+
+.dow-label {
+  font-size: 0.65rem;
+  height: 11px;
+  line-height: 11px;
+  color: var(--text-muted, #64748b);
+  font-weight: 500;
+  width: 14px;
+  text-align: right;
+}
+
+.heatmap-weeks-grid {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+
+.heatmap-week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2.5px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.heatmap-cell:hover,
+.heatmap-cell.hovered {
+  transform: scale(1.3);
+  z-index: 2;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.heatmap-cell.mini {
+  width: 10px;
+  height: 10px;
+  cursor: default;
+}
+
+.heatmap-cell.mini:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Heatmap Levels (Flame & Vitality Gradient) */
+.heatmap-cell.level-0 {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.heatmap-cell.level-1 {
+  background: rgba(249, 115, 22, 0.3);
+}
+
+.heatmap-cell.level-2 {
+  background: rgba(249, 115, 22, 0.55);
+}
+
+.heatmap-cell.level-3 {
+  background: rgba(234, 88, 12, 0.85);
+  box-shadow: 0 0 4px rgba(234, 88, 12, 0.2);
+}
+
+.heatmap-cell.level-4 {
+  background: #f97316;
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.6);
+}
+
+/* Heatmap Footer */
+.heatmap-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--text-secondary, #94a3b8);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.heatmap-tooltip-display strong {
+  color: var(--text-primary, #f8fafc);
+}
+
+.heatmap-hint-text {
+  color: var(--text-muted, #64748b);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-label {
+  font-size: 0.68rem;
+  color: var(--text-muted, #64748b);
+}

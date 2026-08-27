@@ -1,215 +1,83 @@
 # Project Roadmap & Future Plans (Yol Haritası ve Gelecek Planları)
 
-This document tracks the upcoming features, architectural improvements, and experimental integrations planned for the **Life OS - Personal Dashboard** Chrome Extension.
+Bu belge, **Life OS - Personal Dashboard** eklentisinin gelecekteki sürümlerinde hayata geçirilmesi planlanan yenilikçi özellikleri, mimari geliştirmeleri ve vizyoner modül önerilerini listeler.
 
 ---
 
-## 🗺️ Upcoming Features (Yaklaşan Özellikler)
+## 🗺️ Yaklaşan & Planlanan Özellikler (Upcoming Roadmap)
 
-### 1. 📊 Daily Routine Heatmap Streak (Alışkanlık Zinciri Takvim Izgarası)
-Visualize your routine completion consistency with an interactive calendar widget.
-- [ ] **Contribution Grid**: A GitHub-style yearly/monthly contribution grid showing green intensity based on the percentage of routines ticked off each day.
-- [ ] **Streak Counters**: Live counts of consecutive days routines were fully completed, with fire particle micro-animations on hit milestones.
-
-### 2. 🧠 SRS Custom Flashcards Deck Builder (Özel Aralıklı Tekrar Kart Oluşturucu)
-Allow users to write and structure their own spaced repetition vocabulary learning decks.
-- [ ] **Deck Creator**: Forms to add front/back content cards, choose custom deck categories (e.g. English, KPSS history, programming).
-- [ ] **Deck Importer**: Import csv/json format flashcard sheets easily.
-
-### 3. 🎵 AI-Enhanced Ambient Sound Mixer (Yapay Zeka Destekli Odak Sesleri Mikseri)
-Design and mix your own focus soundscapes.
-- [ ] **Multi-Voice Mixer**: Play synthesized Wind, Rain, Hairdryer, and Lo-Fi chords simultaneously to create custom soundscapes (e.g. "Rainy Cafe", "Winter Cabin").
-- [ ] **Individual Volume Sliders**: Control each synthesized sound's level independently to fine-tune the ambient background.
-
-### 4. 🎯 Interactive Daily Willpower & Mood Analytics (Günlük İrade ve Disiplin Analitiği)
-Visualize and track self-discipline metrics.
-- [ ] **Mood Check-ins**: Daily logs to record mood and focus levels.
-- [ ] **Willpower Streaks**: Track routine compliance, Pomodoro sessions, and detox successes in a unified productivity score graph.
-
-### 5. 🌐 Interactive Smart Web Clipboard & Universal Info Box (Akıllı Web Not Panosu)
-A lightweight widget to capture content across the web.
-- [ ] **Floating Widget**: Keyboard-triggered floating glassmorphic popup that overlays on any website.
-- [ ] **Quick Capture**: Instantly save highlighted webpage text directly to notes or add tasks to the dashboard without opening the New Tab page.
-
-### 7. 🕹️ Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Dev Hub)
-
-Unified indie game showcase, HTML5 arcade player, and Steam-style developer laboratory.
-- [x] **YouTube Playables & Steam Hybrid Hub**: Glassmorphic visual gallery cards, embedded canvas games (Snake, Knight Runner, Space Shooter), and dev logs (v4.0.0).
-- [ ] **Game Achievement Engine (Başarım Sistemi)**: Custom unlockable achievement badges for built-in and local indie games.
-- [ ] **Local Dev Server Ping Detector**: Automatically pinging `http://localhost:5173`, `3000`, `8080` ports to display a live "Dev Server Ready" indicator.
+### 1. ⚡ AI Smart Goal Breakdown (Yapay Zeka Destekli Hedef & Alt Görev Parçalayıcı)
+Büyük ve karmaşık hedefleri tek tıkla uygulanabilir mikro adımlara bölen akıllı görev asistanı.
+- [ ] **Akıllı Parçalama Butonu**: Görev oluştururken `✨ AI ile Parçala` butonuna basıldığında büyük bir hedefi (örn. *"Godot ile 2D Platformer Yap"* veya *"KPSS Tarih İnkılapları Bitir"*) 4-6 somut alt göreve dönüştürme.
+- [ ] **Zaman Tahmini & Önceliklendirme**: Her alt göreve otomatik tahmini süre ve Eisenhower matrisi öncelik seviyesi (Acil/Önemli) atama.
+- [ ] **Tek Tıkla Listeye Ekleme**: Üretilen alt görevleri doğrudan yapılacaklar veya rutinler listesine aktarma.
 
 ---
 
-## ✅ Tamamlanan v4.3.0 (2026-08-27)
-
-### 1. 🎨 Ücretsiz Oyun Assetleri Modülü (Free Game Assets) — TAMAMLANDI
-- [x] **Çoklu Canlı Akışlar**: Itch.io Free & On-Sale, Kenney.nl %100 CC0, OpenGameArt.org ve GamerPower Loot endpoint entegrasyonu (`gameAssetsService.ts`).
-- [x] **Quick Hubs Hızlı Portallar**: Poly Pizza (3D CC0), Kenney, Itch, OpenGameArt, Quaternius, Game-Icons, AmbientCG, Epic Fab, Unity Asset Store ve Mixamo kısayol çipleri (`AssetHubsBar.tsx`).
-- [x] **Kategori & Kaynak Filtreleri**: 2D, 3D, Audio, UI, Textures, Loot sekmeleri ve Itch/Kenney/OpenGameArt/GamerPower filtreleri (`GameAssetsFilterBar.tsx`).
-- [x] **Varlık Kartları & Claim Durumu**: Lisans etiketleri (CC0, Free vb.), anlık arama ve Chrome Storage'da saklanan kaydedildi durumu (`GameAssetCard.tsx`, `ChromeStorageGameAssetsRepository.ts`).
-- [x] **Tasarım & i18n**: Glassmorphic koyu tema kartları (`game-assets.css`), Sidebar 3D kutu ikonu ve TR/EN dil desteği.
+### 2. 🎙️ Voice Memo to Structured Note (Sesli Not Kaydedici & AI Cornell Özetleyici)
+Tarayıcı mikrofonu ile hızlı sesli düşünce kaydı ve otomatik yapılandırılmış not çıkarma.
+- [ ] **Web Audio API Ses Kaydı**: Notlar ekranında tek tıkla ses kaydı başlatma (`🎙️ Sesli Not`).
+- [ ] **Konuşmadan Metne (Speech-to-Text)**: Tarayıcının yerleşik Web Speech API'si ile sıfır harici kota tüketerek sesi metne dökme.
+- [ ] **AI Cornell Formatlayıcı**: Ham ses transkriptini otomatik olarak *"Anahtar Kavramlar"*, *"Özet"* ve *"Aksiyon Maddeleri"* şeklinde Cornell ders notu kartına dönüştürme.
 
 ---
 
-## ✅ Tamamlanan v4.2.0 (2026-08-11)
-
-### 1. 📡 RSS Takip & Okuyucu — TAMAMLANDI
-- [x] **Sağ tık "RSS Kaydet" menüsü**: Herhangi bir sayfadan tek tıkla feed kayıt.
-- [x] **RssView sidebar paneli**: Feed listesi (favicon + okunmamış rozeti) + item listesi.
-- [x] **30 dk otomatik senkron**: `chrome.alarms` ile arka planda tüm feed'ler çekilir.
-- [x] **RSS 2.0 + Atom desteği**: DOMParser ile XML ayrıştırma.
-- [x] **XSS güvenli render**: Tüm içerik `textContent` ile basılır.
-- [x] **Yönetim**: Manuel URL ekleme, yenileme, silme (onaylı).
-
-### 2. 🛡️ Detox Feed Blocker SSM Tekniği — TAMAMLANDI
-- [x] **Container-hide stratejisi**: X/IG/FB/YT/TikTok akışı CSS ile 0x0 yapılır (React geri getirse de mute).
-- [x] **facebookCleaner.ts**: 4 katmanlı JS tarayıcı (href/aria/text/pagelet) ile modern FB DOM'undaki Reels.
-- [x] **YouTube Abonelikler toggle**: `ytSubscriptionsBlock` ile sidebar kaldırma.
-- [x] **Detox quote widget**: `feedContainer.nextSibling` ile ana scroll akışına yerleşim.
-
-### 3. 🎵 AudioContext Autoplay Fix — TAMAMLANDI
-- [x] **Gesture-deferred context**: `volumeBooster.ts` ilk kullanıcı jestinde AudioContext oluşturur.
-- [x] **Unity boost skip**: 1.0 gain'de context hiç oluşturulmaz.
+### 3. 🕸️ Interactive Knowledge Graph Visualizer (Zettelkasten Bilgi Grafı)
+Obsidian tarzı, notlar ve KPSS konuları arasındaki `[[Wikilink]]` bağlantılarını gösteren 2D/3D interaktif ağ görselleştiricisi.
+- [ ] **D3.js / Force-Directed Graph**: Notlar ve konular arasındaki çapraz referansları nodlar ve çizgiler halinde interaktif tuvalde çizme.
+- [ ] **Kategori & Renk Gruplama**: Coğrafya, Tarih, Yazılım, Finans ve Kişisel notları farklı renk halkalarıyla gruplama.
+- [ ] **Odak & Filtreleme**: Bir nota tıklandığında yalnızca o notla bağlantılı olan birinci ve ikinci derece komşuları aydınlatma.
 
 ---
 
-
-## 🎯 BIST Borsa İstanbul Odaklı Yaklaşan Özellikler (Stock Roadmap)
-
-### 1. 💰 Nakit & Toplam Varlık Takibi (Mal Varlığım) — ✅ TAMAMLANDI (v4.1.0)
-- [x] **Nakit Bakiyesi**: Manuel ekleme, hisse alımında otomatik düşme, satışında otomatik eklenme (sync'te).
-- [x] **Toplam Varlık**: Nakit + hisse değeri kırılımı özet kartı.
-- [x] **Varlık Dağılımı Pasta Grafiği**: Cyberpunk SVG grafik — Toplam Varlık kartından açılır.
-- [x] **Satış Geçmişi**: Gerçekleşen K/Z + tarih kaydı + toplam özet.
-- [ ] **Döviz & Kripto Desteği**: Nakit gibi USD/EUR/BTC bakiyesi ekleme (Toplam Varlık'a dahil).
-
-### 2. 📊 Teknik İndikatör Sinyal Motoru (RSI, EMA 20/50, MACD)
-Gelişmiş teknik indikatör kuralları tanımlama.
-- [ ] **RSI Aşırı Alım/Satım Alarmları**: RSI 14 periyodu 30 altına inince "Aşırı Satım (Alım Fırsatı)", 70 üstüne çıkınca "Aşırı Alım (Kar Al)" uyarısı.
-- [ ] **Golden Cross / Death Cross Sinyalleri**: EMA 20 hareketli ortalamanın EMA 50 ortalamasını yukarı kesmesi durumunda yükseliş sinyali üretme.
-
-### 3. 📈 Hacim Sıçraması ve Ani Volatilite Tespiti (Volume & Spike Detector)
-- [ ] **Hacim Sıçraması:** Dakikalık hacim ortalamanın 3 katına çıktığında balina hareketi uyarısı atma.
-- [ ] **Sektörel Portföy Gruplama:** Hisseleri "Halka Arzlar", "Temettü Hisseleri", "Teknoloji" şeklinde kategorilere ayırma.
+### 4. 🧘 Mindful Micro-Breaks & 20-20-20 Eye Guard (Göz ve Duruş Dinlendirme)
+Uzun ekran başı seanslarında göz yorgunluğunu ve duruş bozukluğunu engelleyen ergonomik asistan.
+- [ ] **20-20-20 Kuralı Zamanlayıcısı**: Her 20 dakikada bir 20 saniye boyunca 20 feet (6 metre) uzağa bakmayı hatırlatan zarif mikro bildirim.
+- [ ] **Esneme & Duruş Hatırlatıcıları**: Pomodoro uzun molalarında basit omuz, boyun ve sırt esneme egzersizi animasyonları sunma.
+- [ ] **Akıllı Seans İstatistiği**: Günlük kaç mikro mola verildiğini ve ekran dinlenme süresini takip etme.
 
 ---
 
-## 📈 Long-Term Backlog (Uzun Vadeli Planlar)
-- [ ] **Visual Theme Engine**: Custom wallpaper uploads and glassmorphic blur opacity sliders.
-- [ ] **Cloud Sync Adapters**: WebDAV or Google Drive remote sync options in addition to `chrome.storage.sync`.
+### 5. 💰 BİST Temettü & Bedelsiz Sermaye Artırımı Takvimi (Dividend Tracker)
+Borsa portföyündeki şirketlerin nakit temettü ve bedelsiz pay dağıtım tarihlerini takip eden finansal takvim.
+- [ ] **Otomatik Hakediş Takvimi**: Portföyünüzdeki ve izleme listenizdeki şirketlerin kesinleşen temettü ödeme tarihlerini takvime işleme.
+- [ ] **Yıllık Pasif Gelir Projeksiyonu**: Sahip olunan lot sayısına göre tahmini yıllık net temettü getirisini TL olarak hesaplama.
+- [ ] **Bedelsiz Sermaye Bildirimi**: Portföydeki hisselerin bedelsiz bölünme günlerini ve yeni oluşacak tahmini lot adedini özetleme.
 
 ---
 
-## 🔮 Gelecek Yol Haritası & Planlanan Özellikler (Roadmap)
-
-1. **🔮 Wikipedia Tarzı Popover Önizleme Kartları (Hover Cards)**: Fareyle `[[Wikilink]]` bağlantısı üzerine gelindiğinde tıklamadan o notun görselini ve ilk 2 cümlesini gösteren minik önizleme penceresi.
-2. **🤖 Nota Özel AI Soru & Flashcard Üretici (`✨ AI Soru Üret`)**: Ders notunu okurken tek tıkla o nottan 3 KPSS test sorusu veya Spaced Repetition (SRS) bilgi kartı ürettirme.
-3. **💡 KPSS Akrostiş & Şifre Kutusu (Mnemonics Box)**: Infobox içerisine konunun meşhur KPSS hafıza kodlamalarını (Örn. *ZADEM*) gösteren özel mor renkli akrostiş kutusu.
-4. **🕸️ Gelişmiş Konu İlişki Haritası (Graph View)**: Notların kategorilerine göre (Coğrafya, Tarih vb.) otomatik renk gruplaması ve görsel Obsidian Zettelkasten ilişki ağı.
-5. **🔥 ÖSYM Çıkma Sıklığı Rozeti (Exam Relevance Score)**: Infobox'ın en üstüne konunun ÖSYM sınavlarında çıkma ağırlığını gösteren derlenmiş gösterge (`🔥🔥🔥 ÖSYM Favorisi`).
-6. **🎧 Sesli Not Dinleme (Text-to-Speech Reader)**: Web Speech API altyapısıyla ders notlarını yolda/otobüste sesli dinleme butonu (`▶️ Dinle`).
-
----
----
-**📝 Merged from suggestion.md**
-# 🚀 ZenTodo / Life OS - Gelecek Geliştirme & İnovasyon Önerileri (`SUGGESTION.md`)
-
-Bu doküman, **ZenTodo / Life OS Chrome Extension** projesinin gelecekteki sürümlerinde eklentiyi sıradan bir eklentiden **"Dünyanın En Gelişmiş Yapay Zeka Destekli Kişisel Yaşam & Finans İşletim Sistemine"** dönüştürecek vizyoner fikirleri ve teknik önerileri içerir.
+### 6. 🎵 Multi-Channel Ambient Soundscapes Mixer (Özel Ambiyans Sentezleyici)
+Çevrimdışı Web Audio API sentezleyicilerini çok kanallı bir ses mikserinde birleştirme.
+- [ ] **Eşzamanlı Ses Katmanlama**: Yağmur, Rüzgar, Lo-Fi Piyano Akorları ve Beyaz Gürültüyü aynı anda çalarak özel ambiyans oluşturma (*"Fırtınalı Kütüphane"*, *"Kış Gecesi"*).
+- [ ] **Bağımsız Kanal Ses Düğmeleri**: Her bir ses kaynağının desibel ve frekans seviyesini bağımsız dairesel slider'lar ile ayarlama.
+- [ ] **Önceden Kayıtlı Hazır Profiller (Presets)**: Hızlı odaklanma modları arasında tek tıkla geçiş yapabilme.
 
 ---
 
-## 📌 İçindekiler
-1. 🏛️ [BİST & Halka Arz OS (Yeni Nesil AI Borsa İnovasyonları)](#1-bist--halka-arz-os-yeni-nesil-ai-borsa-inovasyonları)
-2. 🤖 [9Router & Yerel AI Güçlendirmeleri (Local LLM Power Tools)](#2-9router--yerel-ai-güçlendirmeleri-local-llm-power-tools)
-3. ⚡ [Yaşam OS & Üretkenlik İnovasyonları](#3-yaşam-os--üretkenlik-inovasyonları)
-4. 🛠️ [Önceliklendirme & Yol Haritası Önerisi](#4-önceliklendirme--yol-haritası-önerisi)
+### 7. 📊 Teknik İndikatör & Sinyal Motoru (RSI, EMA 20/50, MACD)
+BIST hisselerinde teknik analiz göstergelerini hesaplayıp yapay zeka analizine besleyen kurallar motoru.
+- [ ] **RSI 14 Aşırı Alım/Satım Dedektörü**: RSI değeri 30 altına indiğinde *"Aşırı Satım / Olası Dip"*, 70 üstüne çıktığında *"Aşırı Alım / Kâr Al"* göstergesi.
+- [ ] **EMA Golden Cross / Death Cross Tespiti**: 20 günlük ortalamanın 50 günlüğü yukarı veya aşağı kesmesini otomatik yakalama.
+- [ ] **Hacim Sıçraması Uyarısı**: Günlük işlem hacmi 30 günlük ortalamanın 3 katına çıktığında balina girişi ikazı.
 
 ---
 
-## 🏛️ 1. BİST & Halka Arz OS (Yeni Nesil AI Borsa İnovasyonları)
-
-### 1.1 📈 RSI / MACD / MA Teknik Gösterge Veri Motoru (Technical Indicators Engine)
-* **Fikir**: 30 günlük mum verilerinden RSI (Relative Strength Index), MACD osilatörü ve 20/50 günlük Hareketli Ortalamaları (MA) otomatik hesaplayarak AI promptuna besleme.
-* **Katma Değer**: Yapay zekanın "RSI 72 seviyesinde aşırı alım bölgesinde, 20 günlük MA üzerinde seyrediyor" şeklinde profesyonel teknik analiz üretmesini sağlar.
-
-### 1.2 🌅 Sabah BİST Açılış AI Strateji Raporu (Morning Market Brief)
-* **Fikir**: Her sabah saat 09:45'te (BİST açılışından 15 dakika önce) takip listenizdeki hisseler ve gece yayınlanan KAP haberlerine göre kişiselleştirilmiş 3 maddelik **Sabah Açılış Stratejisi**.
-* **Katma Değer**: Güne başlamadan seansın olası yönünü ve riskli bölgeleri saniyeler içinde özetler.
-
-### 1.3 💰 Temettü & Bedelsiz Sermaye Artırımı Takvimi (Dividend & Corporate Action Tracker)
-* **Fikir**: Takip ettiğiniz şirketlerin nakit kâr payı (temettü) dağıtım tarihlerini, hisse başına ödeme tutarlarını ve bedelsiz sermaye artırımı tarihlerini gösteren akıllı takvim.
-* **Katma Değer**: Portföyünüzün yıllık **Pasif Gelir Projeksiyonunu** (Örn: *Yıllık Tahmini Temettü: 12.450 ₺*) hesaplar.
-
-### 1.4 📊 BİST Sektörel Isı Haritası & Korelasyon Matrisi (Sector Treemap)
-* **Fikir**: Portföyünüzü ve BİST'i sektörel dağılımına (Havacılık, Bankacılık, Gayrimenkul, Teknoloji) göre renkli kutucuklar halinde görselleştirme.
-* **Katma Değer**: Hangi sektöre para girişi olduğunu ve tek bir sektöre aşırı yüklenip yüklenmediğinizi görsel ikaz eder.
-
-### 1.5 📢 Telegram Bot & Webhook Akıllı Alarmları
-* **Fikir**: Tarayıcı kapalıyken bile fiyat alarmlarınız (Stop-Loss, Kar-Al veya Hedef Fiyat) tetiklendiğinde **Telegram Botunuza** anında bildirim ve AI analiz özeti gönderme.
+### 8. 🌐 Offline Multi-Device P2P WebRTC Sync (Sunucusuz Cihazlar Arası Eşitleme)
+Harici üçüncü taraf sunucu veya bulut kullanmadan, iki bilgisayar arasında yerel ağ üzerinden şifreli doğrudan veri aktarımı.
+- [ ] **QR Kod / Peer Eşleşme**: Evdeki laptop ve masaüstü bilgisayar arasında WebRTC DataChannel ile tek tıkla P2P eşitleme.
+- [ ] **Uçtan Uca Şifreleme (E2EE)**: AES-GCM 256-bit şifreleme ile görev, not ve borsa verilerinin sıfır bilgi prensibiyle aktarımı.
 
 ---
 
-## 🤖 2. 9Router & Yerel AI Güçlendirmeleri (Local LLM Power Tools)
-
-### 2.1 🎙️ Sesli AI Asistan & Komut Motoru (Voice Commands)
-* **Fikir**: Eklenti içinde mikrofona basarak "THYAO alarmlarımı göster", "KPSS Matematik timer'ımı 25 dakika başlat" gibi Türkçe sesli komutlarla eklentiyi yönetme.
-* **Teknik Yaklaşım**: Web Speech API + 9Router Intent Parser.
-
-### 2.2 📓 AI Gece Değerlendirme Raporu (Evening AI Debrief)
-* **Fikir**: Her akşam saat 22:00'de gün içinde tamamladığınız görevleri, disiplin sürenizi ve borsa portföy hareketlerinizi özetleyen kişiselleştirilmiş 3 maddelik **AI Gece Raporu**.
-
-### 2.3 👁️ Görsel RAG & Ekran Okuma (Vision AI Integration)
-* **Fikir**: 9Router / Gemini Vision modellerini kullanarak ekrandaki karmaşık borsa grafiklerini veya KPSS soru görsellerini taratıp anında adım adım çözüm/yorum alma.
+### 9. 🎮 Game Jam Countdown & Asset Pack Bundler (Game Jam & Proje Başlatıcı)
+Indie oyun geliştiricileri için yaklaşan Game Jam'leri takip etme ve hızlı başlangıç şablonu oluşturma.
+- [ ] **Itch.io Game Jam Takvimi**: Popüler game jam'lerin başlangıç ve bitiş tarihlerini listeleyen canlı sayaç.
+- [ ] **Tema Beyin Fırtınası**: Jam teması açıklandığında AI ile 3 farklı oyun mekaniği ve prototip fikri türetme.
+- [ ] **Seçili Asset Paketi İndirici**: Ücretsiz oyun assetleri sayfasından seçilen paketleri tek tıkla zip listesi haline getirme.
 
 ---
 
-## ⚡ 3. Yaşam OS & Üretkenlik İnovasyonları
-
-### 3.1 🏆 Oyunlaştırma & Seviye Sistemi (Life OS Gamification & Badges)
-* **Fikir**: Tamamlanan her görev, korunan disiplin süresi ve çözülen KPSS soruları için XP kazanarak seviye atlama (`Level 1 Acemi` ➔ `Level 50 Usta`).
-
-### 3.2 📑 Akıllı Sekme Gruplama & RAM Tasarrufu (Smart Tab Grouping & Suspender)
-* **Fikir**: Tarayıcınızda biriken 50+ sekmeyi AI ile konularına göre (Borsa, KPSS, Haberler) otomatik gruplama ve inaktif sekmeleri uyutarak RAM tasarrufu sağlama.
-
-### 3.4 📚 KPSS Wiki Notlarından Otomatik AI Flashcard & Test Üretimi
-* **Fikir**: Vikipedi formatındaki ders notlarınızdan tek tıkla yapay zeka ile **KPSS Bilgi Kartı (SRS)** veya **Test Sorusu** türetme.
-* **Katma Değer**: `Maki` veya `Çorum` ders notunu okurken "Kart Üret" butonuna basarak nottaki en kritik 5 soruyu otomatik SRS kart kutunuza ekler.
-
----
-* **Fikir**: Eklentideki görevlerinizi ve hatırlatıcılarınızı doğrudan kişisel Google Takviminize işleme.
-
----
-
-## 🛠️ 4. Önceliklendirme & Yol Haritası Önerisi
-
-| Özellik | Zorluk / Süre | Etki / Değer | Önerilen Sürüm |
-| :--- | :---: | :---: | :---: |
-| **RSI / MACD / MA Teknik Gösterge Motoru** | Orta (2 Gün) | ⭐⭐⭐⭐⭐ | v1.3.0 |
-| **Sabah BİST Açılış AI Raporu** | Kolay (1 Gün) | ⭐⭐⭐⭐⭐ | v1.3.0 |
-| **Telegram Alarm Bildirim Botu** | Kolay (1-2 Gün) | ⭐⭐⭐⭐⭐ | v1.3.0 |
-| **Temettü & Bedelsiz Takvimi** | Orta (2 Gün) | ⭐⭐⭐⭐ | v1.4.0 |
-| **Portföy Sektör Isı Haritası** | Kolay (1 Gün) | ⭐⭐⭐⭐ | v1.4.0 |
-| **Oyunlaştırma & Seviye Sistemi (XP)** | Orta (3 Gün) | ⭐⭐⭐⭐⭐ | v1.5.0 |
-| **Sesli Komut Motoru (Voice OS)** | İleri (4 Gün) | ⭐⭐⭐⭐ | v2.0.0 |
-
----
-
-## 🕹️ 5. Life OS Arcade & Oyun Geliştirme Laboratuvarı İnovasyonları
-
-
-### 5.1 📡 Otomatik Yerel Dev Sunucu Tespiti (Port Auto-Scanner)
-* **Fikir**: Eklenti açıkken arkaplanda `http://localhost:5173`, `3000`, `8080`, `5174` gibi popüler Vite / Next.js / React portlarını periyodik tarayarak yayında olan yerel oyunu otomatik tespit etme.
-* **Katma Değer**: `C:\Users\emre_\Desktop\GitHub\In Progress` altında `npm run dev` yaptığınızda oyun kartında otomatik olarak yeşil canlı **"Dev Sunucusu Aktif 🟢"** ikazı belirir ve tek tıkla canlı teste geçilir.
-
-### 5.2 🏆 Genel Başarım Engine & Rozet Sistemi (Game Achievements)
-* **Fikir**: Gömülü oyunlarda ve yerel oyun projelerinizde elde edilen skorlara/tamamlanan to-do maddelerine göre eklenti genelinde kilit açan Steam tarzı koleksiyon rozetleri.
-* **Katma Değer**: "Yılan Ustası", "Şövalye Katili", "Indie Dev Master" rozetleri ile oyun geliştirme motivasyonunu üst seviyeye taşır.
-
-### 5.3 📸 Oyun İçi GIF & Ekran Görüntüsü Kaydedici (Game Screenshot & Clip Tool)
-* **Fikir**: Modal oyuncuda oyun oynarken veya geliştirirken tek tıkla HTML5 Canvas ekran görüntüsü veya 5 saniyelik GIF klip alabilme.
-* **Katma Değer**: Oyun projelerinizin sosyal medya ve devlog paylaşımları için anında görsel içerik üretmenizi sağlar.
-
----
-
-*Bu doküman ZenTodo / Life OS projesi geliştirme sürecinde ilham kaynağı ve vizyon belgesi olarak güncel tutulmaktadır.* 🚀
-
+### 10. 📑 Akıllı Sekme Gruplama & RAM Tasarrufu (Smart Tab Suspender)
+Tarayıcıda biriken sekmeleri yapay zeka ile organize edip inaktif sekmeleri uyutma.
+- [ ] **AI Kategori Gruplama**: Açık 30+ sekmeyi *"Borsa & Finans"*, *"KPSS & Çalışma"*, *"Oyun Geliştirme"* sekmelerine otomatik gruplama.
+- [ ] **Bellek Uyutucu**: 30 dakikadan uzun süre kullanılmayan sekmeleri dondurarak Chrome bellek ve CPU kullanımını %60 azaltma.

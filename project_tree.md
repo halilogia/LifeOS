@@ -137,6 +137,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   **services/** → Domain'e ait saf iş mantığı servisleri.
     - **detoxMotivationalService.ts** → detoxMotivationalService.ts
     - **KpssCalculatorService.ts** → KpssCalculatorService
+    - **routineStreakCalculator.ts** → routineStreakCalculator.ts
     - **SrsService.ts** → SrsService
     - **TaskService.ts** → TaskService
   **value-objects/** → Değer nesneleri (basit tiplerin tip güvenli hali).
@@ -433,6 +434,10 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   **prayer/**
     - **PrayerCityForm.tsx** → City selector form — ortak bileşen (AGENTS.md 5.2: presentational).
   - **PrayerView.tsx** → Prayer
+  **routines/**
+    - **FlameIcon.tsx** → FlameIcon.tsx
+    - **RoutineHeatmap.tsx** → RoutineHeatmap.tsx
+    - **RoutineStreakCard.tsx** → RoutineStreakCard.tsx
   **rss/**
     - **RssFeedList.tsx** → RssFeedList.tsx
     - **RssItemList.tsx** → RssItemList.tsx
@@ -688,6 +693,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **notes.css** → Not: notes
     - **pomodoro.css** → Pomodoro: pomodoro
     - **prayer.css** → prayer
+    - **routine-streak.css** → routine streak
     - **sidebar.css** → sidebar
     - **sidepanel.css** → sidepanel
     - **srs.css** → srs

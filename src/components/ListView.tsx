@@ -1,6 +1,7 @@
 import { Todo, Language } from "@/types/types.js";
 import { translations } from "@/utils/i18n.js";
 import { TodoListItem } from "@/components/TodoListItem.js";
+import { RoutineStreakCard } from "@/components/routines/RoutineStreakCard.js";
 
 interface ListViewProps {
   todos: Todo[];
@@ -114,6 +115,9 @@ export function ListView({
             id="recurring-section"
             className={`tasks-container ${activeTab === "routines" ? "active" : ""}`}
           >
+            {activeTab === "routines" && (
+              <RoutineStreakCard todos={todos} lang={lang} t={t} />
+            )}
             <h2 className="section-title">{t.section_recurring}</h2>
             <ul id="recurring-list" className="todo-list">
               {activeTab === "routines" &&
