@@ -253,8 +253,6 @@ export function SettingsDrawer({
             onToggleWhatsappBridge={onToggleWhatsappBridge}
             telegramBridgeEnabled={telegramBridgeEnabled}
             onToggleTelegramBridge={onToggleTelegramBridge}
-            autoGroupTabsEnabled={autoGroupTabsEnabled}
-            onToggleAutoGroupTabs={onToggleAutoGroupTabs}
             sidebarAutoSortEnabled={sidebarAutoSortEnabled}
             onToggleSidebarAutoSort={onToggleSidebarAutoSort}
             onResetSidebarUsage={onResetSidebarUsage}
@@ -295,6 +293,8 @@ export function SettingsDrawer({
             onUpdateAIConfig={onUpdateAIConfig}
             aiShowThinking={aiShowThinking}
             onUpdateAIShowThinking={onUpdateAIShowThinking}
+            autoGroupTabsEnabled={autoGroupTabsEnabled}
+            onToggleAutoGroupTabs={onToggleAutoGroupTabs}
           />
         )}
 

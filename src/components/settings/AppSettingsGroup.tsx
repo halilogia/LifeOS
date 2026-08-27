@@ -31,8 +31,6 @@ export interface AppSettingsGroupProps {
   onToggleWhatsappBridge: () => void;
   telegramBridgeEnabled: boolean;
   onToggleTelegramBridge: () => void;
-  autoGroupTabsEnabled?: boolean;
-  onToggleAutoGroupTabs?: () => void;
   sidebarAutoSortEnabled?: boolean;
   onToggleSidebarAutoSort?: () => void;
   onResetSidebarUsage?: () => void;
@@ -70,8 +68,6 @@ export function AppSettingsGroup({
   onToggleWhatsappBridge,
   telegramBridgeEnabled,
   onToggleTelegramBridge,
-  autoGroupTabsEnabled = true,
-  onToggleAutoGroupTabs,
   sidebarAutoSortEnabled = true,
   onToggleSidebarAutoSort,
   onResetSidebarUsage,
@@ -92,7 +88,7 @@ export function AppSettingsGroup({
           {onToggleSidebarAutoSort && (
             <AppToggleRow
               label={t.settings_sidebar_auto_sort}
-              icon="bell"
+              icon="globe"
               enabled={sidebarAutoSortEnabled}
               enabledText={t.enabled}
               disabledText={t.disabled}
@@ -127,7 +123,7 @@ export function AppSettingsGroup({
       {/* Bildirimler */}
       <GroupCard title={t.settings_category_notifications}>
         <AppToggleRow
-          label={t.free_games_notifications_title}
+          label={t.free_games_notifications}
           icon="bell"
           enabled={freeGamesNotificationsEnabled}
           enabledText={t.enabled}
@@ -135,7 +131,7 @@ export function AppSettingsGroup({
           onClick={onToggleFreeGamesNotifications}
         />
         <AppToggleRow
-          label={t.settings_notify_tasks}
+          label={t.calendar_notifications}
           icon="calendar"
           enabled={calendarNotificationsEnabled}
           enabledText={t.enabled}
@@ -147,7 +143,7 @@ export function AppSettingsGroup({
       {/* Odak Araçları */}
       <GroupCard title={t.settings_category_focus}>
         <AppToggleRow
-          label={t.settings_pomo_blocker}
+          label={t.pomo_block_sites}
           icon="lock"
           enabled={pomoBlockEnabled}
           enabledText={t.enabled}
@@ -159,7 +155,7 @@ export function AppSettingsGroup({
       {/* Entegrasyonlar */}
       <GroupCard title={t.settings_category_integrations}>
         <AppToggleRow
-          label={t.uib_title}
+          label={t.universal_infobox_setting}
           icon="info"
           enabled={universalInfoBoxEnabled}
           enabledText={t.enabled}
@@ -180,16 +176,6 @@ export function AppSettingsGroup({
           telegramBridgeEnabled={telegramBridgeEnabled}
           onToggleTelegramBridge={onToggleTelegramBridge}
         />
-        {onToggleAutoGroupTabs && (
-          <AppToggleRow
-            label={t.settings_auto_group_tabs}
-            icon="calendar"
-            enabled={autoGroupTabsEnabled}
-            enabledText={t.enabled}
-            disabledText={t.disabled}
-            onClick={onToggleAutoGroupTabs}
-          />
-        )}
       </GroupCard>
     </div>
   );

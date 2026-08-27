@@ -20,6 +20,8 @@ interface AiSettingsTabProps {
   ) => void;
   aiShowThinking: boolean;
   onUpdateAIShowThinking: (val: boolean) => void;
+  autoGroupTabsEnabled?: boolean;
+  onToggleAutoGroupTabs?: () => void;
 }
 
 export function AiSettingsTab({
@@ -30,6 +32,8 @@ export function AiSettingsTab({
   onUpdateAIConfig,
   aiShowThinking,
   onUpdateAIShowThinking,
+  autoGroupTabsEnabled = true,
+  onToggleAutoGroupTabs,
 }: AiSettingsTabProps) {
   const [showKey, setShowKey] = useState(false);
   const [models, setModels] = useState<string[]>([]);
@@ -129,6 +133,46 @@ export function AiSettingsTab({
           aiShowThinking={aiShowThinking}
           onToggle={() => onUpdateAIShowThinking(!aiShowThinking)}
         />
+
+        {onToggleAutoGroupTabs && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: "4px",
+              paddingTop: "8px",
+              borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+            }}
+          >
+            <label
+              style={{
+                fontSize: "0.85rem",
+                color: "var(--text-secondary)",
+                fontWeight: 500,
+              }}
+            >
+              {t.settings_auto_group_tabs}
+            </label>
+            <button
+              type="button"
+              onClick={onToggleAutoGroupTabs}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: 700,
+                color: autoGroupTabsEnabled
+                  ? "var(--accent-color)"
+                  : "var(--text-secondary)",
+                fontSize: "0.85rem",
+                padding: "4px 8px",
+              }}
+            >
+              {autoGroupTabsEnabled ? t.enabled : t.disabled}
+            </button>
+          </div>
+        )}
 
         <AiMemoryEditor
           t={t}

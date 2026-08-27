@@ -26,8 +26,6 @@ interface GeneralSettingsTabProps {
   onToggleWhatsappBridge: () => void;
   telegramBridgeEnabled: boolean;
   onToggleTelegramBridge: () => void;
-  autoGroupTabsEnabled?: boolean;
-  onToggleAutoGroupTabs?: () => void;
   sidebarAutoSortEnabled?: boolean;
   onToggleSidebarAutoSort?: () => void;
   onResetSidebarUsage?: () => void;
@@ -52,8 +50,6 @@ export function GeneralSettingsTab({
   onToggleWhatsappBridge,
   telegramBridgeEnabled,
   onToggleTelegramBridge,
-  autoGroupTabsEnabled = true,
-  onToggleAutoGroupTabs,
   sidebarAutoSortEnabled = true,
   onToggleSidebarAutoSort,
   onResetSidebarUsage,
@@ -79,8 +75,6 @@ export function GeneralSettingsTab({
         onToggleWhatsappBridge={onToggleWhatsappBridge}
         telegramBridgeEnabled={telegramBridgeEnabled}
         onToggleTelegramBridge={onToggleTelegramBridge}
-        autoGroupTabsEnabled={autoGroupTabsEnabled}
-        onToggleAutoGroupTabs={onToggleAutoGroupTabs}
         sidebarAutoSortEnabled={sidebarAutoSortEnabled}
         onToggleSidebarAutoSort={onToggleSidebarAutoSort}
         onResetSidebarUsage={onResetSidebarUsage}
