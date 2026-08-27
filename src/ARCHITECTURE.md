@@ -60,6 +60,7 @@ flowchart TB
     subgraph Services["services/ (Dış dünya iletişimi)"]
         kpssService
         aiChatService
+        fileAttachmentService["fileAttachmentService.ts (Multimodal dosya/görsel işleme)"]
         prayerService
         gamesService
         gameAssetsService

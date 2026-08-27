@@ -1,10 +1,11 @@
 /**
  * AiChatMessageItem.tsx
- * AI sohbet mesaj balonu, katlanabilir düşünme süreci ve Google AI Modu Canlı Arama kaynak adımları bileşeni.
- * Tuval: copied/showSources state + AiMessageSources/AiThinkingCard/AiMessageFooter + avatar + text.
+ * AI sohbet mesaj balonu, katlanabilir düşünme süreci, ekli görsel/dosya rozetleri ve Google AI Modu Canlı Arama kaynak adımları bileşeni.
  */
 import { useState } from "preact/hooks";
 import type { WebSearchSource } from "@/services/webSearchAgent.js";
+import type { ChatAttachment } from "@/services/aichat/types.js";
+import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 import { AiMessageSources } from "./AiMessageSources.js";
 import { AiThinkingCard } from "./AiThinkingCard.js";
 import { AiMessageFooter } from "./AiMessageFooter.js";
@@ -16,6 +17,7 @@ export interface MessageItemData {
   thinking?: string;
   searchQuery?: string;
   sources?: WebSearchSource[];
+  attachments?: ChatAttachment[];
 }
 
 interface AiChatMessageItemProps {
@@ -38,6 +40,7 @@ export function AiChatMessageItem({
   const isUser = message.sender === "user";
   const [copied, setCopied] = useState(false);
   const [showSources, setShowSources] = useState(true);
+  const [lightboxImg, setLightboxImg] = useState<{ src: string; alt: string } | null>(null);
 
   const handleCopy = () => {
     if (!message.text) {
@@ -50,6 +53,17 @@ export function AiChatMessageItem({
 
   return (
     <div className={`message-bubble-wrapper ${message.sender}`}>
+      {lightboxImg && (
+        <div className="sidepanel-lightbox-overlay" onClick={() => setLightboxImg(null)}>
+          <div className="sidepanel-lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <img src={lightboxImg.src} alt={lightboxImg.alt} className="sidepanel-lightbox-img" />
+            <button className="sidepanel-lightbox-close" onClick={() => setLightboxImg(null)}>
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="avatar">
         {isUser ? (
           "👤"
@@ -67,6 +81,46 @@ export function AiChatMessageItem({
         )}
       </div>
       <div className="message-bubble">
+        {/* Render User Attached Images or Document Badges */}
+        {isUser && message.attachments && message.attachments.length > 0 && (
+          <div className="aichat-msg-attachments">
+            {message.attachments.map((att) => (
+              <div key={att.id} className="aichat-msg-att-item">
+                {att.type === "image" && (att.previewUrl || att.dataUrl) ? (
+                  <div
+                    className="aichat-msg-img-wrap"
+                    onClick={() =>
+                      setLightboxImg({
+                        src: att.previewUrl || att.dataUrl || "",
+                        alt: att.name,
+                      })
+                    }
+                  >
+                    <img
+                      src={att.previewUrl || att.dataUrl}
+                      alt={att.name}
+                      className="aichat-msg-thumb"
+                    />
+                    <span className="aichat-msg-att-badge">
+                      {att.name} ({formatFileSize(att.size)})
+                    </span>
+                  </div>
+                ) : (
+                  <div className={`aichat-msg-doc-pill ${att.type}`}>
+                    {att.type === "pdf" ? (
+                      <span className="doc-icon pdf">PDF</span>
+                    ) : (
+                      <span className="doc-icon code">DOC</span>
+                    )}
+                    <span className="doc-name">{att.name}</span>
+                    <span className="doc-size">{formatFileSize(att.size)}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Google AI Mode Live Research Step Card */}
         {!isUser && message.sources && message.sources.length > 0 && (
           <AiMessageSources

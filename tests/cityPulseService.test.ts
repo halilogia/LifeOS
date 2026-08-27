@@ -66,6 +66,7 @@ describe("cityPulseService", () => {
       getTaxonomiesCache: vi.fn().mockResolvedValue(null),
       saveTaxonomiesCache: vi.fn().mockResolvedValue(undefined),
       getFavorites: vi.fn().mockImplementation(() => Promise.resolve(savedFavs)),
+      loadFavorites: vi.fn().mockImplementation(() => Promise.resolve(savedFavs)),
       saveFavorites: vi.fn().mockImplementation((favs) => {
         savedFavs = favs;
         return Promise.resolve();

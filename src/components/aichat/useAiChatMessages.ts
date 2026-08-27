@@ -1,14 +1,10 @@
-/**
- * useAiChatMessages.ts
- * Hook — manages AI Chat state, message history, and AI API interaction.
- * Extracted from AIChatView.tsx to keep view pure.
- * Tuval: mesaj state + AI akışı; offline/fallback reply'lar localReplyBuilder'da.
- */
 import { useState, useEffect } from "preact/hooks";
 import type { Todo } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 import type { Language } from "@/types/types.js";
 import type { MessageItemData } from "./AiChatMessageItem.js";
+import type { ChatAttachment } from "@/services/aichat/types.js";
+import { processUploadedFile } from "@/services/aichat/fileAttachmentService.js";
 import { parseLocalCommand } from "@/utils/aiCommandParser.js";
 import {
   callAIConfigured,
@@ -37,8 +33,11 @@ export interface UseAiChatMessagesReturn {
   messages: MessageItemData[];
   isBotTyping: boolean;
   enableWebSearch: boolean;
+  attachments: ChatAttachment[];
   openThinkingIndexes: Record<number, boolean>;
   handleSendMessage: (textToSend?: string) => Promise<void>;
+  handleAddFiles: (files: FileList | File[]) => Promise<void>;
+  handleRemoveAttachment: (id: string) => void;
   handleToggleThinking: (idx: number) => void;
   setOpenThinkingIndexes: (
     fn: (prev: Record<number, boolean>) => Record<number, boolean>,
@@ -78,9 +77,28 @@ export function useAiChatMessages({
   const [messages, setMessages] = useState<MessageItemData[]>([]);
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [enableWebSearch, setEnableWebSearch] = useState(true);
+  const [attachments, setAttachments] = useState<ChatAttachment[]>([]);
   const [openThinkingIndexes, setOpenThinkingIndexes] = useState<
     Record<number, boolean>
   >({});
+
+  const handleAddFiles = async (files: FileList | File[]) => {
+    const fileList = Array.from(files);
+    try {
+      const processed = await Promise.all(
+        fileList.map((f) => processUploadedFile(f)),
+      );
+      setAttachments((prev) => [...prev, ...processed]);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.error("File upload error in AIChatView:", err);
+      alert(msg);
+    }
+  };
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+  };
 
   // Initialize welcome message (and check for pending stock from BIST analysis)
   useEffect(() => {
@@ -124,19 +142,27 @@ export function useAiChatMessages({
   const handleSendMessage = async (textToSend?: string) => {
     // State'ten en güncel input'u al
     const query = (textToSend || "").trim();
-    if (!query) {
+    if (!query && attachments.length === 0) {
       return;
     }
-    if (!textToSend) {
-      // stashed — inputVal ref'ten gelir, View kontrol eder
-    }
+
+    const currentAttachments = [...attachments];
+    setAttachments([]);
 
     const time = new Date().toLocaleTimeString(
       lang === "tr" ? "tr-TR" : "en-US",
       { hour: "2-digit", minute: "2-digit" },
     );
 
-    setMessages((prev) => [...prev, { sender: "user", text: query, time }]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        sender: "user",
+        text: query || (currentAttachments.length > 0 ? "Ekli dosyaları analiz et." : ""),
+        time,
+        attachments: currentAttachments.length > 0 ? currentAttachments : undefined,
+      },
+    ]);
     setIsBotTyping(true);
 
     try {
@@ -176,6 +202,7 @@ export function useAiChatMessages({
             aiModel,
             aiEndpoint,
             enableWebSearch: true,
+            attachments: currentAttachments,
             conversationHistory,
           });
 
@@ -203,12 +230,13 @@ export function useAiChatMessages({
           }));
 
         const aiResponse = await callAIConfigured({
-          userPrompt: query,
+          userPrompt: query || "Ekli dosyaları incele ve açıkla.",
           aiProvider,
           aiApiKey,
           aiModel,
           aiEndpoint,
           enableWebSearch,
+          attachments: currentAttachments,
           conversationHistory,
         });
         setIsBotTyping(false);
@@ -305,8 +333,11 @@ export function useAiChatMessages({
     messages,
     isBotTyping,
     enableWebSearch,
+    attachments,
     openThinkingIndexes,
     handleSendMessage,
+    handleAddFiles,
+    handleRemoveAttachment,
     handleToggleThinking,
     setOpenThinkingIndexes,
     setEnableWebSearch,

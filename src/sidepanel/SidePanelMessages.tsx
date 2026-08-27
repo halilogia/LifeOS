@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { ChatMessage } from "./ChatMessage.js";
+import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 
 interface SidePanelMessagesProps {
   t: Record<string, string>;
@@ -53,7 +54,7 @@ function SidePanelCopyBtn({
           viewBox="0 0 24 24"
           fill="none"
           stroke="#10b981"
-          stroke-width="2.5"
+          strokeWidth="2.5"
         >
           <polyline points="20 6 9 17 4 12" />
         </svg>
@@ -64,7 +65,7 @@ function SidePanelCopyBtn({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          strokeWidth="2"
         >
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -83,8 +84,21 @@ export function SidePanelMessages({
   messagesEndRef,
   onChipClick,
 }: SidePanelMessagesProps) {
+  const [lightboxImg, setLightboxImg] = useState<{ src: string; alt: string } | null>(null);
+
   return (
     <div className="sidepanel-messages">
+      {lightboxImg && (
+        <div className="sidepanel-lightbox-overlay" onClick={() => setLightboxImg(null)}>
+          <div className="sidepanel-lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <img src={lightboxImg.src} alt={lightboxImg.alt} className="sidepanel-lightbox-img" />
+            <button className="sidepanel-lightbox-close" onClick={() => setLightboxImg(null)}>
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+
       {messages.length === 0 ? (
         <div className="sidepanel-empty-state">
           <div className="ai-orb-container">
@@ -134,6 +148,48 @@ export function SidePanelMessages({
       ) : (
         messages.map((msg) => (
           <div key={msg.id} className={`sidepanel-msg ${msg.role}`}>
+            {/* Render User Attached Files / Images */}
+            {msg.attachments && msg.attachments.length > 0 && (
+              <div className="sidepanel-msg-attachments">
+                {msg.attachments.map((att) => (
+                  <div key={att.id} className="sidepanel-msg-att-item">
+                    {att.type === "image" && att.previewUrl ? (
+                      <div
+                        className="sidepanel-msg-img-wrap"
+                        onClick={() =>
+                          setLightboxImg({
+                            src: att.previewUrl || att.dataUrl || "",
+                            alt: att.name,
+                          })
+                        }
+                      >
+                        <img
+                          src={att.previewUrl}
+                          alt={att.name}
+                          className="sidepanel-msg-thumb"
+                        />
+                        <span className="sidepanel-msg-att-badge">
+                          {att.name} ({formatFileSize(att.size)})
+                        </span>
+                      </div>
+                    ) : (
+                      <div className={`sidepanel-msg-doc-pill ${att.type}`}>
+                        {att.type === "pdf" ? (
+                          <span className="doc-icon pdf">PDF</span>
+                        ) : (
+                          <span className="doc-icon code">DOC</span>
+                        )}
+                        <span className="doc-name">{att.name}</span>
+                        <span className="doc-size">
+                          {formatFileSize(att.size)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div style={{ whiteSpace: "pre-wrap" }}>{msg.content}</div>
             <div
               style={{
@@ -163,15 +219,15 @@ export function SidePanelMessages({
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2.5"
+            strokeWidth="2.5"
             style={{ animation: "spin 1s linear infinite" }}
           >
             <circle
               cx="12"
               cy="12"
               r="10"
-              stroke-dasharray="32"
-              stroke-dashoffset="10"
+              strokeDasharray="32"
+              strokeDashoffset="10"
             ></circle>
           </svg>
           <span>{agentStatus}</span>

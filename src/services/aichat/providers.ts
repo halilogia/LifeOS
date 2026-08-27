@@ -1,5 +1,9 @@
 import { parseAIResponse } from "@/utils/aiCommandParser.js";
-import type { AIResponseData } from "./types.js";
+import type { AIResponseData, ChatAttachment } from "./types.js";
+import {
+  extractDocumentContext,
+  formatFileSize,
+} from "./fileAttachmentService.js";
 
 interface HistoryMessage {
   role: "user" | "assistant";
@@ -13,6 +17,7 @@ export async function callOllama(
   userPrompt: string,
   aiEndpoint: string,
   aiModel: string,
+  attachments?: ChatAttachment[],
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -22,6 +27,12 @@ export async function callOllama(
     ? `${baseUrl}/chat/completions`
     : `${baseUrl}/v1/chat/completions`;
   const modelName = aiModel || "llama3";
+
+  const docContext = extractDocumentContext(attachments || []);
+  const finalPrompt = docContext
+    ? `${userPrompt}\n\n${docContext}`
+    : userPrompt;
+
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -30,7 +41,7 @@ export async function callOllama(
       messages: [
         { role: "system", content: systemPrompt },
         ...historyMessages,
-        { role: "user", content: userPrompt },
+        { role: "user", content: finalPrompt },
       ],
       stream: false,
     }),
@@ -62,6 +73,7 @@ export async function callOpenRouter(
   aiEndpoint: string,
   aiModel: string,
   aiApiKey: string,
+  attachments?: ChatAttachment[],
 ): Promise<AIResponseData> {
   const baseUrl =
     aiEndpoint && aiEndpoint.trim()
@@ -84,6 +96,27 @@ export async function callOpenRouter(
     headers["X-Title"] = "Life OS Dashboard";
   }
 
+  const imageAttachments = attachments?.filter(
+    (a) => a.type === "image" && a.dataUrl,
+  );
+  const docContext = extractDocumentContext(attachments || []);
+
+  let userContent: unknown = userPrompt;
+  if (imageAttachments && imageAttachments.length > 0) {
+    userContent = [
+      {
+        type: "text",
+        text: docContext ? `${userPrompt}\n\n${docContext}` : userPrompt,
+      },
+      ...imageAttachments.map((img) => ({
+        type: "image_url",
+        image_url: { url: img.dataUrl },
+      })),
+    ];
+  } else if (docContext) {
+    userContent = `${userPrompt}\n\n${docContext}`;
+  }
+
   const res = await fetch(url, {
     method: "POST",
     headers,
@@ -92,7 +125,7 @@ export async function callOpenRouter(
       messages: [
         { role: "system", content: systemPrompt },
         ...historyMessages,
-        { role: "user", content: userPrompt },
+        { role: "user", content: userContent },
       ],
       stream: false,
     }),
@@ -130,6 +163,7 @@ export async function callGemini(
   aiModel: string,
   aiApiKey: string,
   enableWebSearch: boolean,
+  attachments?: ChatAttachment[],
 ): Promise<AIResponseData> {
   const modelName = aiModel || "gemini-1.5-flash";
   const baseUrl =
@@ -138,13 +172,35 @@ export async function callGemini(
       : "https://generativelanguage.googleapis.com/v1beta";
   const url = `${baseUrl}/models/${modelName}:generateContent?key=${aiApiKey}`;
 
+  const userParts: Array<Record<string, unknown>> = [{ text: userPrompt }];
+
+  if (attachments && attachments.length > 0) {
+    for (const att of attachments) {
+      if (att.dataUrl && (att.type === "image" || att.type === "pdf")) {
+        const base64Data = att.dataUrl.includes(",")
+          ? att.dataUrl.split(",")[1]
+          : att.dataUrl;
+        userParts.push({
+          inlineData: {
+            mimeType: att.mimeType,
+            data: base64Data,
+          },
+        });
+      } else if (att.textContent) {
+        userParts.push({
+          text: `\n[Eklenen Belge: "${att.name}" (${formatFileSize(att.size)})]\n${att.textContent}\n`,
+        });
+      }
+    }
+  }
+
   const reqPayload: Record<string, unknown> = {
     contents: [
       ...historyMessages.map((m) => ({
         role: m.role === "assistant" ? "model" : "user",
         parts: [{ text: m.content }],
       })),
-      { role: "user", parts: [{ text: userPrompt }] },
+      { role: "user", parts: userParts },
     ],
     systemInstruction: { parts: [{ text: systemPrompt }] },
     generationConfig: { responseMimeType: "application/json" },

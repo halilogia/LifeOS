@@ -55,8 +55,11 @@ export function AIChatView({
     messages,
     isBotTyping,
     enableWebSearch,
+    attachments,
     openThinkingIndexes,
     handleSendMessage,
+    handleAddFiles,
+    handleRemoveAttachment,
     handleToggleThinking,
     setOpenThinkingIndexes,
     setEnableWebSearch,
@@ -75,12 +78,14 @@ export function AIChatView({
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isBotTyping]);
 
-  const onSend = () => {
-    const text = inputVal.trim();
-    if (!text) {
+  const onSend = (suggestedText?: string) => {
+    const text = (suggestedText || inputVal).trim();
+    if (!text && attachments.length === 0) {
       return;
     }
-    setInputVal("");
+    if (!suggestedText) {
+      setInputVal("");
+    }
     handleSendMessage(text);
   };
 
@@ -165,9 +170,12 @@ export function AIChatView({
           webSearchLabel={
             enableWebSearch ? t.aichat_web_search_on : t.aichat_web_search_off
           }
+          attachments={attachments}
           onInputChange={setInputVal}
           onSendMessage={onSend}
           onToggleWebSearch={() => setEnableWebSearch((prev) => !prev)}
+          onAddFiles={handleAddFiles}
+          onRemoveAttachment={handleRemoveAttachment}
         />
       </div>
     </div>

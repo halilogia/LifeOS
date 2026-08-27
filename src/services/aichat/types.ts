@@ -4,6 +4,17 @@ import type { IMemoryRepository } from "@/domain/repositories/IMemoryRepository.
 import type { ITodoRepository } from "@/domain/repositories/ITodoRepository.js";
 import type { INoteRepository } from "@/domain/repositories/INoteRepository.js";
 
+export interface ChatAttachment {
+  id: string;
+  name: string;
+  type: "image" | "pdf" | "document" | "code";
+  mimeType: string;
+  size: number;
+  dataUrl?: string; // Base64 data URL for images and PDFs
+  textContent?: string; // Text content for text/code/json/csv documents
+  previewUrl?: string; // Thumbnail preview URL (for images)
+}
+
 export interface AICallParams {
   userPrompt: string;
   aiProvider: string;
@@ -11,6 +22,7 @@ export interface AICallParams {
   aiModel: string;
   aiEndpoint: string;
   enableWebSearch?: boolean;
+  attachments?: ChatAttachment[];
   conversationHistory?: Array<{ role: "user" | "assistant"; content: string }>;
 }
 

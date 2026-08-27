@@ -23,12 +23,17 @@ export function SidePanelApp() {
     pageContext,
     isListening,
     isYoutube,
+    attachments,
+    enableWebSearch,
     messagesEndRef,
     setInputText,
     toggleVoiceInput,
     refreshPageContext,
     handleNewChat,
     handleSendMessage,
+    handleAddFiles,
+    handleRemoveAttachment,
+    handleToggleWebSearch,
     handleChipClick,
   } = useSidePanelChat();
 
@@ -73,9 +78,14 @@ export function SidePanelApp() {
         inputText={inputText}
         isProcessing={isProcessing}
         isListening={isListening}
+        attachments={attachments}
+        enableWebSearch={enableWebSearch}
         onInputChange={setInputText}
         onSend={() => handleSendMessage()}
         onToggleVoice={toggleVoiceInput}
+        onAddFiles={handleAddFiles}
+        onRemoveAttachment={handleRemoveAttachment}
+        onToggleWebSearch={handleToggleWebSearch}
       />
     </div>
   );

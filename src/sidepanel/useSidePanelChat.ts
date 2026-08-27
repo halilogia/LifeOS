@@ -1,10 +1,3 @@
-/**
- * useSidePanelChat.ts
- * Side Panel Chat — kompozisyon tuvali.
- * 3 alt-hook: useChatSession, useVoiceInput, useAgentBridge.
- * Return yüzeyi korunur — SidePanelApp.tsx değişmez.
- */
-
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
@@ -13,7 +6,18 @@ import {
   getAIConfigFromStorage,
   handleUpdateMemoryFromAI,
 } from "@/services/aichat/index.js";
+import type { ChatAttachment } from "@/services/aichat/types.js";
+import {
+  processUploadedFile,
+  extractDocumentContext,
+  formatFileSize,
+} from "@/services/aichat/fileAttachmentService.js";
+import {
+  detectNeedsWebSearch,
+  executeWebSearch,
+} from "@/services/webSearchAgent.js";
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
+import { logger } from "@/utils/logger.js";
 import { ChatMessage } from "./ChatMessage.js";
 import { useChatSession } from "./useChatSession.js";
 import { useVoiceInput } from "./useVoiceInput.js";
@@ -29,12 +33,17 @@ export interface UseSidePanelChatReturn {
   pageContext: PageContext | null;
   isListening: boolean;
   isYoutube: boolean;
+  attachments: ChatAttachment[];
+  enableWebSearch: boolean;
   messagesEndRef: { current: HTMLDivElement | null };
   setInputText: (v: string) => void;
   toggleVoiceInput: () => void;
   refreshPageContext: () => void;
   handleNewChat: () => void;
   handleSendMessage: (promptOverride?: string) => Promise<void>;
+  handleAddFiles: (files: FileList | File[]) => Promise<void>;
+  handleRemoveAttachment: (id: string) => void;
+  handleToggleWebSearch: () => void;
   handleChipClick: (
     type:
       | "summarize"
@@ -50,6 +59,8 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
   const [lang, setLang] = useState<Language>("tr");
   const [inputText, setInputText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [attachments, setAttachments] = useState<ChatAttachment[]>([]);
+  const [enableWebSearch, setEnableWebSearch] = useState<boolean>(true);
 
   const t = getTranslation(lang);
 
@@ -99,17 +110,44 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
     };
   }, []);
 
+  /* ---- Dosya & Arama Yönetimi ---- */
+  const handleAddFiles = async (files: FileList | File[]) => {
+    const fileList = Array.from(files);
+    try {
+      const processed = await Promise.all(
+        fileList.map((f) => processUploadedFile(f)),
+      );
+      setAttachments((prev) => [...prev, ...processed]);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.error("File upload error in sidepanel:", err);
+      alert(msg);
+    }
+  };
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const handleToggleWebSearch = () => {
+    setEnableWebSearch((prev) => !prev);
+  };
+
   /* ---- Ana AI çağrı akışı ---- */
   const handleSendMessage = async (promptOverride?: string) => {
     const textToSend = (promptOverride || inputText).trim();
-    if (!textToSend || isProcessing) {
+    if ((!textToSend && attachments.length === 0) || isProcessing) {
       return;
     }
+
+    const currentAttachments = [...attachments];
+    setAttachments([]);
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: textToSend,
+      content: textToSend || (currentAttachments.length > 0 ? "Ekli dosyayı analiz et." : ""),
+      attachments: currentAttachments.length > 0 ? currentAttachments : undefined,
       timestamp: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -154,6 +192,29 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       ),
     );
 
+    // Canlı Web Arama Entegrasyonu
+    let webSearchSnippet = "";
+    if (enableWebSearch && textToSend && detectNeedsWebSearch(textToSend)) {
+      setAgentStatus("Web aranıyor...");
+      try {
+        const searchData = await executeWebSearch(textToSend);
+        if (searchData && searchData.sources.length > 0) {
+          webSearchSnippet =
+            `\n\n[Canlı Web Arama Sonuçları: "${searchData.query}"]\n` +
+            searchData.sources
+              .slice(0, 4)
+              .map(
+                (s, i) =>
+                  `[${i + 1}] ${s.title} (${s.url})\n${s.snippet}`,
+              )
+              .join("\n\n") +
+            "\n[Web Arama Sonu]\n";
+        }
+      } catch (err) {
+        logger.warn("Web search error in sidepanel:", err);
+      }
+    }
+
     const currentContextText = activeCtx ? activeCtx.pageText : "";
     const currentTitle = activeCtx ? activeCtx.title : "";
     const currentUrl = activeCtx ? activeCtx.url : "";
@@ -161,6 +222,8 @@ export function useSidePanelChat(): UseSidePanelChatReturn {
       activeCtx && activeCtx.interactiveElements
         ? JSON.stringify(activeCtx.interactiveElements.slice(0, 50))
         : "[]";
+
+    const docContext = extractDocumentContext(currentAttachments);
 
     const systemPrompt = `You are Life OS Web Agent & Copilot embedded in Chrome Side Panel for active tab:
 Title: "${currentTitle}"
@@ -174,6 +237,8 @@ Active Page Content Excerpt:
 
 Interactive Form & Input Elements on Active Page:
 ${currentInteractiveElements}
+${docContext ? `\n\nEkli Belgeler ve Dosyalar:\n${docContext}` : ""}
+${webSearchSnippet ? `\n\n${webSearchSnippet}` : ""}
 
 INSTRUCTIONS FOR FORM FILLING, REGISTRATION & WEB ACTIONS:
 If the user asks to fill a form, register, or sign up on a website/forum (e.g. "Formu doldur", "Kayıt ol", "Üye ol", "Bu siteye kayıt ol", "Sign up"), match input field labels/placeholders (Username, Email, Full Name, Bio, Occupation) on the active page against the user's personal memory (memory.md).
@@ -205,14 +270,37 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
       if (provider === "gemini") {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        
+        const userParts: Array<Record<string, unknown>> = [
+          { text: systemPrompt },
+          { text: `User request: ${textToSend || "Ekli dosyayı incele."}` },
+        ];
+
+        if (currentAttachments.length > 0) {
+          for (const att of currentAttachments) {
+            if (att.dataUrl && (att.type === "image" || att.type === "pdf")) {
+              const base64Data = att.dataUrl.includes(",")
+                ? att.dataUrl.split(",")[1]
+                : att.dataUrl;
+              userParts.push({
+                inlineData: {
+                  mimeType: att.mimeType,
+                  data: base64Data,
+                },
+              });
+            } else if (att.textContent) {
+              userParts.push({
+                text: `\n[Eklenen Belge: "${att.name}" (${formatFileSize(att.size)})]\n${att.textContent}\n`,
+              });
+            }
+          }
+        }
+
         const reqBody = {
           contents: [
             {
               role: "user",
-              parts: [
-                { text: systemPrompt },
-                { text: `User request: ${textToSend}` },
-              ],
+              parts: userParts,
             },
           ],
         };
@@ -244,6 +332,21 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
           reqHeaders["Authorization"] = `Bearer ${apiKey}`;
         }
 
+        const imageAttachments = currentAttachments.filter(
+          (a) => a.type === "image" && a.dataUrl,
+        );
+
+        let userContent: unknown = textToSend || "Ekli dosyaları analiz et.";
+        if (imageAttachments.length > 0) {
+          userContent = [
+            { type: "text", text: textToSend || "Görseli analiz et." },
+            ...imageAttachments.map((img) => ({
+              type: "image_url",
+              image_url: { url: img.dataUrl },
+            })),
+          ];
+        }
+
         const resp = await fetch(targetEndpoint, {
           method: "POST",
           headers: reqHeaders,
@@ -251,7 +354,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
             model: model,
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: textToSend },
+              { role: "user", content: userContent },
             ],
           }),
         });
@@ -435,12 +538,17 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     pageContext,
     isListening,
     isYoutube,
+    attachments,
+    enableWebSearch,
     messagesEndRef,
     setInputText,
     toggleVoiceInput,
     refreshPageContext,
     handleNewChat,
     handleSendMessage,
+    handleAddFiles,
+    handleRemoveAttachment,
+    handleToggleWebSearch,
     handleChipClick,
   };
 }

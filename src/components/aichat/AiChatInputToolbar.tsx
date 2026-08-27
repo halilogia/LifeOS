@@ -1,7 +1,10 @@
 /**
  * AiChatInputToolbar.tsx
- * Google AI Modu Canlı Arama çipi, hızlı komut çipleri ve mesaj yazma/gönderme çubuğu.
+ * Google AI Modu Canlı Arama çipi, ek dosya/görsel ataşı, önizleme çipleri ve mesaj yazma/gönderme çubuğu.
  */
+import { useRef, useState } from "preact/hooks";
+import type { ChatAttachment } from "@/services/aichat/types.js";
+import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 
 interface AiChatInputToolbarProps {
   inputVal: string;
@@ -13,9 +16,12 @@ interface AiChatInputToolbarProps {
   enableWebSearch: boolean;
   webSearchTitle: string;
   webSearchLabel: string;
+  attachments?: ChatAttachment[];
   onInputChange: (val: string) => void;
   onSendMessage: (text?: string) => void;
   onToggleWebSearch: () => void;
+  onAddFiles?: (files: FileList | File[]) => void;
+  onRemoveAttachment?: (id: string) => void;
 }
 
 function IconSend() {
@@ -65,22 +71,119 @@ export function AiChatInputToolbar({
   enableWebSearch,
   webSearchTitle,
   webSearchLabel,
+  attachments = [],
   onInputChange,
   onSendMessage,
   onToggleWebSearch,
+  onAddFiles,
+  onRemoveAttachment,
 }: AiChatInputToolbarProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleFileChange = (e: Event) => {
+    const input = e.target as HTMLInputElement;
+    if (input.files && input.files.length > 0 && onAddFiles) {
+      onAddFiles(input.files);
+      input.value = "";
+    }
+  };
+
+  const handlePaste = (e: ClipboardEvent) => {
+    if (e.clipboardData && e.clipboardData.files.length > 0 && onAddFiles) {
+      e.preventDefault();
+      onAddFiles(e.clipboardData.files);
+    }
+  };
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    if (e.dataTransfer && e.dataTransfer.files.length > 0 && onAddFiles) {
+      onAddFiles(e.dataTransfer.files);
+    }
+  };
+
   return (
-    <div className="chat-input-panel">
+    <div
+      className={`chat-input-panel ${isDragOver ? "drag-over" : ""}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+        multiple
+        accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.ts,.py,.html,.css"
+      />
+
+      {/* Attachment Previews Bar */}
+      {attachments.length > 0 && (
+        <div className="aichat-attachment-previews">
+          {attachments.map((att) => (
+            <div key={att.id} className="aichat-att-chip">
+              {att.type === "image" && att.previewUrl ? (
+                <img
+                  src={att.previewUrl}
+                  alt={att.name}
+                  className="aichat-att-thumb"
+                />
+              ) : (
+                <div className={`aichat-att-icon-badge ${att.type}`}>
+                  {att.type === "pdf" ? (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  ) : (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                      <polyline points="13 2 13 9 20 9" />
+                    </svg>
+                  )}
+                </div>
+              )}
+              <div className="aichat-att-meta">
+                <span className="aichat-att-name" title={att.name}>
+                  {att.name}
+                </span>
+                <span className="aichat-att-size">
+                  {formatFileSize(att.size)}
+                </span>
+              </div>
+              {onRemoveAttachment && (
+                <button
+                  type="button"
+                  className="aichat-att-remove"
+                  onClick={() => onRemoveAttachment(att.id)}
+                  title="Kaldır"
+                >
+                  &times;
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Quick Suggestions & Google AI Mode Search Chip */}
-      <div
-        className="suggestion-chips-container"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          overflowX: "auto",
-        }}
-      >
+      <div className="suggestion-chips-container">
         <button
           type="button"
           className={`chip-btn ${enableWebSearch ? "active" : ""}`}
@@ -106,28 +209,66 @@ export function AiChatInputToolbar({
           <span>{webSearchLabel}</span>
         </button>
 
-        <button className="chip-btn" onClick={() => onSendMessage(suggestion1)}>
+        <button
+          type="button"
+          className="chip-btn"
+          onClick={() => onSendMessage(suggestion1)}
+        >
           💡 {suggestion1}
         </button>
-        <button className="chip-btn" onClick={() => onSendMessage(suggestion2)}>
+        <button
+          type="button"
+          className="chip-btn"
+          onClick={() => onSendMessage(suggestion2)}
+        >
           💡 {suggestion2}
         </button>
-        <button className="chip-btn" onClick={() => onSendMessage(suggestion3)}>
+        <button
+          type="button"
+          className="chip-btn"
+          onClick={() => onSendMessage(suggestion3)}
+        >
           💡 {suggestion3}
         </button>
       </div>
 
       {/* Main prompt input bar */}
       <div className="main-input-bar">
+        <button
+          type="button"
+          className="aichat-attach-btn"
+          onClick={() => fileInputRef.current?.click()}
+          title="Dosya veya Resim Ekle (PDF, TXT, PNG, JPG, Kod)"
+        >
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+          </svg>
+        </button>
+
         <input
           type="text"
           className="chat-prompt-input"
           value={inputVal}
           onInput={(e) => onInputChange((e.target as HTMLInputElement).value)}
+          onPaste={handlePaste}
           onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
           placeholder={placeholder}
         />
-        <button className="send-message-btn" onClick={() => onSendMessage()}>
+        <button
+          type="button"
+          className="send-message-btn"
+          onClick={() => onSendMessage()}
+          disabled={!inputVal.trim() && attachments.length === 0}
+        >
           <span>{sendLabel}</span>
           <IconSend />
         </button>
