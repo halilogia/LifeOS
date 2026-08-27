@@ -41,6 +41,7 @@ flowchart TB
         useBist["useBist.ts (kompozisyon tuvali → 5 alt-hook)"]
         useCalendar
         useFreeGames
+        useGameAssets
         useEisenhower
         useHifiz
         useWillpower
@@ -61,6 +62,7 @@ flowchart TB
         aiChatService
         prayerService
         gamesService
+        gameAssetsService
         errorReportService
         modelFetcher
         rssService
@@ -157,7 +159,8 @@ flowchart TB
 | `src/components/`                              | Saf UI görünümü                    | View'lar + `<feature>/` alt bileşenleri                                                                                                                                                                                           | `chrome.storage`, `fetch`, iş mantığı |
 | `src/components/kpss/`                         | KPSS not stüdyosu UI'si            | wiki/, quiz/ bileşenleri; notlar chrome.storage'da tutulur, MD indirme var                                                                                                                                                        | —                                     |
 | `src/components/kpss/quiz/`                    | KPSS Quiz ekranları                | `KpssQuizQuestionsStep` (soru + süre sayacı), `KpssQuizTimer` (SVG geri sayım halkası), `KpssQuestionStem` (ÖSYM tarzı roman madde + olumsuzluk vurgusu), `MathRenderer` (KaTeX + `renderRichText`), intro/result/review adımları | —                                     |
-| `src/components/<feature>/`                    | Feature'a özel UI parçaları        | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/...                                                                                                                                                                           | —                                     |
+| `src/components/<feature>/`                    | Feature'a özel UI parçaları        | kpss/quiz/, kpss/wiki/, settings/, stock/, pomodoro/,...                                                                                                                                                                           | —                                     |
+| `src/components/gameassets/`                   | Ücretsiz oyun assetleri UI parçaları | AssetHubsBar.tsx, GameAssetsFilterBar.tsx, GameAssetCard.tsx                                                                                                                                                                       | State                                 |
 | `src/components/rss/`                          | RSS görünüm alt bileşenleri        | RssFeedList.tsx, RssItemList.tsx                                                                                                                                                                                                  | State                                 |
 | `src/presentation/hooks/`                      | State yönetimi, view-model         | useSettings, useTodos, useBist + bist/ alt-hook'lar                                                                                                                                                                               | DOM, fetch                            |
 | `src/presentation/hooks/bist/`                 | BIST alt-hook'ları (modüler)       | usePortfolio, useWatchlists, useStockRules, useStockTrading, useBistQuotes                                                                                                                                                        | JSX, direkt DOM                       |

@@ -54,6 +54,10 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 - **🎮 Ücretsiz Oyun Takibi & Masaüstü Bildirimleri**:
   - Steam, Epic Games ve GOG platformlarındaki güncel ücretsiz oyun fırsatlarını listeleyen premium arayüz.
   - **Saatlik Arkaplan Alarmı**: `chrome.alarms` servisiyle Steam, Epic ve GOG platformlarındaki yeni ücretsiz oyunları takip edip masaüstü bildirimi gönderir. Bildirime tıklandığında oyunun claim sayfası otomatik açılır.
+- **🎨 Ücretsiz Oyun Assetleri & Geliştirici Kaynakları (`GameAssetsView.tsx`)**:
+  - **Çoklu Canlı Akışlar**: Itch.io Free & On-Sale varlıkları, Kenney.nl %100 CC0 kamu malı paketleri, OpenGameArt.org açık kaynak topluluk kütüphanesi ve GamerPower Loot fırsatlarını eşzamanlı listeleyen modül.
+  - **Quick Hubs Hızlı Varlık Merkezleri**: Poly Pizza (3D CC0), Kenney, Itch.io, OpenGameArt, Quaternius (3D CC0), Game-Icons (SVG), AmbientCG (PBR), Epic Fab Free, Unity Asset Store Free ve Mixamo'ya tek tıkla doğrudan erişim.
+  - **Kategori & Kaynak Filtreleri**: 2D, 3D, Ses/Müzik, UI, Doku/Kaplama ve DLC/Loot kategorileri, anlık arama ve Chrome Storage'da saklanan "Kaydedildi/İndirildi" işaretleme takibi.
 - **🛡️ Sosyal Medya Detoksu (Detox Blocker) & Ekran Süresi Sayacı**:
   - **Derin Bloklama (SSM Tekniği)**: Twitter/X, Instagram, YouTube, TikTok ve Facebook platformlarında **container-gizleme** stratejisi ile akışı, Reels/Shorts bölümlerini ve abonelik butonlarını seçici olarak gizler. SPA güncellemeleri `MutationObserver` + 100ms polling ile izlenir, React geri getirse bile yeniden gizlenir.
   - **Facebook Reels Temizleyici (`facebookCleaner.ts`)**: 4 katmanlı JS tarayıcı (href, aria-label, pagelet, görünür text) ile modern FB DOM'undaki Reels butonlarını akıllı şekilde gizler.

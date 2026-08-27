@@ -1,0 +1,366 @@
+/* ── Free Game Assets Page Styling ────────────────────────── */
+
+.game-assets-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 1.5rem);
+}
+
+/* Quick Hubs Bar */
+.asset-hubs-container {
+  background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 16px);
+  padding: 14px 18px;
+  backdrop-filter: blur(var(--glass-blur, 10px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asset-hubs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.asset-hubs-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.asset-hubs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.asset-hub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  color: var(--text-primary, #f8fafc);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.asset-hub-chip:hover {
+  background: var(--accent-color, #6366f1);
+  color: #ffffff;
+  border-color: var(--accent-color, #6366f1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--accent-glow, rgba(99, 102, 241, 0.3));
+}
+
+.asset-hub-chip .hub-name {
+  white-space: nowrap;
+}
+
+.asset-hub-chip .hub-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+/* Filter Section */
+.game-assets-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--card-bg-subtle, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 16px);
+  padding: 16px 20px;
+  backdrop-filter: blur(var(--glass-blur, 10px));
+}
+
+.game-assets-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.game-assets-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+}
+
+.game-assets-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  margin: 2px 0 0 0;
+}
+
+.game-assets-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.game-assets-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 240px;
+}
+
+.game-assets-search-wrap .search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-secondary, #94a3b8);
+  pointer-events: none;
+}
+
+.game-assets-search-input {
+  width: 100%;
+  background: var(--card-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  padding: 8px 32px 8px 34px;
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.game-assets-search-input:focus {
+  border-color: var(--accent-color, #6366f1);
+  box-shadow: 0 0 12px var(--accent-glow, rgba(99, 102, 241, 0.25));
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+}
+
+.search-clear-btn:hover {
+  color: var(--text-primary, #f8fafc);
+}
+
+.game-assets-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.game-assets-refresh-btn:hover:not(:disabled) {
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--accent-color, #6366f1);
+  background: var(--card-bg-hover, rgba(255, 255, 255, 0.08));
+}
+
+.game-assets-refresh-btn.spinning svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Category Tabs */
+.game-assets-category-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  padding-top: 12px;
+}
+
+.asset-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary, #94a3b8);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.asset-cat-btn:hover {
+  color: var(--text-primary, #f8fafc);
+  background: var(--card-bg-hover, rgba(255, 255, 255, 0.05));
+}
+
+.asset-cat-btn.active {
+  color: var(--text-primary, #f8fafc);
+  background: var(--accent-color, #6366f1);
+  border-color: var(--accent-color, #6366f1);
+  box-shadow: 0 4px 12px var(--accent-glow, rgba(99, 102, 241, 0.3));
+}
+
+.asset-cat-btn .cat-count {
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.asset-cat-btn.active .cat-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Source Selection Bar */
+.game-assets-source-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+}
+
+.source-label-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary, #94a3b8);
+  letter-spacing: 0.5px;
+}
+
+.source-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.source-chip {
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  color: var(--text-secondary, #94a3b8);
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.source-chip:hover {
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--card-border-hover, rgba(255, 255, 255, 0.2));
+}
+
+.source-chip.active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--accent-color, #6366f1);
+  color: var(--accent-color, #6366f1);
+  font-weight: 600;
+}
+
+/* Card customizations for Game Assets */
+.asset-card .asset-license-badge {
+  background: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.asset-card .asset-license-badge.cc0 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.asset-card .asset-source-itch {
+  background: rgba(250, 92, 92, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(250, 92, 92, 0.3);
+}
+
+.asset-card .asset-source-kenney {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.asset-card .asset-source-opengameart {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.asset-card .asset-source-gamerpower {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.asset-card .asset-cat-badge {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.asset-card .asset-author-badge {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted, #64748b);
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-claim-btn.secondary-icon {
+  background: var(--card-bg, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.game-claim-btn.secondary-icon:hover {
+  background: var(--card-bg-hover, rgba(255, 255, 255, 0.12));
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--accent-color, #6366f1);
+}
+
+.game-assets-attribution {
+  margin-top: 10px;
+}

@@ -140,6 +140,8 @@ export const LOCAL_ARCADE_GAMES = "lifeos_arcade_games_v1";
 export const LOCAL_POMO_STATE = "pomoState";
 export const LOCAL_STOPWATCH_STATE = "stopwatchState";
 export const LOCAL_KPSS_PAST_QUIZZES = "kpss_past_quizzes";
+export const LOCAL_GAME_ASSETS_CACHE = "game_assets_cache";
+export const LOCAL_GAME_ASSETS_CLAIMED = "game_assets_claimed";
 
 /** Template for prayer calendar keys: `prayer_calendar_{city}_{year}_{month}`. */
 export const PRAYER_CALENDAR_PREFIX = "prayer_calendar_";

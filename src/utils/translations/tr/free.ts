@@ -25,4 +25,22 @@ export const free = {
   free_games_empty: "Ücretsiz oyun bulunamadı.",
   fg_claimed: "Alındı",
   fg_mark_claimed: "Alındı işaretle",
+
+  // Game Assets Module
+  game_assets_title: "Ücretsiz Oyun Assetleri & Geliştirici Kaynakları",
+  game_assets_subtitle: "Projeleriniz için 2D/3D modeller, sesler, UI paketleri ve CC0 kamu malı varlıklar",
+  game_assets_hubs_title: "⚡ Popüler Ücretsiz Varlık Merkezleri (Quick Hubs)",
+  game_assets_cat_all: "Tümü",
+  game_assets_cat_2d: "2D Sprite & Art",
+  game_assets_cat_3d: "3D Modeller",
+  game_assets_cat_audio: "Ses & Müzik",
+  game_assets_cat_ui: "UI & İkonlar",
+  game_assets_cat_textures: "Kaplama & Doku",
+  game_assets_cat_loot: "DLC & Paketler",
+  game_assets_search_placeholder: "Asset veya etiket ara...",
+  game_assets_get_btn: "Varlığa Git",
+  game_assets_saved: "Kaydedildi",
+  game_assets_loading: "Ücretsiz assetler taranıyor...",
+  game_assets_error: "Assetler yüklenirken bir sorun oluştu.",
+  game_assets_no_match: "Arama kriterlerine uygun asset bulunamadı.",
 };

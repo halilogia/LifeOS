@@ -40,6 +40,17 @@ Unified indie game showcase, HTML5 arcade player, and Steam-style developer labo
 
 ---
 
+## ✅ Tamamlanan v4.3.0 (2026-08-27)
+
+### 1. 🎨 Ücretsiz Oyun Assetleri Modülü (Free Game Assets) — TAMAMLANDI
+- [x] **Çoklu Canlı Akışlar**: Itch.io Free & On-Sale, Kenney.nl %100 CC0, OpenGameArt.org ve GamerPower Loot endpoint entegrasyonu (`gameAssetsService.ts`).
+- [x] **Quick Hubs Hızlı Portallar**: Poly Pizza (3D CC0), Kenney, Itch, OpenGameArt, Quaternius, Game-Icons, AmbientCG, Epic Fab, Unity Asset Store ve Mixamo kısayol çipleri (`AssetHubsBar.tsx`).
+- [x] **Kategori & Kaynak Filtreleri**: 2D, 3D, Audio, UI, Textures, Loot sekmeleri ve Itch/Kenney/OpenGameArt/GamerPower filtreleri (`GameAssetsFilterBar.tsx`).
+- [x] **Varlık Kartları & Claim Durumu**: Lisans etiketleri (CC0, Free vb.), anlık arama ve Chrome Storage'da saklanan kaydedildi durumu (`GameAssetCard.tsx`, `ChromeStorageGameAssetsRepository.ts`).
+- [x] **Tasarım & i18n**: Glassmorphic koyu tema kartları (`game-assets.css`), Sidebar 3D kutu ikonu ve TR/EN dil desteği.
+
+---
+
 ## ✅ Tamamlanan v4.2.0 (2026-08-11)
 
 ### 1. 📡 RSS Takip & Okuyucu — TAMAMLANDI

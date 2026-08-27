@@ -25,4 +25,22 @@ export const free = {
   free_games_empty: "No free games found.",
   fg_claimed: "Claimed",
   fg_mark_claimed: "Mark as claimed",
+
+  // Game Assets Module
+  game_assets_title: "Free Game Assets & Dev Resources",
+  game_assets_subtitle: "2D/3D models, audio, UI packs, textures, and CC0 public domain assets for your games",
+  game_assets_hubs_title: "⚡ Curated Free Asset Portals (Quick Hubs)",
+  game_assets_cat_all: "All Assets",
+  game_assets_cat_2d: "2D Sprites & Art",
+  game_assets_cat_3d: "3D Models",
+  game_assets_cat_audio: "Audio & Music",
+  game_assets_cat_ui: "UI & Icons",
+  game_assets_cat_textures: "Textures & Materials",
+  game_assets_cat_loot: "DLC & Loot Packs",
+  game_assets_search_placeholder: "Search assets or tags...",
+  game_assets_get_btn: "Get Asset",
+  game_assets_saved: "Saved",
+  game_assets_loading: "Scanning free game assets...",
+  game_assets_error: "Failed to load game assets. Check your connection.",
+  game_assets_no_match: "No assets matching your search criteria.",
 };

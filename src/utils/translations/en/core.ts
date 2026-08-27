@@ -154,6 +154,7 @@ export const core = {
   sidebar_detox: "Digital Detox",
   sidebar_arcade: "Arcade",
   sidebar_free_games: "Free Games",
+  sidebar_game_assets: "Free Game Assets",
   sidebar_city_pulse: "City Events",
   sidebar_bist: "BIST & IPOs OS",
   sidebar_bist_short: "IPOs & Stocks",

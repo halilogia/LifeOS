@@ -146,6 +146,8 @@ export function Sidebar({
         return t.sidebar_arcade;
       case "free-games":
         return t.sidebar_free_games;
+      case "game-assets":
+        return t.sidebar_game_assets || "Ücretsiz Assetler";
       case "city-pulse":
         return t.sidebar_city_pulse;
       case "bist":

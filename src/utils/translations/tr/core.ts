@@ -154,6 +154,7 @@ export const core = {
   sidebar_detox: "Dijital Detoks",
   sidebar_arcade: "Arcade",
   sidebar_free_games: "Ücretsiz Oyunlar",
+  sidebar_game_assets: "Ücretsiz Assetler",
   sidebar_city_pulse: "Şehir Etkinlikleri",
   sidebar_bist: "BIST & Halka Arz OS",
   sidebar_bist_short: "Halka Arz & Hisse",

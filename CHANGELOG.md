@@ -1,3 +1,15 @@
+## [4.3.0] - 2026-08-27
+### Eklendi & İyileştirildi
+- **Ücretsiz Oyun Assetleri Modülü (`GameAssetsView.tsx`, `useGameAssets.ts`, `gameAssetsService.ts`, `ChromeStorageGameAssetsRepository.ts`)**:
+  - **Çoklu Canlı Akış & API Entegrasyonu**: Itch.io Free & %100 Off satışları, Kenney.nl CC0 kamu malı paketleri, OpenGameArt.org açık kaynak topluluk içerikleri ve GamerPower Loot endpoint'lerini eşzamanlı çekip normalize eden servis mimarisi.
+  - **Quick Hubs Hızlı Varlık Merkezleri (`AssetHubsBar.tsx`)**: Poly Pizza (3D CC0), Kenney, Itch.io, OpenGameArt, Quaternius (3D CC0), Game-Icons.net (SVG), AmbientCG (PBR CC0), Epic Fab Free, Unity Asset Store Free, Mixamo ve Freesound portallarına doğrudan erişim çipleri.
+  - **Kategori & Kaynak Filtreleme (`GameAssetsFilterBar.tsx`)**: 2D Sprite, 3D Model, Ses & Müzik, UI & İkonlar, Kaplama/Doku ve DLC/Loot kategorileri ve kaynak filtreleri (Itch, Kenney, OpenGameArt, GamerPower) ile canlı arama kutusu.
+  - **Varlık Kartı & Kalıcı Durum (`GameAssetCard.tsx`)**: Lisans rozetleri (CC0, Free, Open Source), görsel önizleme, kategori etiketleri, doğrudan indirme linki ve Chrome Storage'da saklanan "Kaydedildi/İndirildi" (`claimedIds`) takibi.
+  - **Tasarım & i18n (`game-assets.css`, TR/EN)**: Glassmorphic koyu tema tasarımı, responsive kart ızgarası ve Türkçe/İngilizce dil desteği.
+- **Doğrulama**: `vitest run` 89/89 test ✓, `npm run build` (Vite + TS) ✓.
+
+---
+
 ## [4.2.0] - 2026-08-11
 ### Eklendi & İyileştirildi
 - **RSS Takip & Okuyucu (`RssView.tsx`, `rssService.ts`, `rssSyncHandler.ts`, `ChromeStorageRssRepository.ts`)**:
