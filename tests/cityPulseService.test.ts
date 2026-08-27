@@ -14,7 +14,12 @@ describe("cityPulseService", () => {
     expect(decodeEntities("İstanbul &amp; Sanat &#8211; Konser")).toBe(
       "İstanbul & Sanat – Konser",
     );
-    expect(decodeEntities("&quot;Harika&quot;")).toBe('"Harika"');
+    expect(decodeEntities("Gençlik Kampı &#038; Atölye")).toBe(
+      "Gençlik Kampı & Atölye",
+    );
+    expect(decodeEntities("&quot;Harika&quot; &amp;amp; Kamp")).toBe(
+      '"Harika" & Kamp',
+    );
     expect(decodeEntities("&Uuml;cretsiz")).toBe("Ücretsiz");
   });
 

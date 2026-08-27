@@ -202,17 +202,33 @@ export function decodeEntities(input: string): string {
   if (!input) {
     return "";
   }
-  return String(input)
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex: string) =>
-      String.fromCodePoint(parseInt(hex, 16)),
-    )
-    .replace(/&#(\d+);/g, (_, dec: string) =>
-      String.fromCodePoint(parseInt(dec, 10)),
-    )
-    .replace(/&([a-zA-Z][a-zA-Z0-9]*);/g, (match, name: string) => {
-      const mapped = NAMED_ENTITIES[name];
-      return mapped !== undefined ? mapped : match;
-    });
+  let prev = "";
+  let curr = String(input);
+  // Loop up to 3 passes to unwrap double-encoded entities (e.g. &amp;#8211; or &amp;amp;)
+  for (let i = 0; i < 3 && curr !== prev; i++) {
+    prev = curr;
+    curr = curr
+      .replace(/&#x([0-9a-fA-F]+);?/g, (_, hex: string) => {
+        try {
+          return String.fromCodePoint(parseInt(hex, 16));
+        } catch {
+          return "";
+        }
+      })
+      .replace(/&#(\d+);?/g, (_, dec: string) => {
+        try {
+          return String.fromCodePoint(parseInt(dec, 10));
+        } catch {
+          return "";
+        }
+      })
+      .replace(/&([a-zA-Z][a-zA-Z0-9]*);/g, (match, name: string) => {
+        const mapped =
+          NAMED_ENTITIES[name] ?? NAMED_ENTITIES[name.toLowerCase()];
+        return mapped !== undefined ? mapped : match;
+      });
+  }
+  return curr;
 }
 
 /** Strips HTML tags from API-rendered content/excerpt into plain text. */

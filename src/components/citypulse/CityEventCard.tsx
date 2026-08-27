@@ -6,7 +6,7 @@
 
 import { useState } from "preact/hooks";
 import type { CityEvent } from "@/types/cityPulse.js";
-import { escapeHtml, sanitizeUrl } from "@/utils/sanitize.js";
+import { sanitizeUrl } from "@/utils/sanitize.js";
 import { generateGoogleCalendarUrl } from "@/services/cityPulseService.js";
 
 interface CityEventCardProps {
@@ -30,8 +30,6 @@ export function CityEventCard({
 }: CityEventCardProps) {
   const [imgError, setImgError] = useState(false);
 
-  const safeTitle = escapeHtml(event.title);
-  const safeExcerpt = escapeHtml(event.excerpt);
   const safeLink = sanitizeUrl(event.link);
   const venueBadges = event.categoryIds
     .map(categoryName)
@@ -159,9 +157,9 @@ export function CityEventCard({
           <span className="cp-badge cp-badge-free">{t.cp_free_chip || "Ücretsiz"}</span>
         </div>
 
-        <h3 className="city-event-card-title" title={event.title}>{safeTitle}</h3>
+        <h3 className="city-event-card-title" title={event.title}>{event.title}</h3>
 
-        {safeExcerpt && <p className="city-event-card-excerpt">{safeExcerpt}</p>}
+        {event.excerpt && <p className="city-event-card-excerpt">{event.excerpt}</p>}
       </div>
 
       {/* 3. Action Footer (Add to Calendar & View Details) */}
