@@ -96,7 +96,7 @@ export function GameAssetsFilterBar({
             className={`game-assets-refresh-btn ${loading ? "spinning" : ""}`}
             onClick={onRefresh}
             disabled={loading}
-            title={t.refresh || "Yenile"}
+            title={t.cp_refresh_btn}
           >
             <svg
               width="16"

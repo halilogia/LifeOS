@@ -54,4 +54,26 @@ export const detox = {
   detox_tt_feed: "Block Feed / Scrolling",
   detox_x_feed: "Hide Home Timeline Feed",
   detox_x_explore: "Hide Explore & Trending Sidebar",
+
+  // ── BlockerUI: block screen & warning banner ───────────────────────
+  social_media_limit_warning:
+    "Your daily {minutes} minute limit for {site} is up.",
+  daily_limit_reached: "Daily Limit Reached",
+  daily_limit_expired: "Your daily limit is up",
+  daily_limit_desc:
+    "You have exceeded your {minutes} minute daily limit for this site. You can try again tomorrow.",
+  pomo_focus_session: "Focus Session",
+  pomo_blocked_desc:
+    "This site is blocked while your Pomodoro focus session runs. Access reopens automatically when the session ends.",
+  focus_time: "Focus Time",
+  detox_blocked_default_desc:
+    "This site is blocked while your detox session runs. Do not let it break your focus.",
+  remaining_focus_time: "Remaining Focus Time",
+  detox_duration: "Detox Duration",
+  permanent_block: "Indefinite Block",
+  go_to_dashboard: "Go to Dashboard",
+  detox_you_could_achieve: "What Could You Have Achieved?",
+  detox_kpss_solve: "You could have solved some practice exam questions",
+  detox_read_pages: "You could have read a few pages of a book",
+  detox_pomodoro_complete: "You could have completed a focus session",
 };

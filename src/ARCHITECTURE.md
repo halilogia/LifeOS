@@ -272,7 +272,6 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | WillpowerView         | useWillpower                                              | sync+local | —                                                                   |
 | EisenhowerView        | todo repo, useEisenhower                                  | sync       | eisenhower/ (2)                                                     |
 | SettingsDrawer        | settings repos                                            | sync       | settings/ (15)                                                      |
-| ArcadeView            | arcadeService                                             | local      | arcade/ (6)                                                         |
 | Sidebar               | useUI                                                     | sync       | sidebar/ (2)                                                        |
 | SidePanel (Copilot)   | useSidePanelChat (tuval → 3 alt-hook)                     | sync       | sidepanel/ (ChatMessage, Header, TabBar, Chips, Messages, InputBar) |
 
@@ -306,3 +305,26 @@ Bu harita **her değişiklikte** güncellenir:
 4. **Yeni feature** eklendi → Feature Haritası'na satır ekle
 
 Doğrulama: `npm run build` + `npx tsc --noEmit` her değişiklikte çalıştırılır.
+
+---
+
+## 7. `scripts/` Klasörü (Denetim & Koruma Araçları)
+
+| Script                     | Sorumluluk                                    | Ne yapar                                                                                                                             | Çıkış kodu                      |
+| -------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `findDeadFiles.mjs`        | Ölü dosya / boş klasör denetimi               | Hiçbir yerden import edilmeyen `.ts/.tsx/.css` dosyalarını, boş klasörleri ve `public/` referanssız asset'leri raporlar            | 0 = temiz (kural 6.4)           |
+| `i18nHealthCheck.mjs`      | Çeviri anahtarı denetimi                      | `translations/{tr,en}`'de tanımlı anahtar havuzunu çıkarır; `src/` genelinde `t.<anahtar>` kullanımlarını tarar ve tanımsızları listeler | 0 = eksik anahtar yok            |
+
+**`i18nHealthCheck.mjs` neden gerekli:** Ayarlar ekranındaki "okunmayan yazılar" hatasının kök nedeni, tanımsız çeviri anahtarlarının sessizce `undefined` dönmesiydi. Derleyici bunu yakalamaz çünkü `t` tipi `Record<string, string>`'dir. Bu script o kör noktayı kapatır.
+
+> Yanlış pozitifler: `stock/`, `kpss/` gibi dosyalarda `t` harfi bir döngü değişkeni (Todo / hisse işlemi / konu nesnesi) olabilir. Script bunları bir deny-list ile atlar; `--all` verildiğinde hepsini listeler. Bir flag gördüğünüzde önce `t`'nin gerçekten çeviri haritası olup olmadığını doğrulayın.
+
+**Değişiklik öncesi kontrol listesi:**
+
+```
+.\node_modules\.bin\tsc.cmd --noEmit        → exit 0
+.\node_modules\.bin\eslint.cmd src          → 0 error
+node scripts/findDeadFiles.mjs               → Toplam: 0 dosya
+node scripts/i18nHealthCheck.mjs             → ✅ Eksik anahtar bulunamadı
+npm run build                                 → newtab + background + content
+```

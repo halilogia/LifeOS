@@ -54,4 +54,26 @@ export const detox = {
   detox_tt_feed: "Kaydırma (Feed) Engelleme",
   detox_x_feed: "Ana Sayfa Akışını Gizle",
   detox_x_explore: "Keşfet & Gündemdekileri Gizle",
+
+  // ── BlockerUI: engelleme ekranı & uyarı bandı ──────────────────────
+  social_media_limit_warning:
+    "{site} için günlük {minutes} dakikalık süren doldu.",
+  daily_limit_reached: "Günlük Limit Doldu",
+  daily_limit_expired: "Günlük limitin doldu",
+  daily_limit_desc:
+    "Bu site için belirlediğin {minutes} dakikalık günlük limiti aştın. Yarın tekrar deneyebilirsin.",
+  pomo_focus_session: "Odaklanma Seansı",
+  pomo_blocked_desc:
+    "Pomodoro odak seansın sürerken bu site engellendi. Seans bitince erişim otomatik olarak açılır.",
+  focus_time: "Odak Zamanı",
+  detox_blocked_default_desc:
+    "Detoks oturumun sürerken bu site engellendi. Odağını bozmasına izin verme.",
+  remaining_focus_time: "Kalan Odak Süresi",
+  detox_duration: "Detoks Süresi",
+  permanent_block: "Süresiz Engel",
+  go_to_dashboard: "Panele Git",
+  detox_you_could_achieve: "Bu Sürede Neler Yapabilirdin?",
+  detox_kpss_solve: "Birkaç KPSS test sorusu çözebilirdin",
+  detox_read_pages: "Birkaç sayfa kitap okuyabilirdin",
+  detox_pomodoro_complete: "Bir odaklanma seansı tamamlayabilirdin",
 };

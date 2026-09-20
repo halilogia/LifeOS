@@ -135,7 +135,7 @@ export function SrsView({ lang }: SrsViewProps) {
                     background: "rgba(255,255,255,0.1)",
                     padding: "4px 12px",
                     borderRadius: "8px",
-                    color: "var(--accent-light)",
+                    color: "var(--accent-color)",
                   }}
                 >
                   {wordInfo.level || "General"}

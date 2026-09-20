@@ -68,7 +68,11 @@ export function PomoTimerPanel({
               textTransform: "uppercase",
             }}
           >
-            {m === "focus" ? t.focus : m === "short" ? t.short : t.long}
+            {m === "focus"
+              ? t.pomodoro_focus
+              : m === "short"
+                ? t.pomodoro_short
+                : t.pomodoro_long}
           </button>
         ))}
       </div>
@@ -133,10 +137,10 @@ export function PomoTimerPanel({
             }}
           >
             {pomoState.mode === "focus"
-              ? t.focus
+              ? t.pomodoro_focus
               : pomoState.mode === "short"
-                ? t.short
-                : t.long}
+                ? t.pomodoro_short
+                : t.pomodoro_long}
           </span>
         </div>
       </div>

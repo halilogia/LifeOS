@@ -61,8 +61,11 @@ export function RoutineStreakCard({ todos, lang, t }: RoutineStreakCardProps) {
             <div className="streak-title-row">
               <h3 className="streak-count-title">{streakTitle}</h3>
               {bestStreak > 0 && (
-                <span className="best-streak-pill" title={`${t.willpower_best_streak || "En Uzun Seri"}: ${bestStreak} ${t.willpower_days || "gün"}`}>
-                  🏆 {bestStreak} {t.willpower_days || "gün"}
+                <span
+                  className="best-streak-pill"
+                  title={`${t.willpower_best_streak}: ${bestStreak} ${t.willpower_clean_days}`}
+                >
+                  🏆 {bestStreak} {t.willpower_clean_days}
                 </span>
               )}
             </div>

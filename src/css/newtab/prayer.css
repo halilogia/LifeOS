@@ -63,7 +63,7 @@
 }
 
 .prayer-item.active .prayer-name {
-  color: var(--accent-light);
+  color: var(--accent-color);
   font-weight: 700;
 }
 
