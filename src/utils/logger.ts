@@ -24,9 +24,21 @@ export interface ILogger {
   info(...args: unknown[]): void;
 }
 
-/** Ring buffer boyutu — storage.local taşmasın diye sınırlı tutulur. */
-const MAX_ENTRIES = 500;
+/**
+ * Ring buffer boyutu — storage.local taşmasın diye sınırlı tutulur.
+ * Yalnızca log/warn/error/info seviyeleri saklanır (debug console-only),
+ * bu yüzden 300 kayıt indirilen raporda fazlasıyla yeterli.
+ */
+const MAX_ENTRIES = 300;
 const STORAGE_KEY = "logger_entries";
+
+/**
+ * Yazma birleştirme (write coalescing) penceresi.
+ * Log çağrıları patlama halinde geldiğinde (örn. view geçişleri) hepsi tek bir
+ * storage read-modify-write turuna indirilir. Önceden her log satırı 500'lük
+ * diziyi baştan okuyup yazıyordu.
+ */
+const FLUSH_DELAY_MS = 200;
 
 /**
  * Args dizisini serializable string'e çevirir.
@@ -76,26 +88,60 @@ function detectSource(): string {
   }
 }
 
+/** Henüz storage'a yazılmamış kayıtlar (coalescing kuyruğu). */
+let pendingEntries: LogEntry[] = [];
+let flushTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Kuyruğu storage'a boşaltır. */
+function flushPendingEntries(): void {
+  if (flushTimer !== null) {
+    clearTimeout(flushTimer);
+    flushTimer = null;
+  }
+  if (pendingEntries.length === 0) {
+    return;
+  }
+  if (typeof chrome === "undefined" || !chrome.runtime?.id) {
+    pendingEntries = [];
+    return;
+  }
+
+  const batch = pendingEntries;
+  pendingEntries = [];
+
+  chrome.storage.local.get([STORAGE_KEY], (res) => {
+    const existing: LogEntry[] = Array.isArray(res?.[STORAGE_KEY])
+      ? (res[STORAGE_KEY] as LogEntry[])
+      : [];
+    const next = [...existing, ...batch];
+    // Ring buffer: en eskileri at
+    if (next.length > MAX_ENTRIES) {
+      next.splice(0, next.length - MAX_ENTRIES);
+    }
+    chrome.storage.local.set({ [STORAGE_KEY]: next }).catch?.(() => {});
+  });
+}
+
 /**
  * Log kaydını chrome.storage.local'a biriktirir (ring buffer).
- * chrome.runtime yoksa (test ortamı) sessizce atlanır.
+ * Yazmalar FLUSH_DELAY_MS boyunca birleştirilir.
+ * immediate=true → beklemeden hemen yazar (hata kayıtları worker kapanmadan
+ * kaybolmasın diye).
  */
-function persistToStorage(entry: LogEntry): void {
+function persistToStorage(entry: LogEntry, immediate = false): void {
   try {
     if (typeof chrome === "undefined" || !chrome.runtime?.id) {
       return;
     }
-    chrome.storage.local.get([STORAGE_KEY], (res) => {
-      const existing: LogEntry[] = Array.isArray(res?.[STORAGE_KEY])
-        ? (res[STORAGE_KEY] as LogEntry[])
-        : [];
-      const next = [...existing, entry];
-      // Ring buffer: en eskileri at
-      if (next.length > MAX_ENTRIES) {
-        next.splice(0, next.length - MAX_ENTRIES);
-      }
-      chrome.storage.local.set({ [STORAGE_KEY]: next }).catch?.(() => {});
-    });
+    pendingEntries.push(entry);
+
+    if (immediate) {
+      flushPendingEntries();
+      return;
+    }
+    if (flushTimer === null) {
+      flushTimer = setTimeout(flushPendingEntries, FLUSH_DELAY_MS);
+    }
   } catch {
     // Storage hataları loglamayı asla kırmasın
   }
@@ -127,14 +173,23 @@ export class ConsoleLogger implements ILogger {
         break;
     }
 
-    // Storage'a biriktir
+    // debug: yalnızca console'a gider, rapora yazılmaz. Geliştirme sırasında
+    // gürültülü teşhis logları bu seviyede tutulur.
+    if (level === "debug") {
+      return;
+    }
+
+    // Storage'a biriktir (hatalar worker kapanmadan hemen yazılır)
     const source = detectSource();
-    persistToStorage({
-      ts: new Date().toISOString(),
-      level,
-      source,
-      message: serializeArgs(args),
-    });
+    persistToStorage(
+      {
+        ts: new Date().toISOString(),
+        level,
+        source,
+        message: serializeArgs(args),
+      },
+      level === "error",
+    );
   }
 
   log(...args: unknown[]): void {

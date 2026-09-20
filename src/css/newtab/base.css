@@ -369,8 +369,8 @@ body.sidebar-open .container {
 }
 
 .settings-tab-btn.active {
-  color: var(--accent);
-  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-color);
+  background: rgba(var(--accent-color-rgb), 0.12);
 }
 
 .settings-header {

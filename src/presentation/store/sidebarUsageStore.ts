@@ -93,7 +93,7 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
         setStorageItem(USAGE_KEY, usage),
         setStorageItem(LAST_USED_KEY, lastUsed),
       ]).then(() => {
-        logger.info(`[SidebarUsage] saved (${viewKey}=${usage[viewKey]})`);
+        logger.debug(`[SidebarUsage] saved (${viewKey}=${usage[viewKey]})`);
       });
     }, 300);
     set({ _saveTimer: timer });
@@ -102,7 +102,7 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   setAutoSort: async (enabled: boolean) => {
     set({ autoSort: enabled });
     await setStorageItem(AUTO_SORT_KEY, enabled);
-    logger.info(`[SidebarUsage] autoSort=${enabled}`);
+    logger.debug(`[SidebarUsage] autoSort=${enabled}`);
   },
 
   togglePin: async (viewKey: string) => {

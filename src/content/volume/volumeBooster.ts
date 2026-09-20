@@ -15,6 +15,15 @@ let currentMultiplier = 1.0;
 const connectedMediaSet = new WeakSet<HTMLMediaElement>();
 let mutationObserver: MutationObserver | null = null;
 
+/**
+ * Chrome autoplay policy refuses to start an AudioContext that was created
+ * without a user gesture, and logs
+ * "The AudioContext was not allowed to start" at construction time.
+ * Resuming afterwards cannot undo that warning, so we never construct the
+ * context until the first real gesture and replay any pending boost then.
+ */
+let hasUserGesture = false;
+
 /** Recursively discovers all media elements across normal DOM and Shadow Roots. */
 function findMediaElementsInRoot(root: ParentNode): HTMLMediaElement[] {
   const elements: HTMLMediaElement[] = [];
@@ -38,6 +47,13 @@ function findMediaElementsInRoot(root: ParentNode): HTMLMediaElement[] {
 
 /** Obtains or creates the AudioContext and resumes it if suspended. */
 function getOrCreateAudioContext(): AudioContext | null {
+  // Never construct before a user gesture: Chrome would start it suspended
+  // and emit the autoplay warning. Callers re-run applyMultiplierToAllMedia()
+  // on the first gesture, so nothing is permanently missed.
+  if (!hasUserGesture) {
+    return null;
+  }
+
   if (!contentAudioCtx) {
     const AudioCtxClass =
       window.AudioContext ||
@@ -81,9 +97,13 @@ function attachMediaElement(el: HTMLMediaElement): void {
   }
 }
 
-/** Applies volume boost multiplier to all current media elements. */
-export function setVolumeBoostLevel(boostMultiplier: number): void {
-  currentMultiplier = Number(boostMultiplier) || 1.0;
+/** Routes every media element on the page through the gain node. */
+function applyMultiplierToAllMedia(): void {
+  // At 100% there is nothing to boost — skip entirely so we never pay the
+  // cost (or the autoplay warning) of wiring up an AudioContext.
+  if (currentMultiplier === 1.0) {
+    return;
+  }
 
   const ctx = getOrCreateAudioContext();
   if (!ctx || !contentGainNode) {
@@ -103,6 +123,12 @@ export function setVolumeBoostLevel(boostMultiplier: number): void {
   }
 }
 
+/** Applies volume boost multiplier to all current media elements. */
+export function setVolumeBoostLevel(boostMultiplier: number): void {
+  currentMultiplier = Number(boostMultiplier) || 1.0;
+  applyMultiplierToAllMedia();
+}
+
 /** Initializes listeners for messages, media events, DOM mutations, and gestures. */
 export function initVolumeBoosterListener(): void {
   // Listen for boost messages from popup / background
@@ -118,6 +144,12 @@ export function initVolumeBoosterListener(): void {
 
   // Attach listeners to media playback events
   const handleMediaEvent = (e: Event) => {
+    // Skip when no boost is active (mirrors the MutationObserver guard) or when
+    // we are still waiting for the first gesture, so a suspended AudioContext
+    // is never constructed and playback is left untouched.
+    if (currentMultiplier === 1.0 || !hasUserGesture) {
+      return;
+    }
     const target = e.target as HTMLMediaElement;
     if (target && (target.tagName === "VIDEO" || target.tagName === "AUDIO")) {
       attachMediaElement(target);
@@ -130,22 +162,30 @@ export function initVolumeBoosterListener(): void {
   document.addEventListener("loadedmetadata", handleMediaEvent, true);
   document.addEventListener("canplay", handleMediaEvent, true);
 
-  // Resume suspended audio context on any user interaction with the page
-  const resumeAudioContext = () => {
+  // Resume suspended audio context on any user interaction with the page.
+  // The first interaction additionally unlocks AudioContext creation and
+  // replays a boost that was requested before the gesture (the popup sends
+  // set_volume_boost as soon as it opens).
+  const handleUserGesture = () => {
+    if (!hasUserGesture) {
+      hasUserGesture = true;
+      applyMultiplierToAllMedia();
+      return;
+    }
     if (contentAudioCtx && contentAudioCtx.state === "suspended") {
       contentAudioCtx.resume().catch(() => {});
     }
   };
 
-  window.addEventListener("pointerdown", resumeAudioContext, { passive: true });
-  window.addEventListener("click", resumeAudioContext, { passive: true });
-  window.addEventListener("keydown", resumeAudioContext, { passive: true });
-  window.addEventListener("touchstart", resumeAudioContext, { passive: true });
+  window.addEventListener("pointerdown", handleUserGesture, { passive: true });
+  window.addEventListener("click", handleUserGesture, { passive: true });
+  window.addEventListener("keydown", handleUserGesture, { passive: true });
+  window.addEventListener("touchstart", handleUserGesture, { passive: true });
 
   // MutationObserver: automatically detect SPA player mounts (e.g. Kick/Twitch channel switches)
   if (typeof MutationObserver !== "undefined" && !mutationObserver) {
     mutationObserver = new MutationObserver((mutations) => {
-      if (currentMultiplier === 1.0) {
+      if (currentMultiplier === 1.0 || !hasUserGesture) {
         return;
       }
       for (const mutation of mutations) {

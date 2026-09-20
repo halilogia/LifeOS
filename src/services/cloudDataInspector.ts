@@ -74,7 +74,7 @@ export async function getSyncDataSummary(): Promise<SyncKeySummary[]> {
     }
 
     summaries.sort((a, b) => b.size - a.size);
-    logger.info(`[CloudDataInspector] sync keys: ${summaries.length}`);
+    logger.debug(`[CloudDataInspector] sync keys: ${summaries.length}`);
     return summaries;
   } catch (err) {
     logger.error("[CloudDataInspector] sync read failed:", err);

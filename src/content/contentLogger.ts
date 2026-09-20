@@ -8,7 +8,11 @@
  */
 
 const STORAGE_KEY = "content_logs";
-const MAX_ENTRIES = 500;
+/**
+ * 500 → 150: yalnızca warn/error saklandığı için küçük bir tampon yeterli.
+ * (logger_entries tamponuyla birlikte storage.local'ı iki kez şişirmesin.)
+ */
+const MAX_ENTRIES = 150;
 
 function persist(level: string, args: unknown[]): void {
   try {
@@ -27,9 +31,12 @@ function persist(level: string, args: unknown[]): void {
   }
 }
 
+/**
+ * Rutin bilgi mesajı — yalnızca console'a yazılır, kalıcı tampona kaydedilmez.
+ * (Bu seviyedeki mesajlar hacimli ve teşhis değeri düşük.)
+ */
 export function contentLog(...args: unknown[]): void {
   console.log(...args);
-  persist("log", args);
 }
 
 export function contentWarn(...args: unknown[]): void {

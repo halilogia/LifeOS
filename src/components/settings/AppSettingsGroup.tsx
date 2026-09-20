@@ -123,7 +123,7 @@ export function AppSettingsGroup({
       {/* Bildirimler */}
       <GroupCard title={t.settings_category_notifications}>
         <AppToggleRow
-          label={t.free_games_notifications}
+          label={t.settings_free_games_notifications}
           icon="bell"
           enabled={freeGamesNotificationsEnabled}
           enabledText={t.enabled}
@@ -131,7 +131,7 @@ export function AppSettingsGroup({
           onClick={onToggleFreeGamesNotifications}
         />
         <AppToggleRow
-          label={t.calendar_notifications}
+          label={t.settings_calendar_notifications}
           icon="calendar"
           enabled={calendarNotificationsEnabled}
           enabledText={t.enabled}
@@ -143,7 +143,7 @@ export function AppSettingsGroup({
       {/* Odak Araçları */}
       <GroupCard title={t.settings_category_focus}>
         <AppToggleRow
-          label={t.pomo_block_sites}
+          label={t.settings_pomo_blocker}
           icon="lock"
           enabled={pomoBlockEnabled}
           enabledText={t.enabled}
@@ -155,7 +155,7 @@ export function AppSettingsGroup({
       {/* Entegrasyonlar */}
       <GroupCard title={t.settings_category_integrations}>
         <AppToggleRow
-          label={t.universal_infobox_setting}
+          label={t.uib_title}
           icon="info"
           enabled={universalInfoBoxEnabled}
           enabledText={t.enabled}

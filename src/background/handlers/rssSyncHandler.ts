@@ -88,5 +88,8 @@ export function initRssSyncHandler(): void {
     },
   );
 
-  logger.info("[RssSyncHandler] başlatıldı (30 dk periyot)");
+  // debug: bu satır her service worker restart'ında tekrar çalışır (MV3 ~30 sn
+  // hareketsizlikte worker'ı kapatır), bu yüzden info seviyesinde log dosyasını
+  // hızla dolduruyordu. Console'da görünmeye devam eder; rapora yazılmaz.
+  logger.debug("[RssSyncHandler] başlatıldı (30 dk periyot)");
 }
