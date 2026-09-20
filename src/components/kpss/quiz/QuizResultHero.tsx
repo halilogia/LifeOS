@@ -141,7 +141,7 @@ export function QuizResultHero({
             style={{
               height: "100%",
               width: `${questionTargetPct}%`,
-              background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+              background: "linear-gradient(90deg, #6366f1, var(--accent-color))",
               borderRadius: "4px",
               transition: "width 0.4s ease",
             }}

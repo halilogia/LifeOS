@@ -31,9 +31,9 @@ export function SidePanelChips({
             className="sidepanel-chip"
             onClick={() => onChipClick("yt_summarize")}
             style={{
-              background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+              background: "linear-gradient(135deg, var(--accent-hover), #4f46e5)",
               color: "#ffffff",
-              borderColor: "#8b5cf6",
+              borderColor: "var(--accent-color)",
             }}
           >
             <svg

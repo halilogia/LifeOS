@@ -154,7 +154,7 @@ export function KpssHelpModal({ t, onClose }: KpssHelpModalProps) {
           style={{
             marginTop: "18px",
             width: "100%",
-            background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+            background: "linear-gradient(135deg, #2563eb, var(--accent-hover))",
             border: "none",
             color: "white",
             padding: "9px",

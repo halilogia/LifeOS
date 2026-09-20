@@ -45,7 +45,7 @@ export function WatchlistHeader({
       {symbolCount > 0 && (
         <button
           style={{
-            background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
+            background: "linear-gradient(135deg, var(--accent-color) 0%, #ec4899 100%)",
             border: "none",
             color: "#fff",
             padding: "6px 14px",

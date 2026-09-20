@@ -36,7 +36,7 @@
   font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, #c084fc, #8b5cf6);
+  background: linear-gradient(135deg, #c084fc, var(--accent-color));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -153,7 +153,7 @@
 
 .sidepanel-chip:hover {
   background: rgba(139, 92, 246, 0.2);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
@@ -193,7 +193,7 @@
 
 .sidepanel-msg.user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  background: linear-gradient(135deg, var(--accent-color), #6366f1);
   color: #ffffff;
   border-bottom-right-radius: 3px;
   box-shadow: 0 6px 18px rgba(139, 92, 246, 0.3);
@@ -283,7 +283,7 @@
 
 .sidepanel-suggestion-btn:hover {
   background: rgba(139, 92, 246, 0.22);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
@@ -326,8 +326,8 @@
 
 .sidepanel-input-container.drag-over {
   background: rgba(139, 92, 246, 0.15);
-  border-top-color: #8b5cf6;
-  outline: 2px dashed #8b5cf6;
+  border-top-color: var(--accent-color);
+  outline: 2px dashed var(--accent-color);
   outline-offset: -4px;
 }
 
@@ -485,7 +485,7 @@
 
 .sidepanel-attach-btn:hover {
   background: rgba(139, 92, 246, 0.2);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   color: #ffffff;
 }
 
@@ -510,7 +510,7 @@
 }
 
 .sidepanel-input:focus {
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
   background: rgba(0, 0, 0, 0.65);
 }
@@ -532,7 +532,7 @@
 
 .sidepanel-mic-btn:hover {
   background: rgba(139, 92, 246, 0.2);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   color: #ffffff;
 }
 
@@ -545,7 +545,7 @@
 }
 
 .sidepanel-send-btn {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  background: linear-gradient(135deg, var(--accent-color), #6366f1);
   border: none;
   border-radius: 10px;
   width: 34px;
@@ -636,7 +636,7 @@
 }
 
 .sidepanel-msg-doc-pill .doc-icon.code {
-  background: #8b5cf6;
+  background: var(--accent-color);
   color: #ffffff;
 }
 
@@ -706,7 +706,7 @@
 
 .sidepanel-header-icon-btn:hover {
   background: rgba(139, 92, 246, 0.25);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   color: #ffffff;
 }
 
@@ -748,7 +748,7 @@
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #8b5cf6;
+  color: var(--accent-color);
   font-weight: 700;
 }
 
@@ -915,7 +915,7 @@
 
 .sidepanel-session-card.active {
   background: rgba(139, 92, 246, 0.18);
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
   box-shadow: 0 0 12px rgba(139, 92, 246, 0.25);
 }
 
@@ -939,7 +939,7 @@
   font-size: 0.6rem;
   padding: 1px 5px;
   border-radius: 4px;
-  background: #8b5cf6;
+  background: var(--accent-color);
   color: #ffffff;
   font-weight: 700;
 }
@@ -993,7 +993,7 @@
 .sidepanel-session-rename-input {
   flex: 1;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid #8b5cf6;
+  border: 1px solid var(--accent-color);
   border-radius: 4px;
   padding: 3px 6px;
   color: #ffffff;
@@ -1002,7 +1002,7 @@
 }
 
 .sidepanel-rename-save-btn {
-  background: #8b5cf6;
+  background: var(--accent-color);
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -1089,7 +1089,7 @@
 }
 
 .sidepanel-messages .clarification-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  background: linear-gradient(135deg, var(--accent-color), #6366f1);
   border-color: #a78bfa;
   color: #ffffff;
   transform: translateY(-1px);
@@ -1120,11 +1120,11 @@
 }
 
 .sidepanel-messages .clarification-text-input:focus {
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
 }
 
 .sidepanel-messages .clarification-send-btn {
-  background: #8b5cf6;
+  background: var(--accent-color);
   border: none;
   border-radius: 6px;
   width: 28px;
@@ -1261,7 +1261,7 @@
 }
 
 .sidepanel-input-container .queued-item-idx {
-  color: #8b5cf6;
+  color: var(--accent-color);
   font-weight: 700;
   font-size: 0.68rem;
 }
@@ -1313,7 +1313,7 @@
 }
 
 .sidepanel-send-btn.queue-btn {
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  background: linear-gradient(135deg, var(--accent-color), #ec4899);
 }
 
 .sidepanel-input.queued-input {

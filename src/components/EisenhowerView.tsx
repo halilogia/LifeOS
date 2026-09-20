@@ -142,7 +142,7 @@ export function EisenhowerView({
               quadId="q2"
               title={t.eisenhower_schedule}
               headerTag={t.eisenhower_not_urgent_important}
-              headerColor="#8b5cf6"
+              headerColor="var(--accent-color)"
               tagBg="rgba(139, 92, 246, 0.1)"
               icon={
                 <svg

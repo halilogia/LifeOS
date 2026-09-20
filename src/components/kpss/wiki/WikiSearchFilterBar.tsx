@@ -32,7 +32,7 @@ export function WikiSearchFilterBar({
         onClick={onCreateNewNote}
         style={{
           width: "100%",
-          background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+          background: "linear-gradient(135deg, #2563eb, var(--accent-hover))",
           color: "#ffffff",
           border: "none",
           borderRadius: "8px",

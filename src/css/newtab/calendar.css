@@ -195,7 +195,7 @@
 
 .calendar-task-list li.calendar-event-item {
   background: rgba(139, 92, 246, 0.15);
-  border-left: 2px solid #8b5cf6;
+  border-left: 2px solid var(--accent-color);
 }
 
 .calendar-task-list li.calendar-event-item .event-time {
@@ -205,6 +205,6 @@
 }
 
 .day-tasks-list li.calendar-event-detail {
-  border-left-color: #8b5cf6;
+  border-left-color: var(--accent-color);
   background: rgba(139, 92, 246, 0.05);
 }

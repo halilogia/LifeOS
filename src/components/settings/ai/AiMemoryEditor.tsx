@@ -118,7 +118,7 @@ export function AiMemoryEditor({
           fontWeight: 600,
           borderRadius: "8px",
           color: "#ffffff",
-          background: "linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)",
+          background: "linear-gradient(135deg, var(--accent-color) 0%, #6366f1 100%)",
           border: "1px solid rgba(255, 255, 255, 0.15)",
           boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
           cursor: "pointer",

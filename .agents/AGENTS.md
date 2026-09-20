@@ -237,9 +237,17 @@ flowchart LR
 ```
 ````
 
-### 7.3 İhlal Tespiti
+### 7.3 Walkthrough Yalnızca Açık Talep Üzerine Yazılır (Walkthrough Policy)
+* **`walkthrough.md` varsayılan olarak YAZILMAZ.** Planning Mode akışının bir parçası olsa bile her görev sonunda otomatik oluşturulmaz/güncellenmez.
+* **Yazılmaz**: kod düzeltmesi, refactor, bug fix, test çalıştırma, commit/push, onaylanmış plan uygulama ve *"şunu düzelt"* / *"bunu ekle"* gibi tekil iş taleplerinde. Bu durumlarda sonuç **yalnızca sohbet mesajında** özetlenir.
+* **Yazılır**: yalnızca kullanıcı açıkça istediğinde — *"walkthrough yaz/güncelle"*, *"rapor ver/yaz/raporla"*, *"özet rapor çıkar"*, *"değişiklikleri dokümante et"* veya benzeri açık bir belge talebi. Belirsizlik varsa **yazma, sor**.
+* Kapsam: bu kural yalnızca `walkthrough.md` içindir. `implementation_plan.md` kapsam dışıdır; `README.md`, `CHANGELOG.md`, `ROADMAP.md`, `ARCHITECTURE.md` bu kuraldan etkilenmez.
+* Kaynak: `~/.gemini/config/rules/walkthrough_policy.md` (kanonik global kural ile senkron tutulur).
+
+### 7.4 İhlal Tespiti
 * Bir iş bitiminde değişim diyagramı yoksa → iş eksiktir.
 * ARCHITECTURE.md güncellenmemişse → iş eksiktir.
+* Yapılan iş `brain/task.md`'ye işaretlenmemişse → iş eksiktir (bkz. 8.4).
 
 ---
 

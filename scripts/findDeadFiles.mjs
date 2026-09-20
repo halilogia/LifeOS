@@ -96,18 +96,17 @@ console.log(`\nToplam: ${dead.length} dosya`);
 // alt klasörü olmayan klasörler (ölü dosya silinince klasör kalabilir)
 // ============================================================
 function findEmptyDirs(dir, acc = []) {
-  let hasFiles = false;
   let hasSubdirs = false;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) {
       hasSubdirs = true;
       findEmptyDirs(join(dir, entry.name), acc);
-    } else if (/\.(ts|tsx|css)$/.test(entry.name)) {
-      hasFiles = true;
     }
   }
-  // Sadece kaynak dosya türleri sayılır (örn. .gitkeep boş klasörü kurtarmaz)
-  const realFiles = readdirSync(dir).filter((f) => /\.(ts|tsx|css)$/.test(f));
+  // Herhangi bir dosya türü sayılır (.md, .json, .svg vb. dahil) — .ts/.tsx/.css
+  // ile sınırlamak, ?raw ile import edilen prompt .md klasörlerini yanlışlıkla
+  // "boş" gösteriyordu.
+  const realFiles = readdirSync(dir).filter((f) => !f.startsWith("."));
   if (realFiles.length === 0 && !hasSubdirs) {
     acc.push(dir);
   }
