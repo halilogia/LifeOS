@@ -76,7 +76,7 @@ function fillTextIntoElement(targetEl: HTMLElement, textValue: string): void {
     }
 
     // Try document.execCommand insertText (most reliable for React/Lexical/Draft.js editors)
-    let commandSuccess = false;
+    let commandSuccess: boolean;
     try {
       commandSuccess = document.execCommand("insertText", false, textValue);
     } catch {

@@ -20,9 +20,9 @@ export function GovJobCard({ job }: GovJobCardProps) {
   };
 
   const getDaysLeftClass = () => {
-    if (job.isExpired) return "status-expired";
-    if (job.daysLeft <= 3) return "status-urgent";
-    if (job.daysLeft <= 7) return "status-warning";
+    if (job.isExpired) {return "status-expired";}
+    if (job.daysLeft <= 3) {return "status-urgent";}
+    if (job.daysLeft <= 7) {return "status-warning";}
     return "status-normal";
   };
 

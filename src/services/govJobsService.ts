@@ -81,7 +81,7 @@ export const CURATED_GOV_JOBS: GovJobItem[] = [];
  * Calculates remaining days until deadline from ISO date string
  */
 export function calculateDaysLeft(deadlineStr: string): number {
-  if (!deadlineStr) return 0;
+  if (!deadlineStr) {return 0;}
   const deadlineDate = new Date(deadlineStr);
   const now = new Date();
   const diffTime = deadlineDate.getTime() - now.getTime();

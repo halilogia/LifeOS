@@ -12,7 +12,7 @@ interface EventHubsBarProps {
 }
 
 export function EventHubsBar({ hubs, t }: EventHubsBarProps) {
-  if (!hubs || hubs.length === 0) return null;
+  if (!hubs || hubs.length === 0) {return null;}
 
   return (
     <div className="event-hubs-container">

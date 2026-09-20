@@ -249,7 +249,7 @@ export function stripHtml(html: string): string {
 
 /** Extracts the first image src from HTML string */
 export function extractFirstImageSrc(html: string): string | undefined {
-  if (!html) return undefined;
+  if (!html) {return undefined;}
   const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
   return match ? match[1] : undefined;
 }

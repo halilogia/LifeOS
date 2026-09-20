@@ -155,7 +155,7 @@ function inferCategoryFromText(text: string): AssetCategory {
 }
 
 function cleanHtmlDescription(rawHtml: string): string {
-  if (!rawHtml) return "";
+  if (!rawHtml) {return "";}
   return rawHtml
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
@@ -251,7 +251,7 @@ function parseXmlUsingDomOrRegex(xmlText: string): Array<{
       const m = itemXml.match(
         new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, "i"),
       );
-      if (!m) return "";
+      if (!m) {return "";}
       return m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1").trim();
     };
     const getAttr = (tag: string, attr: string) => {
@@ -266,7 +266,7 @@ function parseXmlUsingDomOrRegex(xmlText: string): Array<{
     const rawDesc = getTag("description");
     if (!image && rawDesc) {
       const imgMatch = rawDesc.match(/<img[^>]+src=["']([^"']+)["']/i);
-      if (imgMatch) image = imgMatch[1];
+      if (imgMatch) {image = imgMatch[1];}
     }
     const category = getTag("category") || undefined;
     const pubDate = getTag("pubDate") || undefined;
@@ -323,7 +323,7 @@ export function createGameAssetsService(
           if (res.status === "fulfilled" && res.value) {
             const parsed = parseXmlUsingDomOrRegex(res.value);
             for (const p of parsed) {
-              if (seenUrls.has(p.link)) continue;
+              if (seenUrls.has(p.link)) {continue;}
               seenUrls.add(p.link);
 
               const category = p.category
@@ -363,7 +363,7 @@ export function createGameAssetsService(
         const res = await fetch("https://kenney.nl/feed", {
           headers: { "User-Agent": "Mozilla/5.0 LifeOS" },
         });
-        if (!res.ok) return [];
+        if (!res.ok) {return [];}
         const text = await res.text();
         const parsed = parseXmlUsingDomOrRegex(text);
 
@@ -371,9 +371,9 @@ export function createGameAssetsService(
           let cat: AssetCategory = "2d";
           if (p.category) {
             const cLower = p.category.toLowerCase();
-            if (cLower.includes("3d")) cat = "3d";
-            else if (cLower.includes("audio")) cat = "audio";
-            else if (cLower.includes("ui")) cat = "ui";
+            if (cLower.includes("3d")) {cat = "3d";}
+            else if (cLower.includes("audio")) {cat = "audio";}
+            else if (cLower.includes("ui")) {cat = "ui";}
           } else {
             cat = inferCategoryFromText(p.title + " " + p.description);
           }
@@ -414,7 +414,7 @@ export function createGameAssetsService(
           headers: { "User-Agent": "Mozilla/5.0 LifeOS" },
         });
         clearTimeout(timeout);
-        if (!res.ok) return [];
+        if (!res.ok) {return [];}
         const text = await res.text();
         const parsed = parseXmlUsingDomOrRegex(text);
 
@@ -448,9 +448,9 @@ export function createGameAssetsService(
         const res = await fetch(
           "https://www.gamerpower.com/api/giveaways?type=loot",
         );
-        if (!res.ok) return [];
+        if (!res.ok) {return [];}
         const data = await res.json();
-        if (!Array.isArray(data)) return [];
+        if (!Array.isArray(data)) {return [];}
 
         return data.slice(0, 30).map((item: Record<string, unknown>) => ({
           id: `gp-${item.id}`,
@@ -504,10 +504,10 @@ export function createGameAssetsService(
         ]);
 
         const allItems: GameAssetItem[] = [];
-        if (itchRes.status === "fulfilled") allItems.push(...itchRes.value);
-        if (kenneyRes.status === "fulfilled") allItems.push(...kenneyRes.value);
-        if (ogaRes.status === "fulfilled") allItems.push(...ogaRes.value);
-        if (gpRes.status === "fulfilled") allItems.push(...gpRes.value);
+        if (itchRes.status === "fulfilled") {allItems.push(...itchRes.value);}
+        if (kenneyRes.status === "fulfilled") {allItems.push(...kenneyRes.value);}
+        if (ogaRes.status === "fulfilled") {allItems.push(...ogaRes.value);}
+        if (gpRes.status === "fulfilled") {allItems.push(...gpRes.value);}
 
         // Deduplicate by URL/ID
         const uniqueMap = new Map<string, GameAssetItem>();

@@ -2,6 +2,51 @@
 
 ## Aktif İş
 
+### Log Şişmesi + MCP Hatası + Ayarlar Okunabilirliği + AudioContext + Worktree Temizliği — ✅ TAMAMLANDI (2026-09-21)
+
+**Tur 1 — bildirilen 5 sorun** (`commit 411eccf`)
+- [x] Ayarlar'da okunmayan yazılar: `AppSettingsGroup.tsx` 4 tanımsız çeviri anahtarı → mevcut doğru anahtarlara bağlandı
+- [x] Kök neden: `SettingsDrawer.tsx:177` `translations[lang]` (Proxy değil) → eksik anahtar `undefined` → Preact boş render
+- [x] Tanımsız `--accent` token'ı: `base.css` + `ai-chat.css` (5 kullanım) → `--accent-color` + hardcoded indigo → `rgba(var(--accent-color-rgb))`
+- [x] AudioContext uyarısı: `volumeBooster.ts` → `hasUserGesture` gate + eksik `currentMultiplier === 1.0` guard'ı
+- [x] Log şişmesi (a): `logger.ts` her satırda 500'lük diziyi baştan yazıyordu → 200ms coalescing + `error` anında flush
+- [x] Log şişmesi (b): `rssSyncHandler.ts` MV3 worker her başlayışında log atıyordu → `info`→`debug`; `debug` artık console-only, kalıcı değil
+- [x] Ring buffer 500→300 (`logger_entries`), 500→150 (`content_logs`)
+- [x] `data-agent-kit` MCP: named pipe yok + kimlik dosyaları yok → bağlanması imkânsızdı; ölü kayıt `mcp_config.json`'dan kaldırıldı (yedek alındı)
+
+**Tur 2 — aynı hata sınıfının repoda taranması** (`commit b535a2a`)
+- [x] Proxy tuzağı: `getTranslation()` eksik anahtarda anahtar adını döndürüyor → `t.x || "fallback"` asla çalışmıyor
+- [x] `PomoTimerPanel.tsx` (2 blok), `RoutineStreakCard.tsx`, `GameAssetsFilterBar.tsx` → doğru anahtarlara bağlandı
+- [x] `BlockerUI.ts` 16 tanımsız anahtar → `tr/detox.ts` + `en/detox.ts`'e gerçek çeviriler eklendi
+- [x] `prayer.css` + `SrsView.tsx` tanımsız `--accent-light` → `--accent-color`
+- [x] `scripts/i18nHealthCheck.mjs` [NEW]: bu hata sınıfını yakalayan denetleyici (1325 anahtar · 541 dosya · 0 eksik)
+- [x] `src/ARCHITECTURE.md`: bölüm 7 (`scripts/` klasörü) eklendi, çift `ArcadeView` satırı silindi
+
+**Tur 3 — ölçüm (düzeltilmedi, karar bekliyor)**
+- [x] Hardcoded hex borcu ölçüldü: **144 gerçek ihlal** (77 CSS + 67 TSX). `--accent-color` hiçbir yerde override edilmediği için şu an **latent** — görünür bozukluk yok, ama token değiştirilince 144 yer güncellenmez
+- [x] Meşru bulunanlar: `domain/constants/**` (38, renk verisi), `content/**` (18, shadow DOM'da token yok)
+
+**Repo temizliği**
+- [x] `.kilo/worktrees/miniature-flock` git worktree kaldırıldı (`08f22da`, detached HEAD). Silmeden önce doğrulandı: çalışma ağacı temiz, takip edilmeyen dosya yok, `main`'in atası
+- [x] `git worktree prune` + `.kilo/` klasörü silindi. `.git/worktrees/` temiz, tek worktree kaldı (`main`)
+- [x] Uyarı: Kilo Code eklentisi kurulu (`kilocode.kilo-code-7.7.5`) → tekrar çalıştırılırsa `.kilo/` yeniden oluşur
+
+**Doğrulama**
+- [x] `tsc --noEmit` = 0 · `npm run build` başarılı (newtab + background + content)
+- [x] `eslint` (değişen 9 dosya) = 0 error
+- [x] `node scripts/findDeadFiles.mjs` = Toplam 0 dosya
+- [x] `node scripts/i18nHealthCheck.mjs` = ✅ 0 eksik anahtar
+- [x] XSS kontrolü: `BlockerUI.ts` kullanıcı alıntıları `escapeHtml()`'den geçiyor (temiz)
+
+**Açık kararlar (yapılmadı — kullanıcı onayı bekliyor)**
+- [ ] Hardcoded hex borcu (144 ihlal) — ayrı planlama turu gerektirir
+- [ ] 31 pre-existing repo-wide eslint error + 2383 warning
+- [ ] 3 boş klasör: `src/services/{aichat,kpss,stock}/prompts`
+- [ ] `contentLogger.ts` merkezi logger'a birleştirme (esbuild kısıtı doğrulanmalı)
+- [ ] `stockPrompts.ts` İngilizce anahtarları (AI prompt metni — bırakmak makul)
+
+---
+
 ### Plan 07 — Türkçe Karakter Fix + Obsidian Uygulama Penceresi + Notlardan Özel SRS — ✅ TAMAMLANDI (2026-08-03)
 - [x] Türkçe karakter hataları temizlendi (`KpssWikiEditor`, `KpssWikiReader`, `KpssWikiSidebar`, `KpssSrsCard`, `KpssNotesDashboard`, `KpssView`) + `tr.ts` / `en.ts` güncellendi
 - [x] Izole klasör: `src/components/kpss/obsidian/` (`KpssObsidianStudioModal.tsx`, `KpssObsidianSplitEditor.tsx`)

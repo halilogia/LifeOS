@@ -151,7 +151,7 @@ export async function processUploadedFile(file: File): Promise<ChatAttachment> {
   }
 
   // Text / Code document
-  let textContent = "";
+  let textContent: string;
   try {
     textContent = await readFileAsText(file);
   } catch {

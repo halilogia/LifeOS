@@ -54,7 +54,7 @@ export function calculateRoutineStreak(
     // Check completedDates history array
     if (Array.isArray(r.completedDates)) {
       for (const cd of r.completedDates) {
-        if (!cd) continue;
+        if (!cd) {continue;}
         try {
           const dateObj = new Date(cd);
           if (!isNaN(dateObj.getTime())) {
@@ -174,10 +174,10 @@ export function calculateRoutineStreak(
 
     let level: 0 | 1 | 2 | 3 | 4 = 0;
     if (count > 0) {
-      if (ratio >= 1.0) level = 4;
-      else if (ratio >= 0.75) level = 3;
-      else if (ratio >= 0.4) level = 2;
-      else level = 1;
+      if (ratio >= 1.0) {level = 4;}
+      else if (ratio >= 0.75) {level = 3;}
+      else if (ratio >= 0.4) {level = 2;}
+      else {level = 1;}
     }
 
     // dayOfWeek: 1 = Mon ... 7 = Sun
