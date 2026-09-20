@@ -39,11 +39,34 @@
 - [x] XSS kontrolü: `BlockerUI.ts` kullanıcı alıntıları `escapeHtml()`'den geçiyor (temiz)
 
 **Açık kararlar (yapılmadı — kullanıcı onayı bekliyor)**
-- [ ] Hardcoded hex borcu (144 ihlal) — ayrı planlama turu gerektirir
-- [ ] 31 pre-existing repo-wide eslint error + 2383 warning
-- [ ] 3 boş klasör: `src/services/{aichat,kpss,stock}/prompts`
+- [ ] Hardcoded hex borcu (~96 meşru kalan) — ayrı planlama turu gerektirir. **Latent**, görünür bozukluk yok
+- [x] ~~31 pre-existing repo-wide eslint error~~ → `53c5f5d` ile **çözüldü** (0 error)
+- [x] ~~3 boş klasör: `src/services/{aichat,kpss,stock}/prompts`~~ → **yanlış pozitifti**; içlerinde `?raw` ile import edilen 10 canlı `.md` var, `findDeadFiles.mjs` düzeltildi
 - [ ] `contentLogger.ts` merkezi logger'a birleştirme (esbuild kısıtı doğrulanmalı)
 - [ ] `stockPrompts.ts` İngilizce anahtarları (AI prompt metni — bırakmak makul)
+
+---
+
+### ROADMAP Temizliği + Global Walkthrough Kuralı — ✅ TAMAMLANDI (2026-09-21)
+
+**ROADMAP.md doğrulaması ve temizliği**
+- [x] 10 bölümün tamamı kod araması ile tek tek doğrulandı (dosya/commit kanıtı ile)
+- [x] **Bölüm 3 (Zettelkasten Knowledge Graph) tamamen yapılmış** → `zettelkastenEngine.ts` (30 iterasyonlu force-directed layout, `getNodeColor`, `getBacklinks`), `ZettelkastenGraphModal.tsx`, `GraphSvgCanvas.tsx` (hover odaklama `isConnectedToHover`), `GraphLegend.tsx`; `NotesView.tsx` + `KpssNotesDashboard.tsx`'e bağlı → **bölüm silindi**
+- [x] **Bölüm 5 (Ambient Soundscapes) kısmen yapılmış**: `ambientAudioService.ts` prosedürel sentezleyici var (yağmur/rüzgar/fön/LoFi) **ama** her `play*` çağrısı `stopAllSounds()` yapıyor → eşzamanlı katmanlama yok, tek global `volume` var, preset yok → **bölüm yalnızca kalan işe indirgendi**
+- [x] **Bölüm 6 (Teknik İndikatörler) kısmen yapılmış**: `computeStockTelemetry()` RSI(14) + SMA-20 + hacim oranı hesaplayıp AI prompt'una besliyor. **Ama** UI sinyal yok, `RSI_OVERBOUGHT` kural tipi tanımlı olup hiç kullanılmıyor (ölü kod), EMA/MACD/golden-cross yok → **bölüm "Kullanıcı Arayüzü" olarak yeniden adlandırıldı ve kalan işe indirgendi**
+- [x] **Bölüm 2 (Voice Memo) kısmen yapılmış**: Side Panel'de Web Speech API sesli giriş var (`sidePanelSpeech.ts`, `useVoiceInput.ts`); Notes ekranında yok, MediaRecorder ile ses kaydı yok, AI Cornell formatlayıcı yok (Cornell *not tipi* var) → **bölüm açıklama ile daraltıldı**
+- [x] **Bölüm 8 (Game Jam) kısmen yapılmış**: `gameAssetsService.ts` ücretsiz asset topluyor (Itch.io/Kenney/OpenGameArt/GamerPower); Game Jam takvimi, tema üretimi, zip paketleme yok → **bölüm daraltıldı**
+- [x] **Bölüm 9 (Tab Suspender)**: yalnızca agent'ın açtığı sekmeleri gruplayan `chrome.tabs.group()` var; kullanıcı sekmesi organizasyonu / `discard` yok
+- [x] Yapılmadığı doğrulananlar: bölüm 1 (AI Goal Breakdown), 4 (Temettü Takvimi), 7 (WebRTC P2P) → aynen korundu
+- [x] Dosya başına "yalnızca yapılmamış işleri içerir" notu eklendi; 10 bölüm → 9 bölüm
+
+**Global walkthrough kuralı**
+- [x] Kanonik kural `~/.gemini/config/rules/walkthrough_policy.md` zaten mevcuttu (20.09.2026)
+- [x] `~/.gemini/GEMINI.md` (global RADICAL TRUTH kuralları) içinde walkthrough kuralı **yoktu** → bölüm **72. WALKTHROUGH YAZIM POLİTİKASI** olarak eklendi
+- [x] LifeOS `.agents/AGENTS.md` §7.3 ile senkron (üçü aynı politikayı anlatıyor)
+
+**Tespit (kullanıcıya bildirildi, değiştirilmedi)**
+- [ ] **Çelişki**: `~/.gemini/config/config.json` → `deny: ["command(git)", "command(git *)", "command(git.exe)", "command(git.exe *)"]` **ama** `~/.gemini/config/rules/no_git_commands.md` git commit/push'a **izin veriyor**. Pratikte kural dosyası kazanıyor (commit'ler başarılı). Karar kullanıcıya ait.
 
 ---
 
