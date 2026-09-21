@@ -154,6 +154,8 @@ export function Sidebar({
         return t.sidebar_gov_jobs || "Kamu İşe Alım";
       case "bist":
         return t.sidebar_bist;
+      case "network":
+        return t.sidebar_network || "Network Health";
       default:
         return key;
     }

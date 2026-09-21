@@ -55,6 +55,7 @@ flowchart TB
         useDetox
         useTabVolume
         useAiUserMemory
+        useNetworkStore
     end
 
     subgraph Services["services/ (Dış dünya iletişimi)"]
@@ -67,6 +68,7 @@ flowchart TB
         errorReportService
         modelFetcher
         rssService
+        networkDiagnosticService
     end
 
     subgraph Utils["utils/ (Yardımcı araçlar)"]
@@ -274,6 +276,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | SettingsDrawer        | settings repos                                            | sync       | settings/ (15)                                                      |
 | Sidebar               | useUI                                                     | sync       | sidebar/ (2)                                                        |
 | SidePanel (Copilot)   | useSidePanelChat (tuval → 3 alt-hook)                     | sync       | sidepanel/ (ChatMessage, Header, TabBar, Chips, Messages, InputBar) |
+| NetworkView           | networkDiagnosticService, useNetworkStore                 | local      | network/ (6: Overview, ProtocolHealth, Radar, Speed, Dns, History)  |
 
 ---
 

@@ -21,6 +21,7 @@ import { stock } from "./stock.js";
 import { uib } from "./uib.js";
 import { willpower } from "./willpower.js";
 import { zen } from "./zen.js";
+import { network } from "./network.js";
 
 export const tr = {
   ...agent,
@@ -43,4 +44,5 @@ export const tr = {
   ...uib,
   ...willpower,
   ...zen,
+  ...network,
 };

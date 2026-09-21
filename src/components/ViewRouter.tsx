@@ -88,6 +88,11 @@ const AIChatView = lazy(() =>
     default: m.AIChatView,
   })),
 );
+const NetworkView = lazy(() =>
+  import("@/components/network/NetworkView.js").then((m) => ({
+    default: m.NetworkView,
+  })),
+);
 
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useSettingsStore } from "@/presentation/store/settingsStore.js";
@@ -245,6 +250,8 @@ export function ViewRouter() {
             onSettingsOpen={() => handleOpenSettings("ai")}
           />
         );
+      case "network":
+        return <NetworkView lang={lang} />;
       default:
         return <FreeGamesView lang={lang} />;
     }

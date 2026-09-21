@@ -1,0 +1,1113 @@
+/**
+ * network.css
+ * Styling for Network Health & Diagnostics Hub.
+ * Fully consumes design tokens from base.css.
+ */
+
+.network-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8, 20px);
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: var(--space-12, 60px);
+}
+
+/* ── Top Header ────────────────────────────────────────────── */
+.network-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 14px);
+  padding: var(--space-6, 14px) var(--space-7, 16px);
+  background: var(--card-bg, rgba(30, 41, 59, 0.55));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 14px);
+  backdrop-filter: blur(var(--glass-blur, 16px));
+}
+
+.network-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5, 12px);
+}
+
+.network-header-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md, 10px);
+  background: rgba(var(--accent-color-rgb, 139, 92, 246), 0.15);
+  color: var(--accent-color, #8b5cf6);
+  border: 1px solid rgba(var(--accent-color-rgb, 139, 92, 246), 0.3);
+  box-shadow: 0 0 15px var(--accent-glow, rgba(139, 92, 246, 0.25));
+}
+
+.network-main-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  letter-spacing: -0.02em;
+}
+
+.network-main-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+/* ── Tabs Bar ──────────────────────────────────────────────── */
+.network-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 8px);
+  overflow-x: auto;
+  padding-top: var(--space-2, 6px);
+  border-top: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+}
+
+.network-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 10px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.network-tab-btn:hover {
+  color: var(--text-primary, #f8fafc);
+  background: var(--card-bg-hover, rgba(51, 65, 85, 0.5));
+}
+
+.network-tab-btn.active {
+  color: #fff;
+  background: rgba(var(--accent-color-rgb, 139, 92, 246), 0.2);
+  border-color: rgba(var(--accent-color-rgb, 139, 92, 246), 0.4);
+}
+
+.network-tab-warning-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger, #ef4444);
+  box-shadow: 0 0 6px var(--danger, #ef4444);
+}
+
+/* ── Card Base ─────────────────────────────────────────────── */
+.network-card {
+  background: var(--card-bg, rgba(30, 41, 59, 0.55));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 14px);
+  backdrop-filter: blur(var(--glass-blur, 16px));
+  padding: var(--space-7, 16px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.network-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.network-tab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7, 16px);
+}
+
+.network-split-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: var(--space-7, 16px);
+}
+
+@media (max-width: 820px) {
+  .network-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.network-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.network-btn-primary {
+  background: var(--accent-color, #8b5cf6);
+  color: #fff;
+  border: 1px solid var(--accent-hover, #7c3aed);
+  box-shadow: 0 2px 10px var(--accent-glow, rgba(139, 92, 246, 0.3));
+}
+
+.network-btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover, #7c3aed);
+  transform: translateY(-1px);
+}
+
+.network-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary, #f8fafc);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+}
+
+.network-btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.network-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.network-btn-danger-outline {
+  background: transparent;
+  color: var(--danger, #ef4444);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.network-btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ── Hero / Overview Card ──────────────────────────────────── */
+.network-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-6, 14px);
+}
+
+.network-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.network-hero-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.network-status-indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: network-pulse 2s infinite;
+}
+
+@keyframes network-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.5);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+.network-health-badge {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--radius-sm, 6px);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.health-badge-excellent {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success, #10b981);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.health-badge-good {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--info, #3b82f6);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.health-badge-fair {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning, #f59e0b);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.health-badge-poor {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger, #ef4444);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.health-badge-offline {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--text-muted, #64748b);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.network-hero-connection-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.network-hero-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+.network-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Progress Bar ──────────────────────────────────────────── */
+.network-progress-bar-container {
+  margin-top: var(--space-6, 14px);
+  padding: var(--space-4, 10px) var(--space-5, 12px);
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+}
+
+.network-progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.network-progress-phase {
+  color: var(--accent-color, #8b5cf6);
+  font-weight: 600;
+}
+
+.network-progress-percentage {
+  color: var(--text-secondary, #94a3b8);
+  font-family: var(--font-mono, monospace);
+}
+
+.network-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.network-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color, #8b5cf6), #ec4899);
+  transition: width 0.2s ease;
+}
+
+/* ── Metrics Grid ──────────────────────────────────────────── */
+.network-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5, 12px);
+  margin-top: var(--space-7, 16px);
+}
+
+@media (max-width: 680px) {
+  .network-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.network-metric-box {
+  padding: var(--space-5, 12px);
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.network-metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+}
+
+.network-metric-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  font-family: var(--font-mono, monospace);
+}
+
+.network-metric-unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.network-highlight-accent {
+  color: var(--accent-color, #8b5cf6);
+}
+
+.network-val-danger {
+  color: var(--danger, #ef4444);
+}
+
+.network-val-success {
+  color: var(--success, #10b981);
+}
+
+/* ── Protocol / IPv6 Anomaly Card ──────────────────────────── */
+.protocol-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 14px);
+}
+
+.protocol-alert-mode {
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+}
+
+.protocol-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.protocol-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.protocol-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--info, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.protocol-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.protocol-card-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.protocol-status-badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger, #ef4444);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success, #10b981);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.protocol-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5, 12px);
+}
+
+@media (max-width: 580px) {
+  .protocol-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.protocol-stat-box {
+  padding: var(--space-5, 12px);
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.box-warning {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.protocol-stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.protocol-badge-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.protocol-speed-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.tag-fast {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success, #10b981);
+}
+
+.tag-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger, #ef4444);
+}
+
+.tag-ok {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--info, #3b82f6);
+}
+
+.protocol-stat-body {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.protocol-latency-number {
+  font-size: 24px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary, #f8fafc);
+}
+
+.text-danger {
+  color: var(--danger, #ef4444);
+}
+
+.text-success {
+  color: var(--success, #10b981);
+}
+
+.protocol-latency-unit {
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.protocol-stat-desc {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.4;
+}
+
+/* ── Anomaly Resolution Banner ─────────────────────────────── */
+.protocol-anomaly-banner {
+  padding: var(--space-5, 12px);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 10px);
+}
+
+.anomaly-banner-content {
+  display: flex;
+  gap: 12px;
+}
+
+.anomaly-icon {
+  color: var(--danger, #ef4444);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.anomaly-title {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--danger, #ef4444);
+}
+
+.anomaly-explanation {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.45;
+}
+
+.protocol-guide-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.protocol-guide-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.protocol-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.protocol-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-color, #8b5cf6);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Service Radar Grid ────────────────────────────────────── */
+.radar-card-header {
+  margin-bottom: var(--space-6, 14px);
+}
+
+.radar-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.radar-card-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.radar-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-5, 12px);
+}
+
+.radar-item-card {
+  padding: var(--space-5, 12px);
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.radar-item-card:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.radar-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.radar-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radar-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.radar-item-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+.radar-item-category {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted, #64748b);
+}
+
+.radar-item-metrics {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.radar-latency-number {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary, #f8fafc);
+}
+
+.radar-latency-unit {
+  font-size: 11px;
+  color: var(--text-secondary, #94a3b8);
+  margin-left: 2px;
+}
+
+.radar-item-status-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.radar-jitter-tag {
+  font-size: 10px;
+  color: var(--text-muted, #64748b);
+  font-family: var(--font-mono, monospace);
+}
+
+.radar-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 6px;
+}
+
+.radar-item-desc {
+  font-size: 10px;
+  color: var(--text-muted, #64748b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.radar-ping-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.radar-ping-btn:hover:not(:disabled) {
+  color: var(--accent-color, #8b5cf6);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Speedometer Card ──────────────────────────────────────── */
+.speed-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: var(--space-6, 14px);
+}
+
+.speed-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.speed-card-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.speedometer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: var(--space-8, 20px);
+  padding: var(--space-6, 14px) 0;
+}
+
+.speedometer-gauge-wrapper {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speedometer-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.speedometer-center-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.speedometer-number {
+  font-size: 38px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary, #f8fafc);
+  line-height: 1;
+}
+
+.speedometer-unit {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-color, #8b5cf6);
+  margin-top: 4px;
+}
+
+.speed-stats-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5, 12px);
+  min-width: 260px;
+}
+
+.speed-stat-pill {
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 10px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+}
+
+.stat-val {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary, #f8fafc);
+}
+
+/* ── DNS & Security Card ───────────────────────────────────── */
+.dns-card-header {
+  margin-bottom: var(--space-5, 12px);
+}
+
+.dns-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dns-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success, #10b981);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dns-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.dns-card-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.dns-resolvers-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dns-resolver-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 8px);
+}
+
+.dns-resolver-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dns-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dns-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+.dns-resolver-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dns-latency {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.dns-status-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}
+
+.dns-empty-notice {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted, #64748b);
+}
+
+/* ── History Card ──────────────────────────────────────────── */
+.history-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: var(--space-6, 14px);
+}
+
+.history-card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.history-card-subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-md, 8px);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.history-row-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-status-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.pill-excellent {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success, #10b981);
+}
+
+.pill-good {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--info, #3b82f6);
+}
+
+.pill-fair {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--warning, #f59e0b);
+}
+
+.pill-poor {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger, #ef4444);
+}
+
+.pill-offline {
+  background: rgba(100, 116, 139, 0.2);
+  color: var(--text-muted, #64748b);
+}
+
+.history-date {
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.history-metrics-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.history-metric strong {
+  color: var(--text-muted, #64748b);
+}
+
+.history-copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.history-copy-btn:hover {
+  color: var(--accent-color, #8b5cf6);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.history-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 0;
+  gap: 10px;
+  color: var(--text-muted, #64748b);
+  font-size: 13px;
+}

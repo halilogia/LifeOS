@@ -143,6 +143,7 @@ export const LOCAL_KPSS_PAST_QUIZZES = "kpss_past_quizzes";
 export const LOCAL_GAME_ASSETS_CACHE = "game_assets_cache";
 export const LOCAL_GAME_ASSETS_CLAIMED = "game_assets_claimed";
 export const LOCAL_GOV_JOBS_CACHE = "gov_jobs_cache";
+export const LOCAL_NETWORK_DIAGNOSTICS_HISTORY = "network_diagnostics_history";
 
 /** Template for prayer calendar keys: `prayer_calendar_{city}_{year}_{month}`. */
 export const PRAYER_CALENDAR_PREFIX = "prayer_calendar_";
