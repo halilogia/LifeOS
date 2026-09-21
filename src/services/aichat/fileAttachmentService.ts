@@ -5,6 +5,8 @@
  */
 
 import type { ChatAttachment } from "./types.js";
+import { extractText } from "unpdf";
+import { logger } from "@/utils/logger.js";
 
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -140,6 +142,34 @@ export async function processUploadedFile(file: File): Promise<ChatAttachment> {
 
   if (category === "pdf") {
     const dataUrl = await readFileAsDataUrl(file);
+    let textContent = "";
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const { text, totalPages } = await extractText(arrayBuffer);
+      if (Array.isArray(text)) {
+        textContent = (text as string[])
+          .map(
+            (pageStr, idx) =>
+              `--- [Sayfa ${idx + 1} / ${totalPages}] ---\n${String(pageStr || "").trim()}`,
+          )
+          .filter((chunk) => chunk.trim().length > 0)
+          .join("\n\n");
+      } else {
+        const rawText = String(text ?? "").trim();
+        if (rawText) {
+          textContent = rawText;
+        }
+      }
+      logger.info(
+        `[fileAttachmentService] Extracted text from PDF "${file.name}" (${totalPages} pages, ${textContent.length} chars)`,
+      );
+    } catch (err) {
+      logger.warn(
+        `[fileAttachmentService] Could not parse text from PDF "${file.name}":`,
+        err,
+      );
+    }
+
     return {
       id,
       name: file.name,
@@ -147,6 +177,7 @@ export async function processUploadedFile(file: File): Promise<ChatAttachment> {
       mimeType: "application/pdf",
       size: file.size,
       dataUrl,
+      textContent: textContent || undefined,
     };
   }
 
@@ -180,8 +211,12 @@ export function extractDocumentContext(attachments: ChatAttachment[]): string {
 
   for (const att of attachments) {
     if (att.textContent) {
+      const label =
+        att.type === "pdf"
+          ? `Eklenen Belge (PDF): "${att.name}"`
+          : `Eklenen Belge: "${att.name}"`;
       docSnippets.push(
-        `--- [Eklenen Belge: "${att.name}" (${formatFileSize(att.size)})] ---\n${att.textContent.slice(0, 12000)}\n--- [Belge Sonu] ---`,
+        `--- [${label} (${formatFileSize(att.size)})] ---\n${att.textContent.slice(0, 35000)}\n--- [Belge Sonu] ---`,
       );
     } else if (att.type === "pdf") {
       docSnippets.push(

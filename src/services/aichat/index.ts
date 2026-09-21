@@ -25,7 +25,7 @@ export type {
 } from "./types.js";
 
 export function createAiChatService(deps: AiChatDependencies) {
-  const { aiConfigRepo, memoryRepo, todoRepo, noteRepo } = deps;
+  const { aiConfigRepo, memoryRepo, todoRepo, noteRepo, mediaRepo } = deps;
 
   /** Single authoritative AI config loader: sync → local → defaults. */
   async function getAIConfigFromStorage() {
@@ -54,11 +54,13 @@ export function createAiChatService(deps: AiChatDependencies) {
       historyMessages.push({ role: msg.role, content: msg.content });
     }
 
-    // Build system prompt with web search + memory context
+    // Build system prompt with web search + memory + live dashboard snapshot
     const { systemPrompt, webSearchData } = await buildSystemPrompt(
       userPrompt,
       enableWebSearch,
       memoryRepo,
+      todoRepo,
+      mediaRepo,
     );
 
     // Route to the correct provider
@@ -114,7 +116,7 @@ export function createAiChatService(deps: AiChatDependencies) {
     getAIConfigFromStorage,
     callAIConfigured,
     executeAIAction: (aiResult: AIResponseData, lang?: string) =>
-      runAIAction(aiResult, lang, todoRepo, noteRepo, memoryRepo),
+      runAIAction(aiResult, lang, todoRepo, noteRepo, memoryRepo, mediaRepo),
     handleAddNoteFromAI: (
       type: "note" | "diary" | "cornell",
       content: string,
@@ -139,6 +141,7 @@ import { ChromeStorageAiConfigRepository } from "@/infrastructure/persistence/re
 import { ChromeStorageMemoryRepository } from "@/infrastructure/persistence/repositories/ChromeStorageMemoryRepository.js";
 import { ChromeStorageTodoRepository } from "@/infrastructure/persistence/repositories/ChromeStorageTodoRepository.js";
 import { ChromeStorageNoteRepository } from "@/infrastructure/persistence/repositories/ChromeStorageNoteRepository.js";
+import { ChromeStorageMediaRepository } from "@/infrastructure/persistence/repositories/ChromeStorageMediaRepository.js";
 
 let _aiChatInstance: AiChatService | null = null;
 function getAiChatService(): AiChatService {
@@ -148,6 +151,7 @@ function getAiChatService(): AiChatService {
       memoryRepo: new ChromeStorageMemoryRepository(),
       todoRepo: new ChromeStorageTodoRepository(),
       noteRepo: new ChromeStorageNoteRepository(),
+      mediaRepo: new ChromeStorageMediaRepository(),
     });
   }
   return _aiChatInstance;

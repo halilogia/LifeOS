@@ -45,6 +45,7 @@
     "katex": "^0.18.0",
     "preact": "^10.29.7",
     "topojson-client": "^3.1.0",
+    "unpdf": "^1.8.1",
     "zod": "^4.3.6",
     "zustand": "^5.0.14"
   }

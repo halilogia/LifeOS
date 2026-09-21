@@ -11,6 +11,7 @@ import { AiMessageSources } from "./AiMessageSources.js";
 import { AiThinkingCard } from "./AiThinkingCard.js";
 import { AiMessageFooter } from "./AiMessageFooter.js";
 import { ClarificationCard } from "./ClarificationCard.js";
+import { AiActionBadge } from "./AiActionBadge.js";
 
 export interface MessageItemData {
   sender: "user" | "bot";
@@ -21,6 +22,8 @@ export interface MessageItemData {
   sources?: WebSearchSource[];
   attachments?: ChatAttachment[];
   clarification?: ClarificationRequest;
+  action?: string;
+  actionParams?: Record<string, unknown>;
   isStreaming?: boolean;
 }
 
@@ -152,6 +155,15 @@ export function AiChatMessageItem({
 
         {/* Main Response Text */}
         {message.text && <p className="msg-text">{message.text}</p>}
+
+        {/* Visual Action Execution Feedback Badge */}
+        {!isUser && message.action && (
+          <AiActionBadge
+            action={message.action}
+            actionParams={message.actionParams}
+            t={t}
+          />
+        )}
 
         {/* Interactive Clarification / Ask User Card */}
         {!isUser && message.clarification && (

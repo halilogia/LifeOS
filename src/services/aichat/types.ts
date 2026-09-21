@@ -85,11 +85,14 @@ export interface AIResponseData {
   clarification?: ClarificationRequest;
 }
 
+import type { IMediaRepository } from "@/domain/repositories/IMediaRepository.js";
+
 export interface AiChatDependencies {
   aiConfigRepo: IAiConfigRepository;
   memoryRepo: IMemoryRepository;
   todoRepo: ITodoRepository;
   noteRepo: INoteRepository;
+  mediaRepo?: IMediaRepository;
 }
 
 export type {
@@ -97,4 +100,5 @@ export type {
   IMemoryRepository,
   ITodoRepository,
   IAiConfigRepository,
+  IMediaRepository,
 };

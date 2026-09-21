@@ -1162,5 +1162,35 @@
   border-color: rgba(236, 72, 153, 0.4);
 }
 
+/* AI Action Execution Badge */
+.aichat-action-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 78, 59, 0.25));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.25s ease-out;
+  max-width: 100%;
+}
 
+.aichat-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #34d399;
+  flex-shrink: 0;
+}
 
+.aichat-action-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a7f3d0;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

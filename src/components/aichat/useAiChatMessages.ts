@@ -553,7 +553,11 @@ export function useAiChatMessages({
 
         if (aiResponse.action) {
           await executeAIAction(aiResponse, lang);
-          if (aiResponse.action === "create_task") {
+          if (
+            aiResponse.action === "create_task" ||
+            aiResponse.action === "batch_create_tasks" ||
+            aiResponse.action === "toggle_routine"
+          ) {
             await onManualSync();
           }
         }
@@ -570,6 +574,8 @@ export function useAiChatMessages({
           searchQuery: aiResponse.searchQuery,
           sources: aiResponse.sources,
           clarification: aiResponse.clarification,
+          action: aiResponse.action,
+          actionParams: (aiResponse.params as Record<string, unknown>) || undefined,
         });
         return;
       }
