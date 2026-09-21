@@ -21,6 +21,7 @@ export const network = {
   network_metric_latency: "Average Ping",
   network_metric_jitter: "Jitter",
   network_metric_speed: "Download Speed",
+  network_speed_not_tested: "Not Tested",
   network_metric_connection: "Connection Type",
   network_metric_downlink: "Estimated Bandwidth",
   network_status_fast: "Fast",

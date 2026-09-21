@@ -14,6 +14,7 @@ const USAGE_KEY = "sidebarUsage";
 const AUTO_SORT_KEY = "sidebarAutoSort";
 const LAST_USED_KEY = "sidebarLastUsed";
 const PINNED_KEY = "sidebarPinned";
+const HIDDEN_KEY = "sidebarHidden";
 const RECENT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 saat recency bonus penceresi
 
 interface LastUsedMap {
@@ -25,12 +26,15 @@ interface SidebarUsageState {
   lastUsed: LastUsedMap;
   autoSort: boolean;
   pinnedViews: string[];
+  hiddenViews: string[];
   _saveTimer: ReturnType<typeof setTimeout> | null;
 
   load: () => Promise<void>;
   increment: (viewKey: string) => void;
   setAutoSort: (enabled: boolean) => Promise<void>;
   togglePin: (viewKey: string) => Promise<void>;
+  toggleHide: (viewKey: string) => Promise<void>;
+  unhideAll: () => Promise<void>;
   reset: () => Promise<void>;
   /** İstatistiklere göre sıralı dizi döndürür — pinned view'lar en üstte, kalanlar skora göre. */
   computeSortedOrder: () => string[];
@@ -55,6 +59,7 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
   lastUsed: {},
   autoSort: true,
   pinnedViews: [],
+  hiddenViews: [],
   _saveTimer: null,
 
   load: async () => {
@@ -63,11 +68,13 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
     const lastUsed = (await getStorageItem<LastUsedMap>(LAST_USED_KEY)) || {};
     const autoSortRaw = await getStorageItem<boolean>(AUTO_SORT_KEY);
     const pinnedViews = (await getStorageItem<string[]>(PINNED_KEY)) || [];
+    const hiddenViews = (await getStorageItem<string[]>(HIDDEN_KEY)) || [];
     set({
       usage,
       lastUsed,
       autoSort: autoSortRaw === null ? true : autoSortRaw === true,
       pinnedViews,
+      hiddenViews,
     });
   },
 
@@ -115,6 +122,24 @@ export const useSidebarUsageStore = create<SidebarUsageState>()((set, get) => ({
     logger.info(
       `[SidebarUsage] pin ${viewKey} => ${next.includes(viewKey) ? "pinned" : "unpinned"}`,
     );
+  },
+
+  toggleHide: async (viewKey: string) => {
+    const { hiddenViews } = get();
+    const next = hiddenViews.includes(viewKey)
+      ? hiddenViews.filter((k) => k !== viewKey)
+      : [...hiddenViews, viewKey];
+    set({ hiddenViews: next });
+    await setStorageItem(HIDDEN_KEY, next);
+    logger.info(
+      `[SidebarUsage] hide ${viewKey} => ${next.includes(viewKey) ? "hidden" : "visible"}`,
+    );
+  },
+
+  unhideAll: async () => {
+    set({ hiddenViews: [] });
+    await setStorageItem(HIDDEN_KEY, []);
+    logger.info("[SidebarUsage] unhideAll executed");
   },
 
   reset: async () => {

@@ -81,11 +81,10 @@ export function NetworkOverviewCard({
       )
     : "--";
 
-  const downloadSpeed = report?.speedTest?.downloadSpeedMbps !== undefined
-    ? `${report.speedTest.downloadSpeedMbps} Mbps`
-    : report?.connectionInfo?.downlink
-      ? `~${report.connectionInfo.downlink} Mbps`
-      : "--";
+  const downloadSpeed =
+    report?.speedTest?.downloadSpeedMbps !== undefined
+      ? `${report.speedTest.downloadSpeedMbps} Mbps`
+      : (t.network_speed_not_tested || "Not Tested");
 
   const connectionType =
     report?.connectionInfo?.effectiveType?.toUpperCase() || "WI-FI / LAN";

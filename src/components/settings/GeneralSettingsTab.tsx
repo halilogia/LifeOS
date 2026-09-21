@@ -29,6 +29,8 @@ interface GeneralSettingsTabProps {
   sidebarAutoSortEnabled?: boolean;
   onToggleSidebarAutoSort?: () => void;
   onResetSidebarUsage?: () => void;
+  hiddenViewsCount?: number;
+  onUnhideAllSidebar?: () => void;
   onNotify?: (message: string) => void;
 }
 
@@ -53,6 +55,8 @@ export function GeneralSettingsTab({
   sidebarAutoSortEnabled = true,
   onToggleSidebarAutoSort,
   onResetSidebarUsage,
+  hiddenViewsCount,
+  onUnhideAllSidebar,
   onNotify,
 }: GeneralSettingsTabProps) {
   return (
@@ -78,6 +82,8 @@ export function GeneralSettingsTab({
         sidebarAutoSortEnabled={sidebarAutoSortEnabled}
         onToggleSidebarAutoSort={onToggleSidebarAutoSort}
         onResetSidebarUsage={onResetSidebarUsage}
+        hiddenViewsCount={hiddenViewsCount}
+        onUnhideAllSidebar={onUnhideAllSidebar}
       />
 
       {/* Error Reporting Section */}

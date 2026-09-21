@@ -272,62 +272,180 @@ export class NetworkDiagnosticService {
   }
 
   /**
-   * Run real-time download throughput test with progress reporting.
+   * Run real-time streaming download throughput test with progress reporting.
+   * Utilizes Cloudflare Speed Edge streaming with warm socket connection
+   * and fallback to multi-chunk CDN streaming.
    */
   async runSpeedTest(
     onProgress?: (progress: number, currentMbps: number) => void,
   ): Promise<SpeedTestResult> {
-    // Reliable, fast CDN test payloads (public libraries cached globally)
-    const testUrls = [
-      "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", // ~1.2 MB
-      "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js", // ~300 KB
-      "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js", // ~1.1 MB
-    ];
+    const targetBytes = 15_000_000; // 15 MB test payload
+    const maxDurationSec = 4.5; // Max 4.5s test duration to prevent waiting on slow lines
+    const cloudflareUrl = `https://speed.cloudflare.com/__down?bytes=${targetBytes}&_t=${Date.now()}`;
 
-    const pingStart = performance.now();
-    await fetch("https://1.1.1.1/cdn-cgi/trace", {
-      cache: "no-store",
-      mode: "no-cors",
-    });
-    const latencyMs = Math.round(performance.now() - pingStart);
+    // Phase 1: Connection warm-up & latency measurement (100 KB)
+    let latencyMs = 25;
+    const warmStart = performance.now();
+    try {
+      const warmResp = await fetch(
+        `https://speed.cloudflare.com/__down?bytes=100000&_w=${Date.now()}`,
+        { cache: "no-store" },
+      );
+      if (warmResp.ok) {
+        await warmResp.arrayBuffer();
+        latencyMs = Math.max(1, Math.round(performance.now() - warmStart));
+      }
+    } catch (err) {
+      logger.warn("[NetworkDiagnosticService] speed warm-up warning:", err);
+    }
+    if (onProgress) {
+      onProgress(10, 0);
+    }
 
     let totalBytes = 0;
     let peakMbps = 0;
-    const startTime = performance.now();
+    let avgMbps = 0;
+    let durationMs = 0;
 
-    for (let i = 0; i < testUrls.length; i++) {
-      const url = `${testUrls[i]}?_bench=${Date.now()}_${i}`;
-      try {
-        const chunkStart = performance.now();
-        const response = await fetch(url, { cache: "no-store" });
-        if (response.ok) {
-          const blob = await response.blob();
-          const chunkDurationSec = (performance.now() - chunkStart) / 1000;
-          totalBytes += blob.size;
+    try {
+      const response = await fetch(cloudflareUrl, {
+        cache: "no-store",
+      });
 
-          const currentMbps = Math.round(
-            ((blob.size * 8) / (chunkDurationSec || 0.001) / 1_000_000) * 10,
-          ) / 10;
-          if (currentMbps > peakMbps) {
-            peakMbps = currentMbps;
-          }
+      if (!response.ok || !response.body) {
+        throw new Error(`Cloudflare speed test HTTP ${response.status}`);
+      }
 
-          const progress = Math.round(((i + 1) / testUrls.length) * 100);
-          if (onProgress) {
-            onProgress(progress, currentMbps);
-          }
+      const reader = response.body.getReader();
+      let firstByteTime = 0;
+      let lastSampleTime = 0;
+      let sampleBytes = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        const now = performance.now();
+
+        if (firstByteTime === 0) {
+          firstByteTime = now;
+          lastSampleTime = now;
         }
-      } catch (err) {
-        logger.warn("[NetworkDiagnosticService] speed test chunk error:", err);
+
+        if (done || !value) {
+          break;
+        }
+
+        totalBytes += value.length;
+        sampleBytes += value.length;
+
+        const timeSinceSample = (now - lastSampleTime) / 1000;
+        if (timeSinceSample >= 0.15) {
+          const sampleMbps = (sampleBytes * 8) / timeSinceSample / 1_000_000;
+          if (sampleMbps > peakMbps) {
+            peakMbps = Math.round(sampleMbps * 10) / 10;
+          }
+
+          const totalElapsedSec = (now - firstByteTime) / 1000;
+          const currentTotalMbps =
+            totalElapsedSec > 0
+              ? Math.round(
+                  ((totalBytes * 8) / totalElapsedSec / 1_000_000) * 10,
+                ) / 10
+              : sampleMbps;
+
+          const progress = Math.min(
+            95,
+            10 + Math.round((totalBytes / targetBytes) * 85),
+          );
+          if (onProgress) {
+            onProgress(progress, currentTotalMbps);
+          }
+
+          sampleBytes = 0;
+          lastSampleTime = now;
+        }
+
+        // Time limit safety check (e.g. 4.5 seconds of streaming is plenty for high accuracy)
+        if ((now - firstByteTime) / 1000 >= maxDurationSec) {
+          void reader.cancel();
+          break;
+        }
+      }
+
+      const totalTransferSec = Math.max(
+        0.1,
+        (performance.now() - firstByteTime) / 1000,
+      );
+      durationMs = Math.round(totalTransferSec * 1000);
+      avgMbps =
+        Math.round(((totalBytes * 8) / totalTransferSec / 1_000_000) * 10) / 10;
+      if (peakMbps < avgMbps) {
+        peakMbps = avgMbps;
+      }
+    } catch (err) {
+      logger.warn(
+        "[NetworkDiagnosticService] Cloudflare stream failed, falling back to CDN:",
+        err,
+      );
+      // Fallback: Multi-file CDN streaming
+      const fallbackUrls = [
+        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js",
+        "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js",
+      ];
+      let fallbackBytes = 0;
+      let fallbackDuration = 0;
+
+      for (let i = 0; i < fallbackUrls.length; i++) {
+        try {
+          const tStart = performance.now();
+          const resp = await fetch(`${fallbackUrls[i]}?_b=${Date.now()}_${i}`, {
+            cache: "no-store",
+          });
+          if (resp.ok) {
+            const blob = await resp.blob();
+            const chunkTime = (performance.now() - tStart) / 1000;
+            fallbackBytes += blob.size;
+            fallbackDuration += chunkTime;
+            const currentMbps =
+              chunkTime > 0
+                ? Math.round(
+                    ((blob.size * 8) / chunkTime / 1_000_000) * 10,
+                  ) / 10
+                : 0;
+            if (currentMbps > peakMbps) {
+              peakMbps = currentMbps;
+            }
+            if (onProgress) {
+              onProgress(
+                Math.round(((i + 1) / fallbackUrls.length) * 100),
+                currentMbps,
+              );
+            }
+          }
+        } catch (fbErr) {
+          logger.warn(
+            "[NetworkDiagnosticService] fallback chunk failed:",
+            fbErr,
+          );
+        }
+      }
+
+      totalBytes = fallbackBytes;
+      durationMs = Math.round(fallbackDuration * 1000);
+      avgMbps =
+        fallbackDuration > 0
+          ? Math.round(
+              ((fallbackBytes * 8) / fallbackDuration / 1_000_000) * 10,
+            ) / 10
+          : 0;
+      if (peakMbps < avgMbps) {
+        peakMbps = avgMbps;
       }
     }
 
-    const durationMs = Math.round(performance.now() - startTime);
-    const durationSec = durationMs / 1000;
-    const avgMbps =
-      durationSec > 0
-        ? Math.round(((totalBytes * 8) / durationSec / 1_000_000) * 10) / 10
-        : 0;
+    if (onProgress) {
+      onProgress(100, avgMbps);
+    }
 
     return {
       downloadSpeedMbps: avgMbps,

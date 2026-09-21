@@ -91,38 +91,217 @@
   color: var(--accent-color);
 }
 
-/* Pin ikonu — normalde gizli, hover'da görünür, pinned öğede kalıcı mor */
-.sidebar-pin {
+/* Kontrol butonları (Göz + Pin) — sağ tarafta hizalı */
+.sidebar-item-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
+  gap: 4px;
   margin-left: auto;
-  border-radius: 6px;
-  color: var(--text-secondary);
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 0.15s ease,
-    color 0.15s ease,
-    background 0.15s ease;
+  transition: opacity 0.15s ease;
   flex-shrink: 0;
 }
 
-.sidebar-btn:hover .sidebar-pin,
-.sidebar-btn.pinned .sidebar-pin {
+.sidebar-btn:hover .sidebar-item-controls,
+.sidebar-btn.pinned .sidebar-item-controls {
   opacity: 1;
   pointer-events: auto;
 }
 
-.sidebar-btn .sidebar-pin:hover {
+.sidebar-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+/* Gizle butonu — hover'da görünür */
+.sidebar-hide-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-btn:hover .sidebar-hide-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-hide-btn:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Pin ikonu — hover'da görünür, pinned öğede kalıcı mor */
+.sidebar-pin {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-btn:hover .sidebar-pin,
+.sidebar-pin.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-pin:hover {
   color: var(--accent-color);
   background: rgba(124, 58, 237, 0.15);
 }
 
-.sidebar-btn.pinned .sidebar-pin {
+.sidebar-pin.pinned-icon {
   color: var(--accent-color);
+}
+
+/* Gizlenen Modüller Bölümü (Sıfır kirlilik, katlanabilir drawer) */
+.sidebar-hidden-wrapper {
+  margin: var(--space-2) 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.sidebar-hidden-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-align: left;
+}
+
+.sidebar-hidden-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.sidebar-hidden-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.sidebar-hidden-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-hidden-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--accent-color);
+}
+
+.sidebar-hidden-chevron {
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-hidden-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.sidebar-hidden-drawer {
+  padding: 6px 8px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-hidden-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 4px 6px;
+}
+
+.sidebar-unhide-all-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.sidebar-unhide-all-btn:hover {
+  background: rgba(124, 58, 237, 0.15);
+}
+
+.sidebar-hidden-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.sidebar-hidden-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  transition: background 0.15s ease;
+}
+
+.sidebar-hidden-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.sidebar-hidden-item-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-unhide-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-unhide-btn:hover {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.3);
+  transform: scale(1.05);
 }
 
 #lang-text {

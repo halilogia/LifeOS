@@ -92,7 +92,17 @@ export function SettingsDrawer({
     ui.applySortedOrder();
     if (onNotify) {
       onNotify(
-        t.settings_sidebar_reset_done || "Kullanım istatistikleri temizlendi.",
+        t.settings_sidebar_reset_done || "Usage statistics reset.",
+      );
+    }
+  };
+  const hiddenViews = useSidebarUsageStore((s) => s.hiddenViews);
+  const handleUnhideAll = useSidebarUsageStore((s) => s.unhideAll);
+  const onUnhideAllSidebar = async () => {
+    await handleUnhideAll();
+    if (onNotify) {
+      onNotify(
+        t.settings_sidebar_unhide_done || "Hidden modules restored.",
       );
     }
   };
@@ -256,6 +266,8 @@ export function SettingsDrawer({
             sidebarAutoSortEnabled={sidebarAutoSortEnabled}
             onToggleSidebarAutoSort={onToggleSidebarAutoSort}
             onResetSidebarUsage={onResetSidebarUsage}
+            hiddenViewsCount={hiddenViews.length}
+            onUnhideAllSidebar={onUnhideAllSidebar}
             onNotify={onNotify}
           />
         )}

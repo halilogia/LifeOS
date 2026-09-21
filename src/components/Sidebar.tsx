@@ -34,12 +34,30 @@ export function Sidebar({
   const { order, setOrder, saveOrder } = useSidebarOrder();
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
+  const [hiddenDrawerOpen, setHiddenDrawerOpen] = useState(false);
   const pinnedViews = useSidebarUsageStore((s) => s.pinnedViews);
   const togglePin = useSidebarUsageStore((s) => s.togglePin);
+  const hiddenViews = useSidebarUsageStore((s) => s.hiddenViews);
+  const toggleHide = useSidebarUsageStore((s) => s.toggleHide);
+  const unhideAll = useSidebarUsageStore((s) => s.unhideAll);
+
+  const visibleOrder = order.filter((k) => !hiddenViews.includes(k));
+  const hiddenOrder = order.filter((k) => hiddenViews.includes(k));
 
   const handlePinToggle = async (key: string) => {
     const usage = useSidebarUsageStore.getState();
     await usage.togglePin(key);
+  };
+
+  const handleHideToggle = async (key: string) => {
+    const isCurrentlyHidden = hiddenViews.includes(key);
+    if (!isCurrentlyHidden && activeView === key) {
+      const remainingVisible = visibleOrder.filter((k) => k !== key);
+      const nextView =
+        remainingVisible.length > 0 ? remainingVisible[0] : "free-games";
+      onViewChange(nextView);
+    }
+    await toggleHide(key);
   };
 
   const handleDragStart = (e: DragEvent, id: string) => {
@@ -191,7 +209,7 @@ export function Sidebar({
           <h2 className="logo">Life OS</h2>
         </div>
         <nav className="sidebar-nav">
-          {order.map((key) => (
+          {visibleOrder.map((key) => (
             <SidebarNavItem
               key={key}
               itemKey={key}
@@ -201,6 +219,9 @@ export function Sidebar({
               isDragOver={dragOverItem === key}
               isPinned={pinnedViews.includes(key)}
               onPinToggle={() => handlePinToggle(key)}
+              onHideToggle={() => handleHideToggle(key)}
+              hideTitle={t.sidebar_hide_item}
+              pinTitle={t.sidebar_pin_item}
               onClick={() => onViewChange(key)}
               onDragStart={(e) => handleDragStart(e, key)}
               onDragEnd={handleDragEnd}
@@ -209,6 +230,95 @@ export function Sidebar({
               onDrop={(e) => handleDrop(e, key)}
             />
           ))}
+
+          {hiddenOrder.length > 0 && (
+            <div className="sidebar-hidden-wrapper">
+              <button
+                type="button"
+                className={`sidebar-hidden-toggle ${hiddenDrawerOpen ? "open" : ""}`}
+                onClick={() => setHiddenDrawerOpen(!hiddenDrawerOpen)}
+                title={t.sidebar_hidden_section}
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className="sidebar-hidden-icon"
+                >
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+                <span className="sidebar-hidden-label">
+                  {t.sidebar_hidden_section}
+                </span>
+                <span className="sidebar-hidden-badge">
+                  {hiddenOrder.length}
+                </span>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className={`sidebar-hidden-chevron ${hiddenDrawerOpen ? "rotated" : ""}`}
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              {hiddenDrawerOpen && (
+                <div className="sidebar-hidden-drawer">
+                  <div className="sidebar-hidden-header">
+                    <button
+                      type="button"
+                      className="sidebar-unhide-all-btn"
+                      onClick={() => void unhideAll()}
+                    >
+                      {t.sidebar_unhide_all}
+                    </button>
+                  </div>
+                  <div className="sidebar-hidden-list">
+                    {hiddenOrder.map((key) => (
+                      <div key={key} className="sidebar-hidden-item">
+                        <SidebarIcon itemKey={key} />
+                        <span className="sidebar-hidden-item-name">
+                          {getItemLabel(key)}
+                        </span>
+                        <button
+                          type="button"
+                          className="sidebar-unhide-btn"
+                          title={t.sidebar_unhide_item}
+                          onClick={() => void handleHideToggle(key)}
+                        >
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="sidebar-divider"></div>
 

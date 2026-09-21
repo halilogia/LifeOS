@@ -34,6 +34,8 @@ export interface AppSettingsGroupProps {
   sidebarAutoSortEnabled?: boolean;
   onToggleSidebarAutoSort?: () => void;
   onResetSidebarUsage?: () => void;
+  hiddenViewsCount?: number;
+  onUnhideAllSidebar?: () => void;
 }
 
 interface GroupCardProps {
@@ -71,6 +73,8 @@ export function AppSettingsGroup({
   sidebarAutoSortEnabled = true,
   onToggleSidebarAutoSort,
   onResetSidebarUsage,
+  hiddenViewsCount = 0,
+  onUnhideAllSidebar,
 }: AppSettingsGroupProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -114,6 +118,27 @@ export function AppSettingsGroup({
                 <path d="M3 3v5h5" />
               </svg>
               <span>{t.settings_sidebar_reset_usage}</span>
+            </button>
+          )}
+          {onUnhideAllSidebar && hiddenViewsCount > 0 && (
+            <button
+              className="settings-action-btn"
+              onClick={onUnhideAllSidebar}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <span>{`${t.settings_sidebar_unhide_all} (${hiddenViewsCount})`}</span>
             </button>
           )}
           <AppShortcutRow t={t} />

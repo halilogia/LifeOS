@@ -97,8 +97,9 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 * **DOM XSS Injection Prevention**: Never write unescaped user-entered text directly using `.innerHTML` or `dangerouslySetInnerHTML`. Always route strings through `escapeHtml()` sanitization filters before inserting them into active DOM elements in content scripts or rendering blocks.
 * **Storage Schema Validation**: Validate all imported external datasets, JSON backups, or sync variables using schema validation libraries (such as Zod schemas) before writing them to Chrome storage.
 
-### 4.3 Structured Planning
-* **Planning Workflow Requirement**: Any complex task (architectural changes, multiple file edits, or security revisions) requires establishing a structured plan inside `implementation_plan.md` and waiting for user review and approval before writing code.
+### 4.3 Structured Planning & Çift Yazmalı Proje Hafızası Protokolü (Dual-Write Memory Protocol)
+* **Planning Workflow Requirement**: Mimari değişiklikler, çoklu dosya düzenlemeleri veya yeni modüller eklenirken mutlaka yapılandırılmış bir plan hazırlanmalıdır.
+* **Çift Yazma (Dual-Write) ve Proje İçi Hafıza Kuralı**: Antigravity IDE'nin dahili plan onay butonlarının çalışması için plan `.gemini` artifact dizinine (`implementation_plan.md`) yazılır. **EŞZAMANLI OLARAK**, projenin bağlamını ve hafızasını repo içinde kalıcı kılmak için planın bir kopyası projenin kendi kökündeki `brain/plans/implementation_plan<N>.md` (bir sonraki boş indeks numarasıyla) dizinine kaydedilmelidir. Böylece farklı chat oturumlarında veya cihazlarda proje açıldığında yapay zeka geçmiş planları ve mimari kararları doğrudan okuyabilir.
 
 ### 4.4 Zero Security Vulnerability & Zero Backdoor Guarantee (Sıfır Güvenlik İhlali ve Sıfır Arka Kapı Protokolü)
 * **Zero Backdoor Policy**: All code, scripts, network calls, and content script integrations MUST be strictly transparent and free of any backdoor, unauthorized telemetry, hidden data collection, or remote code execution (RCE).

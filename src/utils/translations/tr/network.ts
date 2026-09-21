@@ -21,6 +21,7 @@ export const network = {
   network_metric_latency: "Ortalama Ping",
   network_metric_jitter: "Jitter (Dalgalanma)",
   network_metric_speed: "İndirme Hızı",
+  network_speed_not_tested: "Ölçüm Bekleniyor",
   network_metric_connection: "Bağlantı Tipi",
   network_metric_downlink: "Tahmini Hat",
   network_status_fast: "Hızlı",
