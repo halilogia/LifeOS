@@ -69,6 +69,7 @@ flowchart TB
         modelFetcher
         rssService
         networkDiagnosticService
+        mediaService
     end
 
     subgraph Utils["utils/ (Yardımcı araçlar)"]
@@ -91,6 +92,8 @@ flowchart TB
             pomoNotify["pomodoroNotify.ts"]
         end
         pomodoroStore["pomodoroStore.ts (4-slice kompozisyon)"]
+        networkStore["networkStore.ts"]
+        mediaStore["mediaStore.ts"]
     end
 
     subgraph SPS["sidepanel/ (Web Copilot)"]
@@ -277,6 +280,7 @@ Ters yön (component içinde `chrome.storage` veya `fetch`) **yasaktır**.
 | Sidebar               | useUI                                                     | sync       | sidebar/ (2)                                                        |
 | SidePanel (Copilot)   | useSidePanelChat (tuval → 3 alt-hook)                     | sync       | sidepanel/ (ChatMessage, Header, TabBar, Chips, Messages, InputBar) |
 | NetworkView           | networkDiagnosticService, useNetworkStore                 | local      | network/ (6: Overview, ProtocolHealth, Radar, Speed, Dns, History)  |
+| MediaView             | mediaService, useMediaStore                               | sync+local | media/ (6: StatsOverview, Toolbar, Grid, Card, DetailModal, QuotesModal) |
 
 ---
 

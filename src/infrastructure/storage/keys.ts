@@ -46,6 +46,7 @@ export const SYNC_STOCK_CASH = "stockCash";
 
 /** Day scores (mood tracker): `Record<"YYYY-MM-DD", 1-10>`. */
 export const SYNC_DAY_SCORES = "dayScores";
+export const SYNC_MEDIA_ITEMS = "media_vault_items";
 
 /** All AI-config keys for batch reads. */
 export const SYNC_AI_KEYS = [
@@ -122,6 +123,7 @@ export const SYNC_ALL_KEYS = [
   SYNC_STOCK_CASH,
   SYNC_AI_USER_MEMORY,
   SYNC_DAY_SCORES,
+  SYNC_MEDIA_ITEMS,
 ];
 
 // ============================================================

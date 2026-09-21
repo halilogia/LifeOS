@@ -19,4 +19,5 @@ export const DEFAULT_SIDEBAR_ORDER: string[] = [
   "detox",
   "bist",
   "network",
+  "media",
 ];

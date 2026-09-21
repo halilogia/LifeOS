@@ -93,6 +93,11 @@ const NetworkView = lazy(() =>
     default: m.NetworkView,
   })),
 );
+const MediaView = lazy(() =>
+  import("@/components/media/MediaView.js").then((m) => ({
+    default: m.MediaView,
+  })),
+);
 
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { useSettingsStore } from "@/presentation/store/settingsStore.js";
@@ -252,6 +257,8 @@ export function ViewRouter() {
         );
       case "network":
         return <NetworkView lang={lang} />;
+      case "media":
+        return <MediaView lang={lang} />;
       default:
         return <FreeGamesView lang={lang} />;
     }

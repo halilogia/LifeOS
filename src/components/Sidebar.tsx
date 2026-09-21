@@ -156,6 +156,8 @@ export function Sidebar({
         return t.sidebar_bist;
       case "network":
         return t.sidebar_network || "Network Health";
+      case "media":
+        return t.sidebar_media || "Media & Library";
       default:
         return key;
     }
