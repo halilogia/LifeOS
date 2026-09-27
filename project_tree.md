@@ -117,12 +117,16 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **IAiConfigRepository.ts** → IAiConfigRepository Interface
     - **IArcadeRepository.ts** → IArcadeRepository Interface
     - **IBistCacheRepository.ts** → IBistCacheRepository Interface
+    - **IChatSessionRepository.ts** → IChatSessionRepository.ts
     - **ICityPulseCacheRepository.ts** → ICityPulseCacheRepository Interface
     - **IGameAssetsCacheRepository.ts** → IGameAssetsCacheRepository Interface
     - **IGamesCacheRepository.ts** → IGamesCacheRepository Interface
+    - **IGovJobsCacheRepository.ts** → IGovJobsCacheRepository.ts
     - **IKapNewsCacheRepository.ts** → IKapNewsCacheRepository Interface
     - **IKpssRepository.ts** → IKpssRepository Interface
+    - **IMediaRepository.ts** → IMediaRepository Interface
     - **IMemoryRepository.ts** → IMemoryRepository Interface
+    - **INetworkRepository.ts** → INetworkRepository Interface
     - **INoteRepository.ts** → INoteRepository Interface
     - **IPrayerCacheRepository.ts** → IPrayerCacheRepository Interface
     - **IQuestionBankRepository.ts** → IQuestionBankRepository.ts
@@ -163,12 +167,16 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
       - **ChromeStorageAiConfigRepository.ts** → ChromeStorageAiConfigRepository
       - **ChromeStorageArcadeRepository.ts** → ChromeStorageArcadeRepository
       - **ChromeStorageBistCacheRepository.ts** → ChromeStorageBistCacheRepository
+      - **ChromeStorageChatSessionRepository.ts** → ChromeStorageChatSessionRepository.ts
       - **ChromeStorageCityPulseCacheRepository.ts** → ChromeStorageCityPulseCacheRepository
       - **ChromeStorageGameAssetsRepository.ts** → ChromeStorageGameAssetsRepository
       - **ChromeStorageGamesCacheRepository.ts** → ChromeStorageGamesCacheRepository
+      - **ChromeStorageGovJobsRepository.ts** → ChromeStorageGovJobsRepository
       - **ChromeStorageKapNewsCacheRepository.ts** → ChromeStorageKapNewsCacheRepository
       - **ChromeStorageKpssRepository.ts** → ChromeStorageKpssRepository
+      - **ChromeStorageMediaRepository.ts** → ChromeStorageMediaRepository
       - **ChromeStorageMemoryRepository.ts** → ChromeStorageMemoryRepository
+      - **ChromeStorageNetworkRepository.ts** → ChromeStorageNetworkRepository
       - **ChromeStorageNoteRepository.ts** → ChromeStorageNoteRepository
       - **ChromeStoragePrayerCacheRepository.ts** → ChromeStoragePrayerCacheRepository
       - **ChromeStorageQuestionBankRepository.ts** → ChromeStorageQuestionBankRepository.ts
@@ -204,6 +212,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **useEisenhower.ts** → Eisenhower matris state + drag-drop + quadrant bölme mantığı.
     - **useFreeGames.ts** → Free games state + fetch + filtre mantığı (AGENTS.md 6.3: presentation/hooks/).
     - **useGameAssets.ts** → useGameAssets.ts
+    - **useGovJobs.ts** → useGovJobs.ts
     - **useHifiz.ts** → Facade over useHifizState — all state + storage lives in the store.
     - **useKpssChartMetric.ts** → useKpssChartMetric — facade over the Zustand singleton store.
     - **useKpssChartSettings.ts** → useKpssChartSettings — facade over the Zustand singleton store.
@@ -227,6 +236,8 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **kpssQuizStore.ts** → useKpssQuiz store
     - **kpssSortSettingsStore.ts** → kpssSortSettingsStore
     - **kpssWikiSidebarStore.ts** → useKpssWikiSidebar store
+    - **mediaStore.ts** → mediaStore.ts
+    - **networkStore.ts** → useNetworkStore
     - **notesStore.ts** → useNotes store
     **pomodoro/**
       - **alarmSlice.ts** → alarm Slice
@@ -252,15 +263,19 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
 
 **components/**
   **aichat/** → AI sohbet alt bileşenleri.
+    - **AiActionBadge.tsx** → AiActionBadge.tsx
     - **AiChatHeaderBar.tsx** → AiChatHeaderBar.tsx
+    - **AiChatHistoryDrawer.tsx** → AiChatHistoryDrawer.tsx
     - **aiChatIcons.tsx** → ai Chat Icons
     - **AiChatInputToolbar.tsx** → AiChatInputToolbar.tsx
     - **AiChatMessageItem.tsx** → AiChatMessageItem.tsx
     - **AiMessageFooter.tsx** → Ai Message Footer
     - **AiMessageSources.tsx** → Ai Message Sources
     - **AiThinkingCard.tsx** → Ai Thinking
+    - **ClarificationCard.tsx** → ClarificationCard.tsx
     - **localReplyBuilder.ts** → localReplyBuilder.ts
-    - **useAiChatMessages.ts** → useAiChatMessages.ts
+    - **QueuedMessagesBar.tsx** → QueuedMessagesBar.tsx
+    - **useAiChatMessages.ts** → Ai Chat Messages
   - **AIChatView.tsx** → AIChatView.tsx
   - **AppTopHeader.tsx** → App Top Header
   **arcade/** → Arcade oyunları alt bileşenleri.
@@ -302,6 +317,12 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **GameAssetsFilterBar.tsx** → GameAssetsFilterBar.tsx
   - **GameAssetsView.tsx** → GameAssetsView.tsx
   - **GameCard.tsx** → Game
+  **govjobs/**
+    - **GovJobCard.tsx** → GovJobCard.tsx
+    - **GovJobHubsBar.tsx** → GovJobHubsBar.tsx
+    - **GovJobsFilterBar.tsx** → GovJobsFilterBar.tsx
+    - **GovJobsHeader.tsx** → GovJobsHeader.tsx
+  - **GovJobsView.tsx** → GovJobsView.tsx
   - **HalkaArzView.tsx** → HalkaArzView.tsx
   - **HeroHeader.tsx** → Hero Header
   **hifiz/** → Hafızlık (Hifiz) alt bileşenleri.
@@ -391,6 +412,22 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   - **KpssCountdownBanner.tsx** → KPSS: Kpss Countdown Banner
   - **KpssView.tsx** → KPSS: Kpss
   - **ListView.tsx** → List
+  **media/**
+    - **MediaCard.tsx** → Media
+    - **MediaDetailModal.tsx** → Media Detail
+    - **MediaGrid.tsx** → Media Grid
+    - **MediaQuotesModal.tsx** → Media Quotes
+    - **MediaStatsOverview.tsx** → Media Stats Overview
+    - **MediaToolbar.tsx** → Media Toolbar
+    - **MediaView.tsx** → Media
+  **network/**
+    - **DiagnosticHistoryCard.tsx** → Diagnostic History
+    - **DnsSecurityCard.tsx** → Dns Security
+    - **NetworkOverviewCard.tsx** → Network Overview
+    - **NetworkView.tsx** → Network
+    - **ProtocolHealthCard.tsx** → Protocol Health
+    - **ServiceRadarGrid.tsx** → Service Radar Grid
+    - **SpeedometerCard.tsx** → Speedometer
   **notes/** → Notlar alt bileşenleri.
     - **CustomQuotesSection.tsx** → CustomQuotesSection.tsx
     - **GraphLegend.tsx** → Graph Legend
@@ -524,15 +561,39 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
 **services/**
   - **agentToolService.ts** → agentToolService.ts
   **aichat/**
-    - **actionExecutor.ts** → Automatically execute structured AI actions (create tasks, add notes, update memory).
+    - **actionExecutor.ts** → Automatically execute structured AI actions (create tasks, add notes, update memory, manage media vault, etc.).
+    - **agentTools.ts** → agentTools.ts
+    - **chatSessionService.ts** → chatSessionService.ts
+    - **fileAttachmentService.ts** → fileAttachmentService.ts
     - **index.ts** → aichat/index.ts
     - **modelFetcher.ts** → model Fetcher
     **prompts/**
       - **system-prompt.md** → system prompt
-    - **providers.ts** → providers
-    - **systemPrompt.ts** → Builds the system prompt with web search context and user memory.
+    - **providers.ts** → Universal SSE / NDJSON stream reader that progressively streams text tokens
+    **registry/**
+      - **aiFeatureRegistry.ts** → aiFeatureRegistry.ts
+      - **index.ts** → index.ts
+      **plugins/**
+        - **bistPlugin.ts** → bistPlugin.ts
+        - **kpssPlugin.ts** → kpssPlugin.ts
+        - **mediaVaultPlugin.ts** → mediaVaultPlugin.ts
+        - **memoryPlugin.ts** → memoryPlugin.ts
+        - **navigationPlugin.ts** → navigationPlugin.ts
+        - **notesPlugin.ts** → notesPlugin.ts
+        - **pomodoroPlugin.ts** → pomodoroPlugin.ts
+        - **prayerPlugin.ts** → prayerPlugin.ts
+        - **routinesPlugin.ts** → routinesPlugin.ts
+        - **tasksPlugin.ts** → tasksPlugin.ts
+      - **types.ts** → types.ts
+    - **systemPrompt.ts** → Builds the system prompt with web search context, user memory, and live dashboard snapshot.
+    - **systemPromptTemplate.ts** → systemPromptTemplate.ts
     - **types.ts** → types
-  - **ambientAudioService.ts** → ambientAudioService.ts
+  **ambientAudio/**
+    - **ambientAudioEngine.ts** → ambientAudioEngine.ts
+    - **ambientAudioTypes.ts** → ambientAudioTypes.ts
+    - **index.ts** → index.ts — Ambient Audio modülünün tek giriş noktası (barrel).
+    - **noiseSynthesis.ts** → noiseSynthesis.ts
+    - **voices.ts** → voices.ts
   **arcade/**
     - **arcadeFileSystem.ts** → arcade File System
     - **arcadeGameLauncher.ts** → Resolves a game's entry HTML into a self-contained data-URL document.
@@ -546,6 +607,7 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   - **errorReportService.ts** → errorReportService.ts
   - **gameAssetsService.ts** → gameAssetsService
   - **gamesService.ts** → gamesService
+  - **govJobsService.ts** → govJobsService.ts
   - **ipoService.ts** → ipoService.ts
   - **kapNewsService.ts** → kapNewsService.ts
   **kpss/**
@@ -590,6 +652,8 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
       - **subject-tarih.md** → subject tarih
       - **subject-turkce.md** → subject turkce
       - **subject-vatandaslik.md** → subject vatandaslik
+  - **mediaService.ts** → mediaService.ts
+  - **networkDiagnosticService.ts** → Network Diagnostic Service
   - **prayerService.ts** → prayerService.ts
   - **rssService.ts** → rssService.ts
   **stock/**
@@ -601,10 +665,8 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **stockPrompts.ts** → Tekil hisse senedi teknik ve temel analiz sistem prompt'u.
     - **stockRuleEngine.ts** → stockRuleEngine.ts
   **vocabulary/** → Kelime/öğrenme kartı servis alt modülü.
-    - **categories.ts** → categories
-    - **loader.ts** → loader
-    - **personal.ts** → personal
-  - **vocabularyService.ts** → vocabulary
+    - **loader.ts** → loader.ts
+  - **vocabularyService.ts** → vocabularyService.ts
   - **webSearchAgent.ts** → webSearchAgent.ts
   - **zettelkastenEngine.ts** → zettelkastenEngine.ts
 
@@ -685,12 +747,15 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
     - **game-assets.css** → game assets
     - **game-history.css** → game history
     - **google-sync.css** → google sync
+    - **govjobs.css** → govjobs.css
     - **halka-arz.css** → halka arz
     - **hifiz.css** → hifiz
     - **kpss-external-quiz.css** → KPSS: kpss external quiz
     - **kpss-quiz.css** → KPSS: kpss quiz
     - **kpss.css** → KPSS: kpss
+    - **media.css** → media.css
     - **mushaf.css** → mushaf
+    - **network.css** → network.css
     - **notes.css** → Not: notes
     - **pomodoro.css** → Pomodoro: pomodoro
     - **prayer.css** → prayer
@@ -716,8 +781,11 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
   - **game.ts** → game
   - **gameAssets.ts** → Types for Free Game Assets module.
   - **games.ts** → Types for free-games features (GamerPower API, Epic history, exclusions).
+  - **govJobs.ts** → govJobs.ts
   - **kap.ts** → kap.ts
   - **kpss.ts** → kpss.ts
+  - **media.ts** → media.ts
+  - **network.ts** → Network Diagnostics Types
   - **prayer.ts** → prayer.ts
   - **stock.ts** → stock.ts
   - **types.ts** → types
@@ -753,6 +821,8 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
       - **index.ts** → en translations — aggregated from per-module files.
       - **ipo.ts** → ipo
       - **kpss.ts** → KPSS: kpss
+      - **media.ts** → media
+      - **network.ts** → network
       - **notes.ts** → Not: notes
       - **pomo.ts** → Pomodoro: pomo
       - **rss.ts** → rss
@@ -775,6 +845,8 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
       - **index.ts** → tr translations — aggregated from per-module files.
       - **ipo.ts** → ipo
       - **kpss.ts** → KPSS: kpss
+      - **media.ts** → media
+      - **network.ts** → network
       - **notes.ts** → Not: notes
       - **pomo.ts** → Pomodoro: pomo
       - **rss.ts** → rss
@@ -798,18 +870,19 @@ Proje **Clean Architecture** (Temiz Mimari) prensiplerine göre yapılandırılm
 
 **sidepanel/**
   - **ChatMessage.ts** → Chat Message
+  - **CommandSuggestionMenu.tsx** → CommandSuggestionMenu.tsx
   - **index.tsx** → index
   - **SidePanelApp.tsx** → SidePanelApp.tsx
-  - **SidePanelChips.tsx** → Robustly detects whether the active page contains personal registration/application form fields.
+  - **SidePanelChips.tsx** → Side Panel Chips
   - **SidePanelHeader.tsx** → Side Panel Header
+  - **SidePanelHistoryDrawer.tsx** → SidePanelHistoryDrawer.tsx
   - **SidePanelInputBar.tsx** → Side Panel Input Bar
   - **SidePanelMessages.tsx** → Side Panel Messages
   - **sidePanelSpeech.ts** → sidePanelSpeech.ts
-  - **sidePanelStorage.ts** → sidePanelStorage.ts
   - **SidePanelTabBar.tsx** → Side Panel Tab Bar
   - **useAgentBridge.ts** → useAgentBridge.ts
   - **useChatSession.ts** → useChatSession.ts
-  - **useSidePanelChat.ts** → useSidePanelChat.ts
+  - **useSidePanelChat.ts** → Side Panel Chat
   - **useVoiceInput.ts** → useVoiceInput.ts
 
 ---

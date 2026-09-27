@@ -20,10 +20,10 @@ export const mediaVaultPlugin: AiFeaturePlugin = {
 
   getContextSnapshot: async (ctx) => {
     try {
-      if (!ctx.mediaRepo) return null;
+      if (!ctx.mediaRepo) {return null;}
 
       const mediaItems = await ctx.mediaRepo.getItems();
-      if (mediaItems.length === 0) return null;
+      if (mediaItems.length === 0) {return null;}
 
       const inProgressBooks = mediaItems
         .filter((m) => m.type === "book" && m.status === "in_progress")

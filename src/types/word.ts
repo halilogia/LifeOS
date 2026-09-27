@@ -14,15 +14,6 @@ export interface WordReviewData {
   incorrectCount: number;
 }
 
-export interface ReviewSession {
-  date: string;
-  wordsReviewed: number;
-  easyCount: number;
-  mediumCount: number;
-  hardCount: number;
-  timeSpentMs: number;
-}
-
 export interface DictionaryCategory {
   partOfSpeech: string;
   translations: string[];

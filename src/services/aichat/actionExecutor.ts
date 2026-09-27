@@ -244,7 +244,7 @@ export async function handleAddMediaFromAI(
   mediaRepo: IMediaRepository,
 ): Promise<void> {
   const title = String(params.title ?? "").trim();
-  if (!title) return;
+  if (!title) {return;}
 
   const type = (String(params.type ?? "book").toLowerCase()) as MediaType;
   const status = (String(params.status ?? "in_progress").toLowerCase()) as MediaStatus;
@@ -312,7 +312,7 @@ export async function handleBatchAddMediaFromAI(
   rawItems: Array<Record<string, unknown>>,
   mediaRepo: IMediaRepository,
 ): Promise<number> {
-  if (!rawItems || rawItems.length === 0) return 0;
+  if (!rawItems || rawItems.length === 0) {return 0;}
 
   const existing = await mediaRepo.getItems();
   const existingMap = new Map<string, number>();
@@ -327,7 +327,7 @@ export async function handleBatchAddMediaFromAI(
   for (let i = 0; i < rawItems.length; i++) {
     const raw = rawItems[i];
     const title = String(raw.title ?? "").trim();
-    if (!title) continue;
+    if (!title) {continue;}
 
     const type = (String(raw.type ?? "book").toLowerCase()) as MediaType;
     const status = (String(raw.status ?? "in_progress").toLowerCase()) as MediaStatus;
@@ -398,7 +398,7 @@ export async function handleAddMediaQuoteFromAI(
 ): Promise<boolean> {
   const cleanTitle = bookTitle.toLowerCase().trim();
   const cleanQuote = quoteText.trim();
-  if (!cleanTitle || !cleanQuote) return false;
+  if (!cleanTitle || !cleanQuote) {return false;}
 
   const items = await mediaRepo.getItems();
   const book = items.find(
@@ -434,7 +434,7 @@ export async function handleUpdateMediaProgressFromAI(
   mediaRepo: IMediaRepository,
 ): Promise<boolean> {
   const title = String(params.title ?? "").toLowerCase().trim();
-  if (!title) return false;
+  if (!title) {return false;}
 
   const items = await mediaRepo.getItems();
   const item = items.find((i) => i.title.toLowerCase().includes(title));

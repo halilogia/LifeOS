@@ -28,39 +28,3 @@ export interface KpssPastQuiz {
   selectedAnswers: number[];
   date: string;
 }
-
-export interface KpssExamConfig {
-  examType: "kpss" | "e-kpss" | "a grubu" | "dgs" | "tus" | "dus" | "yds";
-  maxQuestions: number;
-  durationMinutes: number;
-}
-
-export interface KpssExamRecord {
-  id: string;
-  examType: KpssExamConfig["examType"];
-  date: string;
-  subjectScores: Record<string, number>;
-  totalNet: number;
-  totalScore: number;
-  notes?: string;
-}
-
-export interface KpssQuestion {
-  id: string;
-  subject: string;
-  topic: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation?: string;
-}
-
-export interface KpssSession {
-  id: string;
-  subject: string;
-  topic: string;
-  startTime: string;
-  duration: number;
-  questions: string[];
-  answers: number[];
-}

@@ -14,8 +14,6 @@ import {
 import { renderBarChart } from "./kpssChartRenderBar.js";
 import { renderLineChart } from "./kpssChartRenderLine.js";
 
-export { getSubjectNets, getOverallNets } from "./kpssChartCalculations.js";
-
 export interface KpssChartParams {
   lang: Language;
   dailyStats: KpssDailyStats[];

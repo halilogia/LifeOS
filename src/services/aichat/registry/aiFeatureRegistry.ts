@@ -35,20 +35,6 @@ export class AiFeatureRegistry {
   }
 
   /**
-   * Unregisters a plugin by ID.
-   */
-  public unregisterPlugin(id: string): boolean {
-    return this.plugins.delete(id);
-  }
-
-  /**
-   * Gets a registered plugin by ID.
-   */
-  public getPlugin(id: string): AiFeaturePlugin | undefined {
-    return this.plugins.get(id);
-  }
-
-  /**
    * Returns all registered plugins as an array.
    */
   public getAllPlugins(): AiFeaturePlugin[] {
@@ -117,7 +103,7 @@ export class AiFeatureRegistry {
     let actionIndex = 2;
 
     for (const plugin of this.plugins.values()) {
-      if (!plugin.actions || plugin.actions.length === 0) continue;
+      if (!plugin.actions || plugin.actions.length === 0) {continue;}
 
       for (const act of plugin.actions) {
         const jsonExample = JSON.stringify(

@@ -1,7 +1,6 @@
 import {
   loadExamYearData,
   loadAllExamData,
-  AVAILABLE_EXAM_YEARS,
 } from "@/services/kpss/data/kpssDataRegistry.js";
 import { QuizQuestion } from "@/services/kpss/kpssAiService.js";
 
@@ -304,5 +303,3 @@ export async function getExamSubjectCount(
 
   return (yearData[subject] as unknown[] | undefined)?.length || 0;
 }
-
-export { AVAILABLE_EXAM_YEARS };

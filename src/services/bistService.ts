@@ -249,35 +249,6 @@ export function formatPrice(price: number, currency = "TRY"): string {
   return `${price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${symbol}`;
 }
 
-export function formatVolume(vol: number): string {
-  if (vol === 0) {
-    return "—";
-  }
-  if (vol >= 1_000_000_000) {
-    return `${(vol / 1_000_000_000).toFixed(2)}B`;
-  }
-  if (vol >= 1_000_000) {
-    return `${(vol / 1_000_000).toFixed(2)}M`;
-  }
-  if (vol >= 1_000) {
-    return `${(vol / 1_000).toFixed(1)}K`;
-  }
-  return vol.toLocaleString("tr-TR");
-}
-
-export function formatMarketCap(mc?: number): string {
-  if (!mc) {
-    return "—";
-  }
-  if (mc >= 1_000_000_000) {
-    return `${(mc / 1_000_000_000).toFixed(2)}B ₺`;
-  }
-  if (mc >= 1_000_000) {
-    return `${(mc / 1_000_000).toFixed(2)}M ₺`;
-  }
-  return `${mc.toLocaleString("tr-TR")} ₺`;
-}
-
 export async function fetchStockHistory(
   symbol: string,
   range: string = "1mo",

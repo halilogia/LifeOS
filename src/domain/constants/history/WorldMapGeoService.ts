@@ -27,17 +27,15 @@ const ISO_MAP: Record<string, string[]> = {
   cyprus: ["196"],
 };
 
-export const PROJECTION_WIDTH = 1000;
-export const PROJECTION_HEIGHT = 500;
+const PROJECTION_WIDTH = 1000;
+const PROJECTION_HEIGHT = 500;
 
 // EMENA (Avrupa, Akdeniz, Orta Doğu, Kuzey Afrika) D3 Mercator projeksiyonu
-export const emenaProjection = d3
+const emenaProjection = d3
   .geoMercator()
   .center([28.0, 36.5]) // Lon 28.0 E, Lat 36.5 N (Doğu Akdeniz / Anadolu merkezli)
   .scale(540)
   .translate([PROJECTION_WIDTH / 2, PROJECTION_HEIGHT / 2]);
-
-export const emenaPathGenerator = d3.geoPath().projection(emenaProjection);
 
 /** Coğrafi Boylam (lon) ve Enlem (lat) değerini haritadaki SVG (x, y) piksel koordinatına dönüştürür */
 export function geoToSvgCoords(
@@ -53,10 +51,6 @@ export function geoToSvgCoords(
 
 /** Önceden projeksiyonu yapılmış 0-gecikmeli dünya ülkesi harita özelliklerini senkron getirir */
 export function getWorldFeaturesSync(): CountryGeoFeature[] {
-  return PREPROJECTED_WORLD_FEATURES;
-}
-
-export async function loadWorldCountryFeatures(): Promise<CountryGeoFeature[]> {
   return PREPROJECTED_WORLD_FEATURES;
 }
 

@@ -10,8 +10,7 @@ export type StockRuleType =
   | "TAVAN_BREAK" // Tavan bozulduğunda (%10 altına sarkma)
   | "STOP_LOSS" // Sabit Zarar Durdur (Örn: Maliyetin %3 altı)
   | "TAKE_PROFIT" // Kar Al (Örn: Maliyetin %15 üstü)
-  | "TRAILING_STOP" // İzleyen Stop (Örn: Görülen en yüksek fiyatın %4 altı)
-  | "RSI_OVERBOUGHT"; // RSI aşırı alım bölgesi (RSI > 70)
+  | "TRAILING_STOP"; // İzleyen Stop (Örn: Görülen en yüksek fiyatın %4 altı)
 
 export interface StockPortfolioItem {
   id: string;

@@ -3,7 +3,7 @@
  * Pomodoro yan panel ortam sesleri oynatıcı kartı (Yağmur, Rüzgar, Fön, LoFi ve Ses Seviyesi).
  */
 
-import { AmbientSoundType } from "@/services/ambientAudioService.js";
+import { AmbientSoundType } from "@/services/ambientAudio/index.js";
 
 interface PomoAmbientPlayerCardProps {
   title: string;

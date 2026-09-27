@@ -16,7 +16,7 @@ export const notesPlugin: AiFeaturePlugin = {
   getContextSnapshot: async (ctx) => {
     try {
       const notes = await ctx.noteRepo.getAll();
-      if (notes.length === 0) return null;
+      if (notes.length === 0) {return null;}
 
       const recentTitles = notes
         .slice(-5)

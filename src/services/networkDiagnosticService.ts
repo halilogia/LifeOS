@@ -304,8 +304,8 @@ export class NetworkDiagnosticService {
 
     let totalBytes = 0;
     let peakMbps = 0;
-    let avgMbps = 0;
-    let durationMs = 0;
+    let avgMbps: number;
+    let durationMs: number;
 
     try {
       const response = await fetch(cloudflareUrl, {

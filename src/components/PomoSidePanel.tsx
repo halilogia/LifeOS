@@ -11,7 +11,7 @@ import { getTranslation } from "@/utils/i18n.js";
 import {
   createAmbientAudioEngine,
   AmbientSoundType,
-} from "@/services/ambientAudioService.js";
+} from "@/services/ambientAudio/index.js";
 
 // Extracted Sub-components
 import { PomoStopwatchCard } from "@/components/pomodoro/PomoStopwatchCard.js";
@@ -77,22 +77,12 @@ export function PomoSidePanel({
       return;
     }
 
-    if (activeSound === soundType && isPlaying) {
-      engine.stopAllSounds();
-      setIsPlaying(false);
-    } else {
-      setActiveSound(soundType);
-      setIsPlaying(true);
-      if (soundType === "white_noise") {
-        engine.playHairdryer(volume);
-      } else if (soundType === "rain") {
-        engine.playRain(volume);
-      } else if (soundType === "wind") {
-        engine.playWind(volume);
-      } else if (soundType === "lofi") {
-        engine.playLofi(volume);
-      }
-    }
+    const nextSound =
+      activeSound === soundType && isPlaying ? "none" : soundType;
+
+    setActiveSound(nextSound);
+    setIsPlaying(nextSound !== "none");
+    engine.play(nextSound, volume);
   };
 
   return (

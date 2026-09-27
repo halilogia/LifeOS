@@ -35,7 +35,7 @@ export function AiActionBadge({
     </svg>
   );
 
-  let label = "";
+  let label: string;
 
   if (action === "add_media") {
     const title = String(actionParams?.title ?? "");

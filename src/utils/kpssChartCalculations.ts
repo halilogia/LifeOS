@@ -7,7 +7,7 @@
 import { KpssDailyStats, KpssProgress } from "@/types/types.js";
 import { kpssData } from "@/services/kpss/kpssService.js";
 
-export function getSubjectNets(subKey: string, kpssProgress: KpssProgress[]) {
+function getSubjectNets(subKey: string, kpssProgress: KpssProgress[]) {
   const tList = kpssData[subKey] || [];
   let totalNet = 0;
   let totalQuestions = 0;
@@ -30,7 +30,7 @@ export function getSubjectNets(subKey: string, kpssProgress: KpssProgress[]) {
   return { net: Math.round(totalNet * 10) / 10, max: totalQuestions };
 }
 
-export function getOverallNets(kpssProgress: KpssProgress[]) {
+function getOverallNets(kpssProgress: KpssProgress[]) {
   let totalNet = 0;
   let totalMax = 0;
   Object.keys(kpssData).forEach((subKey) => {

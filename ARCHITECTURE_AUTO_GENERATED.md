@@ -413,7 +413,12 @@ src/
 │   │   ├── providers.ts
 │   │   ├── systemPrompt.ts
 │   │   └── types.ts
-│   ├── ambientAudioService.ts
+│   ├── ambientAudio/
+│   │   ├── ambientAudioEngine.ts
+│   │   ├── ambientAudioTypes.ts
+│   │   ├── index.ts
+│   │   ├── noiseSynthesis.ts
+│   │   └── voices.ts
 │   ├── arcade/
 │   │   ├── arcadeFileSystem.ts
 │   │   ├── arcadeGameLauncher.ts

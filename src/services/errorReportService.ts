@@ -10,8 +10,7 @@ import {
 } from "@/application/ports/IErrorReportPort.js";
 import { ChromeErrorReportAdapter } from "@/infrastructure/adapters/ChromeErrorReportAdapter.js";
 
-const defaultPort = new ChromeErrorReportAdapter();
-let port: IErrorReportPort = defaultPort;
+const port: IErrorReportPort = new ChromeErrorReportAdapter();
 
 /** Storage'daki tüm log kayıtlarını okur (en eskiden yeniye). */
 export async function getLogEntries(): Promise<LogEntry[]> {
@@ -23,17 +22,7 @@ export async function clearLogs(): Promise<void> {
   return port.clearLogs();
 }
 
-/** Log kayıtlarını .md formatına çevirir. */
-export async function exportLogsAsMarkdown(): Promise<string> {
-  return port.exportLogsAsMarkdown();
-}
-
 /** Logları life-os-logs-YYYY-MM-DD.md olarak indirir. */
 export async function downloadLogsMd(): Promise<void> {
   return port.downloadLogsMd();
-}
-
-/** Test için port override (optional). */
-export function __setErrorReportPort(p: IErrorReportPort): void {
-  port = p;
 }

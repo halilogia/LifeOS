@@ -15,7 +15,7 @@ export const prayerPlugin: AiFeaturePlugin = {
 
   getContextSnapshot: async () => {
     try {
-      if (typeof window === "undefined") return null;
+      if (typeof window === "undefined") {return null;}
 
       const store = usePrayerState.getState();
       const city = store.city || "Istanbul";

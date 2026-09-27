@@ -14,53 +14,6 @@ export interface AgentActionPayload {
   direction?: "up" | "down";
 }
 
-export interface AgentToolDefinition {
-  name: string;
-  description: string;
-  actionType: string;
-}
-
-/**
- * Inventory of all 6 core tools currently registered in the Web Copilot Agent.
- */
-export const REGISTERED_AGENT_TOOLS: AgentToolDefinition[] = [
-  {
-    name: "click",
-    description:
-      "Clicks buttons, links, tabs, or interactive elements by target text or CSS selector.",
-    actionType: "click",
-  },
-  {
-    name: "type",
-    description:
-      "Types text into input fields, textareas, or contenteditable elements.",
-    actionType: "type",
-  },
-  {
-    name: "scroll",
-    description: "Scrolls active browser viewport up or down.",
-    actionType: "scroll",
-  },
-  {
-    name: "extract",
-    description:
-      "Extracts page structure, text content, and metadata from active DOM.",
-    actionType: "extract",
-  },
-  {
-    name: "highlight",
-    description:
-      "Highlights target elements visually with neon scanning bounding box.",
-    actionType: "highlight",
-  },
-  {
-    name: "update_memory",
-    description:
-      "Saves new user facts to personal memory.md (chrome.storage.local.aiUserMemory).",
-    actionType: "update_memory",
-  },
-];
-
 /**
  * Generates an accurate, context-aware Turkish/English summary for executed tool actions.
  */

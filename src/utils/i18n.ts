@@ -7,34 +7,6 @@ export const translations = {
   en,
 };
 
-export function applyI18n(
-  lang: Language,
-  todoInput: HTMLInputElement,
-  _langToggleBtn: HTMLButtonElement,
-): void {
-  const elementsWithText = document.querySelectorAll("[data-i18n]");
-  elementsWithText.forEach((el) => {
-    const key = el.getAttribute("data-i18n") as keyof typeof translations.tr;
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key];
-    }
-  });
-
-  const elementsWithPlaceholder = document.querySelectorAll(
-    "[data-i18n-placeholder]",
-  );
-  elementsWithPlaceholder.forEach((el) => {
-    const key = el.getAttribute(
-      "data-i18n-placeholder",
-    ) as keyof typeof translations.tr;
-    if (translations[lang][key]) {
-      (el as HTMLInputElement).placeholder = translations[lang][key];
-    }
-  });
-
-  todoInput.placeholder = translations[lang].todo_placeholder;
-}
-
 export function getTranslation(lang: Language): Record<string, string> {
   const handler = {
     get(target: Record<string, string>, prop: string) {

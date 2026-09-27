@@ -8,33 +8,10 @@ import type { AiFeaturePlugin } from "../types.js";
 import { useUIStore } from "@/presentation/store/uiStore.js";
 import { logger } from "@/utils/logger.js";
 
-export const VALID_LIFEOS_VIEWS = [
-  "list",
-  "kanban",
-  "eisenhower",
-  "calendar",
-  "notes",
-  "media",
-  "pomodoro",
-  "willpower",
-  "hifiz",
-  "srs",
-  "prayer",
-  "kpss",
-  "bist",
-  "halka-arz",
-  "free-games",
-  "game-assets",
-  "city-pulse",
-  "gov-jobs",
-  "arcade",
-  "detox",
-  "network",
-  "ai-chat",
-] as const;
-
-export type LifeOSViewKey = (typeof VALID_LIFEOS_VIEWS)[number];
-
+/**
+ * Görünüm anahtarlarının kullanıcıya gösterilen adları. Eylem, hedef görünümü
+ * bulunamadığında ham anahtarı döndürür (bulut tabanlı değil, deterministik).
+ */
 const VIEW_TITLES_TR: Record<string, string> = {
   list: "Görev Listesi",
   kanban: "Kanban Panosu",

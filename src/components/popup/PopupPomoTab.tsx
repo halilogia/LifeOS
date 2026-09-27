@@ -6,7 +6,7 @@ import {
 import {
   createAmbientAudioEngine,
   AmbientSoundType,
-} from "@/services/ambientAudioService.js";
+} from "@/services/ambientAudio/index.js";
 import { PomoAmbientPlayerCard } from "@/components/pomodoro/PomoAmbientPlayerCard.js";
 import { PomoTimerPanel } from "./pomo/PomoTimerPanel.js";
 import { PomoStopwatchPanel } from "./pomo/PomoStopwatchPanel.js";
@@ -59,23 +59,6 @@ export function PopupPomoTab({
     audioEngineRef.current = createAmbientAudioEngine();
   }
 
-  const playSoundInEngine = (soundType: AmbientSoundType, vol: number) => {
-    if (!audioEngineRef.current) {
-      return;
-    }
-    if (soundType === "none") {
-      audioEngineRef.current.stopAllSounds();
-    } else if (soundType === "rain") {
-      audioEngineRef.current.playRain(vol);
-    } else if (soundType === "wind") {
-      audioEngineRef.current.playWind(vol);
-    } else if (soundType === "white_noise") {
-      audioEngineRef.current.playHairdryer(vol);
-    } else if (soundType === "lofi") {
-      audioEngineRef.current.playLofi(vol);
-    }
-  };
-
   useEffect(() => {
     if (audioEngineRef.current && isPlaying) {
       audioEngineRef.current.setVolume(volume);
@@ -86,29 +69,21 @@ export function PopupPomoTab({
   }, [volume, isPlaying]);
 
   const handleSoundToggle = (soundType: AmbientSoundType) => {
-    if (activeSound === soundType && isPlaying) {
-      setActiveSound("none");
-      setIsPlaying(false);
-      playSoundInEngine("none", volume);
-      chrome.runtime
-        .sendMessage({
-          type: "play_ambient_sound",
-          soundType: "none",
-          volume,
-        })
-        .catch(() => {});
-    } else {
-      setActiveSound(soundType);
-      setIsPlaying(true);
-      playSoundInEngine(soundType, volume);
-      chrome.runtime
-        .sendMessage({
-          type: "play_ambient_sound",
-          soundType,
-          volume,
-        })
-        .catch(() => {});
-    }
+    // Popup hem yerel motoru hem de offscreen belgesini sürer; ikisi de aynı
+    // ses türü sözleşmesini kullanır.
+    const nextSound =
+      activeSound === soundType && isPlaying ? "none" : soundType;
+
+    setActiveSound(nextSound);
+    setIsPlaying(nextSound !== "none");
+    audioEngineRef.current?.play(nextSound, volume);
+    chrome.runtime
+      .sendMessage({
+        type: "play_ambient_sound",
+        soundType: nextSound,
+        volume,
+      })
+      .catch(() => {});
   };
 
   return (

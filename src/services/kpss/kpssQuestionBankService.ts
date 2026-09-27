@@ -40,13 +40,6 @@ export async function addWrongQuestions(
   return getRepo().addWrongQuestions(questions);
 }
 
-/** Removes a question from the wrong-questions bank (by key). */
-export async function removeWrongQuestion(
-  q: QuizQuestion,
-): Promise<QuizQuestion[]> {
-  return getRepo().removeWrongQuestion(q);
-}
-
 /* ------------------------------------------------------------------ */
 /* Koleksiyon (📥 kayıtlı sorular)                                     */
 /* ------------------------------------------------------------------ */
@@ -60,11 +53,4 @@ export async function toggleCollectionQuestion(
   q: QuizQuestion,
 ): Promise<QuizQuestion[]> {
   return getRepo().toggleCollectionQuestion(q);
-}
-
-/** Removes a question from the collection (by key). */
-export async function removeCollectionQuestion(
-  q: QuizQuestion,
-): Promise<QuizQuestion[]> {
-  return getRepo().removeCollectionQuestion(q);
 }

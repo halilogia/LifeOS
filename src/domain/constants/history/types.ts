@@ -41,7 +41,3 @@ export interface HistoryUnit {
 }
 
 export const HISTORY_VIEWBOX = "0 0 1000.0 421.9991241865445";
-
-/** Varsayılan il rengi (parşömen) */
-export const HISTORY_PROVINCE_FILL = "#d8cba7";
-export const HISTORY_PROVINCE_STROKE = "#a3906a";

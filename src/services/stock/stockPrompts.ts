@@ -1,9 +1,7 @@
 import singleStockPrompt from "./prompts/single-stock.md?raw";
 import premarketWatchlistPrompt from "./prompts/premarket-watchlist.md?raw";
-import kapNewsPrompt from "./prompts/kap-news.md?raw";
 import type { StockHistoryItem, StockQuote } from "@/types/bist.js";
 import type { StockPortfolioItem, StockRule } from "@/types/stock.js";
-import type { Language } from "@/types/types.js";
 import { getTranslation } from "@/utils/i18n.js";
 
 export const YTD_DISCLAIMER =
@@ -21,13 +19,6 @@ export function getSingleStockSystemPrompt(): string {
  */
 export function getPremarketWatchlistSystemPrompt(): string {
   return premarketWatchlistPrompt;
-}
-
-/**
- * KAP ve BİST duyuru analiz sistem prompt'u.
- */
-export function getKapNewsSystemPrompt(): string {
-  return kapNewsPrompt;
 }
 
 export interface BuildStockContextParams {
@@ -170,14 +161,6 @@ export function buildStockContextPrompt(
   }
 
   return "Veri mevcut değil.";
-}
-
-/**
- * Kullanıcının portföyü için AI rapor prompt'u — dil desteği ile.
- */
-export function getStockReportUserPrompt(lang: Language): string {
-  const t = getTranslation(lang);
-  return t.stock_report_user_prompt;
 }
 
 /**
