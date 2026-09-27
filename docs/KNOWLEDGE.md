@@ -203,7 +203,7 @@ unknown-age → not-idle.
 
 ### Kapsam dışı bırakılanlar
 Ham ses dosyası saklama (`MediaRecorder`) A3'e alınmadı: kota yönetimi, blob yaşam döngüsü
-ve oynatma arayüzü gerektiriyor. `ROADMAP.md` donmuş §3'te kalan iş olarak duruyor.
+ve oynatma arayüzü gerektiriyor. `ROADMAP.md` donmuş **F1**'de kalan iş olarak duruyor.
 
 ---
 
@@ -213,7 +213,7 @@ ve oynatma arayüzü gerektiriyor. `ROADMAP.md` donmuş §3'te kalan iş olarak 
 - `noiseSynthesis.ts` bilinçli olarak `AudioContext`'ten bağımsızdır → `tests/ambientAudio.test.ts` node ortamında çalışır. Web Audio'ya dokunan mantık test edilemez; bu yüzden ayrılmıştır.
 - `VOICE_FACTORIES` tür→üretici tablosudur. Yeni bir ses eklemek için: `AmbientSoundType`'a değer + `ambientAudioTypes.ts`'e alias kararı + `voices.ts`'e fabrika + tabloda girdi.
 - **Generation jetonu:** `ambientAudioEngine` her `play`/`stopAllSounds`'ta `generation` artırır; üreticiler bunu `isActive()` olarak alır. LoFi akor zamanlayıcısı bu olmadan **değiştirilmiş** bir `AudioContext`'e akor gönderiyordu (eski hata).
-- **Kapsam notu:** Motor hâlâ **tek ses kaynağıdır** (`play()` ilk satırında `stopAllSounds()`). Çok kanallı mixer donmuş durumdadır; bkz. `ROADMAP.md` §6.
+- **Kapsam notu:** Motor hâlâ **tek ses kaynağıdır** (`play()` ilk satırında `stopAllSounds()`). Çok kanallı mixer donmuş durumdadır; bkz. `ROADMAP.md` **F4**.
 
 ---
 

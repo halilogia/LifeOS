@@ -7,8 +7,6 @@ export const notes = {
   notes_editor_title_placeholder: "Başlık...",
   notes_editor_title_label: "Kayıt Türü:",
   notes_editor_type_note: "Not",
-  notes_editor_type_quote: "Söz",
-  notes_editor_type_idea: "Fikir",
   notes_editor_save: "Kaydet",
   notes_editor_autosave_done: "✓ Otomatik kaydedildi",
   notes_editor_autosave_hint: "Yazdıkça otomatik kaydedilir",

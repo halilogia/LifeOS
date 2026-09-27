@@ -143,9 +143,10 @@ npm run generate:tree         # project_tree.md dosyasını yeniden üretir
 ```
 
 > **Geliştirme sırasında:** `ROADMAP.md` kapsam dondurması uygulamadadır. Yalnızca
-> **AI Smart Goal Breakdown** ve **Offline P2P WebRTC Sync** üzerinde çalışılır;
-> yeni modül ve yeni bağımlılık eklenmez. Ayrıntı için `ROADMAP.md` ve
-> `docs/PROJECT_GUIDE.md`.
+> **AI Smart Goal Breakdown** (A1), **Voice Memo to Structured Note** (A3) ve
+> **Offline P2P WebRTC Sync** (A2) üzerinde çalışılır; yeni modül/ekran ve yeni
+> bağımlılık eklenmez, ölü kod biriktirilmez. Tamamlanan iş `ROADMAP.md`'den çıkarılıp
+> `CHANGELOG.md`'ye taşınır. Ayrıntı için `ROADMAP.md` ve `docs/PROJECT_GUIDE.md`.
 
 ---
 *Bu çalışma; kişisel üretkenliği artırmak, hedeflere (KPSS, Hıfız, Yazılım) odaklanmak ve güncel ücretsiz oyun fırsatlarını tek ekranda toplamak için geliştirilmiştir.*

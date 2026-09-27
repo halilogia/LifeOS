@@ -7,8 +7,6 @@ export const notes = {
   notes_editor_title_placeholder: "Title...",
   notes_editor_title_label: "Entry Type:",
   notes_editor_type_note: "Note",
-  notes_editor_type_quote: "Quote",
-  notes_editor_type_idea: "Idea",
   notes_editor_save: "Save",
   notes_editor_autosave_done: "✓ Auto-saved",
   notes_editor_autosave_hint: "Auto-saves as you type",
