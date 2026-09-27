@@ -1,3 +1,88 @@
+# Changelog (Değişiklik Günlüğü)
+
+Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalarını ve eklenen tüm özellikleri sürüm geçmişi olarak takip eder.
+
+> **Sürümleme uyarısı:** `package.json` ve `public/manifest.json` sürümü `1.0.0`'dır ve
+> Chrome Web Store sürümü manifest'ten okunur. Aşağıdaki `[4.x]` başlıkları eski
+> dizilimden kalan **tarihsel** kayıtlardır ve manifest ile senkron değildir.
+> Sürüm şeması tekilleştirilene kadar yeni çalışmalar `[Unreleased]` altında
+> toplanır.
+
+---
+
+## [Unreleased] — 2026-08-27 → 2026-09-27
+
+Bu aralıkta eklenen/uygulanan hiçbir sürüm numarası verilmedi; aşağıdaki
+maddeler o dönemde tamamlanan tüm çalışmaları kapsar.
+
+### AI Sohbet (Companion AI) — Büyük Genişleme
+- **Çok Modlu Dosya Ekleri**: PDF, görsel ve kod dosyaları sohbete eklenebiliyor; pano yapıştırma (`Ctrl+V`), sürükle-bırak ve ilgili eylemler hem New Tab hem Side Panel'de çalışıyor.
+- **Gelişmiş Oturum Yönetimi**: Çoklu oturum, oturum geçişi ve komut otomatik tamamlama (`/` ile başlayan komutlar).
+- **Açıklama & Etkileşimli Soru**: AI, isteği netleştirmek için `clarification` isteği gönderebiliyor ve kullanıcıya seçenekli soru sorabiliyor (`ask_user`).
+- **Kuyruklanmış Mesajlar**: Gönderim sırasında yeni mesajlar kuyruğa alınıyor, ilk uygun boşlukta otomatik gönderiliyor.
+- **Token Streaming & Dayanıklı SSE**: Yanıt token token akar; sekme bazlı oturum geçişi ve parçalanmış/chunked SSE yanıtlarına dayanıklı ayrıştırma.
+- **Markdown Dışa Aktarım**: Oturum geçmişi okunabilir Markdown olarak indirilebiliyor.
+- **Kenar Paneli Düzeltmelereri**: Eksik çeviriler, stillenmemiş boş durum ve canlı arama çipi giderildi.
+- **Ayar Taşınması**: `autoGroupTabs` anahtarı Genel sekmesinden AI Assistant sekmesine taşındı.
+
+### Ajan Ağacı (DOM Agent)
+- **Deklaratif Agent Tool Registry**: Araç tanımları tek kaynaktan yönetiliyor, üst çip temizliği yapıldı ve `/form`, `/post` slash komutları eklendi.
+- **Sosyal Medya Gönderi Oluşturma**: `contenteditable` alanlarına yazma, platform algılama ve dinamik bağlamsal çipler.
+
+### Genişletilebilir AI Özellik Kayıt Sistemi
+- **`AiFeatureRegistry`**: Çekirdek AI sohbet kodunu değiştirmeden yeni bir domain modülünün bağlam sağlayıcısı, araç eylemi ve görsel rozet ekleyebilmesini sağlayan merkezi kayıt.
+- **10 plugin** tek bir kayıt noktasından yükleniyor: navigation, notes, mediaVault, prayer, tasks, kpss, bist, pomodoro, routines, memory.
+- **Bağlam toplayıcı + yetenek prompt'u**: Her eylem için parametre şeması, çalıştırma sonucu ve kullanıcıya gösterilen aksiyon rozeti (`AiActionBadge`).
+
+### Yeni Modül: Kamu İlanları & Kariyer Kapısı
+- Canlı kamu ilanları **Kariyer Kapısı (CBİKO)**, **ilan.gov.tr (BİK)** ve **Resmi Gazete** kaynaklarından toplanıyor; 25 dakikalık önbellek ve `chrome.storage` kalıcı önbellek.
+- `GOV_JOB_HUBS`: Kariyer Kapısı, e-Devlet, ilan.gov.tr, Resmi Gazete ve İŞKUR resmi başvuru portallarına kısayollar.
+- İlan kartlarında `daysLeft` aciliyet rozeti; ilanlar e-Devlet arkasında olduğu için kullanıcıyı resmi portallara yönlendiren açık feragatname.
+- **Sıfır sahte veri politikası**: Önceki sürümden kalan sahte/mock önbellek artık üretilmiyor ve başlangıçta otomatik temizleniyor.
+- Kullanımdan kaldırılmış `cbiko` subdomain'i yerine aktif `kariyerkapisi.gov.tr/isealim` ve e-devlet uçları kullanılıyor.
+
+### Yeni Modül: Ağ Teşhisi
+- Ping/gecikme ölçümü (cache-busting + timeout), **IPv4 vs IPv6 anormali tespiti**, **DNS-over-HTTPS (DoH) doğrulaması** ve bant genişliği hız testi.
+- 5 sekmeli arayüz: Genel Bakış / Servis Radarı / Hız Testi / IPv4-IPv6 Teşhisi / Geçmiş.
+- Kopyalanabilir Markdown tanı raporu ve kalıcı tanı geçmişi. Tüm ölçümler kullanıcı tarafından tetiklenir, hiçbir veri dışarı gönderilmez.
+
+### Yeni Modül: Media Vault (Kütüphane)
+- Film, dizi, kitap ve oyun takibi; tür bazlı ilerleme yüzdesi (sayfa, bölüm, oynama süresi).
+- `computeMediaStats` ististik özeti (tamamlananlar, ortalama puan, devam edenler, backlog) ve `filterAndSortItems` filtre/sıralama.
+- Alıntılar modalı ve tüm kütüphanenin JSON olarak dışa aktarılması.
+- `mediaVaultPlugin` ile AI üzerinden kütüphaneye erişim.
+
+### Sidebar & Gezinme
+- **Sidebar Öğesi Gizleme**: Kullanılmayan sidebar girdileri ayarlardan gizlenebiliyor (sıralama zaten kalıcı).
+- `halka-arz` ayrı bir sidebar öğesi olmaktan çıkarılıp BIST OS içindeki sekmeye taşındı.
+
+### City Pulse Düzeltmeleri
+- JSX içinde çift HTML kaçışı giderildi, çok geçişli entity çözümleme iyileştirildi.
+- `loadFavorites` ve `saveEventsCache` imza uyuşmazlıkları ve eksik fallback'ler düzeltildi.
+
+### Volume Booster
+- Kick.com ve canlı yayın SPA'ları için shadow DOM + `MutationObserver` desteği; sayfa yeniden yüklense bile ses düğümü bağlantısı korunuyor.
+
+### Altyapı, Kalite ve Repo Hijyeni
+- **Logger optimizasyonu** ve kaynak yönetimi (log halkası, ayırma mantığı).
+- **`scripts/i18nHealthCheck.mjs`**: Eksik çeviri anahtarı tespiti + detox çevirilerinin güncellenmesi.
+- Repo genelinde lint hataları sıfırlandı.
+- Walkthrough kuralı geri getirildi, accent renk token'ları güvenli kapsama taşındı, ölü dosya tespit script'indeki false positive giderildi.
+- Yol haritası uygulanmış maddelerden arındırıldı, kısmi bölümler yalnızca kalan işlerle sınırlandırıldı.
+- `brain/` dizini versiyon takibinden çıkarıldı; kalıcı bağlam `docs/KNOWLEDGE.md`'ye taşındı.
+
+### Ortam Sesi Motoru Katmanlandı + Ölü Kod Temizliği
+- 366 satırlık `ambientAudioService` monolitinin yerine 5 katmanlı modül: sözleşmeler, saf DSP, ses grafikleri, yaşam döngüsü, barrel.
+- Genel API `play(type, volume)` olarak sadeleşti; ses türü → üretici eşlemesi üç çağrı yerinde tekrarlanmaktan çıkıp tek tabloya taşındı.
+- `window.lofiTimer` globali ve hiç atanmayan `audioRef` kaldırıldı. Bayat bir LoFi akor zamanlayıcısının **değiştirilmiş** bir `AudioContext`'e ses göndermesine yol açan hata, generation jetonuyla kapatıldı.
+- `RSI_OVERBOUGHT` kural tipi kaldırıldı (zaten `default: break` ile yutuluyordu; tip-only etki, migration yok).
+- `stock` i18n namespace'inin 165 anahtarından 118'i (tr + en) silindi — silinmiş AI rapor/analist arayüzünün çeviri kalıntısı.
+- Tamamen yetim iki vocabulary modülü (`categories.ts`, `personal.ts`) silindi; `vocabularyService` tek fonksiyona indirgendi.
+- Preact öncesi ~160 satır ölü popup CSS'i ve 20+ referanssız sembol silindi. Net **-1301 satır**.
+- Lint bu değişiklikten önce zaten 13 hata veriyordu; repo artık eslint-hatasız. `tsc` temiz, 155/155 test ve build yeşil.
+
+---
+
 ## [4.3.0] - 2026-08-27
 ### Eklendi & İyileştirildi
 - **Ücretsiz Oyun Assetleri Modülü (`GameAssetsView.tsx`, `useGameAssets.ts`, `gameAssetsService.ts`, `ChromeStorageGameAssetsRepository.ts`)**:
@@ -34,12 +119,6 @@
 - **X / YT Detox Widget Konumlandırma**: Quote widget ana scroll akışına yerleştirildi (`feedContainer.nextSibling`), pop-up blok stili kaldırıldı.
 - **AudioContext Autoplay Fix**: `volumeBooster.ts` ilk kullanıcı jestinde context oluşturacak şekilde defer edildi.
 - **Doğrulama**: `tsc --noEmit` ✓, `eslint` ✓, `build` ✓, `findDeadFiles` ✓ (0).
-
----
-
-# Changelog (Değişiklik Günlüğü)
-
-Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalarını ve eklenen tüm özellikleri sürüm geçmişi olarak takip eder.
 
 ---
 

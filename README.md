@@ -33,7 +33,20 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - **Masaüstü Alarmları**: Arka plan servisi (`background.js`) üzerinden 3 dakikada bir otomatik fiyat kontrolü ve `chrome.notifications` masaüstü alarm uyarısı.
   - **Özel Mum (Candlestick) Grafiği**: BIST hisseleri için 1M, 3M, 6M, 1Y zaman aralığı filtreli ve fare takipli crosshair mum grafik ekranı.
 - **✍️ Günlüğüm (Notlar & Ders Notları & .md İndirme)**:
-  - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" kayıtları ekleme. Her karta eklenen **`📥 .md İndir`** butonu ile notları bilgisayara `.md` formatında dışa aktarabilme.
+  - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" kayıtları ekleme. Premium pill segment butonları ile arayüz geçişi; yapay zeka sohbetinden doğrudan komutla ekleme.
+  - Her karta eklenen **`📥 .md İndir`** butonu ile notları bilgisayara `.md` formatında dışa aktarabilme.
+  - `[[Konu Adı]]` wikilink sözdizimi, otomatik TOC, okuma süresi/kelime istatistiği ve backlinks içeren Wikipedia tarzı ders notu okuyucusu.
+- **🤖 AI Asistan (Companion AI) — Yeni Sekme & Kenar Paneli**:
+  - **Çok modlu ekler**: PDF, görsel ve kod dosyaları sohbete eklenebiliyor; pano yapıştırma (`Ctrl+V`) ve sürükle-bırak destekli.
+  - **Token streaming** ile akış yanıt, **oturum yönetimi** (çoklu oturum, sekme bazlı geçiş), **kuyruklanmış mesajlar** ve `/` komut otomatik tamamlama.
+  - **Etkileşimli doğrulama**: AI gerektiğinde `clarification` isteği gönderir veya seçenekli soru sorar; markdown dışa aktarımı.
+  - **Genişletilebilir eylem kaydı (`AiFeatureRegistry`)**: Yeni modüller çekirdek sohbet kodunu değiştirmeden kendi eylemini ekler (görev, not, KPSS, borsa, namaz, medya, pomodoro, rutin, hafıza, gezinme — 10 eylem).
+  - **DOM Ajanı**: Web formlarını doldurma, `contenteditable` alanlarına yazma, sosyal medya gönderi oluşturma, `/form` ve `/post` komutları.
+- **🎬 Media Vault (Kütüphane)**: Film, dizi, kitap ve oyun takibi. Türe özgü ilerleme yüzdesi (sayfa / bölüm / oynama süresi), istatistik özeti (tamamlananlar, ortalama puan, devam edenler, backlog), alıntılar ve tüm kütüphanenin JSON dışa aktarımı.
+- **🌐 Ağ Teşhisi**: Ping/gecikme ölçümü, **IPv4 vs IPv6** anormali tespiti, **DNS-over-HTTPS** doğrulaması ve bant genişliği hız testi. 5 sekmeli arayüz (Genel Bakış / Servis Radarı / Hız Testi / IPv4-IPv6 / Geçmiş) ve kopyalanabilir Markdown tanı raporu. Tüm ölçümler kullanıcı tarafından tetiklenir, hiçbir veri dışarı gönderilmez.
+- **🏛️ Kamu İlanları & Kariyer Kapısı**: Kariyer Kapısı (CBİKO), ilan.gov.tr (BİK) ve Resmi Gazete kaynaklarından canlı kamu ilanları; son başvuru tarihine göre aciliyet rozeti ve resmi başvuru portallarına (Kariyer Kapısı, e-Devlet, İŞKUR) kısayollar. **Sıfır sahte veri politikası** uygulanır.
+- **🎭 Şehir Nabzı (City Pulse)**: İBB Kültür Sanat, Biletix, Passo, AKM ve Zorlu gibi 10 kültür portalına hızlı erişim; görsel afişli etkinlik kartları (WordPress REST API), tür filtreleri ve tek tıkla Google Takvim etkinliği oluşturma.
+- **🔥 Rutin Alışkanlık Zinciri**: Duolingo tarzı çok katmanlı SVG alev, 12 haftalık (84 gün) GitHub tarzı katkı ısı haritası, en uzun seri rozeti ve günlük tamamlama oranı.
 - **🕌 Namaz Vakitleri**:
   - Belirlenen konum için anlık namaz vakitlerini API'den çekme, vakitleri listeleme ve o anki vaktin bitimine kalan süreyi gösteren dinamik sayaç.
 - **📖 Hıfız Paneli & İmam-Hatip Yeterlilikleri**:
@@ -43,8 +56,7 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
   - Kelime ezberini bilimsel aralıklarla yapmanızı sağlayan A1, A2, B1, B2, C1, GRE, Phrasal Verbs ve Düzensiz Fiiller listelerine sahip Spaced Repetition modülü.
 - **📅 Tarih Bazlı Takvim**:
   - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
-- **✍️ Günlüğüm (Notlar & Ders Notları)**:
-  - Klasik not kartlarının yanı sıra "Günlük" ve "Cornell Metodu Ders Notu" türünde kayıtlar ekleme desteği. Premium pill segment butonları ile şık arayüz geçişleri. Yapay zeka sohbetinden doğrudan komutla günlük/not ekleyebilme desteği.
+- **🧭 Sidebar Kişiselleştirme**: Görünüm sırasını sürükle-bırak değiştirilir ve kalıcı olarak saklanır; kullanılmayan girdiler ayarlardan gizlenebilir; açılışta en sık kullanılan görünüm üste otomatik gelir.
 - **🕹️ Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Laboratuvarı)**:
 
   - **YouTube Playables Estetiği**: YouTube "Hazır Oyunlar" tasarımından ilham alan büyük visual kapak posterleri, filtreleme çipleri (`Oynanabilir`, `Geliştirilenler`, `Favoriler`), arama çubuğu ve hızlı Oyna butonları.
@@ -78,6 +90,19 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 
 ---
 
+## 🧭 Ekranlar (21 görünüm)
+
+| Alan | Ekranlar |
+|---|---|
+| **Odak & Üretkenlik** | Liste (Odak/Rutin) · Eisenhower & Kanban · Takvim · Pomodoro · Kişisel Disiplin |
+| **Bilgi & Notlar** | Günlüğüm · Not Stüdyosu (KPSS) · Hıfız · SRS Kelime Ezberi |
+| **KPSS** | Konu & İlerleme · Çıkmış Sorular · Harita |
+| **Finans** | BIST OS (Portföy / Takip Listesi / Keşfet / Alarmlar) · Halka Arz |
+| **Medya & Oyun** | Media Vault · Ücretsiz Oyunlar · Oyun Varlıkları · Arcade |
+| **Asistan & Sistem** | AI Asistan · Ağ Teşhisi · RSS Okuyucu · Şehir Nabzı · Kamu İlanları · Dijital Detoks · Namaz Vakitleri |
+
+---
+
 ## 🛠️ Kurulum ve Geliştirme
 
 ### Gereksinimler
@@ -89,17 +114,37 @@ Proje klasöründe bir terminal açarak npm bağımlılıklarını kurun:
 npm install
 ```
 
-### 2. Adım: Projeyi Derleyin
-TypeScript kodlarını derlemek ve HTML/CSS/Görsel dosyalarını `dist/` klasörüne kopyalamak için derleme betiğini çalıştırın:
+### 2. Adım: Doğrulama (isteğe bağlı ama önerilir)
+```bash
+npx tsc --noEmit              # tip kontrolü
+npx eslint src --quiet        # lint (hatasız olmalı)
+npx vitest run                # test paketi
+npm run build                 # dist/ üretimi
+node scripts/findDeadFiles.mjs       # ölü dosya taraması
+node scripts/i18nHealthCheck.mjs     # eksik çeviri anahtarı taraması
+```
+
+### 3. Adım: Projeyi Derleyin
 ```bash
 npm run build
 ```
 
-### 3. Adım: Chrome'a Yükleyin
+### 4. Adım: Chrome'a Yükleyin
 1. Google Chrome tarayıcınızı açın ve `chrome://extensions/` adresine gidin.
 2. Sağ üst köşede bulunan **Geliştirici modu** (Developer mode) seçeneğini aktif hale getirin.
 3. Sol üstte çıkan **Paketlenmemiş öğe yükle** (Load unpacked) butonuna tıklayın.
 4. Bu proje klasörünün içindeki **`dist`** klasörünü seçin.
+
+### 5. Adım: Geliştirme Modu
+```bash
+npm run dev                   # Vite geliştirme sunucusu
+npm run generate:tree         # project_tree.md dosyasını yeniden üretir
+```
+
+> **Geliştirme sırasında:** `ROADMAP.md` kapsam dondurması uygulamadadır. Yalnızca
+> **AI Smart Goal Breakdown** ve **Offline P2P WebRTC Sync** üzerinde çalışılır;
+> yeni modül ve yeni bağımlılık eklenmez. Ayrıntı için `ROADMAP.md` ve
+> `docs/PROJECT_GUIDE.md`.
 
 ---
 *Bu çalışma; kişisel üretkenliği artırmak, hedeflere (KPSS, Hıfız, Yazılım) odaklanmak ve güncel ücretsiz oyun fırsatlarını tek ekranda toplamak için geliştirilmiştir.*

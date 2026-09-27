@@ -1,6 +1,11 @@
-# Kalıcı Hafıza — ZenTodo / Life OS
+# Kalıcı Hafıza — Life OS
 
-Projenin mimari ve domain bilgisinin özeti. Detaylar: `src/ARCHITECTURE.md` (canlı harita), `.agents/AGENTS.md` (kurallar), `brain/task.md` (görev takibi).
+Projenin mimari ve domain bilgisinin özeti. Detaylar: `ARCHITECTURE.md` (canlı harita),
+`docs/PROJECT_GUIDE.md` (dizin rehberi), `project_tree.md` (üretilmiş ağaç),
+`.agents/AGENTS.md` (kurallar).
+
+> **Not (2026-09-27):** `brain/` dizini artık git takibinde **değildir** ve
+> `brain/knowledge.md` kullanılmaz — kalıcı bağlam bu dosyada tutulur.
 
 ---
 
@@ -10,7 +15,7 @@ Projenin mimari ve domain bilgisinin özeti. Detaylar: `src/ARCHITECTURE.md` (ca
 
 | Akış | Kaynak | Prompt kullanır mı? | Kayıt |
 |---|---|---|---|
-| **1. Konu Testi (kendi AI)** | `useKpssQuiz` → `kpssQuizFlowService.fetchQuestionsSubsetFromAI` → `kpssAiService` → yapılandırılmış AI endpoint (Gemini/Ollama/OpenRouter) | ✅ `getKpssSystemPrompt()` — [kpssPrompts.ts](../src/services/kpssPrompts.ts) | Tam sorular: `evaluateAndSaveQuizResult` → `questions[]` kaydedilir |
+| **1. Konu Testi (kendi AI)** | `useKpssQuiz` → `kpssQuizFlowService.fetchQuestionsSubsetFromAI` → `kpssAiService` → yapılandırılmış AI endpoint (Gemini/Ollama/OpenRouter) | ✅ `getKpssSystemPrompt()` — [kpss/kpssPrompts.ts](../src/services/kpss/kpssPrompts.ts) | Tam sorular: `evaluateAndSaveQuizResult` → `questions[]` kaydedilir |
 | **2. Harici AI** (Claude/Gemini sitede çözme) | `useKpssQuiz` → `kpssQuizFlowService.saveExternalQuizResult` | ❌ **HİÇ kullanmaz** — kullanıcı başka sitede kendi promptuyla çözer, uygulamaya doğru/yanlış sayısını elle girer | Sadece skor: `questions: []`, correct/total sayısı |
 
 ### Konu Testi (Akış 1) — HER ZAMAN AI ÜRETİR (2026-08-01 itibarıyla)
@@ -22,7 +27,7 @@ Projenin mimari ve domain bilgisinin özeti. Detaylar: `src/ARCHITECTURE.md` (ca
   4. İlk 1 soru bekle-senkron (boş ekran görünmez), kalan `count-1` arka planda
 - Çıkmış sorular arşivi SADECE "Çıkmış Sorular Sınav Salonu" sekmesinde kullanılır (`getPastExamQuestions`)
 
-### Prompt Dosyası: `src/services/kpssPrompts.ts`
+### Prompt Dosyası: `src/services/kpss/kpssPrompts.ts`
 - `getKpssSystemPrompt(subjectKey, lang, dynamicExamples?)` → sistem promptu döner
 - Yapı: `baseRules` (ortak ÖSYM kuralları) + `subjectRules` (derse özel: tarih/coğrafya/matematik/türkçe/vatandaşlık/genel) + `outputFormat` (JSON şeması) + isteğe bağlı few-shot örnekler
 - JSON çıktı şeması: `{question, options[5], correctAnswer(0-4), solution, chart?, map?}` — `QuizQuestion` tipi [kpssAiService.ts](../src/services/kpssAiService.ts)
@@ -95,21 +100,26 @@ Projenin mimari ve domain bilgisinin özeti. Detaylar: `src/ARCHITECTURE.md` (ca
 ## Klasör Yapısı Kararları (2026-08-01)
 
 ### Kök vs Klasör Kuralı (AGENTS.md 6.5)
-- **Çok dosyalı feature** (>3, aynı domain) → `feature/` klasörü: `services/kpss/`, `components/kpss/quiz/`
+- **Çok dosyalı feature** (>3, aynı domain) → `feature/` klasörü: `services/kpss/`, `services/ambientAudio/`, `components/kpss/quiz/`
 - **Tek dosyalık feature / giriş noktası** → kök: `ListView.tsx`, `prayerService.ts`
-- **View kökleri** (`components/` 29): ViewRouter'dan yönlenir, birbirini import etmez — route listesi kökte görünür
+- **View kökleri** (`components/` 34 kök dosya): ViewRouter'dan yönlenir (23 `case`), birbirini import etmez
 - **Alt domain'ler** → `feature/<domain>/`: kpss/quiz, kpss/wiki, kpss/srs
 
-### Güncel Klasör Yapısı
+### Güncel Klasör Yapısı (2026-09-27)
 ```
-services/              13 kök (tek dosya feature'lar)
-services/kpss/          8 (AiService, QuizFlow, QuizService, SrsService, WikiService, Prompts...)
-services/stock/         3 (AiService, Prompts, RuleEngine)
-components/            29 view + paylaşılan parça (ConfirmModal, DatePicker)
-components/kpss/       10 kök + quiz/ 8 + wiki/ 4 + srs/ 1
-infrastructure/persistence/repositories/  15 ChromeStorage*
-infrastructure/persistence/migrations/    1 LocalToSyncMigration
-presentation/hooks/    19 (tek sorumluluk — istisna, bölünmez)
+components/             34 kök dosya (23 view + paylaşılan parça)
+components/kpss/        konu/quiz/wiki/map/srs alt klasörleri
+components/media/       6 parça (Toolbar, Grid, Card, Stats, Detail, Quotes)
+components/network/     6 kart (Overview, Protocol, Radar, Speedometer, DNS, History)
+components/govjobs/     3 parça (Header, FilterBar, Card)
+services/               17 kök dosya
+services/kpss/          AiService, QuizFlow, QuizService, SrsService, WikiService, Prompts, data/
+services/stock/         AiService, Prompts, RuleEngine
+services/ambientAudio/  5 katman (types / noiseSynthesis / voices / engine / index)
+services/aichat/        registry/ (10 plugin), actionExecutor, systemPrompt, providers
+infrastructure/persistence/repositories/  23 ChromeStorage*
+presentation/hooks/     28 · presentation/store/  (zustand)
+tests/                  24 dosya / 155 test (environment: node)
 ```
 
 ### IDE Taşıma Dersi (2026-08-01)
@@ -163,14 +173,26 @@ presentation/hooks/    19 (tek sorumluluk — istisna, bölünmez)
 
 ---
 
-## Brain Klasörü Yapısı (2026-08-01 güncel)
-```
-brain/
-├── knowledge.md     ← bu dosya
-├── task.md          ← görev takibi
-└── plans/           ← plan-NN-YYYY-MM-DD.md (eski planlar korunur)
-```
-- Kurallar: `.agents/AGENTS.md` (tek kaynak, brain'de kopyası YOK)
-- Mimari harita: `src/ARCHITECTURE.md` (kod yanında yaşar)
-- `decisions.md` KALDIRILDI (kullanıcı isteği) — kararlar knowledge.md'ye işlenir
-- `walkthrough.md` KULLANILMIYOR (kural kaldırıldı)
+## Ortam Sesi Katmanları (2026-09-27)
+- `src/services/ambientAudio/` 5 katman: `ambientAudioTypes` → `noiseSynthesis` → `voices` → `ambientAudioEngine` → `index`
+- **Katman sınırı kuralı:** timbres ve sabit *trim* kazancı üreticide, kullanıcı *ses seviyesi* motorda (`VoiceHandle.masterGain`). Tek yerden yönetilir.
+- `noiseSynthesis.ts` bilinçli olarak `AudioContext`'ten bağımsızdır → `tests/ambientAudio.test.ts` node ortamında çalışır. Web Audio'ya dokunan mantık test edilemez; bu yüzden ayrılmıştır.
+- `VOICE_FACTORIES` tür→üretici tablosudur. Yeni bir ses eklemek için: `AmbientSoundType`'a değer + `ambientAudioTypes.ts`'e alias kararı + `voices.ts`'e fabrika + tabloda girdi.
+- **Generation jetonu:** `ambientAudioEngine` her `play`/`stopAllSounds`'ta `generation` artırır; üreticiler bunu `isActive()` olarak alır. LoFi akor zamanlayıcısı bu olmadan **değiştirilmiş** bir `AudioContext`'e akor gönderiyordu (eski hata).
+- **Kapsam notu:** Motor hâlâ **tek ses kaynağıdır** (`play()` ilk satırında `stopAllSounds()`). Çok kanallı mixer donmuş durumdadır; bkz. `ROADMAP.md` §6.
+
+---
+
+## AI Eylem Kayıt Sistemi (2026-09-21)
+- `src/services/aichat/registry/aiFeatureRegistry.ts` — tekil (`getInstance()`), `Map<string, AiFeaturePlugin>`.
+- `plugins/index.ts` yerine **kayıt `src/services/aichat/registry/index.ts:39`'da** yapılır: 10 plugin (bist, kpss, mediaVault, memory, navigation, notes, pomodoro, prayer, routines, tasks) liste halinde kaydedilir. Yeni modül eylem eklemek için: `plugins/` altına dosya + `registry/index.ts`'e tek satır. Çekirdek AI sohbet kodu **hiç değişmez**. Uygulama geri bildirimi ortak: `AiActionBadge`.
+- **Çıkarılacak ders:** A1 (AI Goal Breakdown) bu sisteme oturacak; yeni bir AI yolu açmayın.
+
+---
+
+## Ölü Kod Politikası (2026-09-27)
+- Kural: kullanılmayan tip, fonksiyon, çeviri anahtarı veya CSS kuralı **biriktirilmez**.
+- Doğrulama: `node scripts/findDeadFiles.mjs` (ölü dosya + boş klasör + referanssız public asset) ve `node scripts/i18nHealthCheck.mjs` (eksik çeviri anahtarı).
+- Dikkat: `getTranslation()` bir Proxy'dir — eksik anahtar **hata fırlatmaz**, anahtarın kendisini döndürür. Bu yüzden i18n artıkları sessizce birikir. Ayda bir `translations/` taraması yapılmalı.
+- Dikkat 2: `StockRuleType`'a uygulanmayan bir kural tipi eklenirse `evaluateStockRules()` içindeki `default: break` onu sessizce yutar. Tip ile kural motoru birlikte değişmelidir.
+- Dikkat 3: `t[`şablon_${x}`]` ile dinamik erişilen anahtar aileleri statik grep ile bulunamaz (`willpower_rank_*`, `zen_elem_*`, `hifiz_*`, `kpss_map_topic_*`, `labelKey` sabitleri). Bunlara dokunan kod silinmemeli.

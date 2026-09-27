@@ -1,6 +1,9 @@
 # Chrome Extension — Dizin ve Dosya Rehberi
 
-Bu belge, `chrome-extension/` projesinin kök dizinindeki tüm dosya ve klasörlerin ne işe yaradığını açıklar. Güncel mimari harita için bkz. [src/ARCHITECTURE.md](../src/ARCHITECTURE.md).
+Bu belge, LifeOS projesinin kök dizinindeki tüm dosya ve klasörlerin ne işe yaradığını açıklar.
+Güncel mimari harita için bkz. [ARCHITECTURE.md](../ARCHITECTURE.md) ve
+[project_tree.md](../project_tree.md) (otomatik üretilir). Kalıcı alan bilgisi için
+[KNOWLEDGE.md](KNOWLEDGE.md).
 
 ---
 
@@ -8,22 +11,24 @@ Bu belge, `chrome-extension/` projesinin kök dizinindeki tüm dosya ve klasörl
 
 | Dosya | Açıklama |
 |---|---|
-| `newtab.html` | Yeni sekme sayfası girişi. `/src/index.tsx`'i yükler (ana uygulama). |
-| `popup.html` | Araç çubuğu popup girişi. `/src/popup.tsx`'i yükler. |
-| `sidepanel.html` | Kenar paneli girişi. `/src/sidepanel`'i yükler. |
-| `offscreen.html` | Arka plan ses/medya işlemleri için boş offscreen sayfa (Chrome API gereksinimi). |
-| `package.json` | npm proje tanımı: bağımlılıklar, script'ler (`dev`, `build`, `desktop:build` vb.). |
+| `newtab.html` | Yeni sekme sayfası girişi. `src/index.tsx`'i yükler (ana uygulama). |
+| `popup.html` | Araç çubuğu popup girişi. `src/popup.tsx`'i yükler. |
+| `sidepanel.html` | Kenar paneli girişi (Companion AI). `src/sidepanel` girişini yükler. |
+| `offscreen.html` | Arka planda kesintisiz ortam sesi çalması için boş offscreen sayfa (Chrome API gereksinimi). |
+| `package.json` | npm proje tanımı: bağımlılıklar, script'ler (`dev`, `build`, `test`, `lint`, `count-lines`, `generate:tree`, `benchmark`). |
 | `package-lock.json` | Bağımlılıkların kilitli sürümleri (otomatik üretilir, elle düzenlenmez). |
-| `tsconfig.json` | TypeScript derleyici yapılandırması (`@/` yol takma adı burada tanımlı). |
-| `vite.config.ts` | Vite build yapılandırması: giriş noktaları, `iife-inline-plugin` (content/background script'leri inline eder). |
-| `eslint.config.js` | ESLint kuralları (strict: sıfır `any`, sıfır ham `console.*` vb.). |
-| `README.md` | Proje tanıtımı ve kurulum talimatı. |
+| `tsconfig.json` | TypeScript derleyici yapılandırması (`@/*` yol takma adı burada tanımlı). |
+| `vite.config.ts` | Vite build yapılandırması: 4 giriş noktası (newtab/popup/sidepanel/offscreen) + `build-extension-scripts` eklentisi (background.js ve content.js'i ayrı `iife` olarak üretir). |
+| `vitest.config.ts` | Test yapılandırması (`tests/**/*.test.ts`, `environment: "node"`). |
+| `eslint.config.js` | ESLint kuralları + yerel kurallar (`local/no-turkish-literals` vb.). |
+| `README.md` | Proje tanıtımı, ekran listesi ve kurulum talimatları. |
 | `CHANGELOG.md` | Sürüm değişiklik geçmişi. |
-| `ROADMAP.md` | Gelecek planları. |
-| `SUGGESTION.md` | Öneriler. |
-| `LICENSE` | Lisans metni. |
-| `project_tree.md` / `project_tree_manual.md` | Proje ağacı dökümleri (referans). |
-| `zentodo_private_key.pem` | Chrome Web Store yükleme anahtarı (gizli, gitignore'da). |
+| `ROADMAP.md` | Aktif kapsam + donmuş özellikler. |
+| `ARCHITECTURE.md` | Elle yazılmış mimari açıklama. |
+| `ARCHITECTURE_AUTO_GENERATED.md` | Tarama script'inin ürettiği mimari ağaç (üretici scripti depoda **yok**; elle güncellenir). |
+| `project_tree.md` | `npm run generate:tree` ile üretilen proje ağacı. |
+| `LICENSE` | Lisans metni (GPL-3.0). |
+| `zentodo_private_key.pem` | Chrome Web Store yükleme anahtarı (**gizli**, `.gitignore:24`). |
 
 ---
 
@@ -35,52 +40,43 @@ Tüm TypeScript/Preact kaynakları. Detaylı açıklamalar aşağıda.
 ### `public/` — Statik Varlıklar
 | Dosya/Klasör | Açıklama |
 |---|---|
-| `manifest.json` | Chrome eklentisi manifest'i (izinler, arka plan, içerik script'leri, ikonlar). |
-| `icons/` | Eklenti ikonları: `icon-16/48/128.png`, `AI.png` (AI chat avatarları), `mindvault.png` (KPSS not stüdyosu). |
-| `data/` | Statik veri dosyaları (KPSS eski sınavlar vb.). |
+| `manifest.json` | Chrome eklentisi manifest'i (izinler, MV3 service worker, içerik script'leri, ikonlar). Sürüm: `1.0.0`. |
+| `icons/` | Eklenti ikonları: `icon-16/48/128.png`, `AI.png` (AI chat), `mindvault.png` (KPSS not stüdyosu). |
+| `data/` | Statik veri dosyaları (KPSS yılları, sözlük JSON'ları vb.). |
 | `pdf/` | PDF kaynakları. |
 | `sandbox.html` / `sandbox.js` | Güvenli sandbox sayfası (karmaşık işlemler izole ortamda çalışır). |
 
-### `desktop/` — Electron Masaüstü Sarmalayıcı (MindVault.exe)
-| Dosya | Açıklama |
-|---|---|
-| `main.js` | Electron ana süreci: pencere oluşturma, `view=kpss-notes` ile KPSS not stüdyosunu yükler, JSON senkronizasyon IPC handler'ları. |
-| `preload.js` | Preload: `chrome.*` API mock'u (storage → localStorage), `window.mindvaultSync` senkronizasyon API'si. |
-| `build.js` | Build script: `dist/` → `web/` kopyalar, `/assets/` → `./assets/` yol düzeltir, electron-builder çalıştırır. |
-| `package.json` | Electron + electron-builder bağımlılıkları, `portable` hedef. |
-| `icon.png` | Windows exe ikonu. |
-| `web/` | Build çıktısı (gitignore'da, dist'ten kopyalanır). |
-| `dist/` | Exe çıktısı: `MindVault.exe` (portable, 86MB). |
-| `*.log` | Hata ayıklama logları (gitignore'da değilse temizlenebilir). |
-
 ### `dist/` — Build Çıktısı
-`npm run build` sonucu. Chrome'a bu klasör yüklenir (geliştirici modu). Otomatik üretilir, elle düzenlenmez.
+`npm run build` sonucu. Chrome'a bu klasör yüklenir (geliştirici modu). `.gitignore:15` — otomatik üretilir, elle düzenlenmez.
 
 ### `docs/` — Dokümantasyon
-Bu rehber ve diğer belgeler.
+Bu rehber, `KNOWLEDGE.md` (kalıcı alan bilgisi), `geography_summary.md`, `history_summary.md`,
+`verileriniznasilkaydedilir.md` (veri yedekleme rehberi).
 
 ### `scripts/` — Yardımcı Script'ler
-Örn: `findDeadFiles.mjs` (kullanılmayan dosyaları tespit eder).
+`findDeadFiles.mjs` (ölü dosya / boş klasör / referanssız asset), `i18nHealthCheck.mjs` (eksik çeviri
+anahtarı), `automated_project_tree.cjs` (`project_tree.md` üretici), `countLines.js`,
+`benchmark.mjs`, `analyzers/` + `runAnalyzers.mjs`, veri birleştirme script'leri.
 
 ### `archives/` — Arşiv
-Eski/artık kullanılmayan projeler (Flutter sürümü, eski MindVault Electron uygulaması vb.). Silme, taşıma yalnızca açık talimatla.
+Eski/artık kullanılmayan projeler. Silme, taşıma yalnızca açık talimatla.
 
-### `brain/` — Proje Hafızası (AI için)
-- `knowledge.md` — kalıcı bağlam
-- `task.md` — görev takibi
-- `plans/` — sıralı planlar (`plan-NN-YYYY-MM-DD.md`)
+### `tests/` — Testler
+`vitest run` ile çalışır, 24 dosya / 155 test. Ortam `node`; Web Audio gibi tarayıcı
+API'lerine bağlı kodun **saf mantığı** (`ambientAudio/noiseSynthesis.ts` gibi) tarayıcısız
+test edilebilir şekilde ayrılır.
 
-### `.agents/` — AI Kuralları
-`AGENTS.md` — kod yazım kuralları (Clean Architecture, i18n, sıfır `any`, dosya boyut limitleri vb.).
-
-### `.vscode/` — VS Code Ayarları
-Editör yapılandırması (formatlama, lint entegrasyonu).
-
-### `.git/` — Git Deposu
-Sürüm kontrolü veritabanı.
+### Ayar / Araç Dizinleri
+| Dizin | Açıklama |
+|---|---|
+| `.agents/` | `AGENTS.md` — kod yazım kuralları (Clean Architecture, i18n, sıfır `any`, dosya boyut limiti). |
+| `.kilo/` | Kilo IDE yapılandırması. |
+| `.vscode/` | Editör yapılandırması. |
+| `.gravityguard/`, `.hermes/`, `.commandcode/` | Harici araç yapılandırmaları. |
+| `brain/` | Proje hafızası (AI için). **Git takibinde değildir** (bkz. `docs/KNOWLEDGE.md`). |
 
 ### `node_modules/` — npm Bağımlılıkları
-Otomatik kurulur (`npm install`), gitignore'da.
+Otomatik kurulur (`npm install`), `.gitignore`'da.
 
 ---
 
@@ -90,47 +86,51 @@ Otomatik kurulur (`npm install`), gitignore'da.
 |---|---|---|
 | `src/App.tsx` | Ana uygulama: global state, aktif görünüm yönlendirme, `view=kpss-notes` özel dalı. | — |
 | `src/index.tsx` | Giriş noktası: `<App />`'i `#app`'e bağlar. | — |
-| `src/components/` | Sadece UI. View'lar + alt bileşenler. | Aşağıda detaylı |
-| `src/services/` | Dış dünya iletişimi: network fetch, chrome.storage erişimi, AI servisleri. | `aiChatService.ts`, `kpss/`, `stock/`, `zettelkastenEngine.ts` vb. |
-| `src/presentation/hooks/` | State yönetimi hook'ları. | `useSettings`, `useTodos` vb. |
-| `src/domain/` | Saf iş mantığı: entities, value-objects, constants, services, repositories (interface). | `kpssConstants`, `KpssCalculatorService` vb. |
+| `src/components/` | Yalnızca UI. 34 kök dosya (23 view + paylaşılan parça) + feature klasörleri. | Aşağıda detaylı |
+| `src/services/` | Dış dünya iletişimi: network fetch, chrome.storage erişimi, AI servisleri. 17 kök dosya + `aichat/`, `arcade/`, `kpss/`, `stock/`, `vocabulary/`, `ambientAudio/` | — |
+| `src/presentation/` | State yönetimi: `store/` (zustand) + `hooks/` (28 hook). | `uiStore`, `mediaStore`, `networkStore`, `kpssQuizStore` vb. |
+| `src/domain/` | Saf iş mantığı: entities, value-objects, constants, services, repository **arayüzleri**. | `KpssCalculatorService`, `TodoStatus`, `sidebarConstants` vb. |
 | `src/application/` | Use-case'ler ve port arayüzleri (Clean Architecture). | `use-cases/`, `ports/` |
-| `src/infrastructure/` | Dış dünya adaptörleri: Chrome storage repo'ları, Google API client'ları. | `persistence/`, `api/`, `storage/` |
+| `src/infrastructure/` | Dış dünya adaptörleri: 23 `ChromeStorage*` repo, Google API client'ları, content script'ler. | `persistence/`, `api/`, `adapters/`, `content/` |
 | `src/content/` | Content script'ler (sayfa içine enjekte edilir). | `infobox/`, `detox/`, `whatsapp/`, `telegram/`, `agent/`, `quiz/`, `volume/` |
-| `src/background/` | Service worker: mesaj handler'ları, alarm'lar. | `backgroundMain.ts` |
-| `src/offscreen/` | Offscreen sayfa mantığı (ses/medya). | — |
-| `src/sidepanel/` | Kenar paneli mantığı. | — |
-| `src/css/` | Stiller. `newtab/` altında feature bazlı CSS dosyaları, `popup.css`. | `base.css` (tema token'ları), `ai-chat.css`, `kpss.css` vb. |
-| `src/types/` | Tip tanımları. | `types.ts`, `kpss.ts`, `stock.ts`, `mindvaultSync.d.ts` vb. |
-| `src/utils/` | Genel yardımcılar. | `i18n.ts`, `logger.ts`, `translations/` (tr.ts + en.ts), `markdownRenderer.ts` |
-| `src/data/` | Statik veri dosyaları. | `kpss/` (eski sınav JSON'ları) |
+| `src/background/` | MV3 service worker: mesaj handler'ları, alarm'lar. | `backgroundMain.ts`, `handlers/` |
+| `src/offscreen/` | Offscreen sayfa mantığı (ortam sesi). | `offscreenAudio.ts` |
+| `src/sidepanel/` | Kenar paneli mantığı (Companion AI). | `useSidePanelChat`, `SidePanelInputBar` vb. |
+| `src/css/` | Stiller. `newtab/` altında feature bazlı CSS + `popup.css`. | `base.css` (tema token'ları), `ai-chat.css`, `kpss.css` vb. |
+| `src/types/` | Tip tanimleri ve global `window` genişletmeleri (`dom.d.ts`). | `types.ts`, `kpss.ts`, `stock.ts`, `media.ts`, `bist.ts` vb. |
+| `src/utils/` | Genel yardımcılar. | `i18n.ts`, `logger.ts`, `translations/` (tr/ + en/ ayrı klasörler), `markdownRenderer.ts`, `cloudBackup.ts` |
 
-### `src/components/` — View'lar (kök)
+### `src/components/` — View'lar (kök, `ViewRouter.tsx` yönlendirir)
 | Bileşen | Açıklama |
 |---|---|
-| `ViewRouter.tsx` | Aktif görünümü yönlendirir (Sidebar seçimine göre). |
-| `Sidebar.tsx` | Glassmorphic navigasyon menüsü. |
-| `ListView.tsx` / `KanbanView.tsx` | Görev listesi / drag-drop Kanban. |
-| `EisenhowerView.tsx` | Öncelik matrisi. |
-| `PomodoroView.tsx` | Pomodoro zamanlayıcı + stopwatch + alarm. |
+| `ViewRouter.tsx` | Aktif görünümü yönlendirir (23 `case`). `kanban` → `EisenhowerView`, `halka-arz` sidebar'da yok. |
+| `Sidebar.tsx` | Glassmorphic navigasyon menüsü (sürükle-bırak sıralama, gizleme, kullanım bazlı otomatik sıralama). |
+| `ListView.tsx` | Görev listesi (Odak / Rutin sekmeleri). |
+| `EisenhowerView.tsx` | Öncelik matrisi + Kanban sekmesi. |
+| `PomodoroView.tsx` | Pomodoro zamanlayıcı + stopwatch + alarm + ortam sesi. |
 | `WillpowerView.tsx` | Disiplin takip zamanlayıcısı. |
 | `NotesView.tsx` | Zettelkasten notlar. |
 | `HifizView.tsx` | Ezber ilerleme. |
 | `SrsView.tsx` | Kelime kartları (spaced repetition). |
 | `CalendarView.tsx` | Tamamlanan görev takvimi. |
 | `PrayerView.tsx` | Şehir namaz vakitleri. |
-| `KpssView.tsx` | KPSS ana paneli (Konu Dağılımı, quiz, notlar, harita). |
-| `BistView.tsx` | BIST hisse takibi. |
-| `HalkaArzView.tsx` | Halka arz listesi. |
-| `FreeGamesView.tsx` | Oyun indirimleri. |
+| `RssView.tsx` | RSS feed takip ve okuyucu. |
+| `KpssView.tsx` | KPSS ana paneli (konu dağılımı, quiz, notlar, harita). |
+| `BistView.tsx` | BIST portföy / takip listesi / keşfet / alarmlar. |
+| `HalkaArzView.tsx` | Halka arz takvimi. |
+| `FreeGamesView.tsx` | Ücretsiz oyun fırsatları. |
+| `GameAssetsView.tsx` | Ücretsiz oyun varlıkları. |
+| `CityPulseView.tsx` | Şehir kültür/etkinlik portalı. |
+| `GovJobsView.tsx` | Kamu ilanları & Kariyer Kapısı. |
+| `NetworkView.tsx` | Ağ teşhisi (5 sekme). |
+| `MediaView.tsx` | Media Vault (kütüphane). |
 | `ArcadeView.tsx` | Arcade oyunları. |
 | `DetoxView.tsx` | Dijital detoks. |
-| `AIChatView.tsx` | AI sohbet paneli (AI ikonu burada). |
+| `AIChatView.tsx` | AI sohbet paneli. |
 | `SettingsDrawer.tsx` | Ayarlar çekmecesi. |
 | `ConfirmModal.tsx` | Onay modalı (native `confirm()` yasak). |
 | `DatePicker.tsx` | Tarih seçici. |
-| `KpssCountdownBanner.tsx` | KPSS geri sayım. |
-| `FooterQuote.tsx` / `HeroHeader.tsx` | Sunum parçaları. |
+| `KpssCountdownBanner.tsx` / `HeroHeader.tsx` / `FooterQuote.tsx` | Sunum parçaları. |
 
 ### `src/components/` — Alt Klasörler
 | Klasör | İçerik |
@@ -142,19 +142,38 @@ Otomatik kurulur (`npm install`), gitignore'da.
 | `kpss/map/` | `TurkeyMapView.tsx` (Türkiye haritası drag-seek). |
 | `kpss/srs/` | `KpssSrsCard.tsx` |
 | `notes/` | `ZettelkastenGraphModal.tsx` (bilgi grafiği). |
-| `pomodoro/`, `prayer/`, `hifiz/`, `arcade/`, `freegames/`, `detox/`, `eisenhower/`, `stock/`, `settings/`, `sidebar/`, `popup/` | Feature'a özel parçalar. |
+| `stock/` | `BistPortfolioTab`, `watchlist/`, `analysis/`, `portfolio/` vb. |
+| `media/` | `MediaToolbar`, `MediaGrid`, `MediaCard`, `MediaStatsOverview`, `MediaDetailModal`, `MediaQuotesModal` |
+| `network/` | `NetworkOverviewCard`, `ProtocolHealthCard`, `ServiceRadarGrid`, `SpeedometerCard`, `DnsSecurityCard`, `DiagnosticHistoryCard` |
+| `govjobs/` | `GovJobsHeader`, `GovJobsFilterBar`, `GovJobCard` (`daysLeft` rozeti). |
+| `pomodoro/`, `prayer/`, `hifiz/`, `arcade/`, `freegames/`, `gameassets/`, `detox/`, `eisenhower/`, `settings/`, `sidebar/`, `popup/` | Feature'a özel parçalar. |
+
+### `src/services/ambientAudio/` — Katmanlı Ortam Sesi Modülü
+Beş katman, yukarıdan aşağıya bağımlılık:
+
+| Dosya | Katman | Sorumluluk |
+|---|---|---|
+| `ambientAudioTypes.ts` | 1 — Sözleşmeler | `AmbientSoundType`, `AmbientAudioEngine`, legacy `"brown"`/`"hairdryer"` alias normalizasyonu. Bağımlılığı yok. |
+| `noiseSynthesis.ts` | 2 — Saf DSP | Kahverengi/pembe gürültü, yağmur damlası, vinyl cıyaklaması üretimi. `AudioContext` bağımsız → node'da test edilebilir. |
+| `voices.ts` | 3 — Ses grafikleri | Ses başına düğüm zinciri kurar; `VoiceHandle` teardown için kaynakları toplar; `VOICE_FACTORIES` tür→üretici tablosu. |
+| `ambientAudioEngine.ts` | 4 — Yaşam döngüsü | Tek `AudioContext`, seviye uygulama, generation jetonu, teardown. |
+| `index.ts` | 5 — Barrel | Tek giriş noktası: `@/services/ambientAudio/index.js`. |
+
+Genel API: `play(soundType, volume)` / `setVolume(volume)` / `stopAllSounds()`.
 
 ---
 
 ## Veri Akışı (Katman Kuralı)
 
 ```
-services/  →  presentation/hooks/  →  components/ (UI)
+domain/ (saf)  ←  application/ (use-case)  ←  infrastructure/ (adapter)
+                                                  ↑
+services/  →  presentation/ (store + hooks)  →  components/ (UI)
 ```
 
-- `components/` ASLA `chrome.storage.*` veya `fetch()` çağırmaz — `services/` üzerinden gider.
-- `src/services/` dış dünya ile iletişim kurar (storage, network, AI).
+- `components/` ASLA `chrome.storage.*` veya `fetch()` çağırmaz — `services/` veya `presentation/` üzerinden gider.
 - `src/domain/` saf mantık içerir (UI/storage bağımsız).
+- `src/services/` dış dünya ile iletişim kurar (storage, network, AI).
 
 ---
 
@@ -164,10 +183,11 @@ services/  →  presentation/hooks/  →  components/ (UI)
 |---|---|
 | `npm run dev` | Geliştirme sunucusu |
 | `npm run build` | Eklenti build → `dist/` |
-| `npm run desktop:build` | Eklenti build + exe build → `desktop/dist/MindVault.exe` |
-| `npm run desktop:start` | Electron'u geliştirme modunda çalıştırır |
-| `npx tsc --noEmit` | Tip kontrolü |
-| `npx eslint src --quiet` | Lint |
-| `node scripts/findDeadFiles.mjs` | Ölü dosya kontrolü |
-
-> **Not**: `desktop/` ayrı bir npm projesidir — bağımlılıkları `desktop/node_modules/` içinde durur.
+| `npm test` | Vitest paketi (24 dosya / 155 test) |
+| `npm run lint` | ESLint (`--quiet` ile yalnızca hatalar) |
+| `npm run count-lines` | Satır sayımı |
+| `npm run generate:tree` | `project_tree.md` dosyasını yeniden üretir |
+| `npm run benchmark` | Performans ölçümü |
+| `npx tsc --noEmit` | Tip kontrolü (script'i yok, doğrudan çağrılır) |
+| `node scripts/findDeadFiles.mjs` | Ölü dosya / boş klasör / referanssız asset kontrolü |
+| `node scripts/i18nHealthCheck.mjs` | Eksik çeviri anahtarı kontrolü |
