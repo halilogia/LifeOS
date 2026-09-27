@@ -173,6 +173,40 @@ tests/                  24 dosya / 155 test (environment: node)
 
 ---
 
+## Bellek Uyutucu (Sekme Boşaltma) — 2026-09-27
+
+### Neden katmanlı
+`chrome.tabs.discard()` bir sekmenin belleğini boşaltır ve sayfadaki JS durumunu
+(kaydedilmemiş form, çalışan zamanlayıcı) yok eder. **Yanlış bir karar kullanıcının
+verisini siler.** Bu yüzden karar mantığı `src/domain/services/tabSuspendPolicy.ts`
+içinde, `chrome.*` çağrısı olmadan tutulur; 28 senaryo `tests/tabSuspendPolicy.test.ts`
+ile tarayıcı olmadan doğrulanır. Handler yalnızca veri toplar ve kararı uygular.
+
+### Değerlendirme sırası kasıtlı
+Güvenlik gerekçeleri bilgilendirici gerekçelerden **önce** raporlanır. Sesli *ve* yeterince
+boşta olmayan bir sekme için `not-idle` değil `audible` döner — kullanıcı "neden
+boşaltılmadı?" sorusunda gerçek nedeni görmeli. Sıra: extension-page → browser-internal →
+incognito → audible → pinned → active → protected-url → last-window-tab → already-discarded →
+unknown-age → not-idle.
+
+### Tuzaklar
+- **MV3'te `setInterval` güvenilir değil.** Servis worker boşta kaldığında (~30 sn)
+  sonlandırılır; periyodik iş `chrome.alarms` ile yapılır. `screentimeTracker.ts` hâlâ
+  `setInterval` kullanıyor — bu, aynı hatayı taşıyan eski bir örnek, kopyalanmamalı.
+- **`@types/chrome` `tabs.discard`'i yalnızca tek sekme olarak modelliyor.** Runtime dizi
+  kabul etse de tip güvenliği için tek tek çağrılır; yan tesi olarak `beforeunload` uyarısı
+  veren tek bir sekme partiyi iptal etmez.
+- **Servis worker yeniden başlayınca bellekteki durum gider.** Son erişim zamanları
+  `chrome.storage.local`'de tutulur. Hiç kayıt yoksa sekme atlanır (`unknown-age`) —
+  tahmin yürütmek yerine güvenli taraf seçilir.
+- **Varsayılan kapalı.** Geri dönüşsüz bir işlem, açık izin olmadan çalışmaz.
+
+### Kapsam dışı bırakılanlar
+Ham ses dosyası saklama (`MediaRecorder`) A3'e alınmadı: kota yönetimi, blob yaşam döngüsü
+ve oynatma arayüzü gerektiriyor. `ROADMAP.md` donmuş §3'te kalan iş olarak duruyor.
+
+---
+
 ## Ortam Sesi Katmanları (2026-09-27)
 - `src/services/ambientAudio/` 5 katman: `ambientAudioTypes` → `noiseSynthesis` → `voices` → `ambientAudioEngine` → `index`
 - **Katman sınırı kuralı:** timbres ve sabit *trim* kazancı üreticide, kullanıcı *ses seviyesi* motorda (`VoiceHandle.masterGain`). Tek yerden yönetilir.

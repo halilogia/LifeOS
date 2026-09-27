@@ -57,6 +57,7 @@ Eklenti, tarayıcınızın yeni sekme (New Tab) sayfasını tamamen özelleştir
 - **📅 Tarih Bazlı Takvim**:
   - Tam ekranı kaplayacak şekilde genişletilmiş, namaz vakitlerinden arındırılmış ve tamamlanan görevlerin geçmişini tarih bazında izlemeyi sağlayan modern takvim paneli.
 - **🧭 Sidebar Kişiselleştirme**: Görünüm sırasını sürükle-bırak değiştirilir ve kalıcı olarak saklanır; kullanılmayan girdiler ayarlardan gizlenebilir; açılışta en sık kullanılan görünüm üste otomatik gelir.
+- **💾 Bellek Uyutucu (RAM Tasarrufu)**: Uzun süredir açılmadığın arka plan sekmeleri otomatik boşaltılarak tarayıcı belleği ve CPU serbest bırakılır. **Ses çalan sekmeler, sabitlenmiş sekmeler, YouTube / Google Docs / localhost gibi korumalı siteler ve eklenti sayfaları asla boşaltılmaz.** Varsayılan **kapalıdır**; açıldığında ne olacağı ayarlarda açıkça yazılır. Ayarlar → Genel.
 - **🕹️ Life OS Arcade & Indie Dev Game Hub (Oyun Kütüphanesi & Laboratuvarı)**:
 
   - **YouTube Playables Estetiği**: YouTube "Hazır Oyunlar" tasarımından ilham alan büyük visual kapak posterleri, filtreleme çipleri (`Oynanabilir`, `Geliştirilenler`, `Favoriler`), arama çubuğu ve hızlı Oyna butonları.

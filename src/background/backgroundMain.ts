@@ -10,12 +10,17 @@ import { initContextMenuHandler } from "./handlers/contextMenuHandler.js";
 import { handleMediaAndTabMessage } from "./handlers/mediaAndTabHandler.js";
 import { handleRuntimeMessage } from "./handlers/runtimeMessageHandler.js";
 import { initRssSyncHandler } from "./handlers/rssSyncHandler.js";
+import {
+  handleTabSuspendMessage,
+  initTabSuspendHandler,
+} from "./handlers/tabSuspendHandler.js";
 
 // Initialize Background Handlers & Listeners
 initScreentimeTracker();
 initAlarmNotificationHandler();
 initContextMenuHandler();
 initRssSyncHandler();
+initTabSuspendHandler();
 
 // Unified Message Orchestrator
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -25,15 +30,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  // 2. Dispatch translation, tab context, tab grouping, and AI generation events.
-  //    Async handler — sendResponse çağrıları callback içinde tetiklenir.
-  //    Kanal açık tutulur: async listener + return true, Promise resolve
-  //    edince kanalı kapatır ve callback'teki sendResponse kaybolurdu
-  //    (content tarafında "message port closed" → çeviri balonu sessizce ölürdü).
-  void handleRuntimeMessage(message, sender, sendResponse).then((handled) => {
-    if (!handled) {
-      sendResponse({ ok: true });
+  // 2. Dispatch tab suspend status / run-now requests.
+  void handleTabSuspendMessage(message).then((suspendResult) => {
+    if (suspendResult) {
+      sendResponse(suspendResult);
+      return;
     }
+
+    // 3. Dispatch translation, tab context, tab grouping, and AI generation events.
+    //    Async handler — sendResponse çağrıları callback içinde tetiklenir.
+    //    Kanal açık tutulur: async listener + return true, Promise resolve
+    //    edince kanalı kapatır ve callback'teki sendResponse kaybolurdu
+    //    (content tarafında "message port closed" → çeviri balonu sessizce ölürdü).
+    void handleRuntimeMessage(message, sender, sendResponse).then((handled) => {
+      if (!handled) {
+        sendResponse({ ok: true });
+      }
+    });
   });
 
   return true;

@@ -94,6 +94,7 @@ Otomatik kurulur (`npm install`), `.gitignore`'da.
 | `src/infrastructure/` | Dış dünya adaptörleri: 23 `ChromeStorage*` repo, Google API client'ları, content script'ler. | `persistence/`, `api/`, `adapters/`, `content/` |
 | `src/content/` | Content script'ler (sayfa içine enjekte edilir). | `infobox/`, `detox/`, `whatsapp/`, `telegram/`, `agent/`, `quiz/`, `volume/` |
 | `src/background/` | MV3 service worker: mesaj handler'ları, alarm'lar. | `backgroundMain.ts`, `handlers/` |
+| `src/background/handlers/` | Alan bazlı handler'lar. | `screentimeTracker.ts`, `alarmNotificationHandler.ts`, `contextMenuHandler.ts`, `mediaAndTabHandler.ts`, `rssSyncHandler.ts`, `runtimeMessageHandler.ts`, **`tabSuspendHandler.ts`** (Bellek Uyutucu) |
 | `src/offscreen/` | Offscreen sayfa mantığı (ortam sesi). | `offscreenAudio.ts` |
 | `src/sidepanel/` | Kenar paneli mantığı (Companion AI). | `useSidePanelChat`, `SidePanelInputBar` vb. |
 | `src/css/` | Stiller. `newtab/` altında feature bazlı CSS + `popup.css`. | `base.css` (tema token'ları), `ai-chat.css`, `kpss.css` vb. |
@@ -146,7 +147,17 @@ Otomatik kurulur (`npm install`), `.gitignore`'da.
 | `media/` | `MediaToolbar`, `MediaGrid`, `MediaCard`, `MediaStatsOverview`, `MediaDetailModal`, `MediaQuotesModal` |
 | `network/` | `NetworkOverviewCard`, `ProtocolHealthCard`, `ServiceRadarGrid`, `SpeedometerCard`, `DnsSecurityCard`, `DiagnosticHistoryCard` |
 | `govjobs/` | `GovJobsHeader`, `GovJobsFilterBar`, `GovJobCard` (`daysLeft` rozeti). |
-| `pomodoro/`, `prayer/`, `hifiz/`, `arcade/`, `freegames/`, `gameassets/`, `detox/`, `eisenhower/`, `settings/`, `sidebar/`, `popup/` | Feature'a özel parçalar. |
+| `pomodoro/`, `prayer/`, `hifiz/`, `arcade/`, `freegames/`, `gameassets/`, `detox/`, `eisenhower/`, `settings/`, `sidebar/`, `popup/` | Feature'a özel parçalar. `settings/` altında `TabSuspendSettings.tsx` (Bellek Uyutucu arayüzü) bulunur. |
+
+### Bellek Uyutucu (Sekme Boşaltma) Katmanları
+| Dosya | Katman | Sorumluluk |
+|---|---|---|
+| `src/domain/services/tabSuspendPolicy.ts` | Saf politika | Hangi sekmenin boşaltılacağına karar verir. **`chrome.*` çağrısı yoktur** → `tests/tabSuspendPolicy.test.ts` tarayıcısız doğrular. 9 güvenlik kuralı + gerekçe sırası + `policyFromConfig` (depo doğrulaması). |
+| `src/background/handlers/tabSuspendHandler.ts` | Orkestrasyon | `chrome.alarms` 5 dk periyod, son erişim takibi (`onActivated`/`onUpdated`/`onRemoved`), `chrome.tabs.discard()` çağrısı, ayar değişimine tepki, `tab_suspend_*` mesajları. |
+| `src/presentation/store/tabSuspendStore.ts` | UI durumu | Zustand; `tab_suspend_config` anahtarını okur/yazar. Servis worker ayrı JS bağlamı olduğu için aynı anahtarı doğrudan okur. |
+| `src/components/settings/TabSuspendSettings.tsx` | Arayüz | Aç/kapa, eşik seçimi, son tarama özeti, "Şimdi Tara". |
+
+Depolama anahtarları (`chrome.storage.local`): `tab_suspend_config`, `tab_suspend_last_access`, `tab_suspend_last_sweep`.
 
 ### `src/services/ambientAudio/` — Katmanlı Ortam Sesi Modülü
 Beş katman, yukarıdan aşağıya bağımlılık:

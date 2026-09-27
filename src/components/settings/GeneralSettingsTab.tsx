@@ -1,12 +1,14 @@
 /**
  * GeneralSettingsTab.tsx
- * Genel Ayarlar sekmesi — AppSettingsGroup + ErrorReportSettingsTab kompozisyonu.
+ * Genel Ayarlar sekmesi — AppSettingsGroup + TabSuspendSettings +
+ * ErrorReportSettingsTab kompozisyonu.
  * Dosya limiti: ≤400 satır (6.1) — toggle'lar AppSettingsGroup/BridgeToggles'ta.
  */
 
 import { Language } from "@/types/types.js";
 import { ErrorReportSettingsTab } from "@/components/settings/ErrorReportSettingsTab.js";
 import { AppSettingsGroup } from "@/components/settings/AppSettingsGroup.js";
+import { TabSuspendSettings } from "@/components/settings/TabSuspendSettings.js";
 
 interface GeneralSettingsTabProps {
   lang: Language;
@@ -85,6 +87,9 @@ export function GeneralSettingsTab({
         hiddenViewsCount={hiddenViewsCount}
         onUnhideAllSidebar={onUnhideAllSidebar}
       />
+
+      {/* Memory Suspender (RAM tasarrufu) */}
+      <TabSuspendSettings t={t} onNotify={onNotify} />
 
       {/* Error Reporting Section */}
       {onNotify && <ErrorReportSettingsTab t={t} onNotify={onNotify} />}

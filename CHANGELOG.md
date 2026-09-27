@@ -34,6 +34,18 @@ maddeler o dönemde tamamlanan tüm çalışmaları kapsar.
 - **10 plugin** tek bir kayıt noktasından yükleniyor: navigation, notes, mediaVault, prayer, tasks, kpss, bist, pomodoro, routines, memory.
 - **Bağlam toplayıcı + yetenek prompt'u**: Her eylem için parametre şeması, çalıştırma sonucu ve kullanıcıya gösterilen aksiyon rozeti (`AiActionBadge`).
 
+### Bellek Uyutucu (RAM Tasarrufu) — Sekme Boşaltma
+- Belirli süredir etkin olmayan arka plan sekmeleri `chrome.tabs.discard()` ile boşaltılarak tarayıcı belleği ve CPU serbest bırakılıyor. Varsayılan eşik 30 dakika, seçenekler 5 dk – 4 saat.
+- **Karar mantığı saf ve test edilebilir ayrıldı**: `src/domain/services/tabSuspendPolicy.ts` içinde `chrome.*` çağrısı yoktur; `tests/tabSuspendPolicy.test.ts` 28 senaryoyu tarayıcı olmadan doğrular.
+- **9 güvenlik kuralı**, her biri gerekçesiyle birlikte: eklenti sayfaları (LifeOS new tab dahil), `chrome://`/`about:`/devtools, gizli pencere, **ses çalan sekme**, sabitlenmiş sekme, etkin sekme, korunan URL'ler, penceredeki tek sekme, zaten boşaltılmış sekme. Değerlendirme sırası kasıtlı: güvenlik gerekçesi bilgilendirici gerekçeden önce raporlanır, böylece kullanıcı "neden boşaltılmadı?" sorusunda gerçek nedeni görür.
+- **Varsayılan listeye korunan siteler**: YouTube, Netflix, Twitch, Spotify, Google Docs, Gmail, WhatsApp Web, Telegram Web ve `localhost` / `127.0.0.1` (Arcade modülü yerel geliştirme sunucularını iframe'de çalıştırıyor). Kullanıcı listeye kendi URL'lerini ekleyebiliyor (`extraProtectedUrls`).
+- **Tutucu davranış**: Geçmişi bilinmeyen sekme atlanır (`unknown-age`) — servis worker yeniden başladığında tahmin yürütülmez. Politika geçersizse hiçbir işlem yapılmaz.
+- **MV3'e uygun zamanlama**: `setInterval` yerine `chrome.alarms` (5 dk periyot). Servis worker yeniden başladığında alarm yeniden kurulur ve eksik sekme geçmişi doldurulur.
+- **Varsayılan kapalı.** `discard()` geri dönüşsüzdür — sekmenin belleğini boşaltır ve sayfadaki kaydedilmemiş form verilerini yok eder. Kullanıcı açıkça açmadıkça hiçbir sekmeye dokunulmaz.
+- **Ayarlar → Genel → "Bellek Uyutucu"**: Aç/kapa, boşta kalma eşiği seçimi, son tarama saati ve boşaltılan sekme sayacı, "Şimdi Tara" düğmesi. Kullanıcıya ne olacağı ayrıntılı olarak yazılır.
+- Sekmeler tek tek boşaltılır: `beforeunload` uyarısı veren tek bir sekme partiyi iptal etmez, diğerleri yine boşaltılır.
+- Kapanan sekmelerin geçmiş girdileri temizlenir; 7 günden eski kayıtlar ve açık olmayan sekme girdileri budanır.
+
 ### Yeni Modül: Kamu İlanları & Kariyer Kapısı
 - Canlı kamu ilanları **Kariyer Kapısı (CBİKO)**, **ilan.gov.tr (BİK)** ve **Resmi Gazete** kaynaklarından toplanıyor; 25 dakikalık önbellek ve `chrome.storage` kalıcı önbellek.
 - `GOV_JOB_HUBS`: Kariyer Kapısı, e-Devlet, ilan.gov.tr, Resmi Gazete ve İŞKUR resmi başvuru portallarına kısayollar.
