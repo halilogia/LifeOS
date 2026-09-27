@@ -23,7 +23,7 @@ Güncel mimari harita için bkz. [ARCHITECTURE.md](../ARCHITECTURE.md) ve
 | `eslint.config.js` | ESLint kuralları + yerel kurallar (`local/no-turkish-literals` vb.). |
 | `README.md` | Proje tanıtımı, ekran listesi ve kurulum talimatları. |
 | `CHANGELOG.md` | Sürüm değişiklik geçmişi. |
-| `ROADMAP.md` | Aktif kapsam (A1/A2/A3) + donmuş özellikler (F1-F7). Tamamlanan iş buradan çıkarılıp `CHANGELOG.md`'ye taşınır. |
+| `ROADMAP.md` | Planlanmış sürümler (v1.1.0 – v1.4.0) + donmuş bekleme listesi (B1-B7). Tamamlanan sürüm buradan çıkarılıp `CHANGELOG.md`'ye taşınır. |
 | `ARCHITECTURE.md` | Elle yazılmış mimari açıklama. |
 | `ARCHITECTURE_AUTO_GENERATED.md` | Tarama script'inin ürettiği mimari ağaç (üretici scripti depoda **yok**; elle güncellenir). |
 | `project_tree.md` | `npm run generate:tree` ile üretilen proje ağacı. |

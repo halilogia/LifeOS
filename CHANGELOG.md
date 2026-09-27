@@ -35,11 +35,12 @@ maddeler o dönemde tamamlanan tüm çalışmaları kapsar.
 - **Bağlam toplayıcı + yetenek prompt'u**: Her eylem için parametre şeması, çalıştırma sonucu ve kullanıcıya gösterilen aksiyon rozeti (`AiActionBadge`).
 
 ### Yol Haritası & Kapsam Yönetimi
-- **Kapsam dondurması kararı** (2026-09-27): Repo, feature-creep riski en yüksek proje olarak işaretlendi. Aktif geliştirme yalnızca üç özelliğe açıldı: **AI Smart Goal Breakdown**, **Offline P2P WebRTC Sync** ve **Voice Memo to Structured Note**. Bağlayıcı kurallar: yeni modül/ekran yok, donmuş özellikler silinmez, ölü kod biriktirilmez, yeni bağımlılık yok. Gerekçeler ve kabul kriterleri `ROADMAP.md` içinde.
-- **Donmuş Voice Memo geri alındı** (2026-09-27): Kullanıcı kararıyla aktif plana alındı. Ham ses dosyası saklama bilinçli olarak dışarıda bırakıldı (kota yönetimi, blob yaşam döngüsü ve oynatma arayüzü gerektiriyor) ve kalan iş olarak donmuş bölüme taşındı.
-- **Donmuş "Smart Tab Suspender"ın RAM kısmı ayrıldı ve uygulandı** (2026-09-27): Bellek Uyutucu teslim edildi (aşağıda). Donmuş bölümde yalnızca *AI kategori gruplama* kaldı.
+- **Yol haritası sürüme göre yeniden yazıldı** (2026-09-27): Özellik kovaları (A1/A2/A3) yerine **teslim edilebilir sürümler** kullanılıyor — v1.1.0, v1.2.0, v1.3.0, v1.4.0. Her sürüm kendi hedefi, kabul kriterleri, kapsam dışı listesi ve çıkış kriteriyle tanımlı; bir sürüm bir sonrakine bağımlı olmadan çalışır duruma gelmeli. Donmuş kalemler B1-B7 olarak bekleme listesine alındı. Sürüm numaraları mevcut manifest `1.0.0`'ından ileri gider.
+- **Kapsam dondurması kararı** (2026-09-27): Repo, feature-creep riski en yüksek proje olarak işaretlendi. Aktif geliştirme dört sürümle sınırlı. Bağlayıcı kurallar: yeni modül/ekran yok, yeni bağımlılık yok, ölü kod biriktirilmez, donmuş özellikler silinmez. Gerekçeler ve kabul kriterleri `ROADMAP.md` içinde.
+- **Donmuş Voice Memo geri alındı** (2026-09-27): Kullanıcı kararıyla plana alındı (v1.2.0). Ham ses dosyası saklama bilinçli olarak dışarıda bırakıldı (kota yönetimi, blob yaşam döngüsü ve oynatma arayüzü gerektiriyor) ve bekleme listesine **B1** olarak taşındı.
+- **Donmuş "Smart Tab Suspender"ın RAM kısmı ayrıldı ve uygulandı** (2026-09-27): Bellek Uyutucu teslim edildi (aşağıda). Bekleme listesinde yalnızca *AI kategori gruplama* (B7) kaldı.
 - **Yol haritası denetimi** (2026-09-27): 18 donmuş maddenin tamamı koda karşı doğrulandı. Hiçbiri gizlice yapılmış değildi; bir tanesinin (`chrome.tabs.group()`) açıklaması yanlıştı — kod "yalnızca Agent'ın açtığı sekmeleri" değil, o an etkin olan sekmeyi grupluyor. Düzeltildi.
-- **Dondurmadan hemen önce teslim edilen üç modül** (Kamu İlanları, Ağ Teşhisi, Media Vault) hiçbir dokümanda yer almıyordu; bu sürümde hem ROADMAP hem README hem de bu dosya ile belgelendi.
+- **Dondurmadan hemen önce teslim edilen üç modül** (Kamu İlanları, Ağ Teşhisi, Media Vault) hiçbir dokümanda yer almıyordu; bu sürümde ROADMAP, README ve bu dosya ile belgelendi.
 
 ### Ölü Kod Temizliği (2026-09-27, ikinci dalga)
 - `notes_editor_type_quote` ve `notes_editor_type_idea` çeviri anahtarları (tr + en) silindi. `NoteType` yalnızca `note` / `diary` / `cornell` üretiyor (`NoteEditorHeader.tsx:59`); bu iki anahtar hiçbir yerden okunmuyordu.

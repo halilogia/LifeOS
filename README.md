@@ -142,11 +142,12 @@ npm run dev                   # Vite geliştirme sunucusu
 npm run generate:tree         # project_tree.md dosyasını yeniden üretir
 ```
 
-> **Geliştirme sırasında:** `ROADMAP.md` kapsam dondurması uygulamadadır. Yalnızca
-> **AI Smart Goal Breakdown** (A1), **Voice Memo to Structured Note** (A3) ve
-> **Offline P2P WebRTC Sync** (A2) üzerinde çalışılır; yeni modül/ekran ve yeni
-> bağımlılık eklenmez, ölü kod biriktirilmez. Tamamlanan iş `ROADMAP.md`'den çıkarılıp
-> `CHANGELOG.md`'ye taşınır. Ayrıntı için `ROADMAP.md` ve `docs/PROJECT_GUIDE.md`.
+> **Geliştirme sırasında:** `ROADMAP.md` kapsam dondurması uygulamadadır. Çalışma
+> yalnızca dört planlanmış sürümle sınırlıdır: **v1.1.0 AI Smart Goal Breakdown**,
+> **v1.2.0 Sesli Not Kaydı & AI Cornell**, **v1.3.0 P2P Sync — Taşıma & Kriptografi**,
+> **v1.4.0 P2P Sync — Veri Aktarımı**. Yeni modül/ekran ve yeni bağımlılık eklenmez,
+> ölü kod biriktirilmez. Tamamlanan sürüm `ROADMAP.md`'den çıkarılıp `CHANGELOG.md`'ye
+> taşınır. Ayrıntı için `ROADMAP.md` ve `docs/PROJECT_GUIDE.md`.
 
 ---
 *Bu çalışma; kişisel üretkenliği artırmak, hedeflere (KPSS, Hıfız, Yazılım) odaklanmak ve güncel ücretsiz oyun fırsatlarını tek ekranda toplamak için geliştirilmiştir.*
