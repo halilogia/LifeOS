@@ -43,8 +43,8 @@ Ortak kurallar:
 - Yeni davranış için en az bir `tests/` kapsamı yazılır (saf mantık varsayılan olarak `environment: "node"`).
 
 ### A1. ⚡ AI Smart Goal Breakdown
-**Problem:** Kullanıcı büyük bir hedefi (`"Godot ile 2D Platformer Yap"`) yazıyor ve uygulanabilir
-mikro adımlara nasıl bölüneceğini bilmiyor. Mevcut yapı yalnızca düz metin kabul ediyor.
+**Problem:** Kullanıcı büyük bir hedefi (`"KPSS Tarih İnkılapları Bitir"`, `"3 Ayda Türkçe Sorularını Bitir"`) yazıyor
+ve uygulanabilir mikro adımlara nasıl bölüneceğini bilmiyor. Mevcut yapı yalnızca düz metin kabul ediyor.
 
 **Çıktı:** Görev giriş alanının yanında tek bir `✨ AI ile Parçala` düğmesi. AI 4-6 somut alt görevi
 `{ title, estimateMinutes, urgent, important }` olarak döndürür; kullanıcı listeyi önizleyip tek
