@@ -9,6 +9,7 @@ import { MovieSeriesTimelineModal } from "./MovieSeriesTimelineModal.js";
 import { CuratedBooksHub } from "./CuratedBooksHub.js";
 import { CuratedGamesHub } from "./CuratedGamesHub.js";
 import { CuratedMoviesHub } from "./CuratedMoviesHub.js";
+import { CuratedTvHub } from "./CuratedTvHub.js";
 
 interface MediaViewProps {
   lang: Language;
@@ -24,6 +25,10 @@ export function MediaView({ lang }: MediaViewProps) {
   const searchQuery = useMediaStore((s) => s.searchQuery);
   const sortBy = useMediaStore((s) => s.sortBy);
 
+  const curatedTvShows = useMediaStore((s) => s.curatedTvShows);
+  const isSyncingWeb = useMediaStore((s) => s.isSyncingWeb);
+  const syncWebCatalog = useMediaStore((s) => s.syncWebCatalog);
+
   const selectedSeriesForTimeline = useMediaStore(
     (s) => s.selectedSeriesForTimeline,
   );
@@ -37,6 +42,7 @@ export function MediaView({ lang }: MediaViewProps) {
   const toggleCuratedBook = useMediaStore((s) => s.toggleCuratedBook);
   const toggleCuratedGame = useMediaStore((s) => s.toggleCuratedGame);
   const toggleCuratedMovie = useMediaStore((s) => s.toggleCuratedMovie);
+  const toggleCuratedTv = useMediaStore((s) => s.toggleCuratedTv);
 
   const setTypeFilter = useMediaStore((s) => s.setTypeFilter);
   const setStatusFilter = useMediaStore((s) => s.setStatusFilter);
@@ -105,6 +111,8 @@ export function MediaView({ lang }: MediaViewProps) {
           onStatusChange={setStatusFilter}
           onSearchChange={setSearchQuery}
           onSortChange={setSortBy}
+          isSyncingWeb={isSyncingWeb}
+          onSyncWeb={() => void syncWebCatalog(true)}
         />
 
         {/* Curated Catalogs & Series Hub */}
@@ -116,6 +124,27 @@ export function MediaView({ lang }: MediaViewProps) {
               onOpenTimeline={openSeriesTimeline}
               onBatchWatchlist={batchAddSeriesToWatchlist}
               isStandaloneTab={true}
+            />
+          )}
+
+          {activeTypeFilter === "movie" && (
+            <CuratedMoviesHub
+              lang={lang}
+              userItems={items}
+              onToggleMovie={toggleCuratedMovie}
+              statusFilter={activeStatusFilter}
+              searchQuery={searchQuery}
+            />
+          )}
+
+          {activeTypeFilter === "tv" && (
+            <CuratedTvHub
+              lang={lang}
+              userItems={items}
+              tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
+              onToggleTv={toggleCuratedTv}
+              statusFilter={activeStatusFilter}
+              searchQuery={searchQuery}
             />
           )}
 
@@ -139,16 +168,6 @@ export function MediaView({ lang }: MediaViewProps) {
             />
           )}
 
-          {activeTypeFilter === "movie" && (
-            <CuratedMoviesHub
-              lang={lang}
-              userItems={items}
-              onToggleMovie={toggleCuratedMovie}
-              statusFilter={activeStatusFilter}
-              searchQuery={searchQuery}
-            />
-          )}
-
           {activeTypeFilter === "all" && (
             <div className="media-all-showcase">
               {/* 1. Popüler Film Serileri */}
@@ -160,7 +179,26 @@ export function MediaView({ lang }: MediaViewProps) {
                 isStandaloneTab={false}
               />
 
-              {/* 2. Başyapıt Kitaplar (Felsefe, Politika, Distopya...) */}
+              {/* 2. Kült Filmler */}
+              <CuratedMoviesHub
+                lang={lang}
+                userItems={items}
+                onToggleMovie={toggleCuratedMovie}
+                statusFilter={activeStatusFilter}
+                searchQuery={searchQuery}
+              />
+
+              {/* 3. Efsane Diziler */}
+              <CuratedTvHub
+                lang={lang}
+                userItems={items}
+                tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
+                onToggleTv={toggleCuratedTv}
+                statusFilter={activeStatusFilter}
+                searchQuery={searchQuery}
+              />
+
+              {/* 4. Başyapıt Kitaplar (Felsefe, Politika, Distopya...) */}
               <CuratedBooksHub
                 lang={lang}
                 userItems={items}
@@ -169,20 +207,11 @@ export function MediaView({ lang }: MediaViewProps) {
                 searchQuery={searchQuery}
               />
 
-              {/* 3. Zirvedeki Oyunlar */}
+              {/* 5. Zirvedeki Oyunlar */}
               <CuratedGamesHub
                 lang={lang}
                 userItems={items}
                 onToggleGame={toggleCuratedGame}
-                statusFilter={activeStatusFilter}
-                searchQuery={searchQuery}
-              />
-
-              {/* 4. Kült Filmler */}
-              <CuratedMoviesHub
-                lang={lang}
-                userItems={items}
-                onToggleMovie={toggleCuratedMovie}
                 statusFilter={activeStatusFilter}
                 searchQuery={searchQuery}
               />

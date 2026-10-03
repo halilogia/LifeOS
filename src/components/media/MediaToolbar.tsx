@@ -16,6 +16,8 @@ interface MediaToolbarProps {
   onStatusChange: (status: MediaStatusFilter) => void;
   onSearchChange: (q: string) => void;
   onSortChange: (sort: MediaSortBy) => void;
+  isSyncingWeb?: boolean;
+  onSyncWeb?: () => void;
 }
 
 export function MediaToolbar({
@@ -28,6 +30,8 @@ export function MediaToolbar({
   onStatusChange,
   onSearchChange,
   onSortChange,
+  isSyncingWeb = false,
+  onSyncWeb,
 }: MediaToolbarProps) {
   const t = getTranslation(lang);
 
@@ -35,6 +39,7 @@ export function MediaToolbar({
     { key: "all", label: t.media_tab_all || "Tümü", icon: "🌟" },
     { key: "series", label: t.media_tab_series || "Film Serileri", icon: "🎬" },
     { key: "movie", label: t.media_tab_movie || "Kült Filmler", icon: "🍿" },
+    { key: "tv", label: t.media_tab_tv || "Diziler", icon: "📺" },
     { key: "book", label: t.media_tab_book || "Kitaplar", icon: "📚" },
     { key: "game", label: t.media_tab_game || "Oyunlar", icon: "🎮" },
   ];
@@ -48,7 +53,7 @@ export function MediaToolbar({
 
   return (
     <div className="media-toolbar-container">
-      {/* Category Tabs */}
+      {/* Category Tabs & Web Sync Button */}
       <div className="media-toolbar-top-row">
         <div className="media-category-tabs" role="tablist">
           {categories.map((cat) => (
@@ -64,6 +69,23 @@ export function MediaToolbar({
             </button>
           ))}
         </div>
+
+        {onSyncWeb && (
+          <div className="media-web-sync-container">
+            <button
+              type="button"
+              className={`media-web-sync-btn ${isSyncingWeb ? "syncing" : ""}`}
+              onClick={onSyncWeb}
+              disabled={isSyncingWeb}
+              title="İnternet API'lerinden güncel katalog verilerini çek ve eşitle"
+            >
+              <span className={`sync-icon ${isSyncingWeb ? "spin" : ""}`}>🔄</span>
+              <span className="sync-text">
+                {isSyncingWeb ? "Çekiliyor..." : "Web'den Güncelle"}
+              </span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Filter Chips, Search, & Sort Bar */}

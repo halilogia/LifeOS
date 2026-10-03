@@ -31,7 +31,12 @@ import type {
   CuratedBookItem,
   CuratedGameItem,
   CuratedMovieItem,
+  CuratedTvItem,
 } from "@/services/curatedCatalogData.js";
+import {
+  getActiveMergedCatalog,
+  syncAllCatalogsFromWeb,
+} from "@/services/mediaInternetSyncService.js";
 import { logger } from "@/utils/logger.js";
 
 const mediaRepo = new ChromeStorageMediaRepository();
@@ -91,6 +96,19 @@ interface MediaState {
     targetStatus: "completed" | "backlog",
     rating?: number,
   ) => Promise<void>;
+  toggleCuratedTv: (
+    tvShow: CuratedTvItem,
+    targetStatus: "completed" | "in_progress" | "backlog",
+    rating?: number,
+  ) => Promise<void>;
+
+  curatedTvShows: CuratedTvItem[];
+  curatedBooks: CuratedBookItem[];
+  curatedGames: CuratedGameItem[];
+  curatedMovies: CuratedMovieItem[];
+  isSyncingWeb: boolean;
+  lastWebSyncTime: string | null;
+  syncWebCatalog: (force?: boolean) => Promise<void>;
 
   setTypeFilter: (filter: MediaTypeFilter) => void;
   setStatusFilter: (filter: MediaStatusFilter) => void;
@@ -128,12 +146,28 @@ export const useMediaStore = create<MediaState>((set, get) => ({
   selectedSeriesForTimeline: null,
   isSeriesTimelineOpen: false,
 
+  curatedTvShows: [],
+  curatedBooks: [],
+  curatedGames: [],
+  curatedMovies: [],
+  isSyncingWeb: false,
+  lastWebSyncTime: null,
+
   stats: computeMediaStats([]),
   filteredItems: [],
 
   loadItems: async () => {
     set({ isLoading: true });
     try {
+      // 1. Initialize active curated catalogs (offline-first with web cache if available)
+      const catalogs = getActiveMergedCatalog();
+      set({
+        curatedTvShows: catalogs.tvShows,
+        curatedBooks: catalogs.books,
+        curatedGames: catalogs.games,
+        curatedMovies: catalogs.movies,
+      });
+
       const items = await mediaRepo.getItems();
       const stats = computeMediaStats(items);
       const state = get();
@@ -780,6 +814,128 @@ export const useMediaStore = create<MediaState>((set, get) => ({
       state.sortBy,
     );
     set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  toggleCuratedTv: async (tvShow, targetStatus, rating) => {
+    const currentItems = get().items;
+    const showNorm = normalizeTitle(tvShow.title);
+    const origNorm = tvShow.originalTitle ? normalizeTitle(tvShow.originalTitle) : "";
+    const existingIndex = currentItems.findIndex(
+      (i) =>
+        i.type === "tv" &&
+        (normalizeTitle(i.title) === showNorm ||
+          (origNorm && normalizeTitle(i.title) === origNorm)),
+    );
+    const now = new Date().toISOString();
+    let nextItems: MediaItem[];
+
+    if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      if (existing.status === targetStatus && rating === undefined) {
+        nextItems = currentItems.filter((_, idx) => idx !== existingIndex);
+      } else {
+        const updated: MediaItem = {
+          ...existing,
+          status: targetStatus,
+          rating:
+            rating !== undefined
+              ? rating
+              : existing.rating ||
+                (targetStatus === "completed" ? Math.round(tvShow.rating) : 0),
+          updatedAt: now,
+          finishedAt:
+            targetStatus === "completed" ? existing.finishedAt || now : undefined,
+          tvProgress: {
+            currentSeason:
+              targetStatus === "completed"
+                ? tvShow.totalSeasons
+                : targetStatus === "in_progress"
+                  ? existing.tvProgress?.currentSeason || 1
+                  : 0,
+            currentEpisode:
+              targetStatus === "completed"
+                ? tvShow.totalEpisodes
+                : targetStatus === "in_progress"
+                  ? existing.tvProgress?.currentEpisode || 1
+                  : 0,
+            totalSeasons: tvShow.totalSeasons,
+            totalEpisodes: tvShow.totalEpisodes,
+          },
+        };
+        nextItems = currentItems.map((item, idx) =>
+          idx === existingIndex ? updated : item,
+        );
+      }
+    } else {
+      const newItem: MediaItem = {
+        id: `media_tv_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "tv",
+        title: tvShow.title,
+        creator: tvShow.creator,
+        coverUrl: tvShow.coverUrl,
+        releaseYear: tvShow.releaseYear,
+        genres: [tvShow.category, ...tvShow.genres],
+        status: targetStatus,
+        rating:
+          rating !== undefined
+            ? rating
+            : targetStatus === "completed"
+              ? Math.round(tvShow.rating)
+              : 0,
+        favorite: false,
+        tvProgress: {
+          currentSeason:
+            targetStatus === "completed"
+              ? tvShow.totalSeasons
+              : targetStatus === "in_progress"
+                ? 1
+                : 0,
+          currentEpisode:
+            targetStatus === "completed"
+              ? tvShow.totalEpisodes
+              : targetStatus === "in_progress"
+                ? 1
+                : 0,
+          totalSeasons: tvShow.totalSeasons,
+          totalEpisodes: tvShow.totalEpisodes,
+        },
+        createdAt: now,
+        updatedAt: now,
+        finishedAt: targetStatus === "completed" ? now : undefined,
+      };
+      nextItems = [newItem, ...currentItems];
+    }
+
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  syncWebCatalog: async (force = true) => {
+    set({ isSyncingWeb: true });
+    try {
+      const result = await syncAllCatalogsFromWeb(force);
+      const updated = getActiveMergedCatalog();
+      set({
+        curatedTvShows: updated.tvShows,
+        curatedBooks: updated.books,
+        curatedGames: updated.games,
+        curatedMovies: updated.movies,
+        lastWebSyncTime: result.lastUpdated,
+        isSyncingWeb: false,
+      });
+    } catch (err) {
+      logger.warn("[useMediaStore] syncWebCatalog error:", err);
+      set({ isSyncingWeb: false });
+    }
   },
 
   loadSampleData: async () => {

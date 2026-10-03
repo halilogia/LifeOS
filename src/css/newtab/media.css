@@ -2490,4 +2490,82 @@
   cursor: pointer;
 }
 
+/* TV Series Hub & Genre Enhancements */
+.curated-catalog-badge.tv-badge {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2));
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.tv-card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 14px 28px -6px rgba(168, 85, 247, 0.16);
+}
+
+.curated-genres-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.curated-subgenre-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+/* Live Web Sync Toolbar Controls */
+.media-web-sync-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.media-web-sync-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.media-web-sync-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+}
+
+.media-web-sync-btn:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+.sync-icon.spin {
+  display: inline-block;
+  animation: mediaSyncSpin 1s linear infinite;
+}
+
+@keyframes mediaSyncSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 
