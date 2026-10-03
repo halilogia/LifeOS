@@ -43,6 +43,7 @@ export function MediaToolbar({
 
   const categories: { key: MediaTypeFilter; label: string }[] = [
     { key: "all", label: t.media_tab_all || "All" },
+    { key: "series", label: t.media_tab_series || "Film Serileri" },
     { key: "movie", label: t.media_tab_movie || "Movies" },
     { key: "tv", label: t.media_tab_tv || "TV Series" },
     { key: "book", label: t.media_tab_book || "Books" },

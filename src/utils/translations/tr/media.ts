@@ -97,7 +97,20 @@ export const media = {
   media_quotes_input_placeholder:
     "Beğendiğiniz alıntıyı veya cümleyi buraya yapıştırın...",
   media_quotes_page_placeholder: "Sayfa no (opsiyonel)",
-  media_quotes_add_btn: "Alıntı Ekle",
   media_quotes_empty: "Henüz bu kitaba ait kaydedilmiş bir alıntı yok.",
   media_quotes_page_badge: "Sayfa",
+
+  media_tab_series: "Film Serileri",
+  media_series_badge: "Koleksiyonlar & Seriler",
+  media_series_title: "Popüler Film Serileri & Evrenler",
+  media_series_subtitle:
+    "Web'den hazır çekilmiş efsane seriler. Tek tıkla izleme listeni oluştur, kronolojik zaman çizelgesini takip et.",
+  media_open_timeline: "Zaman Çizelgesini Aç",
+  media_add_all_watchlist: "Kalanları Listeme Ekle",
+  media_timeline_preview: "Zaman Çizelgesi:",
+  media_release_order: "Çıkış Yılına Göre",
+  media_chronological_order: "Evren Kronolojisi (Hikaye)",
+  media_filter_unwatched: "Sadece İzlemediklerim",
+  media_mark_watched: "İzlendi Yap",
+  media_add_watchlist: "İzleme Listeme Ekle",
 };

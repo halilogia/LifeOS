@@ -95,7 +95,20 @@ export const media = {
   media_quotes_subtitle: "Memorable quotes and passages saved from this book",
   media_quotes_input_placeholder: "Paste your favorite excerpt or quote here...",
   media_quotes_page_placeholder: "Page no (optional)",
-  media_quotes_add_btn: "Add Quote",
   media_quotes_empty: "No quotes saved for this book yet.",
   media_quotes_page_badge: "Page",
+
+  media_tab_series: "Movie Series",
+  media_series_badge: "Collections & Franchises",
+  media_series_title: "Popular Movie Franchises & Series",
+  media_series_subtitle:
+    "Curated legendary movie franchises. Track chronological timelines and manage your watchlist with one click.",
+  media_open_timeline: "Open Timeline",
+  media_add_all_watchlist: "Add Remaining to Watchlist",
+  media_timeline_preview: "Timeline:",
+  media_release_order: "By Release Year",
+  media_chronological_order: "Storyline Chronology",
+  media_filter_unwatched: "Only Unwatched",
+  media_mark_watched: "Mark as Watched",
+  media_add_watchlist: "Add to Watchlist",
 };

@@ -12,6 +12,8 @@ import type {
   MediaStatusFilter,
   MediaSortBy,
   MediaStats,
+  MovieSeries,
+  MovieSeriesItem,
 } from "@/types/media.js";
 import { ChromeStorageMediaRepository } from "@/infrastructure/persistence/repositories/ChromeStorageMediaRepository.js";
 import {
@@ -24,6 +26,7 @@ import {
   removeQuoteFromBook,
   getSampleMediaItems,
 } from "@/services/mediaService.js";
+import { normalizeTitle } from "@/services/movieSeriesData.js";
 import { logger } from "@/utils/logger.js";
 
 const mediaRepo = new ChromeStorageMediaRepository();
@@ -42,6 +45,8 @@ interface MediaState {
   defaultModalType: MediaType;
   isQuotesModalOpen: boolean;
   selectedBookForQuotes: MediaItem | null;
+  selectedSeriesForTimeline: MovieSeries | null;
+  isSeriesTimelineOpen: boolean;
 
   // Computed views & stats
   stats: MediaStats;
@@ -59,6 +64,13 @@ interface MediaState {
   addQuote: (bookId: string, quoteText: string, page?: number) => Promise<void>;
   removeQuote: (bookId: string, quoteId: string) => Promise<void>;
 
+  toggleSeriesItem: (
+    seriesItem: MovieSeriesItem,
+    targetStatus: "completed" | "backlog",
+    rating?: number,
+  ) => Promise<void>;
+  batchAddSeriesToWatchlist: (series: MovieSeries) => Promise<void>;
+
   setTypeFilter: (filter: MediaTypeFilter) => void;
   setStatusFilter: (filter: MediaStatusFilter) => void;
   setSearchQuery: (query: string) => void;
@@ -69,6 +81,8 @@ interface MediaState {
   closeDetailModal: () => void;
   openQuotesModal: (book: MediaItem) => void;
   closeQuotesModal: () => void;
+  openSeriesTimeline: (series: MovieSeries) => void;
+  closeSeriesTimeline: () => void;
 
   loadSampleData: () => Promise<void>;
   exportBackup: () => string;
@@ -90,6 +104,8 @@ export const useMediaStore = create<MediaState>((set, get) => ({
   defaultModalType: "movie",
   isQuotesModalOpen: false,
   selectedBookForQuotes: null,
+  selectedSeriesForTimeline: null,
+  isSeriesTimelineOpen: false,
 
   stats: computeMediaStats([]),
   filteredItems: [],
@@ -321,6 +337,172 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
   closeQuotesModal: () => {
     set({ isQuotesModalOpen: false, selectedBookForQuotes: null });
+  },
+
+  openSeriesTimeline: (series: MovieSeries) => {
+    set({ isSeriesTimelineOpen: true, selectedSeriesForTimeline: series });
+  },
+
+  closeSeriesTimeline: () => {
+    set({ isSeriesTimelineOpen: false, selectedSeriesForTimeline: null });
+  },
+
+  toggleSeriesItem: async (
+    seriesItem: MovieSeriesItem,
+    targetStatus: "completed" | "backlog",
+    rating?: number,
+  ) => {
+    const currentItems = get().items;
+    const seriesNorm = normalizeTitle(seriesItem.title);
+    const seriesOrigNorm = seriesItem.originalTitle
+      ? normalizeTitle(seriesItem.originalTitle)
+      : "";
+
+    const existingIndex = currentItems.findIndex((i) => {
+      if (i.seriesItemId && i.seriesItemId === seriesItem.id) return true;
+      if (i.type !== "movie") return false;
+      const uNorm = normalizeTitle(i.title);
+      return (
+        uNorm === seriesNorm ||
+        (seriesOrigNorm && uNorm === seriesOrigNorm) ||
+        (seriesItem.releaseYear &&
+          i.releaseYear === seriesItem.releaseYear &&
+          (uNorm.includes(seriesNorm) || seriesNorm.includes(uNorm)))
+      );
+    });
+
+    let nextItems: MediaItem[];
+    const now = new Date().toISOString();
+
+    if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      // If already in target status, toggle it off by removing or switching
+      if (existing.status === targetStatus) {
+        nextItems = currentItems.filter((_, idx) => idx !== existingIndex);
+      } else {
+        const updated: MediaItem = {
+          ...existing,
+          status: targetStatus,
+          seriesId: seriesItem.seriesId,
+          seriesItemId: seriesItem.id,
+          rating:
+            rating !== undefined
+              ? rating
+              : existing.rating > 0
+                ? existing.rating
+                : targetStatus === "completed" && seriesItem.imdbRating
+                  ? Math.round(seriesItem.imdbRating)
+                  : 0,
+          updatedAt: now,
+          finishedAt:
+            targetStatus === "completed" ? existing.finishedAt || now : undefined,
+          movieProgress: {
+            ...existing.movieProgress,
+            runtimeMinutes:
+              seriesItem.runtimeMinutes || existing.movieProgress?.runtimeMinutes,
+            watchedDate:
+              targetStatus === "completed"
+                ? existing.movieProgress?.watchedDate || now.slice(0, 10)
+                : undefined,
+          },
+        };
+        nextItems = currentItems.map((item, idx) =>
+          idx === existingIndex ? updated : item,
+        );
+      }
+    } else {
+      const newItem: MediaItem = {
+        id: `media_movie_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "movie",
+        title: seriesItem.title,
+        creator: seriesItem.director,
+        coverUrl: seriesItem.coverUrl,
+        releaseYear: seriesItem.releaseYear,
+        genres: seriesItem.genres,
+        status: targetStatus,
+        rating:
+          rating !== undefined
+            ? rating
+            : targetStatus === "completed" && seriesItem.imdbRating
+              ? Math.round(seriesItem.imdbRating)
+              : 0,
+        favorite: false,
+        seriesId: seriesItem.seriesId,
+        seriesItemId: seriesItem.id,
+        movieProgress: {
+          runtimeMinutes: seriesItem.runtimeMinutes,
+          watchedDate: targetStatus === "completed" ? now.slice(0, 10) : undefined,
+        },
+        createdAt: now,
+        updatedAt: now,
+        finishedAt: targetStatus === "completed" ? now : undefined,
+      };
+      nextItems = [newItem, ...currentItems];
+    }
+
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  batchAddSeriesToWatchlist: async (series: MovieSeries) => {
+    const currentItems = get().items;
+    const now = new Date().toISOString();
+    const newItemsToAdd: MediaItem[] = [];
+
+    for (const movie of series.items) {
+      const movieNorm = normalizeTitle(movie.title);
+      const exists = currentItems.some((i) => {
+        if (i.seriesItemId && i.seriesItemId === movie.id) return true;
+        if (i.type !== "movie") return false;
+        return normalizeTitle(i.title) === movieNorm;
+      });
+
+      if (!exists) {
+        newItemsToAdd.push({
+          id: `media_movie_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          type: "movie",
+          title: movie.title,
+          creator: movie.director,
+          coverUrl: movie.coverUrl,
+          releaseYear: movie.releaseYear,
+          genres: movie.genres,
+          status: "backlog",
+          rating: 0,
+          favorite: false,
+          seriesId: series.id,
+          seriesItemId: movie.id,
+          movieProgress: {
+            runtimeMinutes: movie.runtimeMinutes,
+          },
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+    }
+
+    if (newItemsToAdd.length === 0) return;
+
+    const nextItems = [...newItemsToAdd, ...currentItems];
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
   },
 
   loadSampleData: async () => {

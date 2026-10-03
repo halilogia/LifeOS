@@ -67,6 +67,8 @@ export interface MediaItem {
   movieProgress?: MovieProgress;
   tvProgress?: TvProgress;
   bookProgress?: BookProgress;
+  seriesId?: string;
+  seriesItemId?: string;
   gameProgress?: GameProgress;
   createdAt: string;
   updatedAt: string;
@@ -80,7 +82,7 @@ export type MediaSortBy =
   | "title"
   | "progress";
 
-export type MediaTypeFilter = "all" | MediaType;
+export type MediaTypeFilter = "all" | MediaType | "series";
 
 export type MediaStatusFilter = "all" | MediaStatus;
 
@@ -97,4 +99,35 @@ export interface MediaStats {
   inProgressCount: number;
   completedCount: number;
   backlogCount: number;
+}
+
+export interface MovieSeriesItem {
+  id: string;
+  seriesId: string;
+  title: string;
+  originalTitle?: string;
+  releaseYear: number;
+  releaseOrder: number;
+  chronologicalOrder?: number;
+  phaseOrArc?: string;
+  director?: string;
+  runtimeMinutes?: number;
+  imdbRating?: number;
+  genres?: string[];
+  coverUrl: string;
+  backdropUrl?: string;
+  synopsis?: string;
+}
+
+export interface MovieSeries {
+  id: string;
+  title: string;
+  originalTitle?: string;
+  description: string;
+  bannerUrl: string;
+  totalMovies: number;
+  averageRating: number;
+  genres: string[];
+  hasChronologicalOrder?: boolean;
+  items: MovieSeriesItem[];
 }

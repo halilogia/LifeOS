@@ -7,6 +7,8 @@ import { MediaToolbar } from "./MediaToolbar.js";
 import { MediaGrid } from "./MediaGrid.js";
 import { MediaDetailModal } from "./MediaDetailModal.js";
 import { MediaQuotesModal } from "./MediaQuotesModal.js";
+import { MovieSeriesHub } from "./MovieSeriesHub.js";
+import { MovieSeriesTimelineModal } from "./MovieSeriesTimelineModal.js";
 import { logger } from "@/utils/logger.js";
 
 interface MediaViewProps {
@@ -29,6 +31,10 @@ export function MediaView({ lang }: MediaViewProps) {
   const defaultModalType = useMediaStore((s) => s.defaultModalType);
   const isQuotesModalOpen = useMediaStore((s) => s.isQuotesModalOpen);
   const selectedBookForQuotes = useMediaStore((s) => s.selectedBookForQuotes);
+  const selectedSeriesForTimeline = useMediaStore(
+    (s) => s.selectedSeriesForTimeline,
+  );
+  const isSeriesTimelineOpen = useMediaStore((s) => s.isSeriesTimelineOpen);
 
   const loadItems = useMediaStore((s) => s.loadItems);
   const addItem = useMediaStore((s) => s.addItem);
@@ -38,6 +44,10 @@ export function MediaView({ lang }: MediaViewProps) {
   const incrementProgress = useMediaStore((s) => s.incrementProgress);
   const addQuote = useMediaStore((s) => s.addQuote);
   const removeQuote = useMediaStore((s) => s.removeQuote);
+  const toggleSeriesItem = useMediaStore((s) => s.toggleSeriesItem);
+  const batchAddSeriesToWatchlist = useMediaStore(
+    (s) => s.batchAddSeriesToWatchlist,
+  );
 
   const setTypeFilter = useMediaStore((s) => s.setTypeFilter);
   const setStatusFilter = useMediaStore((s) => s.setStatusFilter);
@@ -49,6 +59,8 @@ export function MediaView({ lang }: MediaViewProps) {
   const closeDetailModal = useMediaStore((s) => s.closeDetailModal);
   const openQuotesModal = useMediaStore((s) => s.openQuotesModal);
   const closeQuotesModal = useMediaStore((s) => s.closeQuotesModal);
+  const openSeriesTimeline = useMediaStore((s) => s.openSeriesTimeline);
+  const closeSeriesTimeline = useMediaStore((s) => s.closeSeriesTimeline);
   const loadSampleData = useMediaStore((s) => s.loadSampleData);
   const exportBackup = useMediaStore((s) => s.exportBackup);
   const importBackup = useMediaStore((s) => s.importBackup);
@@ -154,22 +166,45 @@ export function MediaView({ lang }: MediaViewProps) {
         onImport={handleImport}
       />
 
-      {/* Grid of Cards */}
+      {/* Grid of Cards or Movie Series Hub */}
       <main className="media-content-main">
-        <MediaGrid
-          items={filteredItems}
-          lang={lang}
-          onEdit={openEditModal}
-          onDelete={deleteItem}
-          onToggleFavorite={toggleFavorite}
-          onIncrement={incrementProgress}
-          onOpenQuotes={openQuotesModal}
-          onAddClick={() =>
-            openCreateModal(
-              activeTypeFilter === "all" ? "movie" : activeTypeFilter,
-            )
-          }
-        />
+        {activeTypeFilter === "series" ? (
+          <MovieSeriesHub
+            lang={lang}
+            userItems={items}
+            onOpenTimeline={openSeriesTimeline}
+            onBatchWatchlist={batchAddSeriesToWatchlist}
+            isStandaloneTab={true}
+          />
+        ) : (
+          <>
+            {/* If user library is empty, showcase popular movie series immediately instead of a blank void */}
+            {items.length === 0 && (
+              <MovieSeriesHub
+                lang={lang}
+                userItems={items}
+                onOpenTimeline={openSeriesTimeline}
+                onBatchWatchlist={batchAddSeriesToWatchlist}
+                isStandaloneTab={false}
+              />
+            )}
+
+            <MediaGrid
+              items={filteredItems}
+              lang={lang}
+              onEdit={openEditModal}
+              onDelete={deleteItem}
+              onToggleFavorite={toggleFavorite}
+              onIncrement={incrementProgress}
+              onOpenQuotes={openQuotesModal}
+              onAddClick={() =>
+                openCreateModal(
+                  activeTypeFilter === "all" ? "movie" : activeTypeFilter,
+                )
+              }
+            />
+          </>
+        )}
       </main>
 
       {/* Add / Edit Detail Modal */}
@@ -204,6 +239,17 @@ export function MediaView({ lang }: MediaViewProps) {
         onAddQuote={addQuote}
         onRemoveQuote={removeQuote}
         onClose={closeQuotesModal}
+      />
+
+      {/* Movie Series Interactive Timeline Modal */}
+      <MovieSeriesTimelineModal
+        isOpen={isSeriesTimelineOpen}
+        series={selectedSeriesForTimeline}
+        userItems={items}
+        lang={lang}
+        onToggleStatus={toggleSeriesItem}
+        onBatchWatchlist={batchAddSeriesToWatchlist}
+        onClose={closeSeriesTimeline}
       />
     </div>
   );

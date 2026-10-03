@@ -51,11 +51,11 @@ export function MediaGrid({
           </svg>
         </div>
         <h3 className="media-empty-title">
-          {t.media_empty_title || "No media items logged yet"}
+          {t.media_empty_title || "Henüz kayıtlı medya bulunmuyor"}
         </h3>
         <p className="media-empty-desc">
           {t.media_empty_desc ||
-            "Click 'Add Media' above to log your movies, TV series, books, or games."}
+            "Yukarıdaki popüler serilerden izlediklerinizi işaretleyebilir veya 'Yeni Ekle' butonuyla kendi içeriklerinizi ekleyebilirsiniz."}
         </p>
         <button
           type="button"
