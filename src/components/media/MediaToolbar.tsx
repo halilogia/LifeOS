@@ -1,4 +1,3 @@
-import { useRef } from "preact/hooks";
 import type { Language } from "@/types/types.js";
 import type {
   MediaTypeFilter,
@@ -17,10 +16,6 @@ interface MediaToolbarProps {
   onStatusChange: (status: MediaStatusFilter) => void;
   onSearchChange: (q: string) => void;
   onSortChange: (sort: MediaSortBy) => void;
-  onAddClick: () => void;
-  onLoadSamples: () => void;
-  onExport: () => void;
-  onImport: (file: File) => void;
 }
 
 export function MediaToolbar({
@@ -33,42 +28,27 @@ export function MediaToolbar({
   onStatusChange,
   onSearchChange,
   onSortChange,
-  onAddClick,
-  onLoadSamples,
-  onExport,
-  onImport,
 }: MediaToolbarProps) {
   const t = getTranslation(lang);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const categories: { key: MediaTypeFilter; label: string }[] = [
-    { key: "all", label: t.media_tab_all || "All" },
-    { key: "series", label: t.media_tab_series || "Film Serileri" },
-    { key: "movie", label: t.media_tab_movie || "Movies" },
-    { key: "tv", label: t.media_tab_tv || "TV Series" },
-    { key: "book", label: t.media_tab_book || "Books" },
-    { key: "game", label: t.media_tab_game || "Games" },
+  const categories: { key: MediaTypeFilter; label: string; icon: string }[] = [
+    { key: "all", label: t.media_tab_all || "Tümü", icon: "🌟" },
+    { key: "series", label: t.media_tab_series || "Film Serileri", icon: "🎬" },
+    { key: "movie", label: t.media_tab_movie || "Kült Filmler", icon: "🍿" },
+    { key: "book", label: t.media_tab_book || "Kitaplar", icon: "📚" },
+    { key: "game", label: t.media_tab_game || "Oyunlar", icon: "🎮" },
   ];
 
   const statuses: { key: MediaStatusFilter; label: string }[] = [
-    { key: "all", label: t.media_status_all || "All Statuses" },
-    { key: "in_progress", label: t.media_status_in_progress || "In Progress" },
-    { key: "completed", label: t.media_status_completed || "Completed" },
-    { key: "backlog", label: t.media_status_backlog || "Backlog / Watchlist" },
-    { key: "dropped", label: t.media_status_dropped || "Dropped" },
+    { key: "all", label: t.media_status_all || "Tümü" },
+    { key: "completed", label: "✓ " + (t.media_status_completed || "Tamamlananlar") },
+    { key: "in_progress", label: "⏳ " + (t.media_status_in_progress || "Devam Edenler") },
+    { key: "backlog", label: "➕ " + (t.media_status_backlog || "İstek Listem") },
   ];
-
-  const handleFileChange = (e: Event) => {
-    const input = e.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      onImport(input.files[0]);
-      input.value = "";
-    }
-  };
 
   return (
     <div className="media-toolbar-container">
-      {/* Category Tabs & Action Buttons Row */}
+      {/* Category Tabs */}
       <div className="media-toolbar-top-row">
         <div className="media-category-tabs" role="tablist">
           {categories.map((cat) => (
@@ -79,107 +59,10 @@ export function MediaToolbar({
               className={`media-category-tab ${activeTypeFilter === cat.key ? "active" : ""}`}
               onClick={() => onTypeChange(cat.key)}
             >
-              {cat.label}
+              <span className="tab-icon">{cat.icon}</span>
+              <span>{cat.label}</span>
             </button>
           ))}
-        </div>
-
-        <div className="media-toolbar-actions">
-          <button
-            type="button"
-            className="media-btn-secondary"
-            title={t.media_btn_sample_data || "Load Samples"}
-            onClick={onLoadSamples}
-          >
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="23 4 23 10 17 10" />
-              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-            </svg>
-            <span>{t.media_btn_sample_data || "Load Samples"}</span>
-          </button>
-
-          <button
-            type="button"
-            className="media-btn-secondary"
-            title={t.media_btn_export || "Export (JSON)"}
-            onClick={onExport}
-          >
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span>{t.media_btn_export || "Export"}</span>
-          </button>
-
-          <button
-            type="button"
-            className="media-btn-secondary"
-            title={t.media_btn_import || "Import JSON"}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            <span>{t.media_btn_import || "Import"}</span>
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-
-          <button
-            type="button"
-            className="media-btn-primary"
-            onClick={onAddClick}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            <span>{t.media_btn_add || "Add Media"}</span>
-          </button>
         </div>
       </div>
 
@@ -222,7 +105,7 @@ export function MediaToolbar({
               value={searchQuery}
               placeholder={
                 t.media_search_placeholder ||
-                "Search by title, creator, genre..."
+                "Başlık, yazar, stüdyo veya tür ara..."
               }
               onInput={(e) =>
                 onSearchChange((e.target as HTMLInputElement).value)
@@ -241,7 +124,7 @@ export function MediaToolbar({
 
           <div className="media-sort-wrapper">
             <label htmlFor="media-sort-select" className="media-sort-label">
-              {t.media_sort_label || "Sort"}:
+              {t.media_sort_label || "Sırala"}:
             </label>
             <select
               id="media-sort-select"
@@ -253,20 +136,14 @@ export function MediaToolbar({
                 )
               }
             >
-              <option value="updated">
-                {t.media_sort_updated || "Recently Updated"}
-              </option>
               <option value="rating_desc">
-                {t.media_sort_rating_desc || "Highest Rated"}
-              </option>
-              <option value="rating_asc">
-                {t.media_sort_rating_asc || "Lowest Rated"}
+                {t.media_sort_rating_desc || "En Yüksek Puan"}
               </option>
               <option value="title">
-                {t.media_sort_title || "Title (A-Z)"}
+                {t.media_sort_title || "İsim (A-Z)"}
               </option>
-              <option value="progress">
-                {t.media_sort_progress || "Progress %"}
+              <option value="updated">
+                {t.media_sort_updated || "Son Güncellenen"}
               </option>
             </select>
           </div>

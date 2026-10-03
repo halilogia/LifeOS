@@ -27,6 +27,11 @@ import {
   getSampleMediaItems,
 } from "@/services/mediaService.js";
 import { normalizeTitle } from "@/services/movieSeriesData.js";
+import type {
+  CuratedBookItem,
+  CuratedGameItem,
+  CuratedMovieItem,
+} from "@/services/curatedCatalogData.js";
 import { logger } from "@/utils/logger.js";
 
 const mediaRepo = new ChromeStorageMediaRepository();
@@ -70,6 +75,22 @@ interface MediaState {
     rating?: number,
   ) => Promise<void>;
   batchAddSeriesToWatchlist: (series: MovieSeries) => Promise<void>;
+
+  toggleCuratedBook: (
+    book: CuratedBookItem,
+    targetStatus: "completed" | "in_progress" | "backlog",
+    rating?: number,
+  ) => Promise<void>;
+  toggleCuratedGame: (
+    game: CuratedGameItem,
+    targetStatus: "completed" | "in_progress" | "backlog",
+    rating?: number,
+  ) => Promise<void>;
+  toggleCuratedMovie: (
+    movie: CuratedMovieItem,
+    targetStatus: "completed" | "backlog",
+    rating?: number,
+  ) => Promise<void>;
 
   setTypeFilter: (filter: MediaTypeFilter) => void;
   setStatusFilter: (filter: MediaStatusFilter) => void;
@@ -492,6 +513,262 @@ export const useMediaStore = create<MediaState>((set, get) => ({
     if (newItemsToAdd.length === 0) return;
 
     const nextItems = [...newItemsToAdd, ...currentItems];
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  toggleCuratedBook: async (book, targetStatus, rating) => {
+    const currentItems = get().items;
+    const bookNorm = normalizeTitle(book.title);
+    const existingIndex = currentItems.findIndex(
+      (i) => i.type === "book" && normalizeTitle(i.title) === bookNorm,
+    );
+    const now = new Date().toISOString();
+    let nextItems: MediaItem[];
+
+    if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      if (existing.status === targetStatus && rating === undefined) {
+        nextItems = currentItems.filter((_, idx) => idx !== existingIndex);
+      } else {
+        const updated: MediaItem = {
+          ...existing,
+          status: targetStatus,
+          rating:
+            rating !== undefined
+              ? rating
+              : existing.rating ||
+                (targetStatus === "completed" ? Math.round(book.rating) : 0),
+          updatedAt: now,
+          finishedAt:
+            targetStatus === "completed" ? existing.finishedAt || now : undefined,
+          bookProgress: {
+            currentPage:
+              targetStatus === "completed"
+                ? book.totalPages
+                : targetStatus === "in_progress"
+                  ? existing.bookProgress?.currentPage ||
+                    Math.round(book.totalPages * 0.2)
+                  : 0,
+            totalPages: book.totalPages,
+            quotes: existing.bookProgress?.quotes || [],
+          },
+        };
+        nextItems = currentItems.map((item, idx) =>
+          idx === existingIndex ? updated : item,
+        );
+      }
+    } else {
+      const newItem: MediaItem = {
+        id: `media_book_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "book",
+        title: book.title,
+        creator: book.author,
+        coverUrl: book.coverUrl,
+        releaseYear: book.releaseYear > 0 ? book.releaseYear : undefined,
+        genres: [book.category, ...book.genres],
+        status: targetStatus,
+        rating:
+          rating !== undefined
+            ? rating
+            : targetStatus === "completed"
+              ? Math.round(book.rating)
+              : 0,
+        favorite: false,
+        bookProgress: {
+          currentPage:
+            targetStatus === "completed"
+              ? book.totalPages
+              : targetStatus === "in_progress"
+                ? Math.round(book.totalPages * 0.2)
+                : 0,
+          totalPages: book.totalPages,
+          quotes: [],
+        },
+        createdAt: now,
+        updatedAt: now,
+        finishedAt: targetStatus === "completed" ? now : undefined,
+      };
+      nextItems = [newItem, ...currentItems];
+    }
+
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  toggleCuratedGame: async (game, targetStatus, rating) => {
+    const currentItems = get().items;
+    const gameNorm = normalizeTitle(game.title);
+    const existingIndex = currentItems.findIndex(
+      (i) => i.type === "game" && normalizeTitle(i.title) === gameNorm,
+    );
+    const now = new Date().toISOString();
+    let nextItems: MediaItem[];
+
+    if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      if (existing.status === targetStatus && rating === undefined) {
+        nextItems = currentItems.filter((_, idx) => idx !== existingIndex);
+      } else {
+        const updated: MediaItem = {
+          ...existing,
+          status: targetStatus,
+          rating:
+            rating !== undefined
+              ? rating
+              : existing.rating ||
+                (targetStatus === "completed" ? Math.round(game.rating) : 0),
+          updatedAt: now,
+          finishedAt:
+            targetStatus === "completed" ? existing.finishedAt || now : undefined,
+          gameProgress: {
+            playtimeHours:
+              targetStatus === "completed"
+                ? game.playtimeHours
+                : targetStatus === "in_progress"
+                  ? existing.gameProgress?.playtimeHours ||
+                    Math.round(game.playtimeHours * 0.3)
+                  : 0,
+            targetHours: game.playtimeHours,
+            playstyle: existing.gameProgress?.playstyle || "main_story",
+            platform: game.platform,
+          },
+        };
+        nextItems = currentItems.map((item, idx) =>
+          idx === existingIndex ? updated : item,
+        );
+      }
+    } else {
+      const newItem: MediaItem = {
+        id: `media_game_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "game",
+        title: game.title,
+        creator: game.developer,
+        coverUrl: game.coverUrl,
+        releaseYear: game.releaseYear,
+        genres: [game.category, ...game.genres],
+        status: targetStatus,
+        rating:
+          rating !== undefined
+            ? rating
+            : targetStatus === "completed"
+              ? Math.round(game.rating)
+              : 0,
+        favorite: false,
+        gameProgress: {
+          playtimeHours:
+            targetStatus === "completed"
+              ? game.playtimeHours
+              : targetStatus === "in_progress"
+                ? Math.round(game.playtimeHours * 0.3)
+                : 0,
+          targetHours: game.playtimeHours,
+          playstyle: "main_story",
+          platform: game.platform,
+        },
+        createdAt: now,
+        updatedAt: now,
+        finishedAt: targetStatus === "completed" ? now : undefined,
+      };
+      nextItems = [newItem, ...currentItems];
+    }
+
+    await mediaRepo.saveItems(nextItems);
+    const stats = computeMediaStats(nextItems);
+    const state = get();
+    const filtered = filterAndSortItems(
+      nextItems,
+      state.activeTypeFilter,
+      state.activeStatusFilter,
+      state.searchQuery,
+      state.sortBy,
+    );
+    set({ items: nextItems, stats, filteredItems: filtered });
+  },
+
+  toggleCuratedMovie: async (movie, targetStatus, rating) => {
+    const currentItems = get().items;
+    const movieNorm = normalizeTitle(movie.title);
+    const origNorm = movie.originalTitle
+      ? normalizeTitle(movie.originalTitle)
+      : "";
+    const existingIndex = currentItems.findIndex(
+      (i) =>
+        i.type === "movie" &&
+        (normalizeTitle(i.title) === movieNorm ||
+          (origNorm && normalizeTitle(i.title) === origNorm)),
+    );
+    const now = new Date().toISOString();
+    let nextItems: MediaItem[];
+
+    if (existingIndex >= 0) {
+      const existing = currentItems[existingIndex];
+      if (existing.status === targetStatus && rating === undefined) {
+        nextItems = currentItems.filter((_, idx) => idx !== existingIndex);
+      } else {
+        const updated: MediaItem = {
+          ...existing,
+          status: targetStatus,
+          rating:
+            rating !== undefined
+              ? rating
+              : existing.rating ||
+                (targetStatus === "completed" ? Math.round(movie.rating) : 0),
+          updatedAt: now,
+          finishedAt:
+            targetStatus === "completed" ? existing.finishedAt || now : undefined,
+        };
+        nextItems = currentItems.map((item, idx) =>
+          idx === existingIndex ? updated : item,
+        );
+      }
+    } else {
+      const newItem: MediaItem = {
+        id: `media_movie_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "movie",
+        title: movie.title,
+        creator: movie.director,
+        coverUrl: movie.coverUrl,
+        releaseYear: movie.releaseYear,
+        genres: movie.genres,
+        status: targetStatus,
+        rating:
+          rating !== undefined
+            ? rating
+            : targetStatus === "completed"
+              ? Math.round(movie.rating)
+              : 0,
+        favorite: false,
+        movieProgress: {
+          runtimeMinutes: movie.runtimeMinutes,
+          watchedDate:
+            targetStatus === "completed" ? now.slice(0, 10) : undefined,
+        },
+        createdAt: now,
+        updatedAt: now,
+        finishedAt: targetStatus === "completed" ? now : undefined,
+      };
+      nextItems = [newItem, ...currentItems];
+    }
+
     await mediaRepo.saveItems(nextItems);
     const stats = computeMediaStats(nextItems);
     const state = get();
