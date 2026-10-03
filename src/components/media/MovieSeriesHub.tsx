@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState, useRef } from "preact/hooks";
 import type { Language } from "@/types/types.js";
 import type { MediaItem, MovieSeries } from "@/types/media.js";
 import { getTranslation } from "@/utils/i18n.js";
@@ -25,6 +25,8 @@ export function MovieSeriesHub({
   const t = getTranslation(lang);
   const seriesList = getMovieSeriesList();
   const [selectedGenre, setSelectedGenre] = useState<string>("all");
+  const [layoutMode, setLayoutMode] = useState<"shelf" | "grid">("shelf");
+  const shelfRef = useRef<HTMLDivElement>(null);
 
   const allGenres = Array.from(
     new Set(seriesList.flatMap((s) => s.genres)),
@@ -34,6 +36,18 @@ export function MovieSeriesHub({
     if (selectedGenre === "all") return true;
     return s.genres.includes(selectedGenre);
   });
+
+  const handleScrollLeft = () => {
+    if (shelfRef.current) {
+      shelfRef.current.scrollBy({ left: -360, behavior: "smooth" });
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (shelfRef.current) {
+      shelfRef.current.scrollBy({ left: 360, behavior: "smooth" });
+    }
+  };
 
   return (
     <section className={`movie-series-hub-section ${isStandaloneTab ? "standalone" : ""}`}>
@@ -53,30 +67,92 @@ export function MovieSeriesHub({
           </p>
         </div>
 
-        {/* Quick Genre Filter Chips */}
-        <div className="movie-series-genre-chips">
-          <button
-            type="button"
-            className={`movie-series-chip ${selectedGenre === "all" ? "active" : ""}`}
-            onClick={() => setSelectedGenre("all")}
-          >
-            {t.media_tab_all || "Tümü"}
-          </button>
-          {allGenres.map((genre) => (
+        {/* Right Controls: Layout Mode & Navigation Arrows */}
+        <div className="movie-series-controls-right">
+          {/* Layout Toggle (Shelf vs Grid) */}
+          <div className="movie-series-layout-toggle" role="group" aria-label="Görünüm Modu">
             <button
-              key={genre}
               type="button"
-              className={`movie-series-chip ${selectedGenre === genre ? "active" : ""}`}
-              onClick={() => setSelectedGenre(genre)}
+              className={`layout-toggle-btn ${layoutMode === "shelf" ? "active" : ""}`}
+              onClick={() => setLayoutMode("shelf")}
+              title="Yatay Kaydırılabilir Raf Görünümü"
             >
-              {genre}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+              <span>Raf</span>
             </button>
-          ))}
+            <button
+              type="button"
+              className={`layout-toggle-btn ${layoutMode === "grid" ? "active" : ""}`}
+              onClick={() => setLayoutMode("grid")}
+              title="Izgara Görünümü (Tümü Ekrana Sığar)"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              <span>Izgara</span>
+            </button>
+          </div>
+
+          {/* Navigation Arrows (Visible in Shelf mode) */}
+          {layoutMode === "shelf" && (
+            <div className="movie-series-nav-arrows">
+              <button
+                type="button"
+                className="movie-series-arrow-btn"
+                onClick={handleScrollLeft}
+                title="Sola Kaydır"
+                aria-label="Sola Kaydır"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="movie-series-arrow-btn"
+                onClick={handleScrollRight}
+                title="Sağa Kaydır"
+                aria-label="Sağa Kaydır"
+              >
+                ›
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Horizontal Scrollable Shelf of Series Cards */}
-      <div className="movie-series-shelf" role="region" aria-label="Film Serileri">
+      {/* Quick Genre Filter Chips */}
+      <div className="movie-series-genre-chips">
+        <button
+          type="button"
+          className={`movie-series-chip ${selectedGenre === "all" ? "active" : ""}`}
+          onClick={() => setSelectedGenre("all")}
+        >
+          {t.media_tab_all || "Tümü"}
+        </button>
+        {allGenres.map((genre) => (
+          <button
+            key={genre}
+            type="button"
+            className={`movie-series-chip ${selectedGenre === genre ? "active" : ""}`}
+            onClick={() => setSelectedGenre(genre)}
+          >
+            {genre}
+          </button>
+        ))}
+      </div>
+
+      {/* Shelf or Grid of Series Cards */}
+      <div
+        ref={shelfRef}
+        className={layoutMode === "shelf" ? "movie-series-shelf" : "movie-series-grid"}
+        role="region"
+        aria-label="Film Serileri"
+      >
         {filteredSeries.map((series) => {
           const progress = computeSeriesProgress(series, userItems);
           const isComplete = progress.percent === 100;

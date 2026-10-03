@@ -4,6 +4,17 @@
  * Strictly consumes centralized design tokens from base.css.
  */
 
+.media-view-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  padding-right: var(--space-4, 12px);
+  padding-bottom: 80px;
+}
+
 .media-view-container {
   display: flex;
   flex-direction: column;
@@ -1161,12 +1172,85 @@
   box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
 }
 
+/* ── Right Controls: Layout Toggle & Arrows ────────────────── */
+.movie-series-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.movie-series-layout-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.layout-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.layout-toggle-btn:hover {
+  color: #ffffff;
+}
+
+.layout-toggle-btn.active {
+  background: var(--accent-color, #8b5cf6);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.35);
+}
+
+.movie-series-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.movie-series-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary, #f8fafc);
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.movie-series-arrow-btn:hover {
+  background: var(--accent-color, #8b5cf6);
+  border-color: var(--accent-color, #8b5cf6);
+  color: #ffffff;
+  transform: scale(1.06);
+}
+
 /* ── Horizontal Scroll Shelf ───────────────────────────────── */
 .movie-series-shelf {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding: 4px 2px 14px 2px;
+  scroll-behavior: smooth;
+  padding: 4px 32px 14px 2px;
   scroll-snap-type: x mandatory;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
@@ -1183,6 +1267,19 @@
 
 .movie-series-shelf::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Grid Layout Mode ──────────────────────────────────────── */
+.movie-series-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.movie-series-grid .movie-series-card {
+  flex: initial;
+  max-width: 100%;
 }
 
 /* ── Series Card ───────────────────────────────────────────── */

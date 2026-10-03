@@ -105,9 +105,10 @@ export function MediaView({ lang }: MediaViewProps) {
   };
 
   return (
-    <div id="media-view" className="media-view-container">
-      {/* Top Header */}
-      <header className="media-header">
+    <div id="media-view" className="view-content active media-view-wrapper">
+      <div className="media-view-container">
+        {/* Top Header */}
+        <header className="media-header">
         <div className="media-header-title-row">
           <div className="media-header-left">
             <div className="media-header-icon-box">
@@ -206,6 +207,7 @@ export function MediaView({ lang }: MediaViewProps) {
           </>
         )}
       </main>
+      </div>
 
       {/* Add / Edit Detail Modal */}
       <MediaDetailModal
