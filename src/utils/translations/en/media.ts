@@ -111,4 +111,17 @@ export const media = {
   media_filter_unwatched: "Only Unwatched",
   media_mark_watched: "Mark as Watched",
   media_add_watchlist: "Add to Watchlist",
+
+  media_movies_catalog_title: "Masterpiece Cult Movies of Cinema",
+  media_movies_catalog_subtitle:
+    "Standalone timeless cinema classics. Mark watched, add to watchlist, and evaluate with one click.",
+  media_tv_catalog_title: "Acclaimed TV Shows & Mini-Series",
+  media_tv_catalog_subtitle:
+    "Curated television masterpieces with ratings, seasons, and episodes. Track your watch progress seamlessly.",
+  media_books_catalog_title: "Masterpiece Literature & Philosophy Library",
+  media_books_catalog_subtitle:
+    "World classics from philosophy to dystopia. Easily track read books and evaluate in one click.",
+  media_games_catalog_title: "Award-Winning & Acclaimed Video Games",
+  media_games_catalog_subtitle:
+    "Top rated video games ranked by Metacritic acclaim. Track your backlog and evaluate with one click.",
 };

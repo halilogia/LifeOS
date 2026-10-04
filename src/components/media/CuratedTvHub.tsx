@@ -98,40 +98,53 @@ export function CuratedTvHub({
             <span>📺 Efsane Diziler & Mini-Seriler</span>
           </div>
           <h2 className="curated-catalog-title">
-            {t.media_tv_catalog_title || "Dünya Çapında Beğeni Toplayan Diziler"}
+            {t.media_tv_catalog_title && t.media_tv_catalog_title !== "media_tv_catalog_title"
+              ? t.media_tv_catalog_title
+              : "Dünya Çapında Beğeni Toplayan Diziler"}
           </h2>
           <p className="curated-catalog-subtitle">
-            {t.media_tv_catalog_subtitle ||
-              "IMDb puanları, sezon/bölüm sayıları ve türleriyle hazırlanmış dizi kataloğu. İzlediklerini veya izleme listeni tek tıkla işaretle."}
+            {t.media_tv_catalog_subtitle && t.media_tv_catalog_subtitle !== "media_tv_catalog_subtitle"
+              ? t.media_tv_catalog_subtitle
+              : "IMDb puanları, sezon/bölüm sayıları ve türleriyle hazırlanmış dizi kataloğu. İzlediklerini veya izleme listeni tek tıkla işaretle."}
           </p>
         </div>
 
         {/* Layout Switcher & Shelf Arrows */}
         <div className="curated-catalog-header-controls">
-          <div className="curated-layout-switcher">
+          <div className="movie-series-layout-toggle" role="group" aria-label="Görünüm Modu">
             <button
               type="button"
-              className={`curated-layout-btn ${layoutMode === "shelf" ? "active" : ""}`}
+              className={`layout-toggle-btn ${layoutMode === "shelf" ? "active" : ""}`}
               onClick={() => setLayoutMode("shelf")}
               title="Yatay Raf Görünümü"
             >
-              ↔️ Raf
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+              <span>Raf</span>
             </button>
             <button
               type="button"
-              className={`curated-layout-btn ${layoutMode === "grid" ? "active" : ""}`}
+              className={`layout-toggle-btn ${layoutMode === "grid" ? "active" : ""}`}
               onClick={() => setLayoutMode("grid")}
               title="Izgara Görünümü"
             >
-              ⊞ Izgara
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              <span>Izgara</span>
             </button>
           </div>
 
           {layoutMode === "shelf" && (
-            <div className="curated-shelf-nav-arrows">
+            <div className="movie-series-nav-arrows">
               <button
                 type="button"
-                className="curated-nav-arrow-btn"
+                className="movie-series-arrow-btn"
                 onClick={handleScrollLeft}
                 aria-label="Sola kaydır"
                 title="Sola Kaydır"
@@ -140,7 +153,7 @@ export function CuratedTvHub({
               </button>
               <button
                 type="button"
-                className="curated-nav-arrow-btn"
+                className="movie-series-arrow-btn"
                 onClick={handleScrollRight}
                 aria-label="Sağa kaydır"
                 title="Sağa Kaydır"
@@ -206,6 +219,11 @@ export function CuratedTvHub({
                   alt={show.title}
                   className="curated-card-cover"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80";
+                  }}
                 />
                 <div className="curated-card-pills">
                   <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>

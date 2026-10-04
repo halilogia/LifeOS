@@ -78,11 +78,14 @@ export function CuratedGamesHub({
             <span>🎮 En İyi & Başyapıt Oyunlar</span>
           </div>
           <h2 className="curated-catalog-title">
-            {t.media_games_catalog_title || "Ödüllü & Zirvedeki Video Oyunları"}
+            {t.media_games_catalog_title && t.media_games_catalog_title !== "media_games_catalog_title"
+              ? t.media_games_catalog_title
+              : "Ödüllü & Zirvedeki Video Oyunları"}
           </h2>
           <p className="curated-catalog-subtitle">
-            {t.media_games_catalog_subtitle ||
-              "Metacritic ve oyuncu değerlendirmelerine göre sıralanmış başyapıtlar. Oynadıklarını veya oynayacaklarını tek tıkla işaretle."}
+            {t.media_games_catalog_subtitle && t.media_games_catalog_subtitle !== "media_games_catalog_subtitle"
+              ? t.media_games_catalog_subtitle
+              : "Metacritic ve oyuncu değerlendirmelerine göre sıralanmış başyapıtlar. Oynadıklarını veya oynayacaklarını tek tıkla işaretle."}
           </p>
         </div>
 
@@ -93,10 +96,10 @@ export function CuratedGamesHub({
             className={`curated-chip ${selectedCategory === "all" ? "active" : ""}`}
             onClick={() => setSelectedCategory("all")}
           >
-            Tümü ({CURATED_GAMES.length})
+            Tümü ({games.length})
           </button>
           {categories.map((cat) => {
-            const count = CURATED_GAMES.filter((g) => g.category === cat).length;
+            const count = games.filter((g) => g.category === cat).length;
             return (
               <button
                 key={cat}
@@ -134,6 +137,11 @@ export function CuratedGamesHub({
                   alt={game.title}
                   className="curated-card-cover"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80";
+                  }}
                 />
                 <div className="curated-card-pills">
                   <span className="curated-rating-pill">★ {game.rating.toFixed(1)}</span>

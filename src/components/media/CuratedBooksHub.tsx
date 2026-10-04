@@ -75,11 +75,14 @@ export function CuratedBooksHub({
             <span>📚 Edebiyat, Felsefe & Düşünce</span>
           </div>
           <h2 className="curated-catalog-title">
-            {t.media_books_catalog_title || "Başyapıt Kitaplar & Düşünce Kütüphanesi"}
+            {t.media_books_catalog_title && t.media_books_catalog_title !== "media_books_catalog_title"
+              ? t.media_books_catalog_title
+              : "Başyapıt Kitaplar & Düşünce Kütüphanesi"}
           </h2>
           <p className="curated-catalog-subtitle">
-            {t.media_books_catalog_subtitle ||
-              "Distopyadan felsefeye, klasiklerden bilim kurguya dünya edebiyatı. Okuduklarını tek tıkla işaretle ve puanla."}
+            {t.media_books_catalog_subtitle && t.media_books_catalog_subtitle !== "media_books_catalog_subtitle"
+              ? t.media_books_catalog_subtitle
+              : "Distopyadan felsefeye, klasiklerden bilim kurguya dünya edebiyatı. Okuduklarını tek tıkla işaretle ve puanla."}
           </p>
         </div>
 
@@ -90,10 +93,10 @@ export function CuratedBooksHub({
             className={`curated-chip ${selectedCategory === "all" ? "active" : ""}`}
             onClick={() => setSelectedCategory("all")}
           >
-            Tümü ({CURATED_BOOKS.length})
+            Tümü ({books.length})
           </button>
           {categories.map((cat) => {
-            const count = CURATED_BOOKS.filter((b) => b.category === cat).length;
+            const count = books.filter((b) => b.category === cat).length;
             return (
               <button
                 key={cat}
@@ -131,6 +134,11 @@ export function CuratedBooksHub({
                   alt={book.title}
                   className="curated-card-cover"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80";
+                  }}
                 />
                 <div className="curated-card-pills">
                   <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>

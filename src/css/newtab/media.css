@@ -1260,6 +1260,12 @@
   height: 6px;
 }
 
+.movie-series-shelf::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .movie-series-shelf::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 3px;
@@ -2278,6 +2284,49 @@
   border-color: var(--accent-color, #8b5cf6);
   color: #ffffff;
   box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+/* ── Catalog Shelf & Controls ──────────────────────────────── */
+.curated-catalog-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.curated-catalog-shelf {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 32px 14px 2px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.curated-catalog-shelf::-webkit-scrollbar {
+  height: 6px;
+}
+
+.curated-catalog-shelf::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.curated-catalog-shelf::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.curated-catalog-shelf::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.curated-catalog-shelf .curated-card {
+  flex: 0 0 280px;
+  max-width: 280px;
+  scroll-snap-align: start;
 }
 
 /* ── Catalog Grid ──────────────────────────────────────────── */

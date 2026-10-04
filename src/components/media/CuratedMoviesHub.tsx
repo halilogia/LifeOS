@@ -97,40 +97,53 @@ export function CuratedMoviesHub({
             <span>🍿 IMDb Top Başyapıtlar</span>
           </div>
           <h2 className="curated-catalog-title">
-            {t.media_movies_catalog_title || "Sinema Tarihinin Zirvesindeki Kült Filmler"}
+            {t.media_movies_catalog_title && t.media_movies_catalog_title !== "media_movies_catalog_title"
+              ? t.media_movies_catalog_title
+              : "Sinema Tarihinin Zirvesindeki Kült Filmler"}
           </h2>
           <p className="curated-catalog-subtitle">
-            {t.media_movies_catalog_subtitle ||
-              "Seri dışındaki kült başyapıtlar. İzlediklerini işaretle, izleme listene al ve puanla."}
+            {t.media_movies_catalog_subtitle && t.media_movies_catalog_subtitle !== "media_movies_catalog_subtitle"
+              ? t.media_movies_catalog_subtitle
+              : "Seri dışındaki kült başyapıtlar. İzlediklerini işaretle, izleme listene al ve puanla."}
           </p>
         </div>
 
         {/* Layout Switcher & Shelf Controls */}
         <div className="curated-catalog-header-controls">
-          <div className="curated-layout-switcher">
+          <div className="movie-series-layout-toggle" role="group" aria-label="Görünüm Modu">
             <button
               type="button"
-              className={`curated-layout-btn ${layoutMode === "shelf" ? "active" : ""}`}
+              className={`layout-toggle-btn ${layoutMode === "shelf" ? "active" : ""}`}
               onClick={() => setLayoutMode("shelf")}
               title="Yatay Raf Görünümü"
             >
-              ↔️ Raf
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+              <span>Raf</span>
             </button>
             <button
               type="button"
-              className={`curated-layout-btn ${layoutMode === "grid" ? "active" : ""}`}
+              className={`layout-toggle-btn ${layoutMode === "grid" ? "active" : ""}`}
               onClick={() => setLayoutMode("grid")}
               title="Izgara Görünümü"
             >
-              ⊞ Izgara
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              <span>Izgara</span>
             </button>
           </div>
 
           {layoutMode === "shelf" && (
-            <div className="curated-shelf-nav-arrows">
+            <div className="movie-series-nav-arrows">
               <button
                 type="button"
-                className="curated-nav-arrow-btn"
+                className="movie-series-arrow-btn"
                 onClick={handleScrollLeft}
                 aria-label="Sola kaydır"
                 title="Sola Kaydır"
@@ -139,7 +152,7 @@ export function CuratedMoviesHub({
               </button>
               <button
                 type="button"
-                className="curated-nav-arrow-btn"
+                className="movie-series-arrow-btn"
                 onClick={handleScrollRight}
                 aria-label="Sağa kaydır"
                 title="Sağa Kaydır"
@@ -204,6 +217,11 @@ export function CuratedMoviesHub({
                   alt={movie.title}
                   className="curated-card-cover"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80";
+                  }}
                 />
                 <div className="curated-card-pills">
                   <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>

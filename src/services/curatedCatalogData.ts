@@ -1422,7 +1422,7 @@ export const CURATED_MOVIES: CuratedMovieItem[] = [
     runtimeMinutes: 202,
     category: "Suç & Drama",
     genres: ["Suç", "Dram", "Devam Filmi"],
-    coverUrl: "https://image.tmdb.org/t/p/w500/hek3koDUyMrk7uOB2SZ1q3j70V1.jpg",
+    coverUrl: "https://image.tmdb.org/t/p/w500/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
     rating: 9.0,
     synopsis: "Genç Vito Corleone'nin Sicilya'dan New York'a yükselişi ile oğlu Michael'ın aileyi Nevada ve Küba'da büyütürken yaşadığı trajik yalnızlaşma.",
   },

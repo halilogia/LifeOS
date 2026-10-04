@@ -113,4 +113,17 @@ export const media = {
   media_filter_unwatched: "Sadece İzlemediklerim",
   media_mark_watched: "İzlendi Yap",
   media_add_watchlist: "İzleme Listeme Ekle",
+
+  media_movies_catalog_title: "Sinema Tarihinin Zirvesindeki Kült Filmler",
+  media_movies_catalog_subtitle:
+    "Seri dışındaki kült başyapıtlar. İzlediklerini işaretle, izleme listene al ve puanla.",
+  media_tv_catalog_title: "Dünya Çapında Beğeni Toplayan Diziler",
+  media_tv_catalog_subtitle:
+    "IMDb puanları, sezon/bölüm sayıları ve türleriyle hazırlanmış dizi kataloğu. İzlediklerini veya izleme listeni tek tıkla işaretle.",
+  media_books_catalog_title: "Başyapıt Kitaplar & Düşünce Kütüphanesi",
+  media_books_catalog_subtitle:
+    "Distopyadan felsefeye, klasiklerden bilim kurguya dünya edebiyatı. Okuduklarını tek tıkla işaretle ve puanla.",
+  media_games_catalog_title: "Ödüllü & Zirvedeki Video Oyunları",
+  media_games_catalog_subtitle:
+    "Metacritic ve oyuncu değerlendirmelerine göre sıralanmış başyapıtlar. Oynadıklarını veya oynayacaklarını tek tıkla işaretle.",
 };
