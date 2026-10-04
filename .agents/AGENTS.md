@@ -138,6 +138,10 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 ### 5.7 Gerçekçi Veri ve Sıfır Sahte Statik Veri Protokolü (Zero Hardcoded Fake Data Protocol)
 * **Sıfır Sahte / Statik Veri Garantisi**: Kod tabanına, servislere veya veri katmanına kesinlikle elle yazılmış uydurma/sahte statik dummy veriler yerleştirilemez.
 * Veriler her zaman dinamik olarak kullanıcı girdisi, gerçek canlı API'ler (`chrome.storage.sync` / `local`) veya kullanıcının kendi yerel projeleri ve yerelleştirilmiş gerçek veri kaynaklarından okunmalı ve yönetilmelidir.
+* **Kaynak Metadata vs. Türetilmiş Sınıflandırma Ayrımı (2026-10-04)**: Bu protokol iki katmanı ayırır; karıştırılmamalıdır:
+  - **Kaynak metadata (source metadata) → asla uydurulamaz.** Gerçek bir dış kaynaktan (API, kullanıcı girdisi, yerel dosya) gelmeyen hiçbir alan domain modeline **yazılmaz**. Örn: `releaseYear`, `director`, `author`, `developer`, `platform`, `coverUrl`, `rating`, `synopsis` — bunlar API'de yoksa `undefined` kalır. Sahte `1950`/`2020` yılları, `"Yönetmen"`/`"Klasik Yazar"` gibi placeholder isimler, `"PC"` platformu veya uydurma kapak URL'leri **persist edilemez**.
+  - **Türetilmiş UI sınıflandırması (derived classification) → uygulama tarafından üretilebilir.** `category` gibi sunum/gruplama amaçlı, LifeOS'un kendi türettiği sınıflandırma alanları (örn. "Bilim Kurgu & Zihin Açıcı", "Rol Yapma (RPG)") sentetik olabilir; bunlar kaynak gerçeği iddia etmez, yalnızca UI'da gruplama sağlar.
+  - **Sunum katmanı fallback'i (presentation-only fallback)**: Eksik görsel gibi durumlarda nötr placeholder yalnızca render anında uygulanır (`resolveCoverSrc()`), domain modeline asla yazılmaz.
 
 ### 4.6 Merkezi ve Tekil AI Yapılandırma Protokolü (Sıfır API Hatası Garantisi)
 * **Merkezi AI Yapılandırması Zorunluluğu**: Yeni bir AI özelliği veya arka plan servisi eklenirken asla elle/ad-hoc `chrome.storage` ayrıştırma mantığı yazılmamalıdır. Her zaman `src/services/aiChatService.ts` içerisindeki tekil yetkili `getAIConfigFromStorage()` fonksiyonu kullanılmalıdır.

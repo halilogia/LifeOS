@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit Production Dependencies (fail on high/critical)
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Ensure CI & Clean Build Fixtures
         run: node scripts/ensureFixtures.mjs
 

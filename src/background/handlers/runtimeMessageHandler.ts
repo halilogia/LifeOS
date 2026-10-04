@@ -154,11 +154,19 @@ export async function handleRuntimeMessage(
   if (message.type === "execute_agent_action") {
     const { targetTabId, targetOrigin, targetUrl, payload } = message;
 
-    // Strict security enforcement: Caller MUST provide targetTabId and targetOrigin
-    if (typeof targetTabId !== "number" || !targetOrigin) {
+    // Strict fail-closed enforcement: Caller MUST provide all three binding fields.
+    // Omitting targetUrl would otherwise skip the exact-URL check entirely.
+    if (
+      typeof targetTabId !== "number" ||
+      typeof targetOrigin !== "string" ||
+      !targetOrigin ||
+      typeof targetUrl !== "string" ||
+      !targetUrl
+    ) {
       sendResponse({
         success: false,
-        error: "Security rejection: execute_agent_action requires verified targetTabId and targetOrigin binding.",
+        error:
+          "Security rejection: execute_agent_action requires verified targetTabId, targetOrigin and targetUrl binding.",
       });
       return true;
     }
@@ -194,17 +202,15 @@ export async function handleRuntimeMessage(
           return;
         }
 
-        if (typeof targetUrl === "string" && targetUrl) {
-          const expectedUrlObj = new URL(targetUrl);
-          // Compare pathname + search (ignore hash: intra-page anchors do not change document identity)
-          const normalize = (u: URL) => `${u.pathname}${u.search}`;
-          if (normalize(activeUrlObj) !== normalize(expectedUrlObj)) {
-            sendResponse({
-              success: false,
-              error: `URL mismatch: Action proposal was bound to ${normalize(expectedUrlObj)}, but active tab navigated to ${normalize(activeUrlObj)}. Execution blocked.`,
-            });
-            return;
-          }
+        const expectedUrlObj = new URL(targetUrl);
+        // Compare pathname + search (ignore hash: intra-page anchors do not change document identity)
+        const normalize = (u: URL) => `${u.pathname}${u.search}`;
+        if (normalize(activeUrlObj) !== normalize(expectedUrlObj)) {
+          sendResponse({
+            success: false,
+            error: `URL mismatch: Action proposal was bound to ${normalize(expectedUrlObj)}, but active tab navigated to ${normalize(activeUrlObj)}. Execution blocked.`,
+          });
+          return;
         }
       } catch {
         sendResponse({
