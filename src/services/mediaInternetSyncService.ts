@@ -123,6 +123,195 @@ export async function fetchPopularTvShowsFromTvMaze(limit = 20): Promise<Curated
 }
 
 /**
+ * Fetches curated books across subjects (philosophy, classics, dystopian, politics) from Open Library API.
+ */
+export async function fetchBooksFromOpenLibrary(
+  subjects = ["philosophy", "classic_literature", "dystopian", "politics"],
+  limitPerSubject = 15,
+): Promise<CuratedBookItem[]> {
+  const books: CuratedBookItem[] = [];
+
+  for (const subject of subjects) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+      const res = await fetch(
+        `https://openlibrary.org/subjects/${subject}.json?limit=${limitPerSubject}`,
+        { signal: controller.signal },
+      );
+      clearTimeout(timeoutId);
+
+      if (!res.ok) continue;
+
+      const data: {
+        works?: Array<{
+          key: string;
+          title: string;
+          authors?: Array<{ name: string }>;
+          first_publish_year?: number;
+          cover_id?: number;
+        }>;
+      } = await res.json();
+
+      if (!data.works) continue;
+
+      let categoryName = "Klasikler & Edebiyat";
+      if (subject === "philosophy") categoryName = "Felsefe & Düşünce";
+      else if (subject === "dystopian") categoryName = "Bilim Kurgu & Distopya";
+      else if (subject === "politics") categoryName = "Politika & Toplum";
+
+      for (const work of data.works) {
+        if (!work.title) continue;
+        const authorName =
+          work.authors && work.authors.length > 0
+            ? work.authors[0].name
+            : "Klasik Yazar";
+        const coverUrl = work.cover_id
+          ? `https://covers.openlibrary.org/b/id/${work.cover_id}-L.jpg`
+          : "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80";
+
+        books.push({
+          id: `web-ol-${work.key.replace(/\//g, "-")}`,
+          title: work.title,
+          author: authorName,
+          totalPages: 320,
+          releaseYear: work.first_publish_year || 1950,
+          category: categoryName,
+          genres: [categoryName, subject],
+          coverUrl,
+          rating: 8.8,
+          synopsis: `${work.title} - ${authorName} tarafından kaleme alınan ${categoryName.toLowerCase()} alanında saygın eser.`,
+        });
+      }
+    } catch (err) {
+      logger.warn(`[mediaInternetSyncService] Open Library ${subject} fetch skipped:`, err);
+    }
+  }
+
+  return books;
+}
+
+/**
+ * Fetches top rated movies from open movie catalog feeds (IMDb Top 250 / Open database).
+ */
+export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<CuratedMovieItem[]> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    const res = await fetch(
+      "https://raw.githubusercontent.com/movie-monk-b0t/top250/master/top250.json",
+      { signal: controller.signal },
+    );
+    clearTimeout(timeoutId);
+
+    if (!res.ok) return [];
+
+    const data: Array<{
+      name: string;
+      image?: string;
+      description?: string;
+      datePublished?: string;
+      director?: Array<{ name: string }>;
+      genre?: string[];
+      aggregateRating?: { ratingValue?: number };
+    }> = await res.json();
+
+    return data.slice(0, limit).map((m, idx): CuratedMovieItem => {
+      const year = m.datePublished ? parseInt(m.datePublished.slice(0, 4), 10) : 2000;
+      const director =
+        m.director && m.director.length > 0 ? m.director[0].name : "Yönetmen";
+      const rating = m.aggregateRating?.ratingValue || 8.5;
+      const genres = m.genre && m.genre.length > 0 ? m.genre : ["Dram", "Kült"];
+
+      let category = "Kült Başyapıtlar";
+      if (genres.some((g) => /sci-fi|fantasy/i.test(g))) {
+        category = "Bilim Kurgu & Zihin Açıcı";
+      } else if (genres.some((g) => /crime|mystery/i.test(g))) {
+        category = "Suç & Kara Film";
+      } else if (genres.some((g) => /history|war/i.test(g))) {
+        category = "Tarih & Biyografi";
+      }
+
+      return {
+        id: `web-imdb-${idx}-${m.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`,
+        title: m.name,
+        originalTitle: m.name,
+        director,
+        releaseYear: isNaN(year) ? 2000 : year,
+        category,
+        genres,
+        coverUrl:
+          m.image ||
+          "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
+        rating,
+        synopsis: m.description || `${m.name}, IMDb Top listesinde yer alan kült sinema eseri.`,
+      };
+    });
+  } catch (err) {
+    logger.warn("[mediaInternetSyncService] Open movies fetch skipped:", err);
+    return [];
+  }
+}
+
+/**
+ * Fetches popular gaming titles from open database.
+ */
+export async function fetchGamesFromOpenApi(limit = 30): Promise<CuratedGameItem[]> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    const res = await fetch("https://www.freetogame.com/api/games", {
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) return [];
+
+    const data: Array<{
+      id: number;
+      title: string;
+      thumbnail?: string;
+      short_description?: string;
+      genre?: string;
+      developer?: string;
+      publisher?: string;
+      release_date?: string;
+    }> = await res.json();
+
+    return data.slice(0, limit).map((g): CuratedGameItem => {
+      const year = g.release_date ? parseInt(g.release_date.slice(0, 4), 10) : 2020;
+      const genre = g.genre || "Aksiyon";
+      let category = "Aksiyon & Macera";
+      if (/rpg|mmorpg/i.test(genre)) category = "Rol Yapma (RPG)";
+      else if (/strategy/i.test(genre)) category = "Strateji";
+
+      return {
+        id: `web-game-${g.id}`,
+        title: g.title,
+        developer: g.developer || g.publisher || "Oyun Stüdyosu",
+        releaseYear: isNaN(year) ? 2020 : year,
+        category,
+        genres: [genre, "Popüler"],
+        coverUrl:
+          g.thumbnail ||
+          "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80",
+        rating: 8.8,
+        playtimeHours: 40,
+        synopsis:
+          g.short_description ||
+          `${g.title} dünya genelinde milyonlarca oyuncusu bulunan popüler video oyunu.`,
+      };
+    });
+  } catch (err) {
+    logger.warn("[mediaInternetSyncService] Games fetch skipped:", err);
+    return [];
+  }
+}
+
+/**
  * Merges two lists of items while preserving unique normalized titles.
  */
 function mergeByTitle<T extends { title: string; originalTitle?: string }>(
@@ -214,7 +403,8 @@ export function getActiveMergedCatalog(): {
 }
 
 /**
- * Performs a live sync from the internet and updates cache.
+ * Performs a comprehensive multi-source live sync from the internet for ALL categories
+ * (TV Shows, Books, Movies, Games) and updates cache.
  */
 export async function syncAllCatalogsFromWeb(forceRefresh = false): Promise<SyncCatalogResult> {
   const cached = getStoredWebCatalog();
@@ -236,14 +426,24 @@ export async function syncAllCatalogsFromWeb(forceRefresh = false): Promise<Sync
   }
 
   try {
-    // 1. Fetch live TV shows
-    const liveTvShows = await fetchPopularTvShowsFromTvMaze(25);
+    // 1. Fetch TV, Books, Movies, Games in parallel
+    const [tvResult, booksResult, moviesResult, gamesResult] = await Promise.allSettled([
+      fetchPopularTvShowsFromTvMaze(40),
+      fetchBooksFromOpenLibrary(["philosophy", "classic_literature", "dystopian", "politics"], 15),
+      fetchTopMoviesFromOpenDataset(40),
+      fetchGamesFromOpenApi(30),
+    ]);
 
-    // 2. Merge TV shows with base
+    const liveTvShows = tvResult.status === "fulfilled" ? tvResult.value : [];
+    const liveBooks = booksResult.status === "fulfilled" ? booksResult.value : [];
+    const liveMovies = moviesResult.status === "fulfilled" ? moviesResult.value : [];
+    const liveGames = gamesResult.status === "fulfilled" ? gamesResult.value : [];
+
+    // 2. Merge with base catalogs
     const mergedTv = mergeByTitle(CURATED_TV_SHOWS, liveTvShows);
-    const mergedBooks = CURATED_BOOKS;
-    const mergedGames = CURATED_GAMES;
-    const mergedMovies = CURATED_MOVIES;
+    const mergedBooks = mergeByTitle(CURATED_BOOKS, liveBooks);
+    const mergedMovies = mergeByTitle(CURATED_MOVIES, liveMovies);
+    const mergedGames = mergeByTitle(CURATED_GAMES, liveGames);
 
     const newCache: WebCatalogCache = {
       lastUpdated: new Date().toISOString(),
