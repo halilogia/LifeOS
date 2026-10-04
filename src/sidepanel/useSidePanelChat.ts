@@ -505,9 +505,22 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
             finalContent = cleanPromptResponse;
 
+            const targetOrigin = activeCtx?.url
+              ? (() => {
+                  try {
+                    return new URL(activeCtx.url).origin;
+                  } catch {
+                    return undefined;
+                  }
+                })()
+              : undefined;
+
             // Deterministic Security Policy Evaluation
             const evalResult = evaluateActionProposal(actionPayload, {
-              expectedUrl: pageContext?.url,
+              expectedTabId: activeCtx?.tabId,
+              actualTabId: activeCtx?.tabId,
+              expectedUrl: activeCtx?.url,
+              actualUrl: activeCtx?.url,
             });
 
             if (!evalResult.allowed) {
@@ -519,7 +532,9 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
               pendingApprovalObj = {
                 id: `action-${Date.now()}`,
                 actions: evalResult.sanitizedActions,
-                targetUrl: pageContext?.url,
+                targetUrl: activeCtx?.url,
+                targetOrigin: targetOrigin,
+                targetTabId: activeCtx?.tabId,
                 status: "pending",
               };
             } else {
@@ -528,7 +543,13 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                 t.executing_actions.replace("{count}", String(count)),
               );
               chrome.runtime.sendMessage(
-                { type: "execute_agent_action", payload: evalResult.sanitizedActions },
+                {
+                  type: "execute_agent_action",
+                  payload: evalResult.sanitizedActions,
+                  targetTabId: activeCtx?.tabId,
+                  targetUrl: activeCtx?.url,
+                  targetOrigin: targetOrigin,
+                },
                 (actRes) => {
                   setAgentStatus(null);
                   if (actRes && actRes.success) {
@@ -668,8 +689,18 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
         if (msg.id === messageId && msg.pendingActionApproval) {
           const approval = msg.pendingActionApproval;
           chrome.runtime.sendMessage(
-            { type: "execute_agent_action", payload: approval.actions },
-            () => {},
+            {
+              type: "execute_agent_action",
+              payload: approval.actions,
+              targetTabId: approval.targetTabId,
+              targetUrl: approval.targetUrl,
+              targetOrigin: approval.targetOrigin,
+            },
+            (res) => {
+              if (res && !res.success) {
+                logger.warn("[useSidePanelChat] Action execution rejected:", res.error);
+              }
+            },
           );
           return {
             ...msg,

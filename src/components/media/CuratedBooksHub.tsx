@@ -46,7 +46,7 @@ export function CuratedBooksHub({
       // Search filter
       if (q) {
         const matchTitle = book.title.toLowerCase().includes(q);
-        const matchAuthor = book.author.toLowerCase().includes(q);
+        const matchAuthor = book.author ? book.author.toLowerCase().includes(q) : false;
         const matchGenre = book.genres.some((g) => g.toLowerCase().includes(q));
         if (!matchTitle && !matchAuthor && !matchGenre) {return false;}
       }
@@ -154,10 +154,10 @@ export function CuratedBooksHub({
                 <div className="curated-card-header">
                   <span className="curated-category-tag">{book.category}</span>
                   <h3 className="curated-card-title">{book.title}</h3>
-                  <p className="curated-card-creator">{book.author}</p>
+                  <p className="curated-card-creator">{book.author || "Bilinmiyor"}</p>
                 </div>
 
-                <p className="curated-card-synopsis">{book.synopsis}</p>
+                {book.synopsis && <p className="curated-card-synopsis">{book.synopsis}</p>}
 
                 {/* Actions Row */}
                 <div className="curated-card-actions">

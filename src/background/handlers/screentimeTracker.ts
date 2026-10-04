@@ -95,6 +95,11 @@ function handleDomainChange(newDomain: string | null): void {
   const now = Date.now();
   accumulateToBuffer(now);
   currentDomain = newDomain;
+  // Immediate persistence on domain/tab transition: eliminates in-memory vulnerability
+  // before the background service worker can be suspended.
+  if (Object.keys(screenTimeBuffer).length > 0) {
+    saveBufferToStorage();
+  }
 }
 
 function updateActiveTab(): void {
@@ -151,7 +156,10 @@ export function initScreentimeTracker(): void {
   });
 
   // MV3 Service Worker lifecycle hooks:
-  // 1. Flush on worker suspension
+  // 1. Best-effort flush on worker suspension (Note: Chrome docs state async ops
+  // in onSuspend are not guaranteed to complete before termination, hence the
+  // primary persistence anchors are the immediate state-transition flushes above
+  // and the chrome.alarms periodic checkpoints below).
   if (chrome.runtime?.onSuspend) {
     chrome.runtime.onSuspend.addListener(() => {
       saveBufferToStorage();

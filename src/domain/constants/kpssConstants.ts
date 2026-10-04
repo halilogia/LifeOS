@@ -51,52 +51,61 @@ export const subjectsList: string[] = [
   "vatandaslik",
 ];
 
+export type KpssDateStatus = "official" | "estimated" | "unannounced";
+
 export interface KpssExamCycle {
   id: string;
   name: string;
-  targetDate: number;
+  year: number;
+  targetDate?: number;
+  dateStatus: KpssDateStatus;
 }
 
 export const KPSS_EXAM_CYCLES: KpssExamCycle[] = [
   {
     id: "kpss_2026",
     name: "2026 KPSS Lisans",
+    year: 2026,
     targetDate: new Date("2026-09-06T10:15:00").getTime(),
+    dateStatus: "official",
   },
   {
     id: "kpss_2027",
     name: "2027 KPSS",
-    targetDate: new Date("2027-09-05T10:15:00").getTime(),
-  },
-  {
-    id: "kpss_2028",
-    name: "2028 KPSS Lisans",
-    targetDate: new Date("2028-09-03T10:15:00").getTime(),
+    year: 2027,
+    // ÖSYM 2027 sınav takvimini henüz resmi olarak duyurmadı
+    dateStatus: "unannounced",
   },
 ];
 
 export interface ActiveKpssCycleInfo {
   cycle: KpssExamCycle;
   isPast: boolean;
-  daysRemaining: number;
+  daysRemaining?: number;
+  statusLabel: string;
 }
 
 export function getActiveKpssCycle(now: number = Date.now()): ActiveKpssCycleInfo {
-  const upcoming = KPSS_EXAM_CYCLES.find((c) => c.targetDate > now);
-  if (upcoming) {
-    const diff = upcoming.targetDate - now;
+  const kpss2026 = KPSS_EXAM_CYCLES[0];
+  if (kpss2026.targetDate && now <= kpss2026.targetDate) {
+    const diff = kpss2026.targetDate - now;
     return {
-      cycle: upcoming,
+      cycle: kpss2026,
       isPast: false,
       daysRemaining: Math.ceil(diff / (1000 * 60 * 60 * 24)),
+      statusLabel: "Resmi Sınav Tarihi",
     };
   }
-  const last = KPSS_EXAM_CYCLES[KPSS_EXAM_CYCLES.length - 1];
+
+  // 2026 sınavı tamamlandı; bir sonraki döngü 2027 KPSS
+  const kpss2027 = KPSS_EXAM_CYCLES[1];
   return {
-    cycle: last,
-    isPast: true,
-    daysRemaining: 0,
+    cycle: kpss2027,
+    isPast: false,
+    daysRemaining: undefined,
+    statusLabel: "ÖSYM Sınav Takvimi Henüz Açıklanmadı",
   };
 }
 
-export const KPSS_TARGET_DATE: number = getActiveKpssCycle().cycle.targetDate;
+export const KPSS_TARGET_DATE: number =
+  getActiveKpssCycle().cycle.targetDate ?? new Date("2026-09-06T10:15:00").getTime();

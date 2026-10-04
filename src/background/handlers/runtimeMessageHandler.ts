@@ -99,6 +99,7 @@ export async function handleRuntimeMessage(
       }
 
       const tabUrl = tabs[0].url || "";
+      const currentTabId = tabs[0].id;
       if (
         tabUrl.startsWith("chrome://") ||
         tabUrl.startsWith("edge://") ||
@@ -108,6 +109,7 @@ export async function handleRuntimeMessage(
         sendResponse({
           success: true,
           context: {
+            tabId: currentTabId,
             title: tabs[0].title || "Sistem Sayfası",
             url: tabUrl,
             domain: "chrome",
@@ -127,6 +129,7 @@ export async function handleRuntimeMessage(
             sendResponse({
               success: true,
               context: {
+                tabId: currentTabId,
                 title: tabs[0].title || "Aktif Sayfa",
                 url: tabUrl,
                 domain: "",
@@ -136,7 +139,10 @@ export async function handleRuntimeMessage(
               },
             });
           } else {
-            sendResponse(res);
+            const contextWithTab = res.context
+              ? { ...res.context, tabId: currentTabId }
+              : res.context;
+            sendResponse({ ...res, context: contextWithTab });
           }
         },
       );
@@ -146,25 +152,57 @@ export async function handleRuntimeMessage(
 
   // Execute Agent Action Service
   if (message.type === "execute_agent_action") {
+    const { targetTabId, targetOrigin, payload } = message;
+
+    // Strict security enforcement: Caller MUST provide targetTabId and targetOrigin
+    if (typeof targetTabId !== "number" || !targetOrigin) {
+      sendResponse({
+        success: false,
+        error: "Security rejection: execute_agent_action requires verified targetTabId and targetOrigin binding.",
+      });
+      return true;
+    }
+
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (!tabs || !tabs[0] || typeof tabs[0].id !== "number") {
         sendResponse({ success: false, error: "No active tab" });
         return;
       }
-      const tabId: number = tabs[0].id;
-      if (
-        message.targetTabId !== undefined &&
-        tabId !== message.targetTabId
-      ) {
+      const activeTab = tabs[0];
+      const activeTabId = activeTab.id!;
+      const activeTabUrl = activeTab.url || "";
+
+      // 1. Enforce active tab ID match
+      if (activeTabId !== targetTabId) {
         sendResponse({
           success: false,
-          error: "Tab mismatch: Active tab changed before execution.",
+          error: `Tab mismatch: Action proposal was created for tab ${targetTabId}, but current active tab is ${activeTabId}. Execution blocked.`,
         });
         return;
       }
+
+      // 2. Enforce active tab Origin match
+      try {
+        const activeOrigin = new URL(activeTabUrl).origin;
+        if (activeOrigin !== targetOrigin) {
+          sendResponse({
+            success: false,
+            error: `Origin mismatch: Action proposal originated from ${targetOrigin}, but active tab is now on ${activeOrigin}. Execution blocked.`,
+          });
+          return;
+        }
+      } catch {
+        sendResponse({
+          success: false,
+          error: "Malformed active tab URL. Execution blocked.",
+        });
+        return;
+      }
+
+      // 3. Both tab ID and origin verified — dispatch to content script
       chrome.tabs.sendMessage(
-        tabId,
-        { type: "agent_execute_action", payload: message.payload },
+        activeTabId,
+        { type: "agent_execute_action", payload },
         (res) => {
           if (chrome.runtime.lastError || !res) {
             sendResponse({

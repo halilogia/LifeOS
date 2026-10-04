@@ -618,7 +618,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
         title: book.title,
         creator: book.author,
         coverUrl: book.coverUrl,
-        releaseYear: book.releaseYear > 0 ? book.releaseYear : undefined,
+        releaseYear: book.releaseYear && book.releaseYear > 0 ? book.releaseYear : undefined,
         genres: [book.category, ...book.genres],
         status: targetStatus,
         rating:
@@ -707,7 +707,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
         title: game.title,
         creator: game.developer,
         coverUrl: game.coverUrl,
-        releaseYear: game.releaseYear,
+        releaseYear: game.releaseYear && game.releaseYear > 0 ? game.releaseYear : undefined,
         genres: [game.category, ...game.genres],
         status: targetStatus,
         rating:
@@ -791,7 +791,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
         title: movie.title,
         creator: movie.director,
         coverUrl: movie.coverUrl,
-        releaseYear: movie.releaseYear,
+        releaseYear: movie.releaseYear && movie.releaseYear > 0 ? movie.releaseYear : undefined,
         genres: movie.genres,
         status: targetStatus,
         rating:
@@ -883,7 +883,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
         title: tvShow.title,
         creator: tvShow.creator,
         coverUrl: tvShow.coverUrl,
-        releaseYear: tvShow.releaseYear,
+        releaseYear: tvShow.releaseYear && tvShow.releaseYear > 0 ? tvShow.releaseYear : undefined,
         genres: [tvShow.category, ...tvShow.genres],
         status: targetStatus,
         rating:

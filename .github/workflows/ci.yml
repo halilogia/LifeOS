@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Ensure CI & Clean Build Fixtures
+        run: node scripts/ensureFixtures.mjs
+
       - name: Run TypeScript verification (Typecheck)
         run: npm run typecheck
 

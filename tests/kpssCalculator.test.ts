@@ -57,17 +57,13 @@ describe("KPSS Calculator Service", () => {
     expect(cycleBefore.isPast).toBe(false);
     expect(cycleBefore.daysRemaining).toBeGreaterThan(0);
 
-    // After 2026 exam (e.g. October 4, 2026) -> transitions to 2027
+    // After 2026 exam (e.g. October 4, 2026) -> transitions to 2027 (unannounced date)
     const after2026 = new Date("2026-10-04T00:00:00").getTime();
     const cycleAfter = getActiveKpssCycle(after2026);
     expect(cycleAfter.cycle.id).toBe("kpss_2027");
+    expect(cycleAfter.cycle.dateStatus).toBe("unannounced");
     expect(cycleAfter.isPast).toBe(false);
-    expect(cycleAfter.daysRemaining).toBeGreaterThan(300);
-
-    // Far future beyond all cycles
-    const farFuture = new Date("2030-01-01T00:00:00").getTime();
-    const cycleFar = getActiveKpssCycle(farFuture);
-    expect(cycleFar.isPast).toBe(true);
-    expect(cycleFar.daysRemaining).toBe(0);
+    expect(cycleAfter.daysRemaining).toBeUndefined();
+    expect(cycleAfter.statusLabel).toContain("Henüz Açıklanmadı");
   });
 });

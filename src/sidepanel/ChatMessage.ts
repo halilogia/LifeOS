@@ -8,6 +8,7 @@ export interface PendingActionApproval {
   id: string;
   actions: AgentActionPayload[];
   targetUrl?: string;
+  targetOrigin?: string;
   targetTabId?: number;
   status: "pending" | "approved" | "rejected";
 }

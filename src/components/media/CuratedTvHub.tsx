@@ -53,7 +53,7 @@ export function CuratedTvHub({
           const matchOrig = show.originalTitle
             ? show.originalTitle.toLowerCase().includes(q)
             : false;
-          const matchCreator = show.creator.toLowerCase().includes(q);
+          const matchCreator = show.creator ? show.creator.toLowerCase().includes(q) : false;
           const matchGenre = show.genres.some((g) => g.toLowerCase().includes(q));
           if (!matchTitle && !matchOrig && !matchCreator && !matchGenre) {return false;}
         }
@@ -249,11 +249,12 @@ export function CuratedTvHub({
                   </div>
                   <h3 className="curated-card-title">{show.title}</h3>
                   <p className="curated-card-creator">
-                    {show.creator} • {show.releaseYear}{show.endYear ? ` - ${show.endYear}` : "..."}
+                    {show.creator || "Bilinmiyor"}
+                    {show.releaseYear ? ` • ${show.releaseYear}${show.endYear ? ` - ${show.endYear}` : "..."}` : ""}
                   </p>
                 </div>
 
-                <p className="curated-card-synopsis">{show.synopsis}</p>
+                {show.synopsis && <p className="curated-card-synopsis">{show.synopsis}</p>}
 
                 {/* Actions Row */}
                 <div className="curated-card-actions">

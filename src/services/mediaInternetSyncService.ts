@@ -29,7 +29,7 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // Pin to immutable commit SHA on GitHub to avoid master branch drift / supply-chain tampering
 const IMDB_TOP250_URL =
-  "https://raw.githubusercontent.com/movie-monk-b0t/top250/master/top250.json";
+  "https://raw.githubusercontent.com/movie-monk-b0t/top250/a75ff045a4ce2b779cc748ac4a5df582c8fc2915/top250.json";
 
 /* ── Zod Validation Schemas for External API Boundaries ────── */
 
@@ -155,7 +155,8 @@ export async function fetchPopularTvShowsFromTvMaze(limit = 20): Promise<Curated
       .filter((s) => s.rating?.average && s.rating.average >= 8.0)
       .slice(0, limit)
       .map((s): CuratedTvItem => {
-        const releaseYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : 2020;
+        const parsedYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : undefined;
+        const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
         
         let category = "Suç & Drama";
         if (s.genres?.some((g) => /sci-fi|fantasy/i.test(g))) {
@@ -171,10 +172,10 @@ export async function fetchPopularTvShowsFromTvMaze(limit = 20): Promise<Curated
         return {
           id: `web-tvmaze-${s.id}`,
           title: s.name,
-          creator: s.network?.name || s.webChannel?.name || "TV Network",
+          creator: s.network?.name || s.webChannel?.name || undefined,
           totalSeasons: undefined, // Zero fake data: not provided by /shows summary
           totalEpisodes: undefined,
-          releaseYear: isNaN(releaseYear) ? 2020 : releaseYear,
+          releaseYear,
           category,
           genres: s.genres && s.genres.length > 0 ? s.genres : [category],
           coverUrl:
@@ -182,9 +183,7 @@ export async function fetchPopularTvShowsFromTvMaze(limit = 20): Promise<Curated
             s.image?.original ||
             "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80",
           rating: s.rating?.average ?? undefined,
-          synopsis: s.summary
-            ? stripHtml(s.summary)
-            : `${s.name} popüler televizyon dizisi.`,
+          synopsis: s.summary ? stripHtml(s.summary) : undefined,
           provenance: "api",
         };
       });
@@ -238,7 +237,7 @@ export async function fetchBooksFromOpenLibrary(
         const authorName =
           work.authors && work.authors.length > 0
             ? work.authors[0].name
-            : "Klasik Yazar";
+            : undefined;
         const coverUrl = work.cover_id
           ? `https://covers.openlibrary.org/b/id/${work.cover_id}-L.jpg`
           : "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80";
@@ -248,12 +247,12 @@ export async function fetchBooksFromOpenLibrary(
           title: work.title,
           author: authorName,
           totalPages: undefined, // Zero fake data
-          releaseYear: work.first_publish_year || 1950,
+          releaseYear: work.first_publish_year || undefined,
           category: categoryName,
           genres: [categoryName, subject],
           coverUrl,
           rating: undefined, // Zero fake data
-          synopsis: `${work.title} - ${authorName} tarafından kaleme alınan ${categoryName.toLowerCase()} alanında saygın eser.`,
+          synopsis: undefined,
           provenance: "api",
         });
       }
@@ -289,9 +288,10 @@ export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<Curated
     const data = parseResult.data;
 
     return data.slice(0, limit).map((m, idx): CuratedMovieItem => {
-      const year = m.datePublished ? parseInt(m.datePublished.slice(0, 4), 10) : 2000;
+      const parsedYear = m.datePublished ? parseInt(m.datePublished.slice(0, 4), 10) : undefined;
+      const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
       const director =
-        m.director && m.director.length > 0 ? m.director[0].name : "Yönetmen";
+        m.director && m.director.length > 0 ? m.director[0].name : undefined;
       const rating = m.aggregateRating?.ratingValue ?? undefined;
       const genres = m.genre && m.genre.length > 0 ? m.genre : ["Dram", "Kült"];
 
@@ -309,7 +309,7 @@ export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<Curated
         title: m.name,
         originalTitle: m.name,
         director,
-        releaseYear: isNaN(year) ? 2000 : year,
+        releaseYear,
         runtimeMinutes: undefined, // Zero fake data
         category,
         genres,
@@ -317,7 +317,7 @@ export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<Curated
           m.image ||
           "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
         rating,
-        synopsis: m.description || `${m.name}, IMDb Top listesinde yer alan kült sinema eseri.`,
+        synopsis: m.description || undefined,
         provenance: "api",
       };
     });
@@ -354,7 +354,8 @@ export async function fetchGamesFromOpenApi(limit = 30): Promise<CuratedGameItem
     const data = parseResult.data;
 
     return data.slice(0, limit).map((g): CuratedGameItem => {
-      const year = g.release_date ? parseInt(g.release_date.slice(0, 4), 10) : 2020;
+      const parsedYear = g.release_date ? parseInt(g.release_date.slice(0, 4), 10) : undefined;
+      const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
       const genre = g.genre || "Aksiyon";
       let category = "Aksiyon & Macera";
       if (/rpg|mmorpg/i.test(genre)) {category = "Rol Yapma (RPG)";}
@@ -363,8 +364,8 @@ export async function fetchGamesFromOpenApi(limit = 30): Promise<CuratedGameItem
       return {
         id: `web-game-${g.id}`,
         title: g.title,
-        developer: g.developer || g.publisher || "Oyun Stüdyosu",
-        releaseYear: isNaN(year) ? 2020 : year,
+        developer: g.developer || g.publisher || undefined,
+        releaseYear,
         platform: g.platform || "PC",
         playtimeHours: undefined, // Zero fake data
         category,
@@ -373,9 +374,7 @@ export async function fetchGamesFromOpenApi(limit = 30): Promise<CuratedGameItem
           g.thumbnail ||
           "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80",
         rating: undefined, // Zero fake data
-        synopsis:
-          g.short_description ||
-          `${g.title} dünya genelinde milyonlarca oyuncusu bulunan popüler video oyunu.`,
+        synopsis: g.short_description || undefined,
         provenance: "api",
       };
     });
@@ -558,13 +557,13 @@ export interface WebSearchResultItem {
   type: "movie" | "tv" | "book" | "game";
   title: string;
   originalTitle?: string;
-  creator: string;
+  creator?: string;
   releaseYear?: number;
   category: string;
   genres: string[];
   coverUrl: string;
   rating?: number;
-  synopsis: string;
+  synopsis?: string;
   extraInfo?: string;
   rawTvItem?: CuratedTvItem;
   rawMovieItem?: CuratedMovieItem;
@@ -595,14 +594,15 @@ export async function searchInternetMedia(query: string): Promise<WebSearchResul
       if (parseResult.success) {
         for (const item of parseResult.data.slice(0, 8)) {
           const s = item.show;
-          const releaseYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : 2020;
+          const parsedYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : undefined;
+          const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
           const genres = s.genres && s.genres.length > 0 ? s.genres : ["Drama"];
-          const creator = s.network?.name || s.webChannel?.name || "TV Network";
+          const creator = s.network?.name || s.webChannel?.name || undefined;
           const coverUrl =
             s.image?.medium ||
             s.image?.original ||
             "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80";
-          const synopsis = s.summary ? stripHtml(s.summary) : `${s.name} dizisi.`;
+          const synopsis = s.summary ? stripHtml(s.summary) : undefined;
           const rating = s.rating?.average ?? undefined;
 
           results.push({
@@ -610,20 +610,20 @@ export async function searchInternetMedia(query: string): Promise<WebSearchResul
             type: "tv",
             title: s.name,
             creator,
-            releaseYear: isNaN(releaseYear) ? 2020 : releaseYear,
+            releaseYear,
             category: genres[0] || "Dizi",
             genres,
             coverUrl,
             rating,
             synopsis,
-            extraInfo: `${isNaN(releaseYear) ? "" : releaseYear} • TV Dizisi`,
+            extraInfo: `${releaseYear ? `${releaseYear} • ` : ""}TV Dizisi`,
             rawTvItem: {
               id: `web-tv-${s.id}`,
               title: s.name,
               creator,
               totalSeasons: undefined, // Zero fake data
               totalEpisodes: undefined,
-              releaseYear: isNaN(releaseYear) ? 2020 : releaseYear,
+              releaseYear,
               category: "Dizi",
               genres,
               coverUrl,

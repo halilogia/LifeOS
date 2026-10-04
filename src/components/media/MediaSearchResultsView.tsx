@@ -98,7 +98,7 @@ export function MediaSearchResultsView({
     return curatedMovies.filter((m) => {
       const matchTitle = m.title.toLowerCase().includes(q);
       const matchOrig = m.originalTitle ? m.originalTitle.toLowerCase().includes(q) : false;
-      const matchDirector = m.director.toLowerCase().includes(q);
+      const matchDirector = m.director ? m.director.toLowerCase().includes(q) : false;
       const matchGenre = m.genres.some((g) => g.toLowerCase().includes(q));
       return matchTitle || matchOrig || matchDirector || matchGenre;
     });
@@ -110,7 +110,7 @@ export function MediaSearchResultsView({
     return curatedTvShows.filter((s) => {
       const matchTitle = s.title.toLowerCase().includes(q);
       const matchOrig = s.originalTitle ? s.originalTitle.toLowerCase().includes(q) : false;
-      const matchCreator = s.creator.toLowerCase().includes(q);
+      const matchCreator = s.creator ? s.creator.toLowerCase().includes(q) : false;
       const matchGenre = s.genres.some((g) => g.toLowerCase().includes(q));
       return matchTitle || matchOrig || matchCreator || matchGenre;
     });
@@ -121,7 +121,7 @@ export function MediaSearchResultsView({
     if (!q) {return [];}
     return curatedBooks.filter((b) => {
       const matchTitle = b.title.toLowerCase().includes(q);
-      const matchAuthor = b.author.toLowerCase().includes(q);
+      const matchAuthor = b.author ? b.author.toLowerCase().includes(q) : false;
       const matchCat = b.category.toLowerCase().includes(q);
       const matchGenre = b.genres.some((g) => g.toLowerCase().includes(q));
       return matchTitle || matchAuthor || matchCat || matchGenre;
@@ -133,7 +133,7 @@ export function MediaSearchResultsView({
     if (!q) {return [];}
     return curatedGames.filter((g) => {
       const matchTitle = g.title.toLowerCase().includes(q);
-      const matchDev = g.developer.toLowerCase().includes(q);
+      const matchDev = g.developer ? g.developer.toLowerCase().includes(q) : false;
       const matchCat = g.category.toLowerCase().includes(q);
       const matchGenre = g.genres.some((gen) => gen.toLowerCase().includes(q));
       return matchTitle || matchDev || matchCat || matchGenre;

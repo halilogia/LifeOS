@@ -16,6 +16,7 @@ export interface PageElementInfo {
 }
 
 export interface PageContext {
+  tabId?: number;
   title: string;
   url: string;
   domain: string;

@@ -23,7 +23,9 @@ export function KpssAutoPlannerCard({
 
   // 1. Calculate remaining days until active exam cycle
   const activeCycle = getActiveKpssCycle();
-  const daysRemaining = Math.max(1, activeCycle.daysRemaining);
+  const hasOfficialDate = activeCycle.daysRemaining !== undefined;
+  // If exam date is unannounced by ÖSYM, calculate daily pace using standard 180-day preparation horizon
+  const daysRemaining = activeCycle.daysRemaining ?? 180;
 
   // 2. Map all uncompleted topics across all subjects in standard order
   const subjectsOrder = [
@@ -163,7 +165,10 @@ export function KpssAutoPlannerCard({
               }}
             >
               <span>
-                <strong>{activeCycle.cycle.name} {t.kpss_days_left}</strong> {daysRemaining}
+                <strong>{activeCycle.cycle.name}:</strong>{" "}
+                {hasOfficialDate
+                  ? `${daysRemaining} ${t.kpss_days_left || "gün"}`
+                  : activeCycle.statusLabel}
               </span>
               <span>
                 <strong>{t.kpss_topics_left}</strong> {totalUncompleted}

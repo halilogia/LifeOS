@@ -49,7 +49,7 @@ export function CuratedGamesHub({
         // Search filter
         if (q) {
           const matchTitle = game.title.toLowerCase().includes(q);
-          const matchDev = game.developer.toLowerCase().includes(q);
+          const matchDev = game.developer ? game.developer.toLowerCase().includes(q) : false;
           const matchGenre = game.genres.some((g) => g.toLowerCase().includes(q));
           if (!matchTitle && !matchDev && !matchGenre) {return false;}
         }
@@ -157,10 +157,13 @@ export function CuratedGamesHub({
                 <div className="curated-card-header">
                   <span className="curated-category-tag">{game.category}</span>
                   <h3 className="curated-card-title">{game.title}</h3>
-                  <p className="curated-card-creator">{game.developer} • {game.releaseYear}</p>
+                  <p className="curated-card-creator">
+                    {game.developer || "Bilinmiyor"}
+                    {game.releaseYear ? ` • ${game.releaseYear}` : ""}
+                  </p>
                 </div>
 
-                <p className="curated-card-synopsis">{game.synopsis}</p>
+                {game.synopsis && <p className="curated-card-synopsis">{game.synopsis}</p>}
 
                 {/* Actions Row */}
                 <div className="curated-card-actions">

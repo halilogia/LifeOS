@@ -10,29 +10,29 @@ export type MediaProvenance = "curated" | "api" | "estimated";
 export interface CuratedBookItem {
   id: string;
   title: string;
-  author: string;
+  author?: string;
   totalPages?: number;
-  releaseYear: number;
+  releaseYear?: number;
   category: string;
   genres: string[];
   coverUrl: string;
   rating?: number; // Goodreads / 10
-  synopsis: string;
+  synopsis?: string;
   provenance?: MediaProvenance;
 }
 
 export interface CuratedGameItem {
   id: string;
   title: string;
-  developer: string;
-  releaseYear: number;
+  developer?: string;
+  releaseYear?: number;
   playtimeHours?: number;
   platform?: "PC" | "PlayStation" | "Xbox" | "Nintendo" | "Steam Deck" | "Other" | string;
   category: string;
   genres: string[];
   coverUrl: string;
   rating?: number; // Metacritic / 10
-  synopsis: string;
+  synopsis?: string;
   provenance?: MediaProvenance;
 }
 
@@ -40,14 +40,14 @@ export interface CuratedMovieItem {
   id: string;
   title: string;
   originalTitle?: string;
-  director: string;
-  releaseYear: number;
+  director?: string;
+  releaseYear?: number;
   runtimeMinutes?: number;
   category: string;
   genres: string[];
   coverUrl: string;
   rating?: number; // IMDb
-  synopsis: string;
+  synopsis?: string;
   provenance?: MediaProvenance;
 }
 
@@ -55,16 +55,16 @@ export interface CuratedTvItem {
   id: string;
   title: string;
   originalTitle?: string;
-  creator: string;
+  creator?: string;
   totalSeasons?: number;
   totalEpisodes?: number;
-  releaseYear: number;
+  releaseYear?: number;
   endYear?: number;
   category: string;
   genres: string[];
   coverUrl: string;
   rating?: number; // IMDb / 10
-  synopsis: string;
+  synopsis?: string;
   provenance?: MediaProvenance;
 }
 

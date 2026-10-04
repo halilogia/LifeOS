@@ -53,7 +53,7 @@ export function CuratedMoviesHub({
           const matchOrig = movie.originalTitle
             ? movie.originalTitle.toLowerCase().includes(q)
             : false;
-          const matchDirector = movie.director.toLowerCase().includes(q);
+          const matchDirector = movie.director ? movie.director.toLowerCase().includes(q) : false;
           const matchGenre = movie.genres.some((g) => g.toLowerCase().includes(q));
           if (!matchTitle && !matchOrig && !matchDirector && !matchGenre) {return false;}
         }
@@ -242,10 +242,13 @@ export function CuratedMoviesHub({
                     ))}
                   </div>
                   <h3 className="curated-card-title">{movie.title}</h3>
-                  <p className="curated-card-creator">{movie.director} • {movie.releaseYear}</p>
+                  <p className="curated-card-creator">
+                    {movie.director || "Bilinmiyor"}
+                    {movie.releaseYear ? ` • ${movie.releaseYear}` : ""}
+                  </p>
                 </div>
 
-                <p className="curated-card-synopsis">{movie.synopsis}</p>
+                {movie.synopsis && <p className="curated-card-synopsis">{movie.synopsis}</p>}
 
                 {/* Actions Row */}
                 <div className="curated-card-actions">
