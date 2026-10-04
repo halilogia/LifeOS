@@ -107,5 +107,3 @@ export function getActiveKpssCycle(now: number = Date.now()): ActiveKpssCycleInf
   };
 }
 
-export const KPSS_TARGET_DATE: number =
-  getActiveKpssCycle().cycle.targetDate ?? new Date("2026-09-06T10:15:00").getTime();

@@ -71,11 +71,60 @@ export function classifyAction(
   }
 }
 
+export interface TabBindingOptions {
+  /**
+   * When true, requires an exact URL match (pathname + search) in addition to
+   * the origin match. Hash fragments are ignored because intra-page anchors do
+   * not change document identity. Use this for MUTATING actions to close the
+   * same-origin navigation race (e.g. /checkout -> /confirmation SPA transition).
+   */
+  requireExactUrl?: boolean;
+}
+
+/**
+ * Compares two URLs by origin, and optionally by full path+query.
+ * Returns null when valid, or a rejection reason string.
+ */
+function compareUrls(
+  expectedUrl: string,
+  actualUrl: string,
+  requireExactUrl: boolean,
+): string | null {
+  let expOrigin: string;
+  let actOrigin: string;
+  let expNorm: string;
+  let actNorm: string;
+  try {
+    const expUrlObj = new URL(expectedUrl);
+    const actUrlObj = new URL(actualUrl);
+    expOrigin = expUrlObj.origin;
+    actOrigin = actUrlObj.origin;
+    expNorm = `${expUrlObj.pathname}${expUrlObj.search}`;
+    actNorm = `${actUrlObj.pathname}${actUrlObj.search}`;
+  } catch {
+    return "Malformed URL in context binding";
+  }
+
+  if (expOrigin !== actOrigin) {
+    return `Origin mismatch: proposal originated from ${expOrigin}, but active tab is ${actOrigin}`;
+  }
+
+  if (requireExactUrl && expNorm !== actNorm) {
+    return `URL mismatch: proposal was bound to ${expNorm}, but active tab navigated to ${actNorm}`;
+  }
+
+  return null;
+}
+
 /**
  * Validates whether the active tab matches the tab where the action proposal was originated.
- * Prevents executing actions if the user switched tabs or navigated to a different origin.
+ * Prevents executing actions if the user switched tabs, navigated to a different origin,
+ * or (for mutating actions) navigated to a different document within the same origin.
  */
-export function validateTabBinding(binding?: ActionContextBinding): {
+export function validateTabBinding(
+  binding?: ActionContextBinding,
+  options?: TabBindingOptions,
+): {
   valid: boolean;
   reason?: string;
 } {
@@ -95,17 +144,13 @@ export function validateTabBinding(binding?: ActionContextBinding): {
   }
 
   if (expectedUrl && actualUrl) {
-    try {
-      const expOrigin = new URL(expectedUrl).origin;
-      const actOrigin = new URL(actualUrl).origin;
-      if (expOrigin !== actOrigin) {
-        return {
-          valid: false,
-          reason: `Origin mismatch: proposal originated from ${expOrigin}, but active tab is ${actOrigin}`,
-        };
-      }
-    } catch {
-      return { valid: false, reason: "Malformed URL in context binding" };
+    const reason = compareUrls(
+      expectedUrl,
+      actualUrl,
+      options?.requireExactUrl === true,
+    );
+    if (reason) {
+      return { valid: false, reason };
     }
   }
 
@@ -120,22 +165,10 @@ export function evaluateActionProposal(
   rawActions: unknown,
   context?: ActionContextBinding,
 ): ActionPolicyEvaluation {
-  // 1. Tab / URL Binding Validation
-  const tabCheck = validateTabBinding(context);
-  if (!tabCheck.valid) {
-    return {
-      allowed: false,
-      classification: "MUTATING_SIDE_EFFECT",
-      requiresUserConfirmation: true,
-      sanitizedActions: [],
-      reason: tabCheck.reason,
-    };
-  }
-
-  // 2. Normalize single action to array
+  // 1. Normalize single action to array
   const actionArray = Array.isArray(rawActions) ? rawActions : [rawActions];
 
-  // 3. Zod Schema Validation
+  // 2. Zod Schema Validation
   const parseResult = AgentActionBatchSchema.safeParse(actionArray);
   if (!parseResult.success) {
     return {
@@ -149,10 +182,24 @@ export function evaluateActionProposal(
 
   const actions = parseResult.data;
 
-  // 4. Classify whole batch (if any action is mutating, entire batch requires confirmation)
+  // 3. Classify whole batch (if any action is mutating, entire batch requires confirmation)
   const hasSideEffect = actions.some(
     (act) => classifyAction(act.actionType) === "MUTATING_SIDE_EFFECT",
   );
+
+  // 4. Tab / URL Binding Validation — mutating actions require exact URL match
+  const tabCheck = validateTabBinding(context, {
+    requireExactUrl: hasSideEffect,
+  });
+  if (!tabCheck.valid) {
+    return {
+      allowed: false,
+      classification: hasSideEffect ? "MUTATING_SIDE_EFFECT" : "READ_ONLY",
+      requiresUserConfirmation: hasSideEffect,
+      sanitizedActions: [],
+      reason: tabCheck.reason,
+    };
+  }
 
   return {
     allowed: true,

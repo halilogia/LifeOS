@@ -29,7 +29,8 @@ interface KpssProgressSectionProps {
   targetScore: number;
   currentSubject: string;
   subjectsList: string[];
-  kpssTargetDate: number;
+  kpssTargetDate?: number;
+  examDateLabel?: string;
   overallNet: number;
   maxNet: number;
   estimatedScore: number;
@@ -76,6 +77,7 @@ export function KpssProgressSection({
   currentSubject,
   subjectsList,
   kpssTargetDate,
+  examDateLabel,
   overallNet,
   maxNet,
   estimatedScore,
@@ -106,6 +108,7 @@ export function KpssProgressSection({
         kpssTimeLeft={kpssTimeLeft}
         estimatedTimeLeft={estimatedTimeLeft}
         remainingCount={remainingCount}
+        examDateLabel={examDateLabel}
       />
 
       <KpssAutoPlannerCard

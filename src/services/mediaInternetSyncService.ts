@@ -177,11 +177,8 @@ export async function fetchPopularTvShowsFromTvMaze(limit = 20): Promise<Curated
           totalEpisodes: undefined,
           releaseYear,
           category,
-          genres: s.genres && s.genres.length > 0 ? s.genres : [category],
-          coverUrl:
-            s.image?.medium ||
-            s.image?.original ||
-            "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80",
+          genres: s.genres && s.genres.length > 0 ? s.genres : [],
+          coverUrl: s.image?.medium || s.image?.original || undefined,
           rating: s.rating?.average ?? undefined,
           synopsis: s.summary ? stripHtml(s.summary) : undefined,
           provenance: "api",
@@ -240,7 +237,7 @@ export async function fetchBooksFromOpenLibrary(
             : undefined;
         const coverUrl = work.cover_id
           ? `https://covers.openlibrary.org/b/id/${work.cover_id}-L.jpg`
-          : "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80";
+          : undefined;
 
         books.push({
           id: `web-ol-${work.key.replace(/\//g, "-")}`,
@@ -293,7 +290,8 @@ export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<Curated
       const director =
         m.director && m.director.length > 0 ? m.director[0].name : undefined;
       const rating = m.aggregateRating?.ratingValue ?? undefined;
-      const genres = m.genre && m.genre.length > 0 ? m.genre : ["Dram", "Kült"];
+      // Zero fake data: only use genres actually returned by the API.
+      const genres = m.genre && m.genre.length > 0 ? m.genre : [];
 
       let category = "Kült Başyapıtlar";
       if (genres.some((g) => /sci-fi|fantasy/i.test(g))) {
@@ -313,9 +311,7 @@ export async function fetchTopMoviesFromOpenDataset(limit = 40): Promise<Curated
         runtimeMinutes: undefined, // Zero fake data
         category,
         genres,
-        coverUrl:
-          m.image ||
-          "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80",
+        coverUrl: m.image || undefined,
         rating,
         synopsis: m.description || undefined,
         provenance: "api",
@@ -356,23 +352,23 @@ export async function fetchGamesFromOpenApi(limit = 30): Promise<CuratedGameItem
     return data.slice(0, limit).map((g): CuratedGameItem => {
       const parsedYear = g.release_date ? parseInt(g.release_date.slice(0, 4), 10) : undefined;
       const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
-      const genre = g.genre || "Aksiyon";
-      let category = "Aksiyon & Macera";
-      if (/rpg|mmorpg/i.test(genre)) {category = "Rol Yapma (RPG)";}
-      else if (/strategy/i.test(genre)) {category = "Strateji";}
+      // Zero fake data: only use the genre actually provided by the API.
+      const genre = g.genre?.trim() || undefined;
+      let category = "Popüler";
+      if (genre && /rpg|mmorpg/i.test(genre)) {category = "Rol Yapma (RPG)";}
+      else if (genre && /strategy/i.test(genre)) {category = "Strateji";}
+      else if (genre && /shooter|action/i.test(genre)) {category = "Aksiyon & Macera";}
 
       return {
         id: `web-game-${g.id}`,
         title: g.title,
         developer: g.developer || g.publisher || undefined,
         releaseYear,
-        platform: g.platform || "PC",
+        platform: g.platform?.trim() || undefined,
         playtimeHours: undefined, // Zero fake data
         category,
-        genres: [genre, "Popüler"],
-        coverUrl:
-          g.thumbnail ||
-          "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80",
+        genres: genre ? [genre] : [],
+        coverUrl: g.thumbnail || undefined,
         rating: undefined, // Zero fake data
         synopsis: g.short_description || undefined,
         provenance: "api",
@@ -561,7 +557,7 @@ export interface WebSearchResultItem {
   releaseYear?: number;
   category: string;
   genres: string[];
-  coverUrl: string;
+  coverUrl?: string;
   rating?: number;
   synopsis?: string;
   extraInfo?: string;
@@ -596,12 +592,10 @@ export async function searchInternetMedia(query: string): Promise<WebSearchResul
           const s = item.show;
           const parsedYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : undefined;
           const releaseYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined;
-          const genres = s.genres && s.genres.length > 0 ? s.genres : ["Drama"];
+          const genres = s.genres && s.genres.length > 0 ? s.genres : [];
           const creator = s.network?.name || s.webChannel?.name || undefined;
           const coverUrl =
-            s.image?.medium ||
-            s.image?.original ||
-            "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80";
+            s.image?.medium || s.image?.original || undefined;
           const synopsis = s.summary ? stripHtml(s.summary) : undefined;
           const rating = s.rating?.average ?? undefined;
 

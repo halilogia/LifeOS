@@ -6,6 +6,7 @@ interface KpssCountdownBannerProps {
   kpssTimeLeft: string;
   estimatedTimeLeft: string;
   remainingCount: number;
+  examDateLabel?: string;
 }
 
 export function KpssCountdownBanner({
@@ -14,6 +15,7 @@ export function KpssCountdownBanner({
   kpssTimeLeft,
   estimatedTimeLeft,
   remainingCount,
+  examDateLabel,
 }: KpssCountdownBannerProps) {
   return (
     <div className="kpss-countdowns-banner">
@@ -22,7 +24,9 @@ export function KpssCountdownBanner({
           {t.kpss_countdown_exam_title}
         </span>
         <span className="kpss-countdown-time">{kpssTimeLeft}</span>
-        <span className="kpss-countdown-subtitle">6 Eylül 2026 - 10:15</span>
+        {examDateLabel ? (
+          <span className="kpss-countdown-subtitle">{examDateLabel}</span>
+        ) : null}
       </div>
       <div className="kpss-countdown-card">
         <span className="kpss-countdown-title">

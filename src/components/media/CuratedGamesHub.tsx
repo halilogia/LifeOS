@@ -4,6 +4,7 @@ import type { MediaItem } from "@/types/media.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { CURATED_GAMES, CuratedGameItem } from "@/services/curatedCatalogData.js";
 import { normalizeTitle } from "@/services/movieSeriesData.js";
+import { resolveCoverSrc, MEDIA_COVER_PLACEHOLDER } from "./mediaCoverFallback.js";
 
 interface CuratedGamesHubProps {
   lang: Language;
@@ -133,14 +134,14 @@ export function CuratedGamesHub({
             >
               <div className="curated-card-media">
                 <img
-                  src={game.coverUrl}
+                  src={resolveCoverSrc(game.coverUrl)}
                   alt={game.title}
                   className="curated-card-cover"
                   loading="lazy"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
                     target.onerror = null;
-                    target.src = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80";
+                    target.src = MEDIA_COVER_PLACEHOLDER;
                   }}
                 />
                 <div className="curated-card-pills">

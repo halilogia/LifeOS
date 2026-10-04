@@ -287,6 +287,7 @@ export const kpss = {
   kpss_chart_target_v: "Hedef Video",
   kpss_completed: "Tebrikler, bitti!",
   kpss_exam_started: "Sınav Başladı!",
+  kpss_exam_tba: "ÖSYM Sınav Takvimi Henüz Açıklanmadı",
   kpss_time_format: "{days} Gün, {hours} Saat, {mins} Dk, {secs} Sn",
   kpss_external_quiz_title: "Harici AI ile Sınav Oluştur",
   kpss_external_quiz_desc:
