@@ -25,7 +25,7 @@ import {
 import {
   SUBJECT_NAMES,
   subjectsList,
-  KPSS_TARGET_DATE,
+  getActiveKpssCycle,
 } from "@/domain/constants/kpssConstants.js";
 import { KpssPastQuiz } from "@/services/kpss/kpssQuizService.js";
 
@@ -199,14 +199,23 @@ export function KpssView({
     const remaining = totalCount - finishedCount;
     setRemainingCount(remaining);
 
+    // Resolve the active exam cycle's official date (may be undefined when unannounced)
+    const activeCycle = getActiveKpssCycle();
+    const targetDate = activeCycle.cycle.targetDate;
+
     const updateCountdown = () => {
       const now = Date.now();
-      const countdown = calculateKpssCountdown(KPSS_TARGET_DATE, now);
-      setKpssTimeLeft(
-        countdown
-          ? formatKpssCountdown(countdown, t.kpss_time_format)
-          : t.kpss_exam_started,
-      );
+      if (targetDate === undefined) {
+        // Zero Fake Data: do not render a countdown against a non-existent date
+        setKpssTimeLeft(t.kpss_exam_tba || "—");
+      } else {
+        const countdown = calculateKpssCountdown(targetDate, now);
+        setKpssTimeLeft(
+          countdown
+            ? formatKpssCountdown(countdown, t.kpss_time_format)
+            : t.kpss_exam_started,
+        );
+      }
       const estimated = calculateEstimatedCompletionTime(remaining, now);
       setEstimatedTimeLeft(
         estimated
@@ -338,7 +347,12 @@ export function KpssView({
             targetScore={targetScore}
             currentSubject={currentSubject}
             subjectsList={subjectsList}
-            kpssTargetDate={KPSS_TARGET_DATE}
+            kpssTargetDate={getActiveKpssCycle().cycle.targetDate}
+            examDateLabel={
+              getActiveKpssCycle().cycle.targetDate
+                ? "6 Eylül 2026 - 10:15"
+                : getActiveKpssCycle().statusLabel
+            }
             overallNet={overallNet}
             maxNet={maxNet}
             estimatedScore={estimatedScore}

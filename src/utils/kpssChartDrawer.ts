@@ -24,7 +24,7 @@ export interface KpssChartParams {
   targetNet: number;
   targetScore: number;
   kpssProgress: KpssProgress[];
-  kpssTargetDate: number;
+  kpssTargetDate?: number;
 }
 
 export function drawKpssStatsChart(

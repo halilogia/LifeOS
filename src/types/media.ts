@@ -49,7 +49,7 @@ export interface GameProgress {
   playtimeHours: number;
   targetHours?: number;
   playstyle: GamePlaystyle;
-  platform: GamePlatform;
+  platform?: GamePlatform;
 }
 
 export interface MediaItem {

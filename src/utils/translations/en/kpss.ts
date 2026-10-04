@@ -289,6 +289,7 @@ export const kpss = {
   kpss_chart_target_v: "Target V",
   kpss_completed: "Completed!",
   kpss_exam_started: "Exam Started!",
+  kpss_exam_tba: "ÖSYM Exam Calendar Not Announced Yet",
   kpss_time_format: "{days}d, {hours}h, {mins}m, {secs}s",
   kpss_external_quiz_title: "Create Quiz with External AI",
   kpss_external_quiz_desc:

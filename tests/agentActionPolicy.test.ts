@@ -106,8 +106,48 @@ describe("Agent Action Policy & Security Engine", () => {
           expectedTabId: 101,
           actualTabId: 101,
           expectedUrl: "https://example.com/checkout",
+          actualUrl: "https://example.com/checkout",
+        }),
+      ).toEqual({ valid: true });
+    });
+
+    it("allows same-origin different-path only when exact URL is NOT required", () => {
+      // Read-only default: origin match is sufficient
+      expect(
+        validateTabBinding({
+          expectedTabId: 101,
+          actualTabId: 101,
+          expectedUrl: "https://example.com/checkout",
           actualUrl: "https://example.com/confirmation",
         }),
+      ).toEqual({ valid: true });
+    });
+
+    it("rejects same-origin navigation when exact URL is required (mutating actions)", () => {
+      const res = validateTabBinding(
+        {
+          expectedTabId: 101,
+          actualTabId: 101,
+          expectedUrl: "https://example.com/checkout",
+          actualUrl: "https://example.com/confirmation",
+        },
+        { requireExactUrl: true },
+      );
+      expect(res.valid).toBe(false);
+      expect(res.reason).toContain("URL mismatch");
+    });
+
+    it("ignores hash fragments when comparing exact URLs", () => {
+      expect(
+        validateTabBinding(
+          {
+            expectedTabId: 101,
+            actualTabId: 101,
+            expectedUrl: "https://example.com/page#section-a",
+            actualUrl: "https://example.com/page#section-b",
+          },
+          { requireExactUrl: true },
+        ),
       ).toEqual({ valid: true });
     });
 

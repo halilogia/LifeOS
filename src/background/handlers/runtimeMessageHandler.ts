@@ -152,7 +152,7 @@ export async function handleRuntimeMessage(
 
   // Execute Agent Action Service
   if (message.type === "execute_agent_action") {
-    const { targetTabId, targetOrigin, payload } = message;
+    const { targetTabId, targetOrigin, targetUrl, payload } = message;
 
     // Strict security enforcement: Caller MUST provide targetTabId and targetOrigin
     if (typeof targetTabId !== "number" || !targetOrigin) {
@@ -181,15 +181,30 @@ export async function handleRuntimeMessage(
         return;
       }
 
-      // 2. Enforce active tab Origin match
+      // 2. Enforce active tab Origin + full URL match.
+      // A same-origin navigation (e.g. /checkout -> /confirmation SPA transition)
+      // must NOT be allowed to receive an action proposed for a different page state.
       try {
-        const activeOrigin = new URL(activeTabUrl).origin;
-        if (activeOrigin !== targetOrigin) {
+        const activeUrlObj = new URL(activeTabUrl);
+        if (activeUrlObj.origin !== targetOrigin) {
           sendResponse({
             success: false,
-            error: `Origin mismatch: Action proposal originated from ${targetOrigin}, but active tab is now on ${activeOrigin}. Execution blocked.`,
+            error: `Origin mismatch: Action proposal originated from ${targetOrigin}, but active tab is now on ${activeUrlObj.origin}. Execution blocked.`,
           });
           return;
+        }
+
+        if (typeof targetUrl === "string" && targetUrl) {
+          const expectedUrlObj = new URL(targetUrl);
+          // Compare pathname + search (ignore hash: intra-page anchors do not change document identity)
+          const normalize = (u: URL) => `${u.pathname}${u.search}`;
+          if (normalize(activeUrlObj) !== normalize(expectedUrlObj)) {
+            sendResponse({
+              success: false,
+              error: `URL mismatch: Action proposal was bound to ${normalize(expectedUrlObj)}, but active tab navigated to ${normalize(activeUrlObj)}. Execution blocked.`,
+            });
+            return;
+          }
         }
       } catch {
         sendResponse({
@@ -199,7 +214,7 @@ export async function handleRuntimeMessage(
         return;
       }
 
-      // 3. Both tab ID and origin verified — dispatch to content script
+      // 3. Tab ID, origin and URL verified — dispatch to content script
       chrome.tabs.sendMessage(
         activeTabId,
         { type: "agent_execute_action", payload },

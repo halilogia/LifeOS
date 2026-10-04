@@ -34,7 +34,7 @@ interface KpssDailyStatsCardProps {
   targetNet: number;
   targetScore: number;
   kpssProgress: KpssProgress[];
-  kpssTargetDate: number;
+  kpssTargetDate?: number;
 }
 
 export function KpssDailyStatsCard({

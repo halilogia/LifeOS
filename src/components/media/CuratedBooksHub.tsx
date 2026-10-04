@@ -4,6 +4,7 @@ import type { MediaItem } from "@/types/media.js";
 import { getTranslation } from "@/utils/i18n.js";
 import { CURATED_BOOKS, CuratedBookItem } from "@/services/curatedCatalogData.js";
 import { normalizeTitle } from "@/services/movieSeriesData.js";
+import { resolveCoverSrc, MEDIA_COVER_PLACEHOLDER } from "./mediaCoverFallback.js";
 
 interface CuratedBooksHubProps {
   lang: Language;
@@ -130,14 +131,14 @@ export function CuratedBooksHub({
             >
               <div className="curated-card-media">
                 <img
-                  src={book.coverUrl}
+                  src={resolveCoverSrc(book.coverUrl)}
                   alt={book.title}
                   className="curated-card-cover"
                   loading="lazy"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
                     target.onerror = null;
-                    target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80";
+                    target.src = MEDIA_COVER_PLACEHOLDER;
                   }}
                 />
                 <div className="curated-card-pills">

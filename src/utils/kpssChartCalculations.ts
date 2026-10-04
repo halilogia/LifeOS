@@ -53,8 +53,15 @@ export interface CalculateTargetsInput {
   targetNet: number;
   targetScore: number;
   kpssProgress: KpssProgress[];
-  kpssTargetDate: number;
+  kpssTargetDate?: number;
 }
+
+/**
+ * Standard preparation horizon (in days) used when ÖSYM has not yet
+ * announced the next exam date. Prevents division-by-zero / past-date
+ * artefacts while keeping daily targets realistic.
+ */
+export const DEFAULT_KPSS_PREP_HORIZON_DAYS = 180;
 
 export function calculateDailyTargets(
   input: CalculateTargetsInput,
@@ -64,10 +71,12 @@ export function calculateDailyTargets(
   const overallNetObj = getOverallNets(kpssProgress);
   const overallNet = overallNetObj.net;
   const estimatedScore = Math.round((40 + overallNet * 0.5) * 10) / 10;
-  const daysRemaining = Math.max(
-    1,
-    Math.round((kpssTargetDate - Date.now()) / (1000 * 60 * 60 * 24)),
-  );
+  const now = Date.now();
+  const computedDays =
+    kpssTargetDate !== undefined
+      ? Math.round((kpssTargetDate - now) / (1000 * 60 * 60 * 24))
+      : DEFAULT_KPSS_PREP_HORIZON_DAYS;
+  const daysRemaining = Math.max(1, computedDays);
 
   let remainingQuestions: number;
   let remainingVideos: number;

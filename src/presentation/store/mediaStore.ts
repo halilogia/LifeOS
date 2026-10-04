@@ -693,7 +693,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
                   : 0,
             targetHours: game.playtimeHours,
             playstyle: existing.gameProgress?.playstyle || "main_story",
-            platform: (game.platform as GamePlatform) || "PC",
+            platform: game.platform as GamePlatform | undefined,
           },
         };
         nextItems = currentItems.map((item, idx) =>
@@ -726,7 +726,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
                 : 0,
           targetHours: game.playtimeHours,
           playstyle: "main_story",
-          platform: (game.platform as GamePlatform) || "PC",
+          platform: game.platform as GamePlatform | undefined,
         },
         createdAt: now,
         updatedAt: now,

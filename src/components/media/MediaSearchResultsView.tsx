@@ -17,6 +17,7 @@ import {
   searchInternetMedia,
   type WebSearchResultItem,
 } from "@/services/mediaInternetSyncService.js";
+import { resolveCoverSrc } from "./mediaCoverFallback.js";
 
 interface MediaSearchResultsViewProps {
   lang: Language;
@@ -352,7 +353,7 @@ export function MediaSearchResultsView({
                   className={`curated-card movie-card ${isWatched ? "status-completed" : isWatchlist ? "status-backlog" : ""}`}
                 >
                   <div className="curated-card-media">
-                    <img src={movie.coverUrl} alt={movie.title} className="curated-card-cover" loading="lazy" />
+                    <img src={resolveCoverSrc(movie.coverUrl)} alt={movie.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
                       {movie.rating !== undefined && (
                         <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>
@@ -440,7 +441,7 @@ export function MediaSearchResultsView({
                   className={`curated-card tv-card ${isWatched ? "status-completed" : isWatching ? "status-in-progress" : isWatchlist ? "status-backlog" : ""}`}
                 >
                   <div className="curated-card-media">
-                    <img src={show.coverUrl} alt={show.title} className="curated-card-cover" loading="lazy" />
+                    <img src={resolveCoverSrc(show.coverUrl)} alt={show.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
                       {show.rating !== undefined && (
                         <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>
@@ -539,7 +540,7 @@ export function MediaSearchResultsView({
                   className={`curated-card book-card ${isRead ? "status-completed" : isReading ? "status-in-progress" : isWishlist ? "status-backlog" : ""}`}
                 >
                   <div className="curated-card-media">
-                    <img src={book.coverUrl} alt={book.title} className="curated-card-cover" loading="lazy" />
+                    <img src={resolveCoverSrc(book.coverUrl)} alt={book.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
                       {book.rating !== undefined && (
                         <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>
@@ -629,7 +630,7 @@ export function MediaSearchResultsView({
                   className={`curated-card game-card ${isPlayed ? "status-completed" : isPlaying ? "status-in-progress" : isWishlist ? "status-backlog" : ""}`}
                 >
                   <div className="curated-card-media">
-                    <img src={game.coverUrl} alt={game.title} className="curated-card-cover" loading="lazy" />
+                    <img src={resolveCoverSrc(game.coverUrl)} alt={game.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
                       {game.rating !== undefined && (
                         <span className="curated-rating-pill">★ {game.rating.toFixed(1)}</span>
@@ -725,7 +726,7 @@ export function MediaSearchResultsView({
                 {webResults.map((item) => (
                   <div key={item.id} className="curated-card web-result-card">
                     <div className="curated-card-media">
-                      <img src={item.coverUrl} alt={item.title} className="curated-card-cover" loading="lazy" />
+                      <img src={resolveCoverSrc(item.coverUrl)} alt={item.title} className="curated-card-cover" loading="lazy" />
                       <div className="curated-card-pills">
                         {item.rating !== undefined && (
                           <span className="curated-rating-pill">⭐ {item.rating.toFixed(1)}</span>

@@ -15,7 +15,7 @@ export interface CuratedBookItem {
   releaseYear?: number;
   category: string;
   genres: string[];
-  coverUrl: string;
+  coverUrl?: string;
   rating?: number; // Goodreads / 10
   synopsis?: string;
   provenance?: MediaProvenance;
@@ -30,7 +30,7 @@ export interface CuratedGameItem {
   platform?: "PC" | "PlayStation" | "Xbox" | "Nintendo" | "Steam Deck" | "Other" | string;
   category: string;
   genres: string[];
-  coverUrl: string;
+  coverUrl?: string;
   rating?: number; // Metacritic / 10
   synopsis?: string;
   provenance?: MediaProvenance;
@@ -45,7 +45,7 @@ export interface CuratedMovieItem {
   runtimeMinutes?: number;
   category: string;
   genres: string[];
-  coverUrl: string;
+  coverUrl?: string;
   rating?: number; // IMDb
   synopsis?: string;
   provenance?: MediaProvenance;
@@ -62,7 +62,7 @@ export interface CuratedTvItem {
   endYear?: number;
   category: string;
   genres: string[];
-  coverUrl: string;
+  coverUrl?: string;
   rating?: number; // IMDb / 10
   synopsis?: string;
   provenance?: MediaProvenance;
