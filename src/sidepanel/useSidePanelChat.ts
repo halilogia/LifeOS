@@ -515,6 +515,28 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                 })()
               : undefined;
 
+            // Fail-closed: an action may only be proposed when we hold a
+            // verifiable tab/URL snapshot to bind it to. Otherwise the
+            // background service worker would reject it anyway.
+            const hasBinding =
+              typeof activeCtx?.tabId === "number" &&
+              typeof activeCtx?.url === "string" &&
+              activeCtx.url.length > 0;
+
+            if (!hasBinding) {
+              finalContent = `${cleanPromptResponse}\n\n🛡️ **Güvenlik Politikası:** Eylem engellendi (aktif sekme bağlamı doğrulanamadı).`;
+              setAgentStatus(null);
+              // Skip evaluation/dispatch below by short-circuiting the branch
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === assistantMsgId
+                    ? { ...msg, content: finalContent }
+                    : msg,
+                ),
+              );
+              return;
+            }
+
             // Deterministic Security Policy Evaluation
             const evalResult = evaluateActionProposal(actionPayload, {
               expectedTabId: activeCtx?.tabId,
