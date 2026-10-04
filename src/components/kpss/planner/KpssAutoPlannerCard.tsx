@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { KpssProgress } from "@/types/types.js";
 import { kpssData } from "@/services/kpss/kpssService.js";
+import { getActiveKpssCycle } from "@/domain/constants/kpssConstants.js";
 import { KpssPlannerHeader } from "./KpssPlannerHeader.js";
 import { KpssTodayTopicsList } from "./KpssTodayTopicsList.js";
 import { KpssPlannerInfoModal } from "./KpssPlannerInfoModal.js";
@@ -20,13 +21,9 @@ export function KpssAutoPlannerCard({
 }: KpssAutoPlannerCardProps) {
   const [showInfoModal, setShowInfoModal] = useState(false);
 
-  // 1. Calculate remaining days until exam (September 6, 2026 10:15)
-  const examDate = new Date("2026-09-06T10:15:00").getTime();
-  const diffTime = examDate - Date.now();
-  const daysRemaining = Math.max(
-    1,
-    Math.ceil(diffTime / (1000 * 60 * 60 * 24)),
-  );
+  // 1. Calculate remaining days until active exam cycle
+  const activeCycle = getActiveKpssCycle();
+  const daysRemaining = Math.max(1, activeCycle.daysRemaining);
 
   // 2. Map all uncompleted topics across all subjects in standard order
   const subjectsOrder = [
@@ -166,7 +163,7 @@ export function KpssAutoPlannerCard({
               }}
             >
               <span>
-                <strong>{t.kpss_days_left}</strong> {daysRemaining}
+                <strong>{activeCycle.cycle.name} {t.kpss_days_left}</strong> {daysRemaining}
               </span>
               <span>
                 <strong>{t.kpss_topics_left}</strong> {totalUncompleted}

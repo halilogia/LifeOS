@@ -2,20 +2,22 @@
   "name": "life-os",
   "version": "1.0.0",
   "type": "module",
-  "description": "ZenTodo is a high-end Chrome extension that replaces your New Tab page with a minimalist, focused, and aesthetically pleasing To-Do list environment.",
+  "description": "LifeOS is an intelligent, privacy-first personal dashboard and autonomous assistant Chrome extension with Clean Architecture.",
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "vite",
     "build": "vite build",
+    "typecheck": "tsc --noEmit",
     "count-lines": "node scripts/countLines.js",
     "generate:tree": "node scripts/automated_project_tree.cjs",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest run",
-    "benchmark": "node scripts/benchmark.mjs"
+    "benchmark": "node scripts/benchmark.mjs",
+    "check": "npm run typecheck && npm run lint -- --quiet && npm run test && npm run build && node scripts/runAnalyzers.mjs && node scripts/findDeadFiles.mjs && node scripts/i18nHealthCheck.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/halilogia/chrome-extension-todo.git"
+    "url": "git+https://github.com/halilogia/LifeOS.git"
   },
   "keywords": [],
   "author": "",

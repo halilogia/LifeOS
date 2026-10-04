@@ -147,12 +147,23 @@ export async function handleRuntimeMessage(
   // Execute Agent Action Service
   if (message.type === "execute_agent_action") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (!tabs || !tabs[0] || !tabs[0].id) {
+      if (!tabs || !tabs[0] || typeof tabs[0].id !== "number") {
         sendResponse({ success: false, error: "No active tab" });
         return;
       }
+      const tabId: number = tabs[0].id;
+      if (
+        message.targetTabId !== undefined &&
+        tabId !== message.targetTabId
+      ) {
+        sendResponse({
+          success: false,
+          error: "Tab mismatch: Active tab changed before execution.",
+        });
+        return;
+      }
       chrome.tabs.sendMessage(
-        tabs[0].id,
+        tabId,
         { type: "agent_execute_action", payload: message.payload },
         (res) => {
           if (chrome.runtime.lastError || !res) {

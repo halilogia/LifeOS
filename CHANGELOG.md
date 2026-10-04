@@ -8,6 +8,32 @@ Bu dosya, **Life OS - Personal Dashboard** eklentisinin geliştirilme aşamalar�
 > Sürüm şeması tekilleştirilene kadar yeni çalışmalar `[Unreleased]` altında
 > toplanır.
 
+## [Unreleased] — 2026-10-04 (Architectural Hardening & Governance)
+
+### Güvenlik & Browser Agent Güven Sınırı (P0)
+- **Deterministik Eylem Politikası Motoru (`agentActionPolicy.ts`)**: Browser Agent'ın sayfa bağlamından ürettiği DOM eylemleri Zod şeması ile sıkı doğrulandı, okuma (`READ_ONLY`) ve yan-etkili/mutating (`MUTATING_SIDE_EFFECT`) olarak sınıflandırıldı.
+- **Kullanıcı Onayı & Etkileşim Kartı (`ActionApprovalCard.tsx`)**: Tıklama (`click`) ve form doldurma (`type`) gibi yan-etkili işlemler kullanıcının açık onayı olmadan doğrudan icra edilmez; side panel üzerinde hedef eleman ve parametreleri gösteren interaktif onay kartı sunulur.
+- **Eleman Sınırlandırması & URL Protokol Koruması (`actionExecutor.ts`)**: `DIV` ve `P` gibi geniş elemanlara kontrolsüz tıklama ve metin yazma engellendi; `javascript:` ve `data:` tehlikeli protokolleri reddedildi.
+- **Aktif Sekme & Origin Doğrulaması (`runtimeMessageHandler.ts`)**: Sekmeler arası güvenli mesajlaşma için tab ID ve origin eşleşmesi zorunlu kılındı.
+
+### Veri Bütünlüğü & Medya Mimarisi (P0/P1)
+- **Zero Fake Data Protocol**: Harici API'lerden (TVMaze, OpenLibrary, FreeToGame, IMDb) eksik gelen metadata için uygulanan yapay uydurma değerler (`3 seasons`, `30 episodes`, `320 pages`, `rating: 8.8`) tamamen kaldırıldı. Eksik alanlar `undefined` olarak bırakılıp arayüzde dinamik rozetlerle sunuldu.
+- **Zod Runtime Doğrulaması**: Dış API'lerden gelen tüm ham yanıtlar Zod şemalarıyla doğrulandı; geçersiz veri yapısı sessizce filtrelendi.
+- **Delta Cache Mimarisi (`ChromeStorageMediaCatalogCache.ts`)**: Statik katalog ile uzaktan senkronize edilen farklar `chrome.storage.local` üzerinde hafif delta olarak önbelleğe alındı.
+- **Zod Güvenlikli Yedek İçe Aktarımı**: `mediaStore.importBackup` fonksiyonuna Zod şeması eklenerek hatalı veya zararlı JSON yüklemeleri engellendi.
+
+### KPSS 2026 Sınav Döngüsü & Otomatik Planlayıcı (P1)
+- **Dinamik Sınav Döngüsü Yönetimi (`kpssConstants.ts`)**: 6 Eylül 2026 tarihinin geçmesiyle ortaya çıkan yapay 1 gün kalmış illüzyonu düzeltildi; `getActiveKpssCycle()` fonksiyonu ile gelecek aktif sınav döngüsü (2027/2028 KPSS) dinamik olarak hesaplanıp arayüzde gösterildi.
+
+### CI/CD, Mekanik Yönetişim & Analizörler (P1)
+- **GitHub Actions CI/CD (`.github/workflows/ci.yml`)**: Typecheck (`tsc`), ESLint, Vitest, Rolldown derlemesi ve mimari analizörleri otomatik çalıştıran CI iş akışı eklendi.
+- **Fail-Closed Mimari Analizörler**: `runAnalyzers.mjs` ve `findDeadFiles.mjs` betiklerine ihlal durumunda `process.exitCode = 1` verildi.
+- **Ölü Dosyalar Temizlendi**: Kullanılmayan `MediaQuotesModal.tsx`, `MediaGrid.tsx`, `MediaDetailModal.tsx` ve `MediaCard.tsx` tamamen silindi.
+- **Paket ve Dizin Temizliği**: `package.json` açıklaması ve repo URL'i güncellendi; `npm run check` toplu doğrulama scripti eklendi; yerel Windows mutlak linkleri bağıl yollara dönüştürüldü.
+
+### Arka Plan Güvenilirliği (P1)
+- **MV3 Servis Çalışanı Yaşam Döngüsü**: `screentimeTracker.ts` içindeki `setInterval` yapısı `chrome.alarms` ve `chrome.runtime.onSuspend` ile güçlendirildi.
+
 ---
 
 ## [Unreleased] — 2026-08-27 → 2026-09-27
@@ -250,7 +276,7 @@ maddeler o dönemde tamamlanan tüm çalışmaları kapsar.
 - **Düşük Kaliteli Emojilerin SVG İkonlarla Değiştirilmesi**: Arayüzlerdeki 📈, 📊 ve 🎯 gibi emojiler mor temalı yüksek çözünürlüklü vektörel SVG simgelerle güncellendi.
 - **Grafik Yazı Üst Üste Binme Hatası Düzeltildi**: Çizgi grafikte soru ve video hedeflerinin çakışmasını engellemek amacıyla hedefler sol ve sağ kenarlara zıt olarak hizalandı.
 - **Ekran Süresi Uyku Modu (Sleep) Düzeltmesi**: Bilgisayar kilitlendiğinde veya uykuya geçtiğinde süre birikmesini engellemek için tekil zaman artışları arka planda maksimum 12 saniye ile sınırlandırıldı.
-- **Yasaklanan Emojiler Kuralı**: [.agents/AGENTS.md](file:///c:/Users/emre_/.agents/AGENTS.md) dosyasına görsel etiketlerde düşük kaliteli emoji kullanımını yasaklayan kural eklendi.
+- **Yasaklanan Emojiler Kuralı**: [.agents/AGENTS.md](.agents/AGENTS.md) dosyasına görsel etiketlerde düşük kaliteli emoji kullanımını yasaklayan kural eklendi.
 
 ## [3.2.0] - 2026-07-18
 ### Eklendi
@@ -519,7 +545,7 @@ maddeler o dönemde tamamlanan tüm çalışmaları kapsar.
 ### Değişti
 - **Vite + Preact + TypeScript (TSX) Göçü**:
   - Proje, eski HTML + JavaScript yapısından modern, tip güvenli ve performanslı **Vite + Preact + TSX** mimarisine taşındı.
-  - Bileşen odaklı yapıya geçilerek tüm ekranlar [src/components/](file:///c:/GitHub/Done/chrome-extension/src/components) altında parçalara bölündü:
+  - Bileşen odaklı yapıya geçilerek tüm ekranlar [src/components/](src/components) altında parçalara bölündü:
     - `App.tsx` (Global durum yönetimi, dil, yedekleme, saat-tarih ve navigasyon)
     - `Sidebar.tsx` (Buzlu cam tasarımlı menü)
     - `ListView.tsx` & `KanbanView.tsx` (Görevler ve rutinlerin listelendiği panolar)

@@ -36,7 +36,7 @@ export function MovieSeriesHub({
 
   const q = searchQuery.trim().toLowerCase();
   const filteredSeries = seriesList.filter((s) => {
-    if (selectedGenre !== "all" && !s.genres.includes(selectedGenre)) return false;
+    if (selectedGenre !== "all" && !s.genres.includes(selectedGenre)) {return false;}
     if (q) {
       const matchTitle = s.title.toLowerCase().includes(q);
       const matchOrig = s.originalTitle
@@ -48,7 +48,7 @@ export function MovieSeriesHub({
           m.title.toLowerCase().includes(q) ||
           (m.originalTitle && m.originalTitle.toLowerCase().includes(q)),
       );
-      if (!matchTitle && !matchOrig && !matchDesc && !matchItems) return false;
+      if (!matchTitle && !matchOrig && !matchDesc && !matchItems) {return false;}
     }
     return true;
   });

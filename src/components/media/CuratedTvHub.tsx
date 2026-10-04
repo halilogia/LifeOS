@@ -40,7 +40,7 @@ export function CuratedTvHub({
     const q = searchQuery.trim().toLowerCase();
 
     return [...tvShows]
-      .sort((a, b) => b.rating - a.rating)
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
       .filter((show) => {
         // Category filter
         if (selectedCategory !== "all" && show.category !== selectedCategory) {
@@ -55,7 +55,7 @@ export function CuratedTvHub({
             : false;
           const matchCreator = show.creator.toLowerCase().includes(q);
           const matchGenre = show.genres.some((g) => g.toLowerCase().includes(q));
-          if (!matchTitle && !matchOrig && !matchCreator && !matchGenre) return false;
+          if (!matchTitle && !matchOrig && !matchCreator && !matchGenre) {return false;}
         }
 
         // Status filter
@@ -68,9 +68,9 @@ export function CuratedTvHub({
               (normalizeTitle(u.title) === showNorm ||
                 (origNorm && normalizeTitle(u.title) === origNorm)),
           );
-          if (statusFilter === "completed" && userItem?.status !== "completed") return false;
-          if (statusFilter === "in_progress" && userItem?.status !== "in_progress") return false;
-          if (statusFilter === "backlog" && userItem?.status !== "backlog") return false;
+          if (statusFilter === "completed" && userItem?.status !== "completed") {return false;}
+          if (statusFilter === "in_progress" && userItem?.status !== "in_progress") {return false;}
+          if (statusFilter === "backlog" && userItem?.status !== "backlog") {return false;}
         }
 
         return true;
@@ -226,10 +226,16 @@ export function CuratedTvHub({
                   }}
                 />
                 <div className="curated-card-pills">
-                  <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>
-                  <span className="curated-pages-pill">
-                    {show.totalSeasons} Sezon • {show.totalEpisodes} Bölüm
-                  </span>
+                  {show.rating !== undefined && (
+                    <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>
+                  )}
+                  {(show.totalSeasons !== undefined || show.totalEpisodes !== undefined) && (
+                    <span className="curated-pages-pill">
+                      {show.totalSeasons !== undefined ? `${show.totalSeasons} Sezon` : ""}
+                      {show.totalSeasons !== undefined && show.totalEpisodes !== undefined ? " • " : ""}
+                      {show.totalEpisodes !== undefined ? `${show.totalEpisodes} Bölüm` : ""}
+                    </span>
+                  )}
                 </div>
               </div>
 

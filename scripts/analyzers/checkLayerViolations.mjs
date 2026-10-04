@@ -11,7 +11,9 @@ export function run() {
     const relPath = getRelativePath(filePath);
     if (!relPath.startsWith("components/")) continue;
 
-    const content = fs.readFileSync(filePath, "utf-8");
+    const rawContent = fs.readFileSync(filePath, "utf-8");
+    // Strip block and line comments to avoid false-positives on JSDoc / docstrings
+    const content = rawContent.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
     if (content.includes("chrome.storage.")) {
       issues.push({
         file: `src/${relPath}`,

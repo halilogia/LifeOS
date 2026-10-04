@@ -40,7 +40,7 @@ export function CuratedMoviesHub({
     const q = searchQuery.trim().toLowerCase();
 
     return [...movies]
-      .sort((a, b) => b.rating - a.rating)
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
       .filter((movie) => {
         // Category filter
         if (selectedCategory !== "all" && movie.category !== selectedCategory) {
@@ -55,7 +55,7 @@ export function CuratedMoviesHub({
             : false;
           const matchDirector = movie.director.toLowerCase().includes(q);
           const matchGenre = movie.genres.some((g) => g.toLowerCase().includes(q));
-          if (!matchTitle && !matchOrig && !matchDirector && !matchGenre) return false;
+          if (!matchTitle && !matchOrig && !matchDirector && !matchGenre) {return false;}
         }
 
         // Status filter
@@ -68,8 +68,8 @@ export function CuratedMoviesHub({
               (normalizeTitle(u.title) === movieNorm ||
                 (origNorm && normalizeTitle(u.title) === origNorm)),
           );
-          if (statusFilter === "completed" && userItem?.status !== "completed") return false;
-          if (statusFilter === "backlog" && userItem?.status !== "backlog") return false;
+          if (statusFilter === "completed" && userItem?.status !== "completed") {return false;}
+          if (statusFilter === "backlog" && userItem?.status !== "backlog") {return false;}
         }
 
         return true;
@@ -224,8 +224,12 @@ export function CuratedMoviesHub({
                   }}
                 />
                 <div className="curated-card-pills">
-                  <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>
-                  <span className="curated-pages-pill">{movie.runtimeMinutes} dk</span>
+                  {movie.rating !== undefined && (
+                    <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>
+                  )}
+                  {movie.runtimeMinutes !== undefined && (
+                    <span className="curated-pages-pill">{movie.runtimeMinutes} dk</span>
+                  )}
                 </div>
               </div>
 

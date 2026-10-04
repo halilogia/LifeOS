@@ -49,6 +49,8 @@ export function SidePanelApp() {
     handleExportCurrentChat,
     handleResolveClarification,
     handleCancelClarification,
+    handleApproveAction,
+    handleRejectAction,
     messageQueue,
     handleRemoveQueuedMessage,
     handleClearQueue,
@@ -118,6 +120,8 @@ export function SidePanelApp() {
         onChipClick={handleChipClick}
         onResolveClarification={handleResolveClarification}
         onCancelClarification={handleCancelClarification}
+        onApproveAction={handleApproveAction}
+        onRejectAction={handleRejectAction}
       />
 
       {/* Input Container with Queued Messages */}

@@ -3,6 +3,7 @@ import { Language } from "@/types/types.js";
 import { ChatMessage } from "./ChatMessage.js";
 import { formatFileSize } from "@/services/aichat/fileAttachmentService.js";
 import { ClarificationCard } from "@/components/aichat/ClarificationCard.js";
+import { ActionApprovalCard } from "@/components/aichat/ActionApprovalCard.js";
 
 interface SidePanelMessagesProps {
   t: Record<string, string>;
@@ -13,6 +14,8 @@ interface SidePanelMessagesProps {
   onChipClick: (type: "summarize" | "key_takeaways") => void;
   onResolveClarification?: (messageId: string, answer: string) => void;
   onCancelClarification?: (messageId: string) => void;
+  onApproveAction?: (messageId: string) => void;
+  onRejectAction?: (messageId: string) => void;
 }
 
 function SidePanelCopyBtn({
@@ -88,6 +91,8 @@ export function SidePanelMessages({
   onChipClick,
   onResolveClarification,
   onCancelClarification,
+  onApproveAction,
+  onRejectAction,
 }: SidePanelMessagesProps) {
   const [lightboxImg, setLightboxImg] = useState<{ src: string; alt: string } | null>(null);
 
@@ -217,6 +222,16 @@ export function SidePanelMessages({
                 onSelectOption={(val) => onResolveClarification?.(msg.id, val)}
                 onSubmitCustomAnswer={(ans) => onResolveClarification?.(msg.id, ans)}
                 onCancel={() => onCancelClarification?.(msg.id)}
+              />
+            )}
+
+            {/* Agent Action Confirmation / Approval Card */}
+            {msg.role === "assistant" && msg.pendingActionApproval && (
+              <ActionApprovalCard
+                approval={msg.pendingActionApproval}
+                t={t}
+                onApprove={() => onApproveAction?.(msg.id)}
+                onReject={() => onRejectAction?.(msg.id)}
               />
             )}
 

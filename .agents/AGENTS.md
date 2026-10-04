@@ -22,13 +22,13 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
   * `KpssView.tsx`: Subject checklist and Canvas daily progress charts.
   * `FreeGamesView.tsx`: Gaming deals tracker.
 * **`src/infrastructure/`**:
-  * [persistence/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/persistence): Chrome storage repository implementations (`ChromeStorageTodoRepository` vb.) — `chrome.storage.sync`/`local` erişimi burada yaşar.
-  * [api/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/api): Google API client'ları (Tasks, Drive, Calendar, Auth).
+  * [persistence/](../src/infrastructure/persistence): Chrome storage repository implementations (`ChromeStorageTodoRepository` vb.) — `chrome.storage.sync`/`local` erişimi burada yaşar.
+  * [api/](../src/infrastructure/api): Google API client'ları (Tasks, Drive, Calendar, Auth).
 * **`src/application/`**:
-  * [use-cases/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/application/use-cases): Tek işlemli iş kuralları (AddTodoUseCase, ToggleTodoUseCase, SyncGoogleTasksUseCase).
-  * [ports/](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/application/ports): Dış dünya port arayüzleri (ITodoSyncPort, IDriveBackupPort).
+  * [use-cases/](../src/application/use-cases): Tek işlemli iş kuralları (AddTodoUseCase, ToggleTodoUseCase, SyncGoogleTasksUseCase).
+  * [ports/](../src/application/ports): Dış dünya port arayüzleri (ITodoSyncPort, IDriveBackupPort).
 * **`src/css/newtab/`**:
-  * CSS files divided into feature-specific stylesheets (e.g. `base.css`, `sidebar.css`, `tasks.css`, etc.). Import stylesheet changes in [newtab.css](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/newtab.css).
+  * CSS files divided into feature-specific stylesheets (e.g. `base.css`, `sidebar.css`, `tasks.css`, etc.). Import stylesheet changes in [newtab.css](../src/newtab.css).
 * **`src/ARCHITECTURE.md`**: CANLI mimari harita — her değişiklikte güncellenir (bkz. bölüm 7).
 
 ---
@@ -37,7 +37,7 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 2.1 CSS & Styling & Design Tokens (Merkezi Tema Sistemi)
 * **No Tailwind CSS**: Use vanilla CSS only.
-* **Design Tokens & Centralized Theme Mandatory Enforcement**: All colors, fonts, borders, glassmorphic filters, and status colors MUST consume CSS variables defined under `:root` in [base.css](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/css/newtab/base.css) (e.g. `var(--accent-color)`, `var(--stock-up)`, `var(--stock-down)`, `var(--card-bg)`, `var(--card-border)`). Never hardcode ad-hoc hex colors or inline style overrides when a theme token exists. Modifying a token in `base.css` must seamlessly update the entire application theme.
+* **Design Tokens & Centralized Theme Mandatory Enforcement**: All colors, fonts, borders, glassmorphic filters, and status colors MUST consume CSS variables defined under `:root` in [base.css](../src/css/newtab/base.css) (e.g. `var(--accent-color)`, `var(--stock-up)`, `var(--stock-down)`, `var(--card-bg)`, `var(--card-border)`). Never hardcode ad-hoc hex colors or inline style overrides when a theme token exists. Modifying a token in `base.css` must seamlessly update the entire application theme.
 * Write custom styles in modular, domain-specific chunks under `src/css/newtab/<feature>.css` (e.g. `pomodoro.css`, `willpower.css`, `tasks.css`, `stock.css`).
 * Respect the dark glassmorphic design system: use vibrant accents, smooth borders, and micro-interactions.
 * **No Low-Quality Emojis for Visual Labels**: Emojis like 📈, 📊, 🎯, ⚙️, 🔥, 📅, 🙋‍♂️, 🗑️, 📥, 👑, 🎉 must not be used as visual icons or prefixes in titles/buttons/labels. Always prefer premium custom inline SVGs or clean text representation.
@@ -48,17 +48,17 @@ The project is structured as a Vite-bundled modular Preact + TypeScript Chrome E
 
 ### 2.3 Storage Management
 * Use **`chrome.storage.sync`** for configurations, user lists, and study logs.
-* Define get/set wrappers inside [ChromeStorageSettingsRepository](file:///c:/Users/emre_/Desktop/GitHub/Done/chrome-extension/src/infrastructure/persistence/ChromeStorageSettingsRepository.ts) veya ilgili `ChromeStorage*Repository` (infrastructure/persistence/).
+* Define get/set wrappers inside [ChromeStorageSettingsRepository](../src/infrastructure/persistence/ChromeStorageSettingsRepository.ts) veya ilgili `ChromeStorage*Repository` (infrastructure/persistence/).
 * **Important**: When adding a new storage key, append its key name string to the `syncKeys` array in the `migrateLocalToSync` method of `storage.ts` so cloud sync works properly.
 
 ### 2.4 Localization (i18n)
 * The extension supports English (`en`) and Turkish (`tr`).
-* Define all interface strings in the `translations` object inside [i18n.ts](file:///c:/GitHub/Done/chrome-extension/src/utils/i18n.ts).
+* Define all interface strings in the `translations` object inside [i18n.ts](../src/utils/i18n.ts).
 * Render localized text in TSX using the format `{translations[lang].translation_key}`.
 
 ### 2.5 View Routing & Navigation
-* Dashboard routing is managed inside [App.tsx](file:///c:/GitHub/Done/chrome-extension/src/App.tsx) via the state variable `activeView`.
-* To introduce a new panel, declare it under the `renderActiveViewComponent` router and wire its navigation triggers to [Sidebar.tsx](file:///c:/GitHub/Done/chrome-extension/src/components/Sidebar.tsx).
+* Dashboard routing is managed inside [App.tsx](../src/App.tsx) via the state variable `activeView`.
+* To introduce a new panel, declare it under the `renderActiveViewComponent` router and wire its navigation triggers to [Sidebar.tsx](../src/components/Sidebar.tsx).
 
 ### 2.6 Path Aliases
 * **Module Aliases Requirement**: Always use path alias syntax `@/` for importing internal modules (e.g. `@/infrastructure/...`, `@/components/...`, `@/utils/...`, `@/services/...`, `@/domain/...`) rather than relative directory nesting references (`../../`).

@@ -124,8 +124,10 @@ function updateActiveTab(): void {
   });
 }
 
+const ALARM_NAME = "lifeos_screentime_flush";
+
 /**
- * Initializes listeners and interval timer for tracking user domain screen time.
+ * Initializes listeners, alarms, and interval timer for tracking user domain screen time.
  */
 export function initScreentimeTracker(): void {
   chrome.tabs.onActivated.addListener(updateActiveTab);
@@ -144,9 +146,30 @@ export function initScreentimeTracker(): void {
       updateActiveTab();
     } else {
       handleDomainChange(null);
+      saveBufferToStorage();
     }
   });
 
-  // Trigger flushing accumulator to local storage every 10 seconds
+  // MV3 Service Worker lifecycle hooks:
+  // 1. Flush on worker suspension
+  if (chrome.runtime?.onSuspend) {
+    chrome.runtime.onSuspend.addListener(() => {
+      saveBufferToStorage();
+    });
+  }
+
+  // 2. MV3 chrome.alarms for background persistence resilience
+  try {
+    chrome.alarms.create(ALARM_NAME, { periodInMinutes: 0.5 });
+    chrome.alarms.onAlarm.addListener((alarm) => {
+      if (alarm.name === ALARM_NAME) {
+        saveBufferToStorage();
+      }
+    });
+  } catch {
+    // Alarms may fail in non-extension environments (e.g. tests)
+  }
+
+  // 3. Fast in-memory interval while service worker is actively executing
   setInterval(saveBufferToStorage, TICK_MS);
 }

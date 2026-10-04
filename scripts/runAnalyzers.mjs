@@ -54,6 +54,7 @@ function run() {
       console.log("");
     }
     console.log(`Toplam ${totalIssues} mimari öneri/ihlal tespit edildi.\n`);
+    process.exitCode = 1;
   }
 }
 

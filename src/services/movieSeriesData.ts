@@ -1910,8 +1910,8 @@ export function computeSeriesProgress(
 
     // Match either by explicit seriesItemId or by title similarity
     const matchedUserItem = userItems.find((u) => {
-      if (u.seriesItemId && u.seriesItemId === movie.id) return true;
-      if (u.type !== "movie") return false;
+      if (u.seriesItemId && u.seriesItemId === movie.id) {return true;}
+      if (u.type !== "movie") {return false;}
       const uNorm = normalizeTitle(u.title);
       return (
         uNorm === movieNormTitle ||

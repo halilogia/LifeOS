@@ -135,3 +135,7 @@ if (existsSync(join(ROOT, "public"))) {
   for (const f of deadPub) console.log("  " + relative(ROOT, f).replace(/\\/g, "/"));
   if (deadPub.length === 0) console.log("  (yok)");
 }
+
+if (dead.length > 0) {
+  process.exitCode = 1;
+}

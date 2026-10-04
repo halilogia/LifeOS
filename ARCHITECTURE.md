@@ -1,6 +1,6 @@
 # 🏛️ Architecture & System Design - LifeOS
 
-> **Not:** Detaylı canlı mimari harita için ayrıca [src/ARCHITECTURE.md](file:///c:/Users/Halil%20Emre/Desktop/GitHub/Public/LifeOS/src/ARCHITECTURE.md) dosyasını inceleyebilirsiniz.
+> **Not:** Detaylı canlı mimari harita için ayrıca [src/ARCHITECTURE.md](./src/ARCHITECTURE.md) dosyasını inceleyebilirsiniz.
 
 ## 📌 1. Project Overview
 LifeOS (ZenTodo), Chrome New Tab sayfasını kişisel bir işletim sistemine, odaklanma merkezine, KPSS sınav salonuna, borsa takip ekranına ve yapay zeka çalışma asistanına dönüştüren yüksek performanslı bir Manifest V3 Chrome eklentisidir.

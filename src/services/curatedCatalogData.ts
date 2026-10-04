@@ -5,17 +5,20 @@
  * with high-res artwork, ratings, pages, playtime, and synopsis.
  */
 
+export type MediaProvenance = "curated" | "api" | "estimated";
+
 export interface CuratedBookItem {
   id: string;
   title: string;
   author: string;
-  totalPages: number;
+  totalPages?: number;
   releaseYear: number;
   category: string;
   genres: string[];
   coverUrl: string;
-  rating: number; // Goodreads / 10
+  rating?: number; // Goodreads / 10
   synopsis: string;
+  provenance?: MediaProvenance;
 }
 
 export interface CuratedGameItem {
@@ -23,13 +26,14 @@ export interface CuratedGameItem {
   title: string;
   developer: string;
   releaseYear: number;
-  playtimeHours: number;
-  platform: "PC" | "PlayStation" | "Xbox" | "Nintendo" | "Steam Deck" | "Other";
+  playtimeHours?: number;
+  platform?: "PC" | "PlayStation" | "Xbox" | "Nintendo" | "Steam Deck" | "Other" | string;
   category: string;
   genres: string[];
   coverUrl: string;
-  rating: number; // Metacritic / 10
+  rating?: number; // Metacritic / 10
   synopsis: string;
+  provenance?: MediaProvenance;
 }
 
 export interface CuratedMovieItem {
@@ -38,12 +42,13 @@ export interface CuratedMovieItem {
   originalTitle?: string;
   director: string;
   releaseYear: number;
-  runtimeMinutes: number;
+  runtimeMinutes?: number;
   category: string;
   genres: string[];
   coverUrl: string;
-  rating: number; // IMDb
+  rating?: number; // IMDb
   synopsis: string;
+  provenance?: MediaProvenance;
 }
 
 export interface CuratedTvItem {
@@ -51,15 +56,16 @@ export interface CuratedTvItem {
   title: string;
   originalTitle?: string;
   creator: string;
-  totalSeasons: number;
-  totalEpisodes: number;
+  totalSeasons?: number;
+  totalEpisodes?: number;
   releaseYear: number;
   endYear?: number;
   category: string;
   genres: string[];
   coverUrl: string;
-  rating: number; // IMDb / 10
+  rating?: number; // IMDb / 10
   synopsis: string;
+  provenance?: MediaProvenance;
 }
 
 /* ─────────────────────────────────────────────────────────────

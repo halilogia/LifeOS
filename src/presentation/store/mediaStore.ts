@@ -5,6 +5,7 @@
  */
 
 import { create } from "zustand";
+import { z } from "zod";
 import type {
   MediaItem,
   MediaType,
@@ -14,7 +15,9 @@ import type {
   MediaStats,
   MovieSeries,
   MovieSeriesItem,
+  GamePlatform,
 } from "@/types/media.js";
+import type { IMediaRepository } from "@/domain/repositories/IMediaRepository.js";
 import { ChromeStorageMediaRepository } from "@/infrastructure/persistence/repositories/ChromeStorageMediaRepository.js";
 import {
   computeMediaStats,
@@ -39,7 +42,14 @@ import {
 } from "@/services/mediaInternetSyncService.js";
 import { logger } from "@/utils/logger.js";
 
-const mediaRepo = new ChromeStorageMediaRepository();
+let mediaRepo: IMediaRepository = new ChromeStorageMediaRepository();
+
+/**
+ * Allows injecting custom repository for testing or decoupling.
+ */
+export function setMediaRepository(repo: IMediaRepository): void {
+  mediaRepo = repo;
+}
 
 interface MediaState {
   items: MediaItem[];
@@ -414,8 +424,8 @@ export const useMediaStore = create<MediaState>((set, get) => ({
       : "";
 
     const existingIndex = currentItems.findIndex((i) => {
-      if (i.seriesItemId && i.seriesItemId === seriesItem.id) return true;
-      if (i.type !== "movie") return false;
+      if (i.seriesItemId && i.seriesItemId === seriesItem.id) {return true;}
+      if (i.type !== "movie") {return false;}
       const uNorm = normalizeTitle(i.title);
       return (
         uNorm === seriesNorm ||
@@ -516,8 +526,8 @@ export const useMediaStore = create<MediaState>((set, get) => ({
     for (const movie of series.items) {
       const movieNorm = normalizeTitle(movie.title);
       const exists = currentItems.some((i) => {
-        if (i.seriesItemId && i.seriesItemId === movie.id) return true;
-        if (i.type !== "movie") return false;
+        if (i.seriesItemId && i.seriesItemId === movie.id) {return true;}
+        if (i.type !== "movie") {return false;}
         return normalizeTitle(i.title) === movieNorm;
       });
 
@@ -544,7 +554,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
       }
     }
 
-    if (newItemsToAdd.length === 0) return;
+    if (newItemsToAdd.length === 0) {return;}
 
     const nextItems = [...newItemsToAdd, ...currentItems];
     await mediaRepo.saveItems(nextItems);
@@ -581,19 +591,19 @@ export const useMediaStore = create<MediaState>((set, get) => ({
             rating !== undefined
               ? rating
               : existing.rating ||
-                (targetStatus === "completed" ? Math.round(book.rating) : 0),
+                (targetStatus === "completed" ? (book.rating ? Math.round(book.rating) : 0) : 0),
           updatedAt: now,
           finishedAt:
             targetStatus === "completed" ? existing.finishedAt || now : undefined,
           bookProgress: {
             currentPage:
               targetStatus === "completed"
-                ? book.totalPages
+                ? book.totalPages ?? 0
                 : targetStatus === "in_progress"
                   ? existing.bookProgress?.currentPage ||
-                    Math.round(book.totalPages * 0.2)
+                    (book.totalPages ? Math.round(book.totalPages * 0.2) : 0)
                   : 0,
-            totalPages: book.totalPages,
+            totalPages: book.totalPages ?? 0,
             quotes: existing.bookProgress?.quotes || [],
           },
         };
@@ -615,17 +625,17 @@ export const useMediaStore = create<MediaState>((set, get) => ({
           rating !== undefined
             ? rating
             : targetStatus === "completed"
-              ? Math.round(book.rating)
+              ? (book.rating ? Math.round(book.rating) : 0)
               : 0,
         favorite: false,
         bookProgress: {
           currentPage:
             targetStatus === "completed"
-              ? book.totalPages
+              ? book.totalPages ?? 0
               : targetStatus === "in_progress"
-                ? Math.round(book.totalPages * 0.2)
+                ? (book.totalPages ? Math.round(book.totalPages * 0.2) : 0)
                 : 0,
-          totalPages: book.totalPages,
+          totalPages: book.totalPages ?? 0,
           quotes: [],
         },
         createdAt: now,
@@ -669,21 +679,21 @@ export const useMediaStore = create<MediaState>((set, get) => ({
             rating !== undefined
               ? rating
               : existing.rating ||
-                (targetStatus === "completed" ? Math.round(game.rating) : 0),
+                (targetStatus === "completed" ? (game.rating ? Math.round(game.rating) : 0) : 0),
           updatedAt: now,
           finishedAt:
             targetStatus === "completed" ? existing.finishedAt || now : undefined,
           gameProgress: {
             playtimeHours:
               targetStatus === "completed"
-                ? game.playtimeHours
+                ? game.playtimeHours ?? 0
                 : targetStatus === "in_progress"
                   ? existing.gameProgress?.playtimeHours ||
-                    Math.round(game.playtimeHours * 0.3)
+                    (game.playtimeHours ? Math.round(game.playtimeHours * 0.3) : 0)
                   : 0,
             targetHours: game.playtimeHours,
             playstyle: existing.gameProgress?.playstyle || "main_story",
-            platform: game.platform,
+            platform: (game.platform as GamePlatform) || "PC",
           },
         };
         nextItems = currentItems.map((item, idx) =>
@@ -704,19 +714,19 @@ export const useMediaStore = create<MediaState>((set, get) => ({
           rating !== undefined
             ? rating
             : targetStatus === "completed"
-              ? Math.round(game.rating)
+              ? (game.rating ? Math.round(game.rating) : 0)
               : 0,
         favorite: false,
         gameProgress: {
           playtimeHours:
             targetStatus === "completed"
-              ? game.playtimeHours
+              ? game.playtimeHours ?? 0
               : targetStatus === "in_progress"
-                ? Math.round(game.playtimeHours * 0.3)
+                ? (game.playtimeHours ? Math.round(game.playtimeHours * 0.3) : 0)
                 : 0,
           targetHours: game.playtimeHours,
           playstyle: "main_story",
-          platform: game.platform,
+          platform: (game.platform as GamePlatform) || "PC",
         },
         createdAt: now,
         updatedAt: now,
@@ -765,7 +775,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
             rating !== undefined
               ? rating
               : existing.rating ||
-                (targetStatus === "completed" ? Math.round(movie.rating) : 0),
+                (targetStatus === "completed" ? (movie.rating ? Math.round(movie.rating) : 0) : 0),
           updatedAt: now,
           finishedAt:
             targetStatus === "completed" ? existing.finishedAt || now : undefined,
@@ -788,7 +798,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
           rating !== undefined
             ? rating
             : targetStatus === "completed"
-              ? Math.round(movie.rating)
+              ? (movie.rating ? Math.round(movie.rating) : 0)
               : 0,
         favorite: false,
         movieProgress: {
@@ -841,20 +851,20 @@ export const useMediaStore = create<MediaState>((set, get) => ({
             rating !== undefined
               ? rating
               : existing.rating ||
-                (targetStatus === "completed" ? Math.round(tvShow.rating) : 0),
+                (targetStatus === "completed" ? (tvShow.rating ? Math.round(tvShow.rating) : 0) : 0),
           updatedAt: now,
           finishedAt:
             targetStatus === "completed" ? existing.finishedAt || now : undefined,
           tvProgress: {
             currentSeason:
               targetStatus === "completed"
-                ? tvShow.totalSeasons
+                ? tvShow.totalSeasons ?? 1
                 : targetStatus === "in_progress"
                   ? existing.tvProgress?.currentSeason || 1
                   : 0,
             currentEpisode:
               targetStatus === "completed"
-                ? tvShow.totalEpisodes
+                ? tvShow.totalEpisodes ?? 1
                 : targetStatus === "in_progress"
                   ? existing.tvProgress?.currentEpisode || 1
                   : 0,
@@ -880,19 +890,19 @@ export const useMediaStore = create<MediaState>((set, get) => ({
           rating !== undefined
             ? rating
             : targetStatus === "completed"
-              ? Math.round(tvShow.rating)
+              ? (tvShow.rating ? Math.round(tvShow.rating) : 0)
               : 0,
         favorite: false,
         tvProgress: {
           currentSeason:
             targetStatus === "completed"
-              ? tvShow.totalSeasons
+              ? tvShow.totalSeasons ?? 1
               : targetStatus === "in_progress"
                 ? 1
                 : 0,
           currentEpisode:
             targetStatus === "completed"
-              ? tvShow.totalEpisodes
+              ? tvShow.totalEpisodes ?? 1
               : targetStatus === "in_progress"
                 ? 1
                 : 0,
@@ -970,15 +980,39 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
   importBackup: async (jsonStr) => {
     try {
-      const parsed = JSON.parse(jsonStr) as { items?: MediaItem[] } | MediaItem[];
-      const itemsToImport = Array.isArray(parsed)
-        ? parsed
-        : Array.isArray(parsed.items)
-          ? parsed.items
-          : null;
+      const parsed: unknown = JSON.parse(jsonStr);
+
+      const MediaItemImportSchema = z
+        .object({
+          id: z.string(),
+          type: z.enum(["movie", "tv", "book", "game"]),
+          title: z.string().min(1),
+          status: z.enum(["backlog", "in_progress", "completed", "dropped"]),
+        })
+        .passthrough();
+
+      const BackupArraySchema = z.array(MediaItemImportSchema);
+      const BackupObjectSchema = z.object({
+        items: z.array(MediaItemImportSchema),
+      });
+
+      let itemsToImport: MediaItem[] | null = null;
+
+      const arrayParse = BackupArraySchema.safeParse(parsed);
+      if (arrayParse.success) {
+        itemsToImport = arrayParse.data as unknown as MediaItem[];
+      } else {
+        const objParse = BackupObjectSchema.safeParse(parsed);
+        if (objParse.success) {
+          itemsToImport = objParse.data.items as unknown as MediaItem[];
+        }
+      }
 
       if (!itemsToImport) {
-        return { success: false, error: "Invalid backup JSON structure" };
+        return {
+          success: false,
+          error: "Invalid backup JSON structure (Zod schema validation failed)",
+        };
       }
 
       await mediaRepo.saveItems(itemsToImport);

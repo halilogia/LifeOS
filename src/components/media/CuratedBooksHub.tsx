@@ -48,7 +48,7 @@ export function CuratedBooksHub({
         const matchTitle = book.title.toLowerCase().includes(q);
         const matchAuthor = book.author.toLowerCase().includes(q);
         const matchGenre = book.genres.some((g) => g.toLowerCase().includes(q));
-        if (!matchTitle && !matchAuthor && !matchGenre) return false;
+        if (!matchTitle && !matchAuthor && !matchGenre) {return false;}
       }
 
       // Status filter
@@ -57,9 +57,9 @@ export function CuratedBooksHub({
         const userItem = userItems.find(
           (u) => u.type === "book" && normalizeTitle(u.title) === bookNorm,
         );
-        if (statusFilter === "completed" && userItem?.status !== "completed") return false;
-        if (statusFilter === "in_progress" && userItem?.status !== "in_progress") return false;
-        if (statusFilter === "backlog" && userItem?.status !== "backlog") return false;
+        if (statusFilter === "completed" && userItem?.status !== "completed") {return false;}
+        if (statusFilter === "in_progress" && userItem?.status !== "in_progress") {return false;}
+        if (statusFilter === "backlog" && userItem?.status !== "backlog") {return false;}
       }
 
       return true;
@@ -141,8 +141,12 @@ export function CuratedBooksHub({
                   }}
                 />
                 <div className="curated-card-pills">
-                  <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>
-                  <span className="curated-pages-pill">{book.totalPages} sf</span>
+                  {book.rating !== undefined && (
+                    <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>
+                  )}
+                  {book.totalPages !== undefined && (
+                    <span className="curated-pages-pill">{book.totalPages} sf</span>
+                  )}
                 </div>
               </div>
 

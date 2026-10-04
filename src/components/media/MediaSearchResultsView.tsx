@@ -78,7 +78,7 @@ export function MediaSearchResultsView({
 
   // 1. Matching Movie Series (matches series or any movie in series)
   const matchingSeries = useMemo(() => {
-    if (!q) return [];
+    if (!q) {return [];}
     return allSeries.filter((s) => {
       const matchTitle = s.title.toLowerCase().includes(q);
       const matchOrig = s.originalTitle ? s.originalTitle.toLowerCase().includes(q) : false;
@@ -94,7 +94,7 @@ export function MediaSearchResultsView({
 
   // 2. Matching Standalone Movies
   const matchingMovies = useMemo(() => {
-    if (!q) return [];
+    if (!q) {return [];}
     return curatedMovies.filter((m) => {
       const matchTitle = m.title.toLowerCase().includes(q);
       const matchOrig = m.originalTitle ? m.originalTitle.toLowerCase().includes(q) : false;
@@ -106,7 +106,7 @@ export function MediaSearchResultsView({
 
   // 3. Matching TV Shows
   const matchingTv = useMemo(() => {
-    if (!q) return [];
+    if (!q) {return [];}
     return curatedTvShows.filter((s) => {
       const matchTitle = s.title.toLowerCase().includes(q);
       const matchOrig = s.originalTitle ? s.originalTitle.toLowerCase().includes(q) : false;
@@ -118,7 +118,7 @@ export function MediaSearchResultsView({
 
   // 4. Matching Books
   const matchingBooks = useMemo(() => {
-    if (!q) return [];
+    if (!q) {return [];}
     return curatedBooks.filter((b) => {
       const matchTitle = b.title.toLowerCase().includes(q);
       const matchAuthor = b.author.toLowerCase().includes(q);
@@ -130,7 +130,7 @@ export function MediaSearchResultsView({
 
   // 5. Matching Games
   const matchingGames = useMemo(() => {
-    if (!q) return [];
+    if (!q) {return [];}
     return curatedGames.filter((g) => {
       const matchTitle = g.title.toLowerCase().includes(q);
       const matchDev = g.developer.toLowerCase().includes(q);
@@ -154,7 +154,7 @@ export function MediaSearchResultsView({
   }, [searchQuery]);
 
   const handleLiveWebSearch = async () => {
-    if (!q) return;
+    if (!q) {return;}
     setIsSearchingWeb(true);
     try {
       const results = await searchInternetMedia(q);
@@ -354,8 +354,12 @@ export function MediaSearchResultsView({
                   <div className="curated-card-media">
                     <img src={movie.coverUrl} alt={movie.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
-                      <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>
-                      <span className="curated-pages-pill">{movie.runtimeMinutes} dk</span>
+                      {movie.rating !== undefined && (
+                        <span className="curated-rating-pill">⭐ {movie.rating.toFixed(1)}</span>
+                      )}
+                      {movie.runtimeMinutes !== undefined && (
+                        <span className="curated-pages-pill">{movie.runtimeMinutes} dk</span>
+                      )}
                     </div>
                   </div>
                   <div className="curated-card-content">
@@ -438,8 +442,16 @@ export function MediaSearchResultsView({
                   <div className="curated-card-media">
                     <img src={show.coverUrl} alt={show.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
-                      <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>
-                      <span className="curated-pages-pill">{show.totalSeasons} Sezon • {show.totalEpisodes} Bölüm</span>
+                      {show.rating !== undefined && (
+                        <span className="curated-rating-pill">⭐ {show.rating.toFixed(1)}</span>
+                      )}
+                      {(show.totalSeasons !== undefined || show.totalEpisodes !== undefined) && (
+                        <span className="curated-pages-pill">
+                          {show.totalSeasons !== undefined ? `${show.totalSeasons} Sezon` : ""}
+                          {show.totalSeasons !== undefined && show.totalEpisodes !== undefined ? " • " : ""}
+                          {show.totalEpisodes !== undefined ? `${show.totalEpisodes} Bölüm` : ""}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="curated-card-content">
@@ -529,8 +541,12 @@ export function MediaSearchResultsView({
                   <div className="curated-card-media">
                     <img src={book.coverUrl} alt={book.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
-                      <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>
-                      <span className="curated-pages-pill">{book.totalPages} sf.</span>
+                      {book.rating !== undefined && (
+                        <span className="curated-rating-pill">★ {book.rating.toFixed(1)}</span>
+                      )}
+                      {book.totalPages !== undefined && (
+                        <span className="curated-pages-pill">{book.totalPages} sf.</span>
+                      )}
                     </div>
                   </div>
                   <div className="curated-card-content">
@@ -615,8 +631,12 @@ export function MediaSearchResultsView({
                   <div className="curated-card-media">
                     <img src={game.coverUrl} alt={game.title} className="curated-card-cover" loading="lazy" />
                     <div className="curated-card-pills">
-                      <span className="curated-rating-pill">★ {game.rating.toFixed(1)}</span>
-                      <span className="curated-pages-pill">⏱ ~{game.playtimeHours}h</span>
+                      {game.rating !== undefined && (
+                        <span className="curated-rating-pill">★ {game.rating.toFixed(1)}</span>
+                      )}
+                      {game.playtimeHours !== undefined && (
+                        <span className="curated-pages-pill">⏱ ~{game.playtimeHours}h</span>
+                      )}
                     </div>
                   </div>
                   <div className="curated-card-content">
@@ -707,7 +727,9 @@ export function MediaSearchResultsView({
                     <div className="curated-card-media">
                       <img src={item.coverUrl} alt={item.title} className="curated-card-cover" loading="lazy" />
                       <div className="curated-card-pills">
-                        <span className="curated-rating-pill">⭐ {item.rating.toFixed(1)}</span>
+                        {item.rating !== undefined && (
+                          <span className="curated-rating-pill">⭐ {item.rating.toFixed(1)}</span>
+                        )}
                         {item.extraInfo && <span className="curated-pages-pill">{item.extraInfo}</span>}
                       </div>
                     </div>

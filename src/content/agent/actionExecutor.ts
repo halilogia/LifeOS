@@ -47,23 +47,58 @@ async function waitForElement(
 }
 
 /**
+ * Strictly verifies whether an element is legitimately editable.
+ * Explicitly rejects arbitrary non-input <div>, <p>, <span> tags.
+ */
+function isElementEditable(el: HTMLElement | null): boolean {
+  if (!el) {return false;}
+
+  if (el instanceof HTMLInputElement) {
+    const nonTextTypes = ["button", "checkbox", "radio", "submit", "reset", "file", "image", "hidden"];
+    return !nonTextTypes.includes(el.type.toLowerCase());
+  }
+
+  if (el instanceof HTMLTextAreaElement) {
+    return true;
+  }
+
+  if (el.isContentEditable || el.getAttribute("contenteditable") === "true") {
+    return true;
+  }
+
+  if (el.getAttribute("role") === "textbox") {
+    return true;
+  }
+
+  return (
+    el.classList.contains("ql-editor") ||
+    el.classList.contains("ProseMirror") ||
+    el.classList.contains("notion-page-content") ||
+    el.classList.contains("public-DraftEditor-content")
+  );
+}
+
+/**
  * Safely inserts text into either standard HTML input/textarea or rich contenteditable / role="textbox" elements
  * (LinkedIn Post creator, Twitter tweet composer, Facebook post, Quill, Lexical, Draft.js).
  */
-function fillTextIntoElement(targetEl: HTMLElement, textValue: string): void {
+function fillTextIntoElement(targetEl: HTMLElement, textValue: string): boolean {
+  if (!isElementEditable(targetEl)) {
+    return false;
+  }
+
   targetEl.focus();
 
-  const isContentEditable =
+  const isRichEditor =
     targetEl.isContentEditable ||
     targetEl.getAttribute("contenteditable") === "true" ||
     targetEl.getAttribute("role") === "textbox" ||
     targetEl.classList.contains("ql-editor") ||
     targetEl.classList.contains("ProseMirror") ||
     targetEl.classList.contains("notion-page-content") ||
-    targetEl.tagName === "DIV" ||
-    targetEl.tagName === "P";
+    targetEl.classList.contains("public-DraftEditor-content");
 
-  if (isContentEditable) {
+  if (isRichEditor) {
     // Select all text in contenteditable if any
     try {
       const selection = window.getSelection();
@@ -120,6 +155,8 @@ function fillTextIntoElement(targetEl: HTMLElement, textValue: string): void {
     inputEl.dispatchEvent(new Event("change", { bubbles: true }));
     inputEl.dispatchEvent(new Event("blur", { bubbles: true }));
   }
+
+  return true;
 }
 
 /**
@@ -132,6 +169,13 @@ export async function executeAgentAction(payload: AgentActionPayload): Promise<{
   extractedData?: ExtractedPageData;
 }> {
   const { actionType, selector, targetText, textValue, direction } = payload;
+
+  if (selector && /javascript:|data:/i.test(selector)) {
+    return {
+      success: false,
+      message: "Security violation: Dangerous selector pattern rejected.",
+    };
+  }
 
   if (actionType === "scroll") {
     showScanningSweep();
@@ -199,7 +243,13 @@ export async function executeAgentAction(payload: AgentActionPayload): Promise<{
   }
 
   if (actionType === "type") {
-    fillTextIntoElement(targetEl, textValue || "");
+    const success = fillTextIntoElement(targetEl, textValue || "");
+    if (!success) {
+      return {
+        success: false,
+        message: `Target element is not a valid editable input or text editor: ${selector || targetText}`,
+      };
+    }
 
     return {
       success: true,

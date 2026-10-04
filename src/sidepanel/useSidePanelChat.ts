@@ -30,7 +30,8 @@ import {
 import { formatActionExecutionSummary } from "@/services/agentToolService.js";
 import { buildAgentToolsPrompt } from "@/services/aichat/agentTools.js";
 import { logger } from "@/utils/logger.js";
-import { ChatMessage } from "./ChatMessage.js";
+import { ChatMessage, PendingActionApproval } from "./ChatMessage.js";
+import { evaluateActionProposal } from "@/services/aichat/agentActionPolicy.js";
 import { useChatSession } from "./useChatSession.js";
 import { useVoiceInput } from "./useVoiceInput.js";
 import { useAgentBridge } from "./useAgentBridge.js";
@@ -43,6 +44,8 @@ export interface UseSidePanelChatReturn {
   isProcessing: boolean;
   agentStatus: string | null;
   pageContext: PageContext | null;
+  handleApproveAction: (messageId: string) => void;
+  handleRejectAction: (messageId: string) => void;
   isListening: boolean;
   isYoutube: boolean;
   attachments: ChatAttachment[];
@@ -430,6 +433,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
       let finalContent = responseText;
       let clarificationObj: ClarificationRequest | undefined =
         aiResponse.clarification;
+      let pendingApprovalObj: PendingActionApproval | undefined;
 
       if (jsonMatch && jsonMatch[1]) {
         try {
@@ -481,10 +485,6 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
               lang,
             );
 
-            setAgentStatus(
-              t.executing_actions.replace("{count}", String(count)),
-            );
-
             let cleanPromptResponse = responseText
               .replace(/```json[\s\S]*?```/gi, "")
               .replace(
@@ -505,21 +505,44 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
 
             finalContent = cleanPromptResponse;
 
-            chrome.runtime.sendMessage(
-              { type: "execute_agent_action", payload: actionPayload },
-              (actRes) => {
-                setAgentStatus(null);
-                if (actRes && actRes.success) {
-                  setMessages((prev) =>
-                    prev.map((msg) =>
-                      msg.id === assistantMsgId
-                        ? { ...msg, content: cleanPromptResponse }
-                        : msg,
-                    ),
-                  );
-                }
-              },
-            );
+            // Deterministic Security Policy Evaluation
+            const evalResult = evaluateActionProposal(actionPayload, {
+              expectedUrl: pageContext?.url,
+            });
+
+            if (!evalResult.allowed) {
+              finalContent = `${cleanPromptResponse}\n\n🛡️ **Güvenlik Politikası:** Eylem engellendi (${evalResult.reason || "Kısıtlandı"}).`;
+              setAgentStatus(null);
+            } else if (evalResult.requiresUserConfirmation) {
+              // Side-effect actions (click, type) require explicit user approval
+              setAgentStatus(null);
+              pendingApprovalObj = {
+                id: `action-${Date.now()}`,
+                actions: evalResult.sanitizedActions,
+                targetUrl: pageContext?.url,
+                status: "pending",
+              };
+            } else {
+              // Read-only actions (scroll, extract, highlight) can run automatically
+              setAgentStatus(
+                t.executing_actions.replace("{count}", String(count)),
+              );
+              chrome.runtime.sendMessage(
+                { type: "execute_agent_action", payload: evalResult.sanitizedActions },
+                (actRes) => {
+                  setAgentStatus(null);
+                  if (actRes && actRes.success) {
+                    setMessages((prev) =>
+                      prev.map((msg) =>
+                        msg.id === assistantMsgId
+                          ? { ...msg, content: cleanPromptResponse }
+                          : msg,
+                      ),
+                    );
+                  }
+                },
+              );
+            }
           }
         } catch {
           /* Fallback */
@@ -550,6 +573,7 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
                 content: finalContent,
                 thinking: aiResponse.thinking,
                 clarification: clarificationObj,
+                pendingActionApproval: pendingApprovalObj,
                 sources: aiResponse.sources,
                 searchQuery: aiResponse.searchQuery,
               }
@@ -638,6 +662,45 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     );
   };
 
+  const handleApproveAction = (messageId: string) => {
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id === messageId && msg.pendingActionApproval) {
+          const approval = msg.pendingActionApproval;
+          chrome.runtime.sendMessage(
+            { type: "execute_agent_action", payload: approval.actions },
+            () => {},
+          );
+          return {
+            ...msg,
+            pendingActionApproval: {
+              ...approval,
+              status: "approved" as const,
+            },
+          };
+        }
+        return msg;
+      }),
+    );
+  };
+
+  const handleRejectAction = (messageId: string) => {
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id === messageId && msg.pendingActionApproval) {
+          return {
+            ...msg,
+            pendingActionApproval: {
+              ...msg.pendingActionApproval,
+              status: "rejected" as const,
+            },
+          };
+        }
+        return msg;
+      }),
+    );
+  };
+
   return {
     t,
     lang,
@@ -646,6 +709,8 @@ Answer the user clearly, professionally, and concisely in ${t.answer_language}. 
     isProcessing,
     agentStatus,
     pageContext,
+    handleApproveAction,
+    handleRejectAction,
     isListening,
     isYoutube,
     attachments,

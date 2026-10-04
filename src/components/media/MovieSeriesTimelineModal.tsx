@@ -31,7 +31,7 @@ export function MovieSeriesTimelineModal({
   const [orderMode, setOrderMode] = useState<"release" | "chronological">("release");
   const [onlyUnwatched, setOnlyUnwatched] = useState<boolean>(false);
 
-  if (!isOpen || !series) return null;
+  if (!isOpen || !series) {return null;}
 
   const progress = useMemo(
     () => computeSeriesProgress(series, userItems),
