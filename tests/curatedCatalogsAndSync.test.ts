@@ -121,6 +121,63 @@ describe("Curated Catalogs & Internet Sync Engine", () => {
     const hg = getMovieSeriesById("hunger-games");
     expect(hg).toBeDefined();
     expect(hg?.items.length).toBe(4);
+
+    // Verify newly added franchises
+    const spidey = getMovieSeriesById("spider-man");
+    expect(spidey).toBeDefined();
+    expect(spidey?.items.length).toBeGreaterThanOrEqual(6);
+
+    const bond = getMovieSeriesById("james-bond");
+    expect(bond).toBeDefined();
+    expect(bond?.items.length).toBe(5);
+
+    const twilight = getMovieSeriesById("twilight");
+    expect(twilight).toBeDefined();
+    expect(twilight?.items.length).toBe(5);
+
+    const terminator = getMovieSeriesById("terminator");
+    expect(terminator).toBeDefined();
+    expect(terminator?.items.length).toBe(4);
+  });
+
+  it("should have newly added cultural books, anime/tv, masterpieces and games", () => {
+    // Books
+    const sefiller = CURATED_BOOKS.find((b) => b.id === "book-sefiller");
+    expect(sefiller).toBeDefined();
+    expect(sefiller?.author).toBe("Victor Hugo");
+
+    const puslu = CURATED_BOOKS.find((b) => b.id === "book-puslu-kitalar");
+    expect(puslu).toBeDefined();
+    expect(puslu?.author).toBe("İhsan Oktay Anar");
+
+    // Anime & TV
+    const aot = CURATED_TV_SHOWS.find((s) => s.id === "tv-attack-on-titan");
+    expect(aot).toBeDefined();
+    expect(aot?.category).toBe("Anime & Animasyon");
+
+    const friends = CURATED_TV_SHOWS.find((s) => s.id === "tv-friends");
+    expect(friends).toBeDefined();
+    expect(friends?.category).toBe("Komedi & Hiciv");
+
+    const sahsiyet = CURATED_TV_SHOWS.find((s) => s.id === "tv-sahsiyet");
+    expect(sahsiyet).toBeDefined();
+    expect(sahsiyet?.category).toBe("Suç & Drama");
+    expect(sahsiyet?.genres).toContain("Türk Polisiye");
+
+    // Games
+    const totk = CURATED_GAMES.find((g) => g.id === "game-zelda-totk");
+    expect(totk).toBeDefined();
+
+    const bloodborne = CURATED_GAMES.find((g) => g.id === "game-bloodborne");
+    expect(bloodborne).toBeDefined();
+
+    // Movies
+    const titanic = CURATED_MOVIES.find((m) => m.id === "movie-titanic");
+    expect(titanic).toBeDefined();
+    expect(titanic?.director).toBe("James Cameron");
+
+    const greenMile = CURATED_MOVIES.find((m) => m.id === "movie-green-mile");
+    expect(greenMile).toBeDefined();
   });
 
   it("should provide active merged catalog and support web cache persistence", () => {

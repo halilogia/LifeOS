@@ -278,3 +278,101 @@ export async function syncAllCatalogsFromWeb(forceRefresh = false): Promise<Sync
     };
   }
 }
+
+export interface WebSearchResultItem {
+  id: string;
+  type: "movie" | "tv" | "book" | "game";
+  title: string;
+  originalTitle?: string;
+  creator: string;
+  releaseYear?: number;
+  category: string;
+  genres: string[];
+  coverUrl: string;
+  rating: number;
+  synopsis: string;
+  extraInfo?: string;
+  rawTvItem?: CuratedTvItem;
+  rawMovieItem?: CuratedMovieItem;
+  rawBookItem?: CuratedBookItem;
+}
+
+/**
+ * Searches public open APIs (TVMaze, etc.) on-demand for any film or series.
+ */
+export async function searchInternetMedia(query: string): Promise<WebSearchResultItem[]> {
+  const cleanQ = query.trim();
+  if (!cleanQ) return [];
+
+  const results: WebSearchResultItem[] = [];
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4500);
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(cleanQ)}`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const shows: Array<{
+        show: {
+          id: number;
+          name: string;
+          genres?: string[];
+          rating?: { average?: number };
+          image?: { medium?: string; original?: string };
+          summary?: string;
+          premiered?: string;
+          network?: { name: string };
+          webChannel?: { name: string };
+        };
+      }> = await res.json();
+
+      for (const item of shows.slice(0, 8)) {
+        const s = item.show;
+        const releaseYear = s.premiered ? parseInt(s.premiered.slice(0, 4), 10) : 2020;
+        const genres = s.genres && s.genres.length > 0 ? s.genres : ["Drama"];
+        const creator = s.network?.name || s.webChannel?.name || "TV Network";
+        const coverUrl =
+          s.image?.medium ||
+          s.image?.original ||
+          "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=500&q=80";
+        const synopsis = s.summary ? stripHtml(s.summary) : `${s.name} dizisi.`;
+        const rating = s.rating?.average || 7.5;
+
+        results.push({
+          id: `web-search-tv-${s.id}`,
+          type: "tv",
+          title: s.name,
+          creator,
+          releaseYear: isNaN(releaseYear) ? 2020 : releaseYear,
+          category: genres[0] || "Dizi",
+          genres,
+          coverUrl,
+          rating,
+          synopsis,
+          extraInfo: `${isNaN(releaseYear) ? "" : releaseYear} • TV Dizisi`,
+          rawTvItem: {
+            id: `web-tv-${s.id}`,
+            title: s.name,
+            creator,
+            totalSeasons: 3,
+            totalEpisodes: 30,
+            releaseYear: isNaN(releaseYear) ? 2020 : releaseYear,
+            category: "Dizi",
+            genres,
+            coverUrl,
+            rating,
+            synopsis,
+          },
+        });
+      }
+    }
+  } catch (err) {
+    logger.warn("[mediaInternetSyncService] TVMaze live search skipped:", err);
+  }
+
+  return results;
+}
+

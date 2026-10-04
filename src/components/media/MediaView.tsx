@@ -10,6 +10,7 @@ import { CuratedBooksHub } from "./CuratedBooksHub.js";
 import { CuratedGamesHub } from "./CuratedGamesHub.js";
 import { CuratedMoviesHub } from "./CuratedMoviesHub.js";
 import { CuratedTvHub } from "./CuratedTvHub.js";
+import { MediaSearchResultsView } from "./MediaSearchResultsView.js";
 
 interface MediaViewProps {
   lang: Language;
@@ -26,6 +27,9 @@ export function MediaView({ lang }: MediaViewProps) {
   const sortBy = useMediaStore((s) => s.sortBy);
 
   const curatedTvShows = useMediaStore((s) => s.curatedTvShows);
+  const curatedMovies = useMediaStore((s) => s.curatedMovies);
+  const curatedBooks = useMediaStore((s) => s.curatedBooks);
+  const curatedGames = useMediaStore((s) => s.curatedGames);
   const isSyncingWeb = useMediaStore((s) => s.isSyncingWeb);
   const syncWebCatalog = useMediaStore((s) => s.syncWebCatalog);
 
@@ -115,107 +119,135 @@ export function MediaView({ lang }: MediaViewProps) {
           onSyncWeb={() => void syncWebCatalog(true)}
         />
 
-        {/* Curated Catalogs & Series Hub */}
+        {/* Curated Catalogs & Series Hub or Global Search Results */}
         <main className="media-content-main">
-          {activeTypeFilter === "series" && (
-            <MovieSeriesHub
+          {searchQuery.trim().length > 0 ? (
+            <MediaSearchResultsView
               lang={lang}
+              searchQuery={searchQuery}
               userItems={items}
-              onOpenTimeline={openSeriesTimeline}
-              onBatchWatchlist={batchAddSeriesToWatchlist}
-              isStandaloneTab={true}
-            />
-          )}
-
-          {activeTypeFilter === "movie" && (
-            <CuratedMoviesHub
-              lang={lang}
-              userItems={items}
+              curatedMovies={curatedMovies.length > 0 ? curatedMovies : undefined}
+              curatedTvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
+              curatedBooks={curatedBooks.length > 0 ? curatedBooks : undefined}
+              curatedGames={curatedGames.length > 0 ? curatedGames : undefined}
+              onOpenSeriesTimeline={openSeriesTimeline}
               onToggleMovie={toggleCuratedMovie}
-              statusFilter={activeStatusFilter}
-              searchQuery={searchQuery}
-            />
-          )}
-
-          {activeTypeFilter === "tv" && (
-            <CuratedTvHub
-              lang={lang}
-              userItems={items}
-              tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
               onToggleTv={toggleCuratedTv}
-              statusFilter={activeStatusFilter}
-              searchQuery={searchQuery}
-            />
-          )}
-
-          {activeTypeFilter === "book" && (
-            <CuratedBooksHub
-              lang={lang}
-              userItems={items}
               onToggleBook={toggleCuratedBook}
-              statusFilter={activeStatusFilter}
-              searchQuery={searchQuery}
-            />
-          )}
-
-          {activeTypeFilter === "game" && (
-            <CuratedGamesHub
-              lang={lang}
-              userItems={items}
               onToggleGame={toggleCuratedGame}
-              statusFilter={activeStatusFilter}
-              searchQuery={searchQuery}
+              onClearSearch={() => setSearchQuery("")}
             />
-          )}
+          ) : (
+            <>
+              {activeTypeFilter === "series" && (
+                <MovieSeriesHub
+                  lang={lang}
+                  userItems={items}
+                  onOpenTimeline={openSeriesTimeline}
+                  onBatchWatchlist={batchAddSeriesToWatchlist}
+                  isStandaloneTab={true}
+                  searchQuery={searchQuery}
+                />
+              )}
 
-          {activeTypeFilter === "all" && (
-            <div className="media-all-showcase">
-              {/* 1. Popüler Film Serileri */}
-              <MovieSeriesHub
-                lang={lang}
-                userItems={items}
-                onOpenTimeline={openSeriesTimeline}
-                onBatchWatchlist={batchAddSeriesToWatchlist}
-                isStandaloneTab={false}
-              />
+              {activeTypeFilter === "movie" && (
+                <CuratedMoviesHub
+                  lang={lang}
+                  userItems={items}
+                  movies={curatedMovies.length > 0 ? curatedMovies : undefined}
+                  onToggleMovie={toggleCuratedMovie}
+                  statusFilter={activeStatusFilter}
+                  searchQuery={searchQuery}
+                />
+              )}
 
-              {/* 2. Kült Filmler */}
-              <CuratedMoviesHub
-                lang={lang}
-                userItems={items}
-                onToggleMovie={toggleCuratedMovie}
-                statusFilter={activeStatusFilter}
-                searchQuery={searchQuery}
-              />
+              {activeTypeFilter === "tv" && (
+                <CuratedTvHub
+                  lang={lang}
+                  userItems={items}
+                  tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
+                  onToggleTv={toggleCuratedTv}
+                  statusFilter={activeStatusFilter}
+                  searchQuery={searchQuery}
+                />
+              )}
 
-              {/* 3. Efsane Diziler */}
-              <CuratedTvHub
-                lang={lang}
-                userItems={items}
-                tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
-                onToggleTv={toggleCuratedTv}
-                statusFilter={activeStatusFilter}
-                searchQuery={searchQuery}
-              />
+              {activeTypeFilter === "book" && (
+                <CuratedBooksHub
+                  lang={lang}
+                  userItems={items}
+                  books={curatedBooks.length > 0 ? curatedBooks : undefined}
+                  onToggleBook={toggleCuratedBook}
+                  statusFilter={activeStatusFilter}
+                  searchQuery={searchQuery}
+                />
+              )}
 
-              {/* 4. Başyapıt Kitaplar (Felsefe, Politika, Distopya...) */}
-              <CuratedBooksHub
-                lang={lang}
-                userItems={items}
-                onToggleBook={toggleCuratedBook}
-                statusFilter={activeStatusFilter}
-                searchQuery={searchQuery}
-              />
+              {activeTypeFilter === "game" && (
+                <CuratedGamesHub
+                  lang={lang}
+                  userItems={items}
+                  games={curatedGames.length > 0 ? curatedGames : undefined}
+                  onToggleGame={toggleCuratedGame}
+                  statusFilter={activeStatusFilter}
+                  searchQuery={searchQuery}
+                />
+              )}
 
-              {/* 5. Zirvedeki Oyunlar */}
-              <CuratedGamesHub
-                lang={lang}
-                userItems={items}
-                onToggleGame={toggleCuratedGame}
-                statusFilter={activeStatusFilter}
-                searchQuery={searchQuery}
-              />
-            </div>
+              {activeTypeFilter === "all" && (
+                <div className="media-all-showcase">
+                  {/* 1. Popüler Film Serileri */}
+                  <MovieSeriesHub
+                    lang={lang}
+                    userItems={items}
+                    onOpenTimeline={openSeriesTimeline}
+                    onBatchWatchlist={batchAddSeriesToWatchlist}
+                    isStandaloneTab={false}
+                    searchQuery={searchQuery}
+                  />
+
+                  {/* 2. Kült Filmler */}
+                  <CuratedMoviesHub
+                    lang={lang}
+                    userItems={items}
+                    movies={curatedMovies.length > 0 ? curatedMovies : undefined}
+                    onToggleMovie={toggleCuratedMovie}
+                    statusFilter={activeStatusFilter}
+                    searchQuery={searchQuery}
+                  />
+
+                  {/* 3. Efsane Diziler */}
+                  <CuratedTvHub
+                    lang={lang}
+                    userItems={items}
+                    tvShows={curatedTvShows.length > 0 ? curatedTvShows : undefined}
+                    onToggleTv={toggleCuratedTv}
+                    statusFilter={activeStatusFilter}
+                    searchQuery={searchQuery}
+                  />
+
+                  {/* 4. Başyapıt Kitaplar (Felsefe, Politika, Distopya...) */}
+                  <CuratedBooksHub
+                    lang={lang}
+                    userItems={items}
+                    books={curatedBooks.length > 0 ? curatedBooks : undefined}
+                    onToggleBook={toggleCuratedBook}
+                    statusFilter={activeStatusFilter}
+                    searchQuery={searchQuery}
+                  />
+
+                  {/* 5. Zirvedeki Oyunlar */}
+                  <CuratedGamesHub
+                    lang={lang}
+                    userItems={items}
+                    games={curatedGames.length > 0 ? curatedGames : undefined}
+                    onToggleGame={toggleCuratedGame}
+                    statusFilter={activeStatusFilter}
+                    searchQuery={searchQuery}
+                  />
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>

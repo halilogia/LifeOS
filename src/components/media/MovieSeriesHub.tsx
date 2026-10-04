@@ -13,6 +13,7 @@ interface MovieSeriesHubProps {
   onOpenTimeline: (series: MovieSeries) => void;
   onBatchWatchlist?: (series: MovieSeries) => void;
   isStandaloneTab?: boolean;
+  searchQuery?: string;
 }
 
 export function MovieSeriesHub({
@@ -21,6 +22,7 @@ export function MovieSeriesHub({
   onOpenTimeline,
   onBatchWatchlist,
   isStandaloneTab = false,
+  searchQuery = "",
 }: MovieSeriesHubProps) {
   const t = getTranslation(lang);
   const seriesList = getMovieSeriesList();
@@ -32,9 +34,23 @@ export function MovieSeriesHub({
     new Set(seriesList.flatMap((s) => s.genres)),
   ).slice(0, 8);
 
+  const q = searchQuery.trim().toLowerCase();
   const filteredSeries = seriesList.filter((s) => {
-    if (selectedGenre === "all") return true;
-    return s.genres.includes(selectedGenre);
+    if (selectedGenre !== "all" && !s.genres.includes(selectedGenre)) return false;
+    if (q) {
+      const matchTitle = s.title.toLowerCase().includes(q);
+      const matchOrig = s.originalTitle
+        ? s.originalTitle.toLowerCase().includes(q)
+        : false;
+      const matchDesc = s.description.toLowerCase().includes(q);
+      const matchItems = s.items.some(
+        (m) =>
+          m.title.toLowerCase().includes(q) ||
+          (m.originalTitle && m.originalTitle.toLowerCase().includes(q)),
+      );
+      if (!matchTitle && !matchOrig && !matchDesc && !matchItems) return false;
+    }
+    return true;
   });
 
   const handleScrollLeft = () => {

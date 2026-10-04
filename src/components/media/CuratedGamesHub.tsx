@@ -8,6 +8,7 @@ import { normalizeTitle } from "@/services/movieSeriesData.js";
 interface CuratedGamesHubProps {
   lang: Language;
   userItems: MediaItem[];
+  games?: CuratedGameItem[];
   onToggleGame: (
     game: CuratedGameItem,
     targetStatus: "completed" | "in_progress" | "backlog",
@@ -20,6 +21,7 @@ interface CuratedGamesHubProps {
 export function CuratedGamesHub({
   lang,
   userItems,
+  games = CURATED_GAMES,
   onToggleGame,
   statusFilter = "all",
   searchQuery = "",
@@ -28,15 +30,15 @@ export function CuratedGamesHub({
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = useMemo(() => {
-    const set = new Set(CURATED_GAMES.map((g) => g.category));
+    const set = new Set(games.map((g) => g.category));
     return Array.from(set);
-  }, []);
+  }, [games]);
 
   // Sorted by acclaim (highest rating first)
   const sortedAndFilteredGames = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
-    return [...CURATED_GAMES]
+    return [...games]
       .sort((a, b) => b.rating - a.rating)
       .filter((game) => {
         // Category filter

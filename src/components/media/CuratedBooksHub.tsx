@@ -8,6 +8,7 @@ import { normalizeTitle } from "@/services/movieSeriesData.js";
 interface CuratedBooksHubProps {
   lang: Language;
   userItems: MediaItem[];
+  books?: CuratedBookItem[];
   onToggleBook: (
     book: CuratedBookItem,
     targetStatus: "completed" | "in_progress" | "backlog",
@@ -20,6 +21,7 @@ interface CuratedBooksHubProps {
 export function CuratedBooksHub({
   lang,
   userItems,
+  books = CURATED_BOOKS,
   onToggleBook,
   statusFilter = "all",
   searchQuery = "",
@@ -28,14 +30,14 @@ export function CuratedBooksHub({
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = useMemo(() => {
-    const set = new Set(CURATED_BOOKS.map((b) => b.category));
+    const set = new Set(books.map((b) => b.category));
     return Array.from(set);
-  }, []);
+  }, [books]);
 
   const filteredBooks = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
-    return CURATED_BOOKS.filter((book) => {
+    return books.filter((book) => {
       // Category filter
       if (selectedCategory !== "all" && book.category !== selectedCategory) {
         return false;
