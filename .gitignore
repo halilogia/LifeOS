@@ -31,7 +31,6 @@ yarn-error.log*
 # Tooling
 .hermes/*
 !.hermes/plans/
-.agent/
 .commandcode/
 
 # Electron desktop runtime artifacts
